@@ -19,6 +19,14 @@ class ForumServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('atrakeur/forum');
+
+		if (\Config::get('forum::routes.enable')) {
+			$routebase = \Config::get('forum::routes.base');
+			$controller = \Config::get('forum::integration.forumcontroller');
+
+			\Route::get($routebase, $controller.'@index');
+			
+		}
 	}
 
 	/**
