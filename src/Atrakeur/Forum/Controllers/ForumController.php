@@ -6,7 +6,9 @@ abstract class ForumController extends \Controller {
 
 	public function index()
 	{
-		var_dump(ForumCategory::whereTopLevel()->with('subcategories')->get()->toArray());
+		$categories = ForumCategory::whereTopLevel()->with('subcategories')->get();
+
+		return \View::make('forum::index', compact('categories'));
 	}
 
 }
