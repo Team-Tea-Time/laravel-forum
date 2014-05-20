@@ -1,14 +1,13 @@
 <?php namespace Atrakeur\Forum\Models;
 
-abstract class ForumBaseModel extends \Eloquent
-{
+abstract class ForumBaseModel extends \Eloquent {
 
 	protected function rememberAttribute($item, $function) {
 		$cacheItem = get_class($this).$this->id.$item;
 
 		$value = \Cache::rememberForever($cacheItem, $function);
 
-        return $value;
+		return $value;
 	}
 
 	protected function clearAttributeCache() {

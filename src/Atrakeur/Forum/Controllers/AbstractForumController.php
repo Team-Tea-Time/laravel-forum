@@ -4,8 +4,7 @@ use \Atrakeur\Forum\Models\ForumCategory;
 
 abstract class AbstractForumController extends \Controller {
 
-	public function index()
-	{
+	public function index() {
 		$categories = ForumCategory::whereTopLevel()->with('subcategories')->get();
 
 		return \View::make('forum::index', compact('categories'));
