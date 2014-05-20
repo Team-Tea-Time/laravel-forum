@@ -2,10 +2,10 @@
 
 class ForumCategory extends AbstractForumBaseModel {
 
-	protected $table = 'forum_categories';
-	public $timestamps = false;
+	protected $table      = 'forum_categories';
+	public    $timestamps = false;
 	protected $softDelete = false;
-	protected $appends = array('topicCount', 'replyCount', 'lastReplyId');
+	protected $appends    = array('topicCount', 'replyCount', 'lastReplyId');
 
 	public function parentCategory()
 	{

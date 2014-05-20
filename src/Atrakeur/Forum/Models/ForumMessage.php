@@ -2,8 +2,8 @@
 
 class ForumMessage extends AbstractForumBaseModel {
 
-	protected $table = 'forum_messages';
-	public $timestamps = true;
+	protected $table      = 'forum_messages';
+	public    $timestamps = true;
 	protected $softDelete = true;
 
 	public function topic()

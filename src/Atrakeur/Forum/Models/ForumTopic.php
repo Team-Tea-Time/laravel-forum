@@ -2,8 +2,8 @@
 
 class ForumTopic extends AbstractForumBaseModel
 {
-	protected $table = 'forum_topics';
-	public $timestamps = true;
+	protected $table      = 'forum_topics';
+	public    $timestamps = true;
 	protected $softDelete = true;
 
 	public function category()
