@@ -30,7 +30,9 @@ class ForumCategory extends AbstractForumBaseModel {
 	public function getTopicCountAttribute()
 	{
 		$topicCount = $this->rememberAttribute('topicCount', function() {
+
 			return $this->topics()->count();
+			
 		});
 		return $topicCount;
 	}
@@ -38,12 +40,14 @@ class ForumCategory extends AbstractForumBaseModel {
 	public function getReplyCountAttribute()
 	{
 		$replyCount = $this->rememberAttribute('replyCount', function() {
+
 			$replyCount = 0;
-			$topics = $this->topics()->with('messages')->get();
+			$topics     = $this->topics()->with('messages')->get();
 			foreach ($topics as $topic) {
 				$replyCount += $topic->messages->count();
 			}
 			return $replyCount;
+
 		});
 		return $replyCount;   
 	}
