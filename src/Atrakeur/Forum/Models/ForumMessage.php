@@ -1,6 +1,6 @@
 <?php namespace Atrakeur\Forum\Models;
 
-class ForumMessage extends \Eloquent {
+class ForumMessage extends AbstractForumBaseModel {
 
 	protected $table = 'forum_messages';
 	public $timestamps = true;

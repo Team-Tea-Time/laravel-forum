@@ -1,6 +1,6 @@
 <?php namespace Atrakeur\Forum\Models;
 
-class ForumCategory extends ForumBaseModel {
+class ForumCategory extends AbstractForumBaseModel {
 
 	protected $table = 'forum_categories';
 	public $timestamps = false;
