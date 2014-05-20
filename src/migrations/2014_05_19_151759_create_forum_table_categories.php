@@ -10,8 +10,10 @@ class CreateForumTableCategories extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up() {
-		Schema::create('forum_categories', function(Blueprint $table) {
+	public function up()
+	{
+		Schema::create('forum_categories', function(Blueprint $table) 
+		{
 			$table->increments('id');
 			$table->integer('parent_category')->unsigned()->nullable();
 			$table->string('title');
@@ -24,7 +26,8 @@ class CreateForumTableCategories extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
+	public function down()
+	{
 		Schema::drop('forum_categories');
 	}
 

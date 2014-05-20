@@ -10,8 +10,10 @@ class CreateForumTableTopics extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up() {
-		Schema::create('forum_topics', function(Blueprint $table) {
+	public function up()
+	{
+		Schema::create('forum_topics', function(Blueprint $table) 
+		{
 			$table->increments('id');
 
 			/* Attributes */
@@ -32,7 +34,8 @@ class CreateForumTableTopics extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
+	public function down()
+	{
 		Schema::drop('forum_topics');
 	}
 

@@ -16,7 +16,8 @@ class ForumServiceProvider extends ServiceProvider {
 	 *
 	 * @return void
 	 */
-	public function boot() {
+	public function boot()
+	{
 		$this->package('atrakeur/forum');
 
 		if (\Config::get('forum::routes.enable')) {
@@ -33,7 +34,8 @@ class ForumServiceProvider extends ServiceProvider {
 	 *
 	 * @return void
 	 */
-	public function register() {
+	public function register()
+	{
 		//
 	}
 
@@ -42,7 +44,8 @@ class ForumServiceProvider extends ServiceProvider {
 	 *
 	 * @return array
 	 */
-	public function provides() {
+	public function provides()
+	{
 		return array();
 	}
 

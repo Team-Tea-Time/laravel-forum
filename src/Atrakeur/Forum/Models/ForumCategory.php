@@ -7,23 +7,28 @@ class ForumCategory extends AbstractForumBaseModel {
 	protected $softDelete = false;
 	protected $appends = array('topicCount', 'replyCount', 'lastReplyId');
 
-	public function parentCategory() {
+	public function parentCategory()
+    {
 		return $this->hasOne('\Atrakeur\Forum\Models\ForumCategory', 'parent_category');
 	}
 
-	public function subcategories() {
+	public function subcategories()
+    {
 		return $this->hasMany('\Atrakeur\Forum\Models\ForumCategory', 'parent_category');
 	}
 
-	public function topics() {
+	public function topics()
+    {
 		return $this->belongsTo('\Atrakeur\Forum\Models\ForumTopic');
 	}
 
-	public function scopeWhereTopLevel($query) {
+	public function scopeWhereTopLevel($query)
+    {
 		return $query->where('parent_category', '=', NULL);
 	}
 
-	public function getTopicCountAttribute() {
+	public function getTopicCountAttribute()
+    {
 		$topicCount = $this->rememberAttribute('topicCount', function() {
 			echo 'load';
 			return $this->topics()->count();
@@ -31,7 +36,8 @@ class ForumCategory extends AbstractForumBaseModel {
 		return $topicCount;
 	}
 
-	public function getReplyCountAttribute() {
+	public function getReplyCountAttribute()
+    {
 		$replyCount = $this->rememberAttribute('replyCount', function() {
 			$replyCount = 0;
 			$topics = $this->topics()->with('messages')->get();
@@ -43,7 +49,8 @@ class ForumCategory extends AbstractForumBaseModel {
 		return $replyCount;   
 	}
 
-	public function getLastReplyIdAttribute() {
+	public function getLastReplyIdAttribute()
+    {
 		//TODO
 	}
 

@@ -6,11 +6,13 @@ class ForumTopic extends AbstractForumBaseModel
 	public $timestamps = true;
 	protected $softDelete = true;
 
-	public function category() {
+	public function category()
+    {
 		return $this->hasOne('\Atrakeur\Forum\Models\ForumCategory');
 	}
 
-	public function messages() {
+	public function messages()
+    {
 		return $this->hasMany('\Atrakeur\Forum\Models\ForumMessage');
 	}
 

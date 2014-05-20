@@ -6,7 +6,8 @@ class ForumMessage extends AbstractForumBaseModel {
 	public $timestamps = true;
 	protected $softDelete = true;
 
-	public function topic() {
+	public function topic()
+	{
 		return $this->belongsTo('\Atrakeur\Forum\Models\ForumTopic');
 	}
 
