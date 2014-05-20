@@ -30,7 +30,6 @@ class ForumCategory extends AbstractForumBaseModel {
 	public function getTopicCountAttribute()
 	{
 		$topicCount = $this->rememberAttribute('topicCount', function() {
-			echo 'load';
 			return $this->topics()->count();
 		});
 		return $topicCount;
