@@ -1,5 +1,7 @@
 # Laravel forum package
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/atrakeur/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/atrakeur/laravel-forum/?branch=master)
+
 ## Goals
 
 This package aims to provide a good starting point implementing a forum inside a laravel application.
@@ -21,3 +23,4 @@ This package is currently in heavy work, so all of the following features arn't 
  * Easy user integration (through an interface)
  * Easy user right integration (through an interface)
  * Message posting (with hooks for formatting)
+ * Light weight & blasing fast (designed with caching and high speed in mind)
