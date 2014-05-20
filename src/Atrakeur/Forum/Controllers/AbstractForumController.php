@@ -2,7 +2,7 @@
 
 use \Atrakeur\Forum\Models\ForumCategory;
 
-abstract class ForumController extends \Controller {
+abstract class AbstractForumController extends \Controller {
 
 	public function index()
 	{
