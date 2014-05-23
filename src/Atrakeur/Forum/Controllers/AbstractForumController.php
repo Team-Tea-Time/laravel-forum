@@ -13,7 +13,7 @@ abstract class AbstractForumController extends \Controller {
 
 	public function getCategory($categoryId, $categoryUrl) 
 	{
-		$category       = ForumCategory::findOrFail($categoryId);
+		$category = ForumCategory::findOrFail($categoryId);
 
 		$category->load('parentCategory', 'subCategories', 'topics');
 

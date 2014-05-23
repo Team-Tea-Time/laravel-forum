@@ -9,7 +9,7 @@ class ForumCategory extends AbstractForumBaseModel {
 
 	public function parentCategory()
 	{
-		return $this->hasOne('\Atrakeur\Forum\Models\ForumCategory', 'parent_category');
+		return $this->belongsTo('\Atrakeur\Forum\Models\ForumCategory', 'parent_category');
 	}
 
 	public function subcategories()
@@ -19,7 +19,7 @@ class ForumCategory extends AbstractForumBaseModel {
 
 	public function topics()
 	{
-		return $this->belongsTo('\Atrakeur\Forum\Models\ForumTopic');
+		return $this->hasMany('\Atrakeur\Forum\Models\ForumTopic', 'parent_category');
 	}
 
 	public function scopeWhereTopLevel($query)
