@@ -5,7 +5,7 @@ class ForumCategory extends AbstractForumBaseModel {
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
 	protected $softDelete = false;
-	protected $appends    = array('topicCount', 'replyCount', 'lastReplyId');
+	protected $appends    = array('topicCount', 'replyCount', 'lastReplyId', 'url');
 
 	public function parentCategory()
 	{
@@ -55,6 +55,16 @@ class ForumCategory extends AbstractForumBaseModel {
 	public function getLastReplyIdAttribute()
 	{
 		//TODO
+	}
+
+	public function getUrlAttribute()
+	{
+		return action(\Config::get('forum::integration.forumcontroller').'@getCategory',
+			array(
+				'categoryId' => $this->id,
+				'categoryUrl' => \Str::slug($this->title, '_')
+			)
+		);
 	}
 
 }

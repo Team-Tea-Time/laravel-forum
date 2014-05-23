@@ -4,16 +4,16 @@ use \Atrakeur\Forum\Models\ForumCategory;
 
 abstract class AbstractForumController extends \Controller {
 
-	public function index()
+	public function getIndex()
 	{
 		$categories = ForumCategory::whereTopLevel()->with('subcategories')->get();
 
 		return \View::make('forum::index', compact('categories'));
 	}
 
-	public function category($category_id, $category_url) 
+	public function getCategory($categoryId, $categoryUrl) 
 	{
-
+		echo $categoryId.' / '.$categoryUrl;
 	}
 
 }

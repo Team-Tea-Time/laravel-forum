@@ -5,7 +5,9 @@
 	<thead>
 		<tr>
 			<td colspan="5">
-				<div class="category_title">{{ $category->title }}</div>
+				<div class="category_title">
+					<a href={{$category->url}}>{{ $category->title }}</a>
+				</div>
 				<div class="category_subtitle">{{ $category->subtitle }}</div>
 			</td>
 		</tr>
@@ -20,7 +22,9 @@
 		@foreach($category->subcategories AS $subcategory)
 		<tr>
 			<th>
-				<div class="category_title">{{ $subcategory->title }}</div>
+				<div class="category_title">
+					<a href={{$subcategory->url}}>{{ $subcategory->title }}</a>
+				</div>
 				<div class="category_subtitle">{{ $subcategory->subtitle }}</div>
 			</th>
 			<td>{{ $subcategory->topicCount }}</td>
