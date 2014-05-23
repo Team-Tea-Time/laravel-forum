@@ -11,4 +11,9 @@ abstract class AbstractForumController extends \Controller {
 		return \View::make('forum::index', compact('categories'));
 	}
 
+	public function category($category_id, $category_url) 
+	{
+
+	}
+
 }

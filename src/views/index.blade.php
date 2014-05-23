@@ -1,5 +1,7 @@
+<link href="{{ asset('packages/atrakeur/forum/css/forum-design.css') }}" rel="stylesheet" type="text/css" />
+
 @foreach ($categories as $category)
-<table>
+<table class="table table-index">
 	<thead>
 		<tr>
 			<td colspan="5">
@@ -21,9 +23,9 @@
 				<div class="category_title">{{ $subcategory->title }}</div>
 				<div class="category_subtitle">{{ $subcategory->subtitle }}</div>
 			</th>
-			<th>{{ $subcategory->topicCount }}</th>
-			<th>{{ $subcategory->replyCount }}</th>
-			<th>TODO</th>
+			<td>{{ $subcategory->topicCount }}</td>
+			<td>{{ $subcategory->replyCount }}</td>
+			<td>TODO</td>
 		</tr>
 		@endforeach
 	</tbody>

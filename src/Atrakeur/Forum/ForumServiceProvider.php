@@ -24,8 +24,7 @@ class ForumServiceProvider extends ServiceProvider {
 			$routebase  = \Config::get('forum::routes.base');
 			$controller = \Config::get('forum::integration.forumcontroller');
 
-			\Route::get($routebase, $controller.'@index');
-			
+			include __DIR__.'/../../routes.php';
 		}
 	}
 
