@@ -13,7 +13,15 @@ abstract class AbstractForumController extends \Controller {
 
 	public function getCategory($categoryId, $categoryUrl) 
 	{
-		echo $categoryId.' / '.$categoryUrl;
+		$category       = ForumCategory::findOrFail($categoryId);
+
+		$category->load('parentCategory', 'subCategories', 'topics');
+
+		$parentCategory = $category->parentCategory;
+		$subCategories  = $category->subCategories;
+		$topics         = $category->topics;
+
+		return \View::make('forum::category', compact('parentCategory', 'category', 'subCategories', 'topics'));
 	}
 
 }
