@@ -26,12 +26,12 @@ abstract class AbstractForumController extends \Controller {
 		return \View::make('forum::category', compact('parentCategory', 'category', 'subCategories', 'topics'));
 	}
 
-	public function getTopic($categoryId, $categoryUrl, $topicId, $topicUrl) {
-		$category = ForumCategory::findOrFail($categoryId);
+	public function getTopic($categoryId, $categoryUrl, $topicId, $topicUrl) 
+	{
+		$category       = ForumCategory::findOrFail($categoryId);
 		$parentCategory = $category->parentCategory;
 
-		$topic = ForumTopic::findOrFail($topicId);
-
+		$topic    = ForumTopic::findOrFail($topicId);
 		$messages = $topic->messages()->paginate(15);
 
 		return \View::make('forum::topic', compact('parentCategory', 'category', 'topic', 'messages'));
