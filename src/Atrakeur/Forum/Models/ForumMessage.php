@@ -8,7 +8,12 @@ class ForumMessage extends AbstractForumBaseModel {
 
 	public function topic()
 	{
-		return $this->belongsTo('\Atrakeur\Forum\Models\ForumTopic');
+		return $this->belongsTo('\Atrakeur\Forum\Models\ForumTopic', 'parent_topic');
+	}
+
+	public function author()
+	{
+		return $this->belongsTo(\Config::get('forum::usermodel'));
 	}
 
 }

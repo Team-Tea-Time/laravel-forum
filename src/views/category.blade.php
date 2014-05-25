@@ -50,7 +50,7 @@
 			@foreach($topics as $topic)
 			<tr>
 				<th>
-					{{ $topic->title }}
+					<a href={{$topic->url}}>{{ $topic->title }}</a>
 				</th>
 				<td>TODO</td>
 				<td>TODO</td>

@@ -1,6 +1,8 @@
 <?php namespace Atrakeur\Forum\Controllers;
 
 use \Atrakeur\Forum\Models\ForumCategory;
+use \Atrakeur\Forum\Models\ForumTopic;
+use \Atrakeur\Forum\Models\ForumMessage;
 
 abstract class AbstractForumController extends \Controller {
 
@@ -22,6 +24,17 @@ abstract class AbstractForumController extends \Controller {
 		$topics         = $category->topics;
 
 		return \View::make('forum::category', compact('parentCategory', 'category', 'subCategories', 'topics'));
+	}
+
+	public function getTopic($categoryId, $categoryUrl, $topicId, $topicUrl) {
+		$category = ForumCategory::findOrFail($categoryId);
+		$parentCategory = $category->parentCategory;
+
+		$topic = ForumTopic::findOrFail($topicId);
+
+		$messages = $topic->messages()->paginate(15);
+
+		return \View::make('forum::topic', compact('parentCategory', 'category', 'topic', 'messages'));
 	}
 
 }

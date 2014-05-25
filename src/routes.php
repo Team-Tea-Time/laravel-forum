@@ -8,3 +8,4 @@ if (!isset($routebase) || !isset($controller)) {
  */
 \Route::get($routebase, $controller.'@getIndex');
 \Route::get($routebase.'{categoryId}-{categoryUrl}', $controller.'@getCategory');
+\Route::get($routebase.'{categoryId}-{categoryUrl}/{topicId}-{topicUrl}', $controller.'@getTopic');
