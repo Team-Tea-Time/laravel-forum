@@ -5,7 +5,7 @@ class ForumCategory extends AbstractForumBaseModel {
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
 	protected $softDelete = false;
-	protected $appends    = array('topicCount', 'replyCount', 'lastReplyId', 'url');
+	protected $appends    = array('topicCount', 'replyCount', 'lastReply', 'url');
 
 	public function parentCategory()
 	{
@@ -52,9 +52,10 @@ class ForumCategory extends AbstractForumBaseModel {
 		return $replyCount;   
 	}
 
-	public function getLastReplyIdAttribute()
+	public function getLastReplyAttribute()
 	{
-		//TODO
+		$topics = $this->topics()->lists('id');
+		return ForumMessage::whereTopicIn($topics)->orderBy('updated_at', 'DESC')->limit(1)->first();
 	}
 
 	public function getUrlAttribute()

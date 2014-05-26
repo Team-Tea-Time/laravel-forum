@@ -5,6 +5,7 @@ class ForumMessage extends AbstractForumBaseModel {
 	protected $table      = 'forum_messages';
 	public    $timestamps = true;
 	protected $softDelete = true;
+	protected $appends    = array('url');
 
 	public function topic()
 	{
@@ -14,6 +15,22 @@ class ForumMessage extends AbstractForumBaseModel {
 	public function author()
 	{
 		return $this->belongsTo(\Config::get('forum::usermodel'));
+	}
+
+	public function scopeWhereTopicIn($query, Array $topics) 
+	{
+		if (count($topics) == 0) 
+		{
+			return new ForumMessage();
+		}
+
+		return $query->whereIn('parent_topic', $topics);
+	}
+
+	public function getUrlAttribute()
+	{
+		//TODO add page get parameter
+		return $this->topic->url;
 	}
 
 }

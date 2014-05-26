@@ -29,7 +29,11 @@
 			</th>
 			<td>{{ $subcategory->topicCount }}</td>
 			<td>{{ $subcategory->replyCount }}</td>
-			<td>TODO</td>
+			<td>
+				@if ($subcategory->lastReply != NULL)
+				<a href="{{ $subcategory->lastReply->url }} ">{{ $subcategory->lastReply->topic->title }}</a>
+				@endif
+			</td>
 		</tr>
 		@endforeach
 	</tbody>
