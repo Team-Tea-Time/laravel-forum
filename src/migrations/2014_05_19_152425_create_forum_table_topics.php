@@ -21,9 +21,6 @@ class CreateForumTableTopics extends Migration {
 			$table->integer('author')->unsigned();
 			$table->string('title');
 
-			/* Cached attributes */
-			$table->integer('cache_reply_count')->unsigned();
-
 			$table->timestamps();
 			$table->softDeletes();
 		});
