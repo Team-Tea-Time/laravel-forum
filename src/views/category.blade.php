@@ -20,7 +20,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach ($subCategories as $category)
+		@foreach ($subCategories as $subcategory)
 		<tr>
 			<th>
 				<div class="category_title">

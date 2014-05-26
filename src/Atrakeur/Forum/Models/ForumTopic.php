@@ -9,7 +9,7 @@ class ForumTopic extends AbstractForumBaseModel
 
 	public function category()
 	{
-		return $this->hasOne('\Atrakeur\Forum\Models\ForumCategory', 'parent_category');
+		return $this->belongsTo('\Atrakeur\Forum\Models\ForumCategory', 'parent_category');
 	}
 
 	public function messages()
