@@ -6,7 +6,7 @@
 	@if (isset($category) && $category)
 		&nbsp;&gt;&nbsp;<a href="{{ $category->url }}">{{$category->title}}</a>
 	@endif
-	@if (isset($category) && $topic)
+	@if (isset($topic) && $topic)
 		&nbsp;&gt;&nbsp;<a href="{{ $topic->url }}">{{$topic->title}}</a>
 	@endif
 </div>
