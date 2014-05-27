@@ -54,8 +54,17 @@ class ForumCategory extends AbstractForumBaseModel {
 
 	public function getLastReplyAttribute()
 	{
-		$topics = $this->topics()->lists('id');
-		return ForumMessage::whereTopicIn($topics)->orderBy('updated_at', 'DESC')->limit(1)->first();
+		$lastReply = $this->rememberAttribute('lastReply', function() {
+
+			$topics = $this->topics()->lists('id');
+			if (count($topics) > 0)
+			{
+				return ForumMessage::whereTopicIn($topics)->orderBy('updated_at', 'DESC')->limit(1)->first();
+			}
+			return NULL;
+
+		});
+		return $lastReply;
 	}
 
 	public function getUrlAttribute()

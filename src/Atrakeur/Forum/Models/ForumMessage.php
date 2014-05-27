@@ -21,7 +21,7 @@ class ForumMessage extends AbstractForumBaseModel {
 	{
 		if (count($topics) == 0) 
 		{
-			return new ForumMessage();
+			return $query;
 		}
 
 		return $query->whereIn('parent_topic', $topics);
