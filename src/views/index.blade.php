@@ -1,5 +1,7 @@
 <link href="{{ asset('packages/atrakeur/forum/css/forum-design.css') }}" rel="stylesheet" type="text/css" />
 
+@include('forum::partials.pathdisplay')
+
 @foreach ($categories as $category)
 <table class="table table-index">
 	<thead>

@@ -1,13 +1,6 @@
 <link href="{{ asset('packages/atrakeur/forum/css/forum-design.css') }}" rel="stylesheet" type="text/css" />
 
-<div class="category_header">
-	@if ($parentCategory)
-		<a href="{{ $category->parentCategory->url }}">{{$category->parentCategory->title}}</a>
-	@endif
-	@if ($category)
-		<a href="{{ $category->url }}">{{$category->title}}</a>
-	@endif
-</div>
+@include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category'))
 
 @if ($subCategories != NULL && $subCategories->count() != 0)
 <table class="table table-category">
