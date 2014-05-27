@@ -6,11 +6,21 @@ use \Atrakeur\Forum\Models\ForumMessage;
 
 abstract class AbstractForumController extends \Controller {
 
+	protected $layout = 'forum::layouts.master';
+
+	protected function setupLayout()
+	{
+		if (!is_null($this->layout))
+		{
+			$this->layout = \View::make($this->layout);
+		}
+	}
+
 	public function getIndex()
 	{
 		$categories = ForumCategory::whereTopLevel()->with('subcategories')->get();
 
-		return \View::make('forum::index', compact('categories'));
+		$this->layout->content = \View::make('forum::index', compact('categories'));
 	}
 
 	public function getCategory($categoryId, $categoryUrl) 
@@ -23,7 +33,7 @@ abstract class AbstractForumController extends \Controller {
 		$subCategories  = $category->subCategories;
 		$topics         = $category->topics;
 
-		return \View::make('forum::category', compact('parentCategory', 'category', 'subCategories', 'topics'));
+		$this->layout->content = \View::make('forum::category', compact('parentCategory', 'category', 'subCategories', 'topics'));
 	}
 
 	public function getTopic($categoryId, $categoryUrl, $topicId, $topicUrl) 
@@ -34,7 +44,7 @@ abstract class AbstractForumController extends \Controller {
 		$topic    = ForumTopic::findOrFail($topicId);
 		$messages = $topic->messages()->paginate(15);
 
-		return \View::make('forum::topic', compact('parentCategory', 'category', 'topic', 'messages'));
+		$this->layout->content = \View::make('forum::topic', compact('parentCategory', 'category', 'topic', 'messages'));
 	}
 
 }

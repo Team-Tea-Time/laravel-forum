@@ -1,7 +1,3 @@
-@include('forum::partials.csslinks')
-
-@include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
-
 <table class="table table-index">
 	<thead>
 		<tr>

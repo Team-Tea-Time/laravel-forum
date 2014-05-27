@@ -1,7 +1,3 @@
-@include('forum::partials.csslinks')
-
-@include('forum::partials.pathdisplay')
-
 @foreach ($categories as $category)
 <table class="table table-index">
 	<thead>

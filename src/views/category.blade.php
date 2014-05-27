@@ -1,7 +1,3 @@
-@include('forum::partials.csslinks')
-
-@include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category'))
-
 @if ($subCategories != NULL && $subCategories->count() != 0)
 <table class="table table-category">
 	<thead>
