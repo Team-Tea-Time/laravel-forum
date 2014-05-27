@@ -10,7 +10,7 @@ abstract class AbstractForumController extends \Controller {
 
 	protected function setupLayout()
 	{
-		if (!is_null($this->layout))
+		if ($this->layout != NULL)
 		{
 			$this->layout = \View::make($this->layout);
 		}
