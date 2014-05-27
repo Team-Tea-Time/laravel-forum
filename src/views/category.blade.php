@@ -1,4 +1,4 @@
-<link href="{{ asset('packages/atrakeur/forum/css/forum-design.css') }}" rel="stylesheet" type="text/css" />
+@include('forum::partials.csslinks')
 
 @include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category'))
 
