@@ -73,21 +73,18 @@ class ForumCategory extends AbstractForumBaseModel {
 		});
 
 		//Get the last message
-		if ($lastReplyId != NULL) 
+		//validate existence or clear orphaned cache data
+		$message = ForumMessage::find($lastReplyId);
+		if ($message != NULL) 
 		{
-			//validate existence or clear orphaned cache data
-			$message = ForumMessage::find($lastReplyId);
-			if ($message != NULL) 
-			{
-				return $message;
-			}
-			else
-			{
-				$this->clearAttributeCache();
-			}
+			return $message;
+		}
+		else
+		{
+			$this->clearAttributeCache();
 		}
 		
-		return $lastReplyId;
+		return NULL;
 	}
 
 	public function getUrlAttribute()
