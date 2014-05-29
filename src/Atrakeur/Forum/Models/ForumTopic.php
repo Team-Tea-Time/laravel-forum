@@ -19,7 +19,7 @@ class ForumTopic extends AbstractForumBaseModel
 
 	public function getUrlAttribute()
 	{
-		return action(\Config::get('forum::integration.forumcontroller').'@getTopic',
+		return action(\Config::get('forum::integration.viewcontroller').'@getTopic',
 			array(
 				'categoryId'  => $this->category->id,
 				'categoryUrl' => \Str::slug($this->category->title, '_'),

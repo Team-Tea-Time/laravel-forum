@@ -89,7 +89,17 @@ class ForumCategory extends AbstractForumBaseModel {
 
 	public function getUrlAttribute()
 	{
-		return action(\Config::get('forum::integration.forumcontroller').'@getCategory',
+		return action(\Config::get('forum::integration.viewcontroller').'@getCategory',
+			array(
+				'categoryId' => $this->id,
+				'categoryUrl' => \Str::slug($this->title, '_')
+			)
+		);
+	}
+
+	public function getPostUrlAttribute()
+	{
+		return action(\Config::get('forum::integration.postcontroller').'@postNewTopic',
 			array(
 				'categoryId' => $this->id,
 				'categoryUrl' => \Str::slug($this->title, '_')

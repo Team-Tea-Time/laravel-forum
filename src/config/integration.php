@@ -29,13 +29,24 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| Application forum controller
+	| Application forum view controller
 	|--------------------------------------------------------------------------
 	|
-	| The controller used as application level hook for the forum
-	| This class must extend \Atrakeur\Forum\Controllers\ForumController
+	| The controller used as application level hook for the forum (visualisation part)
+	| This class must extend \Atrakeur\Forum\Controllers\AbstractViewForumController
 	|
 	*/
-	'forumcontroller' => '\ForumController'
+	'viewcontroller' => '\ForumController',
+
+	/*
+	|--------------------------------------------------------------------------
+	| Application forum post controller
+	|--------------------------------------------------------------------------
+	|
+	| The controller used as application level hook for the forum (post part)
+	| This class must extend \Atrakeur\Forum\Controllers\AbstractPostForumController
+	|
+	*/
+	'postcontroller' => '\ForumPostController'
 
 );
