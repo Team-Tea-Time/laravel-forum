@@ -64,12 +64,11 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			$message->data         = $data;
 			$message->save();
 
-			return \Redirect::to($topic->url)
-					->with('success', 'topic created');
+			return \Redirect::to($topic->url)->with('success', 'topic created');
 		}
-		else {
-			return \Redirect::to($subCategory->url)
-					->withErrors($validator);
+		else 
+		{
+			return \Redirect::to($category->url)->withErrors($validator);
 		}
 	}
 
