@@ -1,3 +1,5 @@
+@include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
+
 @foreach ($categories as $category)
 <table class="table table-index">
 	<thead>

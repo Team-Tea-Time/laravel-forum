@@ -1,3 +1,5 @@
+@include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
+
 @if ($subCategories != NULL && $subCategories->count() != 0)
 <table class="table table-category">
 	<thead>

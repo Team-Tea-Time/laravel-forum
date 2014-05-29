@@ -11,8 +11,6 @@
 	<![endif]-->
 </head>
 <body>
-	@include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
-
 	@if(isset($content))
 		{{ $content }}
 	@else
