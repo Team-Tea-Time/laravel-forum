@@ -14,13 +14,6 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			'data' => 'required|min:5',
 	);
 
-	protected function getCurrentUser() 
-	{
-		$userfunc = \Config::get('forum::integration.currentuser');
-		$user = $userfunc();
-		return $user;
-	}
-
 	public function getNewTopic($categoryId, $categoryUrl)
 	{
 		$user = $this->getCurrentUser();
@@ -56,13 +49,19 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			$topic->parent_category = $category->id;
 			$topic->author          = $user->id;
 			$topic->title           = $title;
+
+			$this->fireEvent('forum.new.topic', array($topic));
 			$topic->save();
+			$this->fireEvent('forum.saved.topic', array($topic));
 
 			$message               = new ForumMessage();
 			$message->parent_topic = $topic->id;
 			$message->author       = $user->id;
 			$message->data         = $data;
+
+			$this->fireEvent('forum.new.message', array($message));
 			$message->save();
+			$this->fireEvent('forum.saved.message', array($message));
 
 			return \Redirect::to($topic->url)->with('success', 'topic created');
 		}

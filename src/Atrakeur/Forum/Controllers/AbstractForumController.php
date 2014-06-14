@@ -16,4 +16,16 @@ abstract class AbstractForumController extends \Controller {
 		}
 	}
 
+	protected function getCurrentUser() 
+	{
+		$userfunc = \Config::get('forum::integration.currentuser');
+		$user = $userfunc();
+		return $user;
+	}
+
+	protected function fireEvent($event, $data) 
+	{
+		return Event::fire($event, $data);
+	}
+
 }

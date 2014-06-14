@@ -24,3 +24,15 @@ This package is currently in heavy work, so all of the following features arn't 
  * Easy user right integration (through an interface)
  * Message posting (with hooks for formatting)
  * Light weight & blasing fast (designed with caching and high speed in mind)
+
+## Events
+
+This package provides various events as hooks to enable you to implement you own functionnality on top of forum's functionnality.
+Here is a complete list of all events, as to when they are fired. When a parameter is given, you can use this parameter to change a forum's iternal object to fit your needs.
+
+| Event                | Params        | Usage                            |
+| -------------        |:-------------:| ---------------------------------------------:                     |
+| forum.new.topic      | $topic        | Called before topic save. Can be used to modify topic contents     |
+| forum.new.message    | $message      | Called before message save. Can be used to modify message contents |
+| forum.saved.topic    | $topic        | Called after topic save. Can be used for logging purposes          |
+| forum.saved.message  | $message      | Called after message save. Can be used for logging purposes        |
