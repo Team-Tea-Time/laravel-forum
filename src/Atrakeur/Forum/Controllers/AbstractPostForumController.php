@@ -27,7 +27,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		$parentCategory = $category->parentCategory;
 		$actionUrl      = $category->postUrl;
 
-		$this->layout->content = \View::make('forum::messageform', compact('parentCategory', 'category', 'actionUrl'));
+		$this->layout->content = \View::make('forum::post', compact('parentCategory', 'category', 'actionUrl'));
 	}
 
 	public function postNewTopic($categoryId, $categoryUrl)
@@ -86,7 +86,39 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		$actionUrl      = $topic->postUrl;
 		$prevMessages   = $topic->messages()->orderBy('id', 'DESC')->take(10)->get();
 
-		$this->layout->content = \View::make('forum::messageform', compact('parentCategory', 'category', 'topic', 'actionUrl', 'prevMessages'));
+		$this->layout->content = \View::make('forum::reply', compact('parentCategory', 'category', 'topic', 'actionUrl', 'prevMessages'));
+	}
+
+	public function postNewMessage($categoryId, $categoryUrl, $topicId, $topicUrl)
+	{
+		$user = $this->getCurrentUser();
+		if ($user == NULL) 
+		{
+			return \App::abort(403, 'Access denied');
+		}
+
+		$category  = ForumCategory::findOrFail($categoryId);
+		$topic          = ForumTopic::findORFail($topicId);
+		$validator = \Validator::make(\Input::all(), $this->messageRules);
+		if ($validator->passes())
+		{
+			$data  = \Input::get('data');
+			
+			$message               = new ForumMessage();
+			$message->parent_topic = $topic->id;
+			$message->author       = $user->id;
+			$message->data         = $data;
+
+			$this->fireEvent('forum.new.message', array($message));
+			$message->save();
+			$this->fireEvent('forum.saved.message', array($message));
+
+			return \Redirect::to($topic->url)->with('success', 'topic created');
+		}
+		else 
+		{
+			return \Redirect::to($category->url)->withErrors($validator);
+		}
 	}
 
 }

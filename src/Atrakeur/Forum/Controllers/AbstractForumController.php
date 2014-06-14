@@ -25,7 +25,7 @@ abstract class AbstractForumController extends \Controller {
 
 	protected function fireEvent($event, $data) 
 	{
-		return Event::fire($event, $data);
+		return \Event::fire($event, $data);
 	}
 
 }
