@@ -1,5 +1,6 @@
 @include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
 
+@include('forum::partials.postbutton')->with(array('message' => 'New Reply', 'url' => $topic->postUrl))
 <table class="table table-index">
 	<thead>
 		<tr>
@@ -23,10 +24,13 @@
 		</tr>
 		<tr>
 			<td>
-				
+				@include('forum::partials.postbutton')->with(array('message' => 'Edit', 'url' => $message->postUrl))
 			</td>
 			<td>
-				{{ $message->created_at }}
+				Posted at {{ $message->created_at }}
+				@if ($message->updated_at != null && $message->created_at != $message->updated_at)
+					Last update at {{ $message->updated_at }}
+				@endif
 			</td>
 		</tr>
 		@endforeach

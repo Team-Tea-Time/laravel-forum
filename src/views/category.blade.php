@@ -1,5 +1,6 @@
 @include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
 
+@include('forum::partials.postbutton')->with(array('message' => 'New Topic', 'url' => $category->postUrl))
 @if ($subCategories != NULL && $subCategories->count() != 0)
 <table class="table table-category">
 	<thead>
