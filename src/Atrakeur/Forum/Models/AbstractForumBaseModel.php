@@ -11,10 +11,10 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 		return $value;
 	}
 
-	protected function clearAttributeCache()
+	protected static function clearAttributeCache($model)
 	{
-		foreach ($this->appends as $attribute) {
-			$cacheItem = get_class($this).$this->id.$attribute;
+		foreach ($model->appends as $attribute) {
+			$cacheItem = get_class($model).$model->id.$attribute;
 			\Cache::forget($cacheItem);
 		}
 	}

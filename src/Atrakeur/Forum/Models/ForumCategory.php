@@ -81,7 +81,7 @@ class ForumCategory extends AbstractForumBaseModel {
 		}
 		else
 		{
-			$this->clearAttributeCache();
+			AbstractForumBaseModel::clearAttributeCache($this);
 		}
 		
 		return NULL;
