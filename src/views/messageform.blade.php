@@ -1,4 +1,8 @@
-@include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category'))
+@include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
+
+<p class="lead">
+	Vous postez dans @include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
+</p>
 
 {{ Form::open(array('url' => $actionUrl)) }}
 

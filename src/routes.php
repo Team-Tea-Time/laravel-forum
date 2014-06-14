@@ -12,3 +12,6 @@ if (!isset($routebase) || !isset($viewController) || !isset($postController)) {
 
 \Route:: get($routebase.'{categoryId}-{categoryUrl}/new', $postController.'@getNewTopic');
 \Route::post($routebase.'{categoryId}-{categoryUrl}/new', $postController.'@postNewTopic');
+
+\Route:: get($routebase.'{categoryId}-{categoryUrl}/{topicId}-{topicUrl}/new', $postController.'@getNewMessage');
+\Route::post($routebase.'{categoryId}-{categoryUrl}/{topicId}-{topicUrl}/new', $postController.'@postNewMessage');

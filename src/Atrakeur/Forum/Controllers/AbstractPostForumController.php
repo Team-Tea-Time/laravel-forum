@@ -71,4 +71,22 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		}
 	}
 
+	public function getNewMessage($categoryId, $categoryUrl, $topicId, $topicUrl)
+	{
+		$user = $this->getCurrentUser();
+		if ($user == NULL) 
+		{
+			return \App::abort(403, 'Access denied');
+		}
+
+		$category       = ForumCategory::findOrFail($categoryId);
+		$category->load('parentCategory');
+		$parentCategory = $category->parentCategory;
+		$topic          = ForumTopic::findORFail($topicId);
+		$actionUrl      = $topic->postUrl;
+		$prevMessages   = $topic->messages()->orderBy('id', 'DESC')->take(10)->get();
+
+		$this->layout->content = \View::make('forum::messageform', compact('parentCategory', 'category', 'topic', 'actionUrl', 'prevMessages'));
+	}
+
 }

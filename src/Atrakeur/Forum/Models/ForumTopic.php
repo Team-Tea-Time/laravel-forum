@@ -29,4 +29,16 @@ class ForumTopic extends AbstractForumBaseModel
 		);
 	}
 
+	public function getPostUrlAttribute()
+	{
+		return action(\Config::get('forum::integration.postcontroller').'@postNewMessage',
+			array(
+				'categoryId'  => $this->category->id,
+				'categoryUrl' => \Str::slug($this->category->title, '_'),
+				'topicId'     => $this->id,
+				'topicUrl'    => \Str::slug($this->title, '_'),
+			)
+		);
+	}
+
 }
