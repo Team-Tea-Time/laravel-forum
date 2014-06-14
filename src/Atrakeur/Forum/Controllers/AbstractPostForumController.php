@@ -79,7 +79,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			return \App::abort(403, 'Access denied');
 		}
 
-		$category       = ForumCategory::findOrFail($categoryId);
+		$category = ForumCategory::findOrFail($categoryId);
 		$category->load('parentCategory');
 		$parentCategory = $category->parentCategory;
 		$topic          = ForumTopic::findORFail($topicId);
@@ -98,12 +98,12 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		}
 
 		$category  = ForumCategory::findOrFail($categoryId);
-		$topic          = ForumTopic::findORFail($topicId);
+		$topic     = ForumTopic::findOrFail($topicId);
 		$validator = \Validator::make(\Input::all(), $this->messageRules);
 		if ($validator->passes())
 		{
-			$data  = \Input::get('data');
-			
+			$data = \Input::get('data');
+
 			$message               = new ForumMessage();
 			$message->parent_topic = $topic->id;
 			$message->author       = $user->id;
