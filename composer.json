@@ -19,7 +19,8 @@
     },
     "autoload": {
         "classmap": [
-            "src/migrations"
+            "src/migrations",
+            "tests"
         ],
         "psr-0": {
             "Atrakeur\\Forum\\": "src/"
