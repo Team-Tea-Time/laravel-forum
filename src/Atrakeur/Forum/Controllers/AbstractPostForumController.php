@@ -69,7 +69,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		}
 		else 
 		{
-			return \Redirect::to($category->url)->withErrors($validator);
+			return \Redirect::to($category->postUrl)->withErrors($validator)->withInput();
 		}
 	}
 
@@ -122,7 +122,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		}
 		else 
 		{
-			return \Redirect::to($category->url)->withErrors($validator);
+			return \Redirect::to($topic->postUrl)->withErrors($validator)->withInput();
 		}
 	}
 

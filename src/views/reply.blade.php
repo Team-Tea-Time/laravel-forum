@@ -1,8 +1,6 @@
 @include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
 
-<p class="lead">
-	You're posting into @include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
-</p>
+@include('forum::partials.errorbox')
 
 @if (isset($prevMessages) && count($prevMessages) > 0)
 <p class="lead">
@@ -27,9 +25,27 @@
 </table>
 @endif
 
-{{ Form::open(array('url' => $actionUrl)) }}
+{{ Form::open(array('url' => $actionUrl, 'class' => 'form-horizontal')) }}
+<fieldset>
 
-Message: {{ Form::textarea('data') }}
+<!-- Form Name -->
+<legend>Post a new message</legend>
+<p class="lead">
+	You're posting into @include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
+</p>
 
-{{ Form::submit('Send') }}
+<div class="control-group">
+	<label class="control-label" for="textarea">Your message</label>
+	<div class="controls">                     
+		{{ Form::textarea('data') }}
+	</div>
+</div>
+
+<div class="control-group">
+	<div class="controls">                     
+		{{ Form::submit('Send') }}
+	</div>
+</div>
+
+</fieldset>
 {{ Form::close() }}
