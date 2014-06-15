@@ -13,9 +13,12 @@ class AbstractForumControllerTest extends ForumBaseTest {
 	public function testCurrentUser() 
 	{
 		$controller = $this->getMockForAbstractClass('\Atrakeur\Forum\Controllers\AbstractForumController');
+
 		$reflectionOfUser = new \ReflectionClass('\Atrakeur\Forum\Controllers\AbstractForumController');
+
 		$method = $reflectionOfUser->getMethod('getCurrentUser');
 		$method->setAccessible(true);
+
 
 		\Config::set('forum::integration.currentuser', function() {
 			$user = $this->getMock('\User');
