@@ -10,7 +10,10 @@ before_script:
   - composer self-update
   - composer install --prefer-source --no-interaction --dev
 
-script: phpunit --coverage-clover "clover"
+script: phpunit
 
 after_success:
-    - curl -sL https://bit.ly/artifact-uploader | php
+	- phpunit --coverage-clover "clover"
+	- wget https://scrutinizer-ci.com/ocular.phar
+	- php ocular.phar code-coverage:upload --access-token="bf65000de9ffe8c906966e656e6d2199e5cc8972a57c1b44c2e98679a4e581e7" --format=php-clover coverage.clover
+	
