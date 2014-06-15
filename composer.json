@@ -10,7 +10,12 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "illuminate/support": "4.1.*"
+        "illuminate/support": "4.1.*",
+        "mockery/mockery": "0.9.*"
+    },
+    "require-dev": {
+        "orchestra/testbench": "2.2.*",
+        "mockery/mockery": "0.9.*"
     },
     "autoload": {
         "classmap": [
