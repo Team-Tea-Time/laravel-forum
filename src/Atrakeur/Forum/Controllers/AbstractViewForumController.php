@@ -32,7 +32,7 @@ abstract class AbstractViewForumController extends AbstractForumController {
 		$parentCategory = $category->parentCategory;
 
 		$topic    = ForumTopic::findOrFail($topicId);
-		$messages = $topic->messages()->paginate(15);
+		$messages = $topic->messages()->paginate(\Config::get('forum::integration.messagesperpage'));
 
 		$this->layout->content = \View::make('forum::topic', compact('parentCategory', 'category', 'topic', 'messages'));
 	}

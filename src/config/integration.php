@@ -47,6 +47,14 @@ return array(
 	| This class must extend \Atrakeur\Forum\Controllers\AbstractPostForumController
 	|
 	*/
-	'postcontroller' => '\ForumPostController'
+	'postcontroller' => '\ForumPostController',
+
+	/*
+	|--------------------------------------------------------------------------
+	| The number of messages per page
+	|--------------------------------------------------------------------------
+	|
+	*/
+	'messagesperpage' => 15
 
 );
