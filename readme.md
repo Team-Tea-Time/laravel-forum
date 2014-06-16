@@ -21,8 +21,8 @@ This package is currently in heavy work, so all of the following features arn't 
 
  * Category nesting on 2 levels
  * Topic and messages inside categories
- * Easy user integration (through an interface)
- * Easy user right integration (through an interface)
+ * Easy user integration (through a php interface)
+ * Easy user right integration (through a php interface)
  * Message posting (with hooks for formatting)
  * Light weight & blasing fast (designed with caching and high speed in mind)
 
@@ -31,7 +31,7 @@ This package is currently in heavy work, so all of the following features arn't 
 This package provides various events as hooks to enable you to implement you own functionnality on top of forum's functionnality.
 Here is a complete list of all events, as to when they are fired. When a parameter is given, you can use this parameter to change a forum's iternal object to fit your needs.
 
-| Event                | Params        | Usage                            |
+| Events               | Params        | Usage                            |
 | -------------        |:-------------:| ---------------------------------------------:                     |
 | forum.new.topic      | $topic        | Called before topic save. Can be used to modify topic contents     |
 | forum.new.message    | $message      | Called before message save. Can be used to modify message contents |
