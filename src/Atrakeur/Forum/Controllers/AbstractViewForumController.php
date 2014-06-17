@@ -4,18 +4,27 @@ use \Atrakeur\Forum\Models\ForumCategory;
 use \Atrakeur\Forum\Models\ForumTopic;
 use \Atrakeur\Forum\Models\ForumMessage;
 
-abstract class AbstractViewForumController extends AbstractForumController {
+class AbstractViewForumController extends AbstractForumController {
+
+	private $categories;
+	private $topics;
+
+	public function __construct(ForumCategory $categories, ForumTopic $topics)
+	{
+		$this->categories = $categories;
+		$this->topics     = $topics;
+	}
 
 	public function getIndex()
 	{
-		$categories = ForumCategory::whereTopLevel()->with('subcategories')->get();
+		$categories = $this->categories->whereTopLevel()->with('subcategories')->get();
 
 		$this->layout->content = \View::make('forum::index', compact('categories'));
 	}
 
 	public function getCategory($categoryId, $categoryUrl) 
 	{
-		$category = ForumCategory::findOrFail($categoryId);
+		$category = $this->categories->findOrFail($categoryId);
 
 		$category->load('parentCategory', 'subCategories', 'topics');
 
@@ -28,10 +37,10 @@ abstract class AbstractViewForumController extends AbstractForumController {
 
 	public function getTopic($categoryId, $categoryUrl, $topicId, $topicUrl) 
 	{
-		$category       = ForumCategory::findOrFail($categoryId);
+		$category       = $this->categories->findOrFail($categoryId);
 		$parentCategory = $category->parentCategory;
 
-		$topic    = ForumTopic::findOrFail($topicId);
+		$topic    = $this->topics->findOrFail($topicId);
 		$messages = $topic->messages()->paginate(\Config::get('forum::integration.messagesperpage'));
 
 		$this->layout->content = \View::make('forum::topic', compact('parentCategory', 'category', 'topic', 'messages'));
