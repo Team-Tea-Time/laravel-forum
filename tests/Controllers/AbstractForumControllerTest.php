@@ -12,6 +12,10 @@ class AbstractForumControllerTest extends ForumBaseTest {
 
 	public function testCurrentUser() 
 	{
+		//use an simple stdClass object to represent user model in tests
+		\Config::set('forum::integration.usermodel', "stdClass");
+
+		//change visibility of getCurrentUser from protected to public
 		$controller = $this->getMockForAbstractClass('\Atrakeur\Forum\Controllers\AbstractForumController');
 
 		$reflectionOfUser = new \ReflectionClass('\Atrakeur\Forum\Controllers\AbstractForumController');
@@ -19,18 +23,22 @@ class AbstractForumControllerTest extends ForumBaseTest {
 		$method = $reflectionOfUser->getMethod('getCurrentUser');
 		$method->setAccessible(true);
 
-
-		\Config::set('forum::integration.currentuser', function() {
-			$user = $this->getMock('\User');
+		//test good current user
+		$user = new \stdClass();
+		\Config::set('forum::integration.currentuser', function() use ($user)
+		{
 			return $user;
 		});
-		$this->assertEquals(null, $method->invoke($controller));
+		$data = $method->invoke($controller);
+		$this->assertEquals($user, $data);
 
+		//test falsey responce
 		\Config::set('forum::integration.currentuser', function() {
 			return false;
 		});
 		$this->assertEquals(null, $method->invoke($controller));
 
+		//test true like responce
 		\Config::set('forum::integration.currentuser', function() {
 			return true;
 		});

@@ -21,7 +21,8 @@ abstract class AbstractForumController extends \Controller {
 		$userfunc = \Config::get('forum::integration.currentuser');
 		
 		$user = $userfunc();
-		if (is_object($user) && get_class($user) == \Config::get('forum::integration.usermodel')) {
+		if (is_object($user) && get_class($user) == \Config::get('forum::integration.usermodel')) 
+		{
 			return $user;
 		}
 		
