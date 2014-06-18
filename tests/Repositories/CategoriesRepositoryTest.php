@@ -17,7 +17,7 @@ class CategoriesRepositoryTest extends ForumBaseTest {
 		$modelMock->shouldReceive('where')->with('parent_category', '=', $id)->once()->andReturn($modelMock);
 		$modelMock->shouldReceive('with')->with($with)->once()->andReturn($modelMock);
 		$modelMock->shouldReceive('get')->once()->andReturn($modelMock);
-		$modelMock->shouldReceive('toObject')->once()->andReturn($return);
+		$modelMock->shouldReceive('convertToObject')->once()->andReturn($return);
 
 		return new CategoriesRepository($modelMock);
 	}

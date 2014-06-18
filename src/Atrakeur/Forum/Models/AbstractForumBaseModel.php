@@ -24,7 +24,7 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 		return $this->convertToObject($this);
 	}
 
-	protected function convertToObject($value)
+	public function convertToObject($value)
 	{
 		if ($value instanceof Eloquent)
 		{
