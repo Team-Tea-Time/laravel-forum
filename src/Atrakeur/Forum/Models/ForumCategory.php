@@ -5,7 +5,7 @@ class ForumCategory extends AbstractForumBaseModel {
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
 	protected $softDelete = false;
-	protected $appends    = array('topicCount', 'replyCount', 'lastReply', 'url');
+	protected $appends    = array('topicCount', 'replyCount', 'url');
 
 	public function parentCategory()
 	{
@@ -50,41 +50,6 @@ class ForumCategory extends AbstractForumBaseModel {
 
 		});
 		return $replyCount;   
-	}
-
-	public function getLastReplyAttribute()
-	{
-		$lastReplyId = $this->rememberAttribute('lastReply', function() {
-
-			// list topics in this category
-			$topics = $this->topics()->lists('id');
-			if (count($topics) > 0)
-			{
-				//get last message
-				$message = ForumMessage::whereTopicIn($topics)->orderBy('updated_at', 'DESC')->limit(1)->first();
-				if ($message != NULL) 
-				{	
-					//store id in cache
-					return $message->id;
-				}
-			}
-
-			return NULL;
-		});
-
-		//Get the last message
-		//validate existence or clear orphaned cache data
-		$message = ForumMessage::find($lastReplyId);
-		if ($message != NULL) 
-		{
-			return $message;
-		}
-		else
-		{
-			AbstractForumBaseModel::clearAttributeCache($this);
-		}
-		
-		return NULL;
 	}
 
 	public function getUrlAttribute()

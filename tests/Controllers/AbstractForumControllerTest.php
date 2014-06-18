@@ -1,15 +1,15 @@
 <?php namespace Atrakeur\Forum\Controllers;
 
-use \Atrakeur\Forum\Models\ForumCategory;
 use \Atrakeur\Forum\ForumBaseTest;
+use \Atrakeur\Forum\Models\ForumCategory;
 use \Atrakeur\Forum\Controllers\AbstractForumController;
 
 class AbstractForumControllerTest extends ForumBaseTest {
 
 	protected function getPackageProviders()
-    {
-        return array('\Atrakeur\Forum\ForumServiceProvider');
-    }
+	{
+		return array('\Atrakeur\Forum\ForumServiceProvider');
+	}
 
 	public function testCurrentUser() 
 	{

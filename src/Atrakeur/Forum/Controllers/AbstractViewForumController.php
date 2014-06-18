@@ -1,6 +1,6 @@
 <?php namespace Atrakeur\Forum\Controllers;
 
-use \Atrakeur\Forum\Models\ForumCategory;
+use Atrakeur\Forum\Repositories\CategoriesRepository;
 use \Atrakeur\Forum\Models\ForumTopic;
 use \Atrakeur\Forum\Models\ForumMessage;
 
@@ -9,7 +9,7 @@ class AbstractViewForumController extends AbstractForumController {
 	private $categories;
 	private $topics;
 
-	public function __construct(ForumCategory $categories, ForumTopic $topics)
+	public function __construct(CategoriesRepository $categories, ForumTopic $topics)
 	{
 		$this->categories = $categories;
 		$this->topics     = $topics;
@@ -17,7 +17,7 @@ class AbstractViewForumController extends AbstractForumController {
 
 	public function getIndex()
 	{
-		$categories = $this->categories->whereTopLevel()->with('subcategories')->get();
+		$categories = $this->categories->getByParent(null, array('subcategories'));
 
 		$this->layout->content = \View::make('forum::index', compact('categories'));
 	}
