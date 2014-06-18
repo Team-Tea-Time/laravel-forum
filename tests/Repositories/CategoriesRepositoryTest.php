@@ -17,35 +17,31 @@ class CategoriesRepositoryTest extends ForumBaseTest {
 		$modelMock->shouldReceive('where')->with('parent_category', '=', $id)->once()->andReturn($modelMock);
 		$modelMock->shouldReceive('with')->with($with)->once()->andReturn($modelMock);
 		$modelMock->shouldReceive('get')->once()->andReturn($modelMock);
-		$modelMock->shouldReceive('toArray')->once()->andReturn($return);
+		$modelMock->shouldReceive('toObject')->once()->andReturn($return);
 
-		return $modelMock;
+		return new CategoriesRepository($modelMock);
 	}
 
 	public function testGetByParentNull()
 	{
-		//mock the ForumCategory model
-		$modelMock = $this->getCategoryModelMock(null, array(), array());
+		$repository = $this->getCategoryModelMock(null, array(), array());
 
-		$repository = new CategoriesRepository($modelMock);
 		$this->assertEquals(array(), $repository->getByParent(null));
 	}
 
 	public function testGetByParentInteger()
 	{
 		//mock the ForumCategory model
-		$modelMock = $this->getCategoryModelMock(1, array(), array());
+		$repository = $this->getCategoryModelMock(1, array(), array());
 
-		$repository = new CategoriesRepository($modelMock);
 		$this->assertEquals(array(), $repository->getByParent(1));
 	}
 
 	public function testGetByParentArray()
 	{
 		//mock the ForumCategory model
-		$modelMock = $this->getCategoryModelMock(1, array(), array());
+		$repository = $this->getCategoryModelMock(1, array(), array());
 
-		$repository = new CategoriesRepository($modelMock);
 		$this->assertEquals(array(), $repository->getByParent(array('id' => 1)));
 	}
 
