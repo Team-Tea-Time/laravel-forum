@@ -45,4 +45,9 @@ class CategoriesRepositoryTest extends ForumBaseTest {
 		$this->assertEquals(array(), $repository->getByParent(array('id' => 1)));
 	}
 
+	public function tearDown()
+	{
+		\Mockery::close();
+	}
+
 }

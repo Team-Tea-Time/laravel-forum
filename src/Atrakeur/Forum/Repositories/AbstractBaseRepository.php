@@ -1,9 +1,5 @@
 <?php namespace Atrakeur\Forum\Repositories;
 
-use \stdClass;
-use \Eloquent;
-use \Illuminate\Database\Eloquent\Collection;
-
 abstract class AbstractBaseRepository  {
 
 	protected $model;
@@ -12,12 +8,15 @@ abstract class AbstractBaseRepository  {
 	{
 		$model = $this->model->where($index, '=', $value)->with($with)->first();
 		return $this->model->convertToObject($model);
+		//var_dump($model[0]);
 	}
 
 	protected function getManyBy($index, $value, array $with = array())
 	{
 		$model = $this->model->where($index, '=', $value)->with($with)->get();
 		return $this->model->convertToObject($model);
+		//var_dump($model[0]);
+		//var_dump($this->model->convertToObject($model[0]));
 	}
 
 }

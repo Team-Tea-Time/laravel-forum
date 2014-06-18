@@ -1,5 +1,7 @@
 <?php namespace Atrakeur\Forum\Models;
 
+use \stdClass;
+
 abstract class AbstractForumBaseModel extends \Eloquent {
 
 	protected function rememberAttribute($item, $function)
@@ -26,7 +28,7 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 
 	public function convertToObject($value)
 	{
-		if ($value instanceof Eloquent)
+		if ($value instanceof \Eloquent)
 		{
 			$attributes = $value->toArray();
 			$relations  = $value->relationsToArray();
@@ -37,7 +39,7 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 				if (array_key_exists($key, $relations)) 
 				{
 					$key = camel_case($key);
-					$object->$key = $this->toObject($value->$key);
+					$object->$key = $this->convertToObject($value->$key);
 				}
 				else 
 				{
@@ -47,16 +49,15 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 			return $object;
 		}
 		
-		if ($value instanceof Collection)
+		if ($value instanceof \Illuminate\Database\Eloquent\Collection)
 		{
 			$array = array();
 			foreach($value AS $key => $element)
 			{
-				$array[$key] = $this->toObject($element);
+				$array[$key] = $this->convertToObject($element);
 			}
 			return $array;
 		}
-
 		return $value;
 	}
 
