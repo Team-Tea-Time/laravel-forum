@@ -1,6 +1,6 @@
-@include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
+@include('forum::partials.pathdisplay')
 
-@include('forum::partials.postbutton')->with(array('message' => 'New Reply', 'url' => $topic->postUrl))
+@include('forum::partials.postbutton')
 <table class="table table-index">
 	<thead>
 		<tr>

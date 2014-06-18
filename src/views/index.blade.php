@@ -1,4 +1,4 @@
-@include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
+@include('forum::partials.pathdisplay')
 
 @foreach ($categories as $category)
 <table class="table table-index">

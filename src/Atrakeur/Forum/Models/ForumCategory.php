@@ -5,7 +5,7 @@ class ForumCategory extends AbstractForumBaseModel {
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
 	protected $softDelete = false;
-	protected $appends    = array('topicCount', 'replyCount', 'url');
+	protected $appends    = array('topicCount', 'replyCount', 'url', 'postUrl');
 
 	public function parentCategory()
 	{

@@ -1,7 +1,7 @@
-@include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
+@include('forum::partials.pathdisplay')
 
-@include('forum::partials.postbutton')->with(array('message' => 'New Topic', 'url' => $category->postUrl))
-@if ($subCategories != NULL && $subCategories->count() != 0)
+@include('forum::partials.postbutton')
+@if ($subCategories != NULL && count($subCategories) != 0)
 <table class="table table-category">
 	<thead>
 		<tr>
@@ -23,9 +23,7 @@
 			<td>{{ $subcategory->topicCount }}</td>
 			<td>{{ $subcategory->replyCount }}</td>
 			<td>
-				@if ($subcategory->lastReply != NULL)
-				<a href="{{ $subcategory->lastReply->url }} ">{{ $subcategory->lastReply->topic->title }}</a>
-				@endif
+				
 			</td>
 		</tr>
 		@endforeach
@@ -42,7 +40,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@if ($topics != NULL && $topics->count() != 0)
+		@if ($topics != NULL && count($topics) != 0)
 			@foreach($topics as $topic)
 			<tr>
 				<th>

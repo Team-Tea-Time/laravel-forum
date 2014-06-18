@@ -25,10 +25,20 @@ abstract class AbstractBaseRepository  {
 		if ($value instanceof Eloquent)
 		{
 			$attributes = $value->toArray();
+			$relations  = $value->relationsToArray();
+			
 			$object = new stdClass();
 			foreach($attributes AS $key => $attribute)
 			{
-				$object->$key = $this->toObject($value->$key);
+				if (array_key_exists($key, $relations)) 
+				{
+					$key = camel_case($key);
+					$object->$key = $this->toObject($value->$key);
+				}
+				else 
+				{
+					$object->$key = $attribute;
+				}
 			}
 			return $object;
 		}

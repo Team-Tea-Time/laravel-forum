@@ -24,20 +24,23 @@ class AbstractViewForumController extends AbstractForumController {
 
 	public function getCategory($categoryId, $categoryUrl) 
 	{
-		$category = $this->categories->findOrFail($categoryId);
-
-		$category->load('parentCategory', 'subCategories', 'topics');
+		$category = $this->categories->getById($categoryId, array('parentCategory', 'subCategories', 'topics'));
+		if ($category == NULL)
+		{
+			\App::abort(404);
+		}
 
 		$parentCategory = $category->parentCategory;
 		$subCategories  = $category->subCategories;
 		$topics         = $category->topics;
 
 		$this->layout->content = \View::make('forum::category', compact('parentCategory', 'category', 'subCategories', 'topics'));
+		
 	}
 
 	public function getTopic($categoryId, $categoryUrl, $topicId, $topicUrl) 
 	{
-		$category       = $this->categories->findOrFail($categoryId);
+		$category       = $this->categories->getById($categoryId, array('parentCategory'));
 		$parentCategory = $category->parentCategory;
 
 		$topic    = $this->topics->findOrFail($topicId);
