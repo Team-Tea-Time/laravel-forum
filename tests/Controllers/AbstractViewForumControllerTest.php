@@ -51,6 +51,24 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 		//$this->assertViewHas('categories');
 	}
 
+	public function testGetCategoryInvalid()
+	{
+		$categoriesMock = $this->createCategoriesMock();
+		$topicsMock = $this->createTopicsMock();
+
+		$categoriesMock->shouldReceive('getById')->once()->with(31415, array('parentCategory', 'subCategories', 'topics'))->andReturn(null);
+
+		$controller = $this->createController($categoriesMock, $topicsMock);
+
+		\App::instance('\Atrakeur\Forum\Repositories\CategoriesRepository', $categoriesMock);
+		\App::instance('\Atrakeur\Forum\Models\ForumTopic', $topicsMock);
+		\App::instance('\Atrakeur\Forum\Controllers\AbstractViewForumController', $controller);
+
+		$this->setExpectedException('\Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+		\Route:: get('testRoute/{categoryId}/{categoryUrl}', '\Atrakeur\Forum\Controllers\AbstractViewForumController@getCategory');
+		$this->call('GET', 'testRoute/31415/FalseTestName');
+	}
+
 	public function tearDown()
 	{
 		\Mockery::close();
