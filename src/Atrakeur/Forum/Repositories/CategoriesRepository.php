@@ -9,14 +9,14 @@ class CategoriesRepository extends AbstractBaseRepository {
 		$this->model = $model;
 	}
 
-	public function getById($id, array $with = array())
+	public function getById($ident, array $with = array())
 	{
-		if (!is_numeric($id))
+		if (!is_numeric($ident))
 		{
 			throw new \InvalidArgumentException();
 		}
 
-		return $this->getFirstBy('id', $id, $with);
+		return $this->getFirstBy('id', $ident, $with);
 	}
 
 	public function getByParent($parent, array $with = array())

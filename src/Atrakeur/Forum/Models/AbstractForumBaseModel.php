@@ -34,7 +34,7 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 			$relations  = $value->relationsToArray();
 			
 			$object = new stdClass();
-			foreach($attributes AS $key => $attribute)
+			foreach($attributes as $key => $attribute)
 			{
 				if (array_key_exists($key, $relations)) 
 				{
@@ -52,7 +52,7 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 		if ($value instanceof \Illuminate\Database\Eloquent\Collection)
 		{
 			$array = array();
-			foreach($value AS $key => $element)
+			foreach($value as $key => $element)
 			{
 				$array[$key] = $this->convertToObject($element);
 			}

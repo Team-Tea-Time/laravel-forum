@@ -22,7 +22,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			return \App::abort(403, 'Access denied');
 		}
 
-		$category       = ForumCategory::findOrFail($categoryId);
+		$category = ForumCategory::findOrFail($categoryId);
 		$category->load('parentCategory');
 		$parentCategory = $category->parentCategory;
 		$actionUrl      = $category->postUrl;
