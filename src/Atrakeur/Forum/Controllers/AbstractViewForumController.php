@@ -27,7 +27,7 @@ class AbstractViewForumController extends AbstractForumController {
 		$category = $this->categories->getById($categoryId, array('parentCategory', 'subCategories', 'topics'));
 		if ($category == NULL)
 		{
-			\App::abort(404);
+			return \App::abort(404);
 		}
 
 		$parentCategory = $category->parentCategory;
