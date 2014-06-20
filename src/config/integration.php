@@ -10,7 +10,7 @@ return array(
 	| The user model from the main application
 	|
 	*/
-	'usermodel' => '\User',
+	'usermodel' => 'User',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -24,6 +24,7 @@ return array(
 	'currentuser' => function() {
 		//Here you can use confide facade, 
 		//or just the default facade, or whatever else
+		
 		return Auth::user();
 	},
 

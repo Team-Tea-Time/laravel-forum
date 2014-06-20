@@ -1,8 +1,8 @@
 <?php namespace Atrakeur\Forum\Controllers;
 
-use \Atrakeur\Forum\Models\ForumCategory;
-use \Atrakeur\Forum\Models\ForumTopic;
-use \Atrakeur\Forum\Models\ForumMessage;
+use Atrakeur\Forum\Repositories\CategoriesRepository;
+use Atrakeur\Forum\Repositories\TopicsRepository;
+use Atrakeur\Forum\Repositories\MessagesRepository;
 
 abstract class AbstractPostForumController extends AbstractForumController {
 
@@ -14,16 +14,28 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			'data' => 'required|min:5',
 	);
 
+	private $categories;
+	private $topics;
+	private $messages;
+
+	public function __construct(CategoriesRepository $categories, TopicsRepository $topics, MessagesRepository $messages)
+	{
+		$this->categories = $categories;
+		$this->topics     = $topics;
+		$this->messages   = $messages;
+	}
+
 	public function getNewTopic($categoryId, $categoryUrl)
 	{
 		$user = $this->getCurrentUser();
 		if ($user == NULL) 
 		{
-			return \App::abort(403, 'Access denied');
+			var_dump($user);
+			return;
+			//return \App::abort(403, 'Access denied');
 		}
 
-		$category = ForumCategory::findOrFail($categoryId);
-		$category->load('parentCategory');
+		$category       = $this->categories->getById($categoryId, array('parentCategory'));
 		$parentCategory = $category->parentCategory;
 		$actionUrl      = $category->postUrl;
 
@@ -38,34 +50,34 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			return \App::abort(403, 'Access denied');
 		}
 
-		$category  = ForumCategory::findOrFail($categoryId);
+		$category  = $this->categories->getById($categoryId);
 		$validator = \Validator::make(\Input::all(), array_merge($this->topicRules, $this->messageRules));
 		if ($validator->passes())
 		{
 			$title = \Input::get('title');
 			$data  = \Input::get('data');
 
-			$topic                  = new ForumTopic();
-			$topic->parent_category = $category->id;
+			$topic                  = new \stdClass();			
 			$topic->author          = $user->id;
+			$topic->parent_category = $category->id;
 			$topic->title           = $title;
 
 			$this->fireEvent('forum.new.topic', array($topic));
-			$topic->save();
+			$topic = $this->topics->create($topic);
 			$this->fireEvent('forum.saved.topic', array($topic));
 
-			$message               = new ForumMessage();
+			$message               = new \stdClass();
 			$message->parent_topic = $topic->id;
 			$message->author       = $user->id;
 			$message->data         = $data;
 
 			$this->fireEvent('forum.new.message', array($message));
-			$message->save();
+			$message = $this->messages->create($message);
 			$this->fireEvent('forum.saved.message', array($message));
 
-			ForumCategory::clearAttributeCache($category);
+			//ForumCategory::clearAttributeCache($category);
 
-			return \Redirect::to($topic->url)->with('success', 'topic created');
+			//return \Redirect::to($topic->url)->with('success', 'topic created');
 		}
 		else 
 		{

@@ -84,6 +84,7 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 
 		$categoryMock = new \stdClass();
 		$categoryMock->url = 'url';
+		$categoryMock->postUrl = 'url';
 		$categoryMock->title = 'title';
 		$categoryMock->subtitle = 'title';
 		$categoryMock->subCategories = array();

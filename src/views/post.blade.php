@@ -1,4 +1,4 @@
-@include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
+@include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'topic'))
 
 @include('forum::partials.errorbox')
 
@@ -8,7 +8,7 @@
 <!-- Form Name -->
 <legend>Post a new topic</legend>
 <p class="lead">
-	You're posting into @include('forum::partials.pathdisplay')->with(compact('parentCategory', 'category', 'topic'))
+	You're posting into @include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'topic'))
 </p>
 
 <div class="control-group">

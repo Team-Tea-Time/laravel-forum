@@ -43,4 +43,12 @@ abstract class AbstractBaseRepository  {
 		return $this->model->paginate($this->itemsPerPage)->links();;
 	}
 
+	public function create(\stdClass $data)
+	{
+		//TODO validate?
+		$array = get_object_vars($data);
+		$model = $this->model->create($array);
+		return $this->model->convertToObject($model);
+	}
+
 }
