@@ -14,8 +14,8 @@
 	</thead>
 	<tbody>
 		@foreach ($messages as $message)
-			@include('forum::partials.message')->with(compact('message'))
+			@include('forum::partials.message')
 		@endforeach
 	</tbody>	
 </table>
-{{ $messages->links() }}
+{{ $paginationLinks }}

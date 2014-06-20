@@ -8,7 +8,7 @@
 </tr>
 <tr>
 	<td>
-		@include('forum::partials.postbutton')->with(array('message' => 'Edit', 'url' => $message->postUrl))
+		@include('forum::partials.postbutton')
 	</td>
 	<td>
 		Posted at {{ $message->created_at }}

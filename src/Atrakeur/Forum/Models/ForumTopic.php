@@ -5,7 +5,7 @@ class ForumTopic extends AbstractForumBaseModel
 	protected $table      = 'forum_topics';
 	public    $timestamps = true;
 	protected $softDelete = true;
-	protected $appends    = array('url');
+	protected $appends    = array('url', 'postUrl');
 
 	public function category()
 	{

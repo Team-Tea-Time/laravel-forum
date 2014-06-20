@@ -5,7 +5,7 @@ class ForumMessage extends AbstractForumBaseModel {
 	protected $table      = 'forum_messages';
 	public    $timestamps = true;
 	protected $softDelete = true;
-	protected $appends    = array('url');
+	protected $appends    = array('url', 'postUrl');
 
 	public function topic()
 	{
@@ -28,6 +28,12 @@ class ForumMessage extends AbstractForumBaseModel {
 	}
 
 	public function getUrlAttribute()
+	{
+		//TODO add page get parameter
+		return $this->topic->url;
+	}
+
+	public function getPostUrlAttribute()
 	{
 		//TODO add page get parameter
 		return $this->topic->url;

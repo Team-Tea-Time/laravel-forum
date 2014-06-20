@@ -9,11 +9,11 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 		return array('\Atrakeur\Forum\ForumServiceProvider');
 	}
 
-	private function createController($categories, $topics)
+	private function createController($categories, $topics, $messages)
 	{
 		return $this->getMockForAbstractClass(
 			'\Atrakeur\Forum\Controllers\AbstractViewForumController',
-			array($categories, $topics)
+			array($categories, $topics, $messages)
 		);
 	}
 
@@ -24,13 +24,19 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 
 	private function createTopicsMock()
 	{
-		return \Mockery::mock('Eloquent', '\Atrakeur\Forum\Models\ForumTopic');
+		return \Mockery::mock('Eloquent', '\Atrakeur\Forum\Repositories\TopicsRepository');
+	}
+
+	private function createMessagesMock()
+	{
+		return \Mockery::mock('Eloquent', '\Atrakeur\Forum\Repositories\MessagesRepository');
 	}
 
 	public function testGetIndex()
 	{
 		$categoriesMock = $this->createCategoriesMock();
 		$topicsMock = $this->createTopicsMock();
+		$messagesMock = $this->createMessagesMock();
 
 		$categoryMock = new \stdClass();
 		$categoryMock->url = 'url';
@@ -39,7 +45,7 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 		$categoryMock->subcategories = array();
 		$categoriesMock->shouldReceive('getByParent')->andReturn(array($categoryMock));
 
-		$controller = $this->createController($categoriesMock, $topicsMock);
+		$controller = $this->createController($categoriesMock, $topicsMock, $messagesMock);
 
 		\App::instance('\Atrakeur\Forum\Repositories\CategoriesRepository', $categoriesMock);
 		\App::instance('\Atrakeur\Forum\Models\ForumTopic', $topicsMock);
@@ -55,10 +61,11 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 	{
 		$categoriesMock = $this->createCategoriesMock();
 		$topicsMock = $this->createTopicsMock();
+		$messagesMock = $this->createMessagesMock();
 
 		$categoriesMock->shouldReceive('getById')->once()->with(31415, array('parentCategory', 'subCategories', 'topics'))->andReturn(null);
 
-		$controller = $this->createController($categoriesMock, $topicsMock);
+		$controller = $this->createController($categoriesMock, $topicsMock, $messagesMock);
 
 		\App::instance('\Atrakeur\Forum\Repositories\CategoriesRepository', $categoriesMock);
 		\App::instance('\Atrakeur\Forum\Models\ForumTopic', $topicsMock);
@@ -73,6 +80,7 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 	{
 		$categoriesMock = $this->createCategoriesMock();
 		$topicsMock = $this->createTopicsMock();
+		$messagesMock = $this->createMessagesMock();
 
 		$categoryMock = new \stdClass();
 		$categoryMock->url = 'url';
@@ -83,7 +91,7 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 		$categoryMock->parentCategory = null;
 		$categoriesMock->shouldReceive('getById')->once()->with(1, array('parentCategory', 'subCategories', 'topics'))->andReturn($categoryMock);
 
-		$controller = $this->createController($categoriesMock, $topicsMock);
+		$controller = $this->createController($categoriesMock, $topicsMock, $messagesMock);
 
 		\App::instance('\Atrakeur\Forum\Repositories\CategoriesRepository', $categoriesMock);
 		\App::instance('\Atrakeur\Forum\Models\ForumTopic', $topicsMock);

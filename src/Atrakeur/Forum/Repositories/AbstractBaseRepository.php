@@ -4,6 +4,8 @@ abstract class AbstractBaseRepository  {
 
 	protected $model;
 
+	protected $itemsPerPage = 0;
+
 	protected function getFirstBy($index, $value, array $with = array())
 	{
 		$model = $this->model->where($index, '=', $value)->with($with)->first();
@@ -12,8 +14,33 @@ abstract class AbstractBaseRepository  {
 
 	protected function getManyBy($index, $value, array $with = array())
 	{
-		$model = $this->model->where($index, '=', $value)->with($with)->get();
+		$model = $this->model->where($index, '=', $value)->with($with);
+
+		if ($this->itemsPerPage != 0)
+		{
+			$model = $model->paginate($this->itemsPerPage);
+		}
+		else 
+		{
+			$model = $model->get();
+		}
+		
 		return $this->model->convertToObject($model);
+	}
+
+	public function paginate($itemsPerPage = 0)
+	{
+		if (!is_numeric($itemsPerPage))
+		{
+			throw new \InvalidArgumentException();
+		}
+
+		$this->itemsPerPage = $itemsPerPage;
+	}
+
+	public function getPaginationLinks()
+	{
+		return $this->model->paginate($this->itemsPerPage)->links();;
 	}
 
 }
