@@ -30,9 +30,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		$user = $this->getCurrentUser();
 		if ($user == NULL) 
 		{
-			var_dump($user);
-			return;
-			//return \App::abort(403, 'Access denied');
+			return \App::abort(403, 'Access denied');
 		}
 
 		$category       = $this->categories->getById($categoryId, array('parentCategory'));
@@ -75,9 +73,10 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			$message = $this->messages->create($message);
 			$this->fireEvent('forum.saved.message', array($message));
 
+			//TODO make that work again
 			//ForumCategory::clearAttributeCache($category);
 
-			//return \Redirect::to($topic->url)->with('success', 'topic created');
+			return \Redirect::to($topic->url)->with('success', 'topic created');
 		}
 		else 
 		{
