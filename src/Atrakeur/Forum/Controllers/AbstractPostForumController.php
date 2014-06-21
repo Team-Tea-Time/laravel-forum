@@ -92,12 +92,16 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			return \App::abort(403, 'Access denied');
 		}
 
-		$category = ForumCategory::findOrFail($categoryId);
-		$category->load('parentCategory');
+		$category = $this->categories->getById($categoryId, array('parentCategory'));
+		$topic    = $this->topics->getById($topicId);
+		if ($category == NULL || $topic == NULL) 
+		{
+			return \App::abort(404);
+		}
+
 		$parentCategory = $category->parentCategory;
-		$topic          = ForumTopic::findORFail($topicId);
 		$actionUrl      = $topic->postUrl;
-		$prevMessages   = $topic->messages()->orderBy('id', 'DESC')->take(10)->get();
+		$prevMessages   = $this->messages->getLastByTopic($topicId);
 
 		$this->layout->content = \View::make('forum::reply', compact('parentCategory', 'category', 'topic', 'actionUrl', 'prevMessages'));
 	}
@@ -110,24 +114,25 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			return \App::abort(403, 'Access denied');
 		}
 
-		$category  = ForumCategory::findOrFail($categoryId);
-		$topic     = ForumTopic::findOrFail($topicId);
+		$category  = $this->categories->getById($categoryId);
+		$topic     = $this->topics->getById($topicId);
 		$validator = \Validator::make(\Input::all(), $this->messageRules);
 		if ($validator->passes())
 		{
 			$data = \Input::get('data');
 
-			$message               = new ForumMessage();
+			$message               = new \stdClass();
 			$message->parent_topic = $topic->id;
 			$message->author       = $user->id;
 			$message->data         = $data;
 
 			$this->fireEvent('forum.new.message', array($message));
-			$message->save();
+			$message = $this->messages->create($message);
 			$this->fireEvent('forum.saved.message', array($message));
 
-			ForumCategory::clearAttributeCache($category);
-			ForumTopic::clearAttributeCache($topic);
+			//Make it work again
+			//ForumCategory::clearAttributeCache($category);
+			//ForumTopic::clearAttributeCache($topic);
 
 			return \Redirect::to($topic->url)->with('success', 'topic created');
 		}
