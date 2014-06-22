@@ -19,7 +19,7 @@ class MessagesRepository extends AbstractBaseRepository {
 		return $this->getManyBy('parent_topic', $topicId);
 	}
 
-	public function getLastByTopic($topicId, array $with = array())
+	public function getLastByTopic($topicId, $count = 10, array $with = array())
 	{
 		if (!is_numeric($topicId))
 		{
@@ -27,7 +27,7 @@ class MessagesRepository extends AbstractBaseRepository {
 		}
 
 		$model = $this->model->where('parent_topic', '=', $topicId);
-		$model = $model->orderBy('created_at', 'DESC')->take(10);
+		$model = $model->orderBy('created_at', 'DESC')->take($count);
 		return $this->model->convertToObject($model->get());
 	}
 
