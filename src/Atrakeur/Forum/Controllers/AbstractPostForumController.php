@@ -73,9 +73,6 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			$message = $this->messages->create($message);
 			$this->fireEvent('forum.saved.message', array($message));
 
-			//TODO make that work again
-			//ForumCategory::clearAttributeCache($category);
-
 			return \Redirect::to($topic->url)->with('success', 'topic created');
 		}
 		else 
@@ -129,10 +126,6 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			$this->fireEvent('forum.new.message', array($message));
 			$message = $this->messages->create($message);
 			$this->fireEvent('forum.saved.message', array($message));
-
-			//Make it work again
-			//ForumCategory::clearAttributeCache($category);
-			//ForumTopic::clearAttributeCache($topic);
 
 			return \Redirect::to($topic->url)->with('success', 'topic created');
 		}
