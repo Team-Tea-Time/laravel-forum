@@ -16,9 +16,9 @@
 		<tr>
 			<th>
 				<div class="category_title">
-					<a href={{$subcategory->url}}>{{ $subcategory->title }}</a>
+					<a href={{$subcategory->url}}>{{{ $subcategory->title }}}</a>
 				</div>
-				<div class="category_subtitle">{{ $subcategory->subtitle }}</div>
+				<div class="category_subtitle">{{{ $subcategory->subtitle }}}</div>
 			</th>
 			<td>{{ $subcategory->topicCount }}</td>
 			<td>{{ $subcategory->replyCount }}</td>
@@ -44,7 +44,7 @@
 			@foreach($topics as $topic)
 			<tr>
 				<th>
-					<a href={{$topic->url}}>{{ $topic->title }}</a>
+					<a href={{$topic->url}}>{{{ $topic->title }}}</a>
 				</th>
 				<td>TODO</td>
 				<td>TODO</td>

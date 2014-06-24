@@ -10,5 +10,5 @@ $userfunc = \Config::get('forum::integration.currentuser');
 $user     = $userfunc();
 ?>
 @if ($user != null && (!isset($accessModel) || $accessModel->canPost($user) == true))
-	<a href="{{ $url }}" class="btn btn-primary">{{ $message }}</a>
+	<a href="{{ $url }}" class="btn btn-primary">{{{ $message }}}</a>
 @endif
