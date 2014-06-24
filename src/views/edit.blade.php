@@ -13,7 +13,7 @@
 <div class="control-group">
 	<label class="control-label" for="textarea">Your message</label>
 	<div class="controls">                     
-		{{ Form::textarea('data') }}
+		{{ Form::textarea('data', $message->data) }}
 	</div>
 </div>
 

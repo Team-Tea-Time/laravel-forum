@@ -157,4 +157,43 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		$this->layout->content = \View::make('forum::edit', compact('parentCategory', 'category', 'topic', 'message', 'actionUrl'));
 	}
 
+	public function postEditMessage($categoryId, $categoryUrl, $topicId, $topicUrl, $messageId)
+	{
+		$user = $this->getCurrentUser();
+		if ($user == NULL) 
+		{
+			return \App::abort(403, 'Access denied');
+		}
+
+		$category = $this->categories->getById($categoryId, array('parentCategory'));
+		$topic    = $this->topics->getById($topicId);
+		$message  = $this->messages->getById($messageId);
+		if ($category == NULL || $topic == NULL || $message == NULL) 
+		{
+			return \App::abort(404);
+		}
+
+		$validator = \Validator::make(\Input::all(), $this->messageRules);
+		if ($validator->passes())
+		{
+			$data = \Input::get('data');
+
+			$message               = new \stdClass();
+			$message->id           = $messageId;
+			$message->parent_topic = $topic->id;
+			$message->author       = $user->id;
+			$message->data         = $data;
+
+			$this->fireEvent('forum.new.message', array($message));
+			$message = $this->messages->update($message);
+			$this->fireEvent('forum.saved.message', array($message));
+
+			return \Redirect::to($message->url)->with('success', 'topic created');
+		}
+		else 
+		{
+			return \Redirect::to($message->postUrl)->withErrors($validator)->withInput();
+		}
+	}
+
 }

@@ -3,7 +3,7 @@
 		Un auteur
 	</td>
 	<td>
-		{{ $message->data }}
+		{{ nl2br(e($message->data)) }}
 	</td>
 </tr>
 <tr>

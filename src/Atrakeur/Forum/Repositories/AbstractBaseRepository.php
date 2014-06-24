@@ -51,4 +51,21 @@ abstract class AbstractBaseRepository  {
 		return $this->model->convertToObject($model);
 	}
 
+	public function update(\stdClass $data)
+	{
+		//TODO validate?
+		$array = get_object_vars($data);
+		$model = $this->model->find($array['id']);
+		if ($model != null)
+		{
+			$model->fill($array);
+			$model->save();
+			return $this->model->convertToObject($model);
+		}
+		else
+		{
+			throw new \InvalidArgumentException('Data must contain an existing id to update');
+		}
+	}
+
 }
