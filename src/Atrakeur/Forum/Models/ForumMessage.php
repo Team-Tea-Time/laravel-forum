@@ -5,7 +5,7 @@ class ForumMessage extends AbstractForumBaseModel {
 	protected $table      = 'forum_messages';
 	public    $timestamps = true;
 	protected $softDelete = true;
-	protected $appends    = array('url', 'postUrl');
+	protected $appends    = array('url', 'postUrl', 'canPost');
 	protected $guarded    = array('id');
 
 	public function topic()
@@ -48,6 +48,11 @@ class ForumMessage extends AbstractForumBaseModel {
 				'messageId'   => $this->id
 			)
 		);
+	}
+
+	public function getCanPostAttribute()
+	{
+		return $this->computeCanPostAttribute('rights.postmessage');
 	}
 
 }

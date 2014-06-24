@@ -61,4 +61,17 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 		return $value;
 	}
 
+	protected function computeCanPostAttribute($configItem)
+	{
+		// Fetch the current user (config callback)
+		$userfunc = \Config::get('forum::integration.currentuser');
+		$user     = $userfunc();
+
+		// Fetch the current rights (config callback)
+		$rightsfunc = \Config::get('forum::'.$configItem);
+
+		//True will give rights, any other will block
+		return $rightsfunc($this, $user);
+	}
+
 }

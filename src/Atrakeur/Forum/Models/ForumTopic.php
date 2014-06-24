@@ -5,7 +5,7 @@ class ForumTopic extends AbstractForumBaseModel
 	protected $table      = 'forum_topics';
 	public    $timestamps = true;
 	protected $softDelete = true;
-	protected $appends    = array('url', 'postUrl');
+	protected $appends    = array('url', 'postUrl', 'canPost');
 	protected $guarded    = array('id');
 
 	public function category()
@@ -40,6 +40,11 @@ class ForumTopic extends AbstractForumBaseModel
 				'topicUrl'    => \Str::slug($this->title, '_'),
 			)
 		);
+	}
+
+	public function getCanPostAttribute()
+	{
+		return $this->computeCanPostAttribute('rights.posttopic');
 	}
 
 }

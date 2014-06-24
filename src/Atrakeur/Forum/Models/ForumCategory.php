@@ -5,7 +5,7 @@ class ForumCategory extends AbstractForumBaseModel {
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
 	protected $softDelete = false;
-	protected $appends    = array('topicCount', 'replyCount', 'url', 'postUrl');
+	protected $appends    = array('topicCount', 'replyCount', 'url', 'postUrl', 'canPost');
 
 	public function parentCategory()
 	{
@@ -71,5 +71,11 @@ class ForumCategory extends AbstractForumBaseModel {
 			)
 		);
 	}
+
+	public function getCanPostAttribute()
+	{
+		return $this->computeCanPostAttribute('rights.postcategory');
+	}
+
 
 }
