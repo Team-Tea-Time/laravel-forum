@@ -9,6 +9,16 @@ class MessagesRepository extends AbstractBaseRepository {
 		$this->model = $model;
 	}
 
+	public function getById($messageId, array $with = array())
+	{
+		if (!is_numeric($messageId))
+		{
+			throw new \InvalidArgumentException();
+		}
+
+		return $this->getFirstBy('id', $messageId, $with);
+	}
+
 	public function getByTopic($topicId, array $with = array())
 	{
 		if (!is_numeric($topicId))
@@ -16,7 +26,7 @@ class MessagesRepository extends AbstractBaseRepository {
 			throw new \InvalidArgumentException();
 		}
 
-		return $this->getManyBy('parent_topic', $topicId);
+		return $this->getManyBy('parent_topic', $topicId, $with);
 	}
 
 	public function getLastByTopic($topicId, $count = 10, array $with = array())
@@ -28,6 +38,7 @@ class MessagesRepository extends AbstractBaseRepository {
 
 		$model = $this->model->where('parent_topic', '=', $topicId);
 		$model = $model->orderBy('created_at', 'DESC')->take($count);
+		$model = $model->with($with);
 		return $this->model->convertToObject($model->get());
 	}
 

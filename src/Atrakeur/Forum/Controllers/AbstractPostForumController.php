@@ -135,4 +135,26 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		}
 	}
 
+	public function getEditMessage($categoryId, $categoryUrl, $topicId, $topicUrl, $messageId)
+	{
+		$user = $this->getCurrentUser();
+		if ($user == NULL) 
+		{
+			return \App::abort(403, 'Access denied');
+		}
+
+		$category = $this->categories->getById($categoryId, array('parentCategory'));
+		$topic    = $this->topics->getById($topicId);
+		$message  = $this->messages->getById($messageId);
+		if ($category == NULL || $topic == NULL || $message == NULL) 
+		{
+			return \App::abort(404);
+		}
+
+		$parentCategory = $category->parentCategory;
+		$actionUrl      = $message->postUrl;
+
+		$this->layout->content = \View::make('forum::edit', compact('parentCategory', 'category', 'topic', 'message', 'actionUrl'));
+	}
+
 }

@@ -36,8 +36,18 @@ class ForumMessage extends AbstractForumBaseModel {
 
 	public function getPostUrlAttribute()
 	{
-		//TODO add page get parameter
-		return $this->topic->url;
+		$topic    = $this->topic;
+		$category = $topic->category;
+
+		return action(\Config::get('forum::integration.postcontroller').'@postEditMessage',
+			array(
+				'categoryId'  => $category->id,
+				'categoryUrl' => \Str::slug($category->title, '_'),
+				'topicId'     => $topic->id,
+				'topicUrl'    => \Str::slug($topic->title, '_'),
+				'messageId'   => $this->id
+			)
+		);
 	}
 
 }

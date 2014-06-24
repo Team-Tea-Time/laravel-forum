@@ -15,3 +15,6 @@ if (!isset($routebase) || !isset($viewController) || !isset($postController)) {
 
 \Route:: get($routebase.'{categoryId}-{categoryUrl}/{topicId}-{topicUrl}/new', $postController.'@getNewMessage');
 \Route::post($routebase.'{categoryId}-{categoryUrl}/{topicId}-{topicUrl}/new', $postController.'@postNewMessage');
+
+\Route:: get($routebase.'{categoryId}-{categoryUrl}/{topicId}-{topicUrl}/edit/{messageId}', $postController.'@getEditMessage');
+\Route::post($routebase.'{categoryId}-{categoryUrl}/{topicId}-{topicUrl}/edit/{messageId}', $postController.'@postEditMessage');
