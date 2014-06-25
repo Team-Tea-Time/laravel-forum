@@ -46,7 +46,7 @@
 				<th>
 					<a href={{$topic->url}}>{{{ $topic->title }}}</a>
 				</th>
-				<td>TODO</td>
+				<td>{{ $topic->replyCount }}</td>
 				<td>TODO</td>
 			</tr>
 			@endforeach

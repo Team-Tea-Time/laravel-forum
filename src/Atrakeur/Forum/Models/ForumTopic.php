@@ -5,7 +5,7 @@ class ForumTopic extends AbstractForumBaseModel
 	protected $table      = 'forum_topics';
 	public    $timestamps = true;
 	protected $softDelete = true;
-	protected $appends    = array('url', 'postUrl', 'canPost');
+	protected $appends    = array('replyCount', 'url', 'postUrl', 'canPost');
 	protected $guarded    = array('id');
 
 	public function category()
@@ -13,9 +13,19 @@ class ForumTopic extends AbstractForumBaseModel
 		return $this->belongsTo('\Atrakeur\Forum\Models\ForumCategory', 'parent_category');
 	}
 
+	public function author()
+	{
+		return $this->belongsTo(\Config::get('forum::integration.usermodel'), 'author_id');
+	}
+
 	public function messages()
 	{
 		return $this->hasMany('\Atrakeur\Forum\Models\ForumMessage', 'parent_topic');
+	}
+
+	public function getReplyCountAttribute()
+	{
+		return $this->messages()->count();
 	}
 
 	public function getUrlAttribute()
