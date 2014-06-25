@@ -10,7 +10,7 @@ return array(
 	| The user model from the main application
 	|
 	*/
-	'usermodel' => 'User',
+	'usermodel' => '\User',
 
 	/*
 	|--------------------------------------------------------------------------

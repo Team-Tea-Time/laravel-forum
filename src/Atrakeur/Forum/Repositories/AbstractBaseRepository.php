@@ -40,7 +40,7 @@ abstract class AbstractBaseRepository  {
 
 	public function getPaginationLinks()
 	{
-		return $this->model->paginate($this->itemsPerPage)->links();;
+		return $this->model->paginate($this->itemsPerPage)->links();
 	}
 
 	public function create(\stdClass $data)

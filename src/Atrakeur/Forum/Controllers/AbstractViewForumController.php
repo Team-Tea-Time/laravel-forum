@@ -56,8 +56,8 @@ class AbstractViewForumController extends AbstractForumController {
 
 		$parentCategory  = $category->parentCategory;
 		$messagesPerPage = \Config::get('forum::integration.messagesperpage');
-		$this->messages->paginate($messagesPerPage);
-		$messages        = $this->messages->getByTopic($topic->id);
+		//$this->messages->paginate($messagesPerPage);
+		$messages        = $this->messages->getByTopic($topic->id, array('author'));
 		$paginationLinks = $this->messages->getPaginationLinks($messagesPerPage);
 
 		$this->layout->content = \View::make('forum::topic', compact('parentCategory', 'category', 'topic', 'messages', 'paginationLinks'));

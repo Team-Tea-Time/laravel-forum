@@ -15,7 +15,7 @@ class ForumMessage extends AbstractForumBaseModel {
 
 	public function author()
 	{
-		return $this->belongsTo(\Config::get('forum::usermodel'));
+		return $this->belongsTo(\Config::get('forum::integration.usermodel'), 'author_id');
 	}
 
 	public function scopeWhereTopicIn($query, Array $topics) 

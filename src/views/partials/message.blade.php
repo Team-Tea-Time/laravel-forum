@@ -1,6 +1,6 @@
 <tr>
 	<td>
-		Un auteur
+		{{{ $message->author->username }}}
 	</td>
 	<td>
 		{{ nl2br(e($message->data)) }}

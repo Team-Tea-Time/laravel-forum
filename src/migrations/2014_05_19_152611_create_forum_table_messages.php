@@ -18,7 +18,7 @@ class CreateForumTableMessages extends Migration {
 			
 			/* Attributes */
 			$table->integer('parent_topic')->unsigned();
-			$table->integer('author')->unsigned();
+			$table->integer('author_id')->unsigned();
 			$table->text('data');
 
 			$table->timestamps();
