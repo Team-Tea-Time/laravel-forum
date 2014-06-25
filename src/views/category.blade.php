@@ -8,7 +8,6 @@
 			<th>Forum</th>
 			<th>Topics</th>
 			<th>Posts</th>
-			<th>Last reply</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -22,39 +21,50 @@
 			</th>
 			<td>{{ $subcategory->topicCount }}</td>
 			<td>{{ $subcategory->replyCount }}</td>
-			<td>
-				
-			</td>
 		</tr>
 		@endforeach
 	</tbody>
 </table>
 @endif
 
+@if ($topics != NULL && count($topics) != 0)
 <table class="table table-topic">
 	<thead>
 		<tr>
 			<th>Subject</th>
 			<th>Reply</th>
-			<th>Last reply</th>
 		</tr>
 	</thead>
 	<tbody>
-		@if ($topics != NULL && count($topics) != 0)
 			@foreach($topics as $topic)
 			<tr>
 				<th>
 					<a href={{$topic->url}}>{{{ $topic->title }}}</a>
 				</th>
 				<td>{{ $topic->replyCount }}</td>
-				<td>TODO</td>
 			</tr>
 			@endforeach
-		@else
-			<tr>
-				<td colspan="3">No topics found</td>
-			</tr>
-		@endif
 	</tbody>
 </table>
+@endif
 
+@if (($subCategories == NULL || count($subCategories) == 0) && ($topics == NULL || count($topics) == 0))
+<table class="table table-topic">
+	<thead>
+		<tr>
+			<th>Subject</th>
+			<th>Reply</th>
+		</tr>
+	</thead>
+	<tbody>
+			<tr>
+				<th>
+					No topics found.
+				</th>
+				<td>
+					@include('forum::partials.postbutton',array('message' => 'Post the first!', 'url' => $category->postUrl, 'accessModel' => $category))
+				</td>
+			</tr>
+	</tbody>
+</table>
+@endif

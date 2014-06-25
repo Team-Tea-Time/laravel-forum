@@ -17,8 +17,8 @@
 			<th>Forum</th>
 			<th>Topics</th>
 			<th>Posts</th>
-			<th>Last reply</th>
 		</tr>
+		@if (count($category->subcategories) > 0)
 		@foreach($category->subcategories AS $subcategory)
 		<tr>
 			<th>
@@ -29,10 +29,15 @@
 			</th>
 			<td>{{ $subcategory->topicCount }}</td>
 			<td>{{ $subcategory->replyCount }}</td>
-			<td>
-			</td>
 		</tr>
 		@endforeach
+		@else
+		<tr>
+			<th colspan="3">
+				No category found
+			</th>
+		</tr>
+		@endif
 	</tbody>
 </table>
 @endforeach
