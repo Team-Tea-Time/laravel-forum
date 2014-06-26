@@ -4,7 +4,7 @@
 <table class="table table-index">
 	<thead>
 		<tr>
-			<td colspan="5">
+			<td colspan="3">
 				<div class="category_title">
 					<a href={{$category->url}}>{{{ $category->title }}}</a>
 				</div>
