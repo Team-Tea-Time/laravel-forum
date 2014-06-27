@@ -1,6 +1,7 @@
 <?php namespace Atrakeur\Forum;
 
 use Illuminate\Support\ServiceProvider;
+use Atrakeur\Forum\Commands\InstallCommand;
 
 class ForumServiceProvider extends ServiceProvider {
 
@@ -36,17 +37,21 @@ class ForumServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+		$this->registerCommands();
 	}
 
 	/**
-	 * Get the services provided by the provider.
+	 * Register package artisan commands.
 	 *
-	 * @return array
+	 * @return void
 	 */
-	public function provides()
+	public function registerCommands()
 	{
-		return array();
+		$this->app['foruminstallcommand'] = $this->app->share(function($app)
+        {
+            return new InstallCommand;
+        });
+		$this->commands('foruminstallcommand');
 	}
 
 }

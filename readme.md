@@ -11,7 +11,27 @@ This package will provide multiple hooks such as specials events and custom clos
 
 ## Installation
 
-Not yet realeased
+To install, simply add the following line to your composer .json and run composer update:
+
+### Import the package
+
+```json
+"atrakeur/forum": "dev-master"
+```
+
+Then add the following service provider to your app.php:
+
+```php
+'Atrakeur\Forum\ForumServiceProvider',
+```
+
+Finally, run `php artisan config:publish atrakeur/forum` to publish config files into your application
+
+### Integrate to your website
+
+To enable you to fully customise the package to your website, it need to be hooked inside your application.
+
+
 
 ## Features
 
