@@ -25,13 +25,17 @@ Then add the following service provider to your app.php:
 'Atrakeur\Forum\ForumServiceProvider',
 ```
 
-Finally, run `php artisan config:publish atrakeur/forum` to publish config files into your application
+Now you can just run `php artisan config:publish atrakeur/forum` to publish config files into your application config folder.
 
-### Integrate to your website
+Then create the database schema using the command `php artisan migrate --package atrakeur/forum`
 
-To enable you to fully customise the package to your website, it need to be hooked inside your application.
+To enable you to fully customise the package to your website, the package is integrated inside your application using two application level controllers.
+Run the command `php artisan forum:install` to auto-deploy the controllers in your app/controllers folder.
 
+Please note that if a file with the same name allready exist, the command above will fail before overriding your files.
 
+Now you are ready to go, just load http://localhost/forum and you should see a brand new (and empty!) forum.
+Now just use phpmyadmin or a seed file to create your own categories and subcategories to post topics into.
 
 ## Features
 
