@@ -1,10 +1,15 @@
 <?php namespace Atrakeur\Forum\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
+
 class ForumTopic extends AbstractForumBaseModel
 {
+
+	use SoftDeletingTrait;
+
 	protected $table      = 'forum_topics';
 	public    $timestamps = true;
-	protected $softDelete = true;
+	protected $dates      = ['deleted_at'];
 	protected $appends    = array('replyCount', 'url', 'postUrl', 'canPost');
 	protected $guarded    = array('id');
 
