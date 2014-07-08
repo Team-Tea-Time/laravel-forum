@@ -28,27 +28,17 @@ class ForumCategory extends AbstractForumBaseModel {
 
 	public function getTopicCountAttribute()
 	{
-		$topicCount = $this->rememberAttribute('topicCount', function() {
-
-			return $this->topics()->count();
-			
-		});
-		return $topicCount;
+		return $this->topics()->count();
 	}
 
 	public function getReplyCountAttribute()
 	{
-		$replyCount = $this->rememberAttribute('replyCount', function() {
-
-			$replyCount = 0;
-			$topics     = $this->topics()->with('messages')->get();
-			foreach ($topics as $topic) {
-				$replyCount += $topic->messages->count();
-			}
-			return $replyCount;
-
-		});
-		return $replyCount;   
+		$replyCount = 0;
+		$topics     = $this->topics()->with('messages')->get();
+		foreach ($topics as $topic) {
+			$replyCount += $topic->messages->count();
+		}
+		return $replyCount;
 	}
 
 	public function getUrlAttribute()

@@ -1,5 +1,7 @@
 # Laravel forum package
 
+Note: this package is currently in a very alpha stage. I'm currently working on integrating it inside my own website. The base functionnality should work but I'll complete the features when requested or when I need them.
+
 [![Build Status](https://travis-ci.org/atrakeur/laravel-forum.svg?branch=master)](https://travis-ci.org/atrakeur/laravel-forum)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/atrakeur/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/atrakeur/laravel-forum/?branch=master)
 
@@ -25,30 +27,36 @@ Then add the following service provider to your app.php:
 'Atrakeur\Forum\ForumServiceProvider',
 ```
 
-Now you can just run `php artisan config:publish atrakeur/forum` to publish config files into your application config folder.
+Now publish forum's files right into your laravel app:
+`php artisan config:publish atrakeur/forum`
+`php artisan migrate:publish atrakeur/forum`
 
-Then create the database schema using the command `php artisan migrate --package atrakeur/forum`
+If all goes well, you should find configuration files inside app/config/packages/atrakeur/forum and three new migrations in app/database/migrations.
+
+Now you can create the database schema using the default laravel command `php artisan migrate` .
 
 To enable you to fully customise the package to your website, the package is integrated inside your application using two application level controllers.
-Run the command `php artisan forum:install` to auto-deploy the controllers in your app/controllers folder.
+Run the command `php artisan forum:install` to auto-deploy the controllers in your app/controllers folder. (Please note that if a file with the same name allready exist, the command above will fail before overriding your files.)
 
-Please note that if a file with the same name allready exist, the command above will fail before overriding your files.
+The very last step needed is to create some categories and subcategories into the forum_categories tables. The schema is straigh forward and you should be able to do that on your own using laravel seeds (TODO: give some examples)
 
-Now you are ready to go, just load http://localhost/forum and you should see a brand new (and empty!) forum.
-Now just use phpmyadmin or a seed file to create your own categories and subcategories to post topics into.
+Now you are ready to go, just load http://localhost/forum and you should see a brand new forum.
+
+More information on how to integrate it with your login system is available through the config files comments. (TODO: give some examples) By default, it should run well on laravel default auth.
 
 ## Features
 
-This package is currently in heavy work, so all of the following features arn't in place and may not work yet
+This package is currently in (very-)alpha stage, so all of the following features may or may not work yet. However, feel free to post issues and features requests at https://github.com/atrakeur/laravel-forum/issues . I'll try to fix and improve the package as fast as I can based on your help!
 
-## Additionnal planned features
+## Features
 
  * Category nesting on 2 levels
  * Topic and messages inside categories
- * Easy user integration (through a php interface)
- * Easy user right integration (through a php interface)
- * Message posting (with hooks for formatting)
+ * Easy user integration (through config files and callbacks)
+ * Easy user right integration (through config files and callbacks)
+ * Message posting (with hooks for app integration)
  * Light weight & blasing fast (designed with caching and high speed in mind)
+ * Designed on bootstrap (clean and simple markup, no messy css and should integrate directly into your website)
 
 ## Events
 
