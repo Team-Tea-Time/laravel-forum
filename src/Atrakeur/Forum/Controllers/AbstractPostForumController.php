@@ -30,8 +30,6 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		$user = $this->getCurrentUser();
 		if ($user == NULL) 
 		{
-			var_dump($user);
-			exit;
 			return \App::abort(403, 'Access denied');
 		}
 
