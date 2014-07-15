@@ -30,6 +30,8 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		$user = $this->getCurrentUser();
 		if ($user == NULL) 
 		{
+			var_dump($user);
+			exit;
 			return \App::abort(403, 'Access denied');
 		}
 
@@ -56,7 +58,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			$data  = \Input::get('data');
 
 			$topic                  = new \stdClass();			
-			$topic->author          = $user->id;
+			$topic->author_id       = $user->id;
 			$topic->parent_category = $category->id;
 			$topic->title           = $title;
 
@@ -66,7 +68,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 
 			$message               = new \stdClass();
 			$message->parent_topic = $topic->id;
-			$message->author       = $user->id;
+			$message->author_id    = $user->id;
 			$message->data         = $data;
 
 			$this->fireEvent('forum.new.message', array($message));
@@ -120,7 +122,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 
 			$message               = new \stdClass();
 			$message->parent_topic = $topic->id;
-			$message->author       = $user->id;
+			$message->author_id    = $user->id;
 			$message->data         = $data;
 
 			$this->fireEvent('forum.new.message', array($message));
@@ -181,7 +183,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			$message               = new \stdClass();
 			$message->id           = $messageId;
 			$message->parent_topic = $topic->id;
-			$message->author       = $user->id;
+			$message->author_id    = $user->id;
 			$message->data         = $data;
 
 			$this->fireEvent('forum.new.message', array($message));
