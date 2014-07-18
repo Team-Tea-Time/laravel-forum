@@ -1,5 +1,7 @@
 <?php namespace Atrakeur\Forum\Models;
 
+use \Atrakeur\Forum\Models\ForumTopic;
+
 class ForumCategory extends AbstractForumBaseModel {
 
 	protected $table      = 'forum_categories';
@@ -37,9 +39,17 @@ class ForumCategory extends AbstractForumBaseModel {
 	{
 		return $this->rememberAttribute('replyCount', function(){
 			$replyCount = 0;
-			$topics     = $this->topics()->with('messages')->get();
-			foreach ($topics as $topic) {
-				$replyCount += $topic->messages->count();
+
+			$topicsIds = array();
+			$topics    = $this->topics()->get(array('id'));
+
+			foreach ($topics AS $topic) {
+				$topicsIds[] = $topic->id;
+			}
+
+			if (!empty($topicsIds)) 
+			{
+				$replyCount = ForumMessage::whereIn('parent_topic', $topicsIds)->count();
 			}
 			return $replyCount;
 		});

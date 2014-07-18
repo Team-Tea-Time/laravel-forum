@@ -8,7 +8,8 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 	{
 		$cacheItem = get_class($this).$this->id.$item;
 
-		$value = \Cache::rememberForever($cacheItem, $function);
+		//TODO make cache duration tweakable
+		$value = \Cache::remember($cacheItem, 1, $function);
 
 		return $value;
 	}
