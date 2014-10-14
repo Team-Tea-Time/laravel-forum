@@ -31,6 +31,17 @@ Then add the following service provider to your app.php:
 
 ### Integrate into your app
 
+Before anything, in some cases (L4) you may need to run an update for composer before these next steps, so:
+
+```php
+composer update
+```
+and, just to be safe, run:
+
+```php
+composer dump-autload
+```
+
 Now publish forum's files right into your laravel app:
 `php artisan config:publish atrakeur/forum`
 `php artisan migrate:publish atrakeur/forum`
