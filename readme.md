@@ -39,7 +39,7 @@ composer update
 and, just to be safe, run:
 
 ```php
-composer dump-autload
+composer dump-autoload
 ```
 
 Now publish forum's files right into your laravel app:
