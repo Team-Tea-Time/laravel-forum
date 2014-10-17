@@ -16,6 +16,6 @@
 		@foreach ($messages as $message)
 			@include('forum::partials.message', compact('message'))
 		@endforeach
-	</tbody>	
+	</tbody>
 </table>
 {{ $paginationLinks }}

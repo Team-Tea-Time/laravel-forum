@@ -33,23 +33,23 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 		{
 			$attributes = $value->toArray();
 			$relations  = $value->relationsToArray();
-			
+
 			$object = new stdClass();
 			foreach($attributes as $key => $attribute)
 			{
-				if (array_key_exists($key, $relations)) 
+				if (array_key_exists($key, $relations))
 				{
 					$key = camel_case($key);
 					$object->$key = $this->convertToObject($value->$key);
 				}
-				else 
+				else
 				{
 					$object->$key = $attribute;
 				}
 			}
 			return $object;
 		}
-		
+
 		if ($value instanceof \Illuminate\Database\Eloquent\Collection)
 		{
 			$array = array();

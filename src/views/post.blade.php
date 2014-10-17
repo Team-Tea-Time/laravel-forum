@@ -13,20 +13,20 @@
 
 <div class="control-group">
 	<label class="control-label" for="title">Title</label>
-	<div class="controls">                     
+	<div class="controls">
 		{{ Form::text('title') }}
 	</div>
 </div>
 
 <div class="control-group">
 	<label class="control-label" for="data">Your message</label>
-	<div class="controls">                     
+	<div class="controls">
 		{{ Form::textarea('data') }}
 	</div>
 </div>
 
 <div class="control-group">
-	<div class="controls">                     
+	<div class="controls">
 		{{ Form::submit('Send') }}
 	</div>
 </div>

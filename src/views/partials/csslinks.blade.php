@@ -1,6 +1,6 @@
 <!--
-	Thanks to: 
-		@jdorfman ( https://twitter.com/jdorfman ) 
+	Thanks to:
+		@jdorfman ( https://twitter.com/jdorfman )
 		@mervinej ( https://twitter.com/mervinej )
 	For maintaining this cdn for bootstrap
 

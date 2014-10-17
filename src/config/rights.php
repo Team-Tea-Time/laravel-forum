@@ -8,7 +8,7 @@ return array(
 	|--------------------------------------------------------------------------
 	|
 	| Callback used to determine if a given user is allowed to post in a given
-	| category. Return true if user is allowed to post a new topic. Any other 
+	| category. Return true if user is allowed to post a new topic. Any other
 	| return type will be used like false.
 	|
 	*/
@@ -56,7 +56,7 @@ return array(
 		if ($user != NULL)
 		{
 			//Here we allow only user to edit their own messages
-			if ($user->id == $message->author) 
+			if ($user->id == $message->author)
 			{
 				return true;
 			}
@@ -65,6 +65,6 @@ return array(
 		return false;
 	},
 
-	
+
 
 );

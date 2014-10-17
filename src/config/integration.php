@@ -22,9 +22,9 @@ return array(
 	|
 	*/
 	'currentuser' => function() {
-		//Here you can use confide facade, 
+		//Here you can use confide facade,
 		//or just the default facade, or whatever else
-		
+
 		return Auth::user();
 	},
 
