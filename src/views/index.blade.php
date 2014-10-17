@@ -14,9 +14,9 @@
 	</thead>
 	<tbody>
 		<tr>
-			<th>Forum</th>
-			<th>Topics</th>
-			<th>Posts</th>
+			<th>{{ trans('forum::base.col_forum') }}</th>
+			<th>{{ trans('forum::base.col_topics') }}</th>
+			<th>{{ trans('forum::base.col_posts') }}</th>
 		</tr>
 		@if (count($category->subcategories) > 0)
 		@foreach($category->subcategories AS $subcategory)
@@ -34,7 +34,7 @@
 		@else
 		<tr>
 			<th colspan="3">
-				No category found
+				{{ trans('forum::base.no_categories') }}
 			</th>
 		</tr>
 		@endif

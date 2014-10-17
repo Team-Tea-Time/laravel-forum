@@ -5,13 +5,13 @@
 {{ Form::open(array('url' => $actionUrl, 'class' => 'form-horizontal')) }}
 <fieldset>
 
-<legend>Edit a message</legend>
+<legend>{{ trans('forum::base.edit_message') }}</legend>
 <p class="lead">
-	You're editing @include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'topic', 'message'))
+	{{ trans('forum::base.your_editing') }} @include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'topic', 'message'))
 </p>
 
 <div class="control-group">
-	<label class="control-label" for="textarea">Your message</label>
+	<label class="control-label" for="textarea">{{ trans('forum::base.label_your_message') }}</label>
 	<div class="controls">
 		{{ Form::textarea('data', $message->data) }}
 	</div>
@@ -19,7 +19,7 @@
 
 <div class="control-group">
 	<div class="controls">
-		{{ Form::submit('Send') }}
+		{{ Form::submit(trans('forum::base.send')) }}
 	</div>
 </div>
 

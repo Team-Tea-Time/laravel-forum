@@ -1,4 +1,4 @@
-<a href="{{ Config::get('forum::routes.base') }}">Index</a>
+<a href="{{ Config::get('forum::routes.base') }}">{{ trans('forum::base.index') }}</a>
 @if (isset($parentCategory) && $parentCategory)
 	&nbsp;&gt;&nbsp;<a href="{{{ $parentCategory->url }}}">{{{ $parentCategory->title }}}</a>
 @endif

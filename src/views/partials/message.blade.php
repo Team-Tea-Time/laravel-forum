@@ -11,9 +11,9 @@
 		@include('forum::partials.postbutton', array('message' => 'Edit', 'url' => $message->postUrl, 'accessModel' => $message))
 	</td>
 	<td>
-		Posted at {{ $message->created_at }}
+		{{ trans('forum::base.posted_at') }} {{ $message->created_at }}
 		@if ($message->updated_at != null && $message->created_at != $message->updated_at)
-			Last update at {{ $message->updated_at }}
+			{{ trans('forum::base.last_update') }} {{ $message->updated_at }}
 		@endif
 	</td>
 </tr>

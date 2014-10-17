@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Laravel forum</title>
+	<title>{{ trans('forum::base.home_title') }}</title>
 	@include('forum::partials.csslinks')
 
 	<!--[if lt IE 9]>
@@ -14,7 +14,7 @@
 	@if(isset($content))
 		{{ $content }}
 	@else
-		Nothing to display here (did you set $this->layout->content in your controller?)
+		{{ trans('forum::base.no_content') }}
 	@endif
 </body>
 </html>

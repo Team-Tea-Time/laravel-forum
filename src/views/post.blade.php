@@ -6,20 +6,20 @@
 <fieldset>
 
 <!-- Form Name -->
-<legend>Post a new topic</legend>
+<legend>{{ trans('forum::base.new_topic_title') }}</legend>
 <p class="lead">
-	You're posting into @include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'topic'))
+	{{ trans('forum::base.posting_into') }} @include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'topic'))
 </p>
 
 <div class="control-group">
-	<label class="control-label" for="title">Title</label>
+	<label class="control-label" for="title">{{ trans('forum::base.title') }}</label>
 	<div class="controls">
 		{{ Form::text('title') }}
 	</div>
 </div>
 
 <div class="control-group">
-	<label class="control-label" for="data">Your message</label>
+	<label class="control-label" for="data">{{ trans('forum::base.label_your_message') }}</label>
 	<div class="controls">
 		{{ Form::textarea('data') }}
 	</div>
@@ -27,7 +27,7 @@
 
 <div class="control-group">
 	<div class="controls">
-		{{ Form::submit('Send') }}
+		{{ Form::submit(trans('forum::base.send')) }}
 	</div>
 </div>
 
