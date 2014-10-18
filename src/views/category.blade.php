@@ -1,13 +1,13 @@
 @include('forum::partials.pathdisplay')
 
-@include('forum::partials.postbutton',array('message' => 'New Topic', 'url' => $category->postUrl, 'accessModel' => $category))
+@include('forum::partials.postbutton',array('message' => trans('forum::base.new_topic') , 'url' => $category->postUrl, 'accessModel' => $category))
 @if ($subCategories != NULL && count($subCategories) != 0)
 <table class="table table-category">
 	<thead>
 		<tr>
-			<th>Forum</th>
-			<th>Topics</th>
-			<th>Posts</th>
+			<th>{{ trans('forum::base.col_forum') }}</th>
+			<th>{{ trans('forum::base.col_topics') }}</th>
+			<th>{{ trans('forum::base.col_posts') }}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -31,8 +31,8 @@
 <table class="table table-topic">
 	<thead>
 		<tr>
-			<th>Subject</th>
-			<th>Reply</th>
+			<th>{{ trans('forum::base.subject') }}</th>
+			<th>{{ trans('forum::base.reply') }}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -52,17 +52,17 @@
 <table class="table table-topic">
 	<thead>
 		<tr>
-			<th>Subject</th>
-			<th>Reply</th>
+			<th>{{ trans('forum::base.subject') }}</th>
+			<th>{{ trans('forum::base.reply') }}</th>
 		</tr>
 	</thead>
 	<tbody>
 			<tr>
 				<th>
-					No topics found.
+					{{ trans('forum::base.no_topics') }}
 				</th>
 				<td>
-					@include('forum::partials.postbutton',array('message' => 'Post the first!', 'url' => $category->postUrl, 'accessModel' => $category))
+					@include('forum::partials.postbutton',array('message' => trans('forum::base.first_topic'), 'url' => $category->postUrl, 'accessModel' => $category))
 				</td>
 			</tr>
 	</tbody>

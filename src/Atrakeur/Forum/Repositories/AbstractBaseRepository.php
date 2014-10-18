@@ -20,11 +20,11 @@ abstract class AbstractBaseRepository  {
 		{
 			$model = $model->paginate($this->itemsPerPage);
 		}
-		else 
+		else
 		{
 			$model = $model->get();
 		}
-		
+
 		return $this->model->convertToObject($model);
 	}
 

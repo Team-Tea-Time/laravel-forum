@@ -28,7 +28,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 	public function getNewTopic($categoryId, $categoryUrl)
 	{
 		$user = $this->getCurrentUser();
-		if ($user == NULL) 
+		if ($user == NULL)
 		{
 			return \App::abort(403, 'Access denied');
 		}
@@ -43,7 +43,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 	public function postNewTopic($categoryId, $categoryUrl)
 	{
 		$user = $this->getCurrentUser();
-		if ($user == NULL) 
+		if ($user == NULL)
 		{
 			return \App::abort(403, 'Access denied');
 		}
@@ -55,7 +55,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 			$title = \Input::get('title');
 			$data  = \Input::get('data');
 
-			$topic                  = new \stdClass();			
+			$topic                  = new \stdClass();
 			$topic->author_id       = $user->id;
 			$topic->parent_category = $category->id;
 			$topic->title           = $title;
@@ -75,7 +75,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 
 			return \Redirect::to($topic->url)->with('success', 'topic created');
 		}
-		else 
+		else
 		{
 			return \Redirect::to($category->postUrl)->withErrors($validator)->withInput();
 		}
@@ -84,14 +84,14 @@ abstract class AbstractPostForumController extends AbstractForumController {
 	public function getNewMessage($categoryId, $categoryUrl, $topicId, $topicUrl)
 	{
 		$user = $this->getCurrentUser();
-		if ($user == NULL) 
+		if ($user == NULL)
 		{
 			return \App::abort(403, 'Access denied');
 		}
 
 		$category = $this->categories->getById($categoryId, array('parentCategory'));
 		$topic    = $this->topics->getById($topicId);
-		if ($category == NULL || $topic == NULL) 
+		if ($category == NULL || $topic == NULL)
 		{
 			return \App::abort(404);
 		}
@@ -106,7 +106,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 	public function postNewMessage($categoryId, $categoryUrl, $topicId, $topicUrl)
 	{
 		$user = $this->getCurrentUser();
-		if ($user == NULL) 
+		if ($user == NULL)
 		{
 			return \App::abort(403, 'Access denied');
 		}
@@ -129,7 +129,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 
 			return \Redirect::to($topic->url)->with('success', 'topic created');
 		}
-		else 
+		else
 		{
 			return \Redirect::to($topic->postUrl)->withErrors($validator)->withInput();
 		}
@@ -138,7 +138,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 	public function getEditMessage($categoryId, $categoryUrl, $topicId, $topicUrl, $messageId)
 	{
 		$user = $this->getCurrentUser();
-		if ($user == NULL) 
+		if ($user == NULL)
 		{
 			return \App::abort(403, 'Access denied');
 		}
@@ -146,7 +146,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		$category = $this->categories->getById($categoryId, array('parentCategory'));
 		$topic    = $this->topics->getById($topicId);
 		$message  = $this->messages->getById($messageId);
-		if ($category == NULL || $topic == NULL || $message == NULL) 
+		if ($category == NULL || $topic == NULL || $message == NULL)
 		{
 			return \App::abort(404);
 		}
@@ -160,7 +160,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 	public function postEditMessage($categoryId, $categoryUrl, $topicId, $topicUrl, $messageId)
 	{
 		$user = $this->getCurrentUser();
-		if ($user == NULL) 
+		if ($user == NULL)
 		{
 			return \App::abort(403, 'Access denied');
 		}
@@ -168,7 +168,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 		$category = $this->categories->getById($categoryId, array('parentCategory'));
 		$topic    = $this->topics->getById($topicId);
 		$message  = $this->messages->getById($messageId);
-		if ($category == NULL || $topic == NULL || $message == NULL) 
+		if ($category == NULL || $topic == NULL || $message == NULL)
 		{
 			return \App::abort(404);
 		}
@@ -190,7 +190,7 @@ abstract class AbstractPostForumController extends AbstractForumController {
 
 			return \Redirect::to($message->url)->with('success', 'topic created');
 		}
-		else 
+		else
 		{
 			return \Redirect::to($message->postUrl)->withErrors($validator)->withInput();
 		}

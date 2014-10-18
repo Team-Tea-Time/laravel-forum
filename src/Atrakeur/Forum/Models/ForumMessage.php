@@ -22,9 +22,9 @@ class ForumMessage extends AbstractForumBaseModel {
 		return $this->belongsTo(\Config::get('forum::integration.usermodel'), 'author_id');
 	}
 
-	public function scopeWhereTopicIn($query, Array $topics) 
+	public function scopeWhereTopicIn($query, Array $topics)
 	{
-		if (count($topics) == 0) 
+		if (count($topics) == 0)
 		{
 			return $query;
 		}

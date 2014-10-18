@@ -24,7 +24,7 @@ class AbstractViewForumController extends AbstractForumController {
 		$this->layout->content = \View::make('forum::index', compact('categories'));
 	}
 
-	public function getCategory($categoryId, $categoryUrl) 
+	public function getCategory($categoryId, $categoryUrl)
 	{
 		$category = $this->categories->getById($categoryId, array('parentCategory', 'subCategories', 'topics'));
 		if ($category == NULL)
@@ -37,10 +37,10 @@ class AbstractViewForumController extends AbstractForumController {
 		$topics         = $category->topics;
 
 		$this->layout->content = \View::make('forum::category', compact('parentCategory', 'category', 'subCategories', 'topics'));
-		
+
 	}
 
-	public function getTopic($categoryId, $categoryUrl, $topicId, $topicUrl, $page = 0) 
+	public function getTopic($categoryId, $categoryUrl, $topicId, $topicUrl, $page = 0)
 	{
 		$category = $this->categories->getById($categoryId, array('parentCategory'));
 		if ($category == NULL)
