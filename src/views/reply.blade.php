@@ -34,7 +34,7 @@
 </p>
 
 <div class="control-group">
-	<label class="control-label" for="textarea">{{ trans('forum::label_your_message') }}</label>
+	<label class="control-label" for="textarea">{{ trans('forum::base.label_your_message') }}</label>
 	<div class="controls">
 		{{ Form::textarea('data') }}
 	</div>
@@ -42,7 +42,7 @@
 
 <div class="control-group">
 	<div class="controls">
-		{{ Form::submit(trans('forum::send')) }}
+		{{ Form::submit(trans('forum::base.send')) }}
 	</div>
 </div>
 
