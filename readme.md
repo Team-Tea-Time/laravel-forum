@@ -7,7 +7,7 @@ Note: this package is currently in a very alpha stage. I'm currently working on 
 
 ## Goals
 
-This package aims to provide a good starting point implementing a forum inside a laravel application.
+This package aims to provide a good starting point implementing a forum inside a Laravel application.
 It focus on taking care of all the tedious and repetiting work of forum creation (categories, subcategories, topics, messages). Allowing you to spend more time on you website features and how the forum integrates with you application.
 This package will provide multiple hooks such as specials events and custom closures to allow you to customise his behavior. Additionnaly, you'll be able to extends forum's core classes to implement you own methods directly inside the core.
 
@@ -42,24 +42,28 @@ and, just to be safe, run:
 composer dump-autoload
 ```
 
-Now publish forum's files right into your laravel app:
+Now publish forum's files right into your Laravel app:
 `php artisan config:publish atrakeur/forum`
 `php artisan migrate:publish atrakeur/forum`
 
 If all goes well, you should find configuration files inside app/config/packages/atrakeur/forum and three new migrations in app/database/migrations.
 
-Now you can create the database schema using the default laravel command `php artisan migrate` .
+Now you can create the database schema using the default Laravel command `php artisan migrate` .
 
 To enable you to fully customise the package to your website, the package is integrated inside your application using two application level controllers.
 Run the command `php artisan forum:install` to auto-deploy the controllers in your app/controllers folder. (Please note that if a file with the same name allready exist, the command above will fail before overriding your files.)
 
 ### Customise
 
-The very last step needed is to create some categories and subcategories into the forum_categories tables. The schema is very basic and you should be able to do that on your own using laravel seeds (TODO: give some examples)
+To tweak the views publish them to your views folder using the Laravel command:
+
+`php artisan view:publish atrakeur/forum`
+
+The very last step needed is to create some categories and subcategories into the forum_categories tables. The schema is very basic and you should be able to do that on your own using Laravel seeds (TODO: give some examples)
 
 Now you are ready to go, just load http://localhost/forum and you should see a brand new forum.
 
-More information on how to integrate it with your login system is available through the config files comments. (TODO: give some examples) By default, it should run well on laravel default auth.
+More information on how to integrate it with your login system is available through the config files comments. (TODO: give some examples) By default, it should run well on Laravel default auth.
 
 ## Features
 
