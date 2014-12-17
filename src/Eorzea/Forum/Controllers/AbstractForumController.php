@@ -1,8 +1,8 @@
-<?php namespace Atrakeur\Forum\Controllers;
+<?php namespace Eorzea\Forum\Controllers;
 
-use \Atrakeur\Forum\Models\ForumCategory;
-use \Atrakeur\Forum\Models\ForumTopic;
-use \Atrakeur\Forum\Models\ForumMessage;
+use \Eorzea\Forum\Models\ForumCategory;
+use \Eorzea\Forum\Models\ForumTopic;
+use \Eorzea\Forum\Models\ForumMessage;
 
 abstract class AbstractForumController extends \Controller {
 

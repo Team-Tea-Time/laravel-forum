@@ -1,4 +1,4 @@
-<?php namespace Atrakeur\Forum\Repositories;
+<?php namespace Eorzea\Forum\Repositories;
 
 abstract class AbstractBaseRepository  {
 

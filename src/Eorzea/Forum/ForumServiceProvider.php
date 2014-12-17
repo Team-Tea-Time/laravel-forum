@@ -1,7 +1,7 @@
-<?php namespace Atrakeur\Forum;
+<?php namespace Eorzea\Forum;
 
 use Illuminate\Support\ServiceProvider;
-use Atrakeur\Forum\Commands\InstallCommand;
+use Eorzea\Forum\Commands\InstallCommand;
 
 class ForumServiceProvider extends ServiceProvider {
 
@@ -19,7 +19,7 @@ class ForumServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('atrakeur/forum');
+		$this->package('Eorzea/forum');
 
 		if (\Config::get('forum::routes.enable')) {
 			$routebase      = \Config::get('forum::routes.base');

@@ -10,7 +10,7 @@ return array(
 	| The user model from the main application
 	|
 	*/
-	'usermodel' => '\User',
+	'usermodel' => 'User',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -34,10 +34,10 @@ return array(
 	|--------------------------------------------------------------------------
 	|
 	| The controller used as application level hook for the forum (visualisation part)
-	| This class must extend \Atrakeur\Forum\Controllers\AbstractViewForumController
+	| This class must extend \Eorzea\Forum\Controllers\AbstractViewForumController
 	|
 	*/
-	'viewcontroller' => '\ForumController',
+	'viewcontroller' => '\ForumViewController',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -45,7 +45,7 @@ return array(
 	|--------------------------------------------------------------------------
 	|
 	| The controller used as application level hook for the forum (post part)
-	| This class must extend \Atrakeur\Forum\Controllers\AbstractPostForumController
+	| This class must extend \Eorzea\Forum\Controllers\AbstractPostForumController
 	|
 	*/
 	'postcontroller' => '\ForumPostController',

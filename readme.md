@@ -2,8 +2,8 @@
 
 Note: this package is currently in a very alpha stage. I'm currently working on integrating it inside my own website. The base functionnality should work but I'll complete the features when requested or when I need them.
 
-[![Build Status](https://travis-ci.org/atrakeur/laravel-forum.svg?branch=master)](https://travis-ci.org/atrakeur/laravel-forum)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/atrakeur/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/atrakeur/laravel-forum/?branch=master)
+[![Build Status](https://travis-ci.org/Eorzea/laravel-forum.svg?branch=master)](https://travis-ci.org/Eorzea/laravel-forum)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Eorzea/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Eorzea/laravel-forum/?branch=master)
 
 ## Goals
 
@@ -20,13 +20,13 @@ This package is far from finished, and pull requests are always welcome to make 
 To install, simply add the following line to your composer .json and run composer update:
 
 ```json
-"atrakeur/forum": "dev-master"
+"Eorzea/forum": "dev-master"
 ```
 
 Then add the following service provider to your app.php:
 
 ```php
-'Atrakeur\Forum\ForumServiceProvider',
+'Eorzea\Forum\ForumServiceProvider',
 ```
 
 ### Integrate into your app
@@ -43,10 +43,10 @@ composer dump-autoload
 ```
 
 Now publish forum's files right into your Laravel app:
-`php artisan config:publish atrakeur/forum`
-`php artisan migrate:publish atrakeur/forum`
+`php artisan config:publish Eorzea/forum`
+`php artisan migrate:publish Eorzea/forum`
 
-If all goes well, you should find configuration files inside app/config/packages/atrakeur/forum and three new migrations in app/database/migrations.
+If all goes well, you should find configuration files inside app/config/packages/Eorzea/forum and three new migrations in app/database/migrations.
 
 Now you can create the database schema using the default Laravel command `php artisan migrate` .
 
@@ -57,7 +57,7 @@ Run the command `php artisan forum:install` to auto-deploy the controllers in yo
 
 To tweak the views publish them to your views folder using the Laravel command:
 
-`php artisan view:publish atrakeur/forum`
+`php artisan view:publish Eorzea/forum`
 
 The very last step needed is to create some categories and subcategories into the forum_categories tables. The schema is very basic and you should be able to do that on your own using Laravel seeds (TODO: give some examples)
 
@@ -67,7 +67,7 @@ More information on how to integrate it with your login system is available thro
 
 ## Features
 
-This package is currently in (very-)alpha stage, so all of the following features may or may not work yet. However, feel free to post issues and features requests at https://github.com/atrakeur/laravel-forum/issues . I'll try to fix and improve the package as fast as I can based on your help!
+This package is currently in (very-)alpha stage, so all of the following features may or may not work yet. However, feel free to post issues and features requests at https://github.com/Eorzea/laravel-forum/issues . I'll try to fix and improve the package as fast as I can based on your help!
 
  * Category nesting on 2 levels
  * Topic and messages inside categories

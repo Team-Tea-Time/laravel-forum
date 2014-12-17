@@ -1,4 +1,4 @@
-<?php namespace Atrakeur\Forum\Commands;
+<?php namespace Eorzea\Forum\Commands;
 
 use Illuminate\Console\Command;
 
@@ -20,8 +20,8 @@ class InstallCommand extends Command {
 			return 1;
 		}
 
-		$this->installController($viewController, '\Atrakeur\Forum\Controllers\AbstractViewForumController');
-		$this->installController($postController, '\Atrakeur\Forum\Controllers\AbstractPostForumController');
+		$this->installController($viewController, '\Eorzea\Forum\Controllers\AbstractViewForumController');
+		$this->installController($postController, '\Eorzea\Forum\Controllers\AbstractPostForumController');
 
 		$this->info('Forum installation done.');
 		return 0;

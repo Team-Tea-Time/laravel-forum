@@ -1,35 +1,35 @@
-<?php namespace Atrakeur\Forum\Controllers;
+<?php namespace Eorzea\Forum\Controllers;
 
-use \Atrakeur\Forum\ForumBaseTest;
+use \Eorzea\Forum\ForumBaseTest;
 
 class AbstractViewForumControllerTest extends ForumBaseTest {
 
 	protected function getPackageProviders()
 	{
-		return array('\Atrakeur\Forum\ForumServiceProvider');
+		return array('\Eorzea\Forum\ForumServiceProvider');
 	}
 
 	private function createController($categories, $topics, $messages)
 	{
 		return $this->getMockForAbstractClass(
-			'\Atrakeur\Forum\Controllers\AbstractViewForumController',
+			'\Eorzea\Forum\Controllers\AbstractViewForumController',
 			array($categories, $topics, $messages)
 		);
 	}
 
 	private function createCategoriesMock()
 	{
-		return \Mockery::mock('Eloquent', '\Atrakeur\Forum\Repositories\CategoriesRepository');
+		return \Mockery::mock('Eloquent', '\Eorzea\Forum\Repositories\CategoriesRepository');
 	}
 
 	private function createTopicsMock()
 	{
-		return \Mockery::mock('Eloquent', '\Atrakeur\Forum\Repositories\TopicsRepository');
+		return \Mockery::mock('Eloquent', '\Eorzea\Forum\Repositories\TopicsRepository');
 	}
 
 	private function createMessagesMock()
 	{
-		return \Mockery::mock('Eloquent', '\Atrakeur\Forum\Repositories\MessagesRepository');
+		return \Mockery::mock('Eloquent', '\Eorzea\Forum\Repositories\MessagesRepository');
 	}
 
 	public function testGetIndex()
@@ -47,11 +47,11 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 
 		$controller = $this->createController($categoriesMock, $topicsMock, $messagesMock);
 
-		\App::instance('\Atrakeur\Forum\Repositories\CategoriesRepository', $categoriesMock);
-		\App::instance('\Atrakeur\Forum\Models\ForumTopic', $topicsMock);
-		\App::instance('\Atrakeur\Forum\Controllers\AbstractViewForumController', $controller);
+		\App::instance('\Eorzea\Forum\Repositories\CategoriesRepository', $categoriesMock);
+		\App::instance('\Eorzea\Forum\Models\ForumTopic', $topicsMock);
+		\App::instance('\Eorzea\Forum\Controllers\AbstractViewForumController', $controller);
 
-		\Route:: get('testRoute', '\Atrakeur\Forum\Controllers\AbstractViewForumController@getIndex');
+		\Route:: get('testRoute', '\Eorzea\Forum\Controllers\AbstractViewForumController@getIndex');
 		$this->call('GET', 'testRoute');
 
 		//$this->assertViewHas('categories');
@@ -67,12 +67,12 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 
 		$controller = $this->createController($categoriesMock, $topicsMock, $messagesMock);
 
-		\App::instance('\Atrakeur\Forum\Repositories\CategoriesRepository', $categoriesMock);
-		\App::instance('\Atrakeur\Forum\Models\ForumTopic', $topicsMock);
-		\App::instance('\Atrakeur\Forum\Controllers\AbstractViewForumController', $controller);
+		\App::instance('\Eorzea\Forum\Repositories\CategoriesRepository', $categoriesMock);
+		\App::instance('\Eorzea\Forum\Models\ForumTopic', $topicsMock);
+		\App::instance('\Eorzea\Forum\Controllers\AbstractViewForumController', $controller);
 
 		$this->setExpectedException('\Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
-		\Route:: get('testRoute/{categoryId}/{categoryUrl}', '\Atrakeur\Forum\Controllers\AbstractViewForumController@getCategory');
+		\Route:: get('testRoute/{categoryId}/{categoryUrl}', '\Eorzea\Forum\Controllers\AbstractViewForumController@getCategory');
 		$this->call('GET', 'testRoute/31415/FalseTestName');
 	}
 
@@ -95,12 +95,12 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 
 		$controller = $this->createController($categoriesMock, $topicsMock, $messagesMock);
 
-		\App::instance('\Atrakeur\Forum\Repositories\CategoriesRepository', $categoriesMock);
-		\App::instance('\Atrakeur\Forum\Models\ForumTopic', $topicsMock);
-		\App::instance('\Atrakeur\Forum\Controllers\AbstractViewForumController', $controller);
+		\App::instance('\Eorzea\Forum\Repositories\CategoriesRepository', $categoriesMock);
+		\App::instance('\Eorzea\Forum\Models\ForumTopic', $topicsMock);
+		\App::instance('\Eorzea\Forum\Controllers\AbstractViewForumController', $controller);
 
 		//$this->setExpectedException('\Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
-		\Route:: get('testRoute/{categoryId}/{categoryUrl}', '\Atrakeur\Forum\Controllers\AbstractViewForumController@getCategory');
+		\Route:: get('testRoute/{categoryId}/{categoryUrl}', '\Eorzea\Forum\Controllers\AbstractViewForumController@getCategory');
 		$this->call('GET', 'testRoute/1/title');
 	}
 

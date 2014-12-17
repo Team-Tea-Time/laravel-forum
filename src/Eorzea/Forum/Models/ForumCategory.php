@@ -1,6 +1,6 @@
-<?php namespace Atrakeur\Forum\Models;
+<?php namespace Eorzea\Forum\Models;
 
-use \Atrakeur\Forum\Models\ForumTopic;
+use \Eorzea\Forum\Models\ForumTopic;
 
 class ForumCategory extends AbstractForumBaseModel {
 
@@ -10,17 +10,17 @@ class ForumCategory extends AbstractForumBaseModel {
 
 	public function parentCategory()
 	{
-		return $this->belongsTo('\Atrakeur\Forum\Models\ForumCategory', 'parent_category');
+		return $this->belongsTo('\Eorzea\Forum\Models\ForumCategory', 'parent_category');
 	}
 
 	public function subcategories()
 	{
-		return $this->hasMany('\Atrakeur\Forum\Models\ForumCategory', 'parent_category');
+		return $this->hasMany('\Eorzea\Forum\Models\ForumCategory', 'parent_category');
 	}
 
 	public function topics()
 	{
-		return $this->hasMany('\Atrakeur\Forum\Models\ForumTopic', 'parent_category');
+		return $this->hasMany('\Eorzea\Forum\Models\ForumTopic', 'parent_category');
 	}
 
 	public function scopeWhereTopLevel($query)

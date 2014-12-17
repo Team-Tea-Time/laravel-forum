@@ -1,8 +1,8 @@
-<?php namespace Atrakeur\Forum\Controllers;
+<?php namespace Eorzea\Forum\Controllers;
 
-use Atrakeur\Forum\Repositories\CategoriesRepository;
-use Atrakeur\Forum\Repositories\TopicsRepository;
-use Atrakeur\Forum\Repositories\MessagesRepository;
+use Eorzea\Forum\Repositories\CategoriesRepository;
+use Eorzea\Forum\Repositories\TopicsRepository;
+use Eorzea\Forum\Repositories\MessagesRepository;
 
 abstract class AbstractPostForumController extends AbstractForumController {
 

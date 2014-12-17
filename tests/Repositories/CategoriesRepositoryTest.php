@@ -1,18 +1,18 @@
-<?php namespace Atrakeur\Forum\Repositories;
+<?php namespace Eorzea\Forum\Repositories;
 
-use \Atrakeur\Forum\ForumBaseTest;
-use \Atrakeur\Forum\Repositories\CategoriesRepository;
+use \Eorzea\Forum\ForumBaseTest;
+use \Eorzea\Forum\Repositories\CategoriesRepository;
 
 class CategoriesRepositoryTest extends ForumBaseTest {
 
 	protected function getPackageProviders()
 	{
-		return array('\Atrakeur\Forum\ForumServiceProvider');
+		return array('\Eorzea\Forum\ForumServiceProvider');
 	}
 
 	public function testGetById()
 	{
-		$modelMock = \Mockery::mock('\Atrakeur\Forum\Models\ForumCategory');
+		$modelMock = \Mockery::mock('\Eorzea\Forum\Models\ForumCategory');
 
 		$modelMock->shouldReceive('where')->with('id', '=', 1)->once()->andReturn($modelMock);
 		$modelMock->shouldReceive('with')->with(array())->once()->andReturn($modelMock);
@@ -26,7 +26,7 @@ class CategoriesRepositoryTest extends ForumBaseTest {
 
 	public function testGetByIdNull()
 	{
-		$modelMock = \Mockery::mock('\Atrakeur\Forum\Models\ForumCategory');
+		$modelMock = \Mockery::mock('\Eorzea\Forum\Models\ForumCategory');
 		$repository = new CategoriesRepository($modelMock);
 
 		$this->setExpectedException('\InvalidArgumentException');
@@ -35,7 +35,7 @@ class CategoriesRepositoryTest extends ForumBaseTest {
 
 	private function getCategoryModelForParentTest($id, $with, $return)
 	{
-		$modelMock = \Mockery::mock('\Atrakeur\Forum\Models\ForumCategory');
+		$modelMock = \Mockery::mock('\Eorzea\Forum\Models\ForumCategory');
 
 		$modelMock->shouldReceive('where')->with('parent_category', '=', $id)->once()->andReturn($modelMock);
 		$modelMock->shouldReceive('with')->with($with)->once()->andReturn($modelMock);
@@ -54,7 +54,7 @@ class CategoriesRepositoryTest extends ForumBaseTest {
 
 	public function testGetByParentInvalid()
 	{
-		$modelMock = \Mockery::mock('\Atrakeur\Forum\Models\ForumCategory');
+		$modelMock = \Mockery::mock('\Eorzea\Forum\Models\ForumCategory');
 		$repository = new CategoriesRepository($modelMock);
 
 		$this->setExpectedException('\InvalidArgumentException');

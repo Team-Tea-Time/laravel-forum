@@ -1,14 +1,14 @@
-<?php namespace Atrakeur\Forum\Controllers;
+<?php namespace Eorzea\Forum\Controllers;
 
-use \Atrakeur\Forum\ForumBaseTest;
-use \Atrakeur\Forum\Models\ForumCategory;
-use \Atrakeur\Forum\Controllers\AbstractForumController;
+use \Eorzea\Forum\ForumBaseTest;
+use \Eorzea\Forum\Models\ForumCategory;
+use \Eorzea\Forum\Controllers\AbstractForumController;
 
 class AbstractForumControllerTest extends ForumBaseTest {
 
 	protected function getPackageProviders()
 	{
-		return array('\Atrakeur\Forum\ForumServiceProvider');
+		return array('\Eorzea\Forum\ForumServiceProvider');
 	}
 
 	public function testFireEvent()
@@ -16,9 +16,9 @@ class AbstractForumControllerTest extends ForumBaseTest {
 		\Event::shouldReceive('fire')->once()->with('randomEvent', 'randomData');
 
 		//change visibility of fireEvent from protected to public
-		$controller = $this->getMockForAbstractClass('\Atrakeur\Forum\Controllers\AbstractForumController');
+		$controller = $this->getMockForAbstractClass('\Eorzea\Forum\Controllers\AbstractForumController');
 
-		$reflectionOfController = new \ReflectionClass('\Atrakeur\Forum\Controllers\AbstractForumController');
+		$reflectionOfController = new \ReflectionClass('\Eorzea\Forum\Controllers\AbstractForumController');
 		$method = $reflectionOfController->getMethod('fireEvent');
 		$method->setAccessible(true);
 
@@ -31,9 +31,9 @@ class AbstractForumControllerTest extends ForumBaseTest {
 		\Config::set('forum::integration.usermodel', "stdClass");
 
 		//change visibility of getCurrentUser from protected to public
-		$controller = $this->getMockForAbstractClass('\Atrakeur\Forum\Controllers\AbstractForumController');
+		$controller = $this->getMockForAbstractClass('\Eorzea\Forum\Controllers\AbstractForumController');
 
-		$reflectionOfController = new \ReflectionClass('\Atrakeur\Forum\Controllers\AbstractForumController');
+		$reflectionOfController = new \ReflectionClass('\Eorzea\Forum\Controllers\AbstractForumController');
 		$method = $reflectionOfController->getMethod('getCurrentUser');
 		$method->setAccessible(true);
 

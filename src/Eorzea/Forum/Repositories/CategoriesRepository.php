@@ -1,6 +1,6 @@
-<?php namespace Atrakeur\Forum\Repositories;
+<?php namespace Eorzea\Forum\Repositories;
 
-use \Atrakeur\Forum\Models\ForumCategory;
+use \Eorzea\Forum\Models\ForumCategory;
 
 class CategoriesRepository extends AbstractBaseRepository {
 

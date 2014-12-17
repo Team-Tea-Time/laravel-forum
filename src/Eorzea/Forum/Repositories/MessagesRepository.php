@@ -1,6 +1,6 @@
-<?php namespace Atrakeur\Forum\Repositories;
+<?php namespace Eorzea\Forum\Repositories;
 
-use \Atrakeur\Forum\Models\ForumMessage;
+use \Eorzea\Forum\Models\ForumMessage;
 
 class MessagesRepository extends AbstractBaseRepository {
 

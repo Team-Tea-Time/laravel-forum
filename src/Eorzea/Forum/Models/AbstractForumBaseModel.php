@@ -1,4 +1,4 @@
-<?php namespace Atrakeur\Forum\Models;
+<?php namespace Eorzea\Forum\Models;
 
 use \stdClass;
 

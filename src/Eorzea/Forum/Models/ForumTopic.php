@@ -1,4 +1,4 @@
-<?php namespace Atrakeur\Forum\Models;
+<?php namespace Eorzea\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
@@ -15,7 +15,7 @@ class ForumTopic extends AbstractForumBaseModel
 
 	public function category()
 	{
-		return $this->belongsTo('\Atrakeur\Forum\Models\ForumCategory', 'parent_category');
+		return $this->belongsTo('\Eorzea\Forum\Models\ForumCategory', 'parent_category');
 	}
 
 	public function author()
@@ -25,7 +25,7 @@ class ForumTopic extends AbstractForumBaseModel
 
 	public function messages()
 	{
-		return $this->hasMany('\Atrakeur\Forum\Models\ForumMessage', 'parent_topic');
+		return $this->hasMany('\Eorzea\Forum\Models\ForumMessage', 'parent_topic');
 	}
 
 	public function getReplyCountAttribute()

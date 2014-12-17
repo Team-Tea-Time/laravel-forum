@@ -1,10 +1,10 @@
-<?php namespace Atrakeur\Forum;
+<?php namespace Eorzea\Forum;
 
 abstract class ForumBaseTest extends \Orchestra\Testbench\TestCase {
 
 	protected function getPackageProviders()
     {
-        return array('\Atrakeur\Forum\ForumServiceProvider');
+        return array('\Eorzea\Forum\ForumServiceProvider');
     }
 
 }

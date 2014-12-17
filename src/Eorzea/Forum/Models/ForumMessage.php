@@ -1,4 +1,4 @@
-<?php namespace Atrakeur\Forum\Models;
+<?php namespace Eorzea\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
@@ -14,7 +14,7 @@ class ForumMessage extends AbstractForumBaseModel {
 
 	public function topic()
 	{
-		return $this->belongsTo('\Atrakeur\Forum\Models\ForumTopic', 'parent_topic');
+		return $this->belongsTo('\Eorzea\Forum\Models\ForumTopic', 'parent_topic');
 	}
 
 	public function author()
@@ -52,11 +52,6 @@ class ForumMessage extends AbstractForumBaseModel {
 				'messageId'   => $this->id
 			)
 		);
-	}
-
-	public function getCanPostAttribute()
-	{
-		return $this->computeCanPostAttribute('rights.postmessage');
 	}
 
 }
