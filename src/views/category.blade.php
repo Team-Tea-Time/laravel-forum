@@ -1,12 +1,12 @@
 @include('forum::partials.pathdisplay')
 
-@include('forum::partials.postbutton',array('message' => trans('forum::base.new_topic') , 'url' => $category->postUrl, 'accessModel' => $category))
+@include('forum::partials.postbutton',array('post' => trans('forum::base.new_thread') , 'url' => $category->postURL, 'accessModel' => $category))
 @if ($subCategories != NULL && count($subCategories) != 0)
 <table class="table table-category">
 	<thead>
 		<tr>
 			<th>{{ trans('forum::base.col_forum') }}</th>
-			<th>{{ trans('forum::base.col_topics') }}</th>
+			<th>{{ trans('forum::base.col_threads') }}</th>
 			<th>{{ trans('forum::base.col_posts') }}</th>
 		</tr>
 	</thead>
@@ -19,7 +19,7 @@
 				</div>
 				<div class="category_subtitle">{{{ $subcategory->subtitle }}}</div>
 			</th>
-			<td>{{ $subcategory->topicCount }}</td>
+			<td>{{ $subcategory->threadCount }}</td>
 			<td>{{ $subcategory->replyCount }}</td>
 		</tr>
 		@endforeach
@@ -27,8 +27,8 @@
 </table>
 @endif
 
-@if ($topics != NULL && count($topics) != 0)
-<table class="table table-topic">
+@if ($threads != NULL && count($threads) != 0)
+<table class="table table-thread">
 	<thead>
 		<tr>
 			<th>{{ trans('forum::base.subject') }}</th>
@@ -36,20 +36,20 @@
 		</tr>
 	</thead>
 	<tbody>
-			@foreach($topics as $topic)
+			@foreach($threads as $thread)
 			<tr>
 				<th>
-					<a href={{$topic->url}}>{{{ $topic->title }}}</a>
+					<a href={{$thread->url}}>{{{ $thread->title }}}</a>
 				</th>
-				<td>{{ $topic->replyCount }}</td>
+				<td>{{ $thread->replyCount }}</td>
 			</tr>
 			@endforeach
 	</tbody>
 </table>
 @endif
 
-@if (($subCategories == NULL || count($subCategories) == 0) && ($topics == NULL || count($topics) == 0))
-<table class="table table-topic">
+@if (($subCategories == NULL || count($subCategories) == 0) && ($threads == NULL || count($threads) == 0))
+<table class="table table-thread">
 	<thead>
 		<tr>
 			<th>{{ trans('forum::base.subject') }}</th>
@@ -59,10 +59,10 @@
 	<tbody>
 			<tr>
 				<th>
-					{{ trans('forum::base.no_topics') }}
+					{{ trans('forum::base.no_threads') }}
 				</th>
 				<td>
-					@include('forum::partials.postbutton',array('message' => trans('forum::base.first_topic'), 'url' => $category->postUrl, 'accessModel' => $category))
+					@include('forum::partials.postbutton',array('post' => trans('forum::base.first_thread'), 'url' => $category->postURL, 'accessModel' => $category))
 				</td>
 			</tr>
 	</tbody>

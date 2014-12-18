@@ -9,7 +9,7 @@ class CategoriesRepository extends AbstractBaseRepository {
 		$this->model = $model;
 	}
 
-	public function getById($ident, array $with = array())
+	public function getByID($ident, array $with = array())
 	{
 		if (!is_numeric($ident))
 		{

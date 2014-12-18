@@ -1,14 +1,14 @@
-@include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'topic'))
+@include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'thread'))
 
 @include('forum::partials.errorbox')
 
-{{ Form::open(array('url' => $actionUrl, 'class' => 'form-horizontal')) }}
+{{ Form::open(array('url' => $actionURL, 'class' => 'form-horizontal')) }}
 <fieldset>
 
 <!-- Form Name -->
-<legend>{{ trans('forum::base.new_topic_title') }}</legend>
+<legend>{{ trans('forum::base.new_thread_title') }}</legend>
 <p class="lead">
-	{{ trans('forum::base.posting_into') }} @include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'topic'))
+	{{ trans('forum::base.posting_into') }} @include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'thread'))
 </p>
 
 <div class="control-group">
@@ -19,7 +19,7 @@
 </div>
 
 <div class="control-group">
-	<label class="control-label" for="data">{{ trans('forum::base.label_your_message') }}</label>
+	<label class="control-label" for="data">{{ trans('forum::base.label_your_post') }}</label>
 	<div class="controls">
 		{{ Form::textarea('data') }}
 	</div>

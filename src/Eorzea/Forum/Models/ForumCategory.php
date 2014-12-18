@@ -1,12 +1,12 @@
 <?php namespace Eorzea\Forum\Models;
 
-use \Eorzea\Forum\Models\ForumTopic;
+use \Eorzea\Forum\Models\ForumThread;
 
 class ForumCategory extends AbstractForumBaseModel {
 
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
-	protected $appends    = array('topicCount', 'replyCount', 'url', 'postUrl', 'canPost');
+	protected $appends    = array('threadCount', 'replyCount', 'url', 'postURL', 'canPost');
 
 	public function parentCategory()
 	{
@@ -18,9 +18,9 @@ class ForumCategory extends AbstractForumBaseModel {
 		return $this->hasMany('\Eorzea\Forum\Models\ForumCategory', 'parent_category');
 	}
 
-	public function topics()
+	public function threads()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\ForumTopic', 'parent_category');
+		return $this->hasMany('\Eorzea\Forum\Models\ForumThread', 'parent_category');
 	}
 
 	public function scopeWhereTopLevel($query)
@@ -28,10 +28,10 @@ class ForumCategory extends AbstractForumBaseModel {
 		return $query->where('parent_category', '=', NULL);
 	}
 
-	public function getTopicCountAttribute()
+	public function getThreadCountAttribute()
 	{
-		return $this->rememberAttribute('topicCount', function(){
-			return $this->topics()->count();
+		return $this->rememberAttribute('threadCount', function(){
+			return $this->threads()->count();
 		});
 	}
 
@@ -40,37 +40,37 @@ class ForumCategory extends AbstractForumBaseModel {
 		return $this->rememberAttribute('replyCount', function(){
 			$replyCount = 0;
 
-			$topicsIds = array();
-			$topics    = $this->topics()->get(array('id'));
+			$threadsIDs = array();
+			$threads    = $this->threads()->get(array('id'));
 
-			foreach ($topics AS $topic) {
-				$topicsIds[] = $topic->id;
+			foreach ($threads AS $thread) {
+				$threadsIDs[] = $thread->id;
 			}
 
-			if (!empty($topicsIds)) 
+			if (!empty($threadsIDs)) 
 			{
-				$replyCount = ForumMessage::whereIn('parent_topic', $topicsIds)->count();
+				$replyCount = ForumPost::whereIn('parent_thread', $threadsIDs)->count();
 			}
 			return $replyCount;
 		});
 	}
 
-	public function getUrlAttribute()
+	public function getURLAttribute()
 	{
 		return action(\Config::get('forum::integration.viewcontroller').'@getCategory',
 			array(
-				'categoryId' => $this->id,
-				'categoryUrl' => \Str::slug($this->title, '_')
+				'categoryID' => $this->id,
+				'categoryURL' => \Str::slug($this->title, '_')
 			)
 		);
 	}
 
-	public function getPostUrlAttribute()
+	public function getPostURLAttribute()
 	{
-		return action(\Config::get('forum::integration.postcontroller').'@postNewTopic',
+		return action(\Config::get('forum::integration.postcontroller').'@postNewThread',
 			array(
-				'categoryId' => $this->id,
-				'categoryUrl' => \Str::slug($this->title, '_')
+				'categoryID' => $this->id,
+				'categoryURL' => \Str::slug($this->title, '_')
 			)
 		);
 	}

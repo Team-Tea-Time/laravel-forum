@@ -8,7 +8,7 @@ Note: this package is currently in a very alpha stage. I'm currently working on 
 ## Goals
 
 This package aims to provide a good starting point implementing a forum inside a Laravel application.
-It focus on taking care of all the tedious and repetiting work of forum creation (categories, subcategories, topics, messages). Allowing you to spend more time on you website features and how the forum integrates with you application.
+It focus on taking care of all the tedious and repetiting work of forum creation (categories, subcategories, threads, posts). Allowing you to spend more time on you website features and how the forum integrates with you application.
 This package will provide multiple hooks such as specials events and custom closures to allow you to customise his behavior. Additionnaly, you'll be able to extends forum's core classes to implement you own methods directly inside the core.
 
 This package is far from finished, and pull requests are always welcome to make this package better together.
@@ -51,7 +51,7 @@ If all goes well, you should find configuration files inside app/config/packages
 Now you can create the database schema using the default Laravel command `php artisan migrate` .
 
 To enable you to fully customise the package to your website, the package is integrated inside your application using two application level controllers.
-Run the command `php artisan forum:install` to auto-deploy the controllers in your app/controllers folder. (Please note that if a file with the same name allready exist, the command above will fail before overriding your files.)
+Run the command `php artisan forum:install` to auto-deploy the controllers in your app/controllers folder. (Please note that if a file with the same name already exist, the command above will fail before overriding your files.)
 
 ### Customise
 
@@ -70,12 +70,12 @@ More information on how to integrate it with your login system is available thro
 This package is currently in (very-)alpha stage, so all of the following features may or may not work yet. However, feel free to post issues and features requests at https://github.com/Eorzea/laravel-forum/issues . I'll try to fix and improve the package as fast as I can based on your help!
 
  * Category nesting on 2 levels
- * Topic and messages inside categories
+ * Threads inside categories
+ * Posts (with hooks for app integration)
  * Easy user integration (through config files and callbacks)
- * Easy user right integration (through config files and callbacks)
- * Message posting (with hooks for app integration)
- * Light weight & blasing fast (designed with caching and high speed in mind)
- * Designed on bootstrap (clean and simple markup, no messy css and should integrate directly into your website)
+ * Zizaco Entrust permission integration (through config files and callbacks)
+ * Lightweight & blazing fast (designed with caching and high speed in mind)
+ * Designed on bootstrap (clean and simple markup, no messy CSS and should integrate directly into your website)
 
 ## Events
 
@@ -84,7 +84,7 @@ Here is a complete list of all events, as to when they are fired. When a paramet
 
 | Events               | Params        | Usage                            |
 | -------------        |:-------------:| ---------------------------------------------:                     |
-| forum.new.topic      | $topic        | Called before topic save. Can be used to modify topic contents     |
-| forum.new.message    | $message      | Called before message save. Can be used to modify message contents |
-| forum.saved.topic    | $topic        | Called after topic save. Can be used for logging purposes          |
-| forum.saved.message  | $message      | Called after message save. Can be used for logging purposes        |
+| forum.new.thread      | $thread        | Called before thread save. Can be used to modify thread contents     |
+| forum.new.post    | $post      | Called before post save. Can be used to modify post contents |
+| forum.saved.thread    | $thread        | Called after thread save. Can be used for logging purposes          |
+| forum.saved.post  | $post      | Called after post save. Can be used for logging purposes        |

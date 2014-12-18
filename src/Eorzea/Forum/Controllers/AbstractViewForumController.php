@@ -1,20 +1,20 @@
 <?php namespace Eorzea\Forum\Controllers;
 
 use Eorzea\Forum\Repositories\CategoriesRepository;
-use Eorzea\Forum\Repositories\TopicsRepository;
-use Eorzea\Forum\Repositories\MessagesRepository;
+use Eorzea\Forum\Repositories\ThreadsRepository;
+use Eorzea\Forum\Repositories\postsRepository;
 
 class AbstractViewForumController extends AbstractForumController {
 
 	private $categories;
-	private $topics;
-	private $messages;
+	private $threads;
+	private $posts;
 
-	public function __construct(CategoriesRepository $categories, TopicsRepository $topics, MessagesRepository $messages)
+	public function __construct(CategoriesRepository $categories, ThreadsRepository $threads, postsRepository $posts)
 	{
 		$this->categories = $categories;
-		$this->topics     = $topics;
-		$this->messages   = $messages;
+		$this->threads     = $threads;
+		$this->posts   = $posts;
 	}
 
 	public function getIndex()
@@ -24,9 +24,9 @@ class AbstractViewForumController extends AbstractForumController {
 		$this->layout->content = \View::make('forum::index', compact('categories'));
 	}
 
-	public function getCategory($categoryId, $categoryUrl)
+	public function getCategory($categoryID, $categoryURL)
 	{
-		$category = $this->categories->getById($categoryId, array('parentCategory', 'subCategories', 'topics'));
+		$category = $this->categories->getByID($categoryID, array('parentCategory', 'subCategories', 'threads'));
 		if ($category == NULL)
 		{
 			return \App::abort(404);
@@ -34,33 +34,33 @@ class AbstractViewForumController extends AbstractForumController {
 
 		$parentCategory = $category->parentCategory;
 		$subCategories  = $category->subCategories;
-		$topics         = $category->topics;
+		$threads         = $category->threads;
 
-		$this->layout->content = \View::make('forum::category', compact('parentCategory', 'category', 'subCategories', 'topics'));
+		$this->layout->content = \View::make('forum::category', compact('parentCategory', 'category', 'subCategories', 'threads'));
 
 	}
 
-	public function getTopic($categoryId, $categoryUrl, $topicId, $topicUrl, $page = 0)
+	public function getThread($categoryID, $categoryURL, $threadID, $threadURL, $page = 0)
 	{
-		$category = $this->categories->getById($categoryId, array('parentCategory'));
+		$category = $this->categories->getByID($categoryID, array('parentCategory'));
 		if ($category == NULL)
 		{
 			return \App::abort(404);
 		}
 
-		$topic = $this->topics->getById($topicId);
-		if ($topic == NULL)
+		$thread = $this->threads->getByID($threadID);
+		if ($thread == NULL)
 		{
 			return \App::abort(404);
 		}
 
 		$parentCategory  = $category->parentCategory;
-		$messagesPerPage = \Config::get('forum::integration.messagesperpage');
-		//$this->messages->paginate($messagesPerPage);
-		$messages        = $this->messages->getByTopic($topic->id, array('author'));
-		$paginationLinks = $this->messages->getPaginationLinks($messagesPerPage);
+		$postsPerPage = \Config::get('forum::integration.postsperpage');
+		//$this->posts->paginate($postsPerPage);
+		$posts        = $this->posts->getByThread($thread->id, array('author'));
+		$paginationLinks = $this->posts->getPaginationLinks($postsPerPage);
 
-		$this->layout->content = \View::make('forum::topic', compact('parentCategory', 'category', 'topic', 'messages', 'paginationLinks'));
+		$this->layout->content = \View::make('forum::thread', compact('parentCategory', 'category', 'thread', 'posts', 'paginationLinks'));
 	}
 
 }

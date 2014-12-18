@@ -13,20 +13,20 @@ return array(
 	'home_title' 	=> 'Laravel forum',
 
 	'col_forum'		=> 'Forum',
-	'col_topics'	=> 'Sujets',
-	'col_posts'		=> 'Messages',
+	'col_threads'	=> 'Sujets',
+	'col_posts'		=> 'posts',
 
 	'index' 		=> 'Index',
 	'author' 		=> 'Auteur',
-	'message'		=> 'Message',
+	'post'		=> 'Post',
 	'subject'		=> 'Sujet',
 	'title'			=> 'Titre',
 
-	'label_your_message'	=> 'Votre message',
+	'label_your_post'	=> 'Votre post',
 
-	'latest_messages' => 'Derniers messages',
-	'edit_message'	=> 'Modifier un message',
-	'post_message'	=> 'Poster un nouveau message',
+	'latest_posts' => 'Derniers posts',
+	'edit_post'	=> 'Modifier un post',
+	'post_post'	=> 'Poster un nouveau post',
 	'posting_into'	=> 'Vous postez dans',
 	'your_editing'	=> 'Vous éditez',
 	'posted_at'		=> 'Posté à',
@@ -34,12 +34,12 @@ return array(
 
 	'reply' 		=> 'Répondre',
 	'new_reply' 	=> 'Nouvelle réponse',
-	'new_topic' 	=> 'Nouveau sujet',
-	'new_topic_title' => 'Publier un nouveau sujet',
+	'new_thread' 	=> 'Nouveau sujet',
+	'new_thread_title' => 'Publier un nouveau sujet',
 	'send'			=> 'Envoyer',
-	'first_topic'	=> 'Postez le premier!',
+	'first_thread'	=> 'Postez le premier!',
 
 	'no_categories' => 'Aucune catégorie trouvée',
-	'no_topics' 	=> 'Aucun thème trouvé',
+	'no_threads' 	=> 'Aucun thème trouvé',
 	'no_content'	=> 'Rien à afficher (ici avez-vous mis $this->layout->content dans votre contrôleur?)',
 );

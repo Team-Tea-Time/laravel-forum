@@ -2,15 +2,15 @@
 
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
-class ForumTopic extends AbstractForumBaseModel
+class ForumThread extends AbstractForumBaseModel
 {
 
 	use SoftDeletingTrait;
 
-	protected $table      = 'forum_topics';
+	protected $table      = 'forum_threads';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = array('replyCount', 'url', 'postUrl', 'canPost');
+	protected $appends    = array('replyCount', 'url', 'postURL', 'canPost');
 	protected $guarded    = array('id');
 
 	public function category()
@@ -23,43 +23,43 @@ class ForumTopic extends AbstractForumBaseModel
 		return $this->belongsTo(\Config::get('forum::integration.usermodel'), 'author_id');
 	}
 
-	public function messages()
+	public function posts()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\ForumMessage', 'parent_topic');
+		return $this->hasMany('\Eorzea\Forum\Models\ForumPost', 'parent_thread');
 	}
 
 	public function getReplyCountAttribute()
 	{
-		return $this->messages()->count();
+		return $this->posts()->count();
 	}
 
-	public function getUrlAttribute()
+	public function getURLAttribute()
 	{
-		return action(\Config::get('forum::integration.viewcontroller').'@getTopic',
+		return action(\Config::get('forum::integration.viewcontroller').'@getThread',
 			array(
-				'categoryId'  => $this->category->id,
-				'categoryUrl' => \Str::slug($this->category->title, '_'),
-				'topicId'     => $this->id,
-				'topicUrl'    => \Str::slug($this->title, '_'),
+				'categoryID'  => $this->category->id,
+				'categoryURL' => \Str::slug($this->category->title, '_'),
+				'threadID'     => $this->id,
+				'threadURL'    => \Str::slug($this->title, '_'),
 			)
 		);
 	}
 
-	public function getPostUrlAttribute()
+	public function getPostURLAttribute()
 	{
-		return action(\Config::get('forum::integration.postcontroller').'@postNewMessage',
+		return action(\Config::get('forum::integration.postcontroller').'@postNewPost',
 			array(
-				'categoryId'  => $this->category->id,
-				'categoryUrl' => \Str::slug($this->category->title, '_'),
-				'topicId'     => $this->id,
-				'topicUrl'    => \Str::slug($this->title, '_'),
+				'categoryID'  => $this->category->id,
+				'categoryURL' => \Str::slug($this->category->title, '_'),
+				'threadID'     => $this->id,
+				'threadURL'    => \Str::slug($this->title, '_'),
 			)
 		);
 	}
 
 	public function getCanPostAttribute()
 	{
-		return $this->computeCanPostAttribute('rights.posttopic');
+		return $this->computeCanPostAttribute('rights.postthread');
 	}
 
 }

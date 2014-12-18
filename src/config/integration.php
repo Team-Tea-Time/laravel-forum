@@ -52,10 +52,10 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| The number of messages per page
+	| The number of posts per page
 	|--------------------------------------------------------------------------
 	|
 	*/
-	'messagesperpage' => 15
+	'postsperpage' => 15
 
 );

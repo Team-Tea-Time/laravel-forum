@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForumTableMessages extends Migration {
+class CreateForumTableposts extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,12 +12,12 @@ class CreateForumTableMessages extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('forum_messages', function(Blueprint $table) 
+		Schema::create('forum_posts', function(Blueprint $table) 
 		{
 			$table->increments('id');
 			
 			/* Attributes */
-			$table->integer('parent_topic')->unsigned();
+			$table->integer('parent_thread')->unsigned();
 			$table->integer('author_id')->unsigned();
 			$table->text('data');
 
@@ -33,7 +33,7 @@ class CreateForumTableMessages extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('forum_messages');
+		Schema::drop('forum_posts');
 	}
 
 }

@@ -2,19 +2,19 @@
 
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
-class ForumMessage extends AbstractForumBaseModel {
+class ForumPost extends AbstractForumBaseModel {
 
 	use SoftDeletingTrait;
 
-	protected $table      = 'forum_messages';
+	protected $table      = 'forum_posts';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = array('url', 'postUrl', 'canPost');
+	protected $appends    = array('url', 'postURL', 'canPost');
 	protected $guarded    = array('id');
 
-	public function topic()
+	public function thread()
 	{
-		return $this->belongsTo('\Eorzea\Forum\Models\ForumTopic', 'parent_topic');
+		return $this->belongsTo('\Eorzea\Forum\Models\ForumThread', 'parent_thread');
 	}
 
 	public function author()
@@ -22,34 +22,34 @@ class ForumMessage extends AbstractForumBaseModel {
 		return $this->belongsTo(\Config::get('forum::integration.usermodel'), 'author_id');
 	}
 
-	public function scopeWhereTopicIn($query, Array $topics)
+	public function scopeWhereThreadIn($query, Array $threads)
 	{
-		if (count($topics) == 0)
+		if (count($threads) == 0)
 		{
 			return $query;
 		}
 
-		return $query->whereIn('parent_topic', $topics);
+		return $query->whereIn('parent_thread', $threads);
 	}
 
-	public function getUrlAttribute()
+	public function getURLAttribute()
 	{
 		//TODO add page get parameter
-		return $this->topic->url;
+		return $this->thread->url;
 	}
 
-	public function getPostUrlAttribute()
+	public function getPostURLAttribute()
 	{
-		$topic    = $this->topic;
-		$category = $topic->category;
+		$thread    = $this->thread;
+		$category = $thread->category;
 
-		return action(\Config::get('forum::integration.postcontroller').'@postEditMessage',
+		return action(\Config::get('forum::integration.postcontroller').'@postEditPost',
 			array(
-				'categoryId'  => $category->id,
-				'categoryUrl' => \Str::slug($category->title, '_'),
-				'topicId'     => $topic->id,
-				'topicUrl'    => \Str::slug($topic->title, '_'),
-				'messageId'   => $this->id
+				'categoryID'  => $category->id,
+				'categoryURL' => \Str::slug($category->title, '_'),
+				'threadID'     => $thread->id,
+				'threadURL'    => \Str::slug($thread->title, '_'),
+				'postID'   => $this->id
 			)
 		);
 	}

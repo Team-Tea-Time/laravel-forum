@@ -15,7 +15,7 @@
 	<tbody>
 		<tr>
 			<th>{{ trans('forum::base.col_forum') }}</th>
-			<th>{{ trans('forum::base.col_topics') }}</th>
+			<th>{{ trans('forum::base.col_threads') }}</th>
 			<th>{{ trans('forum::base.col_posts') }}</th>
 		</tr>
 		@if (count($category->subcategories) > 0)
@@ -27,7 +27,7 @@
 				</div>
 				<div class="category_subtitle">{{{ $subcategory->subtitle }}}</div>
 			</th>
-			<td>{{ $subcategory->topicCount }}</td>
+			<td>{{ $subcategory->threadCount }}</td>
 			<td>{{ $subcategory->replyCount }}</td>
 		</tr>
 		@endforeach

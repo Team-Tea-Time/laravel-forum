@@ -7,14 +7,14 @@ if (!isset($routebase) || !isset($viewController) || !isset($postController)) {
  *  Defines routes used by Forum controller
  */
 \Route:: get($routebase, $viewController.'@getIndex');
-\Route:: get($routebase.'{categoryId}-{categoryUrl}', $viewController.'@getCategory');
-\Route:: get($routebase.'{categoryId}-{categoryUrl}/{topicId}-{topicUrl}', $viewController.'@getTopic');
+\Route:: get($routebase.'{categoryID}-{categoryURL}', $viewController.'@getCategory');
+\Route:: get($routebase.'{categoryID}-{categoryURL}/{threadID}-{threadURL}', $viewController.'@getThread');
 
-\Route:: get($routebase.'{categoryId}-{categoryUrl}/new', $postController.'@getNewTopic');
-\Route::post($routebase.'{categoryId}-{categoryUrl}/new', $postController.'@postNewTopic');
+\Route:: get($routebase.'{categoryID}-{categoryURL}/new', $postController.'@getNewThread');
+\Route::post($routebase.'{categoryID}-{categoryURL}/new', $postController.'@postNewThread');
 
-\Route:: get($routebase.'{categoryId}-{categoryUrl}/{topicId}-{topicUrl}/new', $postController.'@getNewMessage');
-\Route::post($routebase.'{categoryId}-{categoryUrl}/{topicId}-{topicUrl}/new', $postController.'@postNewMessage');
+\Route:: get($routebase.'{categoryID}-{categoryURL}/{threadID}-{threadURL}/new', $postController.'@getNewPost');
+\Route::post($routebase.'{categoryID}-{categoryURL}/{threadID}-{threadURL}/new', $postController.'@postNewPost');
 
-\Route:: get($routebase.'{categoryId}-{categoryUrl}/{topicId}-{topicUrl}/edit/{messageId}', $postController.'@getEditMessage');
-\Route::post($routebase.'{categoryId}-{categoryUrl}/{topicId}-{topicUrl}/edit/{messageId}', $postController.'@postEditMessage');
+\Route:: get($routebase.'{categoryID}-{categoryURL}/{threadID}-{threadURL}/edit/{postID}', $postController.'@getEditPost');
+\Route::post($routebase.'{categoryID}-{categoryURL}/{threadID}-{threadURL}/edit/{postID}', $postController.'@postEditPost');

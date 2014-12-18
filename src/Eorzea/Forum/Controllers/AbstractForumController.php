@@ -1,8 +1,8 @@
 <?php namespace Eorzea\Forum\Controllers;
 
 use \Eorzea\Forum\Models\ForumCategory;
-use \Eorzea\Forum\Models\ForumTopic;
-use \Eorzea\Forum\Models\ForumMessage;
+use \Eorzea\Forum\Models\ForumThread;
+use \Eorzea\Forum\Models\ForumPost;
 
 abstract class AbstractForumController extends \Controller {
 

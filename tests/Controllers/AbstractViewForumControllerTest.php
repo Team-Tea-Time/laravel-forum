@@ -9,11 +9,11 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 		return array('\Eorzea\Forum\ForumServiceProvider');
 	}
 
-	private function createController($categories, $topics, $messages)
+	private function createController($categories, $threads, $posts)
 	{
 		return $this->getMockForAbstractClass(
 			'\Eorzea\Forum\Controllers\AbstractViewForumController',
-			array($categories, $topics, $messages)
+			array($categories, $threads, $posts)
 		);
 	}
 
@@ -22,21 +22,21 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 		return \Mockery::mock('Eloquent', '\Eorzea\Forum\Repositories\CategoriesRepository');
 	}
 
-	private function createTopicsMock()
+	private function createThreadsMock()
 	{
-		return \Mockery::mock('Eloquent', '\Eorzea\Forum\Repositories\TopicsRepository');
+		return \Mockery::mock('Eloquent', '\Eorzea\Forum\Repositories\ThreadsRepository');
 	}
 
-	private function createMessagesMock()
+	private function createpostsMock()
 	{
-		return \Mockery::mock('Eloquent', '\Eorzea\Forum\Repositories\MessagesRepository');
+		return \Mockery::mock('Eloquent', '\Eorzea\Forum\Repositories\postsRepository');
 	}
 
 	public function testGetIndex()
 	{
 		$categoriesMock = $this->createCategoriesMock();
-		$topicsMock = $this->createTopicsMock();
-		$messagesMock = $this->createMessagesMock();
+		$threadsMock = $this->createThreadsMock();
+		$postsMock = $this->createpostsMock();
 
 		$categoryMock = new \stdClass();
 		$categoryMock->url = 'url';
@@ -45,10 +45,10 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 		$categoryMock->subcategories = array();
 		$categoriesMock->shouldReceive('getByParent')->andReturn(array($categoryMock));
 
-		$controller = $this->createController($categoriesMock, $topicsMock, $messagesMock);
+		$controller = $this->createController($categoriesMock, $threadsMock, $postsMock);
 
 		\App::instance('\Eorzea\Forum\Repositories\CategoriesRepository', $categoriesMock);
-		\App::instance('\Eorzea\Forum\Models\ForumTopic', $topicsMock);
+		\App::instance('\Eorzea\Forum\Models\ForumThread', $threadsMock);
 		\App::instance('\Eorzea\Forum\Controllers\AbstractViewForumController', $controller);
 
 		\Route:: get('testRoute', '\Eorzea\Forum\Controllers\AbstractViewForumController@getIndex');
@@ -60,47 +60,47 @@ class AbstractViewForumControllerTest extends ForumBaseTest {
 	public function testGetCategoryInvalid()
 	{
 		$categoriesMock = $this->createCategoriesMock();
-		$topicsMock = $this->createTopicsMock();
-		$messagesMock = $this->createMessagesMock();
+		$threadsMock = $this->createThreadsMock();
+		$postsMock = $this->createpostsMock();
 
-		$categoriesMock->shouldReceive('getById')->once()->with(31415, array('parentCategory', 'subCategories', 'topics'))->andReturn(null);
+		$categoriesMock->shouldReceive('getByID')->once()->with(31415, array('parentCategory', 'subCategories', 'threads'))->andReturn(null);
 
-		$controller = $this->createController($categoriesMock, $topicsMock, $messagesMock);
+		$controller = $this->createController($categoriesMock, $threadsMock, $postsMock);
 
 		\App::instance('\Eorzea\Forum\Repositories\CategoriesRepository', $categoriesMock);
-		\App::instance('\Eorzea\Forum\Models\ForumTopic', $topicsMock);
+		\App::instance('\Eorzea\Forum\Models\ForumThread', $threadsMock);
 		\App::instance('\Eorzea\Forum\Controllers\AbstractViewForumController', $controller);
 
 		$this->setExpectedException('\Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
-		\Route:: get('testRoute/{categoryId}/{categoryUrl}', '\Eorzea\Forum\Controllers\AbstractViewForumController@getCategory');
+		\Route:: get('testRoute/{categoryID}/{categoryURL}', '\Eorzea\Forum\Controllers\AbstractViewForumController@getCategory');
 		$this->call('GET', 'testRoute/31415/FalseTestName');
 	}
 
 	public function testGetCategory()
 	{
 		$categoriesMock = $this->createCategoriesMock();
-		$topicsMock = $this->createTopicsMock();
-		$messagesMock = $this->createMessagesMock();
+		$threadsMock = $this->createThreadsMock();
+		$postsMock = $this->createpostsMock();
 
 		$categoryMock = new \stdClass();
 		$categoryMock->url = 'url';
-		$categoryMock->postUrl = 'url';
+		$categoryMock->postURL = 'url';
 		$categoryMock->title = 'title';
 		$categoryMock->canPost = false;
 		$categoryMock->subtitle = 'title';
 		$categoryMock->subCategories = array();
-		$categoryMock->topics = array();
+		$categoryMock->threads = array();
 		$categoryMock->parentCategory = null;
-		$categoriesMock->shouldReceive('getById')->once()->with(1, array('parentCategory', 'subCategories', 'topics'))->andReturn($categoryMock);
+		$categoriesMock->shouldReceive('getByID')->once()->with(1, array('parentCategory', 'subCategories', 'threads'))->andReturn($categoryMock);
 
-		$controller = $this->createController($categoriesMock, $topicsMock, $messagesMock);
+		$controller = $this->createController($categoriesMock, $threadsMock, $postsMock);
 
 		\App::instance('\Eorzea\Forum\Repositories\CategoriesRepository', $categoriesMock);
-		\App::instance('\Eorzea\Forum\Models\ForumTopic', $topicsMock);
+		\App::instance('\Eorzea\Forum\Models\ForumThread', $threadsMock);
 		\App::instance('\Eorzea\Forum\Controllers\AbstractViewForumController', $controller);
 
 		//$this->setExpectedException('\Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
-		\Route:: get('testRoute/{categoryId}/{categoryUrl}', '\Eorzea\Forum\Controllers\AbstractViewForumController@getCategory');
+		\Route:: get('testRoute/{categoryID}/{categoryURL}', '\Eorzea\Forum\Controllers\AbstractViewForumController@getCategory');
 		$this->call('GET', 'testRoute/1/title');
 	}
 

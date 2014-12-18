@@ -1,15 +1,15 @@
 <?php namespace Eorzea\Forum\Repositories;
 
-use \Eorzea\Forum\Models\ForumTopic;
+use \Eorzea\Forum\Models\ForumThread;
 
-class TopicsRepository extends AbstractBaseRepository {
+class ThreadsRepository extends AbstractBaseRepository {
 
-	public function __construct(ForumTopic $model)
+	public function __construct(ForumThread $model)
 	{
 		$this->model = $model;
 	}
 
-	public function getById($ident, array $with = array())
+	public function getByID($ident, array $with = array())
 	{
 		if (!is_numeric($ident))
 		{

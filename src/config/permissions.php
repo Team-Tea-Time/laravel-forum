@@ -4,23 +4,23 @@ return array(
 
   /*
   |-----------------------------------------------------------------------------
-  | New topic permission
+  | New thread permission
   |-----------------------------------------------------------------------------
   |
-  | Determines whether or not the current user is allowed to post new topics.
+  | Determines whether or not the current user is allowed to post new threads.
   |
   */
-  'postNewTopic' => function() {},
+  'create_threads' => function() {},
 
   /*
   |-----------------------------------------------------------------------------
   | New post/reply permission
   |-----------------------------------------------------------------------------
   |
-  | Determines whether or not the current user is allowed to post topic replies.
+  | Determines whether or not the current user is allowed to post thread replies.
   |
   */
-  'postNewMessage' => function() {},
+  'post_replies' => function() {},
 
 
   /*
@@ -31,7 +31,7 @@ return array(
   | Determines whether or not the current user is allowed to edit a given post.
   |
   */
-  'postEditMessage' => function() {},
+  'edit_posts' => function() {},
 
 
   /*
@@ -42,6 +42,6 @@ return array(
   | Specifies role-restricted forums and the roles needed to access them.
   |
   */
-  'postInForums' => array()
+  'access_forums' => array()
 
 );

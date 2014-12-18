@@ -1,42 +1,42 @@
 <?php namespace Eorzea\Forum\Repositories;
 
-use \Eorzea\Forum\Models\ForumMessage;
+use \Eorzea\Forum\Models\ForumPost;
 
-class MessagesRepository extends AbstractBaseRepository {
+class postsRepository extends AbstractBaseRepository {
 
-	public function __construct(ForumMessage $model)
+	public function __construct(ForumPost $model)
 	{
 		$this->model = $model;
 	}
 
-	public function getById($messageId, array $with = array())
+	public function getById($postId, array $with = array())
 	{
-		if (!is_numeric($messageId))
+		if (!is_numeric($postId))
 		{
 			throw new \InvalidArgumentException();
 		}
 
-		return $this->getFirstBy('id', $messageId, $with);
+		return $this->getFirstBy('id', $postId, $with);
 	}
 
-	public function getByTopic($topicId, array $with = array())
+	public function getByThread($threadId, array $with = array())
 	{
-		if (!is_numeric($topicId))
+		if (!is_numeric($threadId))
 		{
 			throw new \InvalidArgumentException();
 		}
 
-		return $this->getManyBy('parent_topic', $topicId, $with);
+		return $this->getManyBy('parent_thread', $threadId, $with);
 	}
 
-	public function getLastByTopic($topicId, $count = 10, array $with = array())
+	public function getLastByThread($threadId, $count = 10, array $with = array())
 	{
-		if (!is_numeric($topicId))
+		if (!is_numeric($threadId))
 		{
 			throw new \InvalidArgumentException();
 		}
 
-		$model = $this->model->where('parent_topic', '=', $topicId);
+		$model = $this->model->where('parent_thread', '=', $threadId);
 		$model = $model->orderBy('created_at', 'DESC')->take($count);
 		$model = $model->with($with);
 		return $this->model->convertToObject($model->get());

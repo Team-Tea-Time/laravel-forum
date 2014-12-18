@@ -1,6 +1,6 @@
 @include('forum::partials.pathdisplay')
 
-@include('forum::partials.postbutton', array('message' => trans('forum::base.new_reply'), 'url' => $topic->postUrl, 'accessModel' => $topic))
+@include('forum::partials.postbutton', array('post' => trans('forum::base.new_reply'), 'url' => $thread->postURL, 'accessModel' => $thread))
 <table class="table table-index">
 	<thead>
 		<tr>
@@ -8,13 +8,13 @@
 				{{ trans('forum::base.author') }}
 			</td>
 			<td>
-				{{ trans('forum::base.message') }}
+				{{ trans('forum::base.post') }}
 			</td>
 		</tr>
 	</thead>
 	<tbody>
-		@foreach ($messages as $message)
-			@include('forum::partials.message', compact('message'))
+		@foreach ($posts as $post)
+			@include('forum::partials.post', compact('post'))
 		@endforeach
 	</tbody>
 </table>

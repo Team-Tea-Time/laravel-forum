@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForumTableTopics extends Migration {
+class CreateForumTableThreads extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreateForumTableTopics extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('forum_topics', function(Blueprint $table) 
+		Schema::create('forum_threads', function(Blueprint $table) 
 		{
 			$table->increments('id');
 
@@ -33,7 +33,7 @@ class CreateForumTableTopics extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('forum_topics');
+		Schema::drop('forum_threads');
 	}
 
 }

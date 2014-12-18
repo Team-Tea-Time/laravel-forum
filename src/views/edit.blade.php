@@ -1,19 +1,19 @@
-@include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'topic'))
+@include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'thread'))
 
 @include('forum::partials.errorbox')
 
-{{ Form::open(array('url' => $actionUrl, 'class' => 'form-horizontal')) }}
+{{ Form::open(array('url' => $actionURL, 'class' => 'form-horizontal')) }}
 <fieldset>
 
-<legend>{{ trans('forum::base.edit_message') }}</legend>
+<legend>{{ trans('forum::base.edit_post') }}</legend>
 <p class="lead">
-	{{ trans('forum::base.your_editing') }} @include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'topic', 'message'))
+	{{ trans('forum::base.your_editing') }} @include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'thread', 'post'))
 </p>
 
 <div class="control-group">
-	<label class="control-label" for="textarea">{{ trans('forum::base.label_your_message') }}</label>
+	<label class="control-label" for="textarea">{{ trans('forum::base.label_your_post') }}</label>
 	<div class="controls">
-		{{ Form::textarea('data', $message->data) }}
+		{{ Form::textarea('data', $post->data) }}
 	</div>
 </div>
 

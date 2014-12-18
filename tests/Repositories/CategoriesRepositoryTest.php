@@ -10,7 +10,7 @@ class CategoriesRepositoryTest extends ForumBaseTest {
 		return array('\Eorzea\Forum\ForumServiceProvider');
 	}
 
-	public function testGetById()
+	public function testGetByID()
 	{
 		$modelMock = \Mockery::mock('\Eorzea\Forum\Models\ForumCategory');
 
@@ -21,16 +21,16 @@ class CategoriesRepositoryTest extends ForumBaseTest {
 
 		$repository = new CategoriesRepository($modelMock);
 
-		$this->assertEquals($modelMock, $repository->getById(1));
+		$this->assertEquals($modelMock, $repository->getByID(1));
 	}
 
-	public function testGetByIdNull()
+	public function testGetByIDNull()
 	{
 		$modelMock = \Mockery::mock('\Eorzea\Forum\Models\ForumCategory');
 		$repository = new CategoriesRepository($modelMock);
 
 		$this->setExpectedException('\InvalidArgumentException');
-		$this->assertEquals(array(), $repository->getById("a"));
+		$this->assertEquals(array(), $repository->getByID("a"));
 	}
 
 	private function getCategoryModelForParentTest($id, $with, $return)

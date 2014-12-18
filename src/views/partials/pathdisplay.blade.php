@@ -5,6 +5,6 @@
 @if (isset($category) && $category)
 	&nbsp;&gt;&nbsp;<a href="{{{ $category->url }}}">{{{ $category->title }}}</a>
 @endif
-@if (isset($topic) && $topic)
-	&nbsp;&gt;&nbsp;<a href="{{{ $topic->url }}}">{{{ $topic->title }}}</a>
+@if (isset($thread) && $thread)
+	&nbsp;&gt;&nbsp;<a href="{{{ $thread->url }}}">{{{ $thread->title }}}</a>
 @endif
