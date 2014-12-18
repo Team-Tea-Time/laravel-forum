@@ -67,7 +67,7 @@ More information on how to integrate it with your login system is available thro
 
 ## Features
 
-This package is currently in (very-)alpha stage, so all of the following features may or may not work yet. However, feel free to post issues and features requests at https://github.com/Eorzea/laravel-forum/issues . I'll try to fix and improve the package as fast as I can based on your help!
+This package is currently in (very-)alpha stage, so all of the following features may or may not work yet. However, feel free to post issues and features requests at https://github.com/Riari/laravel-forum/issues . I'll try to fix and improve the package as fast as I can based on your help!
 
  * Category nesting on 2 levels
  * Threads inside categories
@@ -77,14 +77,13 @@ This package is currently in (very-)alpha stage, so all of the following feature
  * Lightweight & blazing fast (designed with caching and high speed in mind)
  * Designed on bootstrap (clean and simple markup, no messy CSS and should integrate directly into your website)
 
-## Events
+## Hooks
 
-This package provides various events as hooks to enable you to implement you own functionnality on top of forum's functionnality.
-Here is a complete list of all events, as to when they are fired. When a parameter is given, you can use this parameter to change a forum's iternal object to fit your needs.
+This package provides hooks to enable you to alter certain workflows. Below is a complete list of these hooks, the parameters they take and when they're executed. When a parameter is given, you can use this parameter to change a forum's iternal object to fit your needs.
 
-| Events               | Params        | Usage                            |
+| Events               | Params        | Conditions                            |
 | -------------        |:-------------:| ---------------------------------------------:                     |
-| forum.new.thread      | $thread        | Called before thread save. Can be used to modify thread contents     |
-| forum.new.post    | $post      | Called before post save. Can be used to modify post contents |
-| forum.saved.thread    | $thread        | Called after thread save. Can be used for logging purposes          |
-| forum.saved.post  | $post      | Called after post save. Can be used for logging purposes        |
+| forum.create.thread      | $thread        | Called during thread creation. Can be used to modify thread contents.     |
+| forum.create.post    | $post      | Called during post creation. Can be used to modify post contents. |
+| forum.modified.thread    | $thread        | Called after saving a thread. Can be used for logging purposes.          |
+| forum.modified.post  | $post      | Called after saving a post. Can be used for logging purposes.        |
