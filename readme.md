@@ -1,15 +1,12 @@
 # Laravel forum package
 
-Note: this package is currently in a very alpha stage. I'm currently working on integrating it inside my own website. The base functionnality should work but I'll complete the features when requested or when I need them.
-
-[![Build Status](https://travis-ci.org/Eorzea/laravel-forum.svg?branch=master)](https://travis-ci.org/Eorzea/laravel-forum)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Eorzea/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Eorzea/laravel-forum/?branch=master)
+**Note: this is a fork of the excellent Laravel forum solution written by Atrakeur (https://github.com/Atrakeur/laravel-forum).** My intention is to strip out the user rights handling and replace it with Zizaco Entrust integration, as well as alter other aspects of the package to suit my needs. You might find that it suits yours too, so I'm being careful to retain the flexibility of the config and view publishing seen in the original package.
 
 ## Goals
 
-This package aims to provide a good starting point implementing a forum inside a Laravel application.
-It focus on taking care of all the tedious and repetiting work of forum creation (categories, subcategories, threads, posts). Allowing you to spend more time on you website features and how the forum integrates with you application.
-This package will provide multiple hooks such as specials events and custom closures to allow you to customise his behavior. Additionnaly, you'll be able to extends forum's core classes to implement you own methods directly inside the core.
+This package aims to provide a solid basis for implementing a forum inside a Laravel application.
+It focuses on taking care of all the tedious and repetitive work of building a forum (such as categories, subcategories, threads and posts), allowing you to spend more time on your website features and how the forum integrates with you application.
+It provides a set of event hooks to enable adjustments to the core workflow and, additionally, provides an easy means of overriding the core classes for more advanced functionality tweaking.
 
 This package is far from finished, and pull requests are always welcome to make this package better together.
 
@@ -36,50 +33,45 @@ Before anything, in some cases (L4) you may need to run an update for composer b
 ```php
 composer update
 ```
-and, just to be safe, run:
-
-```php
-composer dump-autoload
-```
 
 Now publish forum's files right into your Laravel app:
 `php artisan config:publish Eorzea/forum`
 `php artisan migrate:publish Eorzea/forum`
 
-If all goes well, you should find configuration files inside app/config/packages/Eorzea/forum and three new migrations in app/database/migrations.
+If all goes well, you should find the configuration files inside app/config/packages/Eorzea/forum and three new migrations in app/database/migrations.
 
 Now you can create the database schema using the default Laravel command `php artisan migrate` .
 
-To enable you to fully customise the package to your website, the package is integrated inside your application using two application level controllers.
-Run the command `php artisan forum:install` to auto-deploy the controllers in your app/controllers folder. (Please note that if a file with the same name already exist, the command above will fail before overriding your files.)
+To enable you to fully customise your forum, the package is integrated inside your application using two application level controllers.
+Run the command `php artisan forum:install` to auto-deploy the controllers in your app/controllers folder. (Please note that the command will fail if a file with the same name already exists.)
 
 ### Customise
 
-To tweak the views publish them to your views folder using the Laravel command:
+To tweak the views, publish them to your views folder using the Laravel command:
 
 `php artisan view:publish Eorzea/forum`
 
-The very last step needed is to create some categories and subcategories into the forum_categories tables. The schema is very basic and you should be able to do that on your own using Laravel seeds (TODO: give some examples)
+The very last step needed is to create some categories and subcategories in the forum_categories tables. The schema is very basic and you should be able to do that on your own using Laravel seeds.
 
-Now you are ready to go, just load http://localhost/forum and you should see a brand new forum.
+Once your categories are set up, go to <app hostname>/forum and you should see a brand new forum.
 
-More information on how to integrate it with your login system is available through the config files comments. (TODO: give some examples) By default, it should run well on Laravel default auth.
+More information on how to integrate it with your login system is available through the config files comments. By default, it should run well with Laravel's default auth mechanism (which is also extended by certain auth packages such as Zizaco Confide, so they will inherently be compatible with this package).
 
 ## Features
 
-This package is currently in (very-)alpha stage, so all of the following features may or may not work yet. However, feel free to post issues and features requests at https://github.com/Riari/laravel-forum/issues . I'll try to fix and improve the package as fast as I can based on your help!
+This package is currently in early development stages. However, feel free to post issues and features requests at https://github.com/Riari/laravel-forum/issues.
 
- * Category nesting on 2 levels
+ * Category nesting (up to 2 levels)
  * Threads inside categories
  * Posts (with hooks for app integration)
  * Easy user integration (through config files and callbacks)
  * Zizaco Entrust permission integration (through config files and callbacks)
  * Lightweight & blazing fast (designed with caching and high speed in mind)
- * Designed on bootstrap (clean and simple markup, no messy CSS and should integrate directly into your website)
+ * Default markup written for [Bootstrap](http://getbootstrap.com/)
 
-## Hooks
+## Event Hooks
 
-This package provides hooks to enable you to alter certain workflows. Below is a complete list of these hooks, the parameters they take and when they're executed. When a parameter is given, you can use this parameter to change a forum's iternal object to fit your needs.
+This package provides event hooks to enable you to alter its behaviour. Below is a complete list of these hooks, the parameters they take and when they're executed.
 
 | Events               | Params        | Conditions                            |
 | -------------        |:-------------:| ---------------------------------------------:                     |
