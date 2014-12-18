@@ -1,15 +1,14 @@
 <?php namespace Eorzea\Forum\Models;
 
-use \stdClass;
+use stdClass;
 
 abstract class AbstractForumBaseModel extends \Eloquent {
 
 	protected function rememberAttribute($item, $function)
 	{
 		$cacheItem = get_class($this).$this->id.$item;
-
-		//TODO make cache duration tweakable
-		$value = \Cache::remember($cacheItem, 1, $function);
+		
+		$value = Cache::remember($cacheItem, 1, $function);
 
 		return $value;
 	}
@@ -18,7 +17,7 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 	{
 		foreach ($model->appends as $attribute) {
 			$cacheItem = get_class($model).$model->id.$attribute;
-			\Cache::forget($cacheItem);
+			Cache::forget($cacheItem);
 		}
 	}
 
@@ -29,7 +28,7 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 
 	public function convertToObject($value)
 	{
-		if ($value instanceof \Eloquent)
+		if ($value instanceof Eloquent)
 		{
 			$attributes = $value->toArray();
 			$relations  = $value->relationsToArray();
@@ -60,19 +59,6 @@ abstract class AbstractForumBaseModel extends \Eloquent {
 			return $array;
 		}
 		return $value;
-	}
-
-	protected function computeCanPostAttribute($configItem)
-	{
-		// Fetch the current user (config callback)
-		$userfunc = \Config::get('forum::integration.currentuser');
-		$user     = $userfunc();
-
-		// Fetch the current rights (config callback)
-		$rightsfunc = \Config::get('forum::'.$configItem);
-
-		//True will give rights, any other will block
-		return $rightsfunc($this, $user);
 	}
 
 }

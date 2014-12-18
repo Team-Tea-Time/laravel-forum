@@ -14,13 +14,23 @@ return array(
 
   /*
   |-----------------------------------------------------------------------------
+  | Delete thread permission
+  |-----------------------------------------------------------------------------
+  |
+  | Determines whether or not the current user is allowed to delete threads.
+  |
+  */
+  'delete_threads' => function() {},
+
+  /*
+  |-----------------------------------------------------------------------------
   | New post/reply permission
   |-----------------------------------------------------------------------------
   |
   | Determines whether or not the current user is allowed to post thread replies.
   |
   */
-  'post_replies' => function() {},
+  'create_posts' => function() {},
 
 
   /*
@@ -31,7 +41,18 @@ return array(
   | Determines whether or not the current user is allowed to edit a given post.
   |
   */
-  'edit_posts' => function() {},
+  'update_post' => function() {},
+
+
+  /*
+  |-----------------------------------------------------------------------------
+  | Delete post permission
+  |-----------------------------------------------------------------------------
+  |
+  | Determines whether or not the current user is allowed to delete posts.
+  |
+  */
+  'delete_posts' => function() {},
 
 
   /*
@@ -39,9 +60,13 @@ return array(
   | Forum permissions
   |-----------------------------------------------------------------------------
   |
-  | Specifies role-restricted forums and the roles needed to access them.
+  | Determines whether or not the current user is allowed to access a given
+  | forum.
   |
   */
-  'access_forums' => array()
+  'access_forum' => function()
+  {
+    $forum_roles = array();
+  }
 
 );
