@@ -12,8 +12,8 @@ class InstallCommand extends Command {
 		$this->info('Fetching controller names from integration config...');
 		$controller = class_basename(\Config::get('forum::integration.controller'));
 
-		$this->info('Config specify controllers "'.$viewController.'" and "'.$postController.'"');
-		if (!$this->confirm('Proceed with creation of controllers (no override)? [Yes|no]'))
+		$this->info('Config specifies controllers: "'.$controller.'"');
+		if (!$this->confirm('Proceed with controller creation (no override)? [Yes|no]'))
 		{
 			$this->info('Action aborted. No changes done.');
 			return;

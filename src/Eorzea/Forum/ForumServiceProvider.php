@@ -3,6 +3,8 @@
 use Illuminate\Support\ServiceProvider;
 use Eorzea\Forum\Commands\InstallCommand;
 
+use Config;
+
 class ForumServiceProvider extends ServiceProvider {
 
 	/**

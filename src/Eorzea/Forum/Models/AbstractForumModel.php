@@ -1,8 +1,9 @@
 <?php namespace Eorzea\Forum\Models;
 
+use Cache;
 use stdClass;
 
-abstract class AbstractForumBaseModel extends Eloquent {
+abstract class AbstractForumBaseModel extends \Eloquent {
 
 	protected function rememberAttribute($item, $function)
 	{

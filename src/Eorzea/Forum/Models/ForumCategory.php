@@ -57,7 +57,7 @@ class ForumCategory extends AbstractForumBaseModel {
 
 	public function getAliasAttribute()
 	{
-		return action(Config::get('forum::integration.viewcontroller').'@getCategory',
+		return action(Config::get('forum::integration.controller').'@getCategory',
 			array(
 				'categoryID' => $this->id,
 				'categoryAlias' => Str::slug($this->title, '_')

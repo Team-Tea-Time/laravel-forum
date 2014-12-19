@@ -35,7 +35,7 @@ class ForumThread extends AbstractForumBaseModel
 
 	public function getAliasAttribute()
 	{
-		return action(Config::get('forum::integration.viewcontroller').'@getThread',
+		return action(Config::get('forum::integration.controller').'@getThread',
 			array(
 				'categoryID'  => $this->category->id,
 				'categoryAlias' => Str::slug($this->category->title, '_'),

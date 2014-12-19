@@ -36,7 +36,7 @@ return array(
 	| This class must extend \Eorzea\Forum\Controllers\AbstractForumController
 	|
 	*/
-	'controller' => 'ForumViewController',
+	'controller' => 'ForumController',
 
 	/*
 	|--------------------------------------------------------------------------
