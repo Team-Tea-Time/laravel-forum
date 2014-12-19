@@ -10,8 +10,7 @@ class InstallCommand extends Command {
 	public function fire()
 	{
 		$this->info('Fetching controller names from integration config...');
-		$viewController = class_basename(\Config::get('forum::integration.viewcontroller'));
-		$postController = class_basename(\Config::get('forum::integration.postcontroller'));
+		$controller = class_basename(\Config::get('forum::integration.controller'));
 
 		$this->info('Config specify controllers "'.$viewController.'" and "'.$postController.'"');
 		if (!$this->confirm('Proceed with creation of controllers (no override)? [Yes|no]'))
@@ -20,8 +19,7 @@ class InstallCommand extends Command {
 			return 1;
 		}
 
-		$this->installController($viewController, '\Eorzea\Forum\Controllers\AbstractForumViewController');
-		$this->installController($postController, '\Eorzea\Forum\Controllers\AbstractForumCreateController');
+		$this->installController($controller, '\Eorzea\Forum\Controllers\AbstractForumController');
 
 		$this->info('Forum installation done.');
 		return 0;
