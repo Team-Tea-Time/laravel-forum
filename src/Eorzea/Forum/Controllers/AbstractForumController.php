@@ -18,34 +18,35 @@ abstract class AbstractForumController extends Controller {
 
 	protected function getCurrentUser()
 	{
-		$userfunc = Config::get('forum::integration.currentuser');
+		$user_callback = Config::get('forum::integration.currentuser');
 
-		$user = $userfunc();
+		$user = $user_callback();
 		if (is_object($user) && get_class($user) == Config::get('forum::integration.usermodel'))
 		{
 			return $user;
 		}
 
-		return null;
+		return NULL;
 	}
 
 	protected function userCan($permission)
 	{
 		// Fetch the current user
-		$user = Config::get('forum::integration.currentuser')();
+		$user_callback = Config::get('forum::integration.currentuser');
+		$user = $user_callback();
 
 		// Check for access permission
-		$access_granted = Config::get('forum::access_forums')($this, $user);
+		$access_callback = Config::get('forum::access_forums');
+		$permission_granted = $access_callback($this, $user);
 
-		if (!$access_granted)
+		if ( $permission_granted && ( $permission != 'access_forums' ) )
 		{
-			return FALSE;
+			// Check for action permission
+			$action_callback = Config::get('forum::' . $permission);
+			$permission_granted = $action_callback($this, $user);
 		}
 
-		// Check for action permission
-		$action_granted = Config::get('forum::' . $permission)($this, $user);
-
-		return $access_granted;
+		return $permission_granted;
 	}
 
 }

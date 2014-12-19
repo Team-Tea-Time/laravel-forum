@@ -34,6 +34,11 @@ abstract class AbstractForumCRUDController extends AbstractForumController {
 
   public function getCategory($categoryID, $categoryAlias)
   {
+    if (!$this->userCan('access_forum'))
+    {
+      return App::abort(403, 'Access denied');
+    }
+    
     $category = $this->categories->getByID($categoryID, array('parentCategory', 'subCategories', 'threads'));
     if ($category == NULL)
     {
@@ -50,6 +55,11 @@ abstract class AbstractForumCRUDController extends AbstractForumController {
 
   public function getThread($categoryID, $categoryAlias, $threadID, $threadAlias, $page = 0)
   {
+    if (!$this->userCan('access_forum'))
+    {
+      return App::abort(403, 'Access denied');
+    }
+
     $category = $this->categories->getByID($categoryID, array('parentCategory'));
     if ($category == NULL)
     {
@@ -73,8 +83,7 @@ abstract class AbstractForumCRUDController extends AbstractForumController {
 
   public function getCreateThread($categoryID, $categoryAlias)
   {
-    $user = $this->getCurrentUser();
-    if ($user == NULL)
+    if (!$this->userCan('create_threads'))
     {
       return App::abort(403, 'Access denied');
     }
@@ -88,7 +97,7 @@ abstract class AbstractForumCRUDController extends AbstractForumController {
 
   public function postCreateThread($categoryID, $categoryAlias)
   {
-    if( !$this->userCan('create_threads') )
+    if (!$this->userCan('create_threads'))
     {
       return App::abort(403, 'Access denied');
     }
@@ -124,7 +133,7 @@ abstract class AbstractForumCRUDController extends AbstractForumController {
 
   public function getDeleteThread($threadID)
   {
-    if( !$this->userCan('delete_threads') )
+    if (!$this->userCan('delete_threads'))
     {
       return App::abort(403, 'Access denied');
     }
@@ -132,7 +141,7 @@ abstract class AbstractForumCRUDController extends AbstractForumController {
 
   public function getNewPost($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
-    if( !$this->userCan('create_posts') )
+    if (!$this->userCan('create_posts'))
     {
       return App::abort(403, 'Access denied');
     }
@@ -153,7 +162,7 @@ abstract class AbstractForumCRUDController extends AbstractForumController {
 
   public function postCreatePost($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
-    if( !$this->userCan('create_posts') )
+    if (!$this->userCan('create_posts'))
     {
       return App::abort(403, 'Access denied');
     }
@@ -182,7 +191,7 @@ abstract class AbstractForumCRUDController extends AbstractForumController {
 
   public function getEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
   {
-    if( !$this->userCan('update_post') )
+    if (!$this->userCan('update_post'))
     {
       return App::abort(403, 'Access denied');
     }
@@ -203,7 +212,7 @@ abstract class AbstractForumCRUDController extends AbstractForumController {
 
   public function postEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
   {
-    if( !$this->userCan('update_post') )
+    if (!$this->userCan('update_post'))
     {
       return App::abort(403, 'Access denied');
     }

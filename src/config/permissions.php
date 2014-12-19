@@ -4,7 +4,7 @@ return array(
 
   /*
   |-----------------------------------------------------------------------------
-  | New thread permission
+  | ACTION: New thread permission
   |-----------------------------------------------------------------------------
   |
   | Determines whether or not the current user is allowed to post new threads.
@@ -22,7 +22,7 @@ return array(
 
   /*
   |-----------------------------------------------------------------------------
-  | Delete thread permission
+  | ACTION: Delete thread permission
   |-----------------------------------------------------------------------------
   |
   | Determines whether or not the current user is allowed to delete threads.
@@ -35,7 +35,7 @@ return array(
 
   /*
   |-----------------------------------------------------------------------------
-  | New post/reply permission
+  | ACTION: New post/reply permission
   |-----------------------------------------------------------------------------
   |
   | Determines whether or not the current user is allowed to post thread replies.
@@ -54,7 +54,7 @@ return array(
 
   /*
   |-----------------------------------------------------------------------------
-  | Edit post permission
+  | ACTION: Edit post permission
   |-----------------------------------------------------------------------------
   |
   | Determines whether or not the current user is allowed to edit a given post.
@@ -73,7 +73,7 @@ return array(
 
   /*
   |-----------------------------------------------------------------------------
-  | Delete post permission
+  | ACTION: Delete post permission
   |-----------------------------------------------------------------------------
   |
   | Determines whether or not the current user is allowed to delete posts.
@@ -87,7 +87,7 @@ return array(
 
   /*
   |-----------------------------------------------------------------------------
-  | Forum permissions
+  | ACCESS: Forum permissions
   |-----------------------------------------------------------------------------
   |
   | Determines whether or not the current user is allowed to access a given
