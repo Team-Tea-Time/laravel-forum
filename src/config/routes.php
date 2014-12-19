@@ -14,12 +14,12 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| Forum route base
+	| Forum root
 	|--------------------------------------------------------------------------
 	|
 	| The base url of the forum inside your application including trailing slash
 	|
 	*/
-	'base' => '/forum/',
+	'root' => '/forum/',
 
 );

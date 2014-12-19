@@ -21,9 +21,9 @@ class ForumServiceProvider extends ServiceProvider {
 	{
 		$this->package('Eorzea/forum');
 
-		if (\Config::get('forum::routes.enable')) {
-			$routebase      = \Config::get('forum::routes.base');
-			$controller = \Config::get('forum::integration.controller');
+		if (Config::get('forum::routes.enable')) {
+			$root = Config::get('forum::routes.root');
+			$controller = Config::get('forum::integration.controller');
 
 			include __DIR__.'/../../routes.php';
 		}
