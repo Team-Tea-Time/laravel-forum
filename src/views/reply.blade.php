@@ -25,7 +25,7 @@
 </table>
 @endif
 
-{{ Form::open(array('url' => $actionURL, 'class' => 'form-horizontal')) }}
+{{ Form::open(array('url' => $actionAlias, 'class' => 'form-horizontal')) }}
 <fieldset>
 
 <legend>{{ trans('forum::base.post_post') }}</legend>

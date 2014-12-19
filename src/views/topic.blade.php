@@ -1,6 +1,6 @@
 @include('forum::partials.pathdisplay')
 
-@include('forum::partials.postbutton', array('post' => trans('forum::base.new_reply'), 'url' => $thread->postURL, 'accessModel' => $thread))
+@include('forum::partials.postbutton', array('post' => trans('forum::base.new_reply'), 'url' => $thread->postAlias, 'accessModel' => $thread))
 <table class="table table-index">
 	<thead>
 		<tr>

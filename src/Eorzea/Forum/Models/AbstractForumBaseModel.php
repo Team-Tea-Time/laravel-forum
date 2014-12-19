@@ -2,12 +2,12 @@
 
 use stdClass;
 
-abstract class AbstractForumBaseModel extends \Eloquent {
+abstract class AbstractForumBaseModel extends Eloquent {
 
 	protected function rememberAttribute($item, $function)
 	{
 		$cacheItem = get_class($this).$this->id.$item;
-		
+
 		$value = Cache::remember($cacheItem, 1, $function);
 
 		return $value;

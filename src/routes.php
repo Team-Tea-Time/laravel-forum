@@ -1,20 +1,20 @@
 <?php
-if (!isset($routebase) || !isset($viewController) || !isset($postController)) {
-	throw new Exception ('This file can\'t be included outside of ForumServiceProvider@boot!');
+if (!isset($root) || !isset($controller)) {
+	throw new Exception ("This file can't be included outside of ForumServiceProvider@boot!");
 }
 
-/*
- *  Defines routes used by Forum controller
- */
-\Route:: get($routebase, $viewController.'@getIndex');
-\Route:: get($routebase.'{categoryID}-{categoryURL}', $viewController.'@getCategory');
-\Route:: get($routebase.'{categoryID}-{categoryURL}/{threadID}-{threadURL}', $viewController.'@getThread');
+$category = $root . '{categoryID}-{categoryAlias}';
+$thread = '/{threadID}-{threadAlias}';
 
-\Route:: get($routebase.'{categoryID}-{categoryURL}/new', $postController.'@getNewThread');
-\Route::post($routebase.'{categoryID}-{categoryURL}/new', $postController.'@postNewThread');
+Route::get($root, $controller . '@getIndex');
+Route::get($root . $category, $controller . '@getCategory');
+Route::get($root . $category . '/{threadID}-{threadAlias}', $controller . '@getThread');
 
-\Route:: get($routebase.'{categoryID}-{categoryURL}/{threadID}-{threadURL}/new', $postController.'@getNewPost');
-\Route::post($routebase.'{categoryID}-{categoryURL}/{threadID}-{threadURL}/new', $postController.'@postNewPost');
+Route::get($root . $category . '/create', $controller . '@getCreateThread');
+Route::post($root . $category . '/create', $controller . '@postCreateThread');
 
-\Route:: get($routebase.'{categoryID}-{categoryURL}/{threadID}-{threadURL}/edit/{postID}', $postController.'@getEditPost');
-\Route::post($routebase.'{categoryID}-{categoryURL}/{threadID}-{threadURL}/edit/{postID}', $postController.'@postEditPost');
+Route::get($root . $category . $thread . '/create', $controller . '@getCreatePost');
+Route::post($root . $category . $thread . '/create', $controller . '@postCreatePost');
+
+Route::get($root . $category . $thread . '/edit/{postID}', $controller . '@getEditPost');
+Route::post($root . $category . $thread . '/edit/{postID}', $controller . '@postEditPost');

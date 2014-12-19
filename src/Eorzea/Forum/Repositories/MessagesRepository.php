@@ -2,41 +2,41 @@
 
 use \Eorzea\Forum\Models\ForumPost;
 
-class postsRepository extends AbstractBaseRepository {
+class PostsRepository extends AbstractBaseRepository {
 
 	public function __construct(ForumPost $model)
 	{
 		$this->model = $model;
 	}
 
-	public function getById($postId, array $with = array())
+	public function getById($postID, array $with = array())
 	{
-		if (!is_numeric($postId))
+		if (!is_numeric($postID))
 		{
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
-		return $this->getFirstBy('id', $postId, $with);
+		return $this->getFirstBy('id', $postID, $with);
 	}
 
-	public function getByThread($threadId, array $with = array())
+	public function getByThread($threadID, array $with = array())
 	{
-		if (!is_numeric($threadId))
+		if (!is_numeric($threadID))
 		{
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
-		return $this->getManyBy('parent_thread', $threadId, $with);
+		return $this->getManyBy('parent_thread', $threadID, $with);
 	}
 
-	public function getLastByThread($threadId, $count = 10, array $with = array())
+	public function getLastByThread($threadID, $count = 10, array $with = array())
 	{
-		if (!is_numeric($threadId))
+		if (!is_numeric($threadID))
 		{
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
-		$model = $this->model->where('parent_thread', '=', $threadId);
+		$model = $this->model->where('parent_thread', '=', $threadID);
 		$model = $model->orderBy('created_at', 'DESC')->take($count);
 		$model = $model->with($with);
 		return $this->model->convertToObject($model->get());

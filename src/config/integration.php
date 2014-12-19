@@ -30,25 +30,13 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| Application forum view controller
+	| Application controller
 	|--------------------------------------------------------------------------
 	|
-	| The controller used as application level hook for the forum (visualisation part)
-	| This class must extend \Eorzea\Forum\Controllers\AbstractViewForumController
+	| This class must extend \Eorzea\Forum\Controllers\AbstractForumController
 	|
 	*/
-	'viewcontroller' => '\ForumViewController',
-
-	/*
-	|--------------------------------------------------------------------------
-	| Application forum post controller
-	|--------------------------------------------------------------------------
-	|
-	| The controller used as application level hook for the forum (post part)
-	| This class must extend \Eorzea\Forum\Controllers\AbstractPostForumController
-	|
-	*/
-	'postcontroller' => '\ForumPostController',
+	'controller' => 'ForumViewController',
 
 	/*
 	|--------------------------------------------------------------------------

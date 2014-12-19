@@ -8,7 +8,7 @@
 </tr>
 <tr>
 	<td>
-		@include('forum::partials.postbutton', array('post' => 'Edit', 'url' => $post->postURL, 'accessModel' => $post))
+		@include('forum::partials.postbutton', array('post' => 'Edit', 'url' => $post->postAlias, 'accessModel' => $post))
 	</td>
 	<td>
 		{{ trans('forum::base.posted_at') }} {{ $post->created_at }}

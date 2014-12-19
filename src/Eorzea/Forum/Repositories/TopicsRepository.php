@@ -13,7 +13,7 @@ class ThreadsRepository extends AbstractBaseRepository {
 	{
 		if (!is_numeric($ident))
 		{
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		return $this->getFirstBy('id', $ident, $with);

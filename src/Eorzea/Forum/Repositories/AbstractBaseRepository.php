@@ -32,7 +32,7 @@ abstract class AbstractBaseRepository  {
 	{
 		if (!is_numeric($itemsPerPage))
 		{
-			throw new \InvalidArgumentException();
+			throw new InvalidArgumentException();
 		}
 
 		$this->itemsPerPage = $itemsPerPage;
@@ -51,7 +51,7 @@ abstract class AbstractBaseRepository  {
 		return $this->model->convertToObject($model);
 	}
 
-	public function update(\stdClass $data)
+	public function update(stdClass $data)
 	{
 		//TODO validate?
 		$array = get_object_vars($data);
@@ -64,7 +64,7 @@ abstract class AbstractBaseRepository  {
 		}
 		else
 		{
-			throw new \InvalidArgumentException('Data must contain an existing id to update');
+			throw new InvalidArgumentException('Data must contain an existing id to update');
 		}
 	}
 

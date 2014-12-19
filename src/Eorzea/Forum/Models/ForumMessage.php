@@ -9,7 +9,7 @@ class ForumPost extends AbstractForumBaseModel {
 	protected $table      = 'forum_posts';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = array('url', 'postURL', 'canPost');
+	protected $appends    = array('url', 'postAlias', 'canPost');
 	protected $guarded    = array('id');
 
 	public function thread()
@@ -19,7 +19,7 @@ class ForumPost extends AbstractForumBaseModel {
 
 	public function author()
 	{
-		return $this->belongsTo(\Config::get('forum::integration.usermodel'), 'author_id');
+		return $this->belongsTo(Config::get('forum::integration.usermodel'), 'author_id');
 	}
 
 	public function scopeWhereThreadIn($query, Array $threads)
@@ -32,23 +32,23 @@ class ForumPost extends AbstractForumBaseModel {
 		return $query->whereIn('parent_thread', $threads);
 	}
 
-	public function getURLAttribute()
+	public function getAliasAttribute()
 	{
 		//TODO add page get parameter
 		return $this->thread->url;
 	}
 
-	public function getPostURLAttribute()
+	public function getPostAliasAttribute()
 	{
 		$thread    = $this->thread;
 		$category = $thread->category;
 
-		return action(\Config::get('forum::integration.postcontroller').'@postEditPost',
+		return action(Config::get('forum::integration.postcontroller').'@postEditPost',
 			array(
 				'categoryID'  => $category->id,
-				'categoryURL' => \Str::slug($category->title, '_'),
+				'categoryAlias' => Str::slug($category->title, '_'),
 				'threadID'     => $thread->id,
-				'threadURL'    => \Str::slug($thread->title, '_'),
+				'threadAlias'    => Str::slug($thread->title, '_'),
 				'postID'   => $this->id
 			)
 		);

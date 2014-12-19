@@ -10,7 +10,7 @@ class ForumThread extends AbstractForumBaseModel
 	protected $table      = 'forum_threads';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = array('replyCount', 'url', 'postURL', 'canPost');
+	protected $appends    = array('replyCount', 'url', 'postAlias', 'canPost');
 	protected $guarded    = array('id');
 
 	public function category()
@@ -20,7 +20,7 @@ class ForumThread extends AbstractForumBaseModel
 
 	public function author()
 	{
-		return $this->belongsTo(\Config::get('forum::integration.usermodel'), 'author_id');
+		return $this->belongsTo(Config::get('forum::integration.usermodel'), 'author_id');
 	}
 
 	public function posts()
@@ -33,26 +33,26 @@ class ForumThread extends AbstractForumBaseModel
 		return $this->posts()->count();
 	}
 
-	public function getURLAttribute()
+	public function getAliasAttribute()
 	{
-		return action(\Config::get('forum::integration.viewcontroller').'@getThread',
+		return action(Config::get('forum::integration.viewcontroller').'@getThread',
 			array(
 				'categoryID'  => $this->category->id,
-				'categoryURL' => \Str::slug($this->category->title, '_'),
+				'categoryAlias' => Str::slug($this->category->title, '_'),
 				'threadID'     => $this->id,
-				'threadURL'    => \Str::slug($this->title, '_'),
+				'threadAlias'    => Str::slug($this->title, '_'),
 			)
 		);
 	}
 
-	public function getPostURLAttribute()
+	public function getPostAliasAttribute()
 	{
 		return action(\Config::get('forum::integration.postcontroller').'@postNewPost',
 			array(
 				'categoryID'  => $this->category->id,
-				'categoryURL' => \Str::slug($this->category->title, '_'),
+				'categoryAlias' => \Str::slug($this->category->title, '_'),
 				'threadID'     => $this->id,
-				'threadURL'    => \Str::slug($this->title, '_'),
+				'threadAlias'    => \Str::slug($this->title, '_'),
 			)
 		);
 	}

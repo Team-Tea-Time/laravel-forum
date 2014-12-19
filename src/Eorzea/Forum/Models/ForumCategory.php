@@ -6,7 +6,7 @@ class ForumCategory extends AbstractForumBaseModel {
 
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
-	protected $appends    = array('threadCount', 'replyCount', 'url', 'postURL', 'canPost');
+	protected $appends    = array('threadCount', 'replyCount', 'url', 'postAlias', 'canPost');
 
 	public function parentCategory()
 	{
@@ -47,7 +47,7 @@ class ForumCategory extends AbstractForumBaseModel {
 				$threadsIDs[] = $thread->id;
 			}
 
-			if (!empty($threadsIDs)) 
+			if (!empty($threadsIDs))
 			{
 				$replyCount = ForumPost::whereIn('parent_thread', $threadsIDs)->count();
 			}
@@ -55,22 +55,22 @@ class ForumCategory extends AbstractForumBaseModel {
 		});
 	}
 
-	public function getURLAttribute()
+	public function getAliasAttribute()
 	{
-		return action(\Config::get('forum::integration.viewcontroller').'@getCategory',
+		return action(Config::get('forum::integration.viewcontroller').'@getCategory',
 			array(
 				'categoryID' => $this->id,
-				'categoryURL' => \Str::slug($this->title, '_')
+				'categoryAlias' => Str::slug($this->title, '_')
 			)
 		);
 	}
 
-	public function getPostURLAttribute()
+	public function getPostAliasAttribute()
 	{
 		return action(\Config::get('forum::integration.postcontroller').'@postNewThread',
 			array(
 				'categoryID' => $this->id,
-				'categoryURL' => \Str::slug($this->title, '_')
+				'categoryAlias' => Str::slug($this->title, '_')
 			)
 		);
 	}
