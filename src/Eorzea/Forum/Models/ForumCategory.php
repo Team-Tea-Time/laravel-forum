@@ -1,6 +1,10 @@
 <?php namespace Eorzea\Forum\Models;
 
 use \Eorzea\Forum\Models\ForumThread;
+use Eorzea\Forum\AccessControl;
+
+use Str;
+use Config;
 
 class ForumCategory extends AbstractForumBaseModel {
 
@@ -55,29 +59,29 @@ class ForumCategory extends AbstractForumBaseModel {
 		});
 	}
 
-	public function getAliasAttribute()
+	public function getURLAttribute()
 	{
-		return action(Config::get('forum::integration.controller').'@getCategory',
+		return route('forum.get.category',
 			array(
-				'categoryID' => $this->id,
-				'categoryAlias' => Str::slug($this->title, '_')
+				'categoryID'		=> $this->id,
+				'categoryAlias'	=> Str::slug($this->title, '-')
 			)
 		);
 	}
 
 	public function getPostAliasAttribute()
 	{
-		return action(\Config::get('forum::integration.postcontroller').'@postNewThread',
+		return route('forum.post.create.thread',
 			array(
-				'categoryID' => $this->id,
-				'categoryAlias' => Str::slug($this->title, '_')
+				'categoryID'		=> $this->id,
+				'categoryAlias'	=> Str::slug($this->title, '-')
 			)
 		);
 	}
 
 	public function getCanPostAttribute()
 	{
-		return $this->computeCanPostAttribute('rights.postcategory');
+		return AccessControl::check($this, 'access_forum');
 	}
 
 

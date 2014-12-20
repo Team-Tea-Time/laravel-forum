@@ -6,9 +6,9 @@
  *
  * Otherwise, the button shouldn't be displayed
  */
-$userfunc = \Config::get('forum::integration.currentuser');
+$userfunc = \Config::get('forum::integration.current_user');
 $user     = $userfunc();
 ?>
-@if (isset($accessModel) && $accessModel->canPost === true)
+@if (isset($accessModel) && $accessModel->canPost)
 	<a href="{{ $url }}" class="btn btn-primary">{{{ $post }}}</a>
 @endif

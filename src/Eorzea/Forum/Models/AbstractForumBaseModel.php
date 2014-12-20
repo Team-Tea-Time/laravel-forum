@@ -1,7 +1,7 @@
 <?php namespace Eorzea\Forum\Models;
 
-use Cache;
 use stdClass;
+use Cache;
 
 abstract class AbstractForumBaseModel extends \Eloquent {
 

@@ -3,8 +3,15 @@
 use Eorzea\Forum\Repositories\CategoriesRepository;
 use Eorzea\Forum\Repositories\ThreadsRepository;
 use Eorzea\Forum\Repositories\PostsRepository;
+use Eorzea\Forum\AccessControl;
 
+use stdClass;
+use App;
+use Config;
+use Input;
+use Redirect;
 use View;
+use Validator;
 
 abstract class AbstractForumController extends AbstractBaseForumController {
 
@@ -36,7 +43,7 @@ abstract class AbstractForumController extends AbstractBaseForumController {
 
   public function getCategory($categoryID, $categoryAlias)
   {
-    if (!$this->userCan('access_forum'))
+    if (!AccessControl::check($this, 'access_forum'))
     {
       return App::abort(403, 'Access denied');
     }
@@ -57,7 +64,7 @@ abstract class AbstractForumController extends AbstractBaseForumController {
 
   public function getThread($categoryID, $categoryAlias, $threadID, $threadAlias, $page = 0)
   {
-    if (!$this->userCan('access_forum'))
+    if (!AccessControl::check($this, 'access_forum'))
     {
       return App::abort(403, 'Access denied');
     }
@@ -75,9 +82,9 @@ abstract class AbstractForumController extends AbstractBaseForumController {
     }
 
     $parentCategory  = $category->parentCategory;
-    $postsPerPage = Config::get('forum::integration.postsperpage');
+    $postsPerPage = Config::get('forum::integration.posts_per_page');
     //$this->posts->paginate($postsPerPage);
-    $posts        = $this->posts->getByThread($thread->id, array('author'));
+    $posts = $this->posts->getByThread($thread->id, array('author'));
     $paginationLinks = $this->posts->getPaginationLinks($postsPerPage);
 
     $this->layout->content = View::make('forum::thread', compact('parentCategory', 'category', 'thread', 'posts', 'paginationLinks'));
@@ -85,7 +92,7 @@ abstract class AbstractForumController extends AbstractBaseForumController {
 
   public function getCreateThread($categoryID, $categoryAlias)
   {
-    if (!$this->userCan('create_threads'))
+    if (!AccessControl::check($this, 'create_threads'))
     {
       return App::abort(403, 'Access denied');
     }
@@ -99,11 +106,12 @@ abstract class AbstractForumController extends AbstractBaseForumController {
 
   public function postCreateThread($categoryID, $categoryAlias)
   {
-    if (!$this->userCan('create_threads'))
+    if (!AccessControl::check($this, 'create_threads'))
     {
       return App::abort(403, 'Access denied');
     }
 
+    $user = $this->getCurrentUser();
     $category  = $this->categories->getByID($categoryID);
     $validator = Validator::make(Input::all(), array_merge($this->threadRules, $this->postRules));
     if ($validator->passes())
@@ -135,42 +143,43 @@ abstract class AbstractForumController extends AbstractBaseForumController {
 
   public function getDeleteThread($threadID)
   {
-    if (!$this->userCan('delete_threads'))
+    if (!AccessControl::check($this, 'delete_threads'))
     {
       return App::abort(403, 'Access denied');
     }
   }
 
-  public function getNewPost($categoryID, $categoryAlias, $threadID, $threadAlias)
+  public function getCreatePost($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
-    if (!$this->userCan('create_posts'))
+    if (!AccessControl::check($this, 'create_posts'))
     {
       return App::abort(403, 'Access denied');
     }
 
     $category = $this->categories->getByID($categoryID, array('parentCategory'));
-    $thread    = $this->threads->getByID($threadID);
+    $thread = $this->threads->getByID($threadID);
     if ($category == NULL || $thread == NULL)
     {
       return App::abort(404);
     }
 
     $parentCategory = $category->parentCategory;
-    $actionAlias      = $thread->postAlias;
-    $prevPosts   = $this->posts->getLastByThread($threadID);
+    $actionAlias = $thread->postAlias;
+    $prevPosts = $this->posts->getLastByThread($threadID);
 
     $this->layout->content = View::make('forum::reply', compact('parentCategory', 'category', 'thread', 'actionAlias', 'prevPosts'));
   }
 
   public function postCreatePost($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
-    if (!$this->userCan('create_posts'))
+    if (!AccessControl::check($this, 'create_posts'))
     {
       return App::abort(403, 'Access denied');
     }
 
-    $category  = $this->categories->getByID($categoryID);
-    $thread     = $this->threads->getByID($threadID);
+    $user = $this->getCurrentUser();
+    $category = $this->categories->getByID($categoryID);
+    $thread = $this->threads->getByID($threadID);
     $validator = Validator::make(Input::all(), $this->postRules);
     if ($validator->passes())
     {
@@ -193,35 +202,37 @@ abstract class AbstractForumController extends AbstractBaseForumController {
 
   public function getEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
   {
-    if (!$this->userCan('update_post'))
-    {
-      return App::abort(403, 'Access denied');
-    }
-
     $category = $this->categories->getByID($categoryID, array('parentCategory'));
-    $thread    = $this->threads->getByID($threadID);
-    $post  = $this->posts->getByID($postID);
+    $thread = $this->threads->getByID($threadID);
+    $post = $this->posts->getByID($postID);
+
     if ($category == NULL || $thread == NULL || $post == NULL)
     {
       return App::abort(404);
     }
 
+    if (!AccessControl::check($post, 'edit_post'))
+    {
+      return App::abort(403, 'Access denied');
+    }
+
     $parentCategory = $category->parentCategory;
-    $actionAlias      = $post->postAlias;
+    $actionAlias = $post->postAlias;
 
     $this->layout->content = View::make('forum::edit', compact('parentCategory', 'category', 'thread', 'post', 'actionAlias'));
   }
 
   public function postEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
   {
-    if (!$this->userCan('update_post'))
+    if (!AccessControl::check($this, 'edit_post'))
     {
       return App::abort(403, 'Access denied');
     }
 
+    $user = $this->getCurrentUser();
     $category = $this->categories->getByID($categoryID, array('parentCategory'));
-    $thread    = $this->threads->getByID($threadID);
-    $post  = $this->posts->getByID($postID);
+    $thread = $this->threads->getByID($threadID);
+    $post = $this->posts->getByID($postID);
     if ($category == NULL || $thread == NULL || $post == NULL)
     {
       return App::abort(404);

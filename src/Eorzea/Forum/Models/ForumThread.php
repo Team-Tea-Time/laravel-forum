@@ -1,6 +1,10 @@
 <?php namespace Eorzea\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
+use Eorzea\Forum\AccessControl;
+
+use Str;
+use Config;
 
 class ForumThread extends AbstractForumBaseModel
 {
@@ -20,7 +24,7 @@ class ForumThread extends AbstractForumBaseModel
 
 	public function author()
 	{
-		return $this->belongsTo(Config::get('forum::integration.usermodel'), 'author_id');
+		return $this->belongsTo(Config::get('forum::integration.user_model'), 'author_id');
 	}
 
 	public function posts()
@@ -33,33 +37,33 @@ class ForumThread extends AbstractForumBaseModel
 		return $this->posts()->count();
 	}
 
-	public function getAliasAttribute()
+	public function getURLAttribute()
 	{
-		return action(Config::get('forum::integration.controller').'@getThread',
+		return route('forum.get.thread',
 			array(
-				'categoryID'  => $this->category->id,
-				'categoryAlias' => Str::slug($this->category->title, '_'),
-				'threadID'     => $this->id,
-				'threadAlias'    => Str::slug($this->title, '_'),
+				'categoryID'		=> $this->category->id,
+				'categoryAlias'	=> Str::slug($this->category->title, '-'),
+				'threadID'			=> $this->id,
+				'threadAlias'		=> Str::slug($this->title, '-'),
 			)
 		);
 	}
 
 	public function getPostAliasAttribute()
 	{
-		return action(\Config::get('forum::integration.postcontroller').'@postNewPost',
+		return route('forum.post.create.post',
 			array(
-				'categoryID'  => $this->category->id,
-				'categoryAlias' => \Str::slug($this->category->title, '_'),
-				'threadID'     => $this->id,
-				'threadAlias'    => \Str::slug($this->title, '_'),
+				'categoryID'		=> $this->category->id,
+				'categoryAlias'	=> Str::slug($this->category->title, '-'),
+				'threadID'			=> $this->id,
+				'threadAlias'		=> Str::slug($this->title, '-'),
 			)
 		);
 	}
 
 	public function getCanPostAttribute()
 	{
-		return $this->computeCanPostAttribute('rights.postthread');
+		return AccessControl::check($this, 'create_posts');
 	}
 
 }

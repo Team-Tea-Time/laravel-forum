@@ -17,9 +17,9 @@ return array(
 	| Forum root
 	|--------------------------------------------------------------------------
 	|
-	| The base url of the forum inside your application including trailing slash
+	| The base url of the forum inside your application
 	|
 	*/
-	'root' => '/forum/',
+	'root' => '/forum',
 
 );

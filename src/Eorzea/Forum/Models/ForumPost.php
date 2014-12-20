@@ -2,6 +2,9 @@
 
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
+use Str;
+use Config;
+
 class ForumPost extends AbstractForumBaseModel {
 
 	use SoftDeletingTrait;
@@ -19,7 +22,7 @@ class ForumPost extends AbstractForumBaseModel {
 
 	public function author()
 	{
-		return $this->belongsTo(Config::get('forum::integration.usermodel'), 'author_id');
+		return $this->belongsTo(Config::get('forum::integration.user_model'), 'author_id');
 	}
 
 	public function scopeWhereThreadIn($query, Array $threads)
@@ -40,16 +43,16 @@ class ForumPost extends AbstractForumBaseModel {
 
 	public function getPostAliasAttribute()
 	{
-		$thread    = $this->thread;
+		$thread = $this->thread;
 		$category = $thread->category;
 
-		return action(Config::get('forum::integration.postcontroller').'@postEditPost',
+		return route('forum.post.edit.post',
 			array(
-				'categoryID'  => $category->id,
-				'categoryAlias' => Str::slug($category->title, '_'),
-				'threadID'     => $thread->id,
-				'threadAlias'    => Str::slug($thread->title, '_'),
-				'postID'   => $this->id
+				'categoryID'		=> $category->id,
+				'categoryAlias'	=> Str::slug($category->title, '-'),
+				'threadID'			=> $thread->id,
+				'threadAlias'		=> Str::slug($thread->title, '-'),
+				'postID'				=> $this->id
 			)
 		);
 	}

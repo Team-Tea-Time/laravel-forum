@@ -10,7 +10,7 @@ return array(
 	| The user model from the main application
 	|
 	*/
-	'usermodel' => 'User',
+	'user_model' => 'User',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -21,7 +21,7 @@ return array(
 	| Non object, or NULL response is considered as not logged in
 	|
 	*/
-	'currentuser' => function() {
+	'current_user' => function() {
 		//Here you can use confide facade,
 		//or just the default facade, or whatever else
 
@@ -44,6 +44,6 @@ return array(
 	|--------------------------------------------------------------------------
 	|
 	*/
-	'postsperpage' => 15
+	'posts_per_page' => 15
 
 );
