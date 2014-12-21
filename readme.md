@@ -30,6 +30,11 @@ Update your packages:
 
 `composer update`
 
+### Deploy the controller
+
+Run the forum install command to auto-deploy the forum controller to your app/controllers folder:
+`php artisan forum:install`
+
 ### Update your database
 
 Publish the package migrations:
@@ -43,23 +48,6 @@ Then run your migrations:
 Once complete, you can define your categories and sub-categories in the forum_categories table. The schema is simple, so you should be able to do that on your own using Laravel seeds.
 
 Once your categories are set up, go to <app hostname>/forum and you should see a brand new forum.
-
-### Deploy the controller
-
-Run the forum install command to auto-deploy the forum controller to your app/controllers folder:
-`php artisan forum:install`
-
-### Integrate into your app
-
-You can publish the config and migration files right into your Laravel app:
-`php artisan config:publish Eorzea/forum`
-`php artisan migrate:publish Eorzea/forum`
-
-If all goes well, you should find the configuration files inside app/config/packages/Eorzea/forum and three new migrations in app/database/migrations.
-
-Now you can create the database schema using the default Laravel command `php artisan migrate` .
-
-Finally, run the command `php artisan forum:install` to auto-deploy the forum controller in your app/controllers folder. You can override any of the methods in this controller to alter the behaviour of the forum.
 
 ## Customisation
 
