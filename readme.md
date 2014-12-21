@@ -33,6 +33,7 @@ Update your packages:
 ### Deploy the controller
 
 Run the forum install command to auto-deploy the forum controller to your app/controllers folder:
+
 `php artisan forum:install`
 
 ### Update your database
@@ -73,7 +74,7 @@ You can then adjust the views however you like. I suggest editing the master vie
 
 ## Features
 
-This package is currently in early development stages. However, feel free to post issues and features requests at https://github.com/Riari/laravel-forum/issues.
+This package is currently in early development stages. Feel free to post issues and features requests at https://github.com/Riari/laravel-forum/issues.
 
  * Category nesting (up to 2 levels)
  * Threads inside categories
