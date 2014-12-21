@@ -149,6 +149,11 @@ abstract class AbstractForumController extends AbstractBaseForumController {
     }
   }
 
+  public function postDeleteThread($threadID)
+  {
+
+  }
+
   public function getCreatePost($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
     if (!AccessControl::check($this, 'create_posts'))

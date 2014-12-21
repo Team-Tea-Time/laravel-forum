@@ -43,7 +43,7 @@ abstract class AbstractBaseRepository  {
 		return $this->model->paginate($this->itemsPerPage)->links();
 	}
 
-	public function create(\stdClass $data)
+	public function create(stdClass $data)
 	{
 		//TODO validate?
 		$array = get_object_vars($data);
