@@ -224,18 +224,19 @@ abstract class AbstractForumController extends AbstractBaseForumController {
 
   public function postEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
   {
-    if (!AccessControl::check($this, 'edit_post'))
-    {
-      return App::abort(403, 'Access denied');
-    }
-
     $user = $this->getCurrentUser();
     $category = $this->categories->getByID($categoryID, array('parentCategory'));
     $thread = $this->threads->getByID($threadID);
     $post = $this->posts->getByID($postID);
+
     if ($category == NULL || $thread == NULL || $post == NULL)
     {
       return App::abort(404);
+    }
+
+    if (!AccessControl::check($post, 'edit_post'))
+    {
+      return App::abort(403, 'Access denied');
     }
 
     $validator = Validator::make(Input::all(), $this->postRules);
