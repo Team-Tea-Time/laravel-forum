@@ -1,14 +1,15 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/build-status/master)
+
 # Laravel forum package
 
-**Note: this is a fork of the excellent Laravel forum solution written by Atrakeur (https://github.com/Atrakeur/laravel-forum).** It has been heavily rewritten to provide more flexible permission handling, cleaner structure and some minor optimisations. Functionally it's very similar to the original package, but my goal is to build on it over time to suit my needs. You might find that it suits yours too, and I've
+**Note: this is a fork of the excellent Laravel forum solution written by Atrakeur (https://github.com/Atrakeur/laravel-forum).** It has been heavily rewritten to provide more flexible permission handling, cleaner structure and some minor optimisations. Functionally it's very similar to the original package, but my goal is to build on it over time to use in a new project.
 
 ## Goals
 
-This package aims to provide a solid basis for implementing a forum inside a Laravel application.
-It focuses on taking care of all the tedious and repetitive work of building a forum (such as categories, subcategories, threads and posts), allowing you to spend more time on your website features and how the forum integrates with you application.
-It provides a set of event hooks to enable adjustments to the core workflow and, additionally, provides an easy means of overriding the core classes for more advanced functionality tweaking.
+This package aims to provide a solid basis for implementing a forum in a Laravel application. It focuses on taking care of conventional forum features, allowing you to spend more time on building your application and how the forum integrates with it.
 
-This package is far from finished, and pull requests are always welcome to make this package better together.
+In addition to allowing controller methods to be overridden to tweak their behaviour, the package also provides extensive configuration options including permission callbacks and integration options.
 
 ## Installation
 
