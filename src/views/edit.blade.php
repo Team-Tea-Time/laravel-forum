@@ -1,4 +1,4 @@
-@include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'thread'))
+@include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
 @include('forum::partials.errorbox')
 
@@ -7,7 +7,7 @@
 
 <legend>{{ trans('forum::base.edit_post') }}</legend>
 <p class="lead">
-	{{ trans('forum::base.your_editing') }} @include('forum::partials.pathdisplay', compact('parentCategory', 'category', 'thread', 'post'))
+	{{ trans('forum::base.your_editing') }} @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread', 'post'))
 </p>
 
 <div class="control-group">

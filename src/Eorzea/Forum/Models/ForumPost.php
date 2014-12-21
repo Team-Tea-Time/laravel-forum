@@ -1,6 +1,7 @@
 <?php namespace Eorzea\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
+use Eorzea\Forum\AccessControl;
 
 use Str;
 use Config;
@@ -55,6 +56,11 @@ class ForumPost extends AbstractForumBaseModel {
 				'postID'				=> $this->id
 			)
 		);
+	}
+
+	public function getCanPostAttribute()
+	{
+		return AccessControl::check($this, 'edit_post');
 	}
 
 }

@@ -1,4 +1,4 @@
-@include('forum::partials.pathdisplay')
+@include('forum::partials.breadcrumbs')
 
 @foreach ($categories as $category)
 <table class="table table-index">

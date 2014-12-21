@@ -1,6 +1,6 @@
-@include('forum::partials.pathdisplay')
+@include('forum::partials.breadcrumbs')
 
-@include('forum::partials.postbutton',array('post' => trans('forum::base.new_thread') , 'url' => $category->postAlias, 'accessModel' => $category))
+@include('forum::partials.action',array('label' => trans('forum::base.new_thread') , 'url' => $category->postAlias, 'accessModel' => $category))
 @if ($subCategories != NULL && count($subCategories) != 0)
 <table class="table table-category">
 	<thead>
@@ -62,7 +62,7 @@
 					{{ trans('forum::base.no_threads') }}
 				</th>
 				<td>
-					@include('forum::partials.postbutton',array('post' => trans('forum::base.first_thread'), 'url' => $category->postAlias, 'accessModel' => $category))
+					@include('forum::partials.action',array('label' => trans('forum::base.first_thread'), 'url' => $category->postAlias, 'accessModel' => $category))
 				</td>
 			</tr>
 	</tbody>
