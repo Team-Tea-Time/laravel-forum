@@ -1,6 +1,6 @@
 # Laravel forum package
 
-**Note: this is a fork of the excellent Laravel forum solution written by Atrakeur (https://github.com/Atrakeur/laravel-forum).** My intention is to strip out the user rights handling and replace it with Zizaco Entrust integration, as well as alter other aspects of the package to suit my needs. You might find that it suits yours too, so I'm being careful to retain the flexibility of the config and view publishing seen in the original package.
+**Note: this is a fork of the excellent Laravel forum solution written by Atrakeur (https://github.com/Atrakeur/laravel-forum).** It has been heavily rewritten to provide more flexible permission handling, cleaner structure and some minor optimisations. Functionally it's very similar to the original package, but my goal is to build on it over time to suit my needs. You might find that it suits yours too, and I've
 
 ## Goals
 
@@ -26,15 +26,32 @@ Then add the following service provider to your app.php:
 'Eorzea\Forum\ForumServiceProvider',
 ```
 
+Update your packages:
+
+`composer update`
+
+### Update your database
+
+Publish the package migrations:
+
+`php artisan migrate:publish Eorzea/forum`
+
+Then run your migrations:
+
+`php artisan migrate`
+
+Once complete, you can define your categories and sub-categories in the forum_categories table. The schema is simple, so you should be able to do that on your own using Laravel seeds.
+
+Once your categories are set up, go to <app hostname>/forum and you should see a brand new forum.
+
+### Deploy the controller
+
+Run the forum install command to auto-deploy the forum controller to your app/controllers folder:
+`php artisan forum:install`
+
 ### Integrate into your app
 
-Before anything, in some cases (L4) you may need to run an update for composer before these next steps, so:
-
-```php
-composer update
-```
-
-Now publish forum's files right into your Laravel app:
+You can publish the config and migration files right into your Laravel app:
 `php artisan config:publish Eorzea/forum`
 `php artisan migrate:publish Eorzea/forum`
 
@@ -42,20 +59,29 @@ If all goes well, you should find the configuration files inside app/config/pack
 
 Now you can create the database schema using the default Laravel command `php artisan migrate` .
 
-To enable you to fully customise your forum, the package is integrated inside your application using two application level controllers.
-Run the command `php artisan forum:install` to auto-deploy the controllers in your app/controllers folder. (Please note that the command will fail if a file with the same name already exists.)
+Finally, run the command `php artisan forum:install` to auto-deploy the forum controller in your app/controllers folder. You can override any of the methods in this controller to alter the behaviour of the forum.
 
-### Customise
+## Customisation
 
-To tweak the views, publish them to your views folder using the Laravel command:
+### Configuration
+
+To adjust configuration (including permissions and integration options), publish the package config files:
+
+`php artisan config:publish Eorzea/forum`
+
+You'll find them in app/config/packages/Eorzea/forum.
+
+### Controller methods
+
+You can override any of the methods in the controller (app/controllers/ForumController.php by default) to adjust the behaviour of your forum.
+
+### Views
+
+Publish the package view files to your views folder:
 
 `php artisan view:publish Eorzea/forum`
 
-The very last step needed is to create some categories and subcategories in the forum_categories tables. The schema is very basic and you should be able to do that on your own using Laravel seeds.
-
-Once your categories are set up, go to <app hostname>/forum and you should see a brand new forum.
-
-More information on how to integrate it with your login system is available through the config files comments. By default, it should run well with Laravel's default auth mechanism (which is also extended by certain auth packages such as Zizaco Confide, so they will inherently be compatible with this package).
+You can then adjust the views however you like. I suggest editing the master view to make it extend your app's main layout to easily integrate the forum with your design.
 
 ## Features
 
@@ -63,19 +89,8 @@ This package is currently in early development stages. However, feel free to pos
 
  * Category nesting (up to 2 levels)
  * Threads inside categories
- * Posts (with hooks for app integration)
+ * Posts
  * Easy user integration (through config files and callbacks)
- * Zizaco Entrust permission integration (through config files and callbacks)
+ * Permissions integration, with basic handling out of the box (through config files and callbacks)
  * Lightweight & blazing fast (designed with caching and high speed in mind)
- * Default markup written for [Bootstrap](http://getbootstrap.com/)
-
-## Event Hooks
-
-This package provides event hooks to enable you to alter its behaviour. Below is a complete list of these hooks, the parameters they take and when they're executed.
-
-| Events               | Params        | Conditions                            |
-| -------------        |:-------------:| ---------------------------------------------:                     |
-| forum.create.thread      | $thread        | Called during thread creation. Can be used to modify thread contents.     |
-| forum.create.post    | $post      | Called during post creation. Can be used to modify post contents. |
-| forum.modified.thread    | $thread        | Called after saving a thread. Can be used for logging purposes.          |
-| forum.modified.post  | $post      | Called after saving a post. Can be used for logging purposes.        |
+ * Default markup written with [Bootstrap](http://getbootstrap.com/) in mind
