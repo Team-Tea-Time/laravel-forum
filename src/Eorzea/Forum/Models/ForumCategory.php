@@ -1,6 +1,6 @@
 <?php namespace Eorzea\Forum\Models;
 
-use \Eorzea\Forum\Models\ForumThread;
+use Eorzea\Forum\Models\ForumThread;
 use Eorzea\Forum\AccessControl;
 
 use Str;
@@ -10,7 +10,7 @@ class ForumCategory extends AbstractForumBaseModel {
 
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
-	protected $appends    = array('threadCount', 'replyCount', 'url', 'postAlias', 'canPost');
+	protected $appends    = array('threadCount', 'replyCount', 'URL', 'postAlias', 'canPost');
 
 	public function parentCategory()
 	{

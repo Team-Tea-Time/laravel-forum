@@ -38,7 +38,7 @@ abstract class AbstractForumController extends AbstractBaseForumController {
   {
     $categories = $this->categories->getByParent(null, array('subcategories'));
 
-    $this->layout->content = View::make('forum::index', compact('categories'));
+    return View::make('forum::index', compact('categories'));
   }
 
   public function getCategory($categoryID, $categoryAlias)
@@ -58,7 +58,7 @@ abstract class AbstractForumController extends AbstractBaseForumController {
     $subCategories  = $category->subCategories;
     $threads = $category->threads;
 
-    $this->layout->content = View::make('forum::category', compact('parentCategory', 'category', 'subCategories', 'threads'));
+    return View::make('forum::category', compact('parentCategory', 'category', 'subCategories', 'threads'));
 
   }
 
@@ -87,7 +87,7 @@ abstract class AbstractForumController extends AbstractBaseForumController {
     $posts = $this->posts->getByThread($thread->id, array('author'));
     $paginationLinks = $this->posts->getPaginationLinks($postsPerPage);
 
-    $this->layout->content = View::make('forum::thread', compact('parentCategory', 'category', 'thread', 'posts', 'paginationLinks'));
+    return View::make('forum::thread', compact('parentCategory', 'category', 'thread', 'posts', 'paginationLinks'));
   }
 
   public function getCreateThread($categoryID, $categoryAlias)
@@ -101,7 +101,7 @@ abstract class AbstractForumController extends AbstractBaseForumController {
     $parentCategory = $category->parentCategory;
     $actionAlias      = $category->postAlias;
 
-    $this->layout->content = View::make('forum::post', compact('parentCategory', 'category', 'actionAlias'));
+    return View::make('forum::post', compact('parentCategory', 'category', 'actionAlias'));
   }
 
   public function postCreateThread($categoryID, $categoryAlias)
@@ -172,19 +172,20 @@ abstract class AbstractForumController extends AbstractBaseForumController {
     $actionAlias = $thread->postAlias;
     $prevPosts = $this->posts->getLastByThread($threadID);
 
-    $this->layout->content = View::make('forum::reply', compact('parentCategory', 'category', 'thread', 'actionAlias', 'prevPosts'));
+    return View::make('forum::reply', compact('parentCategory', 'category', 'thread', 'actionAlias', 'prevPosts'));
   }
 
   public function postCreatePost($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
-    if (!AccessControl::check($this, 'create_posts'))
+    $user = $this->getCurrentUser();
+    $category = $this->categories->getByID($categoryID);
+    $thread = $this->threads->getByID($threadID);
+
+    if (!AccessControl::check($category, 'create_posts'))
     {
       return App::abort(403, 'Access denied');
     }
 
-    $user = $this->getCurrentUser();
-    $category = $this->categories->getByID($categoryID);
-    $thread = $this->threads->getByID($threadID);
     $validator = Validator::make(Input::all(), $this->postRules);
     if ($validator->passes())
     {
@@ -224,7 +225,7 @@ abstract class AbstractForumController extends AbstractBaseForumController {
     $parentCategory = $category->parentCategory;
     $actionAlias = $post->postAlias;
 
-    $this->layout->content = View::make('forum::edit', compact('parentCategory', 'category', 'thread', 'post', 'actionAlias'));
+    return View::make('forum::edit', compact('parentCategory', 'category', 'thread', 'post', 'actionAlias'));
   }
 
   public function postEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)

@@ -1,3 +1,6 @@
+@extends('forum::layouts.master')
+
+@section('content')
 @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
 @include('forum::partials.errorbox')
@@ -25,3 +28,4 @@
 
 </fieldset>
 {{ Form::close() }}
+@overwrite

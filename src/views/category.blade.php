@@ -1,3 +1,6 @@
+@extends('forum::layouts.master')
+
+@section('content')
 @include('forum::partials.breadcrumbs')
 
 @include('forum::partials.action',array('label' => trans('forum::base.new_thread') , 'url' => $category->postAlias, 'accessModel' => $category))
@@ -68,3 +71,4 @@
 	</tbody>
 </table>
 @endif
+@overwrite

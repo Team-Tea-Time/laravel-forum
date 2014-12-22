@@ -1,3 +1,6 @@
+@extends('forum::layouts.master')
+
+@section('content')
 @include('forum::partials.breadcrumbs')
 
 @include('forum::partials.action', array('label' => trans('forum::base.new_reply'), 'url' => $thread->postAlias, 'accessModel' => $thread))
@@ -19,3 +22,4 @@
 	</tbody>
 </table>
 {{ $paginationLinks }}
+@overwrite

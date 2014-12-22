@@ -1,3 +1,6 @@
+@extends('forum::layouts.master')
+
+@section('content')
 @include('forum::partials.breadcrumbs')
 
 @foreach ($categories as $category)
@@ -41,3 +44,4 @@
 	</tbody>
 </table>
 @endforeach
+@overwrite

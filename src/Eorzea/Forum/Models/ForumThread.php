@@ -14,7 +14,7 @@ class ForumThread extends AbstractForumBaseModel
 	protected $table      = 'forum_threads';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = array('replyCount', 'url', 'postAlias', 'canPost');
+	protected $appends    = array('replyCount', 'URL', 'postAlias', 'canPost');
 	protected $guarded    = array('id');
 
 	public function category()

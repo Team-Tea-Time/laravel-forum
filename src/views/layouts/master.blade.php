@@ -5,10 +5,6 @@
 	<title>{{ trans('forum::base.home_title') }}</title>=
 </head>
 <body>
-	@if(isset($content))
-		{{ $content }}
-	@else
-		{{ trans('forum::base.no_content') }}
-	@endif
+	@section('content')
 </body>
 </html>
