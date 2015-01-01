@@ -6,8 +6,7 @@ use Eorzea\Forum\AccessControl;
 use Str;
 use Config;
 
-class ForumThread extends AbstractForumBaseModel
-{
+class Thread extends AbstractBaseModel {
 
 	use SoftDeletingTrait;
 
@@ -19,7 +18,7 @@ class ForumThread extends AbstractForumBaseModel
 
 	public function category()
 	{
-		return $this->belongsTo('\Eorzea\Forum\Models\ForumCategory', 'parent_category');
+		return $this->belongsTo('\Eorzea\Forum\Models\Category', 'parent_category');
 	}
 
 	public function author()
@@ -29,7 +28,7 @@ class ForumThread extends AbstractForumBaseModel
 
 	public function posts()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\ForumPost', 'parent_thread');
+		return $this->hasMany('\Eorzea\Forum\Models\Post', 'parent_thread');
 	}
 
 	public function getReplyCountAttribute()

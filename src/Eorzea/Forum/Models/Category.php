@@ -1,12 +1,12 @@
 <?php namespace Eorzea\Forum\Models;
 
-use Eorzea\Forum\Models\ForumThread;
+use Eorzea\Forum\Models\Thread;
 use Eorzea\Forum\AccessControl;
 
 use Str;
 use Config;
 
-class ForumCategory extends AbstractForumBaseModel {
+class Category extends AbstractBaseModel {
 
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
@@ -14,17 +14,17 @@ class ForumCategory extends AbstractForumBaseModel {
 
 	public function parentCategory()
 	{
-		return $this->belongsTo('\Eorzea\Forum\Models\ForumCategory', 'parent_category');
+		return $this->belongsTo('\Eorzea\Forum\Models\Category', 'parent_category');
 	}
 
 	public function subcategories()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\ForumCategory', 'parent_category');
+		return $this->hasMany('\Eorzea\Forum\Models\Category', 'parent_category');
 	}
 
 	public function threads()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\ForumThread', 'parent_category');
+		return $this->hasMany('\Eorzea\Forum\Models\Thread', 'parent_category');
 	}
 
 	public function scopeWhereTopLevel($query)
@@ -47,13 +47,13 @@ class ForumCategory extends AbstractForumBaseModel {
 			$threadsIDs = array();
 			$threads    = $this->threads()->get(array('id'));
 
-			foreach ($threads AS $thread) {
+			foreach ($threads as $thread) {
 				$threadsIDs[] = $thread->id;
 			}
 
 			if (!empty($threadsIDs))
 			{
-				$replyCount = ForumPost::whereIn('parent_thread', $threadsIDs)->count();
+				$replyCount = Post::whereIn('parent_thread', $threadsIDs)->count();
 			}
 			return $replyCount;
 		});

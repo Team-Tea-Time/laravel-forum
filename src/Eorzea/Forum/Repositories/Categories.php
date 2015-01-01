@@ -1,22 +1,22 @@
 <?php namespace Eorzea\Forum\Repositories;
 
-use \Eorzea\Forum\Models\ForumCategory;
+use \Eorzea\Forum\Models\Category;
 
-class CategoriesRepository extends AbstractBaseRepository {
+class Categories extends AbstractBaseRepository {
 
-	public function __construct(ForumCategory $model)
+	public function __construct(Category $model)
 	{
 		$this->model = $model;
 	}
 
-	public function getByID($ident, array $with = array())
+	public function getByID($categoryID, array $with = array())
 	{
-		if (!is_numeric($ident))
+		if (!is_numeric($categoryID))
 		{
 			throw new InvalidArgumentException();
 		}
 
-		return $this->getFirstBy('id', $ident, $with);
+		return $this->getFirstBy('id', $categoryID, $with);
 	}
 
 	public function getByParent($parent, array $with = array())

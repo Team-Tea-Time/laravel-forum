@@ -19,7 +19,7 @@ class InstallCommand extends Command {
 			return;
 		}
 
-		$this->installController($controller, '\Eorzea\Forum\Controllers\AbstractForumController');
+		$this->installController($controller, '\Eorzea\Forum\Controllers\AbstractController');
 
 		$this->info('Forum installation done.');
 	}

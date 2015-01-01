@@ -24,7 +24,7 @@
 <div class="control-group">
 	<label class="control-label" for="data">{{ trans('forum::base.label_your_post') }}</label>
 	<div class="controls">
-		{{ Form::textarea('data') }}
+		{{ Form::textarea('content') }}
 	</div>
 </div>
 

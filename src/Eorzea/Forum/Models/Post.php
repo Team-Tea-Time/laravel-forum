@@ -6,7 +6,7 @@ use Eorzea\Forum\AccessControl;
 use Str;
 use Config;
 
-class ForumPost extends AbstractForumBaseModel {
+class Post extends AbstractBaseModel {
 
 	use SoftDeletingTrait;
 
@@ -18,7 +18,7 @@ class ForumPost extends AbstractForumBaseModel {
 
 	public function thread()
 	{
-		return $this->belongsTo('\Eorzea\Forum\Models\ForumThread', 'parent_thread');
+		return $this->belongsTo('\Eorzea\Forum\Models\Thread', 'parent_thread');
 	}
 
 	public function author()
@@ -36,10 +36,10 @@ class ForumPost extends AbstractForumBaseModel {
 		return $query->whereIn('parent_thread', $threads);
 	}
 
-	public function getAliasAttribute()
+	public function getURLAttribute()
 	{
 		//TODO add page get parameter
-		return $this->thread->url;
+		return $this->thread->URL;
 	}
 
 	public function getPostAliasAttribute()

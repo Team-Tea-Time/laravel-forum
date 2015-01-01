@@ -1,8 +1,11 @@
 <?php namespace Eorzea\Forum\Controllers;
 
-use Eorzea\Forum\Repositories\CategoriesRepository;
-use Eorzea\Forum\Repositories\ThreadsRepository;
-use Eorzea\Forum\Repositories\PostsRepository;
+use Eorzea\Forum\Models\Category;
+use Eorzea\Forum\Models\Thread;
+use Eorzea\Forum\Models\Post;
+use Eorzea\Forum\Repositories\Categories;
+use Eorzea\Forum\Repositories\Threads;
+use Eorzea\Forum\Repositories\Posts;
 use Eorzea\Forum\AccessControl;
 
 use stdClass;
@@ -13,7 +16,7 @@ use Redirect;
 use View;
 use Validator;
 
-abstract class AbstractForumController extends AbstractBaseForumController {
+abstract class AbstractController extends AbstractBaseController {
 
   private $categories;
   private $threads;
@@ -24,10 +27,10 @@ abstract class AbstractForumController extends AbstractBaseForumController {
   );
 
   protected $postRules = array(
-    'data' => 'required|min:5',
+    'content' => 'required|min:5',
   );
 
-  public function __construct(CategoriesRepository $categories, ThreadsRepository $threads, PostsRepository $posts)
+  public function __construct(Categories $categories, Threads $threads, Posts $posts)
   {
     $this->categories = $categories;
     $this->threads = $threads;
@@ -133,7 +136,7 @@ abstract class AbstractForumController extends AbstractBaseForumController {
 
       $post = $this->posts->create($post);
 
-      return Redirect::to($thread->url)->with('success', 'thread created');
+      return Redirect::to($thread->URL)->with('success', 'thread created');
     }
     else
     {
@@ -189,16 +192,15 @@ abstract class AbstractForumController extends AbstractBaseForumController {
     $validator = Validator::make(Input::all(), $this->postRules);
     if ($validator->passes())
     {
-      $data = Input::get('data');
-
-      $post               = new stdClass();
-      $post->parent_thread = $thread->id;
-      $post->author_id    = $user->id;
-      $post->data         = $data;
+      $post = array(
+        'parent_thread' => $threadID,
+        'author_id'     => $user->id,
+        'content'       => Input::get('content')
+      );
 
       $post = $this->posts->create($post);
 
-      return Redirect::to($thread->url)->with('success', 'thread created');
+      return Redirect::to($thread->URL)->with('success', 'thread created');
     }
     else
     {
@@ -248,17 +250,16 @@ abstract class AbstractForumController extends AbstractBaseForumController {
     $validator = Validator::make(Input::all(), $this->postRules);
     if ($validator->passes())
     {
-      $data = Input::get('data');
-
-      $post               = new stdClass();
-      $post->id           = $postID;
-      $post->parent_thread = $thread->id;
-      $post->author_id    = $user->id;
-      $post->data         = $data;
+      $post = array(
+        'id'            => $postID,
+        'parent_thread' => $threadID,
+        'author_id'     => $user->id,
+        'content'       => Input::get('content')
+      );
 
       $post = $this->posts->update($post);
 
-      return Redirect::to($post->url)->with('success', 'thread created');
+      return Redirect::to($post->URL)->with('success', 'thread created');
     }
     else
     {

@@ -2,8 +2,9 @@
 
 use stdClass;
 use Cache;
+use Eloquent;
 
-abstract class AbstractForumBaseModel extends \Eloquent {
+abstract class AbstractBaseModel extends Eloquent {
 
 	protected function rememberAttribute($item, $function)
 	{

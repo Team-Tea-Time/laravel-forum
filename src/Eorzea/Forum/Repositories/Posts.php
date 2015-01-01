@@ -1,15 +1,15 @@
 <?php namespace Eorzea\Forum\Repositories;
 
-use \Eorzea\Forum\Models\ForumPost;
+use \Eorzea\Forum\Models\Post;
 
-class PostsRepository extends AbstractBaseRepository {
+class Posts extends AbstractBaseRepository {
 
-	public function __construct(ForumPost $model)
+	public function __construct(Post $model)
 	{
 		$this->model = $model;
 	}
 
-	public function getById($postID, array $with = array())
+	public function getById($postID, Array $with = array())
 	{
 		if (!is_numeric($postID))
 		{
@@ -19,7 +19,7 @@ class PostsRepository extends AbstractBaseRepository {
 		return $this->getFirstBy('id', $postID, $with);
 	}
 
-	public function getByThread($threadID, array $with = array())
+	public function getByThread($threadID, Array $with = array())
 	{
 		if (!is_numeric($threadID))
 		{

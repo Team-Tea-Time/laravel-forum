@@ -1,24 +1,10 @@
 <?php namespace Eorzea\Forum\Controllers;
 
-use Eorzea\Forum\Models\ForumCategory;
-use Eorzea\Forum\Models\ForumThread;
-use Eorzea\Forum\Models\ForumPost;
-
 use Controller;
 use Config;
 use View;
 
-abstract class AbstractBaseForumController extends Controller {
-
-	protected $layout = 'forum::layouts.master';
-
-	protected function setupLayout()
-	{
-		if ($this->layout != NULL)
-		{
-			$this->layout = View::make($this->layout);
-		}
-	}
+abstract class AbstractBaseController extends Controller {
 
 	protected function getCurrentUser()
 	{

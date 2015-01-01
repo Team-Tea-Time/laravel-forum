@@ -1,6 +1,8 @@
 <?php namespace Eorzea\Forum\Repositories;
 
-abstract class AbstractBaseRepository  {
+use stdClass;
+
+abstract class AbstractBaseRepository {
 
 	protected $model;
 
@@ -43,24 +45,22 @@ abstract class AbstractBaseRepository  {
 		return $this->model->paginate($this->itemsPerPage)->links();
 	}
 
-	public function create(stdClass $data)
+	public function create(Array $data = array())
 	{
-		//TODO validate?
-		$array = get_object_vars($data);
-		$model = $this->model->create($array);
-		return $this->model->convertToObject($model);
+		$model = $this->model->create($data);
+
+		return $model;
 	}
 
-	public function update(stdClass $data)
+	public function update(Array $data = array())
 	{
-		//TODO validate?
-		$array = get_object_vars($data);
-		$model = $this->model->find($array['id']);
+		$model = $this->model->find($data['id']);
 		if ($model != null)
 		{
-			$model->fill($array);
+			$model->fill($data);
 			$model->save();
-			return $this->model->convertToObject($model);
+
+			return $model;
 		}
 		else
 		{

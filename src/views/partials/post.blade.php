@@ -3,7 +3,7 @@
 		{{{ $post->author->username }}}
 	</td>
 	<td>
-		{{ nl2br(e($post->data)) }}
+		{{ nl2br(e($post->content)) }}
 	</td>
 </tr>
 <tr>
