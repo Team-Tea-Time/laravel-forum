@@ -39,7 +39,7 @@ class Posts extends AbstractBaseRepository {
 		$model = $this->model->where('parent_thread', '=', $threadID);
 		$model = $model->orderBy('created_at', 'DESC')->take($count);
 		$model = $model->with($with);
-		return $this->model->convertToObject($model->get());
+		return $model;
 	}
 
 }

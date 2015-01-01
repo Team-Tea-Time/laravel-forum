@@ -104,7 +104,7 @@ abstract class AbstractController extends AbstractBaseController {
     $parentCategory = $category->parentCategory;
     $actionAlias      = $category->postAlias;
 
-    return View::make('forum::post', compact('parentCategory', 'category', 'actionAlias'));
+    return View::make('forum::forms.create', compact('parentCategory', 'category', 'actionAlias'));
   }
 
   public function postCreateThread($categoryID, $categoryAlias)
@@ -119,20 +119,19 @@ abstract class AbstractController extends AbstractBaseController {
     $validator = Validator::make(Input::all(), array_merge($this->threadRules, $this->postRules));
     if ($validator->passes())
     {
-      $title = Input::get('title');
-      $data  = Input::get('data');
-
-      $thread                  = new stdClass();
-      $thread->author_id       = $user->id;
-      $thread->parent_category = $category->id;
-      $thread->title           = $title;
+      $thread = array(
+        'author_id'       => $user->id,
+        'parent_category' => $categoryID,
+        'title'           => Input::get('title')
+      );
 
       $thread = $this->threads->create($thread);
 
-      $post               = new stdClass();
-      $post->parent_thread = $thread->id;
-      $post->author_id    = $user->id;
-      $post->data         = $data;
+      $post = array(
+        'parent_thread'   => $thread->id,
+        'author_id'       => $user->id,
+        'content'         => Input::get('content')
+      );
 
       $post = $this->posts->create($post);
 
@@ -175,7 +174,7 @@ abstract class AbstractController extends AbstractBaseController {
     $actionAlias = $thread->postAlias;
     $prevPosts = $this->posts->getLastByThread($threadID);
 
-    return View::make('forum::reply', compact('parentCategory', 'category', 'thread', 'actionAlias', 'prevPosts'));
+    return View::make('forum::forms.reply', compact('parentCategory', 'category', 'thread', 'actionAlias', 'prevPosts'));
   }
 
   public function postCreatePost($categoryID, $categoryAlias, $threadID, $threadAlias)
@@ -227,7 +226,7 @@ abstract class AbstractController extends AbstractBaseController {
     $parentCategory = $category->parentCategory;
     $actionAlias = $post->postAlias;
 
-    return View::make('forum::edit', compact('parentCategory', 'category', 'thread', 'post', 'actionAlias'));
+    return View::make('forum::forms.edit', compact('parentCategory', 'category', 'thread', 'post', 'actionAlias'));
   }
 
   public function postEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)

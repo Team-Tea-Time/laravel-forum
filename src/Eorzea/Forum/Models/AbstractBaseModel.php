@@ -23,44 +23,4 @@ abstract class AbstractBaseModel extends Eloquent {
 		}
 	}
 
-	public function toObject()
-	{
-		return $this->convertToObject($this);
-	}
-
-	public function convertToObject($value)
-	{
-		if ($value instanceof Eloquent)
-		{
-			$attributes = $value->toArray();
-			$relations  = $value->relationsToArray();
-
-			$object = new stdClass();
-			foreach($attributes as $key => $attribute)
-			{
-				if (array_key_exists($key, $relations))
-				{
-					$key = camel_case($key);
-					$object->$key = $this->convertToObject($value->$key);
-				}
-				else
-				{
-					$object->$key = $attribute;
-				}
-			}
-			return $object;
-		}
-
-		if ($value instanceof \Illuminate\Database\Eloquent\Collection)
-		{
-			$array = array();
-			foreach($value as $key => $element)
-			{
-				$array[$key] = $this->convertToObject($element);
-			}
-			return $array;
-		}
-		return $value;
-	}
-
 }
