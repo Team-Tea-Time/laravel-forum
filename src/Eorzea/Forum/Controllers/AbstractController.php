@@ -102,9 +102,9 @@ abstract class AbstractController extends AbstractBaseController {
 
     $category       = $this->categories->getByID($categoryID, array('parentCategory'));
     $parentCategory = $category->parentCategory;
-    $actionAlias      = $category->postAlias;
+    $actionAlias    = $category->postAlias;
 
-    return View::make('forum::forms.create', compact('parentCategory', 'category', 'actionAlias'));
+    return View::make('forum::thread-create', compact('parentCategory', 'category', 'actionAlias'));
   }
 
   public function postCreateThread($categoryID, $categoryAlias)
@@ -174,7 +174,7 @@ abstract class AbstractController extends AbstractBaseController {
     $actionAlias = $thread->postAlias;
     $prevPosts = $this->posts->getLastByThread($threadID);
 
-    return View::make('forum::forms.reply', compact('parentCategory', 'category', 'thread', 'actionAlias', 'prevPosts'));
+    return View::make('forum::thread-reply', compact('parentCategory', 'category', 'thread', 'actionAlias', 'prevPosts'));
   }
 
   public function postCreatePost($categoryID, $categoryAlias, $threadID, $threadAlias)
@@ -226,7 +226,7 @@ abstract class AbstractController extends AbstractBaseController {
     $parentCategory = $category->parentCategory;
     $actionAlias = $post->postAlias;
 
-    return View::make('forum::forms.edit', compact('parentCategory', 'category', 'thread', 'post', 'actionAlias'));
+    return View::make('forum::post-edit', compact('parentCategory', 'category', 'thread', 'post', 'actionAlias'));
   }
 
   public function postEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)

@@ -15,8 +15,8 @@ Route::group(['prefix' => $root], function() use ($controller)
 	Route::get($category . '/thread/create', ['as' => 'forum.get.create.thread', 'uses' => $controller . '@getCreateThread']);
 	Route::post($category . '/thread/create', ['as' => 'forum.post.create.thread', 'uses' => $controller . '@postCreateThread']);
 
-	Route::get($category . $thread . '/post/create', ['as' => 'forum.get.create.post', 'uses' => $controller . '@getCreatePost']);
-	Route::post($category . $thread . '/post/create', ['as' => 'forum.post.create.post', 'uses' => $controller . '@postCreatePost']);
+	Route::get($category . $thread . '/reply', ['as' => 'forum.get.create.post', 'uses' => $controller . '@getCreatePost']);
+	Route::post($category . $thread . '/reply', ['as' => 'forum.post.create.post', 'uses' => $controller . '@postCreatePost']);
 
 	Route::get($category . $thread . '/post/{postID}/edit', ['as' => 'forum.get.edit.post', 'uses' => $controller . '@getEditPost']);
 	Route::post($category . $thread . '/post/{postID}/edit', ['as' => 'forum.post.edit.post', 'uses' => $controller . '@postEditPost']);
