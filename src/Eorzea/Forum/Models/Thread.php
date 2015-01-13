@@ -36,6 +36,16 @@ class Thread extends AbstractBaseModel {
 		return $this->posts()->count();
 	}
 
+	public function getLastPageAttribute()
+	{
+		return $this->posts()->paginate(Config::get('forum::integration.posts_per_thread'))->getLastPage();
+	}
+
+	public function getLastPostAttribute()
+	{
+		return $this->posts()->orderBy('created_at', 'desc')->first();
+	}
+
 	public function getURLAttribute()
 	{
 		return route('forum.get.thread',

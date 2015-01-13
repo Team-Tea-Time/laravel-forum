@@ -1,6 +1,7 @@
 <?php namespace Eorzea\Forum\Repositories;
 
 use stdClass;
+use Config;
 
 abstract class AbstractBaseRepository {
 
@@ -30,19 +31,9 @@ abstract class AbstractBaseRepository {
 		return $model;
 	}
 
-	public function paginate($itemsPerPage = 0)
+	public function getPaginationLinks($index, $value)
 	{
-		if (!is_numeric($itemsPerPage))
-		{
-			throw new InvalidArgumentException();
-		}
-
-		$this->itemsPerPage = $itemsPerPage;
-	}
-
-	public function getPaginationLinks()
-	{
-		return $this->model->paginate($this->itemsPerPage)->links();
+		return $this->model->where($index, '=', $value)->paginate($this->itemsPerPage)->links(Config::get('forum::integration.pagination_view'));
 	}
 
 	public function create(Array $data = array())

@@ -40,10 +40,11 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| The number of posts per page
+	| Pagination settings
 	|--------------------------------------------------------------------------
-	|
 	*/
-	'posts_per_page' => 15
+	'threads_per_category' => 20,
+	'posts_per_thread' => 15,
+	'pagination_view' => ''
 
 );

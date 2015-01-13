@@ -1,5 +1,6 @@
 <?php namespace Eorzea\Forum\Repositories;
 
+use Config;
 use \Eorzea\Forum\Models\Post;
 
 class Posts extends AbstractBaseRepository {
@@ -7,6 +8,8 @@ class Posts extends AbstractBaseRepository {
 	public function __construct(Post $model)
 	{
 		$this->model = $model;
+
+		$this->itemsPerPage = Config::get('forum::integration.posts_per_thread');
 	}
 
 	public function getById($postID, Array $with = array())
