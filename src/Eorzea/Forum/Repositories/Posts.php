@@ -12,7 +12,7 @@ class Posts extends AbstractBaseRepository {
 		$this->itemsPerPage = Config::get('forum::integration.posts_per_thread');
 	}
 
-	public function getById($postID, Array $with = array())
+	public function getByID($postID, Array $with = array())
 	{
 		if (!is_numeric($postID))
 		{

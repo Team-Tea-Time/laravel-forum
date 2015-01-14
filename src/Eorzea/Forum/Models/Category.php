@@ -10,7 +10,7 @@ class Category extends AbstractBaseModel {
 
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
-	protected $appends    = array('threadCount', 'replyCount', 'URL', 'postAlias', 'canPost');
+	protected $appends    = ['threadCount', 'replyCount', 'URL', 'postAlias', 'canPost'];
 
 	public function parentCategory()
 	{
@@ -30,13 +30,6 @@ class Category extends AbstractBaseModel {
 	public function scopeWhereTopLevel($query)
 	{
 		return $query->where('parent_category', '=', NULL);
-	}
-
-	public function getThreadCountAttribute()
-	{
-		return $this->rememberAttribute('threadCount', function(){
-			return $this->threads()->count();
-		});
 	}
 
 	public function getReplyCountAttribute()

@@ -13,8 +13,8 @@ class Post extends AbstractBaseModel {
 	protected $table      = 'forum_posts';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = array('URL', 'postAlias', 'canPost');
-	protected $guarded    = array('id');
+	protected $appends    = ['URL', 'postAlias', 'canPost'];
+	protected $guarded    = ['id'];
 
 	public function thread()
 	{

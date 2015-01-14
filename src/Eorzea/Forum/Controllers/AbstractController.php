@@ -85,7 +85,7 @@ abstract class AbstractController extends AbstractBaseController {
     }
 
     $parentCategory  = $category->parentCategory;
-    $posts = $this->posts->getByThread($thread->id, array('author'));
+    $posts = $this->posts->getByThread($thread->id);
     $paginationLinks = $this->posts->getPaginationLinks('parent_thread', $thread->id);
 
     return View::make('forum::thread', compact('parentCategory', 'category', 'thread', 'posts', 'paginationLinks'));

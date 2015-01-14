@@ -25,12 +25,15 @@ return array(
 	'label_your_post'	=> 'Votre post',
 
 	'latest_posts' => 'Derniers posts',
+	'edit'	=> 'Modifier',
 	'edit_post'	=> 'Modifier un post',
 	'post_post'	=> 'Poster un nouveau post',
 	'posting_into'	=> 'Vous postez dans',
 	'your_editing'	=> 'Vous éditez',
 	'posted_at'		=> 'Posté à',
 	'last_update'	=> 'Dernière mise à jour à',
+	'last_post' => 'Dernière post',
+	'view_post' => 'Voir le post',
 
 	'reply' 		=> 'Répondre',
 	'new_reply' 	=> 'Nouvelle réponse',

@@ -13,8 +13,9 @@ class Thread extends AbstractBaseModel {
 	protected $table      = 'forum_threads';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = array('replyCount', 'URL', 'postAlias', 'canPost');
-	protected $guarded    = array('id');
+	protected $appends    = ['replyCount', 'lastPage', 'URL', 'postAlias', 'canPost'];
+	protected $with 			= ['category', 'author', 'posts'];
+	protected $guarded    = ['id'];
 
 	public function category()
 	{
@@ -40,12 +41,7 @@ class Thread extends AbstractBaseModel {
 	{
 		return $this->posts()->paginate(Config::get('forum::integration.posts_per_thread'))->getLastPage();
 	}
-
-	public function getLastPostAttribute()
-	{
-		return $this->posts()->orderBy('created_at', 'desc')->first();
-	}
-
+	
 	public function getURLAttribute()
 	{
 		return route('forum.get.thread',
