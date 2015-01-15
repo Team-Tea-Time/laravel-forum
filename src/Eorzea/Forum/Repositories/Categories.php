@@ -13,7 +13,7 @@ class Categories extends AbstractBaseRepository {
 	{
 		if (!is_numeric($categoryID))
 		{
-			throw new InvalidArgumentException();
+			throw new \InvalidArgumentException();
 		}
 
 		return $this->getFirstBy('id', $categoryID, $with);
@@ -26,9 +26,9 @@ class Categories extends AbstractBaseRepository {
 			$parent = $parent['id'];
 		}
 
-		if ($parent != null && !is_numeric($parent))
+		if ($parent != NULL && !is_numeric($parent))
 		{
-			throw new InvalidArgumentException();
+			throw new \InvalidArgumentException();
 		}
 
 		return $this->getManyBy('parent_category', $parent, $with);

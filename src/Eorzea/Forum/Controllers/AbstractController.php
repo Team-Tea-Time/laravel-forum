@@ -37,52 +37,47 @@ abstract class AbstractController extends AbstractBaseController {
     $this->posts = $posts;
   }
 
+  private function check404(Array $items = array())
+  {
+    foreach($items as $item)
+    {
+      if($item == NULL)
+      {
+        App::abort(404);
+      }
+    }
+  }
+
   public function getIndex()
   {
-    $categories = $this->categories->getByParent(null, array('subcategories'));
+    $categories = $this->categories->getByParent(NULL, ['subcategories']);
 
     return View::make('forum::index', compact('categories'));
   }
 
   public function getCategory($categoryID, $categoryAlias)
   {
-    if (!AccessControl::check($this, 'access_forum'))
-    {
-      return App::abort(403, 'Access denied');
-    }
+    $category = $this->categories->getByID($categoryID, ['parentCategory', 'subcategories', 'threads']);
 
-    $category = $this->categories->getByID($categoryID, array('parentCategory', 'subCategories', 'threads'));
-    if ($category == NULL)
-    {
-      return App::abort(404);
-    }
+    $this->check404([$category]);
+
+    AccessControl::check($category, 'access_category');
 
     $parentCategory = $category->parentCategory;
-    $subCategories  = $category->subCategories;
+    $subcategories  = $category->subcategories;
     $threads = $category->threads;
 
-    return View::make('forum::category', compact('parentCategory', 'category', 'subCategories', 'threads'));
-
+    return View::make('forum::category', compact('parentCategory', 'category', 'subcategories', 'threads'));
   }
 
   public function getThread($categoryID, $categoryAlias, $threadID, $threadAlias, $page = 0)
   {
-    if (!AccessControl::check($this, 'access_forum'))
-    {
-      return App::abort(403, 'Access denied');
-    }
-
-    $category = $this->categories->getByID($categoryID, array('parentCategory'));
-    if ($category == NULL)
-    {
-      return App::abort(404);
-    }
-
+    $category = $this->categories->getByID($categoryID, ['parentCategory']);
     $thread = $this->threads->getByID($threadID);
-    if ($thread == NULL)
-    {
-      return App::abort(404);
-    }
+
+    $this->check404([$category, $thread]);
+
+    AccessControl::check($category, 'access_category');
 
     $parentCategory  = $category->parentCategory;
     $posts = $this->posts->getByThread($thread->id);
@@ -93,27 +88,23 @@ abstract class AbstractController extends AbstractBaseController {
 
   public function getCreateThread($categoryID, $categoryAlias)
   {
-    if (!AccessControl::check($this, 'create_threads'))
-    {
-      return App::abort(403, 'Access denied');
-    }
+    $category = $this->categories->getByID($categoryID, ['parentCategory']);
 
-    $category       = $this->categories->getByID($categoryID, array('parentCategory'));
+    AccessControl::check($category, 'create_threads');
+
     $parentCategory = $category->parentCategory;
-    $actionAlias    = $category->postAlias;
+    $actionAlias = $category->postAlias;
 
     return View::make('forum::thread-create', compact('parentCategory', 'category', 'actionAlias'));
   }
 
   public function postCreateThread($categoryID, $categoryAlias)
   {
-    if (!AccessControl::check($this, 'create_threads'))
-    {
-      return App::abort(403, 'Access denied');
-    }
-
     $user = $this->getCurrentUser();
-    $category  = $this->categories->getByID($categoryID);
+    $category = $this->categories->getByID($categoryID);
+
+    AccessControl::check($category, 'create_threads');
+
     $validator = Validator::make(Input::all(), array_merge($this->threadRules, $this->postRules));
     if ($validator->passes())
     {
@@ -131,7 +122,7 @@ abstract class AbstractController extends AbstractBaseController {
         'content'         => Input::get('content')
       );
 
-      $post = $this->posts->create($post);
+      $this->posts->create($post);
 
       return Redirect::to($thread->URL)->with('success', 'thread created');
     }
@@ -143,10 +134,9 @@ abstract class AbstractController extends AbstractBaseController {
 
   public function getDeleteThread($threadID)
   {
-    if (!AccessControl::check($this, 'delete_threads'))
-    {
-      return App::abort(403, 'Access denied');
-    }
+    $thread = $this->threads->getByID($threadID);
+
+    AccessControl::check($thread, 'delete_threads');
   }
 
   public function postDeleteThread($threadID)
@@ -156,17 +146,13 @@ abstract class AbstractController extends AbstractBaseController {
 
   public function getCreatePost($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
-    if (!AccessControl::check($this, 'create_posts'))
-    {
-      return App::abort(403, 'Access denied');
-    }
 
-    $category = $this->categories->getByID($categoryID, array('parentCategory'));
+    $category = $this->categories->getByID($categoryID, ['parentCategory']);
     $thread = $this->threads->getByID($threadID);
-    if ($category == NULL || $thread == NULL)
-    {
-      return App::abort(404);
-    }
+
+    $this->check404([$category, $thread]);
+
+    AccessControl::check($thread, 'create_posts');
 
     $parentCategory = $category->parentCategory;
     $actionAlias = $thread->postAlias;
@@ -181,10 +167,7 @@ abstract class AbstractController extends AbstractBaseController {
     $category = $this->categories->getByID($categoryID);
     $thread = $this->threads->getByID($threadID);
 
-    if (!AccessControl::check($category, 'create_posts'))
-    {
-      return App::abort(403, 'Access denied');
-    }
+    AccessControl::check($category, 'create_posts');
 
     $validator = Validator::make(Input::all(), $this->postRules);
     if ($validator->passes())
@@ -195,7 +178,7 @@ abstract class AbstractController extends AbstractBaseController {
         'content'       => Input::get('content')
       );
 
-      $post = $this->posts->create($post);
+      $this->posts->create($post);
 
       return Redirect::to($thread->URL)->with('success', 'thread created');
     }
@@ -207,19 +190,13 @@ abstract class AbstractController extends AbstractBaseController {
 
   public function getEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
   {
-    $category = $this->categories->getByID($categoryID, array('parentCategory'));
+    $category = $this->categories->getByID($categoryID, ['parentCategory']);
     $thread = $this->threads->getByID($threadID);
     $post = $this->posts->getByID($postID);
 
-    if ($category == NULL || $thread == NULL || $post == NULL)
-    {
-      return App::abort(404);
-    }
+    $this->check404([$category, $thread, $post]);
 
-    if (!AccessControl::check($post, 'edit_post'))
-    {
-      return App::abort(403, 'Access denied');
-    }
+    AccessControl::check($post, 'edit_post');
 
     $parentCategory = $category->parentCategory;
     $actionAlias = $post->postAlias;
@@ -230,19 +207,13 @@ abstract class AbstractController extends AbstractBaseController {
   public function postEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
   {
     $user = $this->getCurrentUser();
-    $category = $this->categories->getByID($categoryID, array('parentCategory'));
+    $category = $this->categories->getByID($categoryID, ['parentCategory']);
     $thread = $this->threads->getByID($threadID);
     $post = $this->posts->getByID($postID);
 
-    if ($category == NULL || $thread == NULL || $post == NULL)
-    {
-      return App::abort(404);
-    }
+    $this->check404([$category, $thread, $post]);
 
-    if (!AccessControl::check($post, 'edit_post'))
-    {
-      return App::abort(403, 'Access denied');
-    }
+    AccessControl::check($post, 'edit_post');
 
     $validator = Validator::make(Input::all(), $this->postRules);
     if ($validator->passes())

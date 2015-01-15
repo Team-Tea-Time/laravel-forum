@@ -10,7 +10,7 @@ class Category extends AbstractBaseModel {
 
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
-	protected $appends    = ['threadCount', 'replyCount', 'URL', 'postAlias', 'canPost'];
+	protected $appends    = ['threadCount', 'replyCount', 'URL', 'postAlias'];
 
 	public function parentCategory()
 	{
@@ -74,7 +74,7 @@ class Category extends AbstractBaseModel {
 
 	public function getCanPostAttribute()
 	{
-		return AccessControl::check($this, 'access_forum');
+		return AccessControl::check($this, 'access_category', FALSE);
 	}
 
 

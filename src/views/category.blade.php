@@ -9,7 +9,7 @@
 </p>
 @endif
 
-@if ($subCategories != NULL && count($subCategories) != 0)
+@if ($subcategories != NULL && count($subcategories) != 0)
 <table class="table table-category">
 	<thead>
 		<tr>
@@ -19,11 +19,11 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach ($subCategories as $subcategory)
+		@foreach ($subcategories as $subcategory)
 		<tr>
 			<th>
 				<div class="category_title">
-					<a href={{$subcategory->url}}>{{{ $subcategory->title }}}</a>
+					<a href={{$subcategory->URL}}>{{{ $subcategory->title }}}</a>
 				</div>
 				<div class="category_subtitle">{{{ $subcategory->subtitle }}}</div>
 			</th>
@@ -52,10 +52,10 @@
 				</th>
 				<td>{{ $thread->posts->count() }}</td>
 				<td>
-					<a href="{{ URL::to( $thread->posts->sortBy('created_at')->first()->author->profile->route ) }}">{{ $thread->posts->sortBy('created_at')->first()->author->username }}</a>
+					<a href="{{ URL::to( $thread->lastPost->author->profile->route ) }}">{{ $thread->lastPost->author->username }}</a>
 				</td>
 				<td>
-					<a href="{{ URL::to( $thread->URL . '?page=' . $thread->lastPage . '#post-' . $thread->posts->sortBy('created_at')->first()->id ) }}">{{ trans('forum::base.view_post') }} &raquo;</a>
+					<a href="{{ URL::to( $thread->URL . '?page=' . $thread->lastPage . '#post-' . $thread->lastPost->id ) }}">{{ trans('forum::base.view_post') }} &raquo;</a>
 				</td>
 			</tr>
 			@endforeach

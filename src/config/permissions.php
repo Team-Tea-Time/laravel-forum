@@ -4,14 +4,14 @@ return array(
 
   /*
   |--------------------------------------------------------------------------
-  | ACCESS: Forum permissions
+  | ACCESS: Category permissions
   |--------------------------------------------------------------------------
   |
   | Determines whether or not the current user is allowed to access a given
-  | forum. All forums are open by default.
+  | category. All categories are open by default.
   |
   */
-  'access_forum' => function($forum, $user)
+  'access_category' => function($category, $user)
   {
     return TRUE;
   },
@@ -25,7 +25,7 @@ return array(
   | threads.
   |
   */
-  'create_threads' => function($thread, $user)
+  'create_threads' => function($category, $user)
   {
     if ($user == NULL)
     {
@@ -85,7 +85,7 @@ return array(
 
     return TRUE;
   },
-  
+
   /*
   |--------------------------------------------------------------------------
   | ACTION: Delete post permission

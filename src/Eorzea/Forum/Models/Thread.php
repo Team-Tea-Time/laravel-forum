@@ -13,8 +13,8 @@ class Thread extends AbstractBaseModel {
 	protected $table      = 'forum_threads';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = ['replyCount', 'lastPage', 'URL', 'postAlias', 'canPost'];
-	protected $with 			= ['category', 'author', 'posts'];
+	protected $appends    = ['lastPost', 'lastPage', 'URL', 'postAlias'];
+	protected $with 			= ['category', 'posts'];
 	protected $guarded    = ['id'];
 
 	public function category()
@@ -32,16 +32,16 @@ class Thread extends AbstractBaseModel {
 		return $this->hasMany('\Eorzea\Forum\Models\Post', 'parent_thread');
 	}
 
-	public function getReplyCountAttribute()
+	public function getLastPostAttribute()
 	{
-		return $this->posts()->count();
+		return $this->posts->sortBy('created_at')->first();
 	}
 
 	public function getLastPageAttribute()
 	{
 		return $this->posts()->paginate(Config::get('forum::integration.posts_per_thread'))->getLastPage();
 	}
-	
+
 	public function getURLAttribute()
 	{
 		return route('forum.get.thread',
@@ -68,7 +68,7 @@ class Thread extends AbstractBaseModel {
 
 	public function getCanPostAttribute()
 	{
-		return AccessControl::check($this, 'create_posts');
+		return AccessControl::check($this, 'create_posts', FALSE);
 	}
 
 }

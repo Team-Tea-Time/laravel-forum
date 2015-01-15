@@ -41,7 +41,7 @@
 		'show_title_field'	=> FALSE,
 		'post_content'			=> '',
 		'submit_label'			=> 'Post reply',
-		'cancel_url'				=> $thread->url
+		'cancel_url'				=> $thread->URL
 	)
 )
 @overwrite

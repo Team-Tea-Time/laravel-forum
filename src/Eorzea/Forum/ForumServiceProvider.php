@@ -48,10 +48,11 @@ class ForumServiceProvider extends ServiceProvider {
 	 */
 	public function registerCommands()
 	{
-		$this->app['foruminstallcommand'] = $this->app->share(function($app)
-        {
-            return new InstallCommand;
-        });
+		$this->app['foruminstallcommand'] = $this->app->share(function()
+    {
+        return new InstallCommand;
+    });
+		
 		$this->commands('foruminstallcommand');
 	}
 

@@ -16,7 +16,7 @@ class Posts extends AbstractBaseRepository {
 	{
 		if (!is_numeric($postID))
 		{
-			throw new InvalidArgumentException();
+			throw new \InvalidArgumentException();
 		}
 
 		return $this->getFirstBy('id', $postID, $with);
@@ -26,7 +26,7 @@ class Posts extends AbstractBaseRepository {
 	{
 		if (!is_numeric($threadID))
 		{
-			throw new InvalidArgumentException();
+			throw new \InvalidArgumentException();
 		}
 
 		return $this->getManyBy('parent_thread', $threadID, $with);
@@ -36,7 +36,7 @@ class Posts extends AbstractBaseRepository {
 	{
 		if (!is_numeric($threadID))
 		{
-			throw new InvalidArgumentException();
+			throw new \InvalidArgumentException();
 		}
 
 		$model = $this->model->where('parent_thread', '=', $threadID);

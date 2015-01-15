@@ -13,7 +13,8 @@ class Post extends AbstractBaseModel {
 	protected $table      = 'forum_posts';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = ['URL', 'postAlias', 'canPost'];
+	protected $appends    = ['URL', 'postAlias'];
+	protected $with    		= ['author'];
 	protected $guarded    = ['id'];
 
 	public function thread()
@@ -26,19 +27,8 @@ class Post extends AbstractBaseModel {
 		return $this->belongsTo(Config::get('forum::integration.user_model'), 'author_id');
 	}
 
-	public function scopeWhereThreadIn($query, Array $threads)
-	{
-		if (count($threads) == 0)
-		{
-			return $query;
-		}
-
-		return $query->whereIn('parent_thread', $threads);
-	}
-
 	public function getURLAttribute()
 	{
-		//TODO add page get parameter
 		return $this->thread->URL;
 	}
 
@@ -60,7 +50,7 @@ class Post extends AbstractBaseModel {
 
 	public function getCanPostAttribute()
 	{
-		return AccessControl::check($this, 'edit_post');
+		return AccessControl::check($this, 'edit_post', FALSE);
 	}
 
 }

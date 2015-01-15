@@ -18,7 +18,7 @@
 		'show_title_field'	=> FALSE,
 		'post_content'			=> $post->content,
 		'submit_label'			=> 'Update post',
-		'cancel_url'				=> $post->thread->url
+		'cancel_url'				=> $post->thread->URL
 	)
 )
 @overwrite
