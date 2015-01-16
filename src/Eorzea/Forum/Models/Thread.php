@@ -44,7 +44,7 @@ class Thread extends AbstractBaseModel {
 
 	public function getURLAttribute()
 	{
-		return route('forum.get.thread',
+		return route('forum.get.view.thread',
 			array(
 				'categoryID'		=> $this->category->id,
 				'categoryAlias'	=> Str::slug($this->category->title, '-'),
@@ -56,7 +56,7 @@ class Thread extends AbstractBaseModel {
 
 	public function getPostAliasAttribute()
 	{
-		return route('forum.post.create.post',
+		return route('forum.post.reply.thread',
 			array(
 				'categoryID'		=> $this->category->id,
 				'categoryAlias'	=> Str::slug($this->category->title, '-'),

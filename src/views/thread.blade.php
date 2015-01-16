@@ -24,7 +24,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach ($posts as $post)
+		@foreach($thread->posts as $post)
 		@include('forum::partials.post', compact('post'))
 		@endforeach
 	</tbody>

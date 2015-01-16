@@ -13,14 +13,19 @@ use App;
 use Config;
 use Input;
 use Redirect;
+use Route;
 use View;
 use Validator;
 
 abstract class AbstractController extends AbstractBaseController {
 
+  // Repositories
   private $categories;
   private $threads;
   private $posts;
+
+  // Collections cache
+  private $collections = array();
 
   protected $threadRules = array(
     'title' => 'required',
@@ -37,9 +42,9 @@ abstract class AbstractController extends AbstractBaseController {
     $this->posts = $posts;
   }
 
-  private function check404(Array $items = array())
+  private function check404()
   {
-    foreach($items as $item)
+    foreach($this->collections as $item)
     {
       if($item == NULL)
       {
@@ -48,62 +53,87 @@ abstract class AbstractController extends AbstractBaseController {
     }
   }
 
-  public function getIndex()
+  private function load($select = array(), $category_with = array())
+  {
+    $map_model_repos = array(
+      'category'  => 'categories',
+      'thread'    => 'threads',
+      'post'      => 'posts'
+    );
+
+    $map_route_permissions = array(
+      'forum.get.view.category' => 'access_category',
+      'forum.get.view.thread'   => 'access_category',
+      'forum.get.create.thread' => 'create_threads',
+      'forum.get.delete.thread' => 'delete_threads',
+      'forum.get.edit.post'     => 'edit_post',
+      'forum.get.delete.post'   => 'delete_posts'
+    );
+
+    $route_name = Route::current()->getAction()['as'];
+    
+    foreach($select as $model => $id)
+    {
+      $with = ($model == 'category') ? $category_with : array();
+
+      $this->collections[$model] = $this->$map_model_repos[$model]->getByID($id, $with);
+
+      if(isset($map_route_permissions[$route_name]))
+      {
+        AccessControl::check($this->collections[$model], $map_route_permissions[$route_name]);
+      }
+    }
+
+    $this->check404();
+  }
+
+  private function makeView($name)
+  {
+    return View::make($name)->with($this->collections);
+  }
+
+  public function getViewIndex()
   {
     $categories = $this->categories->getByParent(NULL, ['subcategories']);
 
     return View::make('forum::index', compact('categories'));
   }
 
-  public function getCategory($categoryID, $categoryAlias)
+  public function getViewCategory($categoryID, $categoryAlias)
   {
-    $category = $this->categories->getByID($categoryID, ['parentCategory', 'subcategories', 'threads']);
+    $this->load(['category' => $categoryID], ['parentCategory', 'subCategories', 'threads']);
 
-    $this->check404([$category]);
-
-    AccessControl::check($category, 'access_category');
-
-    $parentCategory = $category->parentCategory;
-    $subcategories  = $category->subcategories;
-    $threads = $category->threads;
-
-    return View::make('forum::category', compact('parentCategory', 'category', 'subcategories', 'threads'));
+    return $this->makeView('forum::category');
   }
 
-  public function getThread($categoryID, $categoryAlias, $threadID, $threadAlias, $page = 0)
+  public function getViewThread($categoryID, $categoryAlias, $threadID, $threadAlias, $page = 0)
   {
-    $category = $this->categories->getByID($categoryID, ['parentCategory']);
-    $thread = $this->threads->getByID($threadID);
+    $this->load(['category' => $categoryID, 'thread' => $threadID]);
 
-    $this->check404([$category, $thread]);
+    $with = array(
+      'posts'           => $this->posts->getByThread($threadID),
+      'paginationLinks' => $this->posts->getPaginationLinks('parent_thread', $threadID)
+    );
 
-    AccessControl::check($category, 'access_category');
-
-    $parentCategory  = $category->parentCategory;
-    $posts = $this->posts->getByThread($thread->id);
-    $paginationLinks = $this->posts->getPaginationLinks('parent_thread', $thread->id);
-
-    return View::make('forum::thread', compact('parentCategory', 'category', 'thread', 'posts', 'paginationLinks'));
+    return $this->makeView('forum::thread')->with($with);
   }
 
   public function getCreateThread($categoryID, $categoryAlias)
   {
-    $category = $this->categories->getByID($categoryID, ['parentCategory']);
+    $this->load(['category' => $categoryID]);
 
-    AccessControl::check($category, 'create_threads');
+    $with = array(
+      'actionAlias' => $this->collections['category']->postAlias
+    );
 
-    $parentCategory = $category->parentCategory;
-    $actionAlias = $category->postAlias;
-
-    return View::make('forum::thread-create', compact('parentCategory', 'category', 'actionAlias'));
+    return $this->makeView('forum::thread-create')->with($with);
   }
 
   public function postCreateThread($categoryID, $categoryAlias)
   {
     $user = $this->getCurrentUser();
-    $category = $this->categories->getByID($categoryID);
 
-    AccessControl::check($category, 'create_threads');
+    $this->load(['category' => $categoryID]);
 
     $validator = Validator::make(Input::all(), array_merge($this->threadRules, $this->postRules));
     if ($validator->passes())
@@ -117,7 +147,7 @@ abstract class AbstractController extends AbstractBaseController {
       $thread = $this->threads->create($thread);
 
       $post = array(
-        'parent_thread'   => $thread->id,
+        'parent_thread'   => $this->collections['thread']->id,
         'author_id'       => $user->id,
         'content'         => Input::get('content')
       );
@@ -128,46 +158,37 @@ abstract class AbstractController extends AbstractBaseController {
     }
     else
     {
-      return Redirect::to($category->postAlias)->withErrors($validator)->withInput();
+      return Redirect::to($this->collections['category']->postAlias)->withErrors($validator)->withInput();
     }
   }
 
   public function getDeleteThread($threadID)
   {
-    $thread = $this->threads->getByID($threadID);
-
-    AccessControl::check($thread, 'delete_threads');
+    $this->load(['thread' => $threadID]);
   }
 
   public function postDeleteThread($threadID)
   {
-
+    $this->load(['thread' => $threadID]);
   }
 
-  public function getCreatePost($categoryID, $categoryAlias, $threadID, $threadAlias)
+  public function getReplyToThread($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
+    $this->load(['category' => $categoryID, 'thread' => $threadID]);
 
-    $category = $this->categories->getByID($categoryID, ['parentCategory']);
-    $thread = $this->threads->getByID($threadID);
+    $with = array(
+      'actionAlias' => $this->collections['thread']->postAlias,
+      'prevPosts'   => $this->posts->getLastByThread($threadID)
+    );
 
-    $this->check404([$category, $thread]);
-
-    AccessControl::check($thread, 'create_posts');
-
-    $parentCategory = $category->parentCategory;
-    $actionAlias = $thread->postAlias;
-    $prevPosts = $this->posts->getLastByThread($threadID);
-
-    return View::make('forum::thread-reply', compact('parentCategory', 'category', 'thread', 'actionAlias', 'prevPosts'));
+    return $this->makeView('forum::thread-reply')->with($with);
   }
 
-  public function postCreatePost($categoryID, $categoryAlias, $threadID, $threadAlias)
+  public function postReplyToThread($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
     $user = $this->getCurrentUser();
-    $category = $this->categories->getByID($categoryID);
-    $thread = $this->threads->getByID($threadID);
 
-    AccessControl::check($category, 'create_posts');
+    $this->load(['category' => $categoryID, 'thread' => $threadID]);
 
     $validator = Validator::make(Input::all(), $this->postRules);
     if ($validator->passes())
@@ -180,40 +201,30 @@ abstract class AbstractController extends AbstractBaseController {
 
       $this->posts->create($post);
 
-      return Redirect::to($thread->URL)->with('success', 'thread created');
+      return Redirect::to($this->collections['thread']->URL)->with('success', 'thread created');
     }
     else
     {
-      return Redirect::to($thread->postAlias)->withErrors($validator)->withInput();
+      return Redirect::to($this->collections['thread']->postAlias)->withErrors($validator)->withInput();
     }
   }
 
   public function getEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
   {
-    $category = $this->categories->getByID($categoryID, ['parentCategory']);
-    $thread = $this->threads->getByID($threadID);
-    $post = $this->posts->getByID($postID);
+    $this->load(['category' => $categoryID, 'thread' => $threadID, 'post' => $postID]);
 
-    $this->check404([$category, $thread, $post]);
+    $with = array(
+      'actionAlias' => $this->collections['post']->postAlias
+    );
 
-    AccessControl::check($post, 'edit_post');
-
-    $parentCategory = $category->parentCategory;
-    $actionAlias = $post->postAlias;
-
-    return View::make('forum::post-edit', compact('parentCategory', 'category', 'thread', 'post', 'actionAlias'));
+    return $this->makeView('forum::post-edit')->with($with);
   }
 
   public function postEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
   {
     $user = $this->getCurrentUser();
-    $category = $this->categories->getByID($categoryID, ['parentCategory']);
-    $thread = $this->threads->getByID($threadID);
-    $post = $this->posts->getByID($postID);
 
-    $this->check404([$category, $thread, $post]);
-
-    AccessControl::check($post, 'edit_post');
+    $this->load(['category' => $categoryID, 'thread' => $threadID, 'post' => $postID]);
 
     $validator = Validator::make(Input::all(), $this->postRules);
     if ($validator->passes())
@@ -231,7 +242,7 @@ abstract class AbstractController extends AbstractBaseController {
     }
     else
     {
-      return Redirect::to($post->postAlias)->withErrors($validator)->withInput();
+      return Redirect::to($this->collections['post']->postAlias)->withErrors($validator)->withInput();
     }
   }
 

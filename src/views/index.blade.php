@@ -9,7 +9,7 @@
 		<tr>
 			<td colspan="3">
 				<div class="category_title">
-					<a href={{$category->URL}}>{{{ $category->title }}}</a>
+					<a href={{ $category->URL }}>{{{ $category->title }}}</a>
 				</div>
 				<div class="category_subtitle">{{{ $category->subtitle }}}</div>
 			</td>
@@ -26,7 +26,7 @@
 		<tr>
 			<th>
 				<div class="category_title">
-					<a href={{$subcategory->URL}}>{{{ $subcategory->title }}}</a>
+					<a href={{ $subcategory->URL }}>{{{ $subcategory->title }}}</a>
 				</div>
 				<div class="category_subtitle">{{{ $subcategory->subtitle }}}</div>
 			</th>

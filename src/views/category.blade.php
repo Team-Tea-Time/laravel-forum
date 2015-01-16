@@ -3,13 +3,13 @@
 @section('content')
 @include('forum::partials.breadcrumbs')
 
-@if( $category->canPost )
+@if($category->canPost)
 <p>
 	<a href="{{ $category->postAlias }}">{{ trans('forum::base.new_thread') }}</a>
 </p>
 @endif
 
-@if ($subcategories != NULL && count($subcategories) != 0)
+@if(!$category->subcategories->isEmpty())
 <table class="table table-category">
 	<thead>
 		<tr>
@@ -19,11 +19,11 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach ($subcategories as $subcategory)
+		@foreach($category->subcategories as $subcategory)
 		<tr>
 			<th>
 				<div class="category_title">
-					<a href={{$subcategory->URL}}>{{{ $subcategory->title }}}</a>
+					<a href={{ $subcategory->URL }}>{{{ $subcategory->title }}}</a>
 				</div>
 				<div class="category_subtitle">{{{ $subcategory->subtitle }}}</div>
 			</th>
@@ -35,7 +35,6 @@
 </table>
 @endif
 
-@if ($threads != NULL && count($threads) != 0)
 <table class="table table-thread">
 	<thead>
 		<tr>
@@ -45,7 +44,8 @@
 		</tr>
 	</thead>
 	<tbody>
-			@foreach($threads as $thread)
+		@if(!$category->threads->isEmpty())
+			@foreach($category->threads as $thread)
 			<tr>
 				<th>
 					<a href={{ $thread->URL }}>{{{ $thread->title }}}</a>
@@ -59,35 +59,23 @@
 				</td>
 			</tr>
 			@endforeach
-	</tbody>
-</table>
-@endif
-
-@if (($subCategories == NULL || count($subCategories) == 0) && ($threads == NULL || count($threads) == 0))
-<table class="table table-thread">
-	<thead>
-		<tr>
-			<th>{{ trans('forum::base.subject') }}</th>
-			<th>{{ trans('forum::base.reply') }}</th>
-		</tr>
-	</thead>
-	<tbody>
+		@else
 			<tr>
-				<th>
-					{{ trans('forum::base.no_threads') }}
-				</th>
 				<td>
-					@if( $category->canPost )
+					{{ trans('forum::base.no_threads') }}
+				</td>
+				<td colspan="2">
+					@if($category->canPost)
 					<a href="{{ $category->postAlias }}">{{ trans('forum::base.first_thread') }}</a>
 					@endif
 				</td>
 			</tr>
+		@endif
 	</tbody>
 </table>
-@endif
 @overwrite
 
-@if( $category->canPost )
+@if($category->canPost)
 <p>
 	<a href="{{ $category->postAlias }}">{{ trans('forum::base.new_thread') }}</a>
 </p>

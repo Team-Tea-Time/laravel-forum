@@ -14,17 +14,17 @@ class Category extends AbstractBaseModel {
 
 	public function parentCategory()
 	{
-		return $this->belongsTo('\Eorzea\Forum\Models\Category', 'parent_category')->orderBy('weight');
+		return $this->belongsTo('\Eorzea\Forum\Models\Category', 'parent_category');
 	}
 
 	public function subcategories()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\Category', 'parent_category')->orderBy('weight');
+		return $this->hasMany('\Eorzea\Forum\Models\Category', 'parent_category');
 	}
 
 	public function threads()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\Thread', 'parent_category')->orderBy('created_at', 'desc');
+		return $this->hasMany('\Eorzea\Forum\Models\Thread', 'parent_category');
 	}
 
 	public function scopeWhereTopLevel($query)
@@ -54,7 +54,7 @@ class Category extends AbstractBaseModel {
 
 	public function getURLAttribute()
 	{
-		return route('forum.get.category',
+		return route('forum.get.view.category',
 			array(
 				'categoryID'		=> $this->id,
 				'categoryAlias'	=> Str::slug($this->title, '-')

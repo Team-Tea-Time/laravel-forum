@@ -50,14 +50,14 @@ return array(
 
   /*
   |--------------------------------------------------------------------------
-  | ACTION: New post/reply permission
+  | ACTION: Reply to thread permission
   |--------------------------------------------------------------------------
   |
   | Determines whether or not the current user is allowed to post thread
   | replies.
   |
   */
-  'create_posts' => function($thread, $user)
+  'reply_to_thread' => function($thread, $user)
   {
     if ($user == NULL)
     {
