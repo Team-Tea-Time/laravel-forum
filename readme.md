@@ -5,13 +5,31 @@
 
 # Laravel forum package
 
-**Note: this is a fork of the excellent Laravel forum solution written by Atrakeur (https://github.com/Atrakeur/laravel-forum).** It has been heavily rewritten to provide more flexible permission handling, cleaner structure and some minor optimisations. Functionally it's very similar to the original package, but my goal is to build on it over time to use in a new project.
+**Note: this is a fork of the excellent Laravel forum solution written by Atrakeur (https://github.com/Atrakeur/laravel-forum).** I've rewritten the permission handling and made some minor optimisations throughout, and my goal is to introduce new features over time to use it in a new project (see below for details).
 
 ## Goals
 
 This package aims to provide a solid basis for implementing a forum in a Laravel application. It focuses on taking care of conventional forum features, allowing you to spend more time on building your application and how the forum integrates with it.
 
 In addition to allowing controller methods to be overridden to tweak their behaviour, the package also provides extensive configuration options including permission callbacks and integration options.
+
+## Features
+
+This package is currently under heavy development. Feel free to post issues and features requests at https://github.com/Riari/laravel-forum/issues.
+
+ * Categories with nesting (up to 2 levels) and weighting
+ * Threads & posts
+ * Pagination
+ * User integration (through config files and callbacks)
+ * Permissions integration, with basic defaults (through config files and callbacks)
+ * Lightweight & blazing fast (designed with caching and high speed in mind)
+ * Default views written with [Bootstrap](http://getbootstrap.com/) compatibility in mind
+
+### Planned features
+ * Thread pinning & locking
+ * Read/unread thread status (with icons and 'new posts' page)
+ * Post & thread deletion
+ * Permalinks for posts
 
 ## Installation
 
@@ -74,15 +92,3 @@ Publish the package view files to your views folder:
 `php artisan view:publish Eorzea/forum`
 
 You can then adjust the views however you like. I suggest editing the master view to make it extend your app's main layout to easily integrate the forum with your design.
-
-## Features
-
-This package is currently in early development stages. Feel free to post issues and features requests at https://github.com/Riari/laravel-forum/issues.
-
- * Category nesting (up to 2 levels)
- * Threads inside categories
- * Posts
- * Easy user integration (through config files and callbacks)
- * Permissions integration, with basic handling out of the box (through config files and callbacks)
- * Lightweight & blazing fast (designed with caching and high speed in mind)
- * Default markup written with [Bootstrap](http://getbootstrap.com/) in mind
