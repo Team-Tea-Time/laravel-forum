@@ -71,7 +71,7 @@ abstract class AbstractController extends AbstractBaseController {
     );
 
     $route_name = Route::current()->getAction()['as'];
-    
+
     foreach($select as $model => $id)
     {
       $with = ($model == 'category') ? $category_with : array();
@@ -106,7 +106,7 @@ abstract class AbstractController extends AbstractBaseController {
     return $this->makeView('forum::category');
   }
 
-  public function getViewThread($categoryID, $categoryAlias, $threadID, $threadAlias, $page = 0)
+  public function getViewThread($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
     $this->load(['category' => $categoryID, 'thread' => $threadID]);
 
