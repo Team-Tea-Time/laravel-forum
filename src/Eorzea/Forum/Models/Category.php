@@ -14,17 +14,17 @@ class Category extends AbstractBaseModel {
 
 	public function parentCategory()
 	{
-		return $this->belongsTo('\Eorzea\Forum\Models\Category', 'parent_category');
+		return $this->belongsTo('\Eorzea\Forum\Models\Category', 'parent_category')->orderBy('weight');
 	}
 
 	public function subcategories()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\Category', 'parent_category');
+		return $this->hasMany('\Eorzea\Forum\Models\Category', 'parent_category')->orderBy('weight');
 	}
 
 	public function threads()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\Thread', 'parent_category');
+		return $this->hasMany('\Eorzea\Forum\Models\Thread', 'parent_category')->orderBy('created_at', 'desc');
 	}
 
 	public function scopeWhereTopLevel($query)
