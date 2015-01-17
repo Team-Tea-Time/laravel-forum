@@ -47,12 +47,14 @@
 		@if(!$category->threads->isEmpty())
 			@foreach($category->threads as $thread)
 			<tr>
-				<th>
-					<a href={{ $thread->URL }}>{{{ $thread->title }}}</a>
-				</th>
-				<td>{{ $thread->posts->count() }}</td>
 				<td>
-					<a href="{{ URL::to( $thread->lastPost->author->profile->route ) }}">{{ $thread->lastPost->author->username }}</a>
+					<a href={{ $thread->URL }}>{{{ $thread->title }}}</a>
+				</td>
+				<td>
+					{{ $thread->posts->count() }}
+				</td>
+				<td>
+					{{ $thread->lastPost->author->username }}
 				</td>
 				<td>
 					<a href="{{ URL::to( $thread->URL . '?page=' . $thread->lastPage . '#post-' . $thread->lastPost->id ) }}">{{ trans('forum::base.view_post') }} &raquo;</a>
@@ -73,10 +75,10 @@
 		@endif
 	</tbody>
 </table>
-@overwrite
 
 @if($category->canPost)
 <p>
 	<a href="{{ $category->postAlias }}">{{ trans('forum::base.new_thread') }}</a>
 </p>
 @endif
+@overwrite

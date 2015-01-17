@@ -21,7 +21,7 @@
 			<th>{{ trans('forum::base.col_threads') }}</th>
 			<th>{{ trans('forum::base.col_posts') }}</th>
 		</tr>
-		@if (count($category->subcategories) > 0)
+		@if (!$category->subcategories->isEmpty())
 		@foreach($category->subcategories AS $subcategory)
 		<tr>
 			<th>

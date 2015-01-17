@@ -19,6 +19,7 @@ class AccessControl {
     {
       // Check for action permission
       $action_callback = Config::get('forum::permissions.' . $permission);
+      \Log::info($permission);
       $permission_granted = $action_callback($context, $user);
     }
 

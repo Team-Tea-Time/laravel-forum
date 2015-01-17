@@ -69,7 +69,7 @@ class Thread extends AbstractBaseModel {
 
 	public function getCanPostAttribute()
 	{
-		return AccessControl::check($this, 'create_posts', FALSE);
+		return AccessControl::check($this, 'reply_to_thread', FALSE);
 	}
 
 }
