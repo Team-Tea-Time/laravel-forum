@@ -14,17 +14,17 @@ class Category extends AbstractBaseModel {
 
 	public function parentCategory()
 	{
-		return $this->belongsTo('\Eorzea\Forum\Models\Category', 'parent_category');
+		return $this->belongsTo('\Eorzea\Forum\Models\Category', 'parent_category')->orderBy('weight');
 	}
 
 	public function subcategories()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\Category', 'parent_category');
+		return $this->hasMany('\Eorzea\Forum\Models\Category', 'parent_category')->orderBy('weight');
 	}
 
 	public function threads()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\Thread', 'parent_category');
+		return $this->hasMany('\Eorzea\Forum\Models\Thread', 'parent_category')->with('category', 'posts')->orderBy('created_at', 'desc');
 	}
 
 	public function scopeWhereTopLevel($query)
@@ -32,22 +32,24 @@ class Category extends AbstractBaseModel {
 		return $query->where('parent_category', '=', NULL);
 	}
 
+	public function getThreadCountAttribute()
+	{
+		return $this->rememberAttribute('threadCount', function(){
+			return $this->threads->count();
+		});
+	}
+
 	public function getReplyCountAttribute()
 	{
 		return $this->rememberAttribute('replyCount', function(){
 			$replyCount = 0;
 
-			$threadsIDs = array();
-			$threads    = $this->threads()->get(array('id'));
+			$threads = $this->threads()->get(array('id'));
 
 			foreach ($threads as $thread) {
-				$threadsIDs[] = $thread->id;
+				$replyCount += $thread->posts->count();
 			}
 
-			if (!empty($threadsIDs))
-			{
-				$replyCount = Post::whereIn('parent_thread', $threadsIDs)->count();
-			}
 			return $replyCount;
 		});
 	}

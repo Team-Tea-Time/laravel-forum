@@ -36,15 +36,6 @@ return array(
 	| This class must extend \Eorzea\Forum\Controllers\AbstractController
 	|
 	*/
-	'controller' => 'ForumController',
-
-	/*
-	|--------------------------------------------------------------------------
-	| Pagination settings
-	|--------------------------------------------------------------------------
-	*/
-	'threads_per_category' => 20,
-	'posts_per_thread' => 15,
-	'pagination_view' => ''
+	'controller' => 'ForumController'
 
 );

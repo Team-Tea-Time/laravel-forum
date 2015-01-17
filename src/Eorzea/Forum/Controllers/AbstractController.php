@@ -147,7 +147,7 @@ abstract class AbstractController extends AbstractBaseController {
       $thread = $this->threads->create($thread);
 
       $post = array(
-        'parent_thread'   => $this->collections['thread']->id,
+        'parent_thread'   => $thread->id,
         'author_id'       => $user->id,
         'content'         => Input::get('content')
       );

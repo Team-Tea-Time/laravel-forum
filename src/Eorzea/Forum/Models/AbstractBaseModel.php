@@ -2,6 +2,7 @@
 
 use stdClass;
 use Cache;
+use Config;
 use Eloquent;
 
 abstract class AbstractBaseModel extends Eloquent {
@@ -10,7 +11,7 @@ abstract class AbstractBaseModel extends Eloquent {
 	{
 		$cacheItem = get_class($this).$this->id.$item;
 
-		$value = Cache::remember($cacheItem, 1, $function);
+		$value = Cache::remember($cacheItem, Config::get('forum::preferences.cache_lifetime'), $function);
 
 		return $value;
 	}

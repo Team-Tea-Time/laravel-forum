@@ -14,7 +14,6 @@ class Thread extends AbstractBaseModel {
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
 	protected $appends    = ['lastPost', 'lastPage', 'URL', 'postAlias'];
-	protected $with 			= ['category', 'posts'];
 	protected $guarded    = ['id'];
 
 	public function category()
@@ -39,7 +38,9 @@ class Thread extends AbstractBaseModel {
 
 	public function getLastPageAttribute()
 	{
-		return $this->posts()->paginate(Config::get('forum::integration.posts_per_thread'))->getLastPage();
+		return $this->rememberAttribute('lastPage', function(){
+			return $this->posts()->paginate(Config::get('forum::integration.posts_per_thread'))->getLastPage();
+		});
 	}
 
 	public function getURLAttribute()
