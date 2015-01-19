@@ -24,7 +24,7 @@ class Category extends AbstractBaseModel {
 
 	public function threads()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\Thread', 'parent_category')->with('category', 'posts')->orderBy('created_at', 'desc');
+		return $this->hasMany('\Eorzea\Forum\Models\Thread', 'parent_category')->with('category', 'posts')->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc');
 	}
 
 	public function scopeWhereTopLevel($query)

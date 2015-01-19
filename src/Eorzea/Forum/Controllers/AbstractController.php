@@ -199,7 +199,9 @@ abstract class AbstractController extends AbstractBaseController {
         'content'       => Input::get('content')
       );
 
-      $this->posts->create($post);
+      $post = $this->posts->create($post);
+
+      $post->thread->touch();
 
       return Redirect::to($this->collections['thread']->lastPostURL)->with('success', 'thread created');
     }

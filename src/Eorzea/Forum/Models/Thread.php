@@ -28,17 +28,22 @@ class Thread extends AbstractBaseModel {
 
 	public function posts()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\Post', 'parent_thread');
+		return $this->hasMany('\Eorzea\Forum\Models\Post', 'parent_thread')->orderBy('created_at', 'desc');
 	}
 
 	public function getLastPostAttribute()
 	{
-		return $this->posts->sortBy('created_at')->first();
+		return $this->posts->first();
 	}
 
 	public function getLastPostURLAttribute()
 	{
 		return $this->URL . '?page=' . $this->lastPage . '#post-' . $this->lastPost->id;
+	}
+
+	public function getLastPostTimeAttribute()
+	{
+		return $this->lastPost->created_at;
 	}
 
 	public function getLastPageAttribute()
