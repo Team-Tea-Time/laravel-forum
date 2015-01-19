@@ -3,8 +3,8 @@
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 use Eorzea\Forum\AccessControl;
 
-use Str;
 use Config;
+use Str;
 
 class Thread extends AbstractBaseModel {
 
@@ -13,7 +13,7 @@ class Thread extends AbstractBaseModel {
 	protected $table      = 'forum_threads';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = ['lastPost', 'lastPage', 'URL', 'postAlias'];
+	protected $appends    = ['lastPost', 'lastPostURL', 'lastPage', 'URL', 'postAlias'];
 	protected $guarded    = ['id'];
 
 	public function category()
@@ -36,11 +36,14 @@ class Thread extends AbstractBaseModel {
 		return $this->posts->sortBy('created_at')->first();
 	}
 
+	public function getLastPostURLAttribute()
+	{
+		return $this->URL . '?page=' . $this->lastPage . '#post-' . $this->lastPost->id;
+	}
+
 	public function getLastPageAttribute()
 	{
-		return $this->rememberAttribute('lastPage', function(){
-			return $this->posts()->paginate(Config::get('forum::integration.posts_per_thread'))->getLastPage();
-		});
+		return $this->posts()->paginate(Config::get('forum::integration.posts_per_thread'))->getLastPage();
 	}
 
 	public function getURLAttribute()

@@ -3,8 +3,8 @@
 use Eorzea\Forum\Models\Thread;
 use Eorzea\Forum\AccessControl;
 
-use Str;
 use Config;
+use Str;
 
 class Category extends AbstractBaseModel {
 

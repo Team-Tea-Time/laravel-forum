@@ -13,9 +13,9 @@
 		@endif
 	</td>
 	<td>
-		{{ trans('forum::base.posted_at') }} {{ $post->created_at }}
+		{{ trans('forum::base.posted_at') }} {{ $post->posted }}
 		@if ($post->updated_at != null && $post->created_at != $post->updated_at)
-			{{ trans('forum::base.last_update') }} {{ $post->updated_at }}
+			{{ trans('forum::base.last_update') }} {{ $post->updated }}
 		@endif
 	</td>
 </tr>

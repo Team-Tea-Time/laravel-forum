@@ -3,8 +3,8 @@
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 use Eorzea\Forum\AccessControl;
 
-use Str;
 use Config;
+use Str;
 
 class Post extends AbstractBaseModel {
 

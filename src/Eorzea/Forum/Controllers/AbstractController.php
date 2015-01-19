@@ -201,7 +201,7 @@ abstract class AbstractController extends AbstractBaseController {
 
       $this->posts->create($post);
 
-      return Redirect::to($this->collections['thread']->URL)->with('success', 'thread created');
+      return Redirect::to($this->collections['thread']->lastPostURL)->with('success', 'thread created');
     }
     else
     {
