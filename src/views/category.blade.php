@@ -48,7 +48,15 @@
 			@foreach($category->threads as $thread)
 			<tr>
 				<td>
-					<a href={{ $thread->URL }}>{{{ $thread->title }}}</a>
+					<a href={{ $thread->URL }}>
+						@if($thread->locked)
+						[Locked]
+						@endif
+						@if($thread->pinned)
+						[Pinned]
+						@endif
+						{{{ $thread->title }}}
+					</a>
 				</td>
 				<td>
 					{{ $thread->posts->count() }}

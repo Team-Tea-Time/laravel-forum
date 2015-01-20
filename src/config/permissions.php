@@ -85,7 +85,7 @@ return array(
   */
   'reply_to_thread' => function($thread, $user)
   {
-    if ($user == NULL)
+    if ($user == NULL || $thread->locked)
     {
       return FALSE;
     }

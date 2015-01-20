@@ -103,7 +103,11 @@ abstract class AbstractController extends AbstractBaseController {
   {
     $this->load(['category' => $categoryID], ['parentCategory', 'subCategories', 'threads']);
 
-    return $this->makeView('forum::category');
+    $with = array(
+      'paginationLinks' => $this->threads->getPaginationLinks('parent_category', $categoryID)
+    );
+
+    return $this->makeView('forum::category')->with($with);
   }
 
   public function getViewThread($categoryID, $categoryAlias, $threadID, $threadAlias)
@@ -176,6 +180,11 @@ abstract class AbstractController extends AbstractBaseController {
   {
     $this->load(['category' => $categoryID, 'thread' => $threadID]);
 
+    if (!$this->collections['thread']->canPost)
+    {
+      return Redirect::to($this->collections['thread']->URL);
+    }
+
     $with = array(
       'actionAlias' => $this->collections['thread']->postAlias,
       'prevPosts'   => $this->posts->getLastByThread($threadID)
@@ -189,6 +198,11 @@ abstract class AbstractController extends AbstractBaseController {
     $user = $this->getCurrentUser();
 
     $this->load(['category' => $categoryID, 'thread' => $threadID]);
+
+    if (!$this->collections['thread']->canPost)
+    {
+      return Redirect::to($this->collections['thread']->URL);
+    }
 
     $validator = Validator::make(Input::all(), $this->postRules);
     if ($validator->passes())
