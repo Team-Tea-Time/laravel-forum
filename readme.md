@@ -18,18 +18,25 @@ In addition to allowing controller methods to be overridden to tweak their behav
 This package is currently under heavy development. Feel free to post issues and features requests at https://github.com/Riari/laravel-forum/issues.
 
  * Categories with nesting (up to 2 levels) and weighting
- * Threads & posts
+ * Threads with locking, pinning and deletion
+ * Posts with permalinks, editing and deletion
  * Pagination
- * User integration (through config files and callbacks)
- * Permissions integration, with basic defaults (through config files and callbacks)
+ * Basic auth & user integration out of the box
+ * Permissions integration with basic defaults:
+   * Category access
+   * Create threads
+   * Delete threads
+   * Lock threads
+   * Pin threads
+   * Reply to threads
+   * Edit posts
+   * Delete posts
  * Lightweight & blazing fast (designed with caching and high speed in mind)
  * Default views written with [Bootstrap](http://getbootstrap.com/) compatibility in mind
+ * Multilingual (English and French translations available out of the box)
 
 ### Planned features
- * Thread pinning & locking
  * Read/unread thread status (with icons and 'new posts' page)
- * Post & thread deletion
- * Permalinks for posts
 
 ## Installation
 
@@ -92,3 +99,15 @@ Publish the package view files to your views folder:
 `php artisan view:publish Eorzea/forum`
 
 You can then adjust the views however you like. I suggest editing the master view to make it extend your app's main layout to easily integrate the forum with your design.
+
+## Important notes
+
+### Regarding permissions
+
+The default permission callbacks don't allow users to perform certain actions such as deleting threads or posts; you'll need to modify them to return TRUE based on your own criteria. For example, if you use [Zizaco/entrust](https://github.com/Zizaco/entrust), you might change your `delete_threads` callback to return `Entrust::can('forum_threads_delete');`, allowing users with a role that grants the `forum_threads_delete` permission to delete threads.
+
+Note that the default set of views include links for deleting, editing and replying, and their visibility is controlled by the permission callbacks. 
+
+### Regarding thread and post deletion
+
+There's no confirmation step implemented by default for thread and post deletion - if a user clicks 'Delete [thread/post]' and has permission to perform that action, it'll happen instantantly. You can implement a confirmation step in a variety of ways, either by modifying the links to lead to an intermediary view in your app prompting the user to confirm, or using JS-based dialogs (or a combination of both).
