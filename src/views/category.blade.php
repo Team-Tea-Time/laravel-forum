@@ -5,7 +5,7 @@
 
 @if($category->canPost)
 <p>
-	<a href="{{ $category->postAlias }}">{{ trans('forum::base.new_thread') }}</a>
+	<a href="{{ $category->newThreadURL }}">{{ trans('forum::base.new_thread') }}</a>
 </p>
 @endif
 
@@ -23,7 +23,7 @@
 		<tr>
 			<th>
 				<div class="category_title">
-					<a href={{ $subcategory->URL }}>{{{ $subcategory->title }}}</a>
+					<a href="{{ $subcategory->URL }}">{{{ $subcategory->title }}}</a>
 				</div>
 				<div class="category_subtitle">{{{ $subcategory->subtitle }}}</div>
 			</th>
@@ -48,12 +48,12 @@
 			@foreach($category->threads as $thread)
 			<tr>
 				<td>
-					<a href={{ $thread->URL }}>
+					<a href="{{ $thread->URL }}">
 						@if($thread->locked)
-						[Locked]
+						[{{ trans('forum::base.locked') }}]
 						@endif
 						@if($thread->pinned)
-						[Pinned]
+						[{{ trans('forum::base.pinned') }}]
 						@endif
 						{{{ $thread->title }}}
 					</a>
@@ -76,7 +76,7 @@
 				</td>
 				<td colspan="2">
 					@if($category->canPost)
-					<a href="{{ $category->postAlias }}">{{ trans('forum::base.first_thread') }}</a>
+					<a href="{{ $category->newThreadURL }}">{{ trans('forum::base.first_thread') }}</a>
 					@endif
 				</td>
 			</tr>
@@ -86,7 +86,7 @@
 
 @if($category->canPost)
 <p>
-	<a href="{{ $category->postAlias }}">{{ trans('forum::base.new_thread') }}</a>
+	<a href="{{ $category->newThreadURL }}">{{ trans('forum::base.new_thread') }}</a>
 </p>
 @endif
 @overwrite

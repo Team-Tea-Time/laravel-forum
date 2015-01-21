@@ -11,13 +11,14 @@ use Eorzea\Forum\AccessControl;
 use stdClass;
 use App;
 use Config;
+use Controller;
 use Input;
 use Redirect;
 use Route;
 use View;
 use Validator;
 
-abstract class AbstractController extends AbstractBaseController {
+abstract class AbstractController extends Controller {
 
   // Repositories
   private $categories;
@@ -40,6 +41,19 @@ abstract class AbstractController extends AbstractBaseController {
     $this->categories = $categories;
     $this->threads = $threads;
     $this->posts = $posts;
+  }
+
+  protected function getCurrentUser()
+  {
+    $user_callback = Config::get('forum::integration.current_user');
+
+    $user = $user_callback();
+    if (is_object($user) && get_class($user) == Config::get('forum::integration.user_model'))
+    {
+      return $user;
+    }
+
+    return NULL;
   }
 
   private function check404()
@@ -126,11 +140,7 @@ abstract class AbstractController extends AbstractBaseController {
   {
     $this->load(['category' => $categoryID]);
 
-    $with = array(
-      'actionAlias' => $this->collections['category']->postAlias
-    );
-
-    return $this->makeView('forum::thread-create')->with($with);
+    return $this->makeView('forum::thread-create');
   }
 
   public function postCreateThread($categoryID, $categoryAlias)
@@ -166,16 +176,6 @@ abstract class AbstractController extends AbstractBaseController {
     }
   }
 
-  public function getDeleteThread($threadID)
-  {
-    $this->load(['thread' => $threadID]);
-  }
-
-  public function postDeleteThread($threadID)
-  {
-    $this->load(['thread' => $threadID]);
-  }
-
   public function getReplyToThread($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
     $this->load(['category' => $categoryID, 'thread' => $threadID]);
@@ -186,7 +186,6 @@ abstract class AbstractController extends AbstractBaseController {
     }
 
     $with = array(
-      'actionAlias' => $this->collections['thread']->postAlias,
       'prevPosts'   => $this->posts->getLastByThread($threadID)
     );
 
@@ -221,19 +220,24 @@ abstract class AbstractController extends AbstractBaseController {
     }
     else
     {
-      return Redirect::to($this->collections['thread']->postAlias)->withErrors($validator)->withInput();
+      return Redirect::to($this->collections['thread']->replyURL)->withErrors($validator)->withInput();
     }
+  }
+
+  public function getDeleteThread($categoryID, $categoryAlias, $threadID, $threadAlias)
+  {
+    $this->load(['category' => $categoryID, 'thread' => $threadID]);
+
+    $this->threads->delete($threadID);
+
+    return Redirect::to($this->collections['category']->URL)->with('success', 'thread deleted');
   }
 
   public function getEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
   {
     $this->load(['category' => $categoryID, 'thread' => $threadID, 'post' => $postID]);
 
-    $with = array(
-      'actionAlias' => $this->collections['post']->postAlias
-    );
-
-    return $this->makeView('forum::post-edit')->with($with);
+    return $this->makeView('forum::post-edit');
   }
 
   public function postEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
@@ -258,8 +262,25 @@ abstract class AbstractController extends AbstractBaseController {
     }
     else
     {
-      return Redirect::to($this->collections['post']->postAlias)->withErrors($validator)->withInput();
+      return Redirect::to($this->collections['post']->editURL)->withErrors($validator)->withInput();
     }
+  }
+
+  public function getDeletePost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
+  {
+    $this->load(['category' => $categoryID, 'thread' => $threadID, 'post' => $postID]);
+
+    $this->posts->delete($postID);
+
+    // Force deletion of the thread if it has no remaining posts
+    if ($this->collections['thread']->posts->count() == 0)
+    {
+      $this->threads->delete($threadID);
+
+      return Redirect::to($this->collections['category']->URL)->with('success', 'post deleted');
+    }
+
+    return Redirect::to($this->collections['thread']->URL)->with('success', 'post deleted');
   }
 
 }

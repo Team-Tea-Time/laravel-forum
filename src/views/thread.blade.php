@@ -3,13 +3,25 @@
 @section('content')
 @include('forum::partials.breadcrumbs')
 
-<h2>{{{ $thread->title }}}</h2>
+<h2>
+	@if($thread->locked)
+	[{{ trans('forum::base.locked') }}]
+	@endif
+	@if($thread->pinned)
+	[{{ trans('forum::base.pinned') }}]
+	@endif
+	{{{ $thread->title }}}
+</h2>
 
-@if( $thread->canPost )
-<p>
-	<a href="{{ $thread->postAlias }}" class="button radius small">New reply</a>
-	<a href="#quick-reply" class="button radius small right">Quick reply</a>
-</p>
+@if($thread->canDelete)
+<a href="{{ $thread->deleteURL }}" class="btn btn-default">{{ trans('forum::base.delete_thread') }}</a>
+@endif
+
+@if($thread->canPost)
+<div class="btn-group" role="group">
+	<a href="{{ $thread->replyURL }}" class="btn btn-default">{{ trans('forum::base.new_reply') }}</a>
+	<a href="#quick-reply" class="btn btn-default">{{ trans('forum::base.quick_reply') }}</a>
+</div>
 @endif
 
 <table>
@@ -32,17 +44,17 @@
 
 {{ $paginationLinks }}
 
-@if( $thread->canPost )
-<h3>Quick reply</h3>
+@if($thread->canPost)
+<h3>{{ trans('forum::base.quick_reply') }}</h3>
 <div id="quick-reply">
 	@include(
 		'forum::partials.forms.post',
 		array(
-			'form_url'					=> $thread->postAlias,
+			'form_url'					=> $thread->replyURL,
 			'form_classes'			=> '',
 			'show_title_field'	=> FALSE,
 			'post_content'			=> '',
-			'submit_label'			=> 'Post reply',
+			'submit_label'			=> trans('forum::base.post_reply'),
 			'cancel_url'				=> ''
 		)
 	)

@@ -19,6 +19,15 @@ return array(
   | Duration to cache data such as thread and post counts (in minutes).
   |
   */
-  'cache_lifetime' => 5
+  'cache_lifetime' => 5,
+
+  /*
+  |--------------------------------------------------------------------------
+  | Misc settings
+  |--------------------------------------------------------------------------
+  */
+  // Soft Delete: disable this if you want threads and posts to be permanently
+  // removed from your database when they're deleted by a user.
+  'soft_delete' => TRUE
 
 );

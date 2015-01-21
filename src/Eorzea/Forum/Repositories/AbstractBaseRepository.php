@@ -9,13 +9,13 @@ abstract class AbstractBaseRepository {
 
 	protected $itemsPerPage = 0;
 
-	protected function getFirstBy($index, $value, array $with = array())
+	protected function getFirstBy($index, $value, $with = array())
 	{
 		$model = $this->model->where($index, '=', $value)->with($with)->first();
 		return $model;
 	}
 
-	protected function getManyBy($index, $value, array $with = array())
+	protected function getManyBy($index, $value, $with = array())
 	{
 		$model = $this->model->where($index, '=', $value)->with($with);
 
@@ -36,26 +36,34 @@ abstract class AbstractBaseRepository {
 		return $this->model->where($index, '=', $value)->paginate($this->itemsPerPage)->links(Config::get('forum::integration.pagination_view'));
 	}
 
-	public function create(Array $data = array())
+	public function create($data = array())
 	{
 		$model = $this->model->create($data);
 
 		return $model;
 	}
 
-	public function update(Array $data = array())
+	public function update($data = array())
 	{
-		$model = $this->model->find($data['id']);
-		if ($model != null)
-		{
-			$model->fill($data);
-			$model->save();
+		$item = $this->model->find($data['id']);
 
-			return $model;
+		$item->fill($data);
+		$item->save();
+
+		return $item;
+	}
+
+	public function delete($id)
+	{
+		$item = $this->model->find($id);
+
+		if (Config::get('forum::preferences.soft_delete'))
+		{
+			$item->delete();
 		}
 		else
 		{
-			throw new InvalidArgumentException('Data must contain an existing id to update');
+			$item->forceDelete();
 		}
 	}
 

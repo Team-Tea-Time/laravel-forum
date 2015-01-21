@@ -10,7 +10,7 @@ class Category extends AbstractBaseModel {
 
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
-	protected $appends    = ['threadCount', 'replyCount', 'URL', 'postAlias'];
+	protected $appends    = ['threadCount', 'replyCount', 'URL', 'newThreadURL'];
 
 	public function parentCategory()
 	{
@@ -54,24 +54,24 @@ class Category extends AbstractBaseModel {
 		});
 	}
 
-	public function getURLAttribute()
+	private function getURLComponents()
 	{
-		return route('forum.get.view.category',
-			array(
-				'categoryID'		=> $this->id,
-				'categoryAlias'	=> Str::slug($this->title, '-')
-			)
+		$components = array(
+			'categoryID'		=> $this->id,
+			'categoryAlias'	=> Str::slug($this->title, '-')
 		);
+
+		return $components;
 	}
 
-	public function getPostAliasAttribute()
+	public function getURLAttribute()
 	{
-		return route('forum.post.create.thread',
-			array(
-				'categoryID'		=> $this->id,
-				'categoryAlias'	=> Str::slug($this->title, '-')
-			)
-		);
+		return route('forum.get.view.category', $this->getURLComponents());
+	}
+
+	public function getCreateURLAttribute()
+	{
+		return route('forum.post.create.thread', $this->getURLComponents());
 	}
 
 	public function getCanPostAttribute()

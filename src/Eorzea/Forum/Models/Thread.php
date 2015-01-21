@@ -13,7 +13,7 @@ class Thread extends AbstractBaseModel {
 	protected $table      = 'forum_threads';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = ['lastPost', 'lastPostURL', 'lastPage', 'URL', 'postAlias'];
+	protected $appends    = ['lastPage', 'lastPost', 'lastPostURL', 'URL', 'replyURL', 'deleteURL'];
 	protected $guarded    = ['id'];
 
 	public function category()
@@ -31,6 +31,11 @@ class Thread extends AbstractBaseModel {
 		return $this->hasMany('\Eorzea\Forum\Models\Post', 'parent_thread')->orderBy('created_at', 'desc');
 	}
 
+	public function getLastPageAttribute()
+	{
+		return $this->posts()->paginate(Config::get('forum::integration.posts_per_thread'))->getLastPage();
+	}
+
 	public function getLastPostAttribute()
 	{
 		return $this->posts->first();
@@ -46,38 +51,41 @@ class Thread extends AbstractBaseModel {
 		return $this->lastPost->created_at;
 	}
 
-	public function getLastPageAttribute()
+	private function getURLComponents()
 	{
-		return $this->posts()->paginate(Config::get('forum::integration.posts_per_thread'))->getLastPage();
+		$components = array(
+			'categoryID'		=> $this->category->id,
+			'categoryAlias'	=> Str::slug($this->category->title, '-'),
+			'threadID'			=> $this->id,
+			'threadAlias'		=> Str::slug($this->title, '-')
+		);
+
+		return $components;
 	}
 
 	public function getURLAttribute()
 	{
-		return route('forum.get.view.thread',
-			array(
-				'categoryID'		=> $this->category->id,
-				'categoryAlias'	=> Str::slug($this->category->title, '-'),
-				'threadID'			=> $this->id,
-				'threadAlias'		=> Str::slug($this->title, '-'),
-			)
-		);
+		return route('forum.get.view.thread', $this->getURLComponents());
 	}
 
-	public function getPostAliasAttribute()
+	public function getReplyURLAttribute()
 	{
-		return route('forum.post.reply.thread',
-			array(
-				'categoryID'		=> $this->category->id,
-				'categoryAlias'	=> Str::slug($this->category->title, '-'),
-				'threadID'			=> $this->id,
-				'threadAlias'		=> Str::slug($this->title, '-'),
-			)
-		);
+		return route('forum.get.reply.thread', $this->getURLComponents());
+	}
+
+	public function getDeleteURLAttribute()
+	{
+		return route('forum.get.delete.thread', $this->getURLComponents());
 	}
 
 	public function getCanPostAttribute()
 	{
 		return AccessControl::check($this, 'reply_to_thread', FALSE);
+	}
+
+	public function getCanDeleteAttribute()
+	{
+		return AccessControl::check($this, 'delete_threads', FALSE);
 	}
 
 }

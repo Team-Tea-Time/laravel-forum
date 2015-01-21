@@ -4,10 +4,8 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| Base forum language file
+	| Base forum language strings
 	|--------------------------------------------------------------------------
-	|
-	|
 	*/
 
 	'home_title' 	=> 'Laravel forum',
@@ -34,15 +32,22 @@ return array(
 	'last_update'	=> 'Dernière mise à jour à',
 	'last_post' => 'Dernière post',
 	'view_post' => 'Voir le post',
+	'delete' => 'Supprimer',
+	'generic_confirm' => 'Êtes-vous sûr?',
+
+	'pinned' => 'Épinglé',
+	'locked' => 'Fermé',
 
 	'reply' 		=> 'Répondre',
 	'new_reply' 	=> 'Nouvelle réponse',
+	'quick_reply' => 'Réponse rapide',
+	'post_reply' => 'Proposez un post',
 	'new_thread' 	=> 'Nouveau sujet',
 	'new_thread_title' => 'Publier un nouveau sujet',
 	'send'			=> 'Envoyer',
 	'first_thread'	=> 'Postez le premier!',
+	'delete_thread' => 'Supprimer ce sujet',
 
 	'no_categories' => 'Aucune catégorie trouvée',
 	'no_threads' 	=> 'Aucun thème trouvé',
-	'no_content'	=> 'Rien à afficher (ici avez-vous mis $this->layout->content dans votre contrôleur?)',
 );

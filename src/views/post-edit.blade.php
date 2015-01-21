@@ -13,7 +13,7 @@
 @include(
 	'forum::partials.forms.post',
 	array(
-		'form_url'					=> $actionAlias,
+		'form_url'					=> $newThreadURL,
 		'form_classes'			=> '',
 		'show_title_field'	=> FALSE,
 		'post_content'			=> $post->content,

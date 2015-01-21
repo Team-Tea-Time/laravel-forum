@@ -5,7 +5,7 @@
 
 @include('forum::partials.errorbox')
 
-{{ Form::open(array('url' => $actionAlias, 'class' => 'form-horizontal')) }}
+{{ Form::open(array('url' => $thread->replyURL, 'class' => 'form-horizontal')) }}
 <fieldset>
 
 <!-- Form Name -->

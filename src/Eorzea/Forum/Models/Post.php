@@ -13,7 +13,7 @@ class Post extends AbstractBaseModel {
 	protected $table      = 'forum_posts';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = ['URL', 'postAlias'];
+	protected $appends    = ['URL', 'editURL'];
 	protected $with    		= ['author'];
 	protected $guarded    = ['id'];
 
@@ -32,25 +32,37 @@ class Post extends AbstractBaseModel {
 		return $this->thread->URL;
 	}
 
-	public function getPostAliasAttribute()
+	private function getURLComponents()
 	{
-		$thread = $this->thread;
-		$category = $thread->category;
-
-		return route('forum.post.edit.post',
-			array(
-				'categoryID'		=> $category->id,
-				'categoryAlias'	=> Str::slug($category->title, '-'),
-				'threadID'			=> $thread->id,
-				'threadAlias'		=> Str::slug($thread->title, '-'),
-				'postID'				=> $this->id
-			)
+		$components = array(
+			'categoryID'		=> $this->thread->category->id,
+			'categoryAlias'	=> Str::slug($this->thread->category->title, '-'),
+			'threadID'			=> $this->thread->id,
+			'threadAlias'		=> Str::slug($this->thread->title, '-'),
+			'postID'				=> $this->id
 		);
+
+		return $components;
+	}
+
+	public function getEditURLAttribute()
+	{
+		return route('forum.get.edit.post', $this->getURLComponents());
+	}
+
+	public function getDeleteURLAttribute()
+	{
+		return route('forum.get.delete.post', $this->getURLComponents());
 	}
 
 	public function getCanPostAttribute()
 	{
 		return AccessControl::check($this, 'edit_post', FALSE);
+	}
+
+	public function getCanDeleteAttribute()
+	{
+		return AccessControl::check($this, 'delete_posts', FALSE);
 	}
 
 }
