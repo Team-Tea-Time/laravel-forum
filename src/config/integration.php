@@ -33,7 +33,7 @@ return array(
 	| Application controller
 	|--------------------------------------------------------------------------
 	|
-	| This class must extend \Eorzea\Forum\Controllers\AbstractController
+	| This class must extend \Eorzea\Forum\Controllers\AbstractBaseController
 	|
 	*/
 	'controller' => 'ForumController'

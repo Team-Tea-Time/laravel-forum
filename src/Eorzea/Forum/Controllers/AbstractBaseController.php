@@ -18,7 +18,7 @@ use Route;
 use View;
 use Validator;
 
-abstract class AbstractController extends Controller {
+abstract class AbstractBaseController extends Controller {
 
   // Repositories
   private $categories;
@@ -227,6 +227,15 @@ abstract class AbstractController extends Controller {
   public function getDeleteThread($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
     $this->load(['category' => $categoryID, 'thread' => $threadID]);
+
+    if (Config::get('forum::preferences.soft_delete'))
+    {
+      $this->collections['thread']->posts()->delete();
+    }
+    else
+    {      
+      $this->collections['thread']->posts()->forceDelete();
+    }
 
     $this->threads->delete($threadID);
 

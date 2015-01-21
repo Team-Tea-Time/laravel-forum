@@ -16,6 +16,18 @@ class Thread extends AbstractBaseModel {
 	protected $appends    = ['lastPage', 'lastPost', 'lastPostURL', 'URL', 'replyURL', 'deleteURL'];
 	protected $guarded    = ['id'];
 
+	public static function boot()
+	{
+		// make the parent (Eloquent) boot method run
+		parent::boot();
+
+		// cause a soft delete of a product to cascade to children so they are also soft deleted
+		static::deleted(function($thread)
+		{
+			$thread->posts()->delete();
+		});
+	}
+
 	public function category()
 	{
 		return $this->belongsTo('\Eorzea\Forum\Models\Category', 'parent_category');

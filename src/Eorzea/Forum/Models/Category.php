@@ -69,7 +69,7 @@ class Category extends AbstractBaseModel {
 		return route('forum.get.view.category', $this->getURLComponents());
 	}
 
-	public function getCreateURLAttribute()
+	public function getNewThreadURLAttribute()
 	{
 		return route('forum.post.create.thread', $this->getURLComponents());
 	}
