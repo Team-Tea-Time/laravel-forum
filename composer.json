@@ -1,5 +1,5 @@
 {
-    "name": "riari/forum",
+    "name": "riari/laravel-forum",
     "description": "A complete forum package designed for easy integration into any Laravel application",
     "keywords": ["laravel", "laravel-4", "forum", "discuss"],
     "license": "MIT",
