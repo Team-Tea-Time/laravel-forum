@@ -209,6 +209,8 @@ abstract class BaseController extends Controller {
 
       $post->thread->touch();
 
+      Alerts::add('success', trans('forum::base.reply_added'));
+
       return Redirect::to($this->collections['thread']->lastPostURL);
     }
     else
