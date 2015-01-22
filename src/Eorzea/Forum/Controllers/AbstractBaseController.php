@@ -1,14 +1,10 @@
 <?php namespace Eorzea\Forum\Controllers;
 
-use Eorzea\Forum\Models\Category;
-use Eorzea\Forum\Models\Thread;
-use Eorzea\Forum\Models\Post;
 use Eorzea\Forum\Repositories\Categories;
 use Eorzea\Forum\Repositories\Threads;
 use Eorzea\Forum\Repositories\Posts;
 use Eorzea\Forum\AccessControl;
 
-use stdClass;
 use App;
 use Config;
 use Controller;
@@ -132,8 +128,6 @@ abstract class AbstractBaseController extends Controller {
     {
       if ($post['id'] > 0)
       {
-        $post['id'] = $postID;
-
         $post = $this->posts->update($post);
       }
       else
