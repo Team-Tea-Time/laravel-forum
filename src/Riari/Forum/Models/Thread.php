@@ -1,7 +1,7 @@
 <?php namespace Riari\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
-use Riari\Forum\AccessControl;
+use Riari\Forum\Libraries\AccessControl;
 
 use Config;
 use Str;

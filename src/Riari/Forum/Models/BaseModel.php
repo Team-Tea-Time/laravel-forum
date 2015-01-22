@@ -1,6 +1,5 @@
 <?php namespace Riari\Forum\Models;
 
-use stdClass;
 use Cache;
 use Carbon\Carbon;
 use Config;

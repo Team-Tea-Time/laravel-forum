@@ -1,7 +1,7 @@
 <?php namespace Riari\Forum\Models;
 
 use Riari\Forum\Models\Thread;
-use Riari\Forum\AccessControl;
+use Riari\Forum\Libraries\AccessControl;
 
 use Config;
 use Str;
