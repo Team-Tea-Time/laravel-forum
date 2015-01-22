@@ -256,7 +256,7 @@ abstract class BaseController extends Controller {
         'parent_thread' => $threadID,
         'author_id'     => $user->id,
         'content'       => Input::get('content')
-      )
+      );
 
       $post = $this->posts->update($post);
 
