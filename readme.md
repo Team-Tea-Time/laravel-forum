@@ -40,6 +40,7 @@ This package is currently under heavy development. Feel free to post issues and 
 
 ### Planned features
  * Read/unread thread status (with icons and 'new posts' page)
+ * Alert callback (to intercept success/validation messages)
 
 ## Installation
 
