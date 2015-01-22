@@ -26,7 +26,7 @@ return array(
   | Validation settings
   |--------------------------------------------------------------------------
   */
-  'rules' => array(
+  'validation_rules' => array(
     'thread' => [
       'title' => 'required'
     ],
