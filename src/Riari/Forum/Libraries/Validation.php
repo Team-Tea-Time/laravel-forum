@@ -8,8 +8,6 @@ use Validator;
 
 class Validation {
 
-  public static $rules = Config::get('forum::preferences.validation_rules');
-
   public static function processValidationMessages($messages)
   {
     foreach($messages as $message)
@@ -20,6 +18,7 @@ class Validation {
 
   public static function check($type = 'thread')
   {
+    $rules = Config::get('forum::preferences.validation_rules');
     $validator = Validator::make(Input::all(), self::$rules[$type]);
 
     if ($validator->passes())
