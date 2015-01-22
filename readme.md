@@ -7,7 +7,7 @@
 
 **Note: this is a fork of the excellent Laravel forum solution written by Atrakeur (https://github.com/Atrakeur/laravel-forum).** Although I've largely rewritten and adapted it to facilitate the kind of forum I want in a new project, the original package was a crucial starting point and I wouldn't have been able to do any of this without it - so credit goes first and foremost to Atrakeur for his hard work.
 
-Amongst the many things I've done in this version of the package are the revised permission system, moderation tools and some minor optimisations throughout. My goal is to introduce new features over time as needed for an upcoming project. See further down for a list of current and planned features.
+Among the many things I've done in this version of the package are the revised permission system, moderation tools and some minor optimisations throughout. My goal is to introduce new features over time as needed for an upcoming project. See further down for a list of current and planned features.
 
 ## Goals
 
