@@ -114,3 +114,7 @@ Note that the default set of views include links for deleting, editing and reply
 ### Regarding thread and post deletion
 
 There's no confirmation step implemented by default for thread and post deletion - if a user clicks 'Delete [thread/post]' and has permission to perform that action, it'll happen instantantly. You can implement a confirmation step in a variety of ways, either by modifying the links to lead to an intermediary view in your app prompting the user to confirm, or using JS-based dialogs (or a combination of both).
+
+### Regarding views
+
+I try to keep the views up to date with all feature changes and bug fixes, but as I'm developing it for a site where the views are overridden, I might sometimes overlook an issue in the default views. If you find such an issue, please [report it](https://github.com/Riari/laravel-forum/issues). Thanks!
