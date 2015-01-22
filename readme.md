@@ -23,6 +23,7 @@ This package is currently under heavy development. Feel free to post issues and 
  * Threads with locking, pinning and deletion
  * Posts with permalinks, editing and deletion
  * Optional soft-deletion of threads and posts
+ * Alert callback (to display success/validation messages using your preferred method)
  * Pagination
  * Basic auth & user integration out of the box
  * Permissions integration with basic defaults:
@@ -40,7 +41,6 @@ This package is currently under heavy development. Feel free to post issues and 
 
 ### Planned features
  * Read/unread thread status (with icons and 'new posts' page)
- * Alert callback (to intercept success/validation messages)
 
 ## Installation
 
