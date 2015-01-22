@@ -49,7 +49,7 @@ This package is currently under heavy development. Feel free to post issues and 
 To install, simply add the following line to your composer .json and run composer update:
 
 ```json
-"Riari/forum": "dev-master"
+"riari/forum": "dev-master"
 ```
 
 Then add the following service provider to your app.php:
