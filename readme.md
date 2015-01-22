@@ -5,13 +5,15 @@
 
 # Laravel forum package
 
-**Note: this is a fork of the excellent Laravel forum solution written by Atrakeur (https://github.com/Atrakeur/laravel-forum).** I've rewritten the permission handling and made some minor optimisations throughout, and my goal is to introduce new features over time to use it in a new project (see below for details).
+**Note: this is a fork of the excellent Laravel forum solution written by Atrakeur (https://github.com/Atrakeur/laravel-forum).** Although I've largely rewritten and adapted it to facilitate the kind of forum I want in a new project, the original package was a crucial starting point and I wouldn't have been able to do any of this without it - so credit goes first and foremost to Atrakeur for his hard work.
+
+Amongst the many things I've done in this version of the package are the revised permission system, moderation tools and some minor optimisations throughout. My goal is to introduce new features over time as needed for an upcoming project. See further down for a list of current and planned features.
 
 ## Goals
 
-This package aims to provide a solid basis for implementing a forum in a Laravel application. It focuses on taking care of conventional forum features, allowing you to spend more time on building your application and how the forum integrates with it.
+This package aims to provide a solid basis for implementing a forum in a Laravel application. It focuses on taking care of conventional forum features, allowing you to spend more time building your application and the way in which the forum integrates with it.
 
-In addition to allowing controller methods to be overridden to tweak their behaviour, the package also provides extensive configuration options including permission callbacks and integration options.
+In addition to an overridable main controller, the package also provides extensive configuration options including permission callbacks, integration settings and preferences to tune the behaviour of your forum.
 
 ## Features
 
@@ -20,6 +22,7 @@ This package is currently under heavy development. Feel free to post issues and 
  * Categories with nesting (up to 2 levels) and weighting
  * Threads with locking, pinning and deletion
  * Posts with permalinks, editing and deletion
+ * Optional soft-deletion of threads and posts
  * Pagination
  * Basic auth & user integration out of the box
  * Permissions integration with basic defaults:
