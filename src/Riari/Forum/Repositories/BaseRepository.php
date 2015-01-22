@@ -1,9 +1,9 @@
-<?php namespace Eorzea\Forum\Repositories;
+<?php namespace Riari\Forum\Repositories;
 
 use stdClass;
 use Config;
 
-abstract class AbstractBaseRepository {
+abstract class BaseRepository {
 
 	protected $model;
 

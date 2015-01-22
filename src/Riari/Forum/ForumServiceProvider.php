@@ -1,7 +1,7 @@
-<?php namespace Eorzea\Forum;
+<?php namespace Riari\Forum;
 
 use Illuminate\Support\ServiceProvider;
-use Eorzea\Forum\Commands\InstallCommand;
+use Riari\Forum\Commands\InstallCommand;
 
 use Config;
 
@@ -21,7 +21,7 @@ class ForumServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('Eorzea/forum');
+		$this->package('Riari/forum');
 
 		if (Config::get('forum::routes.enable')) {
 			$root = Config::get('forum::routes.root');

@@ -1,9 +1,9 @@
-<?php namespace Eorzea\Forum\Repositories;
+<?php namespace Riari\Forum\Repositories;
 
 use Config;
-use \Eorzea\Forum\Models\Post;
+use \Riari\Forum\Models\Post;
 
-class Posts extends AbstractBaseRepository {
+class Posts extends BaseRepository {
 
 	public function __construct(Post $model)
 	{

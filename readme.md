@@ -49,13 +49,13 @@ This package is currently under heavy development. Feel free to post issues and 
 To install, simply add the following line to your composer .json and run composer update:
 
 ```json
-"Eorzea/forum": "dev-master"
+"Riari/forum": "dev-master"
 ```
 
 Then add the following service provider to your app.php:
 
 ```php
-'Eorzea\Forum\ForumServiceProvider',
+'Riari\Forum\ForumServiceProvider',
 ```
 
 Update your packages:
@@ -72,7 +72,7 @@ Run the forum install command to auto-deploy the forum controller to your app/co
 
 Publish the package migrations:
 
-`php artisan migrate:publish Eorzea/forum`
+`php artisan migrate:publish Riari/forum`
 
 Then run your migrations:
 
@@ -88,9 +88,9 @@ Once your categories are set up, go to <app hostname>/forum and you should see a
 
 To adjust configuration (including permissions and integration options), publish the package config files:
 
-`php artisan config:publish Eorzea/forum`
+`php artisan config:publish Riari/forum`
 
-You'll find them in app/config/packages/Eorzea/forum.
+You'll find them in app/config/packages/Riari/forum.
 
 ### Controller methods
 
@@ -100,7 +100,7 @@ You can override any of the methods in the controller (app/controllers/ForumCont
 
 Publish the package view files to your views folder:
 
-`php artisan view:publish Eorzea/forum`
+`php artisan view:publish Riari/forum`
 
 You can then adjust the views however you like. I suggest editing the master view to make it extend your app's main layout to easily integrate the forum with your design.
 

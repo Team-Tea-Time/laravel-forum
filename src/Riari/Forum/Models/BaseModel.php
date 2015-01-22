@@ -1,4 +1,4 @@
-<?php namespace Eorzea\Forum\Models;
+<?php namespace Riari\Forum\Models;
 
 use stdClass;
 use Cache;
@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Config;
 use Eloquent;
 
-abstract class AbstractBaseModel extends Eloquent {
+abstract class BaseModel extends Eloquent {
 
 	protected function rememberAttribute($item, $function)
 	{

@@ -1,12 +1,12 @@
-<?php namespace Eorzea\Forum\Models;
+<?php namespace Riari\Forum\Models;
 
-use Eorzea\Forum\Models\Thread;
-use Eorzea\Forum\AccessControl;
+use Riari\Forum\Models\Thread;
+use Riari\Forum\AccessControl;
 
 use Config;
 use Str;
 
-class Category extends AbstractBaseModel {
+class Category extends BaseModel {
 
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
@@ -14,17 +14,17 @@ class Category extends AbstractBaseModel {
 
 	public function parentCategory()
 	{
-		return $this->belongsTo('\Eorzea\Forum\Models\Category', 'parent_category')->orderBy('weight');
+		return $this->belongsTo('\Riari\Forum\Models\Category', 'parent_category')->orderBy('weight');
 	}
 
 	public function subcategories()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\Category', 'parent_category')->orderBy('weight');
+		return $this->hasMany('\Riari\Forum\Models\Category', 'parent_category')->orderBy('weight');
 	}
 
 	public function threads()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\Thread', 'parent_category')->with('category', 'posts')->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc');
+		return $this->hasMany('\Riari\Forum\Models\Thread', 'parent_category')->with('category', 'posts')->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc');
 	}
 
 	public function scopeWhereTopLevel($query)

@@ -1,9 +1,11 @@
-<?php namespace Eorzea\Forum\Controllers;
+<?php namespace Riari\Forum\Controllers;
 
-use Eorzea\Forum\Repositories\Categories;
-use Eorzea\Forum\Repositories\Threads;
-use Eorzea\Forum\Repositories\Posts;
-use Eorzea\Forum\AccessControl;
+use Riari\Forum\Repositories\Categories;
+use Riari\Forum\Repositories\Threads;
+use Riari\Forum\Repositories\Posts;
+use Riari\Forum\Libraries\AccessControl;
+use Riari\Forum\Libraries\Alerts;
+use Riari\Forum\Libraries\Validation;
 
 use App;
 use Config;
@@ -14,7 +16,7 @@ use Route;
 use View;
 use Validator;
 
-abstract class AbstractBaseController extends Controller {
+abstract class BaseController extends Controller {
 
   // Repositories
   private $categories;
@@ -24,37 +26,11 @@ abstract class AbstractBaseController extends Controller {
   // Collections cache
   private $collections = array();
 
-  // Validator
-  private $validator;
-  protected $validationRules = array(
-    'thread' => [
-      'title' => 'required'
-    ],
-    'post' => [
-      'content' => 'required|min:5'
-    ]
-  );
-
-  // Closures
-  private $getCurrentUser;
-  private $processAlert;
-
   public function __construct(Categories $categories, Threads $threads, Posts $posts)
   {
     $this->categories = $categories;
     $this->threads = $threads;
     $this->posts = $posts;
-
-    $this->getCurrentUser = Config::get('forum::integration.current_user');
-    $this->processAlert = Config::get('forum::integration.process_alert');
-  }
-
-  public function call($closure)
-  {
-    $args = func_get_args();
-    unset($args[0]);
-
-    return call_user_func_array($this->$closure, $args);
   }
 
   protected function getCurrentUser()
@@ -113,50 +89,6 @@ abstract class AbstractBaseController extends Controller {
     $this->check404();
   }
 
-  protected function validatePost($post = array())
-  {
-    $post += array(
-      'id'            => 0,
-      'parent_thread' => 0,
-      'author_id'     => 0,
-      'content'       => Input::get('content')
-    );
-
-    $this->validator = Validator::make(Input::all(), $this->validationRules['post']);
-
-    if ($this->validator->passes())
-    {
-      if ($post['id'] > 0)
-      {
-        $post = $this->posts->update($post);
-      }
-      else
-      {
-        unset($post['id']);
-
-        $post = $this->posts->create($post);
-
-        $post->thread->touch();
-      }
-
-      return $post->URL;
-    }
-    else
-    {
-      $this->processValidationMessages();
-
-      return FALSE;
-    }
-  }
-
-  protected function processValidationMessages()
-  {
-    foreach($this->validator->messages()->all() as $message)
-    {
-      $this->call('processAlert', 'error', $message);
-    }
-  }
-
   protected function makeView($name)
   {
     return View::make($name)->with($this->collections);
@@ -205,8 +137,9 @@ abstract class AbstractBaseController extends Controller {
 
     $this->load(['category' => $categoryID]);
 
-    $validator = Validator::make(Input::all(), array_merge($this->validationRules['thread'], $this->validationRules['post']));
-    if ($validator->passes())
+    $thread_valid = Validation::check('thread');
+    $post_valid = Validation::check('post');
+    if ($thread_valid && $post_valid)
     {
       $thread = array(
         'author_id'       => $user->id,
@@ -224,14 +157,12 @@ abstract class AbstractBaseController extends Controller {
 
       $this->posts->create($post);
 
-      $this->call('processAlert', 'success', trans('forum::base.thread_created'));
+      Alerts::add('success', trans('forum::base.thread_created'));
 
       return Redirect::to($thread->URL);
     }
     else
     {
-      $this->processValidationMessages();
-
       return Redirect::to($this->collections['category']->postAlias)->withInput();
     }
   }
@@ -263,9 +194,18 @@ abstract class AbstractBaseController extends Controller {
       return Redirect::to($this->collections['thread']->URL);
     }
 
-    if ($this->validatePost(['parent_thread' => $threadID, 'author_id' => $user->id]))
+    $post_valid = Validation::check('post');
+    if ($post_valid)
     {
-      $this->call('processAlert', 'success', trans('forum::base.reply_added'));
+      $post = array(
+        'parent_thread' => $threadID,
+        'author_id'     => $user->id,
+        'content'       => Input::get('content')
+      );
+
+      $post = $this->posts->create($post);
+
+      $post->thread->touch();
 
       return Redirect::to($this->collections['thread']->lastPostURL);
     }
@@ -290,7 +230,7 @@ abstract class AbstractBaseController extends Controller {
 
     $this->threads->delete($threadID);
 
-    $this->call('processAlert', 'success', trans('forum::base.thread_deleted'));
+    Alerts::add('success', trans('forum::base.thread_deleted'));
 
     return Redirect::to($this->collections['category']->URL);
   }
@@ -308,9 +248,19 @@ abstract class AbstractBaseController extends Controller {
 
     $this->load(['category' => $categoryID, 'thread' => $threadID, 'post' => $postID]);
 
-    if ($post = $this->validatePost(['id' => $user->id, 'parent_thread' => $threadID, 'author_id' => $user->id]))
+    $post_valid = Validation::check('post');
+    if ($post_valid)
     {
-      $this->call('processAlert', 'success', trans('forum::base.post_updated'));
+      $post = array(
+        'id'            => $postID,
+        'parent_thread' => $threadID,
+        'author_id'     => $user->id,
+        'content'       => Input::get('content')
+      )
+
+      $post = $this->posts->update($post);
+
+      Alerts::add('success', trans('forum::base.post_updated'));
 
       return Redirect::to($post->URL);
     }
@@ -326,7 +276,7 @@ abstract class AbstractBaseController extends Controller {
 
     $this->posts->delete($postID);
 
-    $this->call('processAlert', 'success', trans('forum::base.post_deleted'));
+    Alerts::add('success', trans('forum::base.post_deleted'));
 
     // Force deletion of the thread if it has no remaining posts
     if ($this->collections['thread']->posts->count() == 0)

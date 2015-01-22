@@ -1,4 +1,4 @@
-<?php namespace Eorzea\Forum;
+<?php namespace Riari\Forum;
 
 use Config;
 use App;

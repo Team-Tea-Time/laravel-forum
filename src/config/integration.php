@@ -47,7 +47,7 @@ return array(
 	| Application controller
 	|--------------------------------------------------------------------------
 	|
-	| This class must extend \Eorzea\Forum\Controllers\AbstractBaseController
+	| This class must extend \Riari\Forum\Controllers\AbstractBaseController
 	|
 	*/
 	'controller' => 'ForumController'

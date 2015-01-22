@@ -1,4 +1,4 @@
-<?php namespace Eorzea\Forum\Commands;
+<?php namespace Riari\Forum\Commands;
 
 use Illuminate\Console\Command;
 
@@ -19,7 +19,7 @@ class InstallCommand extends Command {
 			return;
 		}
 
-		$this->installController($controller, '\Eorzea\Forum\Controllers\AbstractBaseController');
+		$this->installController($controller, '\Riari\Forum\Controllers\AbstractBaseController');
 
 		$this->info('Forum installation done.');
 	}

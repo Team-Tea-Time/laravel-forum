@@ -1,9 +1,9 @@
-<?php namespace Eorzea\Forum\Repositories;
+<?php namespace Riari\Forum\Repositories;
 
 use Config;
-use \Eorzea\Forum\Models\Thread;
+use \Riari\Forum\Models\Thread;
 
-class Threads extends AbstractBaseRepository {
+class Threads extends BaseRepository {
 
 	public function __construct(Thread $model)
 	{

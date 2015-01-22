@@ -1,12 +1,12 @@
-<?php namespace Eorzea\Forum\Models;
+<?php namespace Riari\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
-use Eorzea\Forum\AccessControl;
+use Riari\Forum\AccessControl;
 
 use Config;
 use Str;
 
-class Thread extends AbstractBaseModel {
+class Thread extends BaseModel {
 
 	use SoftDeletingTrait;
 
@@ -18,7 +18,7 @@ class Thread extends AbstractBaseModel {
 
 	public function category()
 	{
-		return $this->belongsTo('\Eorzea\Forum\Models\Category', 'parent_category');
+		return $this->belongsTo('\Riari\Forum\Models\Category', 'parent_category');
 	}
 
 	public function author()
@@ -28,7 +28,7 @@ class Thread extends AbstractBaseModel {
 
 	public function posts()
 	{
-		return $this->hasMany('\Eorzea\Forum\Models\Post', 'parent_thread')->orderBy('created_at', 'desc');
+		return $this->hasMany('\Riari\Forum\Models\Post', 'parent_thread')->orderBy('created_at', 'desc');
 	}
 
 	public function getLastPageAttribute()

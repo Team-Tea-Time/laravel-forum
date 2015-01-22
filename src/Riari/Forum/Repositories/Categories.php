@@ -1,8 +1,8 @@
-<?php namespace Eorzea\Forum\Repositories;
+<?php namespace Riari\Forum\Repositories;
 
-use \Eorzea\Forum\Models\Category;
+use \Riari\Forum\Models\Category;
 
-class Categories extends AbstractBaseRepository {
+class Categories extends BaseRepository {
 
 	public function __construct(Category $model)
 	{

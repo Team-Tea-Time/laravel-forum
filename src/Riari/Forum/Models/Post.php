@@ -1,12 +1,12 @@
-<?php namespace Eorzea\Forum\Models;
+<?php namespace Riari\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
-use Eorzea\Forum\AccessControl;
+use Riari\Forum\AccessControl;
 
 use Config;
 use Str;
 
-class Post extends AbstractBaseModel {
+class Post extends BaseModel {
 
 	use SoftDeletingTrait;
 
@@ -19,7 +19,7 @@ class Post extends AbstractBaseModel {
 
 	public function thread()
 	{
-		return $this->belongsTo('\Eorzea\Forum\Models\Thread', 'parent_thread');
+		return $this->belongsTo('\Riari\Forum\Models\Thread', 'parent_thread');
 	}
 
 	public function author()
