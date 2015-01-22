@@ -1,4 +1,4 @@
-<?php namespace Riari\Forum;
+<?php namespace Riari\Forum\Libraries;
 
 use Riari\Forum\Libraries\Alerts;
 
