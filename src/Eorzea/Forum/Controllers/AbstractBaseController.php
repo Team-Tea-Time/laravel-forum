@@ -28,26 +28,42 @@ abstract class AbstractBaseController extends Controller {
   // Collections cache
   private $collections = array();
 
-  protected $threadRules = array(
-    'title' => 'required',
+  // Validator
+  private $validator;
+  protected $validationRules = array(
+    'thread' => [
+      'title' => 'required'
+    ],
+    'post' => [
+      'content' => 'required|min:5'
+    ]
   );
 
-  protected $postRules = array(
-    'content' => 'required|min:5',
-  );
+  // Closures
+  private $getCurrentUser;
+  private $processAlert;
 
   public function __construct(Categories $categories, Threads $threads, Posts $posts)
   {
     $this->categories = $categories;
     $this->threads = $threads;
     $this->posts = $posts;
+
+    $this->getCurrentUser = Config::get('forum::integration.current_user');
+    $this->processAlert = Config::get('forum::integration.process_alert');
+  }
+
+  public function call($closure)
+  {
+    $args = func_get_args();
+    unset($args[0]);
+
+    return call_user_func_array($this->$closure, $args);
   }
 
   protected function getCurrentUser()
   {
-    $user_callback = Config::get('forum::integration.current_user');
-
-    $user = $user_callback();
+    $user = $this->call('getCurrentUser');
     if (is_object($user) && get_class($user) == Config::get('forum::integration.user_model'))
     {
       return $user;
@@ -56,7 +72,7 @@ abstract class AbstractBaseController extends Controller {
     return NULL;
   }
 
-  private function check404()
+  protected function check404()
   {
     foreach($this->collections as $item)
     {
@@ -67,7 +83,7 @@ abstract class AbstractBaseController extends Controller {
     }
   }
 
-  private function load($select = array(), $category_with = array())
+  protected function load($select = array(), $category_with = array())
   {
     $map_model_repos = array(
       'category'  => 'categories',
@@ -101,7 +117,53 @@ abstract class AbstractBaseController extends Controller {
     $this->check404();
   }
 
-  private function makeView($name)
+  protected function validatePost($post = array())
+  {
+    $post += array(
+      'id'            => 0,
+      'parent_thread' => 0,
+      'author_id'     => 0,
+      'content'       => Input::get('content')
+    );
+
+    $this->validator = Validator::make(Input::all(), $this->validationRules['post']);
+
+    if ($this->validator->passes())
+    {
+      if ($post['id'] > 0)
+      {
+        $post['id'] = $postID;
+
+        $post = $this->posts->update($post);
+      }
+      else
+      {
+        unset($post['id']);
+
+        $post = $this->posts->create($post);
+
+        $post->thread->touch();
+      }
+
+      return $post->URL;
+    }
+    else
+    {
+      $this->processValidationMessages();
+
+      return FALSE;
+    }
+  }
+
+  protected function processValidationMessages()
+  {
+    foreach($this->validator->messages()->all() as $message)
+    {
+      $this->call('processAlert', 'error', $message);
+    }
+  }
+
+  protected function makeView($name)
   {
     return View::make($name)->with($this->collections);
   }
@@ -149,7 +211,7 @@ abstract class AbstractBaseController extends Controller {
 
     $this->load(['category' => $categoryID]);
 
-    $validator = Validator::make(Input::all(), array_merge($this->threadRules, $this->postRules));
+    $validator = Validator::make(Input::all(), array_merge($this->validationRules['thread'], $this->validationRules['post']));
     if ($validator->passes())
     {
       $thread = array(
@@ -168,11 +230,15 @@ abstract class AbstractBaseController extends Controller {
 
       $this->posts->create($post);
 
-      return Redirect::to($thread->URL)->with('success', 'thread created');
+      $this->call('processAlert', 'success', trans('forum::base.thread_created'));
+
+      return Redirect::to($thread->URL);
     }
     else
     {
-      return Redirect::to($this->collections['category']->postAlias)->withErrors($validator)->withInput();
+      $this->processValidationMessages();
+
+      return Redirect::to($this->collections['category']->postAlias)->withInput();
     }
   }
 
@@ -186,7 +252,7 @@ abstract class AbstractBaseController extends Controller {
     }
 
     $with = array(
-      'prevPosts'   => $this->posts->getLastByThread($threadID)
+      'prevPosts' => $this->posts->getLastByThread($threadID)
     );
 
     return $this->makeView('forum::thread-reply')->with($with);
@@ -203,24 +269,15 @@ abstract class AbstractBaseController extends Controller {
       return Redirect::to($this->collections['thread']->URL);
     }
 
-    $validator = Validator::make(Input::all(), $this->postRules);
-    if ($validator->passes())
+    if ($this->validatePost(['parent_thread' => $threadID, 'author_id' => $user->id]))
     {
-      $post = array(
-        'parent_thread' => $threadID,
-        'author_id'     => $user->id,
-        'content'       => Input::get('content')
-      );
+      $this->call('processAlert', 'success', trans('forum::base.reply_added'));
 
-      $post = $this->posts->create($post);
-
-      $post->thread->touch();
-
-      return Redirect::to($this->collections['thread']->lastPostURL)->with('success', 'thread created');
+      return Redirect::to($this->collections['thread']->lastPostURL);
     }
     else
     {
-      return Redirect::to($this->collections['thread']->replyURL)->withErrors($validator)->withInput();
+      return Redirect::to($this->collections['thread']->replyURL)->withInput();
     }
   }
 
@@ -233,13 +290,15 @@ abstract class AbstractBaseController extends Controller {
       $this->collections['thread']->posts()->delete();
     }
     else
-    {      
+    {
       $this->collections['thread']->posts()->forceDelete();
     }
 
     $this->threads->delete($threadID);
 
-    return Redirect::to($this->collections['category']->URL)->with('success', 'thread deleted');
+    $this->call('processAlert', 'success', trans('forum::base.thread_deleted'));
+
+    return Redirect::to($this->collections['category']->URL);
   }
 
   public function getEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
@@ -255,23 +314,15 @@ abstract class AbstractBaseController extends Controller {
 
     $this->load(['category' => $categoryID, 'thread' => $threadID, 'post' => $postID]);
 
-    $validator = Validator::make(Input::all(), $this->postRules);
-    if ($validator->passes())
+    if ($post = $this->validatePost(['id' => $user->id, 'parent_thread' => $threadID, 'author_id' => $user->id]))
     {
-      $post = array(
-        'id'            => $postID,
-        'parent_thread' => $threadID,
-        'author_id'     => $user->id,
-        'content'       => Input::get('content')
-      );
+      $this->call('processAlert', 'success', trans('forum::base.post_updated'));
 
-      $post = $this->posts->update($post);
-
-      return Redirect::to($post->URL)->with('success', 'thread created');
+      return Redirect::to($post->URL);
     }
     else
     {
-      return Redirect::to($this->collections['post']->editURL)->withErrors($validator)->withInput();
+      return Redirect::to($this->collections['post']->editURL)->withInput();
     }
   }
 
@@ -281,15 +332,17 @@ abstract class AbstractBaseController extends Controller {
 
     $this->posts->delete($postID);
 
+    $this->call('processAlert', 'success', trans('forum::base.post_deleted'));
+
     // Force deletion of the thread if it has no remaining posts
     if ($this->collections['thread']->posts->count() == 0)
     {
       $this->threads->delete($threadID);
 
-      return Redirect::to($this->collections['category']->URL)->with('success', 'post deleted');
+      return Redirect::to($this->collections['category']->URL);
     }
 
-    return Redirect::to($this->collections['thread']->URL)->with('success', 'post deleted');
+    return Redirect::to($this->collections['thread']->URL);
   }
 
 }

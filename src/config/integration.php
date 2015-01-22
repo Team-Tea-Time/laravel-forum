@@ -14,7 +14,7 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| Closure to determine the current user model
+	| Closure: determine the current user model
 	|--------------------------------------------------------------------------
 	|
 	| Must return the current logged in user model to use
@@ -26,6 +26,20 @@ return array(
 		//or just the default facade, or whatever else
 
 		return Auth::user();
+	},
+
+	/*
+	|--------------------------------------------------------------------------
+	| Closure: process alert messages
+	|--------------------------------------------------------------------------
+	|
+	| Change this if your app has its own user alert/notification system.
+	| NOTE: remember to override the forum views to remove the default alerts
+	| if you no longer use them.
+	|
+	*/
+	'process_alert' => function($type, $message) {
+		View::share('alerts', [$type => $message]);
 	},
 
 	/*

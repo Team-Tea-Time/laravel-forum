@@ -3,8 +3,6 @@
 @section('content')
 @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
-@include('forum::partials.errorbox')
-
 <h2>{{ trans('forum::base.post_post') }}</h2>
 <p class="lead">
 	{{ trans('forum::posting_into') }} @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))

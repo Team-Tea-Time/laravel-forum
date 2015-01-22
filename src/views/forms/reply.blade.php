@@ -3,8 +3,6 @@
 @section('content')
 @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
-@include('forum::partials.errorbox')
-
 @if (isset($prevposts) && count($prevposts) > 0)
 <p class="lead">
 	{{ trans('forum::base.latest_posts') }}

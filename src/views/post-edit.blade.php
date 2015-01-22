@@ -3,11 +3,9 @@
 @section('content')
 @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
-@include('forum::partials.errorbox')
-
 <legend>{{ trans('forum::base.edit_post') }}</legend>
 <p class="lead">
-	{{ trans('forum::base.your_editing') }} @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread', 'post'))
+	{{ trans('forum::base.you_are_editing') }} @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread', 'post'))
 </p>
 
 @include(

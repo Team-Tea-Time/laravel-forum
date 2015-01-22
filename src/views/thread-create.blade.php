@@ -3,8 +3,6 @@
 @section('content')
 @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
-@include('forum::partials.errorbox')
-
 {{ Form::open(array('url' => $category->newThreadURL, 'class' => 'form-horizontal')) }}
 <fieldset>
 
