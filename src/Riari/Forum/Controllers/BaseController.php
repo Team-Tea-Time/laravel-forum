@@ -35,7 +35,9 @@ abstract class BaseController extends Controller {
 
   protected function getCurrentUser()
   {
-    $user = $this->call('getCurrentUser');
+    $current_user_callback = Config::get('forum::integration.current_user');
+
+    $user = $current_user_callback();
     if (is_object($user) && get_class($user) == Config::get('forum::integration.user_model'))
     {
       return $user;
