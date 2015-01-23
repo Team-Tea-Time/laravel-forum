@@ -13,21 +13,21 @@
 	{{{ $thread->title }}}
 </h2>
 
-@if($thread->canPin || $thread->canLock || $thread->canDelete)
+@if($thread->canLock || $thread->canPin || $thread->canDelete)
 <div class="dropdown">
 	<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
 		{{ trans('forum::base.actions') }}
 		<span class="caret"></span>
 	</button>
 	<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-		@if($thread->canPin)
-		<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ $thread->pinRoute }}">{{ trans('forum::base.pin_thread') }}</a></li>
-		@endif
 		@if($thread->canLock)
-		<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ $thread->lockRoute }}">{{ trans('forum::base.lock_thread') }}</a></li>
+		<li>{{ Form::inline($thread->lockRoute, [], ['label' => trans('forum::base.lock_thread')]) }}</li>
+		@endif
+		@if($thread->canPin)
+		<li>{{ Form::inline($thread->pinRoute, [], ['label' => trans('forum::base.pin_thread')]) }}</li>
 		@endif
 		@if($thread->canDelete)
-		<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ $thread->deleteRoute }}" onclick="return confirm({{ trans('forum::base.generic_confirm') }})">{{ trans('forum::base.delete_thread') }}</a></li>
+		<li>{{ Form::inline($thread->deleteRoute, ['method' => 'DELETE', 'data-confirm' => TRUE], ['label' => trans('forum::base.delete_thread')]) }}</li>
 		@endif
 	</ul>
 </div>

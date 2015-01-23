@@ -9,12 +9,12 @@ Form::macro('inline', function($route, $form = array(), $link = array()){
 
   $link += array(
     'class'       => '',
-    'attributes'  => 'onclick="this.form.submit();"',
+    'attributes'  => '',
     'label'       => 'Submit'
   );
 
   $output = Form::open($form)
-          . "<a href=\"#\" class=\"{$link['class']}\" {$link['attributes']}>{$link['label']}</a>"
+          . "<a href=\"#\" class=\"{$link['class']}\" data-submit {$link['attributes']}>{$link['label']}</a>"
           . Form::close();
 
   return $output;
