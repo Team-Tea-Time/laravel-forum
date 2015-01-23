@@ -38,8 +38,6 @@ return array(
 	'new_thread' 				=> 'New thread',
 	'thread_created' 		=> 'Thread created',
 	'pin_thread'				=> 'Pin/unpin this thread',
-	'thread_pinned'			=> 'Thread pinned',
-	'thread_unpinned'		=> 'Thread unpinned',
 	'pinned' 						=> 'Pinned',
 	'lock_thread'				=> 'Lock/unlock this thread',
 	'locked'						=> 'Locked',
