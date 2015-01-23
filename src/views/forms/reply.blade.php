@@ -26,7 +26,7 @@
 </table>
 @endif
 
-{{ Form::open(array('url' => $thread->replyURL, 'class' => 'form-horizontal')) }}
+{{ Form::open(array('url' => $thread->replyRoute, 'class' => 'form-horizontal')) }}
 <fieldset>
 
 <legend>{{ trans('forum::base.post_post') }}</legend>

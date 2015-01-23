@@ -14,16 +14,15 @@ Route::group(['prefix' => $root], function() use ($controller)
 
 	Route::get($category . '/thread/create', ['as' => 'forum.get.create.thread', 'uses' => $controller . '@getCreateThread']);
 	Route::post($category . '/thread/create', ['as' => 'forum.post.create.thread', 'uses' => $controller . '@postCreateThread']);
-
+	
 	Route::get($category . $thread . '/reply', ['as' => 'forum.get.reply.thread', 'uses' => $controller . '@getReplyToThread']);
 	Route::post($category . $thread . '/reply', ['as' => 'forum.post.reply.thread', 'uses' => $controller . '@postReplyToThread']);
 
-	Route::get($category . $thread . '/lock/{token}', ['before' => 'inline_csrf', 'as' => 'forum.get.lock.thread', 'uses' => $controller . '@getLockThread']);
-	Route::get($category . $thread . '/pin/{token}', ['before' => 'inline_csrf', 'as' => 'forum.get.pin.thread', 'uses' => $controller . '@getPinThread']);
-	Route::get($category . $thread . '/delete/{token}', ['before' => 'inline_csrf', 'as' => 'forum.get.delete.thread', 'uses' => $controller . '@getDeleteThread']);
+	Route::post($category . $thread . '/lock', ['as' => 'forum.post.lock.thread', 'uses' => $controller . '@postLockThread']);
+	Route::post($category . $thread . '/pin', ['as' => 'forum.post.pin.thread', 'uses' => $controller . '@postPinThread']);
+	Route::delete($category . $thread . '/delete', ['as' => 'forum.delete.thread', 'uses' => $controller . '@deleteThread']);
 
 	Route::get($category . $thread . '/post/{postID}/edit', ['as' => 'forum.get.edit.post', 'uses' => $controller . '@getEditPost']);
 	Route::post($category . $thread . '/post/{postID}/edit', ['as' => 'forum.post.edit.post', 'uses' => $controller . '@postEditPost']);
-
-	Route::get($category . $thread . '/post/{postID}/delete', ['as' => 'forum.get.delete.post', 'uses' => $controller . '@getDeletePost']);
+	Route::delete($category . $thread . '/post/{postID}/delete', ['as' => 'forum.get.delete.post', 'uses' => $controller . '@deletePost']);
 });

@@ -13,7 +13,7 @@ class Post extends BaseModel {
 	protected $table      = 'forum_posts';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = ['URL', 'editURL'];
+	protected $appends    = ['Route', 'editRoute'];
 	protected $with    		= ['author'];
 	protected $guarded    = ['id'];
 
@@ -27,12 +27,12 @@ class Post extends BaseModel {
 		return $this->belongsTo(Config::get('forum::integration.user_model'), 'author_id');
 	}
 
-	public function getURLAttribute()
+	public function getRouteAttribute()
 	{
-		return $this->thread->URL;
+		return $this->thread->Route;
 	}
 
-	protected function getURLComponents()
+	protected function getRouteComponents()
 	{
 		$components = array(
 			'categoryID'		=> $this->thread->category->id,
@@ -45,12 +45,12 @@ class Post extends BaseModel {
 		return $components;
 	}
 
-	public function getEditURLAttribute()
+	public function getEditRouteAttribute()
 	{
 		return $this->getRoute('forum.get.edit.post');
 	}
 
-	public function getDeleteURLAttribute()
+	public function getDeleteRouteAttribute()
 	{
 		return $this->getRoute('forum.get.delete.post');
 	}

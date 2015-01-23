@@ -13,7 +13,7 @@ class Thread extends BaseModel {
 	protected $table      = 'forum_threads';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
-	protected $appends    = ['lastPage', 'lastPost', 'lastPostURL', 'URL', 'replyURL', 'deleteURL'];
+	protected $appends    = ['lastPage', 'lastPost', 'lastPostRoute', 'route', 'lockRoute', 'pinRoute', 'replyRoute', 'deleteRoute'];
 	protected $guarded    = ['id'];
 
 	public function category()
@@ -41,9 +41,9 @@ class Thread extends BaseModel {
 		return $this->posts->first();
 	}
 
-	public function getLastPostURLAttribute()
+	public function getLastPostRouteAttribute()
 	{
-		return $this->URL . '?page=' . $this->lastPage . '#post-' . $this->lastPost->id;
+		return $this->Route . '?page=' . $this->lastPage . '#post-' . $this->lastPost->id;
 	}
 
 	public function getLastPostTimeAttribute()
@@ -51,7 +51,7 @@ class Thread extends BaseModel {
 		return $this->lastPost->created_at;
 	}
 
-	protected function getURLComponents()
+	protected function getRouteComponents()
 	{
 		$components = array(
 			'categoryID'		=> $this->category->id,
@@ -63,29 +63,29 @@ class Thread extends BaseModel {
 		return $components;
 	}
 
-	public function getURLAttribute()
+	public function getRouteAttribute()
 	{
 		return $this->getRoute('forum.get.view.thread');
 	}
 
-	public function getReplyURLAttribute()
+	public function getReplyRouteAttribute()
 	{
 		return $this->getRoute('forum.get.reply.thread');
 	}
 
-	public function getPinURLAttribute()
+	public function getPinRouteAttribute()
 	{
-		return $this->getRoute('forum.get.pin.thread', ['_token' => csrf_token()]);
+		return $this->getRoute('forum.post.pin.thread');
 	}
 
-	public function getLockURLAttribute()
+	public function getLockRouteAttribute()
 	{
-		return $this->getRoute('forum.get.lock.thread', ['_token' => csrf_token()]);
+		return $this->getRoute('forum.post.lock.thread');
 	}
 
-	public function getDeleteURLAttribute()
+	public function getDeleteRouteAttribute()
 	{
-		return $this->getRoute('forum.get.delete.thread', ['_token' => csrf_token()]);
+		return $this->getRoute('forum.delete.thread');
 	}
 
 	public function getCanReplyAttribute()

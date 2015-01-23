@@ -9,10 +9,10 @@
 <tr>
 	<td>
 		@if($post->canPost)
-		<a href="{{ $post->editURL }}">{{ trans('forum::base.edit')}}</a>
+		<a href="{{ $post->editRoute }}">{{ trans('forum::base.edit')}}</a>
 		@endif
 		@if($post->canDelete)
-		<a href="{{ $post->deleteURL }}">{{ trans('forum::base.delete') }}</a>
+		<a href="{{ $post->deleteRoute }}">{{ trans('forum::base.delete') }}</a>
 		@endif
 	</td>
 	<td>

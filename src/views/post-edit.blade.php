@@ -11,12 +11,12 @@
 @include(
 	'forum::partials.forms.post',
 	array(
-		'form_url'					=> $newThreadURL,
+		'form_url'					=> $newThreadRoute,
 		'form_classes'			=> '',
 		'show_title_field'	=> FALSE,
 		'post_content'			=> $post->content,
 		'submit_label'			=> 'Update post',
-		'cancel_url'				=> $post->thread->URL
+		'cancel_url'				=> $post->thread->Route
 	)
 )
 @overwrite

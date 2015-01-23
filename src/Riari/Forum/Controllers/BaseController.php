@@ -67,14 +67,14 @@ abstract class BaseController extends Controller {
     );
 
     $map_route_permissions = array(
-      'forum.get.view.category' => 'access_category',
-      'forum.get.view.thread'   => 'access_category',
-      'forum.get.create.thread' => 'create_threads',
-      'forum.get.lock.thread'   => 'lock_threads',
-      'forum.get.pin.thread'    => 'pin_threads',
-      'forum.get.delete.thread' => 'delete_threads',
-      'forum.get.edit.post'     => 'edit_post',
-      'forum.get.delete.post'   => 'delete_posts'
+      'forum.get.view.category'   => 'access_category',
+      'forum.get.view.thread'     => 'access_category',
+      'forum.get.create.thread'   => 'create_threads',
+      'forum.post.lock.thread'    => 'lock_threads',
+      'forum.post.pin.thread'     => 'pin_threads',
+      'forum.delete.thread'       => 'delete_threads',
+      'forum.get.edit.post'       => 'edit_post',
+      'forum.delete.post'         => 'delete_posts'
     );
 
     $route_name = Route::current()->getAction()['as'];
@@ -164,7 +164,7 @@ abstract class BaseController extends Controller {
 
       Alerts::add('success', trans('forum::base.thread_created'));
 
-      return Redirect::to($thread->URL);
+      return Redirect::to($thread->Route);
     }
     else
     {
@@ -178,7 +178,7 @@ abstract class BaseController extends Controller {
 
     if (!$this->collections['thread']->canPost)
     {
-      return Redirect::to($this->collections['thread']->URL);
+      return Redirect::to($this->collections['thread']->Route);
     }
 
     $with = array(
@@ -196,7 +196,7 @@ abstract class BaseController extends Controller {
 
     if (!$this->collections['thread']->canPost)
     {
-      return Redirect::to($this->collections['thread']->URL);
+      return Redirect::to($this->collections['thread']->Route);
     }
 
     $post_valid = Validation::check('post');
@@ -214,15 +214,15 @@ abstract class BaseController extends Controller {
 
       Alerts::add('success', trans('forum::base.reply_added'));
 
-      return Redirect::to($this->collections['thread']->lastPostURL);
+      return Redirect::to($this->collections['thread']->lastPostRoute);
     }
     else
     {
-      return Redirect::to($this->collections['thread']->replyURL)->withInput();
+      return Redirect::to($this->collections['thread']->replyRoute)->withInput();
     }
   }
 
-  public function getLockThread($categoryID, $categoryAlias, $threadID, $threadAlias)
+  public function postLockThread($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
     $this->load(['thread' => $threadID]);
 
@@ -230,10 +230,10 @@ abstract class BaseController extends Controller {
 
     Alerts::add('success', trans('forum::base.thread_updated'));
 
-    return Redirect::to($this->collections['thread']->URL);
+    return Redirect::to($this->collections['thread']->Route);
   }
 
-  public function getPinThread($categoryID, $categoryAlias, $threadID, $threadAlias)
+  public function postPinThread($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
     $this->load(['thread' => $threadID]);
 
@@ -241,10 +241,10 @@ abstract class BaseController extends Controller {
 
     Alerts::add('success', trans('forum::base.thread_updated'));
 
-    return Redirect::to($this->collections['thread']->URL);
+    return Redirect::to($this->collections['thread']->Route);
   }
 
-  public function getDeleteThread($categoryID, $categoryAlias, $threadID, $threadAlias)
+  public function deleteThread($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
     $this->load(['category' => $categoryID, 'thread' => $threadID]);
 
@@ -261,7 +261,7 @@ abstract class BaseController extends Controller {
 
     Alerts::add('success', trans('forum::base.thread_deleted'));
 
-    return Redirect::to($this->collections['category']->URL);
+    return Redirect::to($this->collections['category']->Route);
   }
 
   public function getEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
@@ -291,15 +291,15 @@ abstract class BaseController extends Controller {
 
       Alerts::add('success', trans('forum::base.post_updated'));
 
-      return Redirect::to($post->URL);
+      return Redirect::to($post->Route);
     }
     else
     {
-      return Redirect::to($this->collections['post']->editURL)->withInput();
+      return Redirect::to($this->collections['post']->editRoute)->withInput();
     }
   }
 
-  public function getDeletePost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
+  public function deletePost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
   {
     $this->load(['category' => $categoryID, 'thread' => $threadID, 'post' => $postID]);
 
@@ -312,10 +312,10 @@ abstract class BaseController extends Controller {
     {
       $this->threads->delete($threadID);
 
-      return Redirect::to($this->collections['category']->URL);
+      return Redirect::to($this->collections['category']->Route);
     }
 
-    return Redirect::to($this->collections['thread']->URL);
+    return Redirect::to($this->collections['thread']->Route);
   }
 
 }

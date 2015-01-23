@@ -24,7 +24,7 @@ abstract class BaseModel extends Eloquent {
 		}
 	}
 
-	protected function getURLComponents()
+	protected function getRouteComponents()
 	{
 		$components = array();
 
@@ -33,7 +33,7 @@ abstract class BaseModel extends Eloquent {
 
 	protected function getRoute($name, $components = array())
 	{
-		return route($name, array_merge($this->getURLComponents(), $components));
+		return route($name, array_merge($this->getRouteComponents(), $components));
 	}
 
 	protected function getTimeAgo($timestamp)

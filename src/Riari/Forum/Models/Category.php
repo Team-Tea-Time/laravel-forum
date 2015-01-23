@@ -10,7 +10,7 @@ class Category extends BaseModel {
 
 	protected $table      = 'forum_categories';
 	public    $timestamps = false;
-	protected $appends    = ['threadCount', 'replyCount', 'URL', 'newThreadURL'];
+	protected $appends    = ['threadCount', 'replyCount', 'Route', 'newThreadRoute'];
 
 	public function parentCategory()
 	{
@@ -54,7 +54,7 @@ class Category extends BaseModel {
 		});
 	}
 
-	protected function getURLComponents()
+	protected function getRouteComponents()
 	{
 		$components = array(
 			'categoryID'		=> $this->id,
@@ -64,12 +64,12 @@ class Category extends BaseModel {
 		return $components;
 	}
 
-	public function getURLAttribute()
+	public function getRouteAttribute()
 	{
 		return $this->getRoute('forum.get.view.category');
 	}
 
-	public function getNewThreadURLAttribute()
+	public function getNewThreadRouteAttribute()
 	{
 		return $this->getRoute('forum.post.create.thread');
 	}

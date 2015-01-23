@@ -27,7 +27,7 @@ class ForumServiceProvider extends ServiceProvider {
 			$root = Config::get('forum::routes.root');
 			$controller = Config::get('forum::integration.controller');
 
-			include __DIR__.'/../../filters.php';
+			include __DIR__.'/../../macros.php';
 			include __DIR__.'/../../routes.php';
 		}
 	}

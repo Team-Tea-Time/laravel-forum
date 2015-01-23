@@ -5,7 +5,7 @@
 
 @if($category->canPost)
 <p>
-	<a href="{{ $category->newThreadURL }}">{{ trans('forum::base.new_thread') }}</a>
+	<a href="{{ $category->newThreadRoute }}">{{ trans('forum::base.new_thread') }}</a>
 </p>
 @endif
 
@@ -23,7 +23,7 @@
 		<tr>
 			<th>
 				<div class="category_title">
-					<a href="{{ $subcategory->URL }}">{{{ $subcategory->title }}}</a>
+					<a href="{{ $subcategory->Route }}">{{{ $subcategory->title }}}</a>
 				</div>
 				<div class="category_subtitle">{{{ $subcategory->subtitle }}}</div>
 			</th>
@@ -48,7 +48,7 @@
 			@foreach($category->threads as $thread)
 			<tr>
 				<td>
-					<a href="{{ $thread->URL }}">
+					<a href="{{ $thread->Route }}">
 						@if($thread->locked)
 						[{{ trans('forum::base.locked') }}]
 						@endif
@@ -65,7 +65,7 @@
 					{{ $thread->lastPost->author->username }}
 				</td>
 				<td>
-					<a href="{{ URL::to( $thread->URL . '?page=' . $thread->lastPage . '#post-' . $thread->lastPost->id ) }}">{{ trans('forum::base.view_post') }} &raquo;</a>
+					<a href="{{ URL::to( $thread->route . '?page=' . $thread->lastPage . '#post-' . $thread->lastPost->id ) }}">{{ trans('forum::base.view_post') }} &raquo;</a>
 				</td>
 			</tr>
 			@endforeach
@@ -76,7 +76,7 @@
 				</td>
 				<td colspan="2">
 					@if($category->canPost)
-					<a href="{{ $category->newThreadURL }}">{{ trans('forum::base.first_thread') }}</a>
+					<a href="{{ $category->newThreadRoute }}">{{ trans('forum::base.first_thread') }}</a>
 					@endif
 				</td>
 			</tr>
@@ -86,7 +86,7 @@
 
 @if($category->canPost)
 <p>
-	<a href="{{ $category->newThreadURL }}">{{ trans('forum::base.new_thread') }}</a>
+	<a href="{{ $category->newThreadRoute }}">{{ trans('forum::base.new_thread') }}</a>
 </p>
 @endif
 @overwrite

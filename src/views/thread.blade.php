@@ -21,13 +21,13 @@
 	</button>
 	<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 		@if($thread->canPin)
-		<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ $thread->pinURL }}">{{ trans('forum::base.pin_thread') }}</a></li>
+		<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ $thread->pinRoute }}">{{ trans('forum::base.pin_thread') }}</a></li>
 		@endif
 		@if($thread->canLock)
-		<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ $thread->lockURL }}">{{ trans('forum::base.lock_thread') }}</a></li>
+		<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ $thread->lockRoute }}">{{ trans('forum::base.lock_thread') }}</a></li>
 		@endif
 		@if($thread->canDelete)
-		<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ $thread->deleteURL }}" onclick="return confirm({{ trans('forum::base.generic_confirm') }})">{{ trans('forum::base.delete_thread') }}</a></li>
+		<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ $thread->deleteRoute }}" onclick="return confirm({{ trans('forum::base.generic_confirm') }})">{{ trans('forum::base.delete_thread') }}</a></li>
 		@endif
 	</ul>
 </div>
@@ -35,7 +35,7 @@
 
 @if($thread->canReply)
 <div class="btn-group" role="group">
-	<a href="{{ $thread->replyURL }}" class="btn btn-default">{{ trans('forum::base.new_reply') }}</a>
+	<a href="{{ $thread->replyRoute }}" class="btn btn-default">{{ trans('forum::base.new_reply') }}</a>
 	<a href="#quick-reply" class="btn btn-default">{{ trans('forum::base.quick_reply') }}</a>
 </div>
 @endif
@@ -66,7 +66,7 @@
 	@include(
 		'forum::partials.forms.post',
 		array(
-			'form_url'					=> $thread->replyURL,
+			'form_url'					=> $thread->replyRoute,
 			'form_classes'			=> '',
 			'show_title_field'	=> FALSE,
 			'post_content'			=> '',
