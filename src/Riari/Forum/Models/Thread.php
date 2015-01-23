@@ -51,7 +51,7 @@ class Thread extends BaseModel {
 		return $this->lastPost->created_at;
 	}
 
-	private function getURLComponents()
+	protected function getURLComponents()
 	{
 		$components = array(
 			'categoryID'		=> $this->category->id,
@@ -65,22 +65,42 @@ class Thread extends BaseModel {
 
 	public function getURLAttribute()
 	{
-		return route('forum.get.view.thread', $this->getURLComponents());
+		return $this->getRoute('forum.get.view.thread');
 	}
 
 	public function getReplyURLAttribute()
 	{
-		return route('forum.get.reply.thread', $this->getURLComponents());
+		return $this->getRoute('forum.get.reply.thread');
+	}
+
+	public function getPinURLAttribute()
+	{
+		return $this->getRoute('forum.get.pin.thread');
+	}
+
+	public function getLockURLAttribute()
+	{
+		return $this->getRoute('forum.get.lock.thread');
 	}
 
 	public function getDeleteURLAttribute()
 	{
-		return route('forum.get.delete.thread', $this->getURLComponents());
+		return $this->getRoute('forum.get.delete.thread');
 	}
 
-	public function getCanPostAttribute()
+	public function getCanReplyAttribute()
 	{
 		return AccessControl::check($this, 'reply_to_thread', FALSE);
+	}
+
+	public function getCanPinAttribute()
+	{
+		return AccessControl::check($this, 'pin_threads', FALSE);
+	}
+
+	public function getCanLockAttribute()
+	{
+		return AccessControl::check($this, 'lock_threads', FALSE);
 	}
 
 	public function getCanDeleteAttribute()

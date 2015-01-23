@@ -37,19 +37,6 @@ return array(
 
   /*
   |--------------------------------------------------------------------------
-  | ACTION: Delete thread permission
-  |--------------------------------------------------------------------------
-  |
-  | Determines whether or not the current user is allowed to delete threads.
-  |
-  */
-  'delete_threads' => function($thread, $user)
-  {
-    return FALSE;
-  },
-
-  /*
-  |--------------------------------------------------------------------------
   | ACTION: Lock thread permission
   |--------------------------------------------------------------------------
   |
@@ -70,6 +57,19 @@ return array(
   |
   */
   'pin_threads' => function($thread, $user)
+  {
+    return FALSE;
+  },
+
+  /*
+  |--------------------------------------------------------------------------
+  | ACTION: Delete thread permission
+  |--------------------------------------------------------------------------
+  |
+  | Determines whether or not the current user is allowed to delete threads.
+  |
+  */
+  'delete_threads' => function($thread, $user)
   {
     return FALSE;
   },

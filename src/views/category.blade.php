@@ -13,9 +13,9 @@
 <table class="table table-category">
 	<thead>
 		<tr>
-			<th>{{ trans('forum::base.col_forum') }}</th>
-			<th>{{ trans('forum::base.col_threads') }}</th>
-			<th>{{ trans('forum::base.col_posts') }}</th>
+			<th>{{ trans('forum::base.category') }}</th>
+			<th>{{ trans('forum::base.threads') }}</th>
+			<th>{{ trans('forum::base.posts') }}</th>
 		</tr>
 	</thead>
 	<tbody>

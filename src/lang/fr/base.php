@@ -2,57 +2,59 @@
 
 return array(
 
-	/*
-	|--------------------------------------------------------------------------
-	| Base forum language strings
-	|--------------------------------------------------------------------------
-	*/
+  /*
+  |--------------------------------------------------------------------------
+  | Base forum language strings
+  |--------------------------------------------------------------------------
+  */
 
-	'home_title' 	=> 'Laravel forum',
+  // General
+  'home_title' 				=> 'Laravel forum',
+  'index' 						=> 'Index',
+  'author' 						=> 'Auteur',
+	'title'							=> 'Titre',
+	'subject'						=> 'Sujet',
+	'edit'							=> 'Modifier',
+	'delete' 						=> 'Supprimer',
+	'reply' 						=> 'Répondre',
+	'new_reply' 				=> 'Nouvelle réponse',
+	'quick_reply' 			=> 'Réponse rapide',
+	'reply_added' 			=> 'Post ajouté',
+	'send'							=> 'Envoyer',
+	'posting_into'			=> 'Vous postez dans',
+	'you_are_editing'		=> 'Vous éditez',
+	'posted_at'					=> 'Posté à',
+	'last_update'				=> 'Dernière mise à jour à',
+	'generic_confirm' 	=> 'Êtes-vous sûr?',
+	'actions'						=> 'Actes',
 
-	'col_forum'		=> 'Forum',
-	'col_threads'	=> 'Sujets',
-	'col_posts'		=> 'posts',
+  // Categories
+	'category'					=> 'Catégorie',
+	'no_categories' 		=> 'Aucune catégorie trouvée',
 
-	'index' 		=> 'Index',
-	'author' 		=> 'Auteur',
-	'post'		=> 'Post',
-	'subject'		=> 'Sujet',
-	'title'			=> 'Titre',
+  // Threads
+	'threads'						=> 'Sujets',
+	'first_thread'			=> 'Postez le premier!',
+	'new_thread' 				=> 'Nouveau sujet',
+	'thread_created' 		=> 'Sujet créé',
+	'pin_thread'				=> 'Épinglér ce sujet',
+	'pinned' 						=> 'Épinglé',
+	'lock_thread'				=> 'Fermer ce sujet',
+	'locked' 						=> 'Fermé',
+	'thread_updated'		=> 'Sujet mis à jour',
+	'delete_thread' 		=> 'Supprimer ce sujet',
+	'thread_deleted' 		=> 'Sujet supprimé',
+	'no_threads' 				=> 'Aucun thème trouvé',
 
-	'label_your_post'	=> 'Votre post',
+  // Posts
+  'posts'							=> 'posts',
+	'post'							=> 'Post',
+	'your_post'					=> 'Votre post',
+  'latest_posts' 			=> 'Derniers posts',
+  'edit_post'					=> 'Modifier un post',
+  'post_updated' 			=> 'Post mis à jour',
+  'post_deleted' 			=> 'Post supprimé',
+  'last_post' 				=> 'Dernière post',
+  'view_post' 				=> 'Voir le post',
 
-	'latest_posts' => 'Derniers posts',
-	'edit'	=> 'Modifier',
-	'edit_post'	=> 'Modifier un post',
-	'post_post'	=> 'Poster un nouveau post',
-	'post_updated' => 'Post mis à jour',
-	'post_deleted' => 'Post supprimé',
-	'posting_into'	=> 'Vous postez dans',
-	'you_are_editing'	=> 'Vous éditez',
-	'posted_at'		=> 'Posté à',
-	'last_update'	=> 'Dernière mise à jour à',
-	'last_post' => 'Dernière post',
-	'view_post' => 'Voir le post',
-	'delete' => 'Supprimer',
-	'generic_confirm' => 'Êtes-vous sûr?',
-
-	'pinned' => 'Épinglé',
-	'locked' => 'Fermé',
-
-	'reply' 		=> 'Répondre',
-	'new_reply' 	=> 'Nouvelle réponse',
-	'quick_reply' => 'Réponse rapide',
-	'post_reply' => 'Proposez un post',
-	'reply_added' => 'Post ajouté',
-	'new_thread' 	=> 'Nouveau sujet',
-	'new_thread_title' => 'Publier un nouveau sujet',
-	'thread_created' => 'Sujet créé',
-	'send'			=> 'Envoyer',
-	'first_thread'	=> 'Postez le premier!',
-	'delete_thread' => 'Supprimer ce sujet',
-	'thread_deleted' => 'Sujet supprimé',
-
-	'no_categories' => 'Aucune catégorie trouvée',
-	'no_threads' 	=> 'Aucun thème trouvé',
 );

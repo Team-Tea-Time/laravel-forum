@@ -3,7 +3,7 @@
 @section('content')
 @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
-<h2>{{ trans('forum::base.post_post') }}</h2>
+<h2>{{ trans('forum::base.new_reply') }}</h2>
 <p class="lead">
 	{{ trans('forum::posting_into') }} @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 </p>

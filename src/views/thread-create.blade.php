@@ -7,7 +7,7 @@
 <fieldset>
 
 <!-- Form Name -->
-<legend>{{ trans('forum::base.new_thread_title') }}</legend>
+<legend>{{ trans('forum::base.new_thread') }}</legend>
 <p class="lead">
 	{{ trans('forum::base.posting_into') }} @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 </p>

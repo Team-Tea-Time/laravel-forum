@@ -54,7 +54,7 @@ class Category extends BaseModel {
 		});
 	}
 
-	private function getURLComponents()
+	protected function getURLComponents()
 	{
 		$components = array(
 			'categoryID'		=> $this->id,
@@ -66,12 +66,12 @@ class Category extends BaseModel {
 
 	public function getURLAttribute()
 	{
-		return route('forum.get.view.category', $this->getURLComponents());
+		return $this->getRoute('forum.get.view.category');
 	}
 
 	public function getNewThreadURLAttribute()
 	{
-		return route('forum.post.create.thread', $this->getURLComponents());
+		return $this->getRoute('forum.post.create.thread');
 	}
 
 	public function getCanPostAttribute()

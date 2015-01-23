@@ -2,57 +2,61 @@
 
 return array(
 
-	/*
-	|--------------------------------------------------------------------------
-	| Base forum language strings
-	|--------------------------------------------------------------------------
-	*/
+  /*
+  |--------------------------------------------------------------------------
+  | Base forum language strings
+  |--------------------------------------------------------------------------
+  */
 
-	'home_title' 	=> 'Laravel forum',
+  // General
+  'home_title'				=> 'Laravel forum',
+	'index' 						=> 'Index',
+	'author' 						=> 'Author',
+	'title'							=> 'Title',
+	'subject'						=> 'Subject',
+	'edit'							=> 'Edit',
+	'delete'						=> 'Delete',
+	'reply' 						=> 'Reply',
+	'new_reply' 				=> 'New reply',
+	'quick_reply' 			=> 'Quick reply',
+	'reply_added' 			=> 'Reply added',
+	'send'							=> 'Send',
+	'posting_into'			=> 'You\'re posting into',
+	'you_are_editing'		=> 'You\'re editing',
+	'posted_at'					=> 'Posted at',
+	'last_update'				=> 'Last update at',
+	'generic_confirm' 	=> 'Are you sure?',
+	'actions'						=> 'Actions',
 
-	'col_forum'		=> 'Forum',
-	'col_threads'	=> 'Threads',
-	'col_posts'		=> 'Posts',
+  // Categories
+  'category'					=> 'Category',
+	'no_categories' 		=> 'No categories found',
 
-	'index' 		=> 'Index',
-	'author' 		=> 'Author',
-	'post'		=> 'Post',
-	'subject'		=> 'Subject',
-	'title'			=> 'Title',
+  // Threads
+  'threads'						=> 'Threads',
+	'first_thread'			=> 'Post the first!',
+	'new_thread' 				=> 'New thread',
+	'thread_created' 		=> 'Thread created',
+	'pin_thread'				=> 'Pin/unpin this thread',
+	'thread_pinned'			=> 'Thread pinned',
+	'thread_unpinned'		=> 'Thread unpinned',
+	'pinned' 						=> 'Pinned',
+	'lock_thread'				=> 'Lock/unlock this thread',
+	'locked'						=> 'Locked',
+	'thread_updated'		=> 'Thread updated',
+	'delete_thread' 		=> 'Delete this thread',
+	'thread_deleted' 		=> 'Thread deleted',
+	'no_threads' 				=> 'No threads found',
 
-	'label_your_post'	=> 'Your post',
+  // Posts
+  'posts'							=> 'Posts',
+  'post'							=> 'Post',
+  'your_post'					=> 'Your post',
+	'latest_posts' 			=> 'Latest posts',
+	'edit_post'					=> 'Edit post',
+  'post_updated' 			=> 'Post updated',
+  'post_deleted' 			=> 'Post deleted',
+  'last_post' 				=> 'Last post',
+  'view_post'	 				=> 'View post',
 
-	'latest_posts' => 'Latest posts',
-	'edit' => 'Edit',
-	'edit_post'	=> 'Edit a post',
-	'post_post'	=> 'Post a new post',
-	'post_updated' => 'Post updated',
-	'post_deleted' => 'Post deleted',
-	'posting_into'	=> 'You\'re posting into',
-	'you_are_editing'	=> 'You\'re editing',
-	'posted_at'		=> 'Posted at',
-	'last_update'	=> 'Last update at',
-	'last_post' => 'Last post',
-	'view_post' => 'View post',
-	'delete' => 'Delete',
-	'generic_confirm' => 'Are you sure?',
-
-	'pinned' => 'Pinned',
-	'locked' => 'Locked',
-
-	'reply' 		=> 'Reply',
-	'new_reply' 	=> 'New reply',
-	'quick_reply' => 'Quick reply',
-	'post_reply' => 'Post reply',
-	'reply_added' => 'Reply added',
-	'new_thread' 	=> 'New thread',
-	'new_thread_title' => 'Post a new thread',
-	'thread_created' => 'Thread created',
-	'send'			=> 'Send',
-	'first_thread'	=> 'Post the first!',
-	'delete_thread' => 'Delete this thread',
-	'thread_deleted' => 'Thread deleted',
-
-	'no_categories' => 'No categories found',
-	'no_threads' 	=> 'No threads found',
 );

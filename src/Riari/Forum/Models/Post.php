@@ -32,7 +32,7 @@ class Post extends BaseModel {
 		return $this->thread->URL;
 	}
 
-	private function getURLComponents()
+	protected function getURLComponents()
 	{
 		$components = array(
 			'categoryID'		=> $this->thread->category->id,
@@ -47,12 +47,12 @@ class Post extends BaseModel {
 
 	public function getEditURLAttribute()
 	{
-		return route('forum.get.edit.post', $this->getURLComponents());
+		return $this->getRoute('forum.get.edit.post');
 	}
 
 	public function getDeleteURLAttribute()
 	{
-		return route('forum.get.delete.post', $this->getURLComponents());
+		return $this->getRoute('forum.get.delete.post');
 	}
 
 	public function getCanPostAttribute()

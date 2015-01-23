@@ -69,6 +69,8 @@ abstract class BaseController extends Controller {
       'forum.get.view.category' => 'access_category',
       'forum.get.view.thread'   => 'access_category',
       'forum.get.create.thread' => 'create_threads',
+      'forum.get.lock.thread'   => 'lock_threads',
+      'forum.get.pin.thread'    => 'pin_threads',
       'forum.get.delete.thread' => 'delete_threads',
       'forum.get.edit.post'     => 'edit_post',
       'forum.get.delete.post'   => 'delete_posts'
@@ -217,6 +219,36 @@ abstract class BaseController extends Controller {
     {
       return Redirect::to($this->collections['thread']->replyURL)->withInput();
     }
+  }
+
+  public function getLockThread($categoryID, $categoryAlias, $threadID, $threadAlias)
+  {
+    $this->load(['thread' => $threadID]);
+
+    $thread = $this->collections['thread'];
+
+    $thread->locked = !$thread->locked;
+
+    $thread->save();
+
+    Alerts::add('success', trans('forum::base.thread_updated'));
+
+    return Redirect::to($thread->URL);
+  }
+
+  public function getPinThread($categoryID, $categoryAlias, $threadID, $threadAlias)
+  {
+    $this->load(['thread' => $threadID]);
+
+    $thread = $this->collections['thread'];
+
+    $thread->pinned = !$thread->pinned;
+
+    $thread->save();
+
+    Alerts::add('success', trans('forum::base.thread_updated'));
+
+    return Redirect::to($thread->URL);
   }
 
   public function getDeleteThread($categoryID, $categoryAlias, $threadID, $threadAlias)
