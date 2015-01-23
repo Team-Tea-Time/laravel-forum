@@ -119,3 +119,7 @@ There's no confirmation step implemented by default for thread and post deletion
 ### Regarding views
 
 I try to keep the views up to date with all feature changes and bug fixes, but as I'm developing it for a site where the views are overridden, I might sometimes overlook an issue in the default views. If you find such an issue, please [report it](https://github.com/Riari/laravel-forum/issues). Thanks!
+
+### Regarding translations
+
+I don't know French very well and as such I'm relying heavily on Google Translate to keep the French strings up to date. If I derped on any of them, please let me know so I can fix them!
