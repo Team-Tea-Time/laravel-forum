@@ -27,13 +27,10 @@
 		<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ $thread->lockURL }}">{{ trans('forum::base.lock_thread') }}</a></li>
 		@endif
 		@if($thread->canDelete)
-		<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ $thread->deleteURL }}">{{ trans('forum::base.delete_thread') }}</a></li>
+		<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ $thread->deleteURL }}" onclick="return confirm({{ trans('forum::base.generic_confirm') }})">{{ trans('forum::base.delete_thread') }}</a></li>
 		@endif
 	</ul>
 </div>
-
-@if($thread->canDelete)
-<a href="{{ $thread->deleteURL }}" class="btn btn-default">{{ trans('forum::base.delete_thread') }}</a>
 @endif
 
 @if($thread->canReply)

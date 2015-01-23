@@ -23,12 +23,17 @@ abstract class BaseModel extends Eloquent {
 			Cache::forget($cacheItem);
 		}
 	}
-	
-	protected function getURLComponents(){}
 
-	protected function getRoute($name)
+	protected function getURLComponents()
 	{
-		return route($name, $this->getURLComponents());
+		$components = array();
+
+		return $components;
+	}
+
+	protected function getRoute($name, $components = array())
+	{
+		return route($name, array_merge($this->getURLComponents(), $components));
 	}
 
 	protected function getTimeAgo($timestamp)

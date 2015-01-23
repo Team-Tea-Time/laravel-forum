@@ -75,17 +75,17 @@ class Thread extends BaseModel {
 
 	public function getPinURLAttribute()
 	{
-		return $this->getRoute('forum.get.pin.thread');
+		return $this->getRoute('forum.get.pin.thread', ['_token' => csrf_token()]);
 	}
 
 	public function getLockURLAttribute()
 	{
-		return $this->getRoute('forum.get.lock.thread');
+		return $this->getRoute('forum.get.lock.thread', ['_token' => csrf_token()]);
 	}
 
 	public function getDeleteURLAttribute()
 	{
-		return $this->getRoute('forum.get.delete.thread');
+		return $this->getRoute('forum.get.delete.thread', ['_token' => csrf_token()]);
 	}
 
 	public function getCanReplyAttribute()

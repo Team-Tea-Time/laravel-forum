@@ -5,6 +5,7 @@ use Riari\Forum\Repositories\Threads;
 use Riari\Forum\Repositories\Posts;
 use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Libraries\Alerts;
+use Riari\Forum\Libraries\Utils;
 use Riari\Forum\Libraries\Validation;
 
 use App;
@@ -225,30 +226,22 @@ abstract class BaseController extends Controller {
   {
     $this->load(['thread' => $threadID]);
 
-    $thread = $this->collections['thread'];
-
-    $thread->locked = !$thread->locked;
-
-    $thread->save();
+    Utils::toggleProperty($this->collections['thread'], 'locked');
 
     Alerts::add('success', trans('forum::base.thread_updated'));
 
-    return Redirect::to($thread->URL);
+    return Redirect::to($this->collections['thread']->URL);
   }
 
   public function getPinThread($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
     $this->load(['thread' => $threadID]);
 
-    $thread = $this->collections['thread'];
-
-    $thread->pinned = !$thread->pinned;
-
-    $thread->save();
+    Utils::toggleProperty($this->collections['thread'], 'pinned');
 
     Alerts::add('success', trans('forum::base.thread_updated'));
 
-    return Redirect::to($thread->URL);
+    return Redirect::to($this->collections['thread']->URL);
   }
 
   public function getDeleteThread($categoryID, $categoryAlias, $threadID, $threadAlias)
