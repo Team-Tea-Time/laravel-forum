@@ -1,6 +1,6 @@
 {
     "name": "riari/laravel-forum",
-    "description": "A complete forum package designed for easy integration into any Laravel application",
+    "description": "A complete forum package designed for easy integration into any Laravel 4 application",
     "keywords": ["laravel", "laravel-4", "forum", "discuss"],
     "license": "MIT",
     "authors": [
