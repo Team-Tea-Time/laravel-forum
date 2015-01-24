@@ -90,7 +90,7 @@ To adjust configuration (including permissions and integration options), publish
 
 `php artisan config:publish riari/forum`
 
-You'll find them in app/config/packages/Riari/forum.
+You'll find them in app/config/packages/riari/forum.
 
 ### Controller methods
 
