@@ -5,7 +5,6 @@ use Riari\Forum\Repositories\Threads;
 use Riari\Forum\Repositories\Posts;
 use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Libraries\Alerts;
-use Riari\Forum\Libraries\Utils;
 use Riari\Forum\Libraries\Validation;
 
 use App;
@@ -164,11 +163,11 @@ abstract class BaseController extends Controller {
 
       Alerts::add('success', trans('forum::base.thread_created'));
 
-      return Redirect::to($thread->Route);
+      return Redirect::to($thread->route);
     }
     else
     {
-      return Redirect::to($this->collections['category']->postAlias)->withInput();
+      return Redirect::to($this->collections['category']->newThreadRoute)->withInput();
     }
   }
 
@@ -178,7 +177,7 @@ abstract class BaseController extends Controller {
 
     if (!$this->collections['thread']->canPost)
     {
-      return Redirect::to($this->collections['thread']->Route);
+      return Redirect::to($this->collections['thread']->route);
     }
 
     $with = array(
@@ -196,7 +195,7 @@ abstract class BaseController extends Controller {
 
     if (!$this->collections['thread']->canPost)
     {
-      return Redirect::to($this->collections['thread']->Route);
+      return Redirect::to($this->collections['thread']->route);
     }
 
     $post_valid = Validation::check('post');
@@ -226,22 +225,18 @@ abstract class BaseController extends Controller {
   {
     $this->load(['thread' => $threadID]);
 
-    Utils::toggleProperty($this->collections['thread'], 'locked');
+    $this->collections['thread']->toggle('locked');
 
-    Alerts::add('success', trans('forum::base.thread_updated'));
-
-    return Redirect::to($this->collections['thread']->Route);
+    return Redirect::to($this->collections['thread']->route);
   }
 
   public function postPinThread($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
     $this->load(['thread' => $threadID]);
 
-    Utils::toggleProperty($this->collections['thread'], 'pinned');
+    $this->collections['thread']->toggle('pinned');
 
-    Alerts::add('success', trans('forum::base.thread_updated'));
-
-    return Redirect::to($this->collections['thread']->Route);
+    return Redirect::to($this->collections['thread']->route);
   }
 
   public function deleteThread($categoryID, $categoryAlias, $threadID, $threadAlias)
@@ -261,7 +256,7 @@ abstract class BaseController extends Controller {
 
     Alerts::add('success', trans('forum::base.thread_deleted'));
 
-    return Redirect::to($this->collections['category']->Route);
+    return Redirect::to($this->collections['category']->route);
   }
 
   public function getEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
@@ -291,7 +286,7 @@ abstract class BaseController extends Controller {
 
       Alerts::add('success', trans('forum::base.post_updated'));
 
-      return Redirect::to($post->Route);
+      return Redirect::to($post->route);
     }
     else
     {
@@ -312,10 +307,10 @@ abstract class BaseController extends Controller {
     {
       $this->threads->delete($threadID);
 
-      return Redirect::to($this->collections['category']->Route);
+      return Redirect::to($this->collections['category']->route);
     }
 
-    return Redirect::to($this->collections['thread']->Route);
+    return Redirect::to($this->collections['thread']->route);
   }
 
 }

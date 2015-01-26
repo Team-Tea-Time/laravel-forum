@@ -2,8 +2,10 @@
 
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 use Riari\Forum\Libraries\AccessControl;
+use Riari\Forum\Libraries\Alerts;
 
 use Config;
+use Redirect;
 use Str;
 
 class Thread extends BaseModel {
@@ -106,6 +108,13 @@ class Thread extends BaseModel {
 	public function getCanDeleteAttribute()
 	{
 		return AccessControl::check($this, 'delete_threads', FALSE);
+	}
+
+	public function toggle($property)
+	{
+		parent::toggle($property);
+
+		Alerts::add('success', trans('forum::base.thread_updated'));
 	}
 
 }

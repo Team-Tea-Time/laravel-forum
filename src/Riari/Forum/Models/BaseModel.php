@@ -51,4 +51,11 @@ abstract class BaseModel extends Eloquent {
 		return $this->getTimeAgo($this->updated_at);
 	}
 
+	public function toggle($property)
+	{
+		$this->$property = !$this->$property;
+
+		$this->save();
+	}
+
 }
