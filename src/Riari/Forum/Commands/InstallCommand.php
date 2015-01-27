@@ -19,7 +19,7 @@ class InstallCommand extends Command {
 			return;
 		}
 
-		$this->installController($controller, '\Riari\Forum\Controllers\AbstractBaseController');
+		$this->installController($controller, '\Riari\Forum\Controllers\BaseController');
 
 		$this->info('Forum installation done.');
 	}
