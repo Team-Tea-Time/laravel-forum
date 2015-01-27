@@ -100,7 +100,7 @@ abstract class BaseController extends Controller {
 
   public function getViewIndex()
   {
-    $categories = $this->categories->getByParent(NULL, ['subcategories']);
+    $categories = $this->categories->getAll();
 
     return View::make('forum::index', compact('categories'));
   }

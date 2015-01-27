@@ -18,17 +18,12 @@ class Posts extends BaseRepository {
 		return $this->getFirstBy('id', $postID, $with);
 	}
 
-	public function getByThread($threadID, $with = array())
-	{
-		return $this->getManyBy('parent_thread', $threadID, $with);
-	}
-
 	public function getLastByThread($threadID, $count = 10, array $with = array())
 	{
 		$model = $this->model->where('parent_thread', '=', $threadID);
 		$model = $model->orderBy('created_at', 'DESC')->take($count);
 		$model = $model->with($with);
-		
+
 		return $model;
 	}
 

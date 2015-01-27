@@ -15,27 +15,6 @@ abstract class BaseRepository {
 		return $model;
 	}
 
-	protected function getManyBy($index, $value, $with = array())
-	{
-		$model = $this->model->where($index, '=', $value)->with($with);
-
-		if ($this->itemsPerPage != 0)
-		{
-			$model = $model->paginate($this->itemsPerPage);
-		}
-		else
-		{
-			$model = $model->get();
-		}
-
-		return $model;
-	}
-
-	public function getPaginationLinks($index, $value)
-	{
-		return $this->model->where($index, '=', $value)->paginate($this->itemsPerPage)->links(Config::get('forum::integration.pagination_view'));
-	}
-
 	public function create($data = array())
 	{
 		$model = $this->model->create($data);

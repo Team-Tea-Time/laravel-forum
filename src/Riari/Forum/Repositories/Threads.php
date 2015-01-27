@@ -18,9 +18,4 @@ class Threads extends BaseRepository {
 		return $this->getFirstBy('id', $threadID, $with);
 	}
 
-	public function getByCategory($categoryID, $with = array())
-	{
-		return $this->getManyBy('parent_category', $categoryID, $with);
-	}
-
 }
