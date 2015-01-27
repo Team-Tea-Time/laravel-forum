@@ -1,6 +1,6 @@
 <?php namespace Riari\Forum\Repositories;
 
-use \Riari\Forum\Models\Category;
+use Riari\Forum\Models\Category;
 
 class Categories extends BaseRepository {
 
@@ -9,17 +9,12 @@ class Categories extends BaseRepository {
 		$this->model = $model;
 	}
 
-	public function getByID($categoryID, array $with = array())
+	public function getByID($categoryID, $with = array())
 	{
-		if (!is_numeric($categoryID))
-		{
-			throw new \InvalidArgumentException();
-		}
-
 		return $this->getFirstBy('id', $categoryID, $with);
 	}
 
-	public function getByParent($parent, array $with = array())
+	public function getByParent($parent, $with = array())
 	{
 		if (is_array($parent) && isset($parent['id']))
 		{

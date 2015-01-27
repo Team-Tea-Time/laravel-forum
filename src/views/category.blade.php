@@ -35,6 +35,8 @@
 </table>
 @endif
 
+{{ $category->pageLinks }}
+
 <table class="table table-thread">
 	<thead>
 		<tr>
@@ -44,8 +46,8 @@
 		</tr>
 	</thead>
 	<tbody>
-		@if(!$category->threads->isEmpty())
-			@foreach($category->threads as $thread)
+		@if(!$category->threadsPaginated->isEmpty())
+			@foreach($category->threadsPaginated as $thread)
 			<tr>
 				<td>
 					<a href="{{ $thread->Route }}">
@@ -83,6 +85,8 @@
 		@endif
 	</tbody>
 </table>
+
+{{ $category->pageLinks }}
 
 @if($category->canPost)
 <p>

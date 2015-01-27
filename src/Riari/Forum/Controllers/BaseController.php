@@ -107,25 +107,16 @@ abstract class BaseController extends Controller {
 
   public function getViewCategory($categoryID, $categoryAlias)
   {
-    $this->load(['category' => $categoryID], ['parentCategory', 'subCategories', 'threads']);
+    $this->load(['category' => $categoryID], ['parentCategory', 'subCategories']);
 
-    $with = array(
-      'paginationLinks' => $this->threads->getPaginationLinks('parent_category', $categoryID)
-    );
-
-    return $this->makeView('forum::category')->with($with);
+    return $this->makeView('forum::category');
   }
 
   public function getViewThread($categoryID, $categoryAlias, $threadID, $threadAlias)
   {
     $this->load(['category' => $categoryID, 'thread' => $threadID]);
 
-    $with = array(
-      'posts'           => $this->posts->getByThread($threadID),
-      'paginationLinks' => $this->posts->getPaginationLinks('parent_thread', $threadID)
-    );
-
-    return $this->makeView('forum::thread')->with($with);
+    return $this->makeView('forum::thread');
   }
 
   public function getCreateThread($categoryID, $categoryAlias)
@@ -193,7 +184,7 @@ abstract class BaseController extends Controller {
 
     $this->load(['category' => $categoryID, 'thread' => $threadID]);
 
-    if (!$this->collections['thread']->canPost)
+    if (!$this->collections['thread']->canReply)
     {
       return Redirect::to($this->collections['thread']->route);
     }

@@ -30,17 +30,27 @@ class Thread extends BaseModel {
 
 	public function posts()
 	{
-		return $this->hasMany('\Riari\Forum\Models\Post', 'parent_thread')->orderBy('created_at', 'desc');
+		return $this->hasMany('\Riari\Forum\Models\Post', 'parent_thread');
+	}
+
+	public function getPostsPaginatedAttribute()
+	{
+		return $this->posts()->paginate(Config::get('forum::preferences.posts_per_thread'));
+	}
+
+	public function getPageLinksAttribute()
+	{
+		return $this->postsPaginated->links(Config::get('forum::preferences.pagination_view'));
 	}
 
 	public function getLastPageAttribute()
 	{
-		return $this->posts()->paginate(Config::get('forum::integration.posts_per_thread'))->getLastPage();
+		return $this->postsPaginated->getLastPage();
 	}
 
 	public function getLastPostAttribute()
 	{
-		return $this->posts->first();
+		return $this->posts()->orderBy('created_at', 'desc')->first();
 	}
 
 	public function getLastPostRouteAttribute()

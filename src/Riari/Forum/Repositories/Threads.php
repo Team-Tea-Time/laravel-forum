@@ -1,7 +1,8 @@
 <?php namespace Riari\Forum\Repositories;
 
+use Riari\Forum\Models\Thread;
+
 use Config;
-use \Riari\Forum\Models\Thread;
 
 class Threads extends BaseRepository {
 
@@ -12,14 +13,14 @@ class Threads extends BaseRepository {
 		$this->itemsPerPage = Config::get('forum::integration.threads_per_category');
 	}
 
-	public function getByID($threadID, Array $with = array())
+	public function getByID($threadID, $with = array())
 	{
-		if (!is_numeric($threadID))
-		{
-			throw new \InvalidArgumentException();
-		}
-
 		return $this->getFirstBy('id', $threadID, $with);
+	}
+
+	public function getByCategory($categoryID, $with = array())
+	{
+		return $this->getManyBy('parent_category', $categoryID, $with);
 	}
 
 }

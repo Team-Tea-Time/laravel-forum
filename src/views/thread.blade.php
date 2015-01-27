@@ -52,7 +52,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($thread->posts as $post)
+		@foreach($thread->postsPaginated as $post)
 		@include('forum::partials.post', compact('post'))
 		@endforeach
 	</tbody>

@@ -27,9 +27,14 @@ class Category extends BaseModel {
 		return $this->hasMany('\Riari\Forum\Models\Thread', 'parent_category')->with('category', 'posts')->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc');
 	}
 
-	public function scopeWhereTopLevel($query)
+	public function getThreadsPaginatedAttribute()
 	{
-		return $query->where('parent_category', '=', NULL);
+		return $this->threads()->paginate(Config::get('forum::preferences.threads_per_category'));
+	}
+
+	public function getPageLinksAttribute()
+	{
+		return $this->threadsPaginated->links(Config::get('forum::preferences.pagination_view'));
 	}
 
 	public function getThreadCountAttribute()
