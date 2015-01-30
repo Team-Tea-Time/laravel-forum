@@ -72,7 +72,7 @@ Run the forum install command to auto-deploy the forum controller to your app/co
 
 Publish the package migrations:
 
-`php artisan migrate:publish riari/forum`
+`php artisan migrate:publish riari/laravel-forum`
 
 Then run your migrations:
 
@@ -88,9 +88,9 @@ Once your categories are set up, go to <app hostname>/forum and you should see a
 
 To adjust configuration (including permissions and integration options), publish the package config files:
 
-`php artisan config:publish riari/forum`
+`php artisan config:publish riari/laravel-forum`
 
-You'll find them in app/config/packages/riari/forum.
+You'll find them in app/config/packages/riari/laravel-forum.
 
 ### Controller methods
 
@@ -100,7 +100,7 @@ You can override any of the methods in the controller (app/controllers/ForumCont
 
 Publish the package view files to your views folder:
 
-`php artisan view:publish riari/forum`
+`php artisan view:publish riari/laravel-forum`
 
 You can then adjust the views however you like. I suggest editing the master view to make it extend your app's main layout to easily integrate the forum with your design.
 

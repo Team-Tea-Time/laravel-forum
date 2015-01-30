@@ -21,7 +21,7 @@ class ForumServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('Riari/forum');
+		$this->package('riari/laravel-forum');
 
 		if (Config::get('forum::routes.enable')) {
 			$root = Config::get('forum::routes.root');
