@@ -20,6 +20,5 @@
         "psr-0": {
             "Riari\\Forum\\": "src/"
         }
-    },
-    "minimum-stability": "stable"
+    }
 }
