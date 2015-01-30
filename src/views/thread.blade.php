@@ -58,7 +58,7 @@
 	</tbody>
 </table>
 
-{{ $paginationLinks }}
+{{ $thread->pageLinks }}
 
 @if($thread->canReply)
 <h3>{{ trans('forum::base.quick_reply') }}</h3>
