@@ -166,7 +166,7 @@ abstract class BaseController extends Controller {
   {
     $this->load(['category' => $categoryID, 'thread' => $threadID]);
 
-    if (!$this->collections['thread']->canPost)
+    if (!$this->collections['thread']->canReply)
     {
       return Redirect::to($this->collections['thread']->route);
     }

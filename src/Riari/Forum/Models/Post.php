@@ -55,7 +55,7 @@ class Post extends BaseModel {
 		return $this->getRoute('forum.get.delete.post');
 	}
 
-	public function getCanPostAttribute()
+	public function getCanEditAttribute()
 	{
 		return AccessControl::check($this, 'edit_post', FALSE);
 	}

@@ -8,7 +8,7 @@
 </tr>
 <tr>
 	<td>
-		@if($post->canPost)
+		@if($post->canEdit)
 		<a href="{{ $post->editRoute }}">{{ trans('forum::base.edit')}}</a>
 		@endif
 		@if($post->canDelete)
