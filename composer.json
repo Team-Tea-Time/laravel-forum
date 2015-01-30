@@ -1,24 +1,25 @@
 {
-    "name": "riari/laravel-forum",
-    "description": "A complete forum package designed for easy integration into any Laravel 4 application",
-    "keywords": ["laravel", "laravel-4", "forum", "discuss"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Riari",
-            "email": "hello@ricko.me"
-        }
-    ],
-    "require": {
-        "php": ">=5.3.0",
-        "illuminate/support": "4.2.*"
-    },
-    "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
-        "psr-0": {
-            "Riari\\Forum\\": "src/"
-        }
+  "name": "riari/laravel-forum",
+  "description": "A complete forum package designed for easy integration into any Laravel 4 application",
+  "keywords": ["laravel", "laravel-4", "forum", "discuss"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Riari",
+      "email": "hello@ricko.me"
     }
+  ],
+  "require": {
+    "php": ">=5.3.0",
+    "illuminate/support": "4.2.*"
+  },
+  "autoload": {
+    "classmap": [
+      "src/migrations"
+    ],
+    "psr-0": {
+      "Riari\\Forum\\": "src/"
+    }
+  },
+	"minimum-stability": "dev"
 }
