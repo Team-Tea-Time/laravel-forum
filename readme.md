@@ -1,7 +1,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/build-status/master)
 
-**Warning: this package is currently under heavy development and should not be considered stable. Feel free to explore, test and contribute, but don't use it for production just yet!**
+**Note: this package is under active development, but should be safe to use for production sites. A demo is available online at http://laravel-forum-demo.ricko.me/ if you want to test it first.**
 
 # Laravel forum package
 
@@ -41,6 +41,10 @@ This package is currently under heavy development. Feel free to post issues and 
 
 ### Planned features
  * Read/unread thread status (with icons and 'new posts' page)
+
+### Demo
+
+You can view a simple demo online at http://laravel-forum-demo.ricko.me/
 
 ## Installation
 
