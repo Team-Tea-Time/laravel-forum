@@ -67,8 +67,8 @@ abstract class BaseController extends Controller {
 
     $map_route_models = array(
       'forum.get.view.category'   => 'category',
+      'forum.get.create.thread'   => 'category',
       'forum.get.view.thread'     => 'thread',
-      'forum.get.create.thread'   => 'thread',
       'forum.post.lock.thread'    => 'thread',
       'forum.post.pin.thread'     => 'thread',
       'forum.delete.thread'       => 'thread',
@@ -78,8 +78,8 @@ abstract class BaseController extends Controller {
 
     $map_route_permissions = array(
       'forum.get.view.category'   => 'access_category',
-      'forum.get.view.thread'     => 'access_category',
       'forum.get.create.thread'   => 'create_threads',
+      'forum.get.view.thread'     => 'access_category',
       'forum.post.lock.thread'    => 'lock_threads',
       'forum.post.pin.thread'     => 'pin_threads',
       'forum.delete.thread'       => 'delete_threads',

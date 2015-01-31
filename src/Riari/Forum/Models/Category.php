@@ -81,8 +81,7 @@ class Category extends BaseModel {
 
 	public function getCanPostAttribute()
 	{
-		return AccessControl::check($this, 'access_category', FALSE);
+		return AccessControl::check($this, 'create_threads', FALSE);
 	}
-
 
 }
