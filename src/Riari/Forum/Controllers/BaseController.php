@@ -65,6 +65,17 @@ abstract class BaseController extends Controller {
       'post'      => 'posts'
     );
 
+    $map_route_models = array(
+      'forum.get.view.category'   => 'category',
+      'forum.get.view.thread'     => 'thread',
+      'forum.get.create.thread'   => 'thread',
+      'forum.post.lock.thread'    => 'thread',
+      'forum.post.pin.thread'     => 'thread',
+      'forum.delete.thread'       => 'thread',
+      'forum.get.edit.post'       => 'post',
+      'forum.delete.post'         => 'post'
+    );
+
     $map_route_permissions = array(
       'forum.get.view.category'   => 'access_category',
       'forum.get.view.thread'     => 'access_category',
@@ -84,7 +95,7 @@ abstract class BaseController extends Controller {
 
       $this->collections[$model] = $this->$map_model_repos[$model]->getByID($id, $with);
 
-      if(isset($map_route_permissions[$route_name]))
+      if(isset($map_route_permissions[$route_name]) && $model == $map_route_models[$route_name])
       {
         AccessControl::check($this->collections[$model], $map_route_permissions[$route_name]);
       }
@@ -171,11 +182,7 @@ abstract class BaseController extends Controller {
       return Redirect::to($this->collections['thread']->route);
     }
 
-    $with = array(
-      'prevPosts' => $this->posts->getLastByThread($threadID)
-    );
-
-    return $this->makeView('forum::thread-reply')->with($with);
+    return $this->makeView('forum::thread-reply');
   }
 
   public function postReplyToThread($categoryID, $categoryAlias, $threadID, $threadAlias)

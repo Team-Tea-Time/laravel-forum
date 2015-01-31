@@ -11,7 +11,7 @@
 @include(
 	'forum::partials.forms.post',
 	array(
-		'form_url'					=> $newThreadRoute,
+		'form_url'					=> $post->editRoute,
 		'form_classes'			=> '',
 		'show_title_field'	=> FALSE,
 		'post_content'			=> $post->content,
