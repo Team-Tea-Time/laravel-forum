@@ -12,7 +12,7 @@
 		<a href="{{ $post->editRoute }}">{{ trans('forum::base.edit')}}</a>
 		@endif
 		@if($post->canDelete)
-		<a href="{{ $post->deleteRoute }}">{{ trans('forum::base.delete') }}</a>
+		{{ Form::inline($post->deleteRoute, ['method' => 'DELETE', 'data-confirm' => TRUE], ['label' => trans('forum::base.delete')]) }}
 		@endif
 	</td>
 	<td>
