@@ -12,7 +12,7 @@ class Validation {
   {
     foreach($messages as $message)
     {
-      Alerts::add('error', $message);
+      Alerts::add('danger', $message);
     }
   }
 

@@ -39,7 +39,13 @@ return array(
 	|
 	*/
 	'process_alert' => function($type, $message) {
-		View::share('alerts', [$type => $message]);
+		$alerts = array();
+		if(Session::has('alerts'))
+		{
+			$alerts = Session::get('alerts');
+		}
+
+		Session::flash('alerts', array_merge($alerts, [['type' => $type, 'message' => $message]]));
 	},
 
 	/*
