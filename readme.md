@@ -1,7 +1,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/build-status/master)
 
-**Note: this package is under active development, but should be safe to use for production sites. A demo is available online at http://laravel-forum-demo.ricko.me/ if you want to test it first.**
+**Note: this package is under active development, but should be safe to use for production sites. A demo is available online at http://laravel-forum-demo.ricko.me/ if you want to test it first. You can also use https://github.com/Riari/laravel-forum-demo to get yourself started.**
 
 # Laravel forum package
 
