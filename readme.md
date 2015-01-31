@@ -52,15 +52,15 @@ To install, simply add the following line to your composer .json and run compose
 "riari/laravel-forum": "dev-master"
 ```
 
-Then add the following service provider to your app.php:
+Update your packages:
+
+`composer update`
+
+Then add the following service provider to your app/config/app.php:
 
 ```php
 'Riari\Forum\ForumServiceProvider',
 ```
-
-Update your packages:
-
-`composer update`
 
 ### Deploy the controller
 
