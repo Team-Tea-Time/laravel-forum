@@ -5,7 +5,7 @@
 
 @if($category->canPost)
 <p>
-	<a href="{{ $category->newThreadRoute }}">{{ trans('forum::base.new_thread') }}</a>
+	<a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::base.new_thread') }}</a>
 </p>
 @endif
 
@@ -27,7 +27,7 @@
 				</div>
 				<div class="category_subtitle">{{{ $subcategory->subtitle }}}</div>
 			</th>
-			<td>{{ $subcategory->threads->count() }}</td>
+			<td>{{ $subcategory->threadCount }}</td>
 			<td>{{ $subcategory->replyCount }}</td>
 		</tr>
 		@endforeach
@@ -90,7 +90,7 @@
 
 @if($category->canPost)
 <p>
-	<a href="{{ $category->newThreadRoute }}">{{ trans('forum::base.new_thread') }}</a>
+	<a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::base.new_thread') }}</a>
 </p>
 @endif
 @overwrite

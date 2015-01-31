@@ -17,10 +17,10 @@
 
 <div class="control-group">
   <div class="controls">
+    <button type="submit" class="btn btn-primary">{{ $submit_label }}</button>
     @if( $cancel_url )
-    <a href="{{ $cancel_url }}" class="button small radius secondary right">Cancel</a>
+    <a href="{{ $cancel_url }}" class="btn btn-default">Cancel</a>
     @endif
-    <button type="submit" class="button small radius">{{ $submit_label }}</button>
   </div>
 </div>
 

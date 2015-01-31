@@ -40,7 +40,7 @@
 </div>
 @endif
 
-<table>
+<table class="table">
 	<thead>
 		<tr>
 			<td>
@@ -70,7 +70,7 @@
 			'form_classes'			=> '',
 			'show_title_field'	=> FALSE,
 			'post_content'			=> '',
-			'submit_label'			=> trans('forum::base.post_reply'),
+			'submit_label'			=> trans('forum::base.reply'),
 			'cancel_url'				=> ''
 		)
 	)

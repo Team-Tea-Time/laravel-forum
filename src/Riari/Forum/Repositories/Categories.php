@@ -16,7 +16,7 @@ class Categories extends BaseRepository {
 
 	public function getAll()
 	{
-		return $this->model->all();
+		return $this->model->where('parent_category', '=', NULL)->get();
 	}
 
 }

@@ -9,7 +9,7 @@ return array(
   */
   'threads_per_category' => 20,
   'posts_per_thread' => 15,
-  'pagination_view' => '',
+  'pagination_view' => 'pagination::simple',
 
   /*
   |--------------------------------------------------------------------------

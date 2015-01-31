@@ -22,7 +22,7 @@
 			<th>{{ trans('forum::base.posts') }}</th>
 		</tr>
 		@if (!$category->subcategories->isEmpty())
-		@foreach($category->subcategories AS $subcategory)
+		@foreach($category->subcategories as $subcategory)
 		<tr>
 			<th>
 				<div class="category_title">
