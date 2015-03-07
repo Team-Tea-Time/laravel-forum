@@ -24,7 +24,7 @@ return array(
 	'posting_into'			=> 'You\'re posting into',
 	'you_are_editing'		=> 'You\'re editing',
 	'posted_at'					=> 'Posted',
-	'last_update'				=> 'Last update at',
+	'last_update'				=> 'Last updated',
 	'generic_confirm' 	=> 'Are you sure?',
 	'actions'						=> 'Actions',
 

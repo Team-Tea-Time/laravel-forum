@@ -24,7 +24,7 @@ return array(
 	'posting_into'			=> 'Vous postez dans',
 	'you_are_editing'		=> 'Vous éditez',
 	'posted_at'					=> 'Posté',
-	'last_update'				=> 'Dernière mise à jour à',
+	'last_update'				=> 'Dernière mise à jour',
 	'generic_confirm' 	=> 'Êtes-vous sûr?',
 	'actions'						=> 'Actes',
 
