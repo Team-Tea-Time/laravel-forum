@@ -48,6 +48,10 @@ You can view a simple demo online at http://laravel-forum-demo.ricko.me/
 
 ## Installation
 
+### Pre-requisites
+
+If you're using Laravel 5, you'll need to install [morrislaptop/LaravelFivePackageBridges](https://github.com/morrislaptop/LaravelFivePackageBridges) first.
+
 ### Import the package
 
 To install, simply add the following line to your composer .json and run composer update:
@@ -60,10 +64,16 @@ Update your packages:
 
 `composer update`
 
-Then add the following service provider to your app/config/app.php:
+Then add the service provider corresponding to your Laravel version to your app/config/app.php:
 
+For Laravel 4:
 ```php
 'Riari\Forum\ForumServiceProvider',
+```
+
+For Laravel 5:
+```php
+'Riari\Forum\L5ForumServiceProvider',
 ```
 
 ### Deploy the controller
