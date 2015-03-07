@@ -23,7 +23,7 @@ return array(
 	'send'							=> 'Envoyer',
 	'posting_into'			=> 'Vous postez dans',
 	'you_are_editing'		=> 'Vous éditez',
-	'posted_at'					=> 'Posté à',
+	'posted_at'					=> 'Posté',
 	'last_update'				=> 'Dernière mise à jour à',
 	'generic_confirm' 	=> 'Êtes-vous sûr?',
 	'actions'						=> 'Actes',
