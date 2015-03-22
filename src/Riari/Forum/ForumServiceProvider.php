@@ -26,7 +26,7 @@ class ForumServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
-        // Publish controller, config, views, lang and migrations
+        // Publish controller, config, views and migrations
         $this->publishes([
             __DIR__.'/Controllers/ForumController.php' => base_path('app/Http/controllers/ForumController.php')
         ], 'controller');
@@ -39,19 +39,18 @@ class ForumServiceProvider extends ServiceProvider {
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../../views/' => base_path('/resources/views/vendor/riari/laravel-forum'),
-            __DIR__.'/../../lang/' => base_path('/resources/lang/vendor/riari/laravel-forum')
-        ], 'resources');
+            __DIR__.'/../../views/' => base_path('/resources/views/vendor/riari/laravel-forum')
+        ], 'views');
 
         $this->publishes([
             __DIR__.'/../../migrations/' => base_path('/database/migrations')
         ], 'migrations');
 
-		// Load views
-		$this->loadViewsFrom(base_path() . '/resources/views/vendor/riari/laravel-forum', 'forum');
+        // Load views
+        $this->loadViewsFrom(__DIR__.'/../../views', 'forum');
 
         // Load translations
-        $this->loadTranslationsFrom(base_path() . '/resources/lang/vendor/riari/laravel-forum', 'forum');
+        $this->loadTranslationsFrom(__DIR__.'/../../translations', 'forum');
 
         // Load routes, if enabled
         if (config('forum.routing.enabled')) {
