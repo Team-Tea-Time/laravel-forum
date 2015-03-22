@@ -7,6 +7,8 @@
 
 Note: This is based on the excellent [Laravel forum solution written by Atrakeur](https://github.com/Atrakeur/laravel-forum). It's structured in the same way, but introduces a lot of features and minor improvements throughout.
 
+**For the Laravel 4 version**, see the [master branch](https://github.com/Riari/laravel-forum).
+
 ## Goals
 
 This package aims to provide a solid basis for implementing a forum in a Laravel application. It focuses on taking care of conventional forum features, allowing you to spend more time building your application and the way in which the forum integrates with it.
