@@ -1,16 +1,16 @@
 <?php namespace Riari\Forum\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletingTrait;
 use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Libraries\Alerts;
 
-use Config;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+
 use Redirect;
-use Str;
 
 class Thread extends BaseModel {
 
-	use SoftDeletingTrait;
+	use SoftDeletes;
 
 	protected $table      = 'forum_threads';
 	public    $timestamps = true;
@@ -25,7 +25,7 @@ class Thread extends BaseModel {
 
 	public function author()
 	{
-		return $this->belongsTo(Config::get('forum::integration.user_model'), 'author_id');
+		return $this->belongsTo(config('forum.integration.user_model'), 'author_id');
 	}
 
 	public function posts()
@@ -35,12 +35,12 @@ class Thread extends BaseModel {
 
 	public function getPostsPaginatedAttribute()
 	{
-		return $this->posts()->paginate(Config::get('forum::preferences.posts_per_thread'));
+		return $this->posts()->paginate(config('forum.preferences.posts_per_thread'));
 	}
 
 	public function getPageLinksAttribute()
 	{
-		return $this->postsPaginated->links(Config::get('forum::preferences.pagination_view'));
+		return $this->postsPaginated->render();
 	}
 
 	public function getLastPageAttribute()
@@ -66,10 +66,10 @@ class Thread extends BaseModel {
 	protected function getRouteComponents()
 	{
 		$components = array(
-			'categoryID'		=> $this->category->id,
-			'categoryAlias'	=> Str::slug($this->category->title, '-'),
-			'threadID'			=> $this->id,
-			'threadAlias'		=> Str::slug($this->title, '-')
+			'categoryID' => $this->category->id,
+			'categoryAlias' => Str::slug($this->category->title, '-'),
+			'threadID' => $this->id,
+			'threadAlias' => Str::slug($this->title, '-')
 		);
 
 		return $components;

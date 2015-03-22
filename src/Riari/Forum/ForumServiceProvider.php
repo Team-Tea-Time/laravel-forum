@@ -1,60 +1,66 @@
 <?php namespace Riari\Forum;
 
 use Illuminate\Support\ServiceProvider;
-use Riari\Forum\Commands\InstallCommand;
-
-use Config;
 
 class ForumServiceProvider extends ServiceProvider {
 
-	/**
-	 * Indicates if loading of the provider is deferred.
-	 *
-	 * @var bool
-	 */
-	protected $defer = false;
-
-	/**
-	 * Bootstrap the application events.
-	 *
-	 * @return void
-	 */
-	public function boot()
-	{
-		$this->package('riari/laravel-forum', 'forum');
-
-		if (Config::get('forum::routes.enable')) {
-			$root = Config::get('forum::routes.root');
-			$controller = Config::get('forum::integration.controller');
-
-			include __DIR__.'/../../macros.php';
-			include __DIR__.'/../../routes.php';
-		}
-	}
-
-	/**
-	 * Register the service provider.
-	 *
-	 * @return void
-	 */
-	public function register()
-	{
-		$this->registerCommands();
-	}
-
-	/**
-	 * Register package artisan commands.
-	 *
-	 * @return void
-	 */
-	public function registerCommands()
-	{
-		$this->app['foruminstallcommand'] = $this->app->share(function()
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
     {
-        return new InstallCommand;
-    });
+        // Merge config
+        $config_path = config_path('vendor/riari/laravel-forum');
+        $this->mergeConfigFrom(__DIR__.'/../../config/integration.php', 'forum.integration');
+        $this->mergeConfigFrom(__DIR__.'/../../config/permissions.php', 'forum.permissions');
+        $this->mergeConfigFrom(__DIR__.'/../../config/preferences.php', 'forum.preferences');
+        $this->mergeConfigFrom(__DIR__.'/../../config/routing.php', 'forum.routing');
+    }
 
-		$this->commands('foruminstallcommand');
-	}
+    /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        // Publish controller, config, views, lang and migrations
+        $this->publishes([
+            __DIR__.'/Controllers/ForumController.php' => base_path('app/Http/controllers/ForumController.php')
+        ], 'controller');
+
+        $this->publishes([
+            __DIR__.'/../../config/integration.php' => config_path('vendor/riari/laravel-forum/integration.php'),
+            __DIR__.'/../../config/permissions.php' => config_path('vendor/riari/laravel-forum/permissions.php'),
+            __DIR__.'/../../config/preferences.php' => config_path('vendor/riari/laravel-forum/preferences.php'),
+            __DIR__.'/../../config/routes.php' => config_path('vendor/riari/laravel-forum/routing.php')
+        ], 'config');
+
+        $this->publishes([
+            __DIR__.'/../../views/' => base_path('/resources/views/vendor/riari/laravel-forum'),
+            __DIR__.'/../../lang/' => base_path('/resources/lang/vendor/riari/laravel-forum')
+        ], 'resources');
+
+        $this->publishes([
+            __DIR__.'/../../migrations/' => base_path('/database/migrations')
+        ], 'migrations');
+
+		// Load views
+		$this->loadViewsFrom(base_path() . '/resources/views/vendor/riari/laravel-forum', 'forum');
+
+        // Load translations
+        $this->loadTranslationsFrom(base_path() . '/resources/lang/vendor/riari/laravel-forum', 'forum');
+
+        // Load routes, if enabled
+        if (config('forum.routing.enabled')) {
+            $root = config('forum.routing.root');
+            $controller = config('forum.integration.controller');
+
+            include __DIR__.'/../../macros.php';
+            include __DIR__.'/../../routes.php';
+        }
+    }
 
 }

@@ -2,7 +2,6 @@
 
 use Cache;
 use Carbon\Carbon;
-use Config;
 use Eloquent;
 
 abstract class BaseModel extends Eloquent {
@@ -11,7 +10,7 @@ abstract class BaseModel extends Eloquent {
 	{
 		$cacheItem = get_class($this).$this->id.$item;
 
-		$value = Cache::remember($cacheItem, Config::get('forum::preferences.cache_lifetime'), $function);
+		$value = Cache::remember($cacheItem, config('forum.preferences.cache_lifetime'), $function);
 
 		return $value;
 	}

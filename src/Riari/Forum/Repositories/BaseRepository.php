@@ -36,7 +36,7 @@ abstract class BaseRepository {
 	{
 		$item = $this->model->find($id);
 
-		if (Config::get('forum::preferences.soft_delete'))
+		if (config('forum.preferences.soft_delete'))
 		{
 			$item->delete();
 		}

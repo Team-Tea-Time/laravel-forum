@@ -14,7 +14,7 @@ Route::group(['prefix' => $root], function() use ($controller)
 
 	Route::get($category . '/thread/create', ['as' => 'forum.get.create.thread', 'uses' => $controller . '@getCreateThread']);
 	Route::post($category . '/thread/create', ['as' => 'forum.post.create.thread', 'uses' => $controller . '@postCreateThread']);
-	
+
 	Route::get($category . $thread . '/reply', ['as' => 'forum.get.reply.thread', 'uses' => $controller . '@getReplyToThread']);
 	Route::post($category . $thread . '/reply', ['as' => 'forum.post.reply.thread', 'uses' => $controller . '@postReplyToThread']);
 

@@ -1,10 +1,10 @@
 <?php namespace Riari\Forum\Models;
 
+use Illuminate\Support\Str;
+
 use Riari\Forum\Models\Thread;
 use Riari\Forum\Libraries\AccessControl;
 
-use Config;
-use Str;
 
 class Category extends BaseModel {
 
@@ -29,12 +29,12 @@ class Category extends BaseModel {
 
 	public function getThreadsPaginatedAttribute()
 	{
-		return $this->threads()->paginate(Config::get('forum::preferences.threads_per_category'));
+		return $this->threads()->paginate(config('forum.preferences.threads_per_category'));
 	}
 
 	public function getPageLinksAttribute()
 	{
-		return $this->threadsPaginated->links(Config::get('forum::preferences.pagination_view'));
+		return $this->threadsPaginated->render();
 	}
 
 	public function getThreadCountAttribute()
@@ -62,7 +62,7 @@ class Category extends BaseModel {
 	protected function getRouteComponents()
 	{
 		$components = array(
-			'categoryID'		=> $this->id,
+			'categoryID' => $this->id,
 			'categoryAlias'	=> Str::slug($this->title, '-')
 		);
 

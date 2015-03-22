@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
 	/*
 	|--------------------------------------------------------------------------
@@ -56,6 +56,6 @@ return array(
 	| This class must extend \Riari\Forum\Controllers\BaseController
 	|
 	*/
-	'controller' => 'ForumController'
+	'controller' => '\App\Http\Controllers\ForumController'
 
-);
+];

@@ -7,9 +7,10 @@ use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Libraries\Alerts;
 use Riari\Forum\Libraries\Validation;
 
+use Illuminate\Routing\Controller;
+
 use App;
 use Config;
-use Controller;
 use Input;
 use Redirect;
 use Route;
@@ -35,10 +36,10 @@ abstract class BaseController extends Controller {
 
   protected function getCurrentUser()
   {
-    $current_user_callback = Config::get('forum::integration.current_user');
+    $current_user_callback = config('forum.integration.current_user');
 
     $user = $current_user_callback();
-    if (is_object($user) && get_class($user) == Config::get('forum::integration.user_model'))
+    if (is_object($user) && get_class($user) == config('forum.integration.user_model'))
     {
       return $user;
     }
@@ -241,7 +242,7 @@ abstract class BaseController extends Controller {
   {
     $this->load(['category' => $categoryID, 'thread' => $threadID]);
 
-    if (Config::get('forum::preferences.soft_delete'))
+    if (config('forum.preferences.soft_delete'))
     {
       $this->collections['thread']->posts()->delete();
     }

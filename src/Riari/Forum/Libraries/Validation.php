@@ -18,7 +18,7 @@ class Validation {
 
   public static function check($type = 'thread')
   {
-    $rules = Config::get('forum::preferences.validation_rules');
+    $rules = config('forum.preferences.validation_rules');
     $validator = Validator::make(Input::all(), $rules[$type]);
 
     if ($validator->passes())

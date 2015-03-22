@@ -1,20 +1,19 @@
 <?php namespace Riari\Forum\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletingTrait;
-use Riari\Forum\Libraries\AccessControl;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
-use Config;
-use Str;
+use Riari\Forum\Libraries\AccessControl;
 
 class Post extends BaseModel {
 
-	use SoftDeletingTrait;
+	use SoftDeletes;
 
 	protected $table      = 'forum_posts';
 	public    $timestamps = true;
 	protected $dates      = ['deleted_at'];
 	protected $appends    = ['Route', 'editRoute'];
-	protected $with    		= ['author'];
+	protected $with       = ['author'];
 	protected $guarded    = ['id'];
 
 	public function thread()
@@ -24,7 +23,7 @@ class Post extends BaseModel {
 
 	public function author()
 	{
-		return $this->belongsTo(Config::get('forum::integration.user_model'), 'author_id');
+		return $this->belongsTo(config('forum.integration.user_model'), 'author_id');
 	}
 
 	public function getRouteAttribute()
@@ -35,11 +34,11 @@ class Post extends BaseModel {
 	protected function getRouteComponents()
 	{
 		$components = array(
-			'categoryID'		=> $this->thread->category->id,
+			'categoryID' => $this->thread->category->id,
 			'categoryAlias'	=> Str::slug($this->thread->category->title, '-'),
-			'threadID'			=> $this->thread->id,
-			'threadAlias'		=> Str::slug($this->thread->title, '-'),
-			'postID'				=> $this->id
+			'threadID' => $this->thread->id,
+			'threadAlias' => Str::slug($this->thread->title, '-'),
+			'postID' => $this->id
 		);
 
 		return $components;

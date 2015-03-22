@@ -10,7 +10,7 @@ class Threads extends BaseRepository {
 	{
 		$this->model = $model;
 
-		$this->itemsPerPage = Config::get('forum::integration.threads_per_category');
+		$this->itemsPerPage = config('forum.integration.threads_per_category');
 	}
 
 	public function getByID($threadID, $with = array())
