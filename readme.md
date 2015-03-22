@@ -1,7 +1,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/build-status/master)
 
-**Note: this package is under active development, but should be safe to use for production sites. A demo is available online at http://laravel-forum-demo.ricko.me/ if you want to test it first. You can also use https://github.com/Riari/laravel-forum-demo to get yourself started.**
+**Note: this package is under active development, but should be safe to use for production sites. A Laravel 4 demo is available online at http://laravel-forum-demo.ricko.me/ if you want to test it first. You can also use https://github.com/Riari/laravel-forum-demo to get yourself started.**
 
 # Laravel forum package
 
@@ -42,7 +42,7 @@ This package is currently under heavy development. Feel free to post issues and 
 
 ### Demo
 
-You can view a simple demo online at http://laravel-forum-demo.ricko.me/
+You can view a simple L4-based demo online at http://laravel-forum-demo.ricko.me/
 
 ## Installation
 
@@ -56,32 +56,28 @@ You can view a simple demo online at http://laravel-forum-demo.ricko.me/
 To install, simply add the following line to your composer .json and run composer update:
 
 ```json
-"riari/laravel-forum": "dev-master"
+"riari/laravel-forum": "dev-laravel-5"
 ```
 
 Update your packages:
 
 `composer update`
 
-Then add the following service provider to your app/config/app.php:
+Then add the following service provider to your `config/app.php`:
 
 ```php
 'Riari\Forum\ForumServiceProvider',
 ```
 
-### Step 2: Deploy the controller
+### Step 2: Publish the package files
 
-Run the forum install command to auto-deploy the forum controller to your app/controllers folder:
+Run the vendor:publish command to copy the controller, config, resources and migrations to your app's directories:
 
-`php artisan forum:install`
+`php artisan vendor:publish`
 
 ### Step 3: Update your database
 
-Publish the package migrations:
-
-`php artisan migrate:publish riari/laravel-forum`
-
-Then run your migrations:
+Run your migrations:
 
 `php artisan migrate`
 
@@ -93,23 +89,15 @@ Once your categories are set up, go to <app hostname>/forum and you should see a
 
 ### Configuration
 
-To adjust configuration (including permissions and integration options), publish the package config files:
-
-`php artisan config:publish riari/laravel-forum`
-
-You'll find them in app/config/packages/riari/laravel-forum.
+You can change integration options, permissions and other preferences in the package config files, which are published to `config/vendor/riari/laravel-forum`.
 
 ### Controller methods
 
-You can override any of the methods in the controller (app/controllers/ForumController.php by default) to adjust the behaviour of your forum.
+You can override any of the methods in the controller (`app/Http/Controllers/ForumController.php` by default) to adjust the behaviour of your forum.
 
 ### Views
 
-Publish the package view files to your views folder:
-
-`php artisan view:publish riari/laravel-forum`
-
-You can then adjust the views however you like. I suggest editing the master view to make it extend your app's main layout to easily integrate the forum with your design.
+You can modify the views as published in `resources/views/vendor/riari/laravel-forum`. I suggest editing the master view to make it extend your app's main layout to easily integrate the forum with your design.
 
 ## Important notes
 
