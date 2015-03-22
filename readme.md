@@ -48,8 +48,8 @@ You can view a simple demo online at http://laravel-forum-demo.ricko.me/
 
 **Important!** Before you proceed, please be aware that user functionality (signup, login, user profiles, etc) is not provided by this package. It only interfaces with your user model and authentication facade (Laravel's built-in one by default) to associate users with their threads/posts. If you need user handling, I recommend these packages:
 
- * [Zizaco Confide](https://github.com/Zizaco/confide) - for account creation, login, logout, confirmation by e-mail, password reset, etc.
- * [Zizaco Entrust](https://github.com/Zizaco/entrust) - for role-based user permissions.
+ * [Zizaco/confide](https://github.com/Zizaco/confide) - for account creation, login, logout, confirmation by e-mail, password reset, etc.
+ * [Zizaco/entrust](https://github.com/Zizaco/entrust) - for role-based user permissions.
 
 ### Step 1: Import the package
 
