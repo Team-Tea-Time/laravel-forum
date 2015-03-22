@@ -124,4 +124,4 @@ To support that, the default master layout loads jQuery via CDN if not already p
 
 I don't know French very well and as such I'm relying heavily on Google Translate to keep the French strings up to date. If I derped on any of them, please let me know so I can fix them!
 
-Also, feel free to provide translations for languages that aren't yet supported. You can find the language files [here](https://github.com/Riari/laravel-forum/tree/master/src/lang).
+Also, feel free to provide translations for languages that aren't yet supported. You can find the language files [here](https://github.com/Riari/laravel-forum/tree/laravel-5/src/translations).
