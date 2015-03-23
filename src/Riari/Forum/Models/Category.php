@@ -79,6 +79,11 @@ class Category extends BaseModel {
 		return $this->getRoute('forum.post.create.thread');
 	}
 
+	public function getCanViewAttribute()
+	{
+		return AccessControl::check($this, 'access_category', FALSE);
+	}
+
 	public function getCanPostAttribute()
 	{
 		return AccessControl::check($this, 'create_threads', FALSE);
