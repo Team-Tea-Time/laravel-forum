@@ -67,7 +67,7 @@
 					{{ $thread->lastPost->author->username }}
 				</td>
 				<td>
-					<a href="{{ URL::to( $thread->route . '?page=' . $thread->lastPage . '#post-' . $thread->lastPost->id ) }}">{{ trans('forum::base.view_post') }} &raquo;</a>
+					<a href="{{ URL::to( $thread->lastPostRoute ) }}">{{ trans('forum::base.view_post') }} &raquo;</a>
 				</td>
 			</tr>
 			@endforeach
