@@ -26,10 +26,14 @@ class Post extends BaseModel {
 		return $this->belongsTo(config('forum.integration.user_model'), 'author_id');
 	}
 
-	public function getRouteAttribute()
-	{
-		return $this->thread->Route;
-	}
+    public function getRouteAttribute()
+    {
+        $perPage = Config::get('forum::preferences.posts_per_thread');
+        $count = $this->thread->posts()->where('id', '<=', $this->id)->paginate($perPage)->getTotal();
+        $page = ceil($count / $perPage);
+
+        return "{$this->thread->route}?page={$page}#post-{$this->id}";
+    }
 
 	protected function getRouteComponents()
 	{

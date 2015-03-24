@@ -6,16 +6,16 @@ use Config;
 
 class Threads extends BaseRepository {
 
-	public function __construct(Thread $model)
-	{
-		$this->model = $model;
+    public function __construct(Thread $model)
+    {
+        $this->model = $model;
 
-		$this->itemsPerPage = config('forum.integration.threads_per_category');
-	}
+        $this->itemsPerPage = config('forum.integration.threads_per_category');
+    }
 
-	public function getByID($threadID, $with = array())
-	{
-		return $this->getFirstBy('id', $threadID, $with);
-	}
+    public function getByID($threadID, $with = array())
+    {
+        return $this->getFirstBy('id', $threadID, $with);
+    }
 
 }

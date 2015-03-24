@@ -5,10 +5,10 @@ use Illuminate\Support\ServiceProvider;
 class ForumServiceProvider extends ServiceProvider {
 
     /**
-     * Register the service provider.
-     *
-     * @return void
-     */
+    * Register the service provider.
+    *
+    * @return void
+    */
     public function register()
     {
         // Merge config
@@ -20,10 +20,10 @@ class ForumServiceProvider extends ServiceProvider {
     }
 
     /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
+    * Bootstrap the application events.
+    *
+    * @return void
+    */
     public function boot()
     {
         // Publish controller, config, views and migrations
