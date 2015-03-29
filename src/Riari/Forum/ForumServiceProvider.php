@@ -12,7 +12,6 @@ class ForumServiceProvider extends ServiceProvider {
     public function register()
     {
         // Merge config
-        $config_path = config_path('vendor/riari/laravel-forum');
         $this->mergeConfigFrom(__DIR__.'/../../config/integration.php', 'forum.integration');
         $this->mergeConfigFrom(__DIR__.'/../../config/permissions.php', 'forum.permissions');
         $this->mergeConfigFrom(__DIR__.'/../../config/preferences.php', 'forum.preferences');
@@ -32,14 +31,14 @@ class ForumServiceProvider extends ServiceProvider {
         ], 'controller');
 
         $this->publishes([
-            __DIR__.'/../../config/integration.php' => config_path('vendor/riari/laravel-forum/integration.php'),
-            __DIR__.'/../../config/permissions.php' => config_path('vendor/riari/laravel-forum/permissions.php'),
-            __DIR__.'/../../config/preferences.php' => config_path('vendor/riari/laravel-forum/preferences.php'),
-            __DIR__.'/../../config/routes.php' => config_path('vendor/riari/laravel-forum/routing.php')
+            __DIR__.'/../../config/integration.php' => config_path('forum.integration.php'),
+            __DIR__.'/../../config/permissions.php' => config_path('forum.permissions.php'),
+            __DIR__.'/../../config/preferences.php' => config_path('forum.preferences.php'),
+            __DIR__.'/../../config/routes.php' => config_path('forum.routing.php')
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../../views/' => base_path('/resources/views/vendor/riari/laravel-forum')
+            __DIR__.'/../../views/' => base_path('/resources/views/forum')
         ], 'views');
 
         $this->publishes([

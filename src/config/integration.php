@@ -10,7 +10,7 @@ return [
 	| The user model from the main application
 	|
 	*/
-	'user_model' => 'User',
+	'user_model' => 'App\User',
 
 	/*
 	|--------------------------------------------------------------------------

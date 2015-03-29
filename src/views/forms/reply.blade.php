@@ -5,16 +5,16 @@
 
 @if (isset($prevposts) && count($prevposts) > 0)
 <p class="lead">
-	{{ trans('forum::base.latest_posts') }}
+	{!! trans('forum::base.latest_posts') !!}
 </p>
 <table class="table table-index">
 	<thead>
 		<tr>
 			<td>
-				{{ trans('forum::base.author') }}
+				{!! trans('forum::base.author') !!}
 			</td>
 			<td>
-				{{ trans('forum::base.post') }}
+				{!! trans('forum::base.post') !!}
 			</td>
 		</tr>
 	</thead>
@@ -26,27 +26,27 @@
 </table>
 @endif
 
-{{ Form::open(array('url' => $thread->replyRoute, 'class' => 'form-horizontal')) }}
+{!! Form::open(array('url' => $thread->replyRoute, 'class' => 'form-horizontal')) !!}
 <fieldset>
 
-<legend>{{ trans('forum::base.post_post') }}</legend>
+<legend>{!! trans('forum::base.post_post') !!}</legend>
 <p class="lead">
-	{{ trans('forum::posting_into') }} @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
+	{!! trans('forum::posting_into') !!} @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 </p>
 
 <div class="control-group">
-	<label class="control-label" for="textarea">{{ trans('forum::base.label_your_post') }}</label>
+	<label class="control-label" for="textarea">{!! trans('forum::base.label_your_post') !!}</label>
 	<div class="controls">
-		{{ Form::textarea('content') }}
+		{!! Form::textarea('content') !!}
 	</div>
 </div>
 
 <div class="control-group">
 	<div class="controls">
-		{{ Form::submit(trans('forum::base.send')) }}
+		{!! Form::submit(trans('forum::base.send')) !!}
 	</div>
 </div>
 
 </fieldset>
-{{ Form::close() }}
+{!! Form::close() !!}
 @overwrite

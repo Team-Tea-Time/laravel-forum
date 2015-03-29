@@ -28,8 +28,8 @@ class Post extends BaseModel {
 
     public function getRouteAttribute()
     {
-        $perPage = Config::get('forum::preferences.posts_per_thread');
-        $count = $this->thread->posts()->where('id', '<=', $this->id)->paginate($perPage)->getTotal();
+        $perPage = config('forum.preferences.posts_per_thread');
+        $count = $this->thread->posts()->where('id', '<=', $this->id)->paginate($perPage)->total();
         $page = ceil($count / $perPage);
 
         return "{$this->thread->route}?page={$page}#post-{$this->id}";

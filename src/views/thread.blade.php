@@ -5,29 +5,29 @@
 
 <h2>
 	@if($thread->locked)
-	[{{ trans('forum::base.locked') }}]
+	[{!! trans('forum::base.locked') !!}]
 	@endif
 	@if($thread->pinned)
-	[{{ trans('forum::base.pinned') }}]
+	[{!! trans('forum::base.pinned') !!}]
 	@endif
-	{{{ $thread->title }}}
+	{!! $thread->title !!}
 </h2>
 
 @if($thread->canLock || $thread->canPin || $thread->canDelete)
 <div class="dropdown">
 		<button class="btn btn-default dropdown-toggle" type="button" id="thread-actions" data-toggle="dropdown" aria-expanded="true">
-			{{ trans('forum::base.actions') }}
+			{!! trans('forum::base.actions') !!}
 			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu" role="menu">
 			@if($thread->canLock)
-			<li>{{ Form::inline($thread->lockRoute, [], ['label' => trans('forum::base.lock_thread')]) }}</li>
+			<li>{!! Form::inline($thread->lockRoute, [], ['label' => trans('forum::base.lock_thread')]) !!}</li>
 			@endif
 			@if($thread->canPin)
-			<li>{{ Form::inline($thread->pinRoute, [], ['label' => trans('forum::base.pin_thread')]) }}</li>
+			<li>{!! Form::inline($thread->pinRoute, [], ['label' => trans('forum::base.pin_thread')]) !!}</li>
 			@endif
 			@if($thread->canDelete)
-			<li>{{ Form::inline($thread->deleteRoute, ['method' => 'DELETE', 'data-confirm' => TRUE], ['label' => trans('forum::base.delete_thread')]) }}</li>
+			<li>{!! Form::inline($thread->deleteRoute, ['method' => 'DELETE', 'data-confirm' => TRUE], ['label' => trans('forum::base.delete_thread')]) !!}</li>
 			@endif
 		</ul>
 </div>
@@ -36,8 +36,8 @@
 
 @if($thread->canReply)
 <div class="btn-group" role="group">
-	<a href="{{ $thread->replyRoute }}" class="btn btn-default">{{ trans('forum::base.new_reply') }}</a>
-	<a href="#quick-reply" class="btn btn-default">{{ trans('forum::base.quick_reply') }}</a>
+	<a href="{!! $thread->replyRoute !!}" class="btn btn-default">{!! trans('forum::base.new_reply') !!}</a>
+	<a href="#quick-reply" class="btn btn-default">{!! trans('forum::base.quick_reply') !!}</a>
 </div>
 @endif
 
@@ -45,10 +45,10 @@
 	<thead>
 		<tr>
 			<td>
-				{{ trans('forum::base.author') }}
+				{!! trans('forum::base.author') !!}
 			</td>
 			<td>
-				{{ trans('forum::base.post') }}
+				{!! trans('forum::base.post') !!}
 			</td>
 		</tr>
 	</thead>
@@ -59,10 +59,10 @@
 	</tbody>
 </table>
 
-{{ $thread->pageLinks }}
+{!! $thread->pageLinks !!}
 
 @if($thread->canReply)
-<h3>{{ trans('forum::base.quick_reply') }}</h3>
+<h3>{!! trans('forum::base.quick_reply') !!}</h3>
 <div id="quick-reply">
 	@include(
 		'forum::partials.forms.post',

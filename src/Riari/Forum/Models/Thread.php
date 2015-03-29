@@ -45,7 +45,7 @@ class Thread extends BaseModel {
 
     public function getLastPageAttribute()
     {
-        return $this->postsPaginated->getLastPage();
+        return $this->postsPaginated->lastPage();
     }
 
     public function getLastPostAttribute()

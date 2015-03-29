@@ -9,35 +9,35 @@
 		<tr>
 			<td colspan="3">
 				<div class="category_title">
-					<a href="{{ $category->Route }}">{{{ $category->title }}}</a>
+					<a href="{!! $category->Route !!}">{!! $category->title !!}</a>
 				</div>
-				<div class="category_subtitle">{{{ $category->subtitle }}}</div>
+				<div class="category_subtitle">{!! $category->subtitle !!}</div>
 			</td>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<th>{{ trans('forum::base.category') }}</th>
-			<th>{{ trans('forum::base.threads') }}</th>
-			<th>{{ trans('forum::base.posts') }}</th>
+			<th>{!! trans('forum::base.category') !!}</th>
+			<th>{!! trans('forum::base.threads') !!}</th>
+			<th>{!! trans('forum::base.posts') !!}</th>
 		</tr>
 		@if (!$category->subcategories->isEmpty())
 		@foreach($category->subcategories as $subcategory)
 		<tr>
 			<th>
 				<div class="category_title">
-					<a href="{{ $subcategory->Route }}">{{{ $subcategory->title }}}</a>
+					<a href="{!! $subcategory->Route !!}">{!! $subcategory->title !!}</a>
 				</div>
-				<div class="category_subtitle">{{{ $subcategory->subtitle }}}</div>
+				<div class="category_subtitle">{!! $subcategory->subtitle !!}</div>
 			</th>
-			<td>{{ $subcategory->threadCount }}</td>
-			<td>{{ $subcategory->replyCount }}</td>
+			<td>{!! $subcategory->threadCount !!}</td>
+			<td>{!! $subcategory->replyCount !!}</td>
 		</tr>
 		@endforeach
 		@else
 		<tr>
 			<th colspan="3">
-				{{ trans('forum::base.no_categories') }}
+				{!! trans('forum::base.no_categories') !!}
 			</th>
 		</tr>
 		@endif

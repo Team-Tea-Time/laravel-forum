@@ -5,7 +5,7 @@
 
 	<script>window.jQuery || document.write('<script src="//code.jquery.com/jquery-1.11.2.min.js">\x3C/script>')</script>
 
-	<title>{{ trans('forum::base.home_title') }}</title>
+	<title>{!! trans('forum::base.home_title') !!}</title>
 </head>
 <body>
 	@include('forum::partials.alerts')
@@ -18,7 +18,7 @@
 	});
 
 	$('form[data-confirm]').submit(function() {
-		return confirm('{{ trans('forum::base.generic_confirm') }}');
+		return confirm('{!! trans('forum::base.generic_confirm') !!}');
 	});
 	</script>
 </body>
