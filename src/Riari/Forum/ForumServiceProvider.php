@@ -46,7 +46,7 @@ class ForumServiceProvider extends ServiceProvider {
         ], 'migrations');
 
         // Load views
-        $this->loadViewsFrom(__DIR__.'/../../views', 'forum');
+        $this->loadViewsFrom(base_path('/resources/views/forum'), 'forum');
 
         // Load translations
         $this->loadTranslationsFrom(__DIR__.'/../../translations', 'forum');
