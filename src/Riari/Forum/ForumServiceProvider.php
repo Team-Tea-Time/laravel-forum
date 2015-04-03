@@ -34,7 +34,7 @@ class ForumServiceProvider extends ServiceProvider {
             __DIR__.'/../../config/integration.php' => config_path('forum.integration.php'),
             __DIR__.'/../../config/permissions.php' => config_path('forum.permissions.php'),
             __DIR__.'/../../config/preferences.php' => config_path('forum.preferences.php'),
-            __DIR__.'/../../config/routes.php' => config_path('forum.routing.php')
+            __DIR__.'/../../config/routing.php' => config_path('forum.routing.php')
         ], 'config');
 
         $this->publishes([
