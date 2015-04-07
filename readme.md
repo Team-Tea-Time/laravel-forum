@@ -53,17 +53,13 @@ You can view a simple demo online at http://laravel-forum-demo.ricko.me/
  * [Zizaco/confide](https://github.com/Zizaco/confide) - for account creation, login, logout, confirmation by e-mail, password reset, etc.
  * [Zizaco/entrust](https://github.com/Zizaco/entrust) - for role-based user permissions.
 
-### Step 1: Import the package
+### Step 1: Install the package
 
-To install, simply add the following line to your composer .json and run composer update:
+Install the package via composer:
 
-```json
-"riari/laravel-forum": "dev-master"
 ```
-
-Update your packages:
-
-`composer update`
+composer require riari/laravel-forum:~1.0
+```
 
 Then add the following service provider to your app/config/app.php:
 
