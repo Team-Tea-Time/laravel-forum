@@ -1,8 +1,6 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/build-status/master)
 
-**Note: this package is under active development, but should be safe to use for production sites. A Laravel 4 demo is available online at http://laravel-forum-demo.ricko.me/ if you want to test it first. You can also use https://github.com/Riari/laravel-forum-demo to get yourself started.**
-
 # Laravel forum package
 
 Note: This is based on the excellent [Laravel forum solution written by Atrakeur](https://github.com/Atrakeur/laravel-forum). It's structured in the same way, but introduces a lot of features and minor improvements throughout.
@@ -44,7 +42,7 @@ This package is currently under heavy development. Feel free to post issues and 
 
 ### Demo
 
-You can view a simple L4-based demo online at http://laravel-forum-demo.ricko.me/
+You can view a simple demo online at http://laravel-forum-demo.ricko.me/. The demo source is available at https://github.com/Riari/laravel-forum-demo.
 
 ## Installation
 
