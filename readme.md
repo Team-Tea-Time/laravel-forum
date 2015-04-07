@@ -51,6 +51,7 @@ You can view a simple demo online at http://laravel-forum-demo.ricko.me/. The de
  * [Zizaco/confide](https://github.com/Zizaco/confide) - for account creation, login, logout, confirmation by e-mail, password reset, etc.
  * [Zizaco/entrust](https://github.com/Zizaco/entrust) - for role-based user permissions.
 
+
 ### Step 1: Install the package
 
 Install the package via composer:
