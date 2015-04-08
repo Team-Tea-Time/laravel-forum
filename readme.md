@@ -100,7 +100,7 @@ You can modify the views as published in `resources/views/vendor/riari/laravel-f
 
 ### Regarding permissions
 
-The default permission callbacks don't allow users to perform certain actions such as deleting threads or posts; you'll need to modify them to return TRUE based on your own criteria. For example, if you use [Zizaco/entrust](https://github.com/Zizaco/entrust), you might change your `delete_threads` callback to return `Entrust::can('forum_threads_delete');`, allowing users with a role that grants the `forum_threads_delete` permission to delete threads.
+The default permission callbacks don't allow users to perform certain actions such as deleting threads or posts; you'll need to modify them to return true based on your own criteria. For example, if you use [Zizaco/entrust](https://github.com/Zizaco/entrust), you might change your `delete_threads` callback to return `Entrust::can('forum_threads_delete');`, allowing users with a role that grants the `forum_threads_delete` permission to delete threads.
 
 Note that the default set of views include links for deleting, editing and replying, and their visibility is controlled by the permission callbacks.
 

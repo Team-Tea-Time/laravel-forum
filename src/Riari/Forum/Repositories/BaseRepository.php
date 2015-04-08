@@ -1,8 +1,5 @@
 <?php namespace Riari\Forum\Repositories;
 
-use stdClass;
-use Config;
-
 abstract class BaseRepository {
 
     protected $model;
@@ -18,7 +15,7 @@ abstract class BaseRepository {
     public function create($data = array())
     {
         $model = $this->model->create($data);
-        
+
         return $model;
     }
 

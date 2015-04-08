@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-
 use Riari\Forum\Libraries\AccessControl;
 
 class Post extends BaseModel {
@@ -60,12 +59,12 @@ class Post extends BaseModel {
 
 	public function getCanEditAttribute()
 	{
-		return AccessControl::check($this, 'edit_post', FALSE);
+		return AccessControl::check($this, 'edit_post', false);
 	}
 
 	public function getCanDeleteAttribute()
 	{
-		return AccessControl::check($this, 'delete_posts', FALSE);
+		return AccessControl::check($this, 'delete_posts', false);
 	}
 
 }

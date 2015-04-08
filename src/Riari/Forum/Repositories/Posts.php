@@ -2,8 +2,6 @@
 
 use Riari\Forum\Models\Post;
 
-use Config;
-
 class Posts extends BaseRepository {
 
     public function __construct(Post $model)

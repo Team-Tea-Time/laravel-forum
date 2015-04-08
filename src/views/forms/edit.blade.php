@@ -3,7 +3,7 @@
 @section('content')
 @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
-{!! Form::open(array('url' => $post->editRoute, 'class' => 'form-horizontal')) !!}
+{!! Form::open(['url' => $post->editRoute, 'class' => 'form-horizontal']) !!}
 <fieldset>
 
 <legend>{!! trans('forum::base.edit_post') !!}</legend>

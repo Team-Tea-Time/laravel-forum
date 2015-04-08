@@ -13,7 +13,7 @@ return [
     */
     'access_category' => function($category, $user)
     {
-        return TRUE;
+        return true;
     },
 
     /*
@@ -27,12 +27,12 @@ return [
     */
     'create_threads' => function($category, $user)
     {
-        if ($user == NULL)
+        if ($user == null)
         {
-            return FALSE;
+            return false;
         }
 
-        return TRUE;
+        return true;
     },
 
     /*
@@ -45,7 +45,7 @@ return [
     */
     'lock_threads' => function($thread, $user)
     {
-        return FALSE;
+        return false;
     },
 
     /*
@@ -58,7 +58,7 @@ return [
     */
     'pin_threads' => function($thread, $user)
     {
-        return FALSE;
+        return false;
     },
 
     /*
@@ -71,7 +71,7 @@ return [
     */
     'delete_threads' => function($thread, $user)
     {
-        return FALSE;
+        return false;
     },
 
     /*
@@ -85,12 +85,12 @@ return [
     */
     'reply_to_thread' => function($thread, $user)
     {
-        if ($user == NULL || $thread->locked)
+        if ($user == null || $thread->locked)
         {
-            return FALSE;
+            return false;
         }
 
-        return TRUE;
+        return true;
     },
 
     /*
@@ -104,12 +104,12 @@ return [
     */
     'edit_post' => function($post, $user)
     {
-        if ($user == NULL || ($user->id != $post->author_id))
+        if ($user == null || ($user->id != $post->author_id))
         {
-            return FALSE;
+            return false;
         }
 
-        return TRUE;
+        return true;
     },
 
     /*
@@ -122,7 +122,7 @@ return [
     */
     'delete_posts' => function($post, $user)
     {
-        return FALSE;
+        return false;
     }
 
 ];

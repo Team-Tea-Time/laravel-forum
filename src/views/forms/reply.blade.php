@@ -3,30 +3,7 @@
 @section('content')
 @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
-@if (isset($prevposts) && count($prevposts) > 0)
-<p class="lead">
-	{!! trans('forum::base.latest_posts') !!}
-</p>
-<table class="table table-index">
-	<thead>
-		<tr>
-			<td>
-				{!! trans('forum::base.author') !!}
-			</td>
-			<td>
-				{!! trans('forum::base.post') !!}
-			</td>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach ($prevposts as $post)
-			@include('forum::partials.post', compact('post'))
-		@endforeach
-	</tbody>
-</table>
-@endif
-
-{!! Form::open(array('url' => $thread->replyRoute, 'class' => 'form-horizontal')) !!}
+{!! Form::open(['url' => $thread->replyRoute, 'class' => 'form-horizontal']) !!}
 <fieldset>
 
 <legend>{!! trans('forum::base.post_post') !!}</legend>

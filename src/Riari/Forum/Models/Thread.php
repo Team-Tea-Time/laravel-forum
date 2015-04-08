@@ -1,12 +1,10 @@
 <?php namespace Riari\Forum\Models;
 
+use Redirect;
 use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Libraries\Alerts;
-
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-
-use Redirect;
 
 class Thread extends BaseModel {
 
@@ -102,22 +100,22 @@ class Thread extends BaseModel {
 
     public function getCanReplyAttribute()
     {
-        return AccessControl::check($this, 'reply_to_thread', FALSE);
+        return AccessControl::check($this, 'reply_to_thread', false);
     }
 
     public function getCanPinAttribute()
     {
-        return AccessControl::check($this, 'pin_threads', FALSE);
+        return AccessControl::check($this, 'pin_threads', false);
     }
 
     public function getCanLockAttribute()
     {
-        return AccessControl::check($this, 'lock_threads', FALSE);
+        return AccessControl::check($this, 'lock_threads', false);
     }
 
     public function getCanDeleteAttribute()
     {
-        return AccessControl::check($this, 'delete_threads', FALSE);
+        return AccessControl::check($this, 'delete_threads', false);
     }
 
     public function toggle($property)

@@ -2,8 +2,6 @@
 
 use Riari\Forum\Models\Thread;
 
-use Config;
-
 class Threads extends BaseRepository {
 
     public function __construct(Thread $model)

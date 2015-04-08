@@ -3,7 +3,7 @@
 @section('content')
 @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
-{!! Form::open(array('url' => $thread->replyRoute, 'class' => 'form-horizontal')) !!}
+{!! Form::open(['url' => $thread->replyRoute, 'class' => 'form-horizontal']) !!}
 <fieldset>
 
 <!-- Form Name -->

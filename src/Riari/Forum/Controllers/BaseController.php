@@ -1,18 +1,16 @@
 <?php namespace Riari\Forum\Controllers;
 
+use App;
+use Config;
+use Input;
+use Illuminate\Routing\Controller;
+use Redirect;
 use Riari\Forum\Repositories\Categories;
 use Riari\Forum\Repositories\Threads;
 use Riari\Forum\Repositories\Posts;
 use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Libraries\Alerts;
 use Riari\Forum\Libraries\Validation;
-
-use Illuminate\Routing\Controller;
-
-use App;
-use Config;
-use Input;
-use Redirect;
 use Route;
 use View;
 use Validator;
@@ -37,21 +35,14 @@ abstract class BaseController extends Controller {
     protected function getCurrentUser()
     {
         $current_user_callback = config('forum.integration.current_user');
-
-        $user = $current_user_callback();
-        if (is_object($user) && get_class($user) == config('forum.integration.user_model'))
-        {
-            return $user;
-        }
-
-        return NULL;
+        return $current_user_callback();
     }
 
     protected function check404()
     {
-        foreach($this->collections as $item)
+        foreach ($this->collections as $item)
         {
-            if($item == NULL)
+            if ($item == null)
             {
                 App::abort(404);
             }
@@ -90,13 +81,13 @@ abstract class BaseController extends Controller {
 
         $route_name = Route::current()->getAction()['as'];
 
-        foreach($select as $model => $id)
+        foreach ($select as $model => $id)
         {
             $with = ($model == 'category') ? $category_with : array();
 
             $this->collections[$model] = $this->$map_model_repos[$model]->getByID($id, $with);
 
-            if(isset($map_route_permissions[$route_name]) && $model == $map_route_models[$route_name])
+            if (isset($map_route_permissions[$route_name]) && $model == $map_route_models[$route_name])
             {
                 AccessControl::check($this->collections[$model], $map_route_permissions[$route_name]);
             }

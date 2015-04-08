@@ -18,7 +18,7 @@ return [
 	|--------------------------------------------------------------------------
 	|
 	| Must return the current logged in user model to use
-	| Non object, or NULL response is considered as not logged in
+	| Non object, or null response is considered as not logged in
 	|
 	*/
 	'current_user' => function() {
@@ -40,7 +40,7 @@ return [
 	*/
 	'process_alert' => function($type, $message) {
 		$alerts = array();
-		if(Session::has('alerts'))
+		if (Session::has('alerts'))
 		{
 			$alerts = Session::get('alerts');
 		}
