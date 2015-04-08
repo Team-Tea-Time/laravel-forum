@@ -27,7 +27,7 @@ class InstallCommand extends Command {
     private function installController($name, $parent)
     {
         $file = $this->laravel->path.'/controllers/'.$name.'.php';
-        if(file_exists($file))
+        if (file_exists($file))
         {
             $this->info('File app/controllers/'.$name.' Exists. Action aborted.');
             return;

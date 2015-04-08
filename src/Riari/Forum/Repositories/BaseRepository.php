@@ -1,6 +1,5 @@
 <?php namespace Riari\Forum\Repositories;
 
-use stdClass;
 use Config;
 
 abstract class BaseRepository {

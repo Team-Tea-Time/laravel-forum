@@ -1,9 +1,8 @@
 <?php namespace Riari\Forum;
 
+use Config;
 use Illuminate\Support\ServiceProvider;
 use Riari\Forum\Commands\InstallCommand;
-
-use Config;
 
 class ForumServiceProvider extends ServiceProvider {
 

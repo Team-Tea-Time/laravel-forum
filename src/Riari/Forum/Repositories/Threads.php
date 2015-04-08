@@ -1,8 +1,7 @@
 <?php namespace Riari\Forum\Repositories;
 
-use Riari\Forum\Models\Thread;
-
 use Config;
+use Riari\Forum\Models\Thread;
 
 class Threads extends BaseRepository {
 

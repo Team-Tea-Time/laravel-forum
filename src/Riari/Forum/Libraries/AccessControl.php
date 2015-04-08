@@ -1,11 +1,11 @@
 <?php namespace Riari\Forum\Libraries;
 
-use Config;
 use App;
+use Config;
 
 class AccessControl {
 
-    public static function check($context, $permission, $abort = TRUE)
+    public static function check($context, $permission, $abort = true)
     {
         // Fetch the current user
         $user_callback = Config::get('forum::integration.current_user');

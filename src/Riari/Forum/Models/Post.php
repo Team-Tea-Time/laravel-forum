@@ -1,9 +1,8 @@
 <?php namespace Riari\Forum\Models;
 
+use Config;
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 use Riari\Forum\Libraries\AccessControl;
-
-use Config;
 use Str;
 
 class Post extends BaseModel {
@@ -61,12 +60,12 @@ class Post extends BaseModel {
 
     public function getCanEditAttribute()
     {
-        return AccessControl::check($this, 'edit_post', FALSE);
+        return AccessControl::check($this, 'edit_post', false);
     }
 
     public function getCanDeleteAttribute()
     {
-        return AccessControl::check($this, 'delete_posts', FALSE);
+        return AccessControl::check($this, 'delete_posts', false);
     }
 
 }

@@ -1,8 +1,7 @@
 <?php namespace Riari\Forum\Repositories;
 
-use Riari\Forum\Models\Post;
-
 use Config;
+use Riari\Forum\Models\Post;
 
 class Posts extends BaseRepository {
 

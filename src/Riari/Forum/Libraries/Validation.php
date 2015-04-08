@@ -1,16 +1,15 @@
 <?php namespace Riari\Forum\Libraries;
 
-use Riari\Forum\Libraries\Alerts;
-
 use Config;
 use Input;
+use Riari\Forum\Libraries\Alerts;
 use Validator;
 
 class Validation {
 
     public static function processValidationMessages($messages)
     {
-        foreach($messages as $message)
+        foreach ($messages as $message)
         {
             Alerts::add('danger', $message);
         }
@@ -21,16 +20,13 @@ class Validation {
         $rules = Config::get('forum::preferences.validation_rules');
         $validator = Validator::make(Input::all(), $rules[$type]);
 
-        if ($validator->passes())
-        {
-            return TRUE;
-        }
-        else
+        if (!$validator->passes())
         {
             self::processValidationMessages($validator->messages()->all());
-
-            return FALSE;
+            return false;
         }
+
+        return false;
     }
 
 }
