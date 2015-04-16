@@ -4,17 +4,20 @@ if (!isset($root) || !isset($controller)) {
 }
 
 Route::get($root, $controller . '@getViewIndex');
-Route::group(['prefix' => $root], function() use ($controller)
+Route::group(['prefix' => $root], function() use ($new, $controller)
 {
 	$category = '{categoryID}-{categoryAlias}';
 	$thread = '/{threadID}-{threadAlias}';
+
+	Route::get('new', ['as' => 'forum.get.new', 'uses' => $controller . '@getViewNew']);
+	Route::post('new/read', ['as' => 'forum.post.mark.read', 'uses' => $controller . '@postMarkAsRead']);
 
 	Route::get($category, ['as' => 'forum.get.view.category', 'uses' => $controller . '@getViewCategory']);
 	Route::get($category . $thread, ['as' => 'forum.get.view.thread', 'uses' => $controller . '@getViewThread']);
 
 	Route::get($category . '/thread/create', ['as' => 'forum.get.create.thread', 'uses' => $controller . '@getCreateThread']);
 	Route::post($category . '/thread/create', ['as' => 'forum.post.create.thread', 'uses' => $controller . '@postCreateThread']);
-	
+
 	Route::get($category . $thread . '/reply', ['as' => 'forum.get.reply.thread', 'uses' => $controller . '@getReplyToThread']);
 	Route::post($category . $thread . '/reply', ['as' => 'forum.post.reply.thread', 'uses' => $controller . '@postReplyToThread']);
 

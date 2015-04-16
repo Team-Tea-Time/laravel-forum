@@ -3,12 +3,14 @@
 @section('content')
 @include('forum::partials.breadcrumbs')
 
+<h2>{{ trans('forum::base.index') }}</h2>
+
 @foreach ($categories as $category)
 <table class="table table-index">
 	<thead>
 		<tr>
 			<td colspan="3">
-				<a href="{{ $category->Route }}">{{{ $category->title }}}</a>
+				<p class="lead"><a href="{{ $category->Route }}">{{{ $category->title }}}</a></p>
 				{{{ $category->subtitle }}}</div>
 			</td>
 		</tr>
@@ -27,16 +29,22 @@
 				<br>
 				{{{ $subcategory->subtitle }}}
 				@if ($subcategory->newestThread)
-				<br>
-				{{ trans('forum::base.newest_thread') }}: <a href="{{ $subcategory->newestThread->route }}">{{{ $subcategory->newestThread->title }}}</a>
-				({{{ $subcategory->newestThread->author->username }}})
-				<br>
-				{{ trans('forum::base.last_post') }}: <a href="{{ $subcategory->latestActiveThread->lastPost->route }}">{{{ $subcategory->latestActiveThread->lastPost->title }}}</a>
-				({{{ $subcategory->latestActiveThread->lastPost->username }}})
+					<br>
+					{{ trans('forum::base.newest_thread') }}:
+					<a href="{{ $subcategory->newestThread->route }}">
+						{{{ $subcategory->newestThread->title }}}
+						({{{ $subcategory->newestThread->author->username }}})
+					</a>
+					<br>
+					{{ trans('forum::base.last_post') }}:
+					<a href="{{ $subcategory->latestActiveThread->lastPost->route }}">
+						{{{ $subcategory->latestActiveThread->title }}}
+						({{{ $subcategory->latestActiveThread->lastPost->author->username }}})
+					</a>
 				@endif
 			</td>
 			<td>{{ $subcategory->threadCount }}</td>
-			<td>{{ $subcategory->replyCount }}</td>
+			<td>{{ $subcategory->postCount }}</td>
 		</tr>
 		@endforeach
 		@else

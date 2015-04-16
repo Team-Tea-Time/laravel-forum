@@ -3,10 +3,7 @@
 @section('content')
 @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
-<legend>{{ trans('forum::base.edit_post') }}</legend>
-<p class="lead">
-    {{ trans('forum::base.you_are_editing') }} @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread', 'post'))
-</p>
+<h2>{{ trans('forum::base.edit_post') }} ({{$thread->title}})</h2>
 
 @include(
     'forum::partials.forms.post',

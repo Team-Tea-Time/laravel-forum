@@ -4,6 +4,21 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
+    | Thread settings
+    |--------------------------------------------------------------------------
+    */
+    'thread' => array(
+        // Specify the minimum age of a thread before it should be considered
+        // old. This determines whether or not a thread can be considered new or
+        // unread for any logged in user. Setting a longer cut-off duration here
+        // will increase the size of your forum_threads_read table.
+        // Must be a valid strtotime() string, or set to false to completely
+        // disable age-sensitive thread features.
+        'cutoff_age' => '-1 month'
+    ),
+
+    /*
+    |--------------------------------------------------------------------------
     | Pagination settings
     |--------------------------------------------------------------------------
     */
@@ -19,7 +34,7 @@ return array(
     | Duration to cache data such as thread and post counts (in minutes).
     |
     */
-    'cache_lifetime' => 5,
+    'cache_lifetime' => 0,
 
     /*
     |--------------------------------------------------------------------------
@@ -37,7 +52,7 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
-    | Soft Delete
+    | Soft delete
     |--------------------------------------------------------------------------
     |
     | Disable this if you want threads and posts to be permanently removed from

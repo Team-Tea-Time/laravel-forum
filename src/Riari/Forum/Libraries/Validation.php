@@ -7,7 +7,10 @@ use Validator;
 
 class Validation {
 
-    public static function processValidationMessages($messages)
+    /**
+     * Add an alert for each of the given messages.
+     */
+    public static function processValidationMessages($messages = array())
     {
         foreach ($messages as $message)
         {
@@ -15,6 +18,10 @@ class Validation {
         }
     }
 
+    /**
+     * Validate the current input using the specified ruleset, as defined in
+     * the preferences.validation_rules config array.
+     */
     public static function check($type = 'thread')
     {
         $rules = Config::get('forum::preferences.validation_rules');

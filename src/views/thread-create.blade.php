@@ -3,35 +3,17 @@
 @section('content')
 @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
-{{ Form::open(array('url' => $category->newThreadRoute, 'class' => 'form-horizontal')) }}
-<fieldset>
+<h2>{{ trans('forum::base.new_thread') }} ({{$category->title}})</h2>
 
-<!-- Form Name -->
-<legend>{{ trans('forum::base.new_thread') }}</legend>
-<p class="lead">
-	{{ trans('forum::base.posting_into') }} @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
-</p>
-
-<div class="control-group">
-	<label class="control-label" for="title">{{ trans('forum::base.title') }}</label>
-	<div class="controls">
-		{{ Form::text('title') }}
-	</div>
-</div>
-
-<div class="control-group">
-	<label class="control-label" for="content">{{ trans('forum::base.your_post') }}</label>
-	<div class="controls">
-		{{ Form::textarea('content') }}
-	</div>
-</div>
-
-<div class="control-group">
-	<div class="controls">
-		{{ Form::submit(trans('forum::base.send')) }}
-	</div>
-</div>
-
-</fieldset>
-{{ Form::close() }}
+@include(
+    'forum::partials.forms.post',
+    array(
+        'form_url'            => $category->newThreadRoute,
+        'form_classes'        => '',
+        'show_title_field'    => true,
+        'post_content'        => '',
+        'submit_label'        => trans('forum::base.send'),
+        'cancel_url'          => ''
+    )
+)
 @overwrite

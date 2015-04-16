@@ -10,6 +10,7 @@ use Riari\Forum\Repositories\Threads;
 use Riari\Forum\Repositories\Posts;
 use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Libraries\Alerts;
+use Riari\Forum\Libraries\Utils;
 use Riari\Forum\Libraries\Validation;
 use Route;
 use View;
@@ -32,12 +33,6 @@ abstract class BaseController extends Controller {
         $this->posts = $posts;
     }
 
-    protected function getCurrentUser()
-    {
-        $current_user_callback = Config::get('forum::integration.current_user');
-        return $current_user_callback();
-    }
-
     protected function check404()
     {
         foreach ($this->collections as $item)
@@ -49,7 +44,7 @@ abstract class BaseController extends Controller {
         }
     }
 
-    protected function load($select = array(), $category_with = array())
+    protected function load($select = array(), $with = array())
     {
         $map_model_repos = array(
             'category'  => 'categories',
@@ -79,12 +74,10 @@ abstract class BaseController extends Controller {
             'forum.delete.post'         => 'delete_posts'
         );
 
-        $route_name = Route::current()->getAction()['as'];
+        $route_name = Route::current()->getName();
 
         foreach ($select as $model => $id)
         {
-            $with = ($model == 'category') ? $category_with : array();
-
             $this->collections[$model] = $this->$map_model_repos[$model]->getByID($id, $with);
 
             if (isset($map_route_permissions[$route_name]) && $model == $map_route_models[$route_name])
@@ -108,6 +101,38 @@ abstract class BaseController extends Controller {
         return View::make('forum::index', compact('categories'));
     }
 
+    public function getViewNew()
+    {
+        $userID = 0;
+        $user = Utils::getCurrentUser();
+        if (!is_null($user))
+        {
+            $userID = $user->id;
+        }
+
+        $threads = $this->threads->getNewForUser($userID);
+
+        return View::make('forum::new', compact('threads', 'user'));
+    }
+
+    public function postMarkAsRead()
+    {
+        $user = Utils::getCurrentUser();
+        if (!is_null($user))
+        {
+            $threads = $this->threads->getNewForUser();
+
+            foreach ($threads as $thread)
+            {
+                $thread->markAsRead($user->id);
+            }
+
+            Alerts::add('success', trans('forum::base.marked_read'));
+        }
+
+        return Redirect::to(Config::get('forum::routes.root'));
+    }
+
     public function getViewCategory($categoryID, $categoryAlias)
     {
         $this->load(['category' => $categoryID], ['parentCategory', 'subCategories']);
@@ -118,6 +143,14 @@ abstract class BaseController extends Controller {
     public function getViewThread($categoryID, $categoryAlias, $threadID, $threadAlias)
     {
         $this->load(['category' => $categoryID, 'thread' => $threadID]);
+
+        $thread = $this->collections['thread'];
+        $user = Utils::getCurrentUser();
+
+        if (!$thread->old && !is_null($user))
+        {
+            $thread->markAsRead($user->id);
+        }
 
         return $this->makeView('forum::thread');
     }
@@ -131,7 +164,7 @@ abstract class BaseController extends Controller {
 
     public function postCreateThread($categoryID, $categoryAlias)
     {
-        $user = $this->getCurrentUser();
+        $user = Utils::getCurrentUser();
 
         $this->load(['category' => $categoryID]);
 
@@ -179,7 +212,7 @@ abstract class BaseController extends Controller {
 
     public function postReplyToThread($categoryID, $categoryAlias, $threadID, $threadAlias)
     {
-        $user = $this->getCurrentUser();
+        $user = Utils::getCurrentUser();
 
         $this->load(['category' => $categoryID, 'thread' => $threadID]);
 
@@ -258,7 +291,7 @@ abstract class BaseController extends Controller {
 
     public function postEditPost($categoryID, $categoryAlias, $threadID, $threadAlias, $postID)
     {
-        $user = $this->getCurrentUser();
+        $user = Utils::getCurrentUser();
 
         $this->load(['category' => $categoryID, 'thread' => $threadID, 'post' => $postID]);
 

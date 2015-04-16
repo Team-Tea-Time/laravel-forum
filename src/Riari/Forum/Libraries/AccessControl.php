@@ -2,14 +2,17 @@
 
 use App;
 use Config;
+use Riari\Forum\Libraries\Utils;
 
 class AccessControl {
 
+    /**
+     * Check a named permission against the given content (category, thread or
+     * post) using the permission closures in permissions.
+     */
     public static function check($context, $permission, $abort = true)
     {
-        // Fetch the current user
-        $user_callback = Config::get('forum::integration.current_user');
-        $user = $user_callback();
+        $user = Utils::getCurrentUser();
 
         // Check for access permission
         $access_callback = Config::get('forum::permissions.access_category');
@@ -24,7 +27,8 @@ class AccessControl {
 
         if (!$permission_granted && $abort)
         {
-            App::abort(403, 'Access denied.');
+            $denied_callback = Config::get('forum::integration.process_denied');
+            $denied_callback($context, $user);
         }
 
         return $permission_granted;
