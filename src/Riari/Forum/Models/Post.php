@@ -9,12 +9,19 @@ class Post extends BaseModel {
 
     use SoftDeletingTrait;
 
+    // Eloquent properties
     protected $table      = 'forum_posts';
     public    $timestamps = true;
     protected $dates      = ['deleted_at'];
-    protected $appends    = ['Route', 'editRoute'];
+    protected $appends    = ['route', 'editRoute'];
     protected $with       = ['author'];
     protected $guarded    = ['id'];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function thread()
     {
@@ -26,6 +33,14 @@ class Post extends BaseModel {
         return $this->belongsTo(Config::get('forum::integration.user_model'), 'author_id');
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Attributes
+    |--------------------------------------------------------------------------
+    */
+
+    // Route attributes
+
     public function getRouteAttribute()
     {
         $perPage = Config::get('forum::preferences.posts_per_thread');
@@ -33,19 +48,6 @@ class Post extends BaseModel {
         $page = ceil($count / $perPage);
 
         return "{$this->thread->route}?page={$page}#post-{$this->id}";
-    }
-
-    protected function getRouteComponents()
-    {
-        $components = array(
-            'categoryID'    => $this->thread->category->id,
-            'categoryAlias' => Str::slug($this->thread->category->title, '-'),
-            'threadID'      => $this->thread->id,
-            'threadAlias'   => Str::slug($this->thread->title, '-'),
-            'postID'        => $this->id
-        );
-
-        return $components;
     }
 
     public function getEditRouteAttribute()
@@ -58,14 +60,45 @@ class Post extends BaseModel {
         return $this->getRoute('forum.get.delete.post');
     }
 
-    public function getCanEditAttribute()
+    // Current user: permission attributes
+
+    public function getUserCanEditAttribute()
     {
         return AccessControl::check($this, 'edit_post', false);
     }
 
-    public function getCanDeleteAttribute()
+    public function getCanEditAttribute()
+    {
+        return $this->userCanEdit;
+    }
+
+    public function getUserCanDeleteAttribute()
     {
         return AccessControl::check($this, 'delete_posts', false);
+    }
+
+    public function getCanDeleteAttribute()
+    {
+        return $this->userCanDelete;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Helpers
+    |--------------------------------------------------------------------------
+    */
+
+    protected function getRouteComponents()
+    {
+        $components = array(
+            'categoryID'    => $this->thread->category->id,
+            'categoryAlias' => Str::slug($this->thread->category->title, '-'),
+            'threadID'      => $this->thread->id,
+            'threadAlias'   => Str::slug($this->thread->title, '-'),
+            'postID'        => $this->id
+        );
+
+        return $components;
     }
 
 }

@@ -24,6 +24,7 @@ class ForumServiceProvider extends ServiceProvider {
 
         if (Config::get('forum::routes.enable')) {
             $root = Config::get('forum::routes.root');
+            $new = Config::get('forum::routes.new');
             $controller = Config::get('forum::integration.controller');
 
             include __DIR__.'/../../macros.php';

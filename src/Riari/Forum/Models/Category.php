@@ -7,9 +7,16 @@ use Str;
 
 class Category extends BaseModel {
 
+    // Eloquent properties
     protected $table      = 'forum_categories';
     public    $timestamps = false;
     protected $appends    = ['threadCount', 'replyCount', 'route', 'newThreadRoute'];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function parentCategory()
     {
@@ -25,6 +32,26 @@ class Category extends BaseModel {
     {
         return $this->hasMany('\Riari\Forum\Models\Thread', 'parent_category')->with('category', 'posts');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Attributes
+    |--------------------------------------------------------------------------
+    */
+
+    // Route attributes
+
+    public function getRouteAttribute()
+    {
+        return $this->getRoute('forum.get.view.category');
+    }
+
+    public function getNewThreadRouteAttribute()
+    {
+        return $this->getRoute('forum.post.create.thread');
+    }
+
+    // General attributes
 
     public function getThreadsPaginatedAttribute()
     {
@@ -53,20 +80,48 @@ class Category extends BaseModel {
         });
     }
 
-    public function getReplyCountAttribute()
+    public function getPostCountAttribute()
     {
-        return $this->rememberAttribute('replyCount', function(){
+        return $this->rememberAttribute('postCount', function(){
             $replyCount = 0;
 
             $threads = $this->threads()->get(['id']);
 
             foreach ($threads as $thread) {
-                $replyCount += $thread->posts->count();
+                $replyCount += $thread->posts->count() - 1;
             }
 
             return $replyCount;
         });
     }
+
+    // Current user: permission attributes
+
+    public function getUserCanViewAttribute()
+    {
+        return AccessControl::check($this, 'access_category', false);
+    }
+
+    public function getCanViewAttribute()
+    {
+        return $this->userCanView;
+    }
+
+    public function getUserCanPostAttribute()
+    {
+        return AccessControl::check($this, 'create_threads', false);
+    }
+
+    public function getCanPostAttribute()
+    {
+        return $this->userCanPost;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Helpers
+    |--------------------------------------------------------------------------
+    */
 
     protected function getRouteComponents()
     {
@@ -76,26 +131,6 @@ class Category extends BaseModel {
         );
 
         return $components;
-    }
-
-    public function getRouteAttribute()
-    {
-        return $this->getRoute('forum.get.view.category');
-    }
-
-    public function getNewThreadRouteAttribute()
-    {
-        return $this->getRoute('forum.post.create.thread');
-    }
-
-    public function getCanViewAttribute()
-    {
-        return AccessControl::check($this, 'access_category', false);
-    }
-
-    public function getCanPostAttribute()
-    {
-        return AccessControl::check($this, 'create_threads', false);
     }
 
 }

@@ -4,6 +4,9 @@ use Config;
 
 class Alerts {
 
+    /**
+     * Process an alert using the integration.process_alert closure.
+     */
     public static function add($type, $message)
     {
         $process_alert_callback = Config::get('forum::integration.process_alert');

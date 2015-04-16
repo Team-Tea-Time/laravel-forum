@@ -9,7 +9,7 @@ class Posts extends BaseRepository {
     {
         $this->model = $model;
 
-        $this->itemsPerPage = Config::get('forum::integration.posts_per_thread');
+        $this->itemsPerPage = Config::get('forum::preferences.posts_per_thread');
     }
 
     public function getByID($postID, $with = array())
