@@ -1,32 +1,34 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
+    <meta charset="utf-8">
 
-	<script>window.jQuery || document.write('<script src="//code.jquery.com/jquery-1.11.2.min.js">\x3C/script>')</script>
+    <script>window.jQuery || document.write('<script src="//code.jquery.com/jquery-1.11.2.min.js">\x3C/script>')</script>
 
-	<title>{!! trans('forum::base.home_title') !!}</title>
+    <title>{!! trans('forum::base.home_title') !!}</title>
 </head>
 <body>
-	<div class="container">
-		@include('forum::partials.alerts')
+    <div class="container">
+        @include('forum::partials.alerts')
 
-		@yield('content')
-	</div>
+        @yield('content')
+    </div>
 
-	<script>
-	$('[data-method]:not(.disabled)').click(function(event) {
-		$('<form action="' + $(this).attr('href') + '" method="POST">' +
-	    '<input type="hidden" name="_method" value="' + $(this).data('method') + '">' +
-		'<input type="hidden" name="_token" value="{!! Session::getToken() !!}"' +
-	    '</form>').submit();
-
-		event.preventDefault();
-	});
-
-	$('a[data-confirm]').click(function() {
-		return confirm('{!! trans('forum::base.generic_confirm') !!}');
-	});
-	</script>
+    <script>
+    $('a[data-confirm]').click(function(event) {
+        if (!confirm('{!! trans('forum::base.generic_confirm') !!}')) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+        }
+    });
+    $('[data-method]:not(.disabled)').click(function(event) {
+        $('<form action="' + $(this).attr('href') + '" method="POST">' +
+        '<input type="hidden" name="_method" value="' + $(this).data('method') + '">' +
+        '<input type="hidden" name="_token" value="{!! Session::getToken() !!}"' +
+        '</form>').submit();
+		
+        event.preventDefault();
+    });
+    </script>
 </body>
 </html>
