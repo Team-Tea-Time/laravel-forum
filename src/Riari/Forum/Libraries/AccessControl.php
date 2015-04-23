@@ -23,7 +23,8 @@ class AccessControl {
 
         if (!$permission_granted && $abort)
         {
-            App::abort(403, 'Access denied.');
+            $denied_callback = config('forum.integration.process_denied');
+            $denied_callback($context, $user);
         }
 
         return $permission_granted;

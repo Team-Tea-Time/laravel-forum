@@ -1,15 +1,9 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/build-status/master)
 
-**See the [wiki](https://github.com/Riari/laravel-forum/wiki) for an overview of this project and its goals, features and customisation options.**
+**See the [wiki](https://github.com/Riari/laravel-forum/wiki) for an overview of this project, goals and features, as well as documentation.**
 
 ## Installation
-
-**Important!** Before you proceed, please be aware that user functionality (signup, login, user profiles, etc) is not provided by this package. It only interfaces with your user model and authentication facade (Laravel's built-in one by default) to associate users with their threads/posts. If you need user handling, I recommend these packages:
-
- * [Zizaco/confide](https://github.com/Zizaco/confide) - for account creation, login, logout, confirmation by e-mail, password reset, etc.
- * [Zizaco/entrust](https://github.com/Zizaco/entrust) - for role-based user permissions.
-
 
 ### Step 1: Install the package
 

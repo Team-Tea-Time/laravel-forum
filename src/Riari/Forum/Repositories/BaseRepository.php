@@ -12,6 +12,11 @@ abstract class BaseRepository {
         return $model;
     }
 
+    public function getByID($id, $with = array())
+    {
+        return $this->getFirstBy('id', $id, $with);
+    }
+
     public function create($data = array())
     {
         $model = $this->model->create($data);
@@ -21,25 +26,25 @@ abstract class BaseRepository {
 
     public function update($data = array())
     {
-        $item = $this->model->find($data['id']);
+        $model = $this->model->find($data['id']);
 
-        $item->fill($data);
-        $item->save();
+        $model->fill($data);
+        $model->save();
 
-        return $item;
+        return $model;
     }
 
     public function delete($id)
     {
-        $item = $this->model->find($id);
+        $model = $this->model->find($id);
 
         if (config('forum.preferences.soft_delete'))
         {
-            $item->delete();
+            $model->delete();
         }
         else
         {
-            $item->forceDelete();
+            $model->forceDelete();
         }
     }
 

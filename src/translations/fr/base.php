@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -9,7 +9,7 @@ return array(
     */
 
     // General
-    'home_title'        => "Laravel forum",
+    'home_title'        => "Forum",
     'index'             => "Index",
     'author'            => "Auteur",
     'title'             => "Titre",
@@ -17,6 +17,7 @@ return array(
     'edit'              => "Modifier",
     'delete'            => "Supprimer",
     'reply'             => "Répondre",
+    'replies'           => "Réponses",
     'new_reply'         => "Nouvelle réponse",
     'quick_reply'       => "Réponse rapide",
     'reply_added'       => "Post ajouté",
@@ -28,6 +29,9 @@ return array(
     'generic_confirm'   => "Êtes-vous sûr?",
     'actions'           => "Actes",
     'cancel'            => "Annuler",
+    'unread'            => "Nouveau",
+    'updated'           => "Mise à jour",
+    'mark_read'         => "Marquer comme lu",
 
     // Categories
     'category'          => "Catégorie",
@@ -47,6 +51,8 @@ return array(
     'thread_deleted'    => "Sujet supprimé",
     'no_threads'        => "Aucun thème trouvé",
     'newest_thread'     => "Récent sujet",
+    'new_threads'       => "Nouvelles et mises à jour les discussions",
+    'marked_read'       => "Toutes les discussions ont été marqués comme lus",
 
     // Posts
     'posts'             => "posts",
@@ -59,4 +65,4 @@ return array(
     'last_post'         => "Dernière post",
     'view_post'         => "Voir le post",
 
-);
+];

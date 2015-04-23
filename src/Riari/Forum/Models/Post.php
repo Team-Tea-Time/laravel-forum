@@ -1,29 +1,45 @@
 <?php namespace Riari\Forum\Models;
 
+use Config;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Riari\Forum\Libraries\AccessControl;
 
 class Post extends BaseModel {
 
-	use SoftDeletes;
+    use SoftDeletes;
 
-	protected $table      = 'forum_posts';
-	public    $timestamps = true;
-	protected $dates      = ['deleted_at'];
-	protected $appends    = ['Route', 'editRoute'];
-	protected $with       = ['author'];
-	protected $guarded    = ['id'];
+    // Eloquent properties
+    protected $table      = 'forum_posts';
+    public    $timestamps = true;
+    protected $dates      = ['deleted_at'];
+    protected $appends    = ['route', 'editRoute'];
+    protected $with       = ['author'];
+    protected $guarded    = ['id'];
 
-	public function thread()
-	{
-		return $this->belongsTo('\Riari\Forum\Models\Thread', 'parent_thread');
-	}
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
-	public function author()
-	{
-		return $this->belongsTo(config('forum.integration.user_model'), 'author_id');
-	}
+    public function thread()
+    {
+        return $this->belongsTo('\Riari\Forum\Models\Thread', 'parent_thread');
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(config('forum.integration.user_model'), 'author_id');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Attributes
+    |--------------------------------------------------------------------------
+    */
+
+    // Route attributes
 
     public function getRouteAttribute()
     {
@@ -34,37 +50,55 @@ class Post extends BaseModel {
         return "{$this->thread->route}?page={$page}#post-{$this->id}";
     }
 
-	protected function getRouteComponents()
-	{
-		$components = array(
-			'categoryID' => $this->thread->category->id,
-			'categoryAlias'	=> Str::slug($this->thread->category->title, '-'),
-			'threadID' => $this->thread->id,
-			'threadAlias' => Str::slug($this->thread->title, '-'),
-			'postID' => $this->id
-		);
+    public function getEditRouteAttribute()
+    {
+        return $this->getRoute('forum.get.edit.post');
+    }
 
-		return $components;
-	}
+    public function getDeleteRouteAttribute()
+    {
+        return $this->getRoute('forum.get.delete.post');
+    }
 
-	public function getEditRouteAttribute()
-	{
-		return $this->getRoute('forum.get.edit.post');
-	}
+    // Current user: permission attributes
 
-	public function getDeleteRouteAttribute()
-	{
-		return $this->getRoute('forum.get.delete.post');
-	}
+    public function getUserCanEditAttribute()
+    {
+        return AccessControl::check($this, 'edit_post', false);
+    }
 
-	public function getCanEditAttribute()
-	{
-		return AccessControl::check($this, 'edit_post', false);
-	}
+    public function getCanEditAttribute()
+    {
+        return $this->userCanEdit;
+    }
 
-	public function getCanDeleteAttribute()
-	{
-		return AccessControl::check($this, 'delete_posts', false);
-	}
+    public function getUserCanDeleteAttribute()
+    {
+        return AccessControl::check($this, 'delete_posts', false);
+    }
+
+    public function getCanDeleteAttribute()
+    {
+        return $this->userCanDelete;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Helpers
+    |--------------------------------------------------------------------------
+    */
+
+    protected function getRouteComponents()
+    {
+        $components = array(
+            'categoryID'    => $this->thread->category->id,
+            'categoryAlias' => Str::slug($this->thread->category->title, '-'),
+            'threadID'      => $this->thread->id,
+            'threadAlias'   => Str::slug($this->thread->title, '-'),
+            'postID'        => $this->id
+        );
+
+        return $components;
+    }
 
 }

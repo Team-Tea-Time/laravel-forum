@@ -11,11 +11,6 @@ class Posts extends BaseRepository {
         $this->itemsPerPage = config('forum.integration.posts_per_thread');
     }
 
-    public function getByID($postID, $with = array())
-    {
-        return $this->getFirstBy('id', $postID, $with);
-    }
-
     public function getLastByThread($threadID, $count = 10, array $with = array())
     {
         $model = $this->model->where('parent_thread', '=', $threadID);

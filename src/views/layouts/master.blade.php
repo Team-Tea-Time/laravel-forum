@@ -8,16 +8,23 @@
 	<title>{!! trans('forum::base.home_title') !!}</title>
 </head>
 <body>
-	@include('forum::partials.alerts')
+	<div class="container">
+		@include('forum::partials.alerts')
 
-	@yield('content')
+		@yield('content')
+	</div>
 
 	<script>
-	$('form a[data-submit]').click(function() {
-		$(this).parent('form').submit();
+	$('[data-method]:not(.disabled)').click(function(event) {
+		$('<form action="' + $(this).attr('href') + '" method="POST">' +
+	    '<input type="hidden" name="_method" value="' + $(this).data('method') + '">' +
+		'<input type="hidden" name="_token" value="{!! Session::getToken() !!}"' +
+	    '</form>').submit();
+
+		event.preventDefault();
 	});
 
-	$('form[data-confirm]').submit(function() {
+	$('a[data-confirm]').click(function() {
 		return confirm('{!! trans('forum::base.generic_confirm') !!}');
 	});
 	</script>

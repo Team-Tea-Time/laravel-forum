@@ -1,15 +1,22 @@
 <?php namespace Riari\Forum\Models;
 
+use Config;
 use Illuminate\Support\Str;
 use Riari\Forum\Models\Thread;
 use Riari\Forum\Libraries\AccessControl;
 
-
 class Category extends BaseModel {
 
+    // Eloquent properties
     protected $table      = 'forum_categories';
     public    $timestamps = false;
     protected $appends    = ['threadCount', 'replyCount', 'route', 'newThreadRoute'];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function parentCategory()
     {
@@ -25,6 +32,26 @@ class Category extends BaseModel {
     {
         return $this->hasMany('\Riari\Forum\Models\Thread', 'parent_category')->with('category', 'posts');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Attributes
+    |--------------------------------------------------------------------------
+    */
+
+    // Route attributes
+
+    public function getRouteAttribute()
+    {
+        return $this->getRoute('forum.get.view.category');
+    }
+
+    public function getNewThreadRouteAttribute()
+    {
+        return $this->getRoute('forum.post.create.thread');
+    }
+
+    // General attributes
 
     public function getThreadsPaginatedAttribute()
     {
@@ -53,49 +80,57 @@ class Category extends BaseModel {
         });
     }
 
-    public function getReplyCountAttribute()
+    public function getPostCountAttribute()
     {
-        return $this->rememberAttribute('replyCount', function(){
+        return $this->rememberAttribute('postCount', function(){
             $replyCount = 0;
 
-            $threads = $this->threads()->get(array('id'));
+            $threads = $this->threads()->get(['id']);
 
             foreach ($threads as $thread) {
-                $replyCount += $thread->posts->count();
+                $replyCount += $thread->posts->count() - 1;
             }
 
             return $replyCount;
         });
     }
 
-    protected function getRouteComponents()
-    {
-        $components = array(
-            'categoryID' => $this->id,
-            'categoryAlias'    => Str::slug($this->title, '-')
-        );
+    // Current user: permission attributes
 
-        return $components;
-    }
-
-    public function getRouteAttribute()
-    {
-        return $this->getRoute('forum.get.view.category');
-    }
-
-    public function getNewThreadRouteAttribute()
-    {
-        return $this->getRoute('forum.post.create.thread');
-    }
-
-    public function getCanViewAttribute()
+    public function getUserCanViewAttribute()
     {
         return AccessControl::check($this, 'access_category', false);
     }
 
-    public function getCanPostAttribute()
+    public function getCanViewAttribute()
+    {
+        return $this->userCanView;
+    }
+
+    public function getUserCanPostAttribute()
     {
         return AccessControl::check($this, 'create_threads', false);
+    }
+
+    public function getCanPostAttribute()
+    {
+        return $this->userCanPost;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Helpers
+    |--------------------------------------------------------------------------
+    */
+
+    protected function getRouteComponents()
+    {
+        $components = array(
+            'categoryID'  	=> $this->id,
+            'categoryAlias' => Str::slug($this->title, '-')
+        );
+
+        return $components;
     }
 
 }

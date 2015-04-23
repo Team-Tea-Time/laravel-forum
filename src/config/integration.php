@@ -50,6 +50,20 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
+	| Closure: process permission denied
+	|--------------------------------------------------------------------------
+	|
+	| Use this to control what happens when a permission is denied to a user.
+	| Note this does not affect inline permission checks for displaying links or
+	| inputs.
+	|
+	*/
+	'process_denied' => function($context, $user) {
+		App::abort(403);
+	},
+
+	/*
+	|--------------------------------------------------------------------------
 	| Application controller
 	|--------------------------------------------------------------------------
 	|

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -9,7 +9,7 @@ return array(
     */
 
     // General
-    'home_title'        => "Laravel forum",
+    'home_title'        => "Forum",
     'index'             => "Index",
     'author'            => "Author",
     'title'             => "Title",
@@ -17,6 +17,7 @@ return array(
     'edit'              => "Edit",
     'delete'            => "Delete",
     'reply'             => "Reply",
+    'replies'           => "Replies",
     'new_reply'         => "New reply",
     'quick_reply'       => "Quick reply",
     'reply_added'       => "Reply added",
@@ -28,6 +29,9 @@ return array(
     'generic_confirm'   => "Are you sure?",
     'actions'           => "Actions",
     'cancel'            => "Cancel",
+    'unread'            => "New",
+    'updated'           => "Updated",
+    'mark_read'         => "Mark as read",
 
     // Categories
     'category'          => "Category",
@@ -47,6 +51,8 @@ return array(
     'thread_deleted'    => "Thread deleted",
     'no_threads'        => "No threads found",
     'newest_thread'     => "Newest thread",
+    'new_threads'       => "New & updated threads",
+    'marked_read'       => "All threads have been marked as read",
 
     // Posts
     'posts'             => "Posts",
@@ -59,4 +65,4 @@ return array(
     'last_post'         => "Last post",
     'view_post'         => "View post",
 
-);
+];

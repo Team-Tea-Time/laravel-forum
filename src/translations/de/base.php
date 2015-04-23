@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -28,6 +28,9 @@ return array(
     'generic_confirm'   => "Bist du sicher?",
     'actions'           => "Aktionen",
     'cancel'            => "Abbrechen",
+    'unread'            => "Neu",
+    'updated'           => "Aktualisiert",
+    'mark_read'         => "Als gelesen markieren",
 
     // Categories
     'category'          => "Kategorie",
@@ -47,6 +50,8 @@ return array(
     'thread_deleted'    => "Thema gelöscht",
     'no_threads'        => "Keine Themen gefunden",
     'newest_thread'     => "Neuestes Thema",
+    'new_threads'       => "Neue Themen",
+    'marked_read'       => "Wurden alle Themen als gelesen markiert",
 
     // Posts
     'posts'             => "Einträge",
@@ -59,4 +64,4 @@ return array(
     'last_post'         => "Letzter Eintrag",
     'view_post'         => "Eintrag ansehen",
 
-);
+];

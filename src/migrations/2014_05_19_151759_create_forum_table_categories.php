@@ -24,8 +24,8 @@ class CreateForumTableCategories extends Migration {
 		DB::table('forum_categories')->insert(
 			array(
 				['parent_category' => null, 'title' => 'Category', 'subtitle' => 'Contains categories and threads', 'weight' => 0],
-				['parent_category' => 1, 'title' => 'Sub-category', 'subtitle' => 'Contains threads', 'weight' => 1],
-				['parent_category' => 1, 'title' => 'Second subcategory', 'subtitle' => 'Contains more threads', 'weight' => 0]
+				['parent_category' => 1, 'title' => 'Sub-category', 'subtitle' => 'Contains threads', 'weight' => 0],
+				['parent_category' => 1, 'title' => 'Second subcategory', 'subtitle' => 'Contains more threads', 'weight' => 1]
 			)
 		);
 	}

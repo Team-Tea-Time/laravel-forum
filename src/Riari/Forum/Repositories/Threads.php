@@ -11,9 +11,25 @@ class Threads extends BaseRepository {
         $this->itemsPerPage = config('forum.integration.threads_per_category');
     }
 
-    public function getByID($threadID, $with = array())
+    public function getRecent($where = array())
     {
-        return $this->getFirstBy('id', $threadID, $with);
+        return $this->model->with('category', 'posts')->recent()->where($where)->orderBy('updated_at', 'desc')->get();
+    }
+
+    public function getNewForUser($userID = 0, $where = array())
+    {
+        $threads = $this->getRecent($where);
+
+        // If we have a user ID, filter the threads appropriately
+        if ($userID)
+        {
+            $threads = $threads->filter(function($thread) use ($userID)
+            {
+                return $thread->userReadStatus;
+            });
+        }
+
+        return $threads;
     }
 
 }

@@ -9,11 +9,6 @@ class Categories extends BaseRepository {
         $this->model = $model;
     }
 
-    public function getByID($categoryID, $with = array())
-    {
-        return $this->getFirstBy('id', $categoryID, $with);
-    }
-
     public function getAll()
     {
         return $this->model->where('parent_category', '=', null)->get();
