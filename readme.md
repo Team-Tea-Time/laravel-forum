@@ -3,6 +3,8 @@
 
 **See the [wiki](https://github.com/Riari/laravel-forum/wiki) for an overview of this project, goals and features, as well as documentation.**
 
+**Note: the Laravel 4 version only receives bug fixes and important amendments to existing features. Only the Laravel 5 version currently receives new features.**
+
 ## Installation
 
 ### Step 1: Install the package
