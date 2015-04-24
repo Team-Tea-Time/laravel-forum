@@ -23,11 +23,17 @@ class Threads extends BaseRepository {
         // If we have a user ID, filter the threads appropriately
         if ($userID)
         {
-            $threads = $threads->filter(function($thread) use ($userID)
+            $threads = $threads->filter(function($thread)
             {
                 return $thread->userReadStatus;
             });
         }
+
+        // Filter the threads according to the user's permissions
+        $threads = $threads->filter(function($thread)
+        {
+            return $thread->category->userCanView;
+        });
 
         return $threads;
     }
