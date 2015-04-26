@@ -35,9 +35,16 @@
 @endif
 
 @if ($thread->canReply)
-    <div class="btn-group" role="group">
-        <a href="{{ $thread->replyRoute }}" class="btn btn-default">{{ trans('forum::base.new_reply') }}</a>
-        <a href="#quick-reply" class="btn btn-default">{{ trans('forum::base.quick_reply') }}</a>
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="btn-group" role="group">
+                <a href="{{ $thread->replyRoute }}" class="btn btn-default">{{ trans('forum::base.new_reply') }}</a>
+                <a href="#quick-reply" class="btn btn-default">{{ trans('forum::base.quick_reply') }}</a>
+            </div>
+        </div>
+        <div class="col-xs-8 text-right">
+            {!! $thread->pageLinks !!}
+        </div>
     </div>
 @endif
 
@@ -59,7 +66,7 @@
     </tbody>
 </table>
 
-{{ $thread->pageLinks }}
+{!! $thread->pageLinks !!}
 
 @if ($thread->canReply)
     <h3>{{ trans('forum::base.quick_reply') }}</h3>
