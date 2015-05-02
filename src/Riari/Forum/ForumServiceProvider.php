@@ -38,7 +38,7 @@ class ForumServiceProvider extends ServiceProvider {
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../../views/' => base_path('/resources/views/forum')
+            __DIR__.'/../../views/' => base_path('/resources/views/vendor/forum')
         ], 'views');
 
         $this->publishes([
