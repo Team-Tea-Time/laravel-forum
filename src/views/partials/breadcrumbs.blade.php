@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-    <li><a href="{{ config('forum.routes.root') }}">{{ trans('forum::base.index') }}</a></li>
+    <li><a href="{{ config('forum.routing.root') }}">{{ trans('forum::base.index') }}</a></li>
     @if (isset($parentCategory) && $parentCategory)
         <li><a href="{!! $parentCategory->route !!}">{!! $parentCategory->title !!}</a></li>
     @endif
