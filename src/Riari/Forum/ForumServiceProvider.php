@@ -27,7 +27,7 @@ class ForumServiceProvider extends ServiceProvider {
     {
         // Publish controller, config, views and migrations
         $this->publishes([
-            __DIR__.'/Controllers/ForumController.php' => base_path('app/Http/controllers/ForumController.php')
+            __DIR__.'/Controllers/ForumController.php' => base_path('app/Http/Controllers/ForumController.php')
         ], 'controller');
 
         $this->publishes([
