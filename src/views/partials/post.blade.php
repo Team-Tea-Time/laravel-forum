@@ -1,6 +1,6 @@
 <tr id="post-{{ $post->id }}">
 	<td>
-		<strong>{!! $post->author->name !!}</strong>
+		<strong>{!! $post->authorName !!}</strong>
 	</td>
 	<td>
 		{!! nl2br(e($post->content)) !!}

@@ -16,6 +16,7 @@ return [
     'subject'           => "Subiect",
     'edit'              => "Editează",
     'delete'            => "Șterge",
+    'deleted'           => "Eliminat",
     'reply'             => "Răspunde",
     'replies'           => "Răspunsuri",
     'new_reply'         => "Răspuns nou",
@@ -35,6 +36,7 @@ return [
 
     // Categories
     'category'          => "Categorie",
+    'subcategories'     => "Subcategorii",
     'no_categories'     => "Nicio categorie găsită",
 
     // Threads

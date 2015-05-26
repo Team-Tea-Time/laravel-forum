@@ -10,7 +10,19 @@ return [
 	| The user model from the main application
 	|
 	*/
+
 	'user_model' => 'App\User',
+
+	/*
+	|--------------------------------------------------------------------------
+	| Application user name attribute
+	|--------------------------------------------------------------------------
+	|
+	| The attribute on the user model to use as a display name.
+	|
+	*/
+
+	'user_name_attribute' => 'name',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -21,6 +33,7 @@ return [
 	| Non object, or null response is considered as not logged in
 	|
 	*/
+	
 	'current_user' => function() {
 		//Here you can use confide facade,
 		//or just the default facade, or whatever else
@@ -38,6 +51,7 @@ return [
 	| if you no longer use them.
 	|
 	*/
+
 	'process_alert' => function($type, $message) {
 		$alerts = array();
 		if (Session::has('alerts'))
@@ -58,6 +72,7 @@ return [
 	| inputs.
 	|
 	*/
+
 	'process_denied' => function($context, $user) {
 		App::abort(403);
 	},
@@ -70,6 +85,7 @@ return [
 	| This class must extend \Riari\Forum\Controllers\BaseController
 	|
 	*/
+
 	'controller' => '\App\Http\Controllers\ForumController'
 
 ];

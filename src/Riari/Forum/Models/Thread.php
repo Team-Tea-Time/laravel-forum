@@ -1,16 +1,15 @@
 <?php namespace Riari\Forum\Models;
 
-use Config;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use Redirect;
 use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Libraries\Alerts;
 use Riari\Forum\Libraries\Utils;
+use Riari\Forum\Models\Traits\HasAuthor;
 
 class Thread extends BaseModel {
 
-    use SoftDeletes;
+    use SoftDeletes, HasAuthor;
 
     // Eloquent properties
     protected $table         = 'forum_threads';
@@ -33,11 +32,6 @@ class Thread extends BaseModel {
     public function category()
     {
         return $this->belongsTo('\Riari\Forum\Models\Category', 'parent_category');
-    }
-
-    public function author()
-    {
-        return $this->belongsTo(config('forum.integration.user_model'), 'author_id');
     }
 
     public function readers()

@@ -2,7 +2,6 @@
 
 use Cache;
 use Carbon\Carbon;
-use Config;
 use Eloquent;
 
 abstract class BaseModel extends Eloquent {

@@ -25,6 +25,8 @@ Run the vendor:publish command to copy the controller, config, resources and mig
 
 `php artisan vendor:publish`
 
+> In your published config, you may need to modify the `forum.integration.user_name_attribute` config option according to your user model. This specifies which attribute on the user model should be used as a display name in the forum views.
+
 ### Step 3: Update your database
 
 Run your migrations:

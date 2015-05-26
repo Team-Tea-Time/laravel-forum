@@ -10,6 +10,7 @@ return [
 	| Whenever to enable forum routes in global application path
 	|
 	*/
+
 	'enabled' => true,
 
 	/*
@@ -20,6 +21,7 @@ return [
 	| The base url of the forum inside your application
 	|
 	*/
+	
 	'root' => '/forum',
 
 ];

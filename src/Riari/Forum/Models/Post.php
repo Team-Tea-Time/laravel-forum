@@ -1,13 +1,13 @@
 <?php namespace Riari\Forum\Models;
 
-use Config;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Riari\Forum\Libraries\AccessControl;
+use Riari\Forum\Models\Traits\HasAuthor;
 
 class Post extends BaseModel {
 
-    use SoftDeletes;
+    use SoftDeletes, HasAuthor;
 
     // Eloquent properties
     protected $table      = 'forum_posts';
@@ -26,11 +26,6 @@ class Post extends BaseModel {
     public function thread()
     {
         return $this->belongsTo('\Riari\Forum\Models\Thread', 'parent_thread');
-    }
-
-    public function author()
-    {
-        return $this->belongsTo(config('forum.integration.user_model'), 'author_id');
     }
 
     /*

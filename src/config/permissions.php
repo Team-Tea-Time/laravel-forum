@@ -11,6 +11,7 @@ return [
     | category. All categories are open by default.
     |
     */
+
     'access_category' => function($category, $user)
     {
         return true;
@@ -25,6 +26,7 @@ return [
     | threads.
     |
     */
+
     'create_threads' => function($category, $user)
     {
         if ($user == null)
@@ -43,6 +45,7 @@ return [
     | Determines whether or not the current user is allowed to lock threads.
     |
     */
+
     'lock_threads' => function($thread, $user)
     {
         return false;
@@ -56,6 +59,7 @@ return [
     | Determines whether or not the current user is allowed to pin threads.
     |
     */
+
     'pin_threads' => function($thread, $user)
     {
         return false;
@@ -69,6 +73,7 @@ return [
     | Determines whether or not the current user is allowed to delete threads.
     |
     */
+    
     'delete_threads' => function($thread, $user)
     {
         return false;
@@ -83,6 +88,7 @@ return [
     | replies.
     |
     */
+
     'reply_to_thread' => function($thread, $user)
     {
         if ($user == null || $thread->locked)
@@ -102,6 +108,7 @@ return [
     | post.
     |
     */
+
     'edit_post' => function($post, $user)
     {
         if ($user == null || ($user->id != $post->author_id))
@@ -120,6 +127,7 @@ return [
     | Determines whether or not the current user is allowed to delete posts.
     |
     */
+
     'delete_posts' => function($post, $user)
     {
         return false;

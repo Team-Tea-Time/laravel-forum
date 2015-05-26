@@ -15,7 +15,8 @@ return [
     'title'             => "Titolo",
     'subject'           => "Oggetto",
     'edit'              => "Modifica",
-    'delete'            => "Elimina",
+    'delete'            => "Rimuovere",
+    'deleted'           => "Rimosso",
     'reply'             => "Rispondi",
     'replies'           => "Risposte",
     'new_reply'         => "Nuova risposta",
@@ -35,6 +36,7 @@ return [
 
     // Categories
     'category'          => "Categoria",
+    'subcategories'     => "Sotto-categorie",
     'no_categories'     => "Nessuna categoria trovata",
 
     // Threads

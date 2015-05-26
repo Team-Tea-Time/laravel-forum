@@ -1,6 +1,5 @@
 <?php namespace Riari\Forum\Models;
 
-use Config;
 use Illuminate\Support\Str;
 use Riari\Forum\Models\Thread;
 use Riari\Forum\Libraries\AccessControl;
