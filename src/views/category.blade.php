@@ -59,8 +59,8 @@
 	<thead>
 		<tr>
 			<th>{{ trans('forum::base.subject') }}</th>
-			<th class="col-md-2">{{ trans('forum::base.views') }}</th>
-			<th class="col-md-2">{{ trans('forum::base.replies') }}</th>
+			<th class="col-md-2 text-right">{{ trans('forum::base.views') }}</th>
+			<th class="col-md-2 text-right">{{ trans('forum::base.replies') }}</th>
 			<th class="col-md-2 text-right">{{ trans('forum::base.last_post') }}</th>
 		</tr>
 	</thead>
@@ -85,10 +85,10 @@
 						</p>
 						<p>{{ $thread->authorName }} <span class="text-muted">({{ $thread->posted }})</span></p>
 					</td>
-					<td>
+					<td class="text-right">
 					    {{ $thread->viewCount }}
 					</td>
-					<td>
+					<td class="text-right">
 					    {{ $thread->replyCount }}
 					</td>
 					<td class="text-right">
