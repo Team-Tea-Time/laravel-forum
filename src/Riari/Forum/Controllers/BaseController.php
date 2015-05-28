@@ -147,7 +147,7 @@ abstract class BaseController extends Controller {
         $thread = $this->collections['thread'];
         $user = Utils::getCurrentUser();
 
-        if (!$thread->old && !is_null($user))
+        if (!is_null($user))
         {
             $thread->markAsRead($user->id);
         }

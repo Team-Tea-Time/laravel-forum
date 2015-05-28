@@ -18,7 +18,7 @@
 		@foreach ($category->subcategories as $subcategory)
 		<tr>
 			<td>
-				<a href="{{ $subcategory->Route }}">{{ $subcategory->title }}</a>
+				<a href="{{ $subcategory->route }}">{{ $subcategory->title }}</a>
 				<br>
 				{{ $subcategory->subtitle }}
 				@if ($subcategory->newestThread)
@@ -59,6 +59,7 @@
 	<thead>
 		<tr>
 			<th>{{ trans('forum::base.subject') }}</th>
+			<th class="col-md-2">{{ trans('forum::base.views') }}</th>
 			<th class="col-md-2">{{ trans('forum::base.replies') }}</th>
 			<th class="col-md-2 text-right">{{ trans('forum::base.last_post') }}</th>
 		</tr>
@@ -83,6 +84,9 @@
 							<a href="{{ $thread->route }}">{{ $thread->title }}</a>
 						</p>
 						<p>{{ $thread->authorName }} <span class="text-muted">({{ $thread->posted }})</span></p>
+					</td>
+					<td>
+					    {{ $thread->viewCount }}
 					</td>
 					<td>
 					    {{ $thread->replyCount }}

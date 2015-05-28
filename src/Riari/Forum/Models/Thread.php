@@ -1,5 +1,6 @@
 <?php namespace Riari\Forum\Models;
 
+use DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Riari\Forum\Libraries\AccessControl;
@@ -36,7 +37,7 @@ class Thread extends BaseModel {
 
     public function readers()
     {
-        return $this->belongsToMany(config('forum.integration.user_model'), 'forum_threads_read', 'thread_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(config('forum.integration.user_model'), 'forum_threads_read', 'thread_id', 'user_id')->withPivot('view_count')->withTimestamps();
     }
 
     public function posts()
@@ -132,6 +133,13 @@ class Thread extends BaseModel {
         return (!$cutoff || $this->updated_at->timestamp < strtotime($cutoff));
     }
 
+    public function getViewCountAttribute()
+    {
+        return DB::table('forum_threads_read')
+                ->where('thread_id', $this->id)
+                ->sum('view_count');
+    }
+
     // Current user: reader attributes
 
     public function getReaderAttribute()
@@ -223,14 +231,19 @@ class Thread extends BaseModel {
 
     public function markAsRead($userID)
     {
-        if (is_null($this->reader))
+        if (!$this->old)
         {
-            $this->readers()->attach($userID);
+            if (is_null($this->reader))
+            {
+                $this->readers()->attach($userID);
+            }
+            elseif ($this->updatedSince($this->reader))
+            {
+                $this->reader->touch();
+            }
         }
-        elseif ($this->updatedSince($this->reader))
-        {
-            $this->reader->touch();
-        }
+
+        $this->readers()->updateExistingPivot($userID, ['view_count' => $this->reader->view_count + 1]);
     }
 
     public function toggle($property)

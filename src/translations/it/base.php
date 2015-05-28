@@ -33,6 +33,7 @@ return [
     'unread'            => "Nuovo",
     'updated'           => "Aggiornato",
     'mark_read'         => "Segna come letto",
+    'views'             => "Visualizzazioni",
 
     // Categories
     'category'          => "Categoria",

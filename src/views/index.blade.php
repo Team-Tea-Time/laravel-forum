@@ -18,7 +18,7 @@
     <tbody>
         <tr>
             <td>
-                <p class="lead"><a href="{{ $category->Route }}">{{ $category->title }}</a></p>
+                <p class="lead"><a href="{{ $category->route }}">{{ $category->title }}</a></p>
                 {{ $category->subtitle }}
 
                 @if ($category->newestThread)

@@ -32,6 +32,7 @@ return [
     'unread'            => "Neu",
     'updated'           => "Aktualisiert",
     'mark_read'         => "Als gelesen markieren",
+    'views'             => "Ansichten",
 
     // Categories
     'category'          => "Kategorie",

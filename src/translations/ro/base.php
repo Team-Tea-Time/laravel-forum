@@ -33,6 +33,7 @@ return [
     'unread'            => "Nou",
     'updated'           => "Actualizat",
     'mark_read'         => "Marchează ca citit",
+    'views'             => "Vizualizari",
 
     // Categories
     'category'          => "Categorie",
