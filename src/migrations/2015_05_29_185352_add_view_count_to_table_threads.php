@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddViewCountToTableThreadsRead extends Migration {
+class AddViewCountToTableThreads extends Migration {
 
     /**
      * Run the migrations.
@@ -11,7 +11,7 @@ class AddViewCountToTableThreadsRead extends Migration {
      */
     public function up()
     {
-        Schema::table('forum_threads_read', function($table)
+        Schema::table('forum_threads', function($table)
         {
             $table->integer('view_count')->unsigned()->default(0);
         });
@@ -24,7 +24,7 @@ class AddViewCountToTableThreadsRead extends Migration {
      */
     public function down()
     {
-        Schema::table('forum_threads_read', function($table)
+        Schema::table('forum_threads', function($table)
         {
             $table->dropColumn('view_count');
         });

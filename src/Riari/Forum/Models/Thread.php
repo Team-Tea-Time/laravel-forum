@@ -37,7 +37,7 @@ class Thread extends BaseModel {
 
     public function readers()
     {
-        return $this->belongsToMany(config('forum.integration.user_model'), 'forum_threads_read', 'thread_id', 'user_id')->withPivot('view_count')->withTimestamps();
+        return $this->belongsToMany(config('forum.integration.user_model'), 'forum_threads_read', 'thread_id', 'user_id')->withTimestamps();
     }
 
     public function posts()
@@ -90,6 +90,11 @@ class Thread extends BaseModel {
         return $this->getRoute('forum.delete.thread');
     }
 
+    public function getLastPostRouteAttribute()
+    {
+        return "{$this->route}?page={$this->lastPage}#post-{$this->lastPost->id}";
+    }
+
     // General attributes
 
     public function getPostsPaginatedAttribute()
@@ -112,11 +117,6 @@ class Thread extends BaseModel {
         return $this->posts()->orderBy('created_at', 'desc')->first();
     }
 
-    public function getLastPostRouteAttribute()
-    {
-        return "{$this->route}?page={$this->lastPage}#post-{$this->lastPost->id}";
-    }
-
     public function getLastPostTimeAttribute()
     {
         return $this->lastPost->created_at;
@@ -135,9 +135,7 @@ class Thread extends BaseModel {
 
     public function getViewCountAttribute()
     {
-        return DB::table('forum_threads_read')
-                ->where('thread_id', $this->id)
-                ->sum('view_count');
+        return $this->attributes['view_count'];
     }
 
     // Current user: reader attributes
@@ -242,8 +240,6 @@ class Thread extends BaseModel {
                 $this->reader->touch();
             }
         }
-
-        $this->readers()->updateExistingPivot($userID, ['view_count' => $this->reader->view_count + 1]);
     }
 
     public function toggle($property)
