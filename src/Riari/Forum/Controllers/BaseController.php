@@ -152,6 +152,7 @@ abstract class BaseController extends Controller {
             $thread->markAsRead($user->id);
         }
 
+        $thread->timestamps = false;
         $thread->increment('view_count');
 
         return $this->makeView('forum::thread');
