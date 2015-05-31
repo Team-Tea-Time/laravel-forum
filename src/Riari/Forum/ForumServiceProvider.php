@@ -1,5 +1,7 @@
 <?php namespace Riari\Forum;
 
+use Event;
+use Riari\Forum\Events\ThreadWasViewed;
 use Illuminate\Support\ServiceProvider;
 
 class ForumServiceProvider extends ServiceProvider {
@@ -58,6 +60,9 @@ class ForumServiceProvider extends ServiceProvider {
 
             include __DIR__.'/../../routes.php';
         }
+
+        // Subscribe event Handlers
+        Event::subscribe('Riari\Forum\Handlers\Events\IncrementThreadViewCount');
     }
 
 }

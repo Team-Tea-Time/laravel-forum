@@ -2,9 +2,11 @@
 
 use App;
 use Config;
+use Event;
 use Input;
 use Illuminate\Routing\Controller;
 use Redirect;
+use Riari\Forum\Events\ThreadWasViewed;
 use Riari\Forum\Repositories\Categories;
 use Riari\Forum\Repositories\Threads;
 use Riari\Forum\Repositories\Posts;
@@ -103,13 +105,8 @@ abstract class BaseController extends Controller {
 
     public function getViewNew()
     {
-        $userID = 0;
         $user = Utils::getCurrentUser();
-        if (!is_null($user))
-        {
-            $userID = $user->id;
-        }
-
+        $userID = (!is_null($user)) ? $user->id : 0;
         $threads = $this->threads->getNewForUser($userID);
 
         return View::make('forum::new', compact('threads', 'user'));
@@ -144,16 +141,7 @@ abstract class BaseController extends Controller {
     {
         $this->load(['category' => $categoryID, 'thread' => $threadID]);
 
-        $thread = $this->collections['thread'];
-        $user = Utils::getCurrentUser();
-
-        if (!is_null($user))
-        {
-            $thread->markAsRead($user->id);
-        }
-
-        $thread->timestamps = false;
-        $thread->increment('view_count');
+        Event::fire(new ThreadWasViewed($this->collections['thread']));
 
         return $this->makeView('forum::thread');
     }
