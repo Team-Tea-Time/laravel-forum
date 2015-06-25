@@ -44,6 +44,10 @@ class ForumServiceProvider extends ServiceProvider {
         ], 'views');
 
         $this->publishes([
+            __DIR__.'/../../translations/' => base_path('/resources/lang/vendor/forum')
+        ], 'lang');
+
+        $this->publishes([
             __DIR__.'/../../migrations/' => base_path('/database/migrations')
         ], 'migrations');
 
