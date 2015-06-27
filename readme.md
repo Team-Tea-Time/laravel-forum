@@ -1,6 +1,8 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/build-status/master)
 
+**This is a rewrite of the Laravel 5 (2.x.x) version and will be released as 3.0.0 in the near future. Please don't attempt to use it as it's likely to be completely broken while I work on refactoring. Thanks!**
+
 **See the [wiki](https://github.com/Riari/laravel-forum/wiki) for an overview of this project, goals and features, as well as documentation.**
 
 ## Installation
