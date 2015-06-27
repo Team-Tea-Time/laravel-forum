@@ -33,7 +33,7 @@ return [
 	| Non object, or null response is considered as not logged in
 	|
 	*/
-	
+
 	'current_user' => function() {
 		//Here you can use confide facade,
 		//or just the default facade, or whatever else
@@ -68,8 +68,8 @@ return [
 	|--------------------------------------------------------------------------
 	|
 	| Use this to control what happens when a permission is denied to a user.
-	| Note this does not affect inline permission checks for displaying links or
-	| inputs.
+	| Note this does not affect inline permission checks for displaying links
+	| or inputs.
 	|
 	*/
 
@@ -79,13 +79,19 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Application controller
+	| Application controllers
 	|--------------------------------------------------------------------------
 	|
-	| This class must extend \Riari\Forum\Controllers\BaseController
+	| Here we specify which controllers to use for each component of the forum.
+	| You can optionally extend these controllers and change the namespaces
+	| here to reference your custom versions instead.
 	|
 	*/
 
-	'controller' => '\App\Http\Controllers\ForumController'
+	'controllers' => [
+		'category'	=> '\Riari\Forum\Http\Controllers\CategoryController',
+		'thread'	=> '\Riari\Forum\Http\Controllers\ThreadController',
+		'post'		=> '\Riari\Forum\Http\Controllers\PostController'
+	]
 
 ];

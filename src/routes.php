@@ -1,31 +1,44 @@
 <?php
-if (!isset($root) || !isset($controller)) {
-	throw new Exception ("This file can't be included outside of ForumServiceProvider@boot!");
-}
 
-Route::get($root, $controller . '@getViewIndex');
-Route::group(['prefix' => $root], function() use ($controller)
+// Forum index
+Route::get($root, "{$controllers['category']}@index");
+Route::group(['prefix' => $root], function() use ($controllers)
 {
-	$category = '{categoryID}-{categoryAlias}';
-	$thread = '/{threadID}-{threadAlias}';
+	$category = '{category}-{categoryAlias}';
+	$thread = '/{thread}-{threadAlias}';
 
-	Route::get('new', ['as' => 'forum.get.new', 'uses' => $controller . '@getViewNew']);
-	Route::post('new/read', ['as' => 'forum.post.mark.read', 'uses' => $controller . '@postMarkAsRead']);
+	// New
+	Route::get('new', ['as' => 'forum.new.index', 'uses' => "{$controllers['thread']}@new"]);
+	Route::post('new/read', ['as' => 'forum.new.mark-read', 'uses' => "{$controllers['thread']}@markRead"]);
 
-	Route::get($category, ['as' => 'forum.get.view.category', 'uses' => $controller . '@getViewCategory']);
-	Route::get($category . $thread, ['as' => 'forum.get.view.thread', 'uses' => $controller . '@getViewThread']);
+	// Categories
+	Route::get($category, ['as' => 'forum.category.index', 'uses' => "{$controllers['category']}@show"]);
 
-	Route::get($category . '/thread/create', ['as' => 'forum.get.create.thread', 'uses' => $controller . '@getCreateThread']);
-	Route::post($category . '/thread/create', ['as' => 'forum.post.create.thread', 'uses' => $controller . '@postCreateThread']);
+	// Threads
+	Route::get($category . $thread, ['as' => 'forum.thread.show', 'uses' => "{$controllers['thread']}@show"]);
+	Route::get($category . '/thread/create', ['as' => 'forum.thread.create', 'uses' => "{$controllers['thread']}@create"]);
+	Route::post($category . '/thread/create', ['as' => 'forum.thread.store', 'uses' => "{$controllers['thread']}@store"]);
+	Route::post($category . $thread . '/lock', ['as' => 'forum.thread.lock', 'uses' => "{$controllers['thread']}@lock"]);
+	Route::post($category . $thread . '/pin', ['as' => 'forum.thread.pin', 'uses' => "{$controllers['thread']}@pin"]);
+	Route::delete($category . $thread . '/delete', ['as' => 'forum.thread.delete', 'uses' => "{$controllers['thread']}@delete"]);
 
-	Route::get($category . $thread . '/reply', ['as' => 'forum.get.reply.thread', 'uses' => $controller . '@getReplyToThread']);
-	Route::post($category . $thread . '/reply', ['as' => 'forum.post.reply.thread', 'uses' => $controller . '@postReplyToThread']);
+	// Posts
+	Route::get($category . $thread . '/reply', ['as' => 'forum.post.create', 'uses' => "{$controllers['post']}@create"]);
+	Route::post($category . $thread . '/reply', ['as' => 'forum.post.store', 'uses' => "{$controllers['post']}@store"]);
+	Route::get($category . $thread . '/post/{postID}/edit', ['as' => 'forum.post.edit', 'uses' => "{$controllers['post']}@edit"]);
+	Route::post($category . $thread . '/post/{postID}/edit', ['as' => 'forum.post.update', 'uses' => "{$controllers['post']}@update"]);
+	Route::delete($category . $thread . '/post/{postID}/delete', ['as' => 'forum.post.delete', 'uses' => "{$controllers['post']}@delete"]);
 
-	Route::post($category . $thread . '/lock', ['as' => 'forum.post.lock.thread', 'uses' => $controller . '@postLockThread']);
-	Route::post($category . $thread . '/pin', ['as' => 'forum.post.pin.thread', 'uses' => $controller . '@postPinThread']);
-	Route::delete($category . $thread . '/delete', ['as' => 'forum.delete.thread', 'uses' => $controller . '@deleteThread']);
-
-	Route::get($category . $thread . '/post/{postID}/edit', ['as' => 'forum.get.edit.post', 'uses' => $controller . '@getEditPost']);
-	Route::post($category . $thread . '/post/{postID}/edit', ['as' => 'forum.post.edit.post', 'uses' => $controller . '@postEditPost']);
-	Route::delete($category . $thread . '/post/{postID}/delete', ['as' => 'forum.get.delete.post', 'uses' => $controller . '@deletePost']);
+	// API
+	Route::group(['prefix' => 'api/v1', 'namespace' => 'API\V1'], function()
+	{
+		Route::resource('category', 'CategoryController');
+		Route::resource('thread', 'ThreadController');
+		Route::resource('post', 'PostController');
+	});
 });
+
+// Model binding
+Route::model('category', 'Riari\Forum\Models\Category');
+Route::model('thread', 'Riari\Forum\Models\Thread');
+Route::model('post', 'Riari\Forum\Models\Post');

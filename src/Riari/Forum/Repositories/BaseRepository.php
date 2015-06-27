@@ -20,17 +20,12 @@ abstract class BaseRepository {
     public function create($data = array())
     {
         $model = $this->model->create($data);
-
         return $model;
     }
 
     public function update($data = array())
     {
-        $model = $this->model->find($data['id']);
-
-        $model->fill($data);
-        $model->save();
-
+        $model = $this->model->find($data['id'])->update($data);
         return $model;
     }
 
@@ -46,6 +41,8 @@ abstract class BaseRepository {
         {
             $model->forceDelete();
         }
+
+        return $model;
     }
 
 }

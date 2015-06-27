@@ -2,9 +2,19 @@
 
 use Event;
 use Riari\Forum\Events\ThreadWasViewed;
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
 class ForumServiceProvider extends ServiceProvider {
+
+    /**
+     * This namespace is applied to the controller routes in your routes file.
+     *
+     * In addition, it is set as the URL generator's root namespace.
+     *
+     * @var string
+     */
+    protected $namespace = 'Riari\Forum\Http\Controllers';
 
     /**
     * Register the service provider.
@@ -23,15 +33,12 @@ class ForumServiceProvider extends ServiceProvider {
     /**
     * Bootstrap the application events.
     *
+    * @param  \Illuminate\Routing\Router  $router
     * @return void
     */
-    public function boot()
+    public function boot(Router $router)
     {
-        // Publish controller, config, views and migrations
-        $this->publishes([
-            __DIR__.'/Controllers/ForumController.php' => base_path('app/Http/Controllers/ForumController.php')
-        ], 'controller');
-
+        // Publish config, views and migrations
         $this->publishes([
             __DIR__.'/../../config/integration.php' => config_path('forum.integration.php'),
             __DIR__.'/../../config/permissions.php' => config_path('forum.permissions.php'),
@@ -53,12 +60,14 @@ class ForumServiceProvider extends ServiceProvider {
         // Load translations
         $this->loadTranslationsFrom(__DIR__.'/../../translations', 'forum');
 
-        // Load routes, if enabled
+        // Load routes (if routing enabled)
         if (config('forum.routing.enabled')) {
-            $root = config('forum.routing.root');
-            $controller = config('forum.integration.controller');
-
-            include __DIR__.'/../../routes.php';
+            $router->group(['namespace' => $this->namespace], function($router)
+            {
+                $root = config('forum.routing.root');
+                $controllers = config('forum.integration.controllers');
+                require __DIR__.'/../../routes.php';
+            });
         }
 
         // Subscribe event Handlers
