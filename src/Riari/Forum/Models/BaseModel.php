@@ -2,9 +2,9 @@
 
 use Cache;
 use Carbon\Carbon;
-use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
-abstract class BaseModel extends Eloquent {
+abstract class BaseModel extends Model {
 
     /*
     |--------------------------------------------------------------------------
@@ -58,7 +58,7 @@ abstract class BaseModel extends Eloquent {
         return $components;
     }
 
-    // Returns a route using the current set route components
+    // Returns a route using the currently set route components
     protected function getRoute($name, $components = array())
     {
         return route($name, array_merge($this->getRouteComponents(), $components));

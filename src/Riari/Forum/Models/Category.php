@@ -4,8 +4,8 @@ use Illuminate\Support\Str;
 use Riari\Forum\Models\Thread;
 use Riari\Forum\Libraries\AccessControl;
 
-class Category extends BaseModel {
-
+class Category extends BaseModel
+{
     // Eloquent properties
     protected $table      = 'forum_categories';
     public    $timestamps = false;
@@ -19,17 +19,17 @@ class Category extends BaseModel {
 
     public function parentCategory()
     {
-        return $this->belongsTo('\Riari\Forum\Models\Category', 'parent_category')->orderBy('weight');
+        return $this->belongsTo('\Riari\Forum\Models\Category')->orderBy('weight');
     }
 
     public function subcategories()
     {
-        return $this->hasMany('\Riari\Forum\Models\Category', 'parent_category')->orderBy('weight');
+        return $this->hasMany('\Riari\Forum\Models\Category')->orderBy('weight');
     }
 
     public function threads()
     {
-        return $this->hasMany('\Riari\Forum\Models\Thread', 'parent_category')->with('category', 'posts');
+        return $this->hasMany('\Riari\Forum\Models\Thread')->with('category', 'posts');
     }
 
     /*
@@ -42,7 +42,7 @@ class Category extends BaseModel {
 
     public function getRouteAttribute()
     {
-        return $this->getRoute('forum.get.view.category');
+        return $this->getRoute('forum.category.index');
     }
 
     public function getNewThreadRouteAttribute()
@@ -54,7 +54,10 @@ class Category extends BaseModel {
 
     public function getThreadsPaginatedAttribute()
     {
-        return $this->threads()->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc')->paginate(config('forum.preferences.threads_per_category'));
+        return $this->threads()
+            ->orderBy('pinned', 'desc')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(config('forum.preferences.pagination.threads'));
     }
 
     public function getPageLinksAttribute()
@@ -124,12 +127,11 @@ class Category extends BaseModel {
 
     protected function getRouteComponents()
     {
-        $components = array(
+        $components = [
             'categoryID'  	=> $this->id,
             'categoryAlias' => Str::slug($this->title, '-')
-        );
+        ];
 
         return $components;
     }
-
 }

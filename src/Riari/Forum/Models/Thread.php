@@ -8,8 +8,8 @@ use Riari\Forum\Libraries\Alerts;
 use Riari\Forum\Libraries\Utils;
 use Riari\Forum\Models\Traits\HasAuthor;
 
-class Thread extends BaseModel {
-
+class Thread extends BaseModel
+{
     use SoftDeletes, HasAuthor;
 
     // Eloquent properties
@@ -32,7 +32,7 @@ class Thread extends BaseModel {
 
     public function category()
     {
-        return $this->belongsTo('\Riari\Forum\Models\Category', 'parent_category');
+        return $this->belongsTo('\Riari\Forum\Models\Category');
     }
 
     public function readers()
@@ -42,7 +42,7 @@ class Thread extends BaseModel {
 
     public function posts()
     {
-        return $this->hasMany('\Riari\Forum\Models\Post', 'parent_thread');
+        return $this->hasMany('\Riari\Forum\Models\Post');
     }
 
     /*
@@ -67,27 +67,27 @@ class Thread extends BaseModel {
 
     public function getRouteAttribute()
     {
-        return $this->getRoute('forum.get.view.thread');
+        return $this->getRoute('forum.thread.show');
     }
 
     public function getReplyRouteAttribute()
     {
-        return $this->getRoute('forum.get.reply.thread');
+        return $this->getRoute('forum.post.create');
     }
 
     public function getPinRouteAttribute()
     {
-        return $this->getRoute('forum.post.pin.thread');
+        return $this->getRoute('forum.thread.pin');
     }
 
     public function getLockRouteAttribute()
     {
-        return $this->getRoute('forum.post.lock.thread');
+        return $this->getRoute('forum.thread.lock');
     }
 
     public function getDeleteRouteAttribute()
     {
-        return $this->getRoute('forum.delete.thread');
+        return $this->getRoute('forum.thread.delete');
     }
 
     public function getLastPostRouteAttribute()
@@ -133,17 +133,11 @@ class Thread extends BaseModel {
         return (!$cutoff || $this->updated_at->timestamp < strtotime($cutoff));
     }
 
-    public function getViewCountAttribute()
-    {
-        return $this->attributes['view_count'];
-    }
-
     // Current user: reader attributes
 
     public function getReaderAttribute()
     {
-        if (!is_null(Utils::getCurrentUser()))
-        {
+        if (!is_null(Utils::getCurrentUser())) {
             $reader = $this->readers()->where('user_id', '=', Utils::getCurrentUser()->id)->first();
 
             return (!is_null($reader)) ? $reader->pivot : null;
@@ -154,10 +148,8 @@ class Thread extends BaseModel {
 
     public function getUserReadStatusAttribute()
     {
-        if (!$this->old && !is_null(Utils::getCurrentUser()))
-        {
-            if (is_null($this->reader))
-            {
+        if (!$this->old && !is_null(Utils::getCurrentUser())) {
+            if (is_null($this->reader)) {
                 return self::STATUS_UNREAD;
             }
 
@@ -229,14 +221,10 @@ class Thread extends BaseModel {
 
     public function markAsRead($userID)
     {
-        if (!$this->old)
-        {
-            if (is_null($this->reader))
-            {
+        if (!$this->old) {
+            if (is_null($this->reader)) {
                 $this->readers()->attach($userID);
-            }
-            elseif ($this->updatedSince($this->reader))
-            {
+            } elseif ($this->updatedSince($this->reader)) {
                 $this->reader->touch();
             }
         }
@@ -246,7 +234,6 @@ class Thread extends BaseModel {
     {
         parent::toggle($property);
 
-        Alerts::add('success', trans('forum::base.thread_updated'));
+        Alerts::add('success', trans('forum::threads.updated'));
     }
-
 }

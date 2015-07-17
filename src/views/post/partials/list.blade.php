@@ -9,16 +9,16 @@
 <tr>
 	<td>
 		@if ($post->canEdit)
-			<a href="{{ $post->editRoute }}">{{ trans('forum::base.edit')}}</a>
+			<a href="{{ $post->editRoute }}">{{ trans('forum::general.edit')}}</a>
 		@endif
 		@if ($post->canDelete)
-			<a href="{{ $post->deleteRoute }}" data-confirm data-method="delete">{{ trans('forum::base.delete') }}</a>
+			<a href="{{ $post->deleteRoute }}" data-confirm data-method="delete">{{ trans('forum::general.delete') }}</a>
 		@endif
 	</td>
 	<td class="text-muted">
-		{{ trans('forum::base.posted_at') }} {{ $post->posted }}
+		{{ trans('forum::general.posted_at') }} {{ $post->posted }}
 		@if ($post->updated_at != null && $post->created_at != $post->updated_at)
-			{{ trans('forum::base.last_update') }} {{ $post->updated }}
+			{{ trans('forum::general.last_updated') }} {{ $post->updated }}
 		@endif
 	</td>
 </tr>

@@ -2,8 +2,8 @@
 
 use App;
 
-class BaseEvent {
-
+class BaseEvent
+{
     /**
      * Create a new event instance.
      *
@@ -13,5 +13,4 @@ class BaseEvent {
     {
         $this->session = App::make('Illuminate\Session\Store');
     }
-
 }

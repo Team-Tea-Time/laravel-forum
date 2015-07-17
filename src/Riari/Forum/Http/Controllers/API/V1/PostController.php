@@ -2,6 +2,7 @@
 
 use Illuminate\Routing\Controller;
 
-class PostController extends Controller {
+class PostController extends Controller
+{
 
 }

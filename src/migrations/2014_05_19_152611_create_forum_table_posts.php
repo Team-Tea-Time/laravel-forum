@@ -3,8 +3,8 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForumTablePosts extends Migration {
-
+class CreateForumTablePosts extends Migration
+{
 	/**
 	 * Run the migrations.
 	 *
@@ -15,7 +15,7 @@ class CreateForumTablePosts extends Migration {
 		Schema::create('forum_posts', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('parent_thread')->unsigned();
+			$table->integer('thread_id')->unsigned();
 			$table->integer('author_id')->unsigned();
 			$table->text('content');
 
@@ -33,5 +33,4 @@ class CreateForumTablePosts extends Migration {
 	{
 		Schema::drop('forum_posts');
 	}
-
 }

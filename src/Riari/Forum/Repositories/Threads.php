@@ -2,18 +2,26 @@
 
 use Riari\Forum\Models\Thread;
 
-class Threads extends BaseRepository {
-
+class Threads extends BaseRepository
+{
+    /**
+     * Create a new thread repository instance.
+     *
+     * @param  Post  $model
+     */
     public function __construct(Thread $model)
     {
         $this->model = $model;
-
-        $this->itemsPerPage = config('forum.integration.threads_per_category');
+        $this->perPage = config('forum.integration.threads_per_category');
     }
 
     public function getRecent($where = array())
     {
-        return $this->model->with('category', 'posts')->recent()->where($where)->orderBy('updated_at', 'desc')->get();
+        return $this->model->with('category', 'posts')
+            ->recent()
+            ->where($where)
+            ->orderBy('updated_at', 'desc')
+            ->get();
     }
 
     public function getNewForUser($userID = 0, $where = array())
@@ -37,5 +45,4 @@ class Threads extends BaseRepository {
 
         return $threads;
     }
-
 }

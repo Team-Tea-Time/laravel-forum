@@ -4,14 +4,34 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Application user model
+	| Application controllers
 	|--------------------------------------------------------------------------
 	|
-	| The user model from the main application
+	| Here we specify which controllers to use for each component of the forum.
+	| You can optionally extend these controllers and change the namespaces
+	| here to reference your custom versions instead.
 	|
 	*/
 
-	'user_model' => 'App\User',
+	'controllers' => [
+		'category'	=> '\Riari\Forum\Http\Controllers\CategoryController',
+		'thread'	=> '\Riari\Forum\Http\Controllers\ThreadController',
+		'post'		=> '\Riari\Forum\Http\Controllers\PostController'
+	],
+
+	/*
+	|--------------------------------------------------------------------------
+	| Application models
+	|--------------------------------------------------------------------------
+	|
+	| Here we specify models in your application that the default forum
+	| integration depends on. Currently only the user model is used.
+	|
+	*/
+
+	'models' => [
+		'user'	=> 'App\User'
+	],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -29,15 +49,13 @@ return [
 	| Closure: determine the current user model
 	|--------------------------------------------------------------------------
 	|
-	| Must return the current logged in user model to use
-	| Non object, or null response is considered as not logged in
+	| Must return the model of the currently logged in user, or null if the
+	| user is a guest.
 	|
 	*/
 
-	'current_user' => function() {
-		//Here you can use confide facade,
-		//or just the default facade, or whatever else
-
+	'current_user' => function ()
+	{
 		return Auth::user();
 	},
 
@@ -50,12 +68,15 @@ return [
 	| NOTE: remember to override the forum views to remove the default alerts
 	| if you no longer use them.
 	|
+	| $type: The type of alert. One of 'success' or 'danger'.
+	| $message: The alert message.
+	|
 	*/
 
-	'process_alert' => function($type, $message) {
-		$alerts = array();
-		if (Session::has('alerts'))
-		{
+	'process_alert' => function ($type, $message)
+	{
+		$alerts = [];
+		if (Session::has('alerts')) {
 			$alerts = Session::get('alerts');
 		}
 
@@ -71,27 +92,14 @@ return [
 	| Note this does not affect inline permission checks for displaying links
 	| or inputs.
 	|
+	| $context: The model related to the permission being checked.
+	| $user: The current user.
+	|
 	*/
 
-	'process_denied' => function($context, $user) {
+	'process_denied' => function ($context, $user)
+	{
 		App::abort(403);
 	},
-
-	/*
-	|--------------------------------------------------------------------------
-	| Application controllers
-	|--------------------------------------------------------------------------
-	|
-	| Here we specify which controllers to use for each component of the forum.
-	| You can optionally extend these controllers and change the namespaces
-	| here to reference your custom versions instead.
-	|
-	*/
-
-	'controllers' => [
-		'category'	=> '\Riari\Forum\Http\Controllers\CategoryController',
-		'thread'	=> '\Riari\Forum\Http\Controllers\ThreadController',
-		'post'		=> '\Riari\Forum\Http\Controllers\PostController'
-	]
 
 ];

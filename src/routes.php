@@ -1,7 +1,7 @@
 <?php
 
 // Forum index
-Route::get($root, "{$controllers['category']}@index");
+Route::get($root, ['as' => 'forum.index', 'uses' => "{$controllers['category']}@index"]);
 Route::group(['prefix' => $root], function() use ($controllers)
 {
 	$category = '{category}-{categoryAlias}';

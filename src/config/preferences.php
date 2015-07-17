@@ -16,13 +16,7 @@ return [
         // will increase the size of your forum_threads_read table.
         // Must be a valid strtotime() string, or set to false to completely
         // disable age-sensitive thread features.
-        'cutoff_age'            => '-1 month',
-
-        // View count throttle:
-        // Specify the minimum interval, in seconds, between incrementing the
-        // view count per thread per user. Set to 0 to effectively disable
-        // throttling.
-        'throttle_view_count_interval'   => 10
+        'cutoff_age' => '-1 month'
     ],
 
     /*
@@ -31,8 +25,10 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'threads_per_category' => 20,
-    'posts_per_thread' => 15,
+    'pagination' => [
+        'threads'   => 20,  // Threads per page
+        'posts'     => 15   // Posts per page
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -43,7 +39,9 @@ return [
     |
     */
 
-    'cache_lifetime' => 5,
+    'cache' => [
+        'lifetime'  => 5
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -51,7 +49,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'validation_rules' => [
+    'validation' => [
         'thread' => [
             'title' => 'required'
         ],
@@ -66,8 +64,10 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    // Soft Delete: disable this if you want threads and posts to be permanently
-    // removed from your database when they're deleted by a user.
-    'soft_delete' => true
+    'misc'  => [
+        // Soft Delete: disable this if you want threads and posts to be permanently
+        // removed from your database when they're deleted by a user.
+        'soft_delete' => true
+    ]
 
 ];

@@ -2,6 +2,7 @@
 
 use Illuminate\Routing\Controller;
 
-class ThreadController extends Controller {
+class ThreadController extends Controller
+{
 
 }

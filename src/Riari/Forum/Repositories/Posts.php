@@ -2,22 +2,37 @@
 
 use Riari\Forum\Models\Post;
 
-class Posts extends BaseRepository {
-
+class Posts extends BaseRepository
+{
+    /**
+     * Create a new post repository instance.
+     *
+     * @param  Post  $model
+     */
     public function __construct(Post $model)
     {
         $this->model = $model;
-
-        $this->itemsPerPage = config('forum.integration.posts_per_thread');
+        $this->perPage = config('forum.preferences.pagination.posts');
     }
 
-    public function getLastByThread($threadID, $count = 10, array $with = array())
+    /**
+     * Get N last posts belonging to the specified thread.
+     *
+     * @param  int  $threadID
+     * @param  int  $count
+     * @param  array  $with
+     * @return Collection
+     */
+    public function getLastByThread($threadID = 0, $count = 10, array $with)
     {
-        $model = $this->model->where('parent_thread', '=', $threadID);
+        $model = $this->model->where('thread_id', $threadID);
         $model = $model->orderBy('created_at', 'DESC')->take($count);
-        $model = $model->with($with);
 
-        return $model;
+        return $model->with($with);
+
+        return $this->model->where('thread_id', $threadID)
+            ->orderBy('created_at', 'DESC')
+            ->take($count)
+            ->with($with);
     }
-
 }

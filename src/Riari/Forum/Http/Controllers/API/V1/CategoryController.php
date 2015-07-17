@@ -2,6 +2,7 @@
 
 use Illuminate\Routing\Controller;
 
-class CategoryController extends Controller {
+class CategoryController extends Controller
+{
 
 }

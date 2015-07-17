@@ -5,8 +5,8 @@ use Illuminate\Support\Str;
 use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Models\Traits\HasAuthor;
 
-class Post extends BaseModel {
-
+class Post extends BaseModel
+{
     use SoftDeletes, HasAuthor;
 
     // Eloquent properties
@@ -25,7 +25,7 @@ class Post extends BaseModel {
 
     public function thread()
     {
-        return $this->belongsTo('\Riari\Forum\Models\Thread', 'parent_thread');
+        return $this->belongsTo('\Riari\Forum\Models\Thread');
     }
 
     /*
@@ -95,5 +95,4 @@ class Post extends BaseModel {
 
         return $components;
     }
-
 }

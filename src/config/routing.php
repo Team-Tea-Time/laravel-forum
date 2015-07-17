@@ -21,7 +21,7 @@ return [
 	| The base url of the forum inside your application
 	|
 	*/
-	
-	'root' => '/forum',
+
+	'root' => 'forum',
 
 ];

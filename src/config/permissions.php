@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'access_category' => function($category, $user)
+    'access_category' => function ($category, $user)
     {
         return true;
     },
@@ -27,7 +27,7 @@ return [
     |
     */
 
-    'create_threads' => function($category, $user)
+    'create_threads' => function ($category, $user)
     {
         if ($user == null)
         {
@@ -46,7 +46,7 @@ return [
     |
     */
 
-    'lock_threads' => function($thread, $user)
+    'lock_threads' => function ($thread, $user)
     {
         return false;
     },
@@ -60,7 +60,7 @@ return [
     |
     */
 
-    'pin_threads' => function($thread, $user)
+    'pin_threads' => function ($thread, $user)
     {
         return false;
     },
@@ -73,8 +73,8 @@ return [
     | Determines whether or not the current user is allowed to delete threads.
     |
     */
-    
-    'delete_threads' => function($thread, $user)
+
+    'delete_threads' => function ($thread, $user)
     {
         return false;
     },
@@ -89,10 +89,9 @@ return [
     |
     */
 
-    'reply_to_thread' => function($thread, $user)
+    'reply_to_thread' => function ($thread, $user)
     {
-        if ($user == null || $thread->locked)
-        {
+        if ($user == null || $thread->locked) {
             return false;
         }
 
@@ -109,10 +108,9 @@ return [
     |
     */
 
-    'edit_post' => function($post, $user)
+    'edit_post' => function ($post, $user)
     {
-        if ($user == null || ($user->id != $post->author_id))
-        {
+        if ($user == null || ($user->id != $post->author_id)) {
             return false;
         }
 
@@ -128,7 +126,7 @@ return [
     |
     */
 
-    'delete_posts' => function($post, $user)
+    'delete_posts' => function ($post, $user)
     {
         return false;
     }

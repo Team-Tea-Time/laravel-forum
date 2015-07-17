@@ -3,8 +3,8 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForumTableThreadsRead extends Migration {
-
+class CreateForumTableThreadsRead extends Migration
+{
 	/**
 	 * Run the migrations.
 	 *
@@ -29,5 +29,4 @@ class CreateForumTableThreadsRead extends Migration {
 	{
 		Schema::drop('forum_threads_read');
 	}
-
 }

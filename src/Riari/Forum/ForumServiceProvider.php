@@ -1,12 +1,11 @@
 <?php namespace Riari\Forum;
 
 use Event;
-use Riari\Forum\Events\ThreadWasViewed;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
-class ForumServiceProvider extends ServiceProvider {
-
+class ForumServiceProvider extends ServiceProvider
+{
     /**
      * This namespace is applied to the controller routes in your routes file.
      *
@@ -17,10 +16,10 @@ class ForumServiceProvider extends ServiceProvider {
     protected $namespace = 'Riari\Forum\Http\Controllers';
 
     /**
-    * Register the service provider.
-    *
-    * @return void
-    */
+     * Register the service provider.
+     *
+     * @return void
+     */
     public function register()
     {
         // Merge config
@@ -31,11 +30,11 @@ class ForumServiceProvider extends ServiceProvider {
     }
 
     /**
-    * Bootstrap the application events.
-    *
-    * @param  \Illuminate\Routing\Router  $router
-    * @return void
-    */
+     * Bootstrap the application events.
+     *
+     * @param  \Illuminate\Routing\Router  $router
+     * @return void
+     */
     public function boot(Router $router)
     {
         // Publish config, views and migrations
@@ -69,9 +68,5 @@ class ForumServiceProvider extends ServiceProvider {
                 require __DIR__.'/../../routes.php';
             });
         }
-
-        // Subscribe event Handlers
-        Event::subscribe('Riari\Forum\Handlers\Events\IncrementThreadViewCount');
     }
-
 }
