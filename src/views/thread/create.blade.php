@@ -6,7 +6,7 @@
 <h2>{{ trans('forum::threads.new_thread') }} ({{$category->title}})</h2>
 
 @include(
-    'forum::partials.forms.post',
+    'forum::post.partials.edit',
     array(
         'form_url'            => $category->newThreadRoute,
         'form_classes'        => '',

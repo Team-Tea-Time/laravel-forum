@@ -68,11 +68,11 @@ abstract class BaseRepository implements Repository
      */
     public function update($id, array $data)
     {
-        $model = $this->getByID($id);
+        $model = $this->find($id);
 
         if (!is_null($model)) {
             $model->fill($data);
-            return $model->save();
+            $model->save();
         }
 
         return $model;
@@ -86,7 +86,7 @@ abstract class BaseRepository implements Repository
      */
     public function delete($id = 0)
     {
-        $model = $this->getByID($id);
+        $model = $this->find($id);
 
         if (!is_null($model)) {
             return $model->delete();

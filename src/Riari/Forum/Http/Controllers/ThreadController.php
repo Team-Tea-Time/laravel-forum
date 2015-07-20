@@ -8,6 +8,6 @@ class ThreadController extends BaseController
 {
     public function show(Category $category, $categoryAlias, Thread $thread)
     {
-        return view('forum::thread.show', compact('thread'));
+        return view('forum::thread.show', compact('category', 'thread'));
     }
 }

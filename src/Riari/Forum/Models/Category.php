@@ -17,14 +17,14 @@ class Category extends BaseModel
     |--------------------------------------------------------------------------
     */
 
-    public function parentCategory()
+    public function parent()
     {
-        return $this->belongsTo('\Riari\Forum\Models\Category')->orderBy('weight');
+        return $this->belongsTo('\Riari\Forum\Models\Category', 'category_id')->orderBy('weight');
     }
 
-    public function subcategories()
+    public function children()
     {
-        return $this->hasMany('\Riari\Forum\Models\Category')->orderBy('weight');
+        return $this->hasMany('\Riari\Forum\Models\Category', 'category_id')->orderBy('weight');
     }
 
     public function threads()

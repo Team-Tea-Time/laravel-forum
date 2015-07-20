@@ -1,19 +1,19 @@
-{!! Form::open(['url' => $form_url, 'class' => $form_classes]) !!}
+@extends('forum::master')
 
-@if ( $show_title_field )
-    <div class="form-group">
-        <label for="title">{{ trans('forum::general.title') }}</label>
-        {!! Form::text('title', Input::old('title'), ['class' => 'form-control']) !!}
-    </div>
-@endif
+@section('content')
+@include('forum::partials.breadcrumbs', compact('category', 'thread'))
 
-<div class="form-group">
-    {!! Form::textarea('content', $post_content, ['class' => 'form-control']) !!}
-</div>
+<h2>{{ trans('forum::general.new_reply') }} ({{$thread->title}})</h2>
 
-<button type="submit" class="btn btn-primary">{{ $submit_label }}</button>
-@if ( $cancel_url )
-    <a href="{{ $cancel_url }}" class="btn btn-default">{{ trans('forum::general.cancel') }}</a>
-@endif
-
-{!! Form::close() !!}
+@include(
+    'forum::post.partials.edit',
+    array(
+        'form_url'          => $thread->replyRoute,
+        'form_classes'      => '',
+        'show_title_field'  => false,
+        'post_content'      => '',
+        'submit_label'      => trans('forum::general.reply'),
+        'cancel_url'        => $thread->route
+    )
+)
+@overwrite

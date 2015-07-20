@@ -39,13 +39,13 @@
                     <td>{{ $category->threadCount }}</td>
                     <td>{{ $category->postCount }}</td>
                 </tr>
-                @if (!$category->subcategories->isEmpty())
+                @if (!$category->children->isEmpty())
                     <tr>
                         <td>{{ trans('forum::categories.subcategories') }}</td>
                         <th>{{ trans('forum::threads.threads') }}</th>
                         <th>{{ trans('forum::posts.posts') }}</th>
                     </tr>
-                    @foreach ($category->subcategories as $subcategory)
+                    @foreach ($category->children as $subcategory)
                         @include('forum::category.partials.list')
                     @endforeach
                 @else

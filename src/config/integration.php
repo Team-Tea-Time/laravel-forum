@@ -35,14 +35,20 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Application user name attribute
+	| Application user
 	|--------------------------------------------------------------------------
 	|
-	| The attribute on the user model to use as a display name.
+	| Here we specify some settings related to the application user. Currently
+	| only the names of attributes used by the forum are specified here.
 	|
 	*/
 
-	'user_name_attribute' => 'name',
+	'user' => [
+		'attributes' => [
+			'id'	=> 'id',
+			'name'	=> 'name'
+		]
+	],
 
 	/*
 	|--------------------------------------------------------------------------

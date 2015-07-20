@@ -5,7 +5,7 @@
 
 	<h2>{{ $category->title }}</h2>
 
-	@if (!$category->subcategories->isEmpty())
+	@if (!$category->children->isEmpty())
 		<table class="table table-category">
 			<thead>
 				<tr>
@@ -15,7 +15,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach ($category->subcategories as $subcategory)
+				@foreach ($category->children as $subcategory)
 					@include('forum::category.partials.list')
 				@endforeach
 			</tbody>

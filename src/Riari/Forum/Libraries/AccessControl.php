@@ -2,32 +2,34 @@
 
 use App;
 
-class AccessControl {
-
-    public static function check($context, $permission, $abort = true)
+class AccessControl
+{
+    /**
+     * Determine if the specified user has access to a named route.
+     *
+     * @param  object  $route
+     * @param  object  $user
+     */
+    public static function check($route, $user, $abort = true)
     {
-        // Fetch the current user
-        $user_callback = config('forum.integration.current_user');
-        $user = $user_callback();
-
         // Check for access permission
-        $access_callback = config('forum.permissions.access_category');
-        $permission_granted = $access_callback($context, $user);
+        $accessCallback = config('forum.permissions.access_category');
+        $granted = $accessCallback($route->parameters(), $user);
 
-        if ($permission_granted && ($permission != 'access_category'))
+        if ($granted && ($permission != 'access_category'))
         {
             // Check for action permission
-            $action_callback = config('forum.permissions.' . $permission);
-            $permission_granted = $action_callback($context, $user);
+            $actionCallback = config('forum.permissions.' . $route->action()['as']);
+            $granted = $actionCallback($route->parameters(), $user);
         }
 
-        if (!$permission_granted && $abort)
+        if (!$granted && $abort)
         {
-            $denied_callback = config('forum.integration.process_denied');
-            $denied_callback($context, $user);
+            $deniedCallback = config('forum.integration.process_denied');
+            $deniedCallback($route->parameters(), $user);
         }
 
-        return $permission_granted;
+        return $granted;
     }
 
 }

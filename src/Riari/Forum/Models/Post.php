@@ -38,7 +38,7 @@ class Post extends BaseModel
 
     public function getRouteAttribute()
     {
-        $perPage = config('forum.preferences.posts_per_thread');
+        $perPage = config('forum.preferences.pagination.threads');
         $count = $this->thread->posts()->where('id', '<=', $this->id)->paginate($perPage)->total();
         $page = ceil($count / $perPage);
 
@@ -47,12 +47,12 @@ class Post extends BaseModel
 
     public function getEditRouteAttribute()
     {
-        return $this->getRoute('forum.get.edit.post');
+        return $this->getRoute('forum.post.edit');
     }
 
     public function getDeleteRouteAttribute()
     {
-        return $this->getRoute('forum.get.delete.post');
+        return $this->getRoute('forum.post.delete');
     }
 
     // Current user: permission attributes

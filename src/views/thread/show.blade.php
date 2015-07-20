@@ -72,7 +72,7 @@
         <h3>{{ trans('forum::general.quick_reply') }}</h3>
         <div id="quick-reply">
             @include(
-                'forum::partials.forms.post',
+                'forum::post.partials.edit',
                 array(
                     'form_url'            => $thread->replyRoute,
                     'form_classes'        => '',

@@ -1,4 +1,4 @@
-@extends('forum::layouts.master')
+@extends('forum::master')
 
 @section('content')
 @include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
@@ -6,7 +6,7 @@
 <h2>{{ trans('forum::posts.edit') }} ({{$thread->title}})</h2>
 
 @include(
-    'forum::partials.forms.post',
+    'forum::post.partials.edit',
     array(
         'form_url'          => $post->editRoute,
         'form_classes'      => '',

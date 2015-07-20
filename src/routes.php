@@ -20,14 +20,14 @@ Route::group(['prefix' => $root], function() use ($controllers)
 	Route::post($category . '/thread/create', ['as' => 'forum.thread.store', 'uses' => "{$controllers['thread']}@store"]);
 	Route::post($category . $thread . '/lock', ['as' => 'forum.thread.lock', 'uses' => "{$controllers['thread']}@lock"]);
 	Route::post($category . $thread . '/pin', ['as' => 'forum.thread.pin', 'uses' => "{$controllers['thread']}@pin"]);
-	Route::delete($category . $thread . '/delete', ['as' => 'forum.thread.delete', 'uses' => "{$controllers['thread']}@delete"]);
+	Route::delete($category . $thread . '/delete', ['as' => 'forum.thread.delete', 'uses' => "{$controllers['thread']}@destroy"]);
 
 	// Posts
 	Route::get($category . $thread . '/reply', ['as' => 'forum.post.create', 'uses' => "{$controllers['post']}@create"]);
 	Route::post($category . $thread . '/reply', ['as' => 'forum.post.store', 'uses' => "{$controllers['post']}@store"]);
-	Route::get($category . $thread . '/post/{postID}/edit', ['as' => 'forum.post.edit', 'uses' => "{$controllers['post']}@edit"]);
-	Route::post($category . $thread . '/post/{postID}/edit', ['as' => 'forum.post.update', 'uses' => "{$controllers['post']}@update"]);
-	Route::delete($category . $thread . '/post/{postID}/delete', ['as' => 'forum.post.delete', 'uses' => "{$controllers['post']}@delete"]);
+	Route::get($category . $thread . '/post/{post}/edit', ['as' => 'forum.post.edit', 'uses' => "{$controllers['post']}@edit"]);
+	Route::patch($category . $thread . '/post/{post}/edit', ['as' => 'forum.post.update', 'uses' => "{$controllers['post']}@update"]);
+	Route::delete($category . $thread . '/post/{post}/delete', ['as' => 'forum.post.delete', 'uses' => "{$controllers['post']}@destroy"]);
 
 	// API
 	Route::group(['prefix' => 'api/v1', 'namespace' => 'API\V1'], function()
