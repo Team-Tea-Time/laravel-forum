@@ -38,16 +38,13 @@ return [
 	| Application user
 	|--------------------------------------------------------------------------
 	|
-	| Here we specify some settings related to the application user. Currently
-	| only the names of attributes used by the forum are specified here.
+	| Here we specify some settings related to the application user.
 	|
 	*/
 
 	'user' => [
 		'attributes' => [
-			'id'		=> 'id',
-			'username'	=> 'username',
-			'name'		=> 'name'
+			'name' => 'name'
 		]
 	],
 

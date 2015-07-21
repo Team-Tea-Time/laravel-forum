@@ -5,43 +5,9 @@ use Illuminate\Routing\Controller;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
-use Riari\Forum\Repositories\Categories;
-use Riari\Forum\Repositories\Posts;
-use Riari\Forum\Repositories\Threads;
 
 class PostController extends BaseController
 {
-    /**
-     * @var Categories
-     */
-    protected $categories;
-
-    /**
-     * @var Posts
-     */
-    protected $posts;
-
-    /**
-     * @var Threads
-     */
-    protected $threads;
-
-    /**
-     * Create a new post controller instance.
-     *
-     * @param  Categories  $categories
-     * @param  Posts  $posts
-     * @param  Threads  $threads
-     */
-    public function __construct(Categories $categories, Posts $posts, Threads $threads)
-    {
-        parent::__construct();
-
-        $this->categories = $categories;
-        $this->posts = $posts;
-        $this->threads = $threads;
-    }
-
     /**
      * GET: return a 'create post' (thread reply) view.
      *
@@ -71,14 +37,14 @@ class PostController extends BaseController
 
         $post = [
             'thread_id' => $thread->id,
-            'author_id' => Auth::user()->{config('forum.integration.user.attributes.id')},
+            'author_id' => Auth::user()->id,
             'content'   => $request->input('content')
         ];
 
         $post = $this->posts->create($post);
         $post->thread->touch();
 
-        $this->alerts->add('success', trans('forum::general.reply_added'));
+        alert('success', trans('forum::general.reply_added'));
 
         return redirect($post->route);
     }
@@ -115,11 +81,11 @@ class PostController extends BaseController
 
         $post = $this->posts->update($post->id, [
             'thread_id' => $thread->id,
-            'author_id' => Auth::user()->{config('forum.integration.user.attributes.id')},
+            'author_id' => Auth::user()->id,
             'content'   => $request->input('content')
         ]);
 
-        $this->alerts->add('success', trans('forum::posts.updated'));
+        alert('success', trans('forum::posts.updated'));
 
         return redirect($post->route);
     }
@@ -146,7 +112,7 @@ class PostController extends BaseController
             return redirect($category->route);
         }
 
-        $this->alerts->add('success', trans('forum::posts.deleted'));
+        alert('success', trans('forum::posts.deleted'));
 
         return redirect($thread->route);
     }

@@ -32,9 +32,9 @@ Route::group(['prefix' => $root], function() use ($controllers)
 	// API
 	Route::group(['prefix' => 'api/v1', 'namespace' => 'API\V1', 'middleware' => 'forum.auth.basic'], function()
 	{
-		Route::resource('category', 'CategoryController');
-		Route::resource('thread', 'ThreadController');
-		Route::resource('post', 'PostController');
+		Route::resource('category', 'CategoryController', ['except' => ['create', 'edit']]);
+		Route::resource('thread', 'ThreadController', ['except' => ['create', 'edit']]);
+		Route::resource('post', 'PostController', ['except' => ['create', 'edit']]);
 	});
 });
 

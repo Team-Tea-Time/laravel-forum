@@ -72,17 +72,11 @@ class Post extends BaseModel
     |--------------------------------------------------------------------------
     */
 
-    protected function getAccessParams()
-    {
-        $parameters = [
-            'category'  => $this->thread->category,
-            'thread'    => $this->thread,
-            'post'      => $this
-        ];
-
-        return $parameters;
-    }
-
+    /**
+     * Return an array of components used to construct this model's route.
+     *
+     * @return array
+     */
     protected function getRouteComponents()
     {
         $components = [
@@ -94,5 +88,22 @@ class Post extends BaseModel
         ];
 
         return $components;
+    }
+
+    /**
+     * Return an array of parameters used by the userCan() method to check
+     * permissions.
+     *
+     * @return array
+     */
+    protected function getAccessParams()
+    {
+        $parameters = [
+            'category'  => $this->thread->category,
+            'thread'    => $this->thread,
+            'post'      => $this
+        ];
+
+        return $parameters;
     }
 }

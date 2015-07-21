@@ -23,7 +23,7 @@ class Category extends BaseModel
 
     public function children()
     {
-        return $this->hasMany('\Riari\Forum\Models\Category', 'category_id')->orderBy('weight');
+        return $this->hasMany('\Riari\Forum\Models\Category', 'category_id')->with('threads')->orderBy('weight');
     }
 
     public function threads()
@@ -46,7 +46,7 @@ class Category extends BaseModel
 
     public function getNewThreadRouteAttribute()
     {
-        return $this->getRoute('forum.post.create.thread');
+        return $this->getRoute('forum.thread.create');
     }
 
     // General attributes
@@ -103,7 +103,7 @@ class Category extends BaseModel
         return $this->userCan('forum.category.index');
     }
 
-    public function getUserCanPostAttribute()
+    public function getUserCanCreateThreadsAttribute()
     {
         return $this->userCan('forum.thread.create');
     }
@@ -114,13 +114,11 @@ class Category extends BaseModel
     |--------------------------------------------------------------------------
     */
 
-    protected function getAccessParams()
-    {
-        $parameters = ['category' => $this];
-
-        return $parameters;
-    }
-
+    /**
+     * Return an array of components used to construct this model's route.
+     *
+     * @return array
+     */
     protected function getRouteComponents()
     {
         $components = [
@@ -129,5 +127,18 @@ class Category extends BaseModel
         ];
 
         return $components;
+    }
+
+    /**
+     * Return an array of parameters used by the userCan() method to check
+     * permissions.
+     *
+     * @return array
+     */
+    protected function getAccessParams()
+    {
+        $parameters = ['category' => $this];
+
+        return $parameters;
     }
 }

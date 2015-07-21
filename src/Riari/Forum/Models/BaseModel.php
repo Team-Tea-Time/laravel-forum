@@ -45,42 +45,73 @@ abstract class BaseModel extends Model
     |--------------------------------------------------------------------------
     */
 
-    // Returns true if this model has been updated since the given model
+    /**
+     * Determine if this model has been updated since the given model.
+     *
+     * @param  Model  $model
+     * @return boolean
+     */
     public function updatedSince(&$model)
     {
         return ($this->updated_at > $model->updated_at);
     }
 
-    // Returns permission check for the specified permission (route name)
+    /**
+     * Determine if the current user has the given permission for this model.
+     *
+     * @param  string  $permission
+     * @return boolean
+     */
     protected function userCan($permission)
     {
         return permitted($this->getAccessParams(), $permission, Auth::user());
     }
 
-    // Returns access parameters for checking access
-    protected function getAccessParams()
-    {
-        $parameters = [];
-        return $parameters;
-    }
-
-    // Returns route components for building routes
+    /**
+     * Return an array of components used to construct this model's route.
+     *
+     * @return array
+     */
     protected function getRouteComponents()
     {
         $components = [];
         return $components;
     }
 
-    // Returns a route using the currently set route components
+    /**
+     * Return an array of parameters used by the userCan() method to check
+     * permissions.
+     *
+     * @return array
+     */
+    protected function getAccessParams()
+    {
+        $parameters = [];
+        return $parameters;
+    }
+
+    /**
+     * Return a route of the given name using the current and specified route
+     * components.
+     *
+     * @param  string  $name
+     * @param  array  $components
+     * @return string
+     */
     protected function getRoute($name, $components = array())
     {
         return route($name, array_merge($this->getRouteComponents(), $components));
     }
 
-    // Toggles an attribute on the model and saves it
-    public function toggle($property)
+    /**
+     * Toggle an attribute on this model.
+     *
+     * @param  string  $attribute
+     * @return void
+     */
+    public function toggle($attribute)
     {
-        $this->$property = !$this->$property;
+        $this->$attribute = !$this->$attribute;
         $this->save();
     }
 }

@@ -23,6 +23,8 @@ function alert($type, $message)
  */
 function permitted($parameters, $routeName, $user)
 {
+    $aliases = config('forum.permissions.aliases');
+    $routeName = (isset($aliases[$routeName])) ? $aliases[$routeName] : $routeName;
     $action = config("forum.permissions.{$routeName}");
 
     if (is_callable($action)) {

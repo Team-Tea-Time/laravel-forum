@@ -187,6 +187,11 @@ class Thread extends BaseModel
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * Return an array of components used to construct this model's route.
+     *
+     * @return array
+     */
     protected function getRouteComponents()
     {
         $components = [
@@ -199,6 +204,12 @@ class Thread extends BaseModel
         return $components;
     }
 
+    /**
+     * Return an array of parameters used by the userCan() method to check
+     * permissions.
+     *
+     * @return array
+     */
     protected function getAccessParams()
     {
         $parameters = [
@@ -209,6 +220,12 @@ class Thread extends BaseModel
         return $parameters;
     }
 
+    /**
+     * Mark this thread as read for the given user ID.
+     *
+     * @param  int  $userID
+     * @return void
+     */
     public function markAsRead($userID)
     {
         if (!$this->old) {
@@ -220,9 +237,15 @@ class Thread extends BaseModel
         }
     }
 
-    public function toggle($property)
+    /**
+     * Toggle an attribute on this thread.
+     *
+     * @param  string  $attribute
+     * @return void
+     */
+    public function toggle($attribute)
     {
-        parent::toggle($property);
+        parent::toggle($attribute);
 
         Alerts::add('success', trans('forum::threads.updated'));
     }

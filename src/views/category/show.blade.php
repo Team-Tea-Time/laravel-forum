@@ -24,7 +24,7 @@
 
 	<div class="row">
 		<div class="col-xs-4">
-			@if ($category->canPost)
+			@if ($category->userCanCreateThreads)
 				<a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
 			@endif
 		</div>
@@ -89,7 +89,7 @@
 
 	<div class="row">
 		<div class="col-xs-4">
-			@if ($category->canPost)
+			@if ($category->userCanCreateThreads)
 				<a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
 			@endif
 		</div>

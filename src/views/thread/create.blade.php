@@ -1,7 +1,7 @@
-@extends('forum::layouts.master')
+@extends('forum::master')
 
 @section('content')
-@include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
+@include('forum::partials.breadcrumbs', compact('category', 'thread'))
 
 <h2>{{ trans('forum::threads.new_thread') }} ({{$category->title}})</h2>
 
