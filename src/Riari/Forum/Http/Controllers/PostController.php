@@ -71,7 +71,7 @@ class PostController extends BaseController
 
         $post = [
             'thread_id' => $thread->id,
-            'author_id' => $this->utils->getCurrentUserAttribute(config('forum.integration.user.attributes.id')),
+            'author_id' => Auth::user()->{config('forum.integration.user.attributes.id')},
             'content'   => $request->input('content')
         ];
 
@@ -115,7 +115,7 @@ class PostController extends BaseController
 
         $post = $this->posts->update($post->id, [
             'thread_id' => $thread->id,
-            'author_id' => $this->utils->getCurrentUserAttribute(config('forum.integration.user.attributes.id')),
+            'author_id' => Auth::user()->{config('forum.integration.user.attributes.id')},
             'content'   => $request->input('content')
         ]);
 

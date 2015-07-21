@@ -100,12 +100,12 @@ class Category extends BaseModel
 
     public function getUserCanViewAttribute()
     {
-        return $this->checkPermission('forum.category.index');
+        return $this->userCan('forum.category.index');
     }
 
     public function getUserCanPostAttribute()
     {
-        return $this->checkPermission('forum.thread.create');
+        return $this->userCan('forum.thread.create');
     }
 
     /*
@@ -114,15 +114,17 @@ class Category extends BaseModel
     |--------------------------------------------------------------------------
     */
 
-    private function checkPermission($permission)
+    protected function getAccessParams()
     {
-        return $this->access->check(['category' => $this], $permission, false);
+        $parameters = ['category' => $this];
+
+        return $parameters;
     }
 
     protected function getRouteComponents()
     {
         $components = [
-            'categoryID'  	=> $this->id,
+            'category'  	=> $this->id,
             'categoryAlias' => Str::slug($this->title, '-')
         ];
 

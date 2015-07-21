@@ -1,27 +1,11 @@
 <?php namespace Riari\Forum\Models;
 
+use Auth;
 use Cache;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Riari\Forum\Libraries\AccessControl;
 
 abstract class BaseModel extends Model
 {
-    /**
-     * @var AccessControl
-     */
-    protected $access;
-
-    /**
-     * Create a new model instance.
-     *
-     * @param  AccessControl  $access
-     */
-    public function __construct()
-    {
-        $this->access = new AccessControl;
-    }
-
     /*
     |--------------------------------------------------------------------------
     | Attributes
@@ -30,19 +14,19 @@ abstract class BaseModel extends Model
 
     public function getPostedAttribute()
     {
-        return $this->getTimeAgo($this->created_at);
+        return $this->created_at->diffForHumans();
     }
 
     public function getUpdatedAttribute()
     {
-        return $this->getTimeAgo($this->updated_at);
+        return $this->updated_at->diffForHumans();
     }
 
     protected function rememberAttribute($item, $function)
     {
         $cacheItem = get_class($this).$this->id.$item;
 
-        $value = Cache::remember($cacheItem, config('forum.preferences.cache_lifetime'), $function);
+        $value = Cache::remember($cacheItem, config('forum.preferences.cache.lifetime'), $function);
 
         return $value;
     }
@@ -67,10 +51,23 @@ abstract class BaseModel extends Model
         return ($this->updated_at > $model->updated_at);
     }
 
+    // Returns permission check for the specified permission (route name)
+    protected function userCan($permission)
+    {
+        return permitted($this->getAccessParams(), $permission, Auth::user());
+    }
+
+    // Returns access parameters for checking access
+    protected function getAccessParams()
+    {
+        $parameters = [];
+        return $parameters;
+    }
+
     // Returns route components for building routes
     protected function getRouteComponents()
     {
-        $components = array();
+        $components = [];
         return $components;
     }
 
@@ -80,13 +77,7 @@ abstract class BaseModel extends Model
         return route($name, array_merge($this->getRouteComponents(), $components));
     }
 
-    // Returns a human readable diff of the given timestamp
-    protected function getTimeAgo($timestamp)
-    {
-        return Carbon::createFromTimeStamp(strtotime($timestamp))->diffForHumans();
-    }
-
-    // Toggles a property (column) on the model and saves it
+    // Toggles an attribute on the model and saves it
     public function toggle($property)
     {
         $this->$property = !$this->$property;

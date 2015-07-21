@@ -4,12 +4,12 @@ trait HasAuthor
 {
     public function author()
     {
-        return $this->belongsTo(config('forum.integration.user_model'), 'author_id');
+        return $this->belongsTo(config('forum.integration.models.user'));
     }
 
     public function getAuthorNameAttribute()
     {
-        $attribute = config('forum.integration.user_name_attribute');
+        $attribute = config('forum.integration.user.attributes.name');
 
         if (!is_null($this->author) && isset($this->author->$attribute)) {
             return $this->author->$attribute;

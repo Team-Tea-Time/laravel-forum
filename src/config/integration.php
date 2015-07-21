@@ -4,7 +4,7 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Application controllers
+	| Controllers
 	|--------------------------------------------------------------------------
 	|
 	| Here we specify which controllers to use for each component of the forum.
@@ -45,25 +45,11 @@ return [
 
 	'user' => [
 		'attributes' => [
-			'id'	=> 'id',
-			'name'	=> 'name'
+			'id'		=> 'id',
+			'username'	=> 'username',
+			'name'		=> 'name'
 		]
 	],
-
-	/*
-	|--------------------------------------------------------------------------
-	| Closure: determine the current user model
-	|--------------------------------------------------------------------------
-	|
-	| Must return the model of the currently logged in user, or null if the
-	| user is a guest.
-	|
-	*/
-
-	'current_user' => function ()
-	{
-		return Auth::user();
-	},
 
 	/*
 	|--------------------------------------------------------------------------
@@ -74,7 +60,7 @@ return [
 	| NOTE: remember to override the forum views to remove the default alerts
 	| if you no longer use them.
 	|
-	| $type: The type of alert. One of 'success' or 'danger'.
+	| $type: The type of alert - 'success' or 'danger'.
 	| $message: The alert message.
 	|
 	*/
@@ -87,25 +73,6 @@ return [
 		}
 
 		Session::flash('alerts', array_merge($alerts, [['type' => $type, 'message' => $message]]));
-	},
-
-	/*
-	|--------------------------------------------------------------------------
-	| Closure: process permission denied
-	|--------------------------------------------------------------------------
-	|
-	| Use this to control what happens when a permission is denied to a user.
-	| Note this does not affect inline permission checks for displaying links
-	| or inputs.
-	|
-	| $context: The model related to the permission being checked.
-	| $user: The current user.
-	|
-	*/
-
-	'process_denied' => function ($context, $user)
-	{
-		App::abort(403);
 	},
 
 ];

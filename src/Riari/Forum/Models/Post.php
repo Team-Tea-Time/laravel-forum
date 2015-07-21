@@ -12,7 +12,7 @@ class Post extends BaseModel
     protected $table      = 'forum_posts';
     public    $timestamps = true;
     protected $dates      = ['deleted_at'];
-    protected $appends    = ['route', 'editRoute'];
+    protected $appends    = ['route', 'editRoute', 'deleteRoute'];
     protected $with       = ['author'];
     protected $guarded    = ['id'];
 
@@ -58,12 +58,12 @@ class Post extends BaseModel
 
     public function getUserCanEditAttribute()
     {
-        return $this->checkPermission('forum.post.edit');
+        return $this->userCan('forum.post.edit');
     }
 
     public function getUserCanDeleteAttribute()
     {
-        return $this->checkPermission('forum.post.delete');
+        return $this->userCan('forum.post.delete');
     }
 
     /*
@@ -72,27 +72,26 @@ class Post extends BaseModel
     |--------------------------------------------------------------------------
     */
 
-    private function checkPermission($permission)
+    protected function getAccessParams()
     {
-        return $this->access->check(
-            [
-                'category'  => $this->thread->category,
-                'thread'    => $this->thread,
-                'post'      => $this
-            ],
-            $permission, false
-        );
+        $parameters = [
+            'category'  => $this->thread->category,
+            'thread'    => $this->thread,
+            'post'      => $this
+        ];
+
+        return $parameters;
     }
 
     protected function getRouteComponents()
     {
-        $components = array(
-            'categoryID'    => $this->thread->category->id,
+        $components = [
+            'category'      => $this->thread->category->id,
             'categoryAlias' => Str::slug($this->thread->category->title, '-'),
-            'threadID'      => $this->thread->id,
+            'thread'        => $this->thread->id,
             'threadAlias'   => Str::slug($this->thread->title, '-'),
-            'postID'        => $this->id
-        );
+            'post'          => $this->id
+        ];
 
         return $components;
     }

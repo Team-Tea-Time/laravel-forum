@@ -58,9 +58,6 @@ class ForumServiceProvider extends ServiceProvider
         // Load translations
         $this->loadTranslationsFrom(__DIR__.'/../../../translations', 'forum');
 
-        // Register middleware
-        $router->middleware('forum.permissions', 'Riari\Forum\Http\Middleware\CheckPermissions');
-
         // Load routes (if routing enabled)
         if (config('forum.routing.enabled')) {
             $router->group(['namespace' => $this->namespace, 'middleware' => 'forum.permissions'], function ($router)
@@ -70,5 +67,12 @@ class ForumServiceProvider extends ServiceProvider
                 require __DIR__.'/../../../routes.php';
             });
         }
+
+        // Register middleware
+        $router->middleware('forum.auth.basic', 'Riari\Forum\Http\Middleware\BasicAuth');
+        $router->middleware('forum.permissions', 'Riari\Forum\Http\Middleware\CheckPermissions');
+
+        // Load helpers
+        require __DIR__.'/../../../helpers.php';
     }
 }

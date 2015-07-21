@@ -30,7 +30,7 @@ Route::group(['prefix' => $root], function() use ($controllers)
 	Route::delete($category . $thread . '/post/{post}/delete', ['as' => 'forum.post.delete', 'uses' => "{$controllers['post']}@destroy"]);
 
 	// API
-	Route::group(['prefix' => 'api/v1', 'namespace' => 'API\V1'], function()
+	Route::group(['prefix' => 'api/v1', 'namespace' => 'API\V1', 'middleware' => 'forum.auth.basic'], function()
 	{
 		Route::resource('category', 'CategoryController');
 		Route::resource('thread', 'ThreadController');

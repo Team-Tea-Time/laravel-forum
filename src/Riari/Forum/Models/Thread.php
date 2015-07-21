@@ -1,9 +1,9 @@
 <?php namespace Riari\Forum\Models;
 
+use Auth;
 use DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Libraries\Alerts;
 use Riari\Forum\Libraries\Utils;
 use Riari\Forum\Models\Traits\HasAuthor;
@@ -37,7 +37,7 @@ class Thread extends BaseModel
 
     public function readers()
     {
-        return $this->belongsToMany(config('forum.integration.user_model'), 'forum_threads_read', 'thread_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(config('forum.integration.models.user'), 'forum_threads_read', 'thread_id', 'user_id')->withTimestamps();
     }
 
     public function posts()
@@ -137,8 +137,8 @@ class Thread extends BaseModel
 
     public function getReaderAttribute()
     {
-        if (!is_null(Utils::getCurrentUser())) {
-            $reader = $this->readers()->where('user_id', '=', Utils::getCurrentUser()->id)->first();
+        if (!is_null()) {
+            $reader = $this->readers()->where('user_id', $user->id)->first();
 
             return (!is_null($reader)) ? $reader->pivot : null;
         }
@@ -148,7 +148,7 @@ class Thread extends BaseModel
 
     public function getUserReadStatusAttribute()
     {
-        if (!$this->old && !is_null(Utils::getCurrentUser())) {
+        if (!$this->old && !is_null(Auth::user())) {
             if (is_null($this->reader)) {
                 return self::STATUS_UNREAD;
             }
@@ -163,22 +163,22 @@ class Thread extends BaseModel
 
     public function getUserCanReplyAttribute()
     {
-        return $this->checkPermission('forum.post.create');
+        return $this->userCan('forum.post.create');
     }
 
     public function getUserCanPinAttribute()
     {
-        return $this->checkPermission('forum.thread.pin');
+        return $this->userCan('forum.thread.pin');
     }
 
     public function getUserCanLockAttribute()
     {
-        return $this->checkPermission('forum.thread.lock');
+        return $this->userCan('forum.thread.lock');
     }
 
     public function getUserCanDeleteAttribute()
     {
-        return $this->checkPermission('forum.thread.delete');
+        return $this->userCan('forum.thread.delete');
     }
 
     /*
@@ -186,11 +186,6 @@ class Thread extends BaseModel
     | Helpers
     |--------------------------------------------------------------------------
     */
-
-    private function checkPermission($permission)
-    {
-        return $this->access->check(['category' => $this->category, 'thread' => $this], $permission, false);
-    }
 
     protected function getRouteComponents()
     {
@@ -202,6 +197,16 @@ class Thread extends BaseModel
         ];
 
         return $components;
+    }
+
+    protected function getAccessParams()
+    {
+        $parameters = [
+            'category'  => $this->category,
+            'thread'    => $this
+        ];
+
+        return $parameters;
     }
 
     public function markAsRead($userID)
