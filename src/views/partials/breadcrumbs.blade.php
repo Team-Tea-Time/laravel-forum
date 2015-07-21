@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
     <li><a href="{{ config('forum.routing.root') }}">{{ trans('forum::general.index') }}</a></li>
-    @if (!is_null($category->parent))
+    @if (isset($category) && !is_null($category->parent))
         <li><a href="{!! $category->parent->route !!}">{!! $category->parent->title !!}</a></li>
     @endif
     @if (isset($category) && $category)

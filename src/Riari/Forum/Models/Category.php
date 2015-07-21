@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Str;
 use Riari\Forum\Models\Thread;
-use Riari\Forum\Libraries\AccessControl;
 
 class Category extends BaseModel
 {
@@ -101,22 +100,12 @@ class Category extends BaseModel
 
     public function getUserCanViewAttribute()
     {
-        return AccessControl::check($this, 'access_category', false);
-    }
-
-    public function getCanViewAttribute()
-    {
-        return $this->userCanView;
+        return $this->checkPermission('forum.category.index');
     }
 
     public function getUserCanPostAttribute()
     {
-        return AccessControl::check($this, 'create_threads', false);
-    }
-
-    public function getCanPostAttribute()
-    {
-        return $this->userCanPost;
+        return $this->checkPermission('forum.thread.create');
     }
 
     /*
@@ -124,6 +113,11 @@ class Category extends BaseModel
     | Helpers
     |--------------------------------------------------------------------------
     */
+
+    private function checkPermission($permission)
+    {
+        return $this->access->check(['category' => $this], $permission, false);
+    }
 
     protected function getRouteComponents()
     {

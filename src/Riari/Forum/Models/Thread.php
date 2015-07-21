@@ -163,42 +163,22 @@ class Thread extends BaseModel
 
     public function getUserCanReplyAttribute()
     {
-        return AccessControl::check($this, 'reply_to_thread', false);
-    }
-
-    public function getCanReplyAttribute()
-    {
-        return $this->userCanReply;
+        return $this->checkPermission('forum.post.create');
     }
 
     public function getUserCanPinAttribute()
     {
-        return AccessControl::check($this, 'pin_threads', false);
-    }
-
-    public function getCanPinAttribute()
-    {
-        return $this->userCanPin;
+        return $this->checkPermission('forum.thread.pin');
     }
 
     public function getUserCanLockAttribute()
     {
-        return AccessControl::check($this, 'lock_threads', false);
-    }
-
-    public function getCanLockAttribute()
-    {
-        return $this->userCanLock;
+        return $this->checkPermission('forum.thread.lock');
     }
 
     public function getUserCanDeleteAttribute()
     {
-        return AccessControl::check($this, 'delete_threads', false);
-    }
-
-    public function getCanDeleteAttribute()
-    {
-        return $this->userCanDelete;
+        return $this->checkPermission('forum.thread.delete');
     }
 
     /*
@@ -207,14 +187,19 @@ class Thread extends BaseModel
     |--------------------------------------------------------------------------
     */
 
+    private function checkPermission($permission)
+    {
+        return $this->access->check(['category' => $this->category, 'thread' => $this], $permission, false);
+    }
+
     protected function getRouteComponents()
     {
-        $components = array(
-            'categoryID'    => $this->category->id,
+        $components = [
+            'category'      => $this->category->id,
             'categoryAlias' => Str::slug($this->category->title, '-'),
-            'threadID'      => $this->id,
+            'thread'        => $this->id,
             'threadAlias'   => Str::slug($this->title, '-')
-        );
+        ];
 
         return $components;
     }

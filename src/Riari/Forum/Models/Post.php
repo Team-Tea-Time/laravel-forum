@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Models\Traits\HasAuthor;
 
 class Post extends BaseModel
@@ -59,22 +58,12 @@ class Post extends BaseModel
 
     public function getUserCanEditAttribute()
     {
-        return AccessControl::check($this, 'edit_post', false);
-    }
-
-    public function getCanEditAttribute()
-    {
-        return $this->userCanEdit;
+        return $this->checkPermission('forum.post.edit');
     }
 
     public function getUserCanDeleteAttribute()
     {
-        return AccessControl::check($this, 'delete_posts', false);
-    }
-
-    public function getCanDeleteAttribute()
-    {
-        return $this->userCanDelete;
+        return $this->checkPermission('forum.post.delete');
     }
 
     /*
@@ -82,6 +71,18 @@ class Post extends BaseModel
     | Helpers
     |--------------------------------------------------------------------------
     */
+
+    private function checkPermission($permission)
+    {
+        return $this->access->check(
+            [
+                'category'  => $this->thread->category,
+                'thread'    => $this->thread,
+                'post'      => $this
+            ],
+            $permission, false
+        );
+    }
 
     protected function getRouteComponents()
     {

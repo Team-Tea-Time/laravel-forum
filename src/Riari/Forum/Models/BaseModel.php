@@ -3,8 +3,24 @@
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Riari\Forum\Libraries\AccessControl;
 
-abstract class BaseModel extends Model {
+abstract class BaseModel extends Model
+{
+    /**
+     * @var AccessControl
+     */
+    protected $access;
+
+    /**
+     * Create a new model instance.
+     *
+     * @param  AccessControl  $access
+     */
+    public function __construct()
+    {
+        $this->access = new AccessControl;
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -76,5 +92,4 @@ abstract class BaseModel extends Model {
         $this->$property = !$this->$property;
         $this->save();
     }
-
 }

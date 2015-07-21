@@ -2,23 +2,38 @@
 
 use Closure;
 use Illuminate\Http\Request;
+use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Libraries\Utils;
 
 class CheckPermissions
 {
+	/**
+	 * @var AccessControl
+	 */
+	protected $access;
+
 	/**
 	 * @var object
 	 */
 	protected $user;
 
 	/**
+	 * The parameters to pass to the permission checker.
+	 *
+	 * @var array
+	 */
+	protected $parameters = ['category', 'post', 'thread'];
+
+	/**
 	 * Create a new filter instance.
 	 *
-	 * @param  Guard  $auth
+	 * @param  AccessControl  $access
+	 * @param  Utils  $utils
 	 * @return void
 	 */
-	public function __construct(Utils $utils)
+	public function __construct(AccessControl $access, Utils $utils)
 	{
+		$this->access = $access;
 		$this->user = $utils->getCurrentUser();
 	}
 
@@ -31,10 +46,11 @@ class CheckPermissions
 	 */
 	public function handle(Request $request, Closure $next)
 	{
-		if ($this->permissionGranted($request))
-		{
-
-		}
+		$this->access->check(
+			$request->route()->parameters(),
+			$request->route()->getName(),
+			$this->user
+		);
 
 		// Permission is granted; continue
 		return $next($request);
@@ -49,37 +65,6 @@ class CheckPermissions
 	public function permissionGranted(Request $request)
 	{
 		dd($request->route());
-		return
+		return;
 	}
-
-	/**
-	 * Determine if the current user has access to the specified route.
-	 *
-	 * @param  string  $route
-	 * @param  object  $parameters
-	 * @return boolean
-	 */
-
-        // Fetch the current user
-        $user_callback = config('forum.integration.current_user');
-        $user = $user_callback();
-
-        // Check for access permission
-        $access_callback = config('forum.permissions.access_category');
-        $permission_granted = $access_callback($context, $user);
-
-        if ($permission_granted && ($permission != 'access_category'))
-        {
-            // Check for action permission
-            $action_callback = config('forum.permissions.' . $permission);
-            $permission_granted = $action_callback($context, $user);
-        }
-
-        if (!$permission_granted && $abort)
-        {
-            $denied_callback = config('forum.integration.process_denied');
-            $denied_callback($context, $user);
-        }
-
-        return $permission_granted;
 }
