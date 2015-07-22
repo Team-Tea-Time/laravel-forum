@@ -1,6 +1,5 @@
 <?php namespace Riari\Forum\Http\Controllers;
 
-use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Riari\Forum\Models\Category;
@@ -23,7 +22,7 @@ class ThreadController extends BaseController
      */
     public function markRead()
     {
-        if (Auth::check()) {
+        if (auth()->check()) {
             $this->threads->markNewForUserAsRead();
             alert('success', trans('forum::threads.marked_read'));
         }
@@ -71,7 +70,7 @@ class ThreadController extends BaseController
         $this->validate($request, config('forum.preferences.validation.post'));
 
         $thread = [
-            'author_id'     => Auth::user()->id,
+            'author_id'     => auth()->user()->id,
             'category_id'   => $category->id,
             'title'         => $request->input('title')
         ];
@@ -79,7 +78,7 @@ class ThreadController extends BaseController
 
         $post = [
             'thread_id' => $thread->id,
-            'author_id' => Auth::user()->id,
+            'author_id' => auth()->user()->id,
             'content'   => $request->input('content')
         ];
         $this->posts->create($post);

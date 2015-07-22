@@ -1,6 +1,5 @@
 <?php namespace Riari\Forum\Http\Middleware;
 
-use Auth;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -15,10 +14,10 @@ class BasicAuth
 	 */
 	public function handle(Request $request, Closure $next)
 	{
-		if (Auth::check()) {
+		if (auth()->check()) {
 			return $next($request);
 		}
 
-		return Auth::onceBasic() ?: $next($request);
+		return auth()->onceBasic() ?: $next($request);
 	}
 }

@@ -1,6 +1,5 @@
 <?php namespace Riari\Forum\Http\Controllers;
 
-use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Riari\Forum\Models\Category;
@@ -38,7 +37,7 @@ class PostController extends BaseController
 
         $post = [
             'thread_id' => $thread->id,
-            'author_id' => Auth::user()->id,
+            'author_id' => auth()->user()->id,
             'content'   => $request->input('content')
         ];
 
@@ -82,7 +81,7 @@ class PostController extends BaseController
 
         $post = $this->posts->update($post->id, [
             'thread_id' => $thread->id,
-            'author_id' => Auth::user()->id,
+            'author_id' => auth()->user()->id,
             'content'   => $request->input('content')
         ]);
 

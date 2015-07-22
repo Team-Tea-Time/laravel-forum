@@ -1,6 +1,5 @@
 <?php namespace Riari\Forum\Http\Middleware;
 
-use Auth;
 use Closure;
 use Illuminate\Http\Request;
 use Riari\Forum\Libraries\Utils;
@@ -28,7 +27,7 @@ class CheckPermissions
 		if (!permitted(
 			$route->parameters(),
 			$route->getName(),
-			Auth::user()
+			auth()->user()
 		)) {
 			if ('Riari\Forum\Http\Controllers\API\V1' == $route->getAction()['namespace']) {
 				return response()->json(

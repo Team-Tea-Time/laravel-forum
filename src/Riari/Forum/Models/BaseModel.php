@@ -1,6 +1,5 @@
 <?php namespace Riari\Forum\Models;
 
-use Auth;
 use Cache;
 use Illuminate\Database\Eloquent\Model;
 
@@ -64,7 +63,7 @@ abstract class BaseModel extends Model
      */
     protected function userCan($permission)
     {
-        return permitted($this->getAccessParams(), $permission, Auth::user());
+        return permitted($this->getAccessParams(), $permission, auth()->user());
     }
 
     /**

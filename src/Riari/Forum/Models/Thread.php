@@ -1,7 +1,5 @@
 <?php namespace Riari\Forum\Models;
 
-use Auth;
-use DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Riari\Forum\Libraries\Alerts;
@@ -137,8 +135,8 @@ class Thread extends BaseModel
 
     public function getReaderAttribute()
     {
-        if (!is_null(Auth::user())) {
-            $reader = $this->readers()->where('user_id', Auth::user()->id)->first();
+        if (!is_null(auth()->user())) {
+            $reader = $this->readers()->where('user_id', auth()->user()->id)->first();
 
             return (!is_null($reader)) ? $reader->pivot : null;
         }
@@ -148,7 +146,7 @@ class Thread extends BaseModel
 
     public function getUserReadStatusAttribute()
     {
-        if (!$this->old && !is_null(Auth::user())) {
+        if (!$this->old && !is_null(auth()->user())) {
             if (is_null($this->reader)) {
                 return self::STATUS_UNREAD;
             }

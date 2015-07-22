@@ -45,7 +45,7 @@ class Threads extends BaseRepository
         $threads = $this->getRecent($where);
 
         // If the user is logged in, filter the threads according to read status
-        if (Auth::check()) {
+        if (auth()->check()) {
             $threads = $threads->filter(function ($thread)
             {
                 return $thread->userReadStatus;
@@ -68,11 +68,11 @@ class Threads extends BaseRepository
      */
     public function markNewForUserAsRead()
     {
-        if (Auth::check()) {
+        if (auth()->check()) {
             $threads = $this->getNewForUser();
 
             foreach ($threads as $thread) {
-                $thread->markAsRead(Auth::user()->id);
+                $thread->markAsRead(auth()->user()->id);
             }
         }
     }
