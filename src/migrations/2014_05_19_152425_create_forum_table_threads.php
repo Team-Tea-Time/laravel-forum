@@ -12,7 +12,7 @@ class CreateForumTableThreads extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('forum_threads', function(Blueprint $table)
+		Schema::create('forum_threads', function (Blueprint $table)
 		{
 			$table->increments('id');
 			$table->integer('category_id')->unsigned();

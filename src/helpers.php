@@ -25,10 +25,10 @@ function permitted($parameters, $routeName, $user)
 {
     $aliases = config('forum.permissions.aliases');
     $routeName = (isset($aliases[$routeName])) ? $aliases[$routeName] : $routeName;
-    $action = config("forum.permissions.{$routeName}");
+    $permitted = config("forum.permissions.{$routeName}");
 
-    if (is_callable($action)) {
-        return $action($parameters, $user);
+    if (is_callable($permitted)) {
+        return $permitted($parameters, $user);
     }
 
     return false;

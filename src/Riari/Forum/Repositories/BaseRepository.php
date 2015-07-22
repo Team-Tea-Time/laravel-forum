@@ -89,6 +89,10 @@ abstract class BaseRepository implements Repository
         $model = $this->find($id);
 
         if (!is_null($model)) {
+            if (!config('forum.preferences.misc.soft_delete')) {
+                return $model->forceDelete();
+            }
+
             return $model->delete();
         }
 

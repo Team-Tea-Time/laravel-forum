@@ -1,10 +1,13 @@
 <?php namespace Riari\Forum\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Riari\Forum\Models\Thread;
 
 class Category extends BaseModel
 {
+    use SoftDeletes;
+
     // Eloquent properties
     protected $table      = 'forum_categories';
     public    $timestamps = false;

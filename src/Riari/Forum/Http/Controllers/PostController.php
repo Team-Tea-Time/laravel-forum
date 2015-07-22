@@ -1,5 +1,6 @@
 <?php namespace Riari\Forum\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Riari\Forum\Models\Category;

@@ -9,7 +9,30 @@ use Riari\Forum\Models\Thread;
 class ThreadController extends BaseController
 {
     /**
-     * GET: show a thread.
+     * GET: return a new/updated threads view.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexNew()
+    {
+        return view('forum::thread.index-new', ['threads' => $this->threads->getNewForUser()]);
+    }
+
+    /**
+     * PATCH: mark new/updated threads as read for the current user.
+     */
+    public function markRead()
+    {
+        if (Auth::check()) {
+            $this->threads->markNewForUserAsRead();
+            alert('success', trans('forum::threads.marked_read'));
+        }
+
+        return redirect(config('forum.routing.root'));
+    }
+
+    /**
+     * GET: return a thread view.
      *
      * @param  Category  $category
      * @param  string  $categoryAlias
@@ -64,5 +87,64 @@ class ThreadController extends BaseController
         alert('success', trans('forum::threads.created'));
 
         return redirect($thread->route);
+    }
+
+    /**
+     * PATCH: lock a thread.
+     *
+     * @param  Category  $category
+     * @param  string  $categoryAlias
+     * @param  Thread  $thread
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function lock(Category $category, $categoryAlias, Thread $thread, Request $request)
+    {
+        $thread->toggle('locked');
+
+        alert('success', trans('forum::threads.updated'));
+
+        return redirect($thread->route);
+    }
+
+    /**
+     * PATCH: pin a thread.
+     *
+     * @param  Category  $category
+     * @param  string  $categoryAlias
+     * @param  Thread  $thread
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function pin(Category $category, $categoryAlias, Thread $thread, Request $request)
+    {
+        $thread->toggle('pinned');
+
+        alert('success', trans('forum::threads.updated'));
+
+        return redirect($thread->route);
+    }
+
+    /**
+     * DELETE: delete a thread (and its posts).
+     *
+     * @param  Category  $category
+     * @param  string  $categoryAlias
+     * @param  Thread  $thread
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Category $category, $categoryAlias, Thread $thread, Request $request)
+    {
+        foreach ($thread->posts as $post)
+        {
+            $this->posts->delete($post->id);
+        }
+
+        $this->threads->delete($thread->id);
+
+        alert('success', trans('forum::threads.deleted'));
+
+        return redirect($category->route);
     }
 }

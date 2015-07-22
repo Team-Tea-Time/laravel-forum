@@ -8,10 +8,10 @@
 </tr>
 <tr>
 	<td>
-		@if ($post->canEdit)
+		@if ($post->userCanEdit)
 			<a href="{{ $post->editRoute }}">{{ trans('forum::general.edit')}}</a>
 		@endif
-		@if ($post->canDelete)
+		@if ($post->userCanDelete)
 			<a href="{{ $post->deleteRoute }}" data-confirm data-method="delete">{{ trans('forum::general.delete') }}</a>
 		@endif
 	</td>

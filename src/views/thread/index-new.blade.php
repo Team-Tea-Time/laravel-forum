@@ -50,7 +50,7 @@
 			</tbody>
 		</table>
 
-		@if (!is_null($user))
+		@if (Auth::check())
 			<div class="text-center">
 				<a href="{{ URL::route('forum.post.mark.read') }}"class="btn btn-primary btn-small" data-confirm data-method="post">{{ trans('forum::general.mark_read') }}</a>
 			</div>

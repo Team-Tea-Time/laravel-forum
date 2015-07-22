@@ -7,7 +7,7 @@ return [
 	| Enable forum routes
 	|--------------------------------------------------------------------------
 	|
-	| Whenever to enable forum routes in global application path
+	| Enable/disable forum route definitions
 	|
 	*/
 
@@ -18,7 +18,7 @@ return [
 	| Forum root
 	|--------------------------------------------------------------------------
 	|
-	| The base url of the forum inside your application
+	| The base URL to use for all forum routes
 	|
 	*/
 

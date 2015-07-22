@@ -8,8 +8,8 @@ Route::group(['prefix' => $root], function() use ($controllers)
 	$thread = '/{thread}-{threadAlias}';
 
 	// New
-	Route::get('new', ['as' => 'forum.new.index', 'uses' => "{$controllers['thread']}@new"]);
-	Route::post('new/read', ['as' => 'forum.new.mark-read', 'uses' => "{$controllers['thread']}@markRead"]);
+	Route::get('new', ['as' => 'forum.new.index', 'uses' => "{$controllers['thread']}@indexNew"]);
+	Route::patch('new/read', ['as' => 'forum.new.mark-read', 'uses' => "{$controllers['thread']}@markRead"]);
 
 	// Categories
 	Route::get($category, ['as' => 'forum.category.index', 'uses' => "{$controllers['category']}@show"]);
@@ -18,8 +18,8 @@ Route::group(['prefix' => $root], function() use ($controllers)
 	Route::get($category . $thread, ['as' => 'forum.thread.show', 'uses' => "{$controllers['thread']}@show"]);
 	Route::get($category . '/thread/create', ['as' => 'forum.thread.create', 'uses' => "{$controllers['thread']}@create"]);
 	Route::post($category . '/thread/create', ['as' => 'forum.thread.store', 'uses' => "{$controllers['thread']}@store"]);
-	Route::post($category . $thread . '/lock', ['as' => 'forum.thread.lock', 'uses' => "{$controllers['thread']}@lock"]);
-	Route::post($category . $thread . '/pin', ['as' => 'forum.thread.pin', 'uses' => "{$controllers['thread']}@pin"]);
+	Route::patch($category . $thread . '/lock', ['as' => 'forum.thread.lock', 'uses' => "{$controllers['thread']}@lock"]);
+	Route::patch($category . $thread . '/pin', ['as' => 'forum.thread.pin', 'uses' => "{$controllers['thread']}@pin"]);
 	Route::delete($category . $thread . '/delete', ['as' => 'forum.thread.delete', 'uses' => "{$controllers['thread']}@destroy"]);
 
 	// Posts

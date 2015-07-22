@@ -12,6 +12,7 @@ return [
     | PATCH permission names to their respective GET permissions.
     |
     */
+
     'aliases' => [
         'forum.thread.store'    => 'forum.thread.create',
         'forum.thread.update'   => 'forum.thread.edit',
@@ -29,6 +30,7 @@ return [
     | as the current user.
     |
     */
+
     'forum' => [
         'index' => function ($parameters, $user)
         {
@@ -48,6 +50,29 @@ return [
                 return true;
             },
             'create' => function ($parameters, $user)
+            {
+                return true;
+            },
+            'pin' => function ($parameters, $user)
+            {
+                return true;
+            },
+            'lock' => function ($parameters, $user)
+            {
+                return true;
+            },
+            'delete' => function ($parameters, $user)
+            {
+                return true;
+            }
+        ],
+
+        'post' => [
+            'create' => function ($parameters, $user)
+            {
+                return true;
+            },
+            'edit' => function ($parameters, $user)
             {
                 return true;
             }

@@ -12,37 +12,68 @@ class Threads extends BaseRepository
     public function __construct(Thread $model)
     {
         $this->model = $model;
-        $this->perPage = config('forum.integration.threads_per_category');
+        $this->perPage = config('forum.preferences.pagination.threads');
     }
 
+    /**
+     * Get recently updated threads.
+     *
+     * @param  array  $where
+     * @return Collection
+     */
     public function getRecent($where = array())
     {
+        // Limit to a multiple of the pagination setting
+        $limit = $this->perPage * 3;
+
         return $this->model->with('category', 'posts')
             ->recent()
             ->where($where)
             ->orderBy('updated_at', 'desc')
+            ->limit($limit)
             ->get();
     }
 
-    public function getNewForUser($userID = 0, $where = array())
+    /**
+     * Get new/updated threads for the current user.
+     *
+     * @param  array  $where
+     * @return Collection
+     */
+    public function getNewForUser($where = array())
     {
         $threads = $this->getRecent($where);
 
-        // If we have a user ID, filter the threads appropriately
-        if ($userID)
-        {
-            $threads = $threads->filter(function($thread)
+        // If the user is logged in, filter the threads according to read status
+        if (Auth::check()) {
+            $threads = $threads->filter(function ($thread)
             {
                 return $thread->userReadStatus;
             });
         }
 
         // Filter the threads according to the user's permissions
-        $threads = $threads->filter(function($thread)
+        $threads = $threads->filter(function ($thread)
         {
             return $thread->category->userCanView;
         });
 
         return $threads;
+    }
+
+    /**
+     * Mark new/updated threads for the current user as read.
+     *
+     * @return void
+     */
+    public function markNewForUserAsRead()
+    {
+        if (Auth::check()) {
+            $threads = $this->getNewForUser();
+
+            foreach ($threads as $thread) {
+                $thread->markAsRead(Auth::user()->id);
+            }
+        }
     }
 }

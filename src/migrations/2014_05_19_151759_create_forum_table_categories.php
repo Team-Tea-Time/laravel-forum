@@ -12,7 +12,7 @@ class CreateForumTableCategories extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('forum_categories', function(Blueprint $table)
+		Schema::create('forum_categories', function (Blueprint $table)
 		{
 			$table->increments('id');
 			$table->integer('parent_id')->unsigned()->nullable();
@@ -23,9 +23,9 @@ class CreateForumTableCategories extends Migration
 
 		DB::table('forum_categories')->insert(
 			[
-				['parent_id' => null, 'title' => 'Category', 'subtitle' => 'Contains categories and threads', 'weight' => 0],
-				['parent_id' => 1, 'title' => 'Sub-category', 'subtitle' => 'Contains threads', 'weight' => 0],
-				['parent_id' => 1, 'title' => 'Second subcategory', 'subtitle' => 'Contains more threads', 'weight' => 1]
+				['parent_id' => null, 'title' => 'Top level category', 'subtitle' => 'Contains categories and threads', 'weight' => 0],
+				['parent_id' => 1, 'title' => 'Level 1 child category', 'subtitle' => 'Contains threads', 'weight' => 0],
+				['parent_id' => 2, 'title' => 'Level 2 child category', 'subtitle' => 'Contains more threads', 'weight' => 1]
 			]
 		);
 	}

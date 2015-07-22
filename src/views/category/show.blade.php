@@ -78,7 +78,7 @@
 						{{ trans('forum::threads.none_found') }}
 					</td>
 					<td colspan="2">
-						@if ($category->canPost)
+						@if ($category->userCanCreateThreads)
 							<a href="{{ $category->newThreadRoute }}">{{ trans('forum::threads.first') }}</a>
 						@endif
 					</td>

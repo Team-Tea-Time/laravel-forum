@@ -137,8 +137,8 @@ class Thread extends BaseModel
 
     public function getReaderAttribute()
     {
-        if (!is_null()) {
-            $reader = $this->readers()->where('user_id', $user->id)->first();
+        if (!is_null(Auth::user())) {
+            $reader = $this->readers()->where('user_id', Auth::user()->id)->first();
 
             return (!is_null($reader)) ? $reader->pivot : null;
         }
@@ -235,18 +235,5 @@ class Thread extends BaseModel
                 $this->reader->touch();
             }
         }
-    }
-
-    /**
-     * Toggle an attribute on this thread.
-     *
-     * @param  string  $attribute
-     * @return void
-     */
-    public function toggle($attribute)
-    {
-        parent::toggle($attribute);
-
-        Alerts::add('success', trans('forum::threads.updated'));
     }
 }

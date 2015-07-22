@@ -65,8 +65,8 @@ return [
     */
 
     'misc'  => [
-        // Soft Delete: disable this if you want threads and posts to be permanently
-        // removed from your database when they're deleted by a user.
+        // Soft Delete: disable this if you want categories, threads and posts
+        // to be permanently removed from your database when they're deleted.
         'soft_delete' => true
     ]
 
