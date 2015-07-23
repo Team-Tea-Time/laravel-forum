@@ -2,11 +2,6 @@
 
 trait HasAuthor
 {
-    /**
-     * @var object
-     */
-    protected $author;
-
     /*
     |--------------------------------------------------------------------------
     | Relationships
@@ -28,7 +23,7 @@ trait HasAuthor
     {
         $attribute = config('forum.integration.user.attributes.name');
 
-        if (!is_null($this->author) && isset($this->author->$attribute)) {
+        if (!is_null($this->author)) {
             return $this->author->$attribute;
         }
 

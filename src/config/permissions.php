@@ -53,17 +53,17 @@ return [
             {
                 return true;
             },
-            'pin' => function ($parameters, $user)
-            {
-                return true;
-            },
             'lock' => function ($parameters, $user)
             {
-                return true;
+                return false;
+            },
+            'pin' => function ($parameters, $user)
+            {
+                return false;
             },
             'delete' => function ($parameters, $user)
             {
-                return true;
+                return false;
             }
         ],
 
@@ -74,7 +74,11 @@ return [
             },
             'edit' => function ($parameters, $user)
             {
-                return true;
+                return ($parameters['post']->author == $user);
+            },
+            'delete' => function ($parameters, $user)
+            {
+                return false;
             }
         ],
 
@@ -83,7 +87,67 @@ return [
                 'category' => [
                     'index' => function ($parameters, $user)
                     {
-                        return true;
+                        return false;
+                    },
+                    'store' => function ($parameters, $user)
+                    {
+                        return false;
+                    },
+                    'show' => function ($parameters, $user)
+                    {
+                        return false;
+                    },
+                    'update' => function ($parameters, $user)
+                    {
+                        return false;
+                    },
+                    'destroy' => function ($parameters, $user)
+                    {
+                        return false;
+                    }
+                ],
+                'thread' => [
+                    'index' => function ($parameters, $user)
+                    {
+                        return false;
+                    },
+                    'store' => function ($parameters, $user)
+                    {
+                        return false;
+                    },
+                    'show' => function ($parameters, $user)
+                    {
+                        return false;
+                    },
+                    'update' => function ($parameters, $user)
+                    {
+                        return false;
+                    },
+                    'destroy' => function ($parameters, $user)
+                    {
+                        return false;
+                    }
+                ],
+                'post' => [
+                    'index' => function ($parameters, $user)
+                    {
+                        return false;
+                    },
+                    'store' => function ($parameters, $user)
+                    {
+                        return false;
+                    },
+                    'show' => function ($parameters, $user)
+                    {
+                        return false;
+                    },
+                    'update' => function ($parameters, $user)
+                    {
+                        return false;
+                    },
+                    'destroy' => function ($parameters, $user)
+                    {
+                        return false;
                     }
                 ]
             ]
