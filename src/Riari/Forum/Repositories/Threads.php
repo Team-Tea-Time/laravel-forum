@@ -15,16 +15,14 @@ class Threads extends BaseRepository
     }
 
     /**
-     * Get recently updated threads.
+     * Get N recently updated threads.
      *
      * @param  array  $where
+     * @param  int  $limit
      * @return Collection
      */
-    public function getRecent($where = array())
+    public function getRecent($where = array(), $limit = 100)
     {
-        // Limit to a multiple of the pagination setting
-        $limit = $this->perPage * 3;
-
         return $this->model->with('category', 'posts')
             ->recent()
             ->where($where)

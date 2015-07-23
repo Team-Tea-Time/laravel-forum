@@ -23,7 +23,7 @@ class ThreadController extends BaseController
 
         event(new UserViewingNew($threads));
 
-        return view('forum::thread.index-new', ['threads' => ]);
+        return view('forum::thread.index-new', ['threads' => $threads]);
     }
 
     /**
