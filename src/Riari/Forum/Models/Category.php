@@ -11,7 +11,6 @@ class Category extends BaseModel
     // Eloquent properties
     protected $table      = 'forum_categories';
     public    $timestamps = false;
-    protected $appends    = ['threadCount', 'replyCount', 'route', 'newThreadRoute'];
 
     /*
     |--------------------------------------------------------------------------

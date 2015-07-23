@@ -12,6 +12,7 @@ class Posts extends BaseRepository
     public function __construct(Post $model)
     {
         $this->model = $model;
+        $this->perPage = config('forum.preferences.pagination.posts');
     }
 
     /**

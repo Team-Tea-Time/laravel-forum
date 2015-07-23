@@ -26,8 +26,9 @@ return [
     */
 
     'pagination' => [
-        'threads'   => 20,  // Threads per page
-        'posts'     => 15   // Posts per page
+        'categories'    => 20, // Categories per page (only applies to the API)
+        'threads'       => 20, // Threads per page
+        'posts'         => 15  // Posts per page
     ],
 
     /*

@@ -1,8 +1,8 @@
 <?php namespace Riari\Forum\Http\Controllers\API\V1;
 
-use Illuminate\Routing\Controller;
+use Riari\Forum\Http\Controllers\BaseController;
 
-class PostController extends Controller
+class PostController extends BaseController
 {
 
 }

@@ -12,15 +12,17 @@ class Categories extends BaseRepository
     public function __construct(Category $model)
     {
         $this->model = $model;
+        $this->perPage = config('forum.preferences.pagination.categories');
     }
 
     /**
      * Get the top level categories (i.e. those where category_id == null).
      *
+     * @param  array  $where
      * @return Collection
      */
-    public function getTop()
+    public function getTop($columns = ['*'])
     {
-        return $this->model->where('category_id', null)->get();
+        return $this->model->where('category_id', null)->get($columns);
     }
 }

@@ -1,8 +1,9 @@
 <?php namespace Riari\Forum\Http\Controllers\API\V1;
 
-use Illuminate\Routing\Controller;
+use Illuminate\Http\Request;
+use Riari\Forum\Http\Controllers\BaseController;
 
-class ThreadController extends Controller
+class ThreadController extends BaseController
 {
 
 }

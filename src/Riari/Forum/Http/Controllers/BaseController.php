@@ -1,6 +1,5 @@
 <?php namespace Riari\Forum\Http\Controllers;
 
-use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
 use Riari\Forum\Repositories\Categories;
@@ -9,7 +8,7 @@ use Riari\Forum\Repositories\Threads;
 
 abstract class BaseController extends Controller
 {
-	use DispatchesCommands, ValidatesRequests;
+	use ValidatesRequests;
 
     /**
      * @var Categories

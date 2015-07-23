@@ -11,6 +11,11 @@ abstract class BaseRepository implements Repository
     protected $model;
 
     /**
+     * @var int
+     */
+    protected $perPage;
+
+    /**
      * Create a new repository instance.
      *
      * @param  Model  $model
@@ -18,6 +23,7 @@ abstract class BaseRepository implements Repository
     public function __construct(Model $model)
     {
         $this->model = $model;
+        $this->perPage = 20;
     }
 
     /**
@@ -29,6 +35,17 @@ abstract class BaseRepository implements Repository
     public function all($columns = ['*'])
     {
         return $this->model->get($columns);
+    }
+
+    /**
+     * Get paginated rows.
+     *
+     * @param  array  $columns
+     * @return LengthAwarePaginator
+     */
+    public function paginate($columns = ['*'])
+    {
+        return $this->model->paginate($this->perPage, $columns);
     }
 
     /**
