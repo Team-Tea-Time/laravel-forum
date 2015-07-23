@@ -1,7 +1,12 @@
 <?php namespace Riari\Forum\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Riari\Forum\Events\UserCreatingThread;
+use Riari\Forum\Events\UserMarkedThreadsRead;
+use Riari\Forum\Events\UserToggledLockThread;
+use Riari\Forum\Events\UserToggledPinThread;
+use Riari\Forum\Events\UserViewingNew;
+use Riari\Forum\Events\UserViewingThread;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Thread;
 
@@ -14,7 +19,11 @@ class ThreadController extends BaseController
      */
     public function indexNew()
     {
-        return view('forum::thread.index-new', ['threads' => $this->threads->getNewForUser()]);
+        $threads = $this->threads->getNewForUser();
+
+        event(new UserViewingNew($threads));
+
+        return view('forum::thread.index-new', ['threads' => ]);
     }
 
     /**
@@ -24,6 +33,9 @@ class ThreadController extends BaseController
     {
         if (auth()->check()) {
             $this->threads->markNewForUserAsRead();
+
+            event(new UserMarkedThreadsRead);
+
             alert('success', trans('forum::threads.marked_read'));
         }
 
@@ -40,19 +52,21 @@ class ThreadController extends BaseController
      */
     public function show(Category $category, $categoryAlias, Thread $thread)
     {
+        event(new UserViewingThread($thread));
+
         return view('forum::thread.show', compact('category', 'thread'));
     }
 
     /**
-     * GET: return a 'create post' (thread reply) view.
+     * GET: return a 'create thread' view.
      *
      * @param  Category  $category
-     * @param  string  $categoryAlias
-     * @param  Thread  $thread
      * @return \Illuminate\Http\Response
      */
     public function create(Category $category)
     {
+        event(new UserCreatingThread($category));
+
         return view('forum::thread.create', compact('category'));
     }
 
@@ -89,7 +103,7 @@ class ThreadController extends BaseController
     }
 
     /**
-     * PATCH: lock a thread.
+     * PATCH: lock/unlock a thread.
      *
      * @param  Category  $category
      * @param  string  $categoryAlias
@@ -101,13 +115,15 @@ class ThreadController extends BaseController
     {
         $thread->toggle('locked');
 
+        event(new UserToggledLockThread($thread));
+
         alert('success', trans('forum::threads.updated'));
 
         return redirect($thread->route);
     }
 
     /**
-     * PATCH: pin a thread.
+     * PATCH: pin/unpin a thread.
      *
      * @param  Category  $category
      * @param  string  $categoryAlias
@@ -118,6 +134,8 @@ class ThreadController extends BaseController
     public function pin(Category $category, $categoryAlias, Thread $thread, Request $request)
     {
         $thread->toggle('pinned');
+
+        event(new UserToggledPinThread($thread));
 
         alert('success', trans('forum::threads.updated'));
 
@@ -135,8 +153,7 @@ class ThreadController extends BaseController
      */
     public function destroy(Category $category, $categoryAlias, Thread $thread, Request $request)
     {
-        foreach ($thread->posts as $post)
-        {
+        foreach ($thread->posts as $post) {
             $this->posts->delete($post->id);
         }
 

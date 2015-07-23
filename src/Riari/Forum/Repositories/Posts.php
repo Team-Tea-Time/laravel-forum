@@ -12,7 +12,6 @@ class Posts extends BaseRepository
     public function __construct(Post $model)
     {
         $this->model = $model;
-        $this->perPage = config('forum.preferences.pagination.posts');
     }
 
     /**
@@ -25,11 +24,6 @@ class Posts extends BaseRepository
      */
     public function getLastByThread($threadID = 0, $count = 10, array $with)
     {
-        $model = $this->model->where('thread_id', $threadID);
-        $model = $model->orderBy('created_at', 'DESC')->take($count);
-
-        return $model->with($with);
-
         return $this->model->where('thread_id', $threadID)
             ->orderBy('created_at', 'DESC')
             ->take($count)

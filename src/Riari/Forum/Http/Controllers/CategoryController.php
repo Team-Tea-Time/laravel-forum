@@ -1,7 +1,8 @@
 <?php namespace Riari\Forum\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Riari\Forum\Events\UserViewingCategory;
+use Riari\Forum\Events\UserViewingIndex;
 use Riari\Forum\Models\Category;
 
 class CategoryController extends BaseController
@@ -14,6 +15,8 @@ class CategoryController extends BaseController
      */
     public function index(Request $request)
     {
+        event(new UserViewingIndex);
+
         return view('forum::category.index', ['categories' => $this->categories->getTop()]);
     }
 
@@ -26,6 +29,8 @@ class CategoryController extends BaseController
      */
     public function show(Category $category, Request $request)
     {
+        event(new UserViewingCategory($category));
+
         return view('forum::category.show', compact('category'));
     }
 }

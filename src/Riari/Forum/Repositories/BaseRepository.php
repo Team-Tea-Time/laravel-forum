@@ -11,11 +11,6 @@ abstract class BaseRepository implements Repository
     protected $model;
 
     /**
-     * @var int
-     */
-    protected $perPage;
-
-    /**
      * Create a new repository instance.
      *
      * @param  Model  $model
@@ -23,7 +18,6 @@ abstract class BaseRepository implements Repository
     public function __construct(Model $model)
     {
         $this->model = $model;
-        $this->perPage = 20;
     }
 
     /**
@@ -35,17 +29,6 @@ abstract class BaseRepository implements Repository
     public function all($columns = ['*'])
     {
         return $this->model->get($columns);
-    }
-
-    /**
-     * Get a paginated collection of rows.
-     *
-     * @param  Array  $columns
-     * @return LengthAwarePaginator
-     */
-    public function paginate($columns = ['*'])
-    {
-        return $this->model->paginate($this->perPage, $columns);
     }
 
     /**
@@ -103,7 +86,7 @@ abstract class BaseRepository implements Repository
      * Fetch a row with the given ID.
      *
      * @param  int  $id
-     * @param  Array  $columns
+     * @param  array  $columns
      * @return Model
      */
     public function find($id = 0, $columns = ['*'])
@@ -114,12 +97,12 @@ abstract class BaseRepository implements Repository
     /**
      * Fetch a row matching the specified column/value.
      *
-     * @param  String  $column
+     * @param  string  $column
      * @param  mixed  $value
      * @return Collection
      */
     public function findBy($column = '', $value, $columns = ['*'])
     {
-        return $this->model->where($field, $value)->get($columns);
+        return $this->model->where($column, $value)->get($columns);
     }
 }

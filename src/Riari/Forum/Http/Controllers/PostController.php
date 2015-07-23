@@ -1,7 +1,8 @@
 <?php namespace Riari\Forum\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Riari\Forum\Events\UserCreatingPost;
+use Riari\Forum\Events\UserEditingPost;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
@@ -18,6 +19,8 @@ class PostController extends BaseController
      */
     public function create(Category $category, $categoryAlias, Thread $thread)
     {
+        event(new UserCreatingPost($thread));
+
         return view('forum::post.create', compact('category', 'thread'));
     }
 
@@ -61,6 +64,8 @@ class PostController extends BaseController
      */
     public function edit(Category $category, $categoryAlias, Thread $thread, $threadAlias, Post $post)
     {
+        event(new UserEditingPost($post));
+
         return view('forum::post.edit', compact('category', 'thread', 'post'));
     }
 

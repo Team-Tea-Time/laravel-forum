@@ -2,7 +2,6 @@
 
 use Closure;
 use Illuminate\Http\Request;
-use Riari\Forum\Libraries\Utils;
 
 class CheckPermissions
 {
@@ -31,7 +30,7 @@ class CheckPermissions
 		)) {
 			if ('Riari\Forum\Http\Controllers\API\V1' == $route->getAction()['namespace']) {
 				return response()->json(
-					['error' => 'Authenticated user does not have permission to access this resource.', 'code' => 1],
+					['error' => 'Authenticated user does not have permission to access this resource.', 'code' => 100],
 					403
 				);
 			}

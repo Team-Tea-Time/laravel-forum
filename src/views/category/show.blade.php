@@ -79,7 +79,7 @@
 					</td>
 					<td colspan="2">
 						@if ($category->userCanCreateThreads)
-							<a href="{{ $category->newThreadRoute }}">{{ trans('forum::threads.first') }}</a>
+							<a href="{{ $category->newThreadRoute }}">{{ trans('forum::threads.post_the_first') }}</a>
 						@endif
 					</td>
 				</tr>

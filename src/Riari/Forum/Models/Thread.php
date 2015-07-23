@@ -2,8 +2,6 @@
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use Riari\Forum\Libraries\Alerts;
-use Riari\Forum\Libraries\Utils;
 use Riari\Forum\Models\Traits\HasAuthor;
 
 class Thread extends BaseModel
@@ -35,7 +33,8 @@ class Thread extends BaseModel
 
     public function readers()
     {
-        return $this->belongsToMany(config('forum.integration.models.user'), 'forum_threads_read', 'thread_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(config('forum.integration.models.user'), 'forum_threads_read', 'thread_id', 'user_id')
+            ->withTimestamps();
     }
 
     public function posts()
@@ -97,7 +96,7 @@ class Thread extends BaseModel
 
     public function getPostsPaginatedAttribute()
     {
-        return $this->posts()->paginate(config('forum.preferences.posts_per_thread'));
+        return $this->posts()->paginate(config('forum.preferences.pagination.posts'));
     }
 
     public function getPageLinksAttribute()
@@ -135,7 +134,7 @@ class Thread extends BaseModel
 
     public function getReaderAttribute()
     {
-        if (!is_null(auth()->user())) {
+        if (auth()->check()) {
             $reader = $this->readers()->where('user_id', auth()->user()->id)->first();
 
             return (!is_null($reader)) ? $reader->pivot : null;
@@ -146,7 +145,7 @@ class Thread extends BaseModel
 
     public function getUserReadStatusAttribute()
     {
-        if (!$this->old && !is_null(auth()->user())) {
+        if (!$this->old && auth()->check()) {
             if (is_null($this->reader)) {
                 return self::STATUS_UNREAD;
             }

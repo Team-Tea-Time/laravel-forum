@@ -4,8 +4,6 @@ interface Repository
 {
     public function all($columns = ['*']);
 
-    public function paginate($columns = ['*']);
-
     public function create(array $data);
 
     public function update($id = 0, array $data);

@@ -79,14 +79,16 @@ class Category extends BaseModel
 
     public function getThreadCountAttribute()
     {
-        return $this->rememberAttribute('threadCount', function(){
+        return $this->rememberAttribute('threadCount', function()
+        {
             return $this->threads->count();
         });
     }
 
     public function getPostCountAttribute()
     {
-        return $this->rememberAttribute('postCount', function(){
+        return $this->rememberAttribute('postCount', function()
+        {
             $replyCount = 0;
 
             $threads = $this->threads()->get(['id']);

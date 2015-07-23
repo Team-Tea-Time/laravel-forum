@@ -1,5 +1,4 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Riari/laravel-forum/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=l5-refactor)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=l5-refactor)
 
 **This is a rewrite of the Laravel 5 (2.x.x) version and will be released as 3.0.0 in the near future. Please don't attempt to use it as it's likely to be completely broken while I work on refactoring. Thanks!**
 
@@ -12,13 +11,13 @@
 Install the package via composer:
 
 ```
-composer require riari/laravel-forum:~2.0
+composer require riari/laravel-forum:~3.0
 ```
 
 Then add the following service provider to your `config/app.php`:
 
 ```php
-'Riari\Forum\ForumServiceProvider',
+'Riari\Forum\Providers\ForumServiceProvider',
 ```
 
 ### Step 2: Publish the package files

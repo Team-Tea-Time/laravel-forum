@@ -2,10 +2,27 @@
 
 trait HasAuthor
 {
+    /**
+     * @var object
+     */
+    protected $author;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
     public function author()
     {
         return $this->belongsTo(config('forum.integration.models.user'));
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Attributes
+    |--------------------------------------------------------------------------
+    */
 
     public function getAuthorNameAttribute()
     {
