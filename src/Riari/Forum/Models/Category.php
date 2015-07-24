@@ -10,6 +10,7 @@ class Category extends BaseModel
 
     // Eloquent properties
     protected $table      = 'forum_categories';
+    protected $fillable   = ['category_id', 'title', 'subtitle', 'weight'];
     public    $timestamps = false;
 
     /*

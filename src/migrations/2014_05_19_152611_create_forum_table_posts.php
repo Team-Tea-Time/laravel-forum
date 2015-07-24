@@ -15,13 +15,9 @@ class CreateForumTablePosts extends Migration
 		Schema::create('forum_posts', function (Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('thread_id')->unsigned();
+			$table->integer('parent_thread')->unsigned();
 			$table->integer('author_id')->unsigned();
 			$table->text('content');
-
-			$table->foreign('thread_id')
-				->references('id')->on('forum_threads')
-				->onDelete('cascade');
 
 			$table->timestamps();
 			$table->softDeletes();

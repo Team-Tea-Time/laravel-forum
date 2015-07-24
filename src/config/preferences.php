@@ -51,11 +51,16 @@ return [
     */
 
     'validation' => [
+        'category' => [
+            'category_id'   => 'integer|exists:forum_categories,id',
+            'title'         => 'required',
+            'weight'        => 'integer'
+        ],
         'thread' => [
-            'title' => 'required'
+            'title'         => 'required'
         ],
         'post' => [
-            'content' => 'required|min:5'
+            'content'       => 'required|min:5'
         ]
     ],
 

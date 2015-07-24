@@ -15,7 +15,7 @@ class CreateForumTableThreads extends Migration
 		Schema::create('forum_threads', function (Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('category_id')->unsigned();
+			$table->integer('parent_category')->unsigned();
 			$table->integer('author_id')->unsigned();
 			$table->string('title');
 			$table->integer('pinned')->unsigned();
