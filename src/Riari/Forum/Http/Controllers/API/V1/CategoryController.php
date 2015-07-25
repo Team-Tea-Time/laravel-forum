@@ -18,7 +18,7 @@ class CategoryController extends BaseController
             ? $this->categories->getTop()
             : $this->categories->paginate();
 
-        return response()->json($categories);
+        return $this->collectionResponse($categories);
     }
 
     /**
@@ -37,7 +37,7 @@ class CategoryController extends BaseController
 
         $category = $this->categories->create($request->only('category_id', 'title', 'subtitle', 'weight'));
 
-        return response()->json(['data' => $category]);
+        return $this->modelResponse($category);
     }
 
     /**
@@ -48,6 +48,54 @@ class CategoryController extends BaseController
      */
     public function show(Category $category)
     {
-        return response()->json(['data' => $category]);
+        if (!$category->exists) {
+            return $this->notFoundResponse();
+        }
+
+        return $this->modelResponse($category);
+    }
+
+    /**
+     * PUT: update a category.
+     *
+     * @param  Category  $category
+     * @param  Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Category $category, Request $request)
+    {
+        if (!$category->exists) {
+            return $this->notFoundResponse();
+        }
+
+        $v = $this->validate($request, config('forum.preferences.validation.category'));
+
+        if ($v instanceof JsonResponse) {
+            return $v;
+        }
+
+        $category = $this->categories->update(
+            $category->id,
+            $request->only('category_id', 'title', 'subtitle', 'weight')
+        );
+
+        return $this->modelResponse($category);
+    }
+
+    /**
+     * DELETE: delete a category.
+     *
+     * @param  Category  $category
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Category $category)
+    {
+        if (!$category->exists) {
+            return $this->notFoundResponse();
+        }
+
+        $this->categories->delete($category->id);
+
+        return $this->modelResponse($category);
     }
 }

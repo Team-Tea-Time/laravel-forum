@@ -37,6 +37,17 @@ return [
             return true;
         },
 
+        'new' => [
+            'index' => function ($parameters, $user)
+            {
+                return true;
+            },
+            'mark-read' => function ($parameters, $user)
+            {
+                return true;
+            }
+        ],
+
         'category' => [
             'index' => function ($parameters, $user)
             {

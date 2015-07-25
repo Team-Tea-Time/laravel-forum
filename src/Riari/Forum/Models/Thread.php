@@ -12,7 +12,6 @@ class Thread extends BaseModel
     protected $table         = 'forum_threads';
     public    $timestamps    = true;
     protected $dates         = ['deleted_at'];
-    protected $appends       = ['lastPage', 'lastPost', 'lastPostRoute', 'route', 'lockRoute', 'pinRoute', 'replyRoute', 'deleteRoute'];
     protected $guarded       = ['id'];
     protected $with          = ['readers'];
 

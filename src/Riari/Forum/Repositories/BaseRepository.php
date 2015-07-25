@@ -112,7 +112,7 @@ abstract class BaseRepository implements Repository
     }
 
     /**
-     * Fetch a row matching the specified column/value.
+     * Fetch rows matching the specified column/value.
      *
      * @param  string  $column
      * @param  mixed  $value
@@ -120,6 +120,6 @@ abstract class BaseRepository implements Repository
      */
     public function findBy($column = '', $value, $columns = ['*'])
     {
-        return $this->model->where($column, $value)->get($columns);
+        return $this->model->where($column, $value)->paginate($this->perPage, $columns);
     }
 }

@@ -1,6 +1,6 @@
 <?php namespace Riari\Forum\Events;
 
-use Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserViewingNew
 {
