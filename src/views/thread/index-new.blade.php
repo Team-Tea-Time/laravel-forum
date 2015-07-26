@@ -1,7 +1,7 @@
-@extends('forum::master')
+@extends ('forum::master')
 
-@section('content')
-	@include('forum::partials.breadcrumbs', ['other' => trans('forum::threads.new_updated')])
+@section ('content')
+	@include ('forum::partials.breadcrumbs', ['other' => trans('forum::threads.new_updated')])
 
 	<h2>{{ trans('forum::threads.new_updated') }}</h2>
 

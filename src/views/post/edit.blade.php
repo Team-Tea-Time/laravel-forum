@@ -1,11 +1,11 @@
-@extends('forum::master')
+@extends ('forum::master')
 
-@section('content')
-@include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
+@section ('content')
+@include ('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
 <h2>{{ trans('forum::posts.edit') }} ({{$thread->title}})</h2>
 
-@include(
+@include (
     'forum::post.partials.edit',
     array(
         'form_url'          => $post->editRoute,

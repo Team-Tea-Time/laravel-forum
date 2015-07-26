@@ -1,11 +1,11 @@
-@extends('forum::layouts.master')
+@extends ('forum::layouts.master')
 
-@section('content')
-@include('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
+@section ('content')
+@include ('forum::partials.breadcrumbs', compact('parentCategory', 'category', 'thread'))
 
 <h2>{{ trans('forum::gemeral.new_reply') }} ({{$thread->title}})</h2>
 
-@include(
+@include (
     'forum::partials.forms.post',
     array(
         'form_url'          => $thread->replyRoute,

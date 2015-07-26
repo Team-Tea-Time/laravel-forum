@@ -1,11 +1,11 @@
-@extends('forum::master')
+@extends ('forum::master')
 
-@section('content')
-@include('forum::partials.breadcrumbs', compact('category', 'thread'))
+@section ('content')
+@include ('forum::partials.breadcrumbs', compact('category', 'thread'))
 
 <h2>{{ trans('forum::threads.new_thread') }} ({{ $category->title }})</h2>
 
-@include(
+@include (
     'forum::post.partials.edit',
     [
         'form_url'            => $category->newThreadRoute,

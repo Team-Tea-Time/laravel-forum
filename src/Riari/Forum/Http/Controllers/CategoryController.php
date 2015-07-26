@@ -4,9 +4,25 @@ use Illuminate\Http\Request;
 use Riari\Forum\Events\UserViewingCategory;
 use Riari\Forum\Events\UserViewingIndex;
 use Riari\Forum\Models\Category;
+use Riari\Forum\Repositories\Categories;
 
 class CategoryController extends BaseController
 {
+    /**
+     * @var Categories
+     */
+    protected $categories;
+    
+    /**
+     * Create a category controller instance.
+     *
+     * @param  Posts  $posts
+     */
+    public function __construct(Categories $categories)
+    {
+        $this->categories = $categories;
+    }
+
     /**
      * GET: return an index of categories view (the forum index).
      *

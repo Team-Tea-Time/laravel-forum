@@ -25,7 +25,7 @@ class CheckPermissions
 		$route = $request->route();
 
 		if (!permitted(
-			$route->parameters(),
+			$request->all() + $route->parameters(),
 			$route->getName(),
 			auth()->user()
 		)) {

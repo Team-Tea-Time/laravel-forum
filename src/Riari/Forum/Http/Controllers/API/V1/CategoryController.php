@@ -2,100 +2,49 @@
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Riari\Forum\Models\Category;
+use Riari\Forum\Repositories\Categories;
 
 class CategoryController extends BaseController
 {
     /**
+     * @var Categories
+     */
+    protected $repository;
+
+    /**
+     * Create a new Category API controller instance.
+     *
+     * @param  Categories  $categories
+     */
+    public function __construct(Categories $categories)
+    {
+        $this->repository = $categories;
+
+        $rules = config('forum.preferences.validation');
+        $this->rules = [
+            'store' => array_merge_recursive(
+                $rules['base'],
+                $rules['post|put']['category']
+            ),
+            'update' => array_merge_recursive(
+                $rules['base'],
+                $rules['patch']['category']
+            )
+        ];
+    }
+
+    /**
      * GET: return an index of categories.
      *
      * @param  Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
         $categories = ($request->has('top') && $request->input('top') == true)
-            ? $this->categories->getTop()
-            : $this->categories->paginate();
+            ? $this->repository->getTop()
+            : $this->repository->paginate();
 
         return $this->collectionResponse($categories);
-    }
-
-    /**
-     * POST: create a new category.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function store(Request $request)
-    {
-        $v = $this->validate($request, config('forum.preferences.validation.category'));
-
-        if ($v instanceof JsonResponse) {
-            return $v;
-        }
-
-        $category = $this->categories->create($request->only('category_id', 'title', 'subtitle', 'weight'));
-
-        return $this->modelResponse($category);
-    }
-
-    /**
-     * GET: return a category by ID.
-     *
-     * @param  Category  $category
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show(Category $category)
-    {
-        if (!$category->exists) {
-            return $this->notFoundResponse();
-        }
-
-        return $this->modelResponse($category);
-    }
-
-    /**
-     * PUT: update a category.
-     *
-     * @param  Category  $category
-     * @param  Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update(Category $category, Request $request)
-    {
-        if (!$category->exists) {
-            return $this->notFoundResponse();
-        }
-
-        $v = $this->validate($request, config('forum.preferences.validation.category'));
-
-        if ($v instanceof JsonResponse) {
-            return $v;
-        }
-
-        $category = $this->categories->update(
-            $category->id,
-            $request->only('category_id', 'title', 'subtitle', 'weight')
-        );
-
-        return $this->modelResponse($category);
-    }
-
-    /**
-     * DELETE: delete a category.
-     *
-     * @param  Category  $category
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function destroy(Category $category)
-    {
-        if (!$category->exists) {
-            return $this->notFoundResponse();
-        }
-
-        $this->categories->delete($category->id);
-
-        return $this->modelResponse($category);
     }
 }

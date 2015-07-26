@@ -10,6 +10,7 @@ class Post extends BaseModel
 
     // Eloquent properties
     protected $table      = 'forum_posts';
+    protected $fillable   = ['thread_id', 'author_id', 'content'];
     public    $timestamps = true;
     protected $dates      = ['deleted_at'];
     protected $appends    = ['route', 'editRoute', 'deleteRoute'];

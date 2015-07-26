@@ -2,7 +2,7 @@
 
 class Error
 {
-    const   NOT_AUTHORISED = 400,
-            VALIDATION_FAILED = 401,
+    const   VALIDATION_FAILED = 400,
+            NOT_AUTHORISED = 401,
             NOT_FOUND = 404;
 }

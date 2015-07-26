@@ -1,7 +1,7 @@
-@extends('forum::master')
+@extends ('forum::master')
 
-@section('content')
-    @include('forum::partials.breadcrumbs')
+@section ('content')
+    @include ('forum::partials.breadcrumbs')
 
     <h2>{{ trans('forum::general.index') }}</h2>
 
@@ -46,7 +46,7 @@
                         <th>{{ trans('forum::posts.posts') }}</th>
                     </tr>
                     @foreach ($category->children as $subcategory)
-                        @include('forum::category.partials.list')
+                        @include ('forum::category.partials.list')
                     @endforeach
                 @else
                     <tr>

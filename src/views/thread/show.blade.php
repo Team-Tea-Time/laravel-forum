@@ -1,7 +1,7 @@
-@extends('forum::master')
+@extends ('forum::master')
 
-@section('content')
-    @include('forum::partials.breadcrumbs')
+@section ('content')
+    @include ('forum::partials.breadcrumbs')
 
     <div id="thread">
         <h2>
@@ -62,7 +62,7 @@
             </thead>
             <tbody>
                 @foreach ($thread->postsPaginated as $post)
-                    @include('forum::post.partials.list', compact('post'))
+                    @include ('forum::post.partials.list', compact('post'))
                 @endforeach
             </tbody>
         </table>
@@ -72,7 +72,7 @@
         @if ($thread->userCanReply)
             <h3>{{ trans('forum::general.quick_reply') }}</h3>
             <div id="quick-reply">
-                @include(
+                @include (
                     'forum::post.partials.edit',
                     array(
                         'form_url'            => $thread->replyRoute,

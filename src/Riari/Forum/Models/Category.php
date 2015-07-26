@@ -10,7 +10,7 @@ class Category extends BaseModel
 
     // Eloquent properties
     protected $table      = 'forum_categories';
-    protected $fillable   = ['category_id', 'title', 'subtitle', 'weight'];
+    protected $fillable   = ['category_id', 'title', 'subtitle', 'weight', 'allows_threads'];
     public    $timestamps = false;
 
     /*
@@ -77,6 +77,11 @@ class Category extends BaseModel
         return $this->threads()->orderBy('updated_at', 'desc')->first();
     }
 
+    public function getThreadsAllowedAttribute()
+    {
+        return $this->allows_threads;
+    }
+
     public function getThreadCountAttribute()
     {
         return $this->rememberAttribute('threadCount', function()
@@ -110,7 +115,7 @@ class Category extends BaseModel
 
     public function getUserCanCreateThreadsAttribute()
     {
-        return $this->userCan('forum.thread.create');
+        return ($this->threadsAllowed && $this->userCan('forum.thread.create'));
     }
 
     /*

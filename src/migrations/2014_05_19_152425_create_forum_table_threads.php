@@ -18,8 +18,8 @@ class CreateForumTableThreads extends Migration
 			$table->integer('parent_category')->unsigned();
 			$table->integer('author_id')->unsigned();
 			$table->string('title');
-			$table->integer('pinned')->unsigned();
-			$table->integer('locked')->unsigned();
+			$table->boolean('pinned');
+			$table->boolean('locked');
 
 			$table->timestamps();
 			$table->softDeletes();

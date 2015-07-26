@@ -14,7 +14,7 @@
 </head>
 <body>
     <div class="container">
-        @include('forum::partials.alerts')
+        @include ('forum::partials.alerts')
 
         @yield('content')
     </div>

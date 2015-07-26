@@ -10,6 +10,7 @@ class Thread extends BaseModel
 
     // Eloquent properties
     protected $table         = 'forum_threads';
+    protected $fillable      = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
     public    $timestamps    = true;
     protected $dates         = ['deleted_at'];
     protected $guarded       = ['id'];

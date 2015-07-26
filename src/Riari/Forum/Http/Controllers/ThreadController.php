@@ -9,9 +9,39 @@ use Riari\Forum\Events\UserViewingNew;
 use Riari\Forum\Events\UserViewingThread;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Thread;
+use Riari\Forum\Repositories\Posts;
+use Riari\Forum\Repositories\Threads;
 
 class ThreadController extends BaseController
 {
+    /**
+     * @var Threads
+     */
+    protected $threads;
+
+    /**
+     * @var Posts
+     */
+    protected $posts;
+    
+    /**
+     * Create a thread controller instance.
+     *
+     * @param  Threads  $threads
+     * @param  Posts  $posts
+     */
+    public function __construct(Threads $threads, Posts $posts)
+    {
+        $this->threads = $threads;
+        $this->posts = $posts;
+
+        $rules = config('forum.preferences.validation');
+        $this->rules = [
+            'thread'    => array_merge_recursive($rules['base'], $rules['post|put']['thread']),
+            'post'      => array_merge_recursive($rules['base'], $rules['post|put']['post'])
+        ];
+    }
+
     /**
      * GET: return a new/updated threads view.
      *
@@ -80,8 +110,8 @@ class ThreadController extends BaseController
      */
     public function store(Category $category, $categoryAlias, Request $request)
     {
-        $this->validate($request, config('forum.preferences.validation.thread'));
-        $this->validate($request, config('forum.preferences.validation.post'));
+        $this->validate($request, $this->rules['thread']);
+        $this->validate($request, $this->rules['post']);
 
         $thread = [
             'author_id'     => auth()->user()->id,
