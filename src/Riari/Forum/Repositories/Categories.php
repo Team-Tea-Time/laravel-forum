@@ -18,7 +18,7 @@ class Categories extends BaseRepository
     /**
      * Get the top level categories (i.e. those where category_id == null).
      *
-     * @param  array  $where
+     * @param  array  $columns
      * @return Collection
      */
     public function getTop($columns = ['*'])

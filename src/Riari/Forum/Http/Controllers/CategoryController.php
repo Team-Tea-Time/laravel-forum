@@ -12,11 +12,11 @@ class CategoryController extends BaseController
      * @var Categories
      */
     protected $categories;
-    
+
     /**
      * Create a category controller instance.
      *
-     * @param  Posts  $posts
+     * @param  Categories  $categories
      */
     public function __construct(Categories $categories)
     {
