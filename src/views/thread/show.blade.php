@@ -74,14 +74,11 @@
             <div id="quick-reply">
                 @include (
                     'forum::post.partials.edit',
-                    array(
-                        'form_url'            => $thread->replyRoute,
-                        'form_classes'        => '',
-                        'show_title_field'    => false,
-                        'post_content'        => '',
-                        'submit_label'        => trans('forum::general.reply'),
-                        'cancel_url'          => ''
-                    )
+                    [
+                        'form_url'          => $thread->replyRoute,
+                        'show_title_field'  => false,
+                        'submit_label'      => trans('forum::general.reply')
+                    ]
                 )
             </div>
         @endif

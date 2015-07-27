@@ -7,13 +7,12 @@
 
 @include (
     'forum::post.partials.edit',
-    array(
+    [
         'form_url'          => $post->editRoute,
-        'form_classes'      => '',
-        'show_title_field'  => false,
+        'method'            => 'PATCH',
         'post_content'      => $post->content,
         'submit_label'      => trans('forum::posts.edit'),
         'cancel_url'        => $post->thread->route
-    )
+    ]
 )
 @overwrite

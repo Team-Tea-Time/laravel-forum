@@ -8,12 +8,10 @@
 @include (
     'forum::post.partials.edit',
     [
-        'form_url'            => $category->newThreadRoute,
-        'form_classes'        => '',
-        'show_title_field'    => true,
-        'post_content'        => '',
-        'submit_label'        => trans('forum::general.send'),
-        'cancel_url'          => ''
+        'form_url'          => $category->newThreadRoute,
+        'method'            => 'POST',
+        'show_title_field'  => true,
+        'submit_label'      => trans('forum::general.send'),
     ]
 )
 @overwrite

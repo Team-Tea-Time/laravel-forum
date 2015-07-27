@@ -61,12 +61,9 @@ return [
                 'title'             => ['required']
             ],
             'thread' => [
-                'category_id'       => ['required'],
-                'author_id'         => ['required'],
                 'title'             => ['required']
             ],
             'post' => [
-                'author_id'         => ['required'],
                 'content'           => ['required']
             ]
         ],
