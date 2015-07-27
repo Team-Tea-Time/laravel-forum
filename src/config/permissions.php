@@ -62,9 +62,6 @@ return [
             },
             'create' => function ($parameters, $user)
             {
-                if (!$parameters['category']->threadsAllowed) {
-                    return false;
-                }
                 return true;
             },
             'lock' => function ($parameters, $user)

@@ -65,7 +65,7 @@ class ThreadController extends BaseController
             return $v;
         }
 
-        $posts = $this->threads->findBy('category_id', $request->input('category_id'));
+        $posts = $this->repository->findBy('category_id', $request->input('category_id'));
 
         return $this->collectionResponse($posts);
     }
@@ -88,7 +88,7 @@ class ThreadController extends BaseController
             return $v;
         }
 
-        $category = $this->repository->find($request->input('category_id'));
+        $category = $this->categories->find($request->input('category_id'));
 
         if (!$category->threadsAllowed) {
             return $this->buildFailedValidationResponse(
@@ -97,7 +97,7 @@ class ThreadController extends BaseController
             );
         }
 
-        $thread = $this->threads->create($request->all());
+        $thread = $this->repository->create($request->all());
         $this->posts->create($request->all() + ['thread_id' => $thread->id]);
 
         return $this->modelResponse($thread);

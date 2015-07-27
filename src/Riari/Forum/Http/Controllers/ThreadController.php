@@ -23,7 +23,7 @@ class ThreadController extends BaseController
      * @var Posts
      */
     protected $posts;
-    
+
     /**
      * Create a thread controller instance.
      *
@@ -95,6 +95,12 @@ class ThreadController extends BaseController
      */
     public function create(Category $category)
     {
+        if (!$category->threadsAllowed) {
+            alert('warning', trans('forum::categories.threads_disallowed'));
+
+            return redirect($category->route);
+        }
+
         event(new UserCreatingThread($category));
 
         return view('forum::thread.create', compact('category'));
@@ -110,6 +116,12 @@ class ThreadController extends BaseController
      */
     public function store(Category $category, $categoryAlias, Request $request)
     {
+        if (!$category->threadsAllowed) {
+            alert('warning', trans('forum::categories.threads_disallowed'));
+
+            return redirect($category->route);
+        }
+
         $this->validate($request, $this->rules['thread']);
         $this->validate($request, $this->rules['post']);
 

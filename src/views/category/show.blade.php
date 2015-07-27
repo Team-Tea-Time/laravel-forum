@@ -12,7 +12,7 @@
 					<tr>
 						<th>{{ trans('forum::categories.category') }}</th>
 						<th class="col-md-2">{{ trans('forum::threads.threads') }}</th>
-						<th class="col-md-2 text-right">{{ trans('forum::posts.posts') }}</th>
+						<th class="col-md-2">{{ trans('forum::posts.posts') }}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -79,7 +79,7 @@
 							<td>
 								{{ trans('forum::threads.none_found') }}
 							</td>
-							<td colspan="2">
+							<td class="text-right" colspan="2">
 								@if ($category->userCanCreateThreads)
 									<a href="{{ $category->newThreadRoute }}">{{ trans('forum::threads.post_the_first') }}</a>
 								@endif

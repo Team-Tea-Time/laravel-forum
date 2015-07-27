@@ -3,10 +3,10 @@
 // Forum index
 get($root, ['as' => 'forum.index', 'uses' => "{$controllers['category']}@index"]);
 
-Route::group(['prefix' => $root], function() use ($controllers)
+Route::group(['prefix' => $root], function() use ($parameters, $controllers)
 {
-	$category = '{category}-{categoryAlias}';
-	$thread = '/{thread}-{threadAlias}';
+	$category = "{{$parameters['category']}}-{category_slug}";
+	$thread = "/{{$parameters['thread']}}-{thread_slug}";
 
 	// New
 	get('new', ['as' => 'forum.new.index', 'uses' => "{$controllers['thread']}@indexNew"]);
@@ -31,24 +31,24 @@ Route::group(['prefix' => $root], function() use ($controllers)
 	delete($category . $thread . '/post/{post}/delete', ['as' => 'forum.post.delete', 'uses' => "{$controllers['post']}@destroy"]);
 
 	// API
-	Route::group(['name' => 'api', 'prefix' => 'api/v1', 'namespace' => 'API\V1', 'middleware' => 'forum.auth.basic'], function()
+	Route::group(['name' => 'api', 'prefix' => 'api/v1', 'namespace' => 'API\V1', 'middleware' => 'forum.auth.basic'], function() use ($parameters)
 	{
-		resource('category', 'CategoryController', ['except' => ['create', 'edit']]);
-		resource('thread', 'ThreadController', ['except' => ['create', 'edit']]);
-		resource('post', 'PostController', ['except' => ['create', 'edit']]);
+		resource($parameters['category'], 'CategoryController', ['except' => ['create', 'edit']]);
+		resource($parameters['thread'], 'ThreadController', ['except' => ['create', 'edit']]);
+		resource($parameters['post'], 'PostController', ['except' => ['create', 'edit']]);
 	});
 });
 
 // Model binding
-Route::bind('category', function ($id)
+Route::bind($parameters['category'], function ($id)
 {
 	return bind_forum_parameter(new \Riari\Forum\Models\Category, $id);
 });
-Route::bind('thread', function ($id)
+Route::bind($parameters['thread'], function ($id)
 {
 	return bind_forum_parameter(new \Riari\Forum\Models\Thread, $id);
 });
-Route::bind('post', function ($id)
+Route::bind($parameters['post'], function ($id)
 {
 	return bind_forum_parameter(new \Riari\Forum\Models\Post, $id);
 });

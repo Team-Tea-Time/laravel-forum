@@ -10,8 +10,8 @@
             <thead>
                 <tr>
                     <th>{{ trans('forum::categories.category') }}</th>
-                    <th>{{ trans('forum::threads.threads') }}</th>
-                    <th>{{ trans('forum::posts.posts') }}</th>
+                    <th class="col-md-2">{{ trans('forum::threads.threads') }}</th>
+                    <th class="col-md-2">{{ trans('forum::posts.posts') }}</th>
                 </tr>
             </thead>
             <tbody>
