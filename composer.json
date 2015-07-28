@@ -1,6 +1,6 @@
 {
     "name": "riari/laravel-forum",
-    "description": "A package providing a solid foundation for building discussion forums in a Laravel 4/5 application",
+    "description": "A Laravel 4/5 package providing a solid foundation for building discussion forums",
     "keywords": ["laravel", "laravel-4", "laravel-5", "forum", "discuss"],
     "license": "MIT",
     "authors": [

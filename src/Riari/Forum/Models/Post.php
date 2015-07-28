@@ -9,13 +9,12 @@ class Post extends BaseModel
     use SoftDeletes, HasAuthor;
 
     // Eloquent properties
-    protected $table      = 'forum_posts';
-    protected $fillable   = ['thread_id', 'author_id', 'content'];
-    public    $timestamps = true;
-    protected $dates      = ['deleted_at'];
-    protected $appends    = ['route', 'editRoute', 'deleteRoute'];
-    protected $with       = ['author'];
-    protected $guarded    = ['id'];
+    protected $table        = 'forum_posts';
+    protected $fillable     = ['thread_id', 'author_id', 'content'];
+    public    $timestamps   = true;
+    protected $dates        = ['deleted_at'];
+    protected $with         = ['author'];
+    protected $guarded      = ['id'];
 
     /*
     |--------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 
 use Riari\Forum\Events\Types\ThreadEvent;
 
-class UserToggledLockThread extends ThreadEvent
+class UserToggledThreadLock extends ThreadEvent
 {
 
 }

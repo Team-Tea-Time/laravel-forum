@@ -9,12 +9,12 @@ class Thread extends BaseModel
     use SoftDeletes, HasAuthor;
 
     // Eloquent properties
-    protected $table         = 'forum_threads';
-    protected $fillable      = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
-    public    $timestamps    = true;
-    protected $dates         = ['deleted_at'];
-    protected $guarded       = ['id'];
-    protected $with          = ['readers'];
+    protected $table        = 'forum_threads';
+    protected $fillable     = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
+    public    $timestamps   = true;
+    protected $dates        = ['deleted_at'];
+    protected $with         = ['author'];
+    protected $guarded      = ['id'];
 
     // Thread constants
     const     STATUS_UNREAD  = 'unread';

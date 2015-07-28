@@ -3,8 +3,8 @@
 use Illuminate\Http\Request;
 use Riari\Forum\Events\UserCreatingThread;
 use Riari\Forum\Events\UserMarkedThreadsRead;
-use Riari\Forum\Events\UserToggledLockThread;
-use Riari\Forum\Events\UserToggledPinThread;
+use Riari\Forum\Events\UserToggledThreadLock;
+use Riari\Forum\Events\UserToggledThreadPin;
 use Riari\Forum\Events\UserViewingNew;
 use Riari\Forum\Events\UserViewingThread;
 use Riari\Forum\Models\Category;
@@ -157,7 +157,7 @@ class ThreadController extends BaseController
     {
         $thread->toggle('locked');
 
-        event(new UserToggledLockThread($thread));
+        event(new UserToggledThreadLock($thread));
 
         alert('success', trans('forum::threads.updated'));
 
@@ -177,7 +177,7 @@ class ThreadController extends BaseController
     {
         $thread->toggle('pinned');
 
-        event(new UserToggledPinThread($thread));
+        event(new UserToggledThreadPin($thread));
 
         alert('success', trans('forum::threads.updated'));
 

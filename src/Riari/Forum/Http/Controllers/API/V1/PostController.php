@@ -51,4 +51,31 @@ class PostController extends BaseController
 
         return $this->collectionResponse($posts);
     }
+
+    /**
+     * POST: create a new post.
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function store(Request $request)
+    {
+        // For regular frontend requests, thread_id and author_id are set
+        // automatically using the current thread and user, so they're not
+        // required parameters. For this endpoint, they're set manually, so we
+        // need to make them required.
+        $v = $this->validate(
+            $request,
+            array_merge_recursive($this->rules['store'], ['thread_id' => ['required'], 'author_id' => ['required']])
+        );
+
+        if ($v instanceof JsonResponse) {
+            return $v;
+        }
+
+        $post = $this->repository->create($request->all());
+        $post->load('thread');
+
+        return $this->modelResponse($post, 201);
+    }
 }

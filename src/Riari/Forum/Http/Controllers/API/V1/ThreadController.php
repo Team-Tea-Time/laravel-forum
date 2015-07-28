@@ -78,11 +78,13 @@ class ThreadController extends BaseController
      */
     public function store(Request $request)
     {
-        // Remove the thread_id validation rules for this request because
-        // we'll get a new thread ID automatically.
-        unset($this->rules['store']['thread_id']);
-
-        $v = $this->validate($request, $this->rules['store']);
+        // For regular frontend requests, author_id is set automatically using
+        // the current user, so it's not a required parameter. For this
+        // endpoint, it's set manually, so we need to make it required.
+        $v = $this->validate(
+            $request,
+            array_merge_recursive($this->rules['store'], ['author_id' => ['required']])
+        );
 
         if ($v instanceof JsonResponse) {
             return $v;
@@ -100,6 +102,6 @@ class ThreadController extends BaseController
         $thread = $this->repository->create($request->all());
         $this->posts->create($request->all() + ['thread_id' => $thread->id]);
 
-        return $this->modelResponse($thread);
+        return $this->modelResponse($thread, 201);
     }
 }

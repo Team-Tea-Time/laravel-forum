@@ -2,7 +2,7 @@
 
 use Riari\Forum\Events\Types\ThreadEvent;
 
-class UserToggledPinThread extends ThreadEvent
+class UserToggledThreadPin extends ThreadEvent
 {
 
 }

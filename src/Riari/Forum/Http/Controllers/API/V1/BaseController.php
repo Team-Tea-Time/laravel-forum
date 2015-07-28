@@ -96,7 +96,6 @@ abstract class BaseController extends Controller
      * DELETE: delete a model.
      *
      * @param  Model  $model
-     * @param  int  $code
      * @return JsonResponse
      */
     public function destroy($model)
