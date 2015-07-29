@@ -90,10 +90,27 @@ abstract class BaseRepository implements Repository
 
         if (!is_null($model)) {
             if (!config('forum.preferences.misc.soft_delete')) {
-                return $model->forceDelete();
+                $model->forceDelete();
+            } else {
+                $model->delete();
             }
+        }
 
-            return $model->delete();
+        return $model;
+    }
+
+    /**
+     * Restore a row with the given ID (only applies to soft-deleted rows).
+     *
+     * @param  int  $id
+     * @return Model
+     */
+    public function restore($id = 0)
+    {
+        $model = $this->find($id, true);
+
+        if (!is_null($model)) {
+            $model->restore();
         }
 
         return $model;
@@ -103,12 +120,14 @@ abstract class BaseRepository implements Repository
      * Fetch a row with the given ID.
      *
      * @param  int  $id
+     * @param  boolean  $withTrashed
      * @param  array  $columns
      * @return Model
      */
-    public function find($id = 0, $columns = ['*'])
+    public function find($id = 0, $withTrashed = false, $columns = ['*'])
     {
-        return $this->model->find($id, $columns);
+        $model = ($withTrashed) ? $this->model->withTrashed() : $this->model;
+        return $model->find($id, $columns);
     }
 
     /**
@@ -116,10 +135,13 @@ abstract class BaseRepository implements Repository
      *
      * @param  string  $column
      * @param  mixed  $value
+     * @param  boolean  $withTrashed
+     * @param  array  $columns
      * @return Collection
      */
-    public function findBy($column = '', $value, $columns = ['*'])
+    public function findBy($column = '', $value, $withTrashed = false, $columns = ['*'])
     {
-        return $this->model->where($column, $value)->paginate($this->perPage, $columns);
+        $model = ($withTrashed) ? $this->model->withTrashed() : $this->model;
+        return $model->where($column, $value)->paginate($this->perPage, $columns);
     }
 }

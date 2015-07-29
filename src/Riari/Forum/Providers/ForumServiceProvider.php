@@ -2,6 +2,12 @@
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Riari\Forum\Models\Category;
+use Riari\Forum\Models\Post;
+use Riari\Forum\Models\Thread;
+use Riari\Forum\Models\Observers\CategoryObserver;
+use Riari\Forum\Models\Observers\PostObserver;
+use Riari\Forum\Models\Observers\ThreadObserver;
 
 class ForumServiceProvider extends ServiceProvider
 {
@@ -72,6 +78,11 @@ class ForumServiceProvider extends ServiceProvider
         // Register middleware
         $router->middleware('forum.auth.basic', 'Riari\Forum\Http\Middleware\BasicAuth');
         $router->middleware('forum.permissions', 'Riari\Forum\Http\Middleware\CheckPermissions');
+
+        // Register model observers
+        Category::observe(new CategoryObserver);
+        Thread::observe(new ThreadObserver);
+        Post::observe(new PostObserver);
 
         // Load helpers
         require __DIR__.'/../../../helpers.php';

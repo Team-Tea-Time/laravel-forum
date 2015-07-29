@@ -41,11 +41,7 @@ class PostController extends BaseController
      */
     public function index(Request $request)
     {
-        $v = $this->validate($request, ['thread_id' => 'integer|required|exists:forum_threads,id']);
-
-        if ($v instanceof JsonResponse) {
-            return $v;
-        }
+        $this->validate($request, ['thread_id' => 'integer|required|exists:forum_threads,id']);
 
         $posts = $this->repository->findBy('thread_id', $request->input('thread_id'));
 
@@ -64,14 +60,10 @@ class PostController extends BaseController
         // automatically using the current thread and user, so they're not
         // required parameters. For this endpoint, they're set manually, so we
         // need to make them required.
-        $v = $this->validate(
+        $this->validate(
             $request,
             array_merge_recursive($this->rules['store'], ['thread_id' => ['required'], 'author_id' => ['required']])
         );
-
-        if ($v instanceof JsonResponse) {
-            return $v;
-        }
 
         $post = $this->repository->create($request->all());
         $post->load('thread');

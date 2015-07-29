@@ -45,8 +45,7 @@ class ThreadController extends BaseController
             ),
             'update' => array_merge_recursive(
                 $rules['base'],
-                $rules['patch']['thread'],
-                $rules['patch']['post']
+                $rules['patch']['thread']
             )
         ];
     }
@@ -59,11 +58,7 @@ class ThreadController extends BaseController
      */
     public function index(Request $request)
     {
-        $v = $this->validate($request, ['category_id' => 'integer|required|exists:forum_categories,id']);
-
-        if ($v instanceof JsonResponse) {
-            return $v;
-        }
+        $this->validate($request, ['category_id' => 'required|integer|exists:forum_categories,id']);
 
         $posts = $this->repository->findBy('category_id', $request->input('category_id'));
 
@@ -81,14 +76,10 @@ class ThreadController extends BaseController
         // For regular frontend requests, author_id is set automatically using
         // the current user, so it's not a required parameter. For this
         // endpoint, it's set manually, so we need to make it required.
-        $v = $this->validate(
+        $this->validate(
             $request,
             array_merge_recursive($this->rules['store'], ['author_id' => ['required']])
         );
-
-        if ($v instanceof JsonResponse) {
-            return $v;
-        }
 
         $category = $this->categories->find($request->input('category_id'));
 
@@ -103,5 +94,38 @@ class ThreadController extends BaseController
         $this->posts->create($request->all() + ['thread_id' => $thread->id]);
 
         return $this->modelResponse($thread, 201);
+    }
+
+    /**
+     * PATCH: bulk lock/unlock threads.
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function bulkLock(Request $request)
+    {
+        return $this->doBulkUpdate($request, 'locked', 'required|boolean');
+    }
+
+    /**
+     * PATCH: bulk pin/unpin threads.
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function bulkPin(Request $request)
+    {
+        return $this->doBulkUpdate($request, 'pinned', 'required|boolean');
+    }
+
+    /**
+     * PATCH: bulk move threads.
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function bulkMove(Request $request)
+    {
+        return $this->doBulkUpdate($request, 'category_id', 'required|integer|exists:forum_categories,id');
     }
 }

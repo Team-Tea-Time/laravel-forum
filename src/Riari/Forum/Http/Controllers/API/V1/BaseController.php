@@ -39,11 +39,7 @@ abstract class BaseController extends Controller
      */
     public function store(Request $request)
     {
-        $v = $this->validate($request, $this->rules['store']);
-
-        if ($v instanceof JsonResponse) {
-            return $v;
-        }
+        $this->validate($request, $this->rules['store']);
 
         $model = $this->repository->create($request->all());
 
@@ -74,22 +70,13 @@ abstract class BaseController extends Controller
      */
     public function update($model, Request $request)
     {
-        if (!$model->exists) {
-            return $this->notFoundResponse();
+        $response = $this->doUpdate($model, $request);
+
+        if ($response instanceof JsonResponse) {
+            return $response;
         }
 
-        $v = $this->validate($request, $this->rules['update']);
-
-        if ($v instanceof JsonResponse) {
-            return $v;
-        }
-
-        $model = $this->repository->update(
-            $model->id,
-            $request->all()
-        );
-
-        return $this->modelResponse($model);
+        return $this->modelResponse($response);
     }
 
     /**
@@ -107,6 +94,96 @@ abstract class BaseController extends Controller
         $this->repository->delete($model->id);
 
         return $this->modelResponse($model);
+    }
+
+    /**
+     * DELETE: bulk delete models.
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function bulkDestroy(Request $request)
+    {
+        $this->validate($request, ['id' => 'required']);
+
+        $collection = collect();
+        foreach ($request->input('id') as $id) {
+            $model = $this->repository->delete($id);
+
+            if (!is_null($model)) {
+                $collection->push($model);
+            }
+        }
+
+        return $this->collectionResponse($collection);
+    }
+
+    /**
+     * PUT: bulk restore models.
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function bulkRestore(Request $request)
+    {
+        $this->validate($request, ['id' => 'required']);
+
+        $collection = collect();
+        foreach ($request->input('id') as $id) {
+            $model = $this->repository->restore($id);
+
+            if (!is_null($model)) {
+                $collection->push($model);
+            }
+        }
+
+        return $this->collectionResponse($collection);
+    }
+
+    /**
+     * Bulk update an attribute.
+     *
+     * @param  Request  $request
+     * @param  string  $attribute
+     * @param  string  $rule
+     * @return JsonResponse
+     */
+    protected function doBulkUpdate(Request $request, $attribute, $rule)
+    {
+        $this->validate($request, ['id' => 'required', $attribute => $rule]);
+
+        $input = $request->all();
+        $request->replace([
+            $attribute => $input[$attribute]
+        ]);
+        $collection = collect();
+        foreach ($input['id'] as $id) {
+            $model = $this->repository->find($id);
+
+            if (!is_null($model) && $model->exists) {
+                $collection->push($this->doUpdate($model, $request));
+            }
+        }
+
+        return $this->collectionResponse($collection);
+    }
+
+    /**
+     * Update a model.
+     *
+     * @param  Model  $model
+     * @param  Request  $request
+     * @return Model
+     */
+    protected function doUpdate($model, Request $request)
+    {
+        if (is_null($model) || !$model->exists) {
+            return $this->notFoundResponse();
+        }
+
+        $this->validate($request, $this->rules['update']);
+
+        return $this->repository->update($model->id, $request->all());
     }
 
     /**

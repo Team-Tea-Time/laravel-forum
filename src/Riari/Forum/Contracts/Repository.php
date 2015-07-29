@@ -12,7 +12,7 @@ interface Repository
 
     public function delete($id = 0);
 
-    public function find($id = 0, $columns = ['*']);
+    public function find($id = 0, $withTrashed, $columns = ['*']);
 
-    public function findBy($column = '', $value, $columns = ['*']);
+    public function findBy($column = '', $value, $withTrashed, $columns = ['*']);
 }
