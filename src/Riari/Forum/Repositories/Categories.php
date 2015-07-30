@@ -11,8 +11,7 @@ class Categories extends BaseRepository
      */
     public function __construct(Category $model)
     {
-        $this->model = $model;
-        $this->perPage = config('forum.preferences.pagination.categories');
+        parent::__construct($model, config('forum.preferences.pagination.categories'));
     }
 
     /**

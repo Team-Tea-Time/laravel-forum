@@ -6,6 +6,7 @@ return [
     'post_the_first'    => "Post the first!",
     'new_thread'        => "New thread",
     'created'           => "Thread created",
+    'view'              => "View thread",
     'pin'               => "Pin/unpin this thread",
     'pinned'            => "Pinned",
     'lock'              => "Lock/unlock this thread",

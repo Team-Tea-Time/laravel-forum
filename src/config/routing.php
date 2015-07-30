@@ -29,9 +29,9 @@ return [
 	| Parameter names
 	|--------------------------------------------------------------------------
 	|
-	| Here you can specify the parameter names to use in the forum routes.
-	| The defaults should work fine unless they conflict with any route binding
-	| that makes use of the same parameters in your application.
+	| Here you can specify the parameter names to use in the forum routes. You
+	| should only change these if they conflict with any route binding that
+	| makes use of the same parameter names in your application.
 	|
 	| IMPORTANT NOTE: Changing these will change the forum API URIs. You will
 	| also need to make sure the permission name keys in

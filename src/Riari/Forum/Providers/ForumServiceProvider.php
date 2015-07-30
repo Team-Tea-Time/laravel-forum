@@ -83,8 +83,5 @@ class ForumServiceProvider extends ServiceProvider
         Category::observe(new CategoryObserver);
         Thread::observe(new ThreadObserver);
         Post::observe(new PostObserver);
-
-        // Load helpers
-        require __DIR__.'/../../../helpers.php';
     }
 }

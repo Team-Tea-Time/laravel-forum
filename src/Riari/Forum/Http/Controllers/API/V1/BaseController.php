@@ -28,7 +28,9 @@ abstract class BaseController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->collectionResponse($this->repository->paginate());
+        $collection = $this->repository->paginate();
+
+        return $this->collectionResponse();
     }
 
     /**
@@ -91,7 +93,24 @@ abstract class BaseController extends Controller
             return $this->notFoundResponse();
         }
 
-        $this->repository->delete($model->id);
+        $model = $this->repository->delete($model->id);
+
+        return $this->modelResponse($model);
+    }
+
+    /**
+     * PATCH: restore a model.
+     *
+     * @param  Model  $model
+     * @return JsonResponse
+     */
+    public function restore($model)
+    {
+        if (!$model->exists) {
+            return $this->notFoundResponse();
+        }
+
+        $this->repository->restore($model->id);
 
         return $this->modelResponse($model);
     }
@@ -119,7 +138,7 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * PUT: bulk restore models.
+     * PATCH: bulk restore models.
      *
      * @param  Request  $request
      * @return JsonResponse

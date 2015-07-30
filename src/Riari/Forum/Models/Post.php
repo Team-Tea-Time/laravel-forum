@@ -35,13 +35,18 @@ class Post extends BaseModel
 
     // Route attributes
 
-    public function getRouteAttribute()
+    public function getUrlAttribute()
     {
         $perPage = config('forum.preferences.pagination.threads');
         $count = $this->thread->posts()->where('id', '<=', $this->id)->paginate($perPage)->total();
         $page = ceil($count / $perPage);
 
         return "{$this->thread->route}?page={$page}#post-{$this->id}";
+    }
+
+    public function getRouteAttribute()
+    {
+        return $this->getRoute('forum.post.show');
     }
 
     public function getEditRouteAttribute()

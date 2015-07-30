@@ -4,6 +4,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Permission handling method
+    |--------------------------------------------------------------------------
+    |
+    | Here we specify the method to use for handling permissions. It defaults
+    | to 'callback', which refers to the permission callbacks listed below.
+    | Set to 'class' if you'd rather specify a class to handle this.
+    |
+    */
+
+    'method' => 'callback',
+
+    /*
+    |--------------------------------------------------------------------------
     | Permission aliases
     |--------------------------------------------------------------------------
     |
@@ -15,30 +28,42 @@ return [
     */
 
     'aliases' => [
-        'forum.thread.store'                => 'forum.thread.create',
-        'forum.thread.update'               => 'forum.thread.edit',
-        'forum.post.store'                  => 'forum.post.create',
-        'forum.post.update'                 => 'forum.post.edit',
-        'forum.api.v1.bulk.thread.lock'     => 'forum.api.v1.thread.lock',
-        'forum.api.v1.bulk.thread.pin'      => 'forum.api.v1.thread.pin',
-        'forum.api.v1.bulk.thread.destroy'  => 'forum.api.v1.thread.destroy',
-        'forum.api.v1.bulk.thread.restore'  => 'forum.api.v1.thread.restore',
-        'forum.api.v1.bulk.post.destroy'    => 'forum.api.v1.post.destroy',
-        'forum.api.v1.bulk.post.restore'    => 'forum.api.v1.post.restore'
+        'thread.store'                => 'thread.create',
+        'thread.update'               => 'thread.edit',
+        'post.store'                  => 'post.create',
+        'post.update'                 => 'post.edit',
+        'api.v1.bulk.thread.lock'     => 'api.v1.thread.lock',
+        'api.v1.bulk.thread.pin'      => 'api.v1.thread.pin',
+        'api.v1.bulk.thread.destroy'  => 'api.v1.thread.destroy',
+        'api.v1.bulk.thread.restore'  => 'api.v1.thread.restore',
+        'api.v1.bulk.post.destroy'    => 'api.v1.post.destroy',
+        'api.v1.bulk.post.restore'    => 'api.v1.post.restore'
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Permission callbacks
+    | Permission handling method: class
     |--------------------------------------------------------------------------
     |
-    | Here we define callbacks for the forum permissions. All of these map to
-    | a named forum route, and each one receives an array of paramaters as well
-    | as the current user.
+    | If 'method' is set to 'class', specify the name of the class here. The
+    | class handle() method will receive the permission name as well as the
+    | parameters and user.
     |
     */
 
-    'forum' => [
+    'class' => null,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Permission handling method: callback
+    |--------------------------------------------------------------------------
+    |
+    | If 'method' is set to 'callback', the functions here are used to handle
+    | permissions.
+    |
+    */
+
+    'callback' => [
         'index' => function ($parameters, $user)
         {
             return true;
@@ -70,22 +95,14 @@ return [
             'create' => function ($parameters, $user)
             {
                 return true;
-            },
-            'lock' => function ($parameters, $user)
-            {
-                return false;
-            },
-            'pin' => function ($parameters, $user)
-            {
-                return false;
-            },
-            'delete' => function ($parameters, $user)
-            {
-                return false;
             }
         ],
 
         'post' => [
+            'show' => function ($parameters, $user)
+            {
+                return true;
+            },
             'create' => function ($parameters, $user)
             {
                 return true;
@@ -93,10 +110,6 @@ return [
             'edit' => function ($parameters, $user)
             {
                 return ($parameters['post']->author == $user);
-            },
-            'delete' => function ($parameters, $user)
-            {
-                return false;
             }
         ],
 
@@ -122,6 +135,10 @@ return [
                     'destroy' => function ($parameters, $user)
                     {
                         return false;
+                    },
+                    'restore' => function ($parameters, $user)
+                    {
+                        return false;
                     }
                 ],
                 'thread' => [
@@ -142,6 +159,10 @@ return [
                         return false;
                     },
                     'destroy' => function ($parameters, $user)
+                    {
+                        return false;
+                    },
+                    'restore' => function ($parameters, $user)
                     {
                         return false;
                     }
@@ -166,33 +187,11 @@ return [
                     'destroy' => function ($parameters, $user)
                     {
                         return false;
+                    },
+                    'restore' => function ($parameters, $user)
+                    {
+                        return false;
                     }
-                ],
-                'bulk' => [
-                    'thread' => [
-                        'lock' => function ($parameters, $user)
-                        {
-                            return false;
-                        },
-                        'pin' => function ($parameters, $user)
-                        {
-                            return false;
-                        },
-                        'move' => function ($parameters, $user)
-                        {
-                            return false;
-                        },
-                        'delete' => function ($parameters, $user)
-                        {
-                            return false;
-                        }
-                    ],
-                    'post' => [
-                        'delete' => function ($parameters, $user)
-                        {
-                            return false;
-                        }
-                    ]
                 ]
             ]
         ]

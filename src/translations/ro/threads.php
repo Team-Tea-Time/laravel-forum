@@ -6,6 +6,7 @@ return [
     'post_the_first'    => "Începe prima discuție!",
     'new_thread'        => "Discuție nouă",
     'created'           => "Discuție creată",
+    'view'              => "Vezi discuție",
     'pin'               => "Fixează/eliberează această discuție",
     'pinned'            => "Fixat",
     'lock'              => "Închide/deschide această discuție",

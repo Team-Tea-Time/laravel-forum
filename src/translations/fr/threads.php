@@ -6,6 +6,7 @@ return [
     'post_the_first'    => "Postez le premier!",
     'new_thread'        => "Nouveau sujet",
     'created'           => "Sujet créé",
+    'view'              => "Voir le sujet",
     'pin'               => "Épinglér ce sujet",
     'pinned'            => "Épinglé",
     'lock'              => "Fermer ce sujet",

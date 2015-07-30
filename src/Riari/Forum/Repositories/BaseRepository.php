@@ -1,9 +1,8 @@
 <?php namespace Riari\Forum\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
-use Riari\Forum\Contracts\Repository;
 
-abstract class BaseRepository implements Repository
+abstract class BaseRepository
 {
     /**
      * @var Model
@@ -16,14 +15,20 @@ abstract class BaseRepository implements Repository
     protected $perPage;
 
     /**
+     * @var boolean
+     */
+    protected $softDelete;
+
+    /**
      * Create a new repository instance.
      *
      * @param  Model  $model
      */
-    public function __construct(Model $model)
+    public function __construct(Model $model, $perPage = 20)
     {
         $this->model = $model;
-        $this->perPage = 20;
+        $this->perPage = $perPage;
+        $this->softDelete = config('forum.preferences.misc.soft_delete');
     }
 
     /**
@@ -89,7 +94,7 @@ abstract class BaseRepository implements Repository
         $model = $this->find($id);
 
         if (!is_null($model)) {
-            if (!config('forum.preferences.misc.soft_delete')) {
+            if (!$this->softDelete) {
                 $model->forceDelete();
             } else {
                 $model->delete();
@@ -142,6 +147,6 @@ abstract class BaseRepository implements Repository
     public function findBy($column = '', $value, $withTrashed = false, $columns = ['*'])
     {
         $model = ($withTrashed) ? $this->model->withTrashed() : $this->model;
-        return $model->where($column, $value)->paginate($this->perPage, $columns);
+        return $model->where($column, $value)->get($columns);
     }
 }

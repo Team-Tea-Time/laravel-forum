@@ -1,10 +1,9 @@
 <?php namespace Riari\Forum\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Riari\Forum\Forum;
 use Riari\Forum\Events\UserCreatingThread;
-use Riari\Forum\Events\UserMarkedThreadsRead;
-use Riari\Forum\Events\UserToggledThreadLock;
-use Riari\Forum\Events\UserToggledThreadPin;
+use Riari\Forum\Events\UserMarkingThreadsRead;
 use Riari\Forum\Events\UserViewingNew;
 use Riari\Forum\Events\UserViewingThread;
 use Riari\Forum\Models\Category;
@@ -62,11 +61,11 @@ class ThreadController extends BaseController
     public function markRead()
     {
         if (auth()->check()) {
+            event(new UserMarkingThreadsRead);
+
             $this->threads->markNewForUserAsRead();
 
-            event(new UserMarkedThreadsRead);
-
-            alert('success', trans('forum::threads.marked_read'));
+            Forum::alert('success', trans('forum::threads.marked_read'));
         }
 
         return redirect(config('forum.routing.root'));
@@ -76,11 +75,11 @@ class ThreadController extends BaseController
      * GET: return a thread view.
      *
      * @param  Category  $category
-     * @param  string  $categoryAlias
+     * @param  string  $categorySlug
      * @param  Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category, $categoryAlias, Thread $thread)
+    public function show(Category $category, $categorySlug, Thread $thread)
     {
         event(new UserViewingThread($thread));
 
@@ -96,7 +95,7 @@ class ThreadController extends BaseController
     public function create(Category $category)
     {
         if (!$category->threadsAllowed) {
-            alert('warning', trans('forum::categories.threads_disallowed'));
+            Forum::alert('warning', trans('forum::categories.threads_disallowed'));
 
             return redirect($category->route);
         }
@@ -110,14 +109,14 @@ class ThreadController extends BaseController
      * POST: validate and store a submitted thread.
      *
      * @param  Category  $category
-     * @param  string  $categoryAlias
+     * @param  string  $categorySlug
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Category $category, $categoryAlias, Request $request)
+    public function store(Category $category, $categorySlug, Request $request)
     {
         if (!$category->threadsAllowed) {
-            alert('warning', trans('forum::categories.threads_disallowed'));
+            Forum::alert('warning', trans('forum::categories.threads_disallowed'));
 
             return redirect($category->route);
         }
@@ -139,70 +138,8 @@ class ThreadController extends BaseController
         ];
         $this->posts->create($post);
 
-        alert('success', trans('forum::threads.created'));
+        Forum::alert('success', trans('forum::threads.created'));
 
         return redirect($thread->route);
-    }
-
-    /**
-     * PATCH: lock/unlock a thread.
-     *
-     * @param  Category  $category
-     * @param  string  $categoryAlias
-     * @param  Thread  $thread
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function lock(Category $category, $categoryAlias, Thread $thread, Request $request)
-    {
-        $thread->toggle('locked');
-
-        event(new UserToggledThreadLock($thread));
-
-        alert('success', trans('forum::threads.updated'));
-
-        return redirect($thread->route);
-    }
-
-    /**
-     * PATCH: pin/unpin a thread.
-     *
-     * @param  Category  $category
-     * @param  string  $categoryAlias
-     * @param  Thread  $thread
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function pin(Category $category, $categoryAlias, Thread $thread, Request $request)
-    {
-        $thread->toggle('pinned');
-
-        event(new UserToggledThreadPin($thread));
-
-        alert('success', trans('forum::threads.updated'));
-
-        return redirect($thread->route);
-    }
-
-    /**
-     * DELETE: delete a thread (and its posts).
-     *
-     * @param  Category  $category
-     * @param  string  $categoryAlias
-     * @param  Thread  $thread
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy(Category $category, $categoryAlias, Thread $thread, Request $request)
-    {
-        foreach ($thread->posts as $post) {
-            $this->posts->delete($post->id);
-        }
-
-        $this->threads->delete($thread->id);
-
-        alert('success', trans('forum::threads.deleted'));
-
-        return redirect($category->route);
     }
 }

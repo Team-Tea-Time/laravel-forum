@@ -17,8 +17,14 @@
 	</td>
 	<td class="text-muted">
 		{{ trans('forum::general.posted_at') }} {{ $post->posted }}
-		@if ($post->updated_at != null && $post->created_at != $post->updated_at)
+		@if ($post->wasUpdated())
 			{{ trans('forum::general.last_updated') }} {{ $post->updated }}
 		@endif
+		<span class="pull-right">
+			<a href="{{ $post->url }}">#{{ $post->id }}</a>
+			@if (Request::fullUrl() != $post->route)
+				(<a href="{{ $post->route }}">{{ trans('forum::posts.view') }}</a>)
+			@endif
+		</span>
 	</td>
 </tr>

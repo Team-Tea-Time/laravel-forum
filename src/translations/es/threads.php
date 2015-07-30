@@ -6,6 +6,7 @@ return [
     'post_the_first'    => "Crea la priméra!",
     'new_thread'        => "Nueva discusión",
     'created'           => "Discusión creada",
+    'view'              => "Ver tema",
     'pin'               => "Marcar/Desmarcar esta discusión",
     'pinned'            => "Marcadas",
     'lock'              => "Bloquear/desbloquear esta discusión",

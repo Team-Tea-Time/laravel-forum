@@ -2,6 +2,7 @@
 
 use Cache;
 use Illuminate\Database\Eloquent\Model;
+use Riari\Forum\Forum;
 
 abstract class BaseModel extends Model
 {
@@ -56,6 +57,16 @@ abstract class BaseModel extends Model
     }
 
     /**
+     * Determine if this model has been updated.
+     *
+     * @return boolean
+     */
+    public function wasUpdated()
+    {
+        return ($this->updated_at > $this->created_at);
+    }
+
+    /**
      * Determine if the current user has the given permission for this model.
      *
      * @param  string  $permission
@@ -63,7 +74,7 @@ abstract class BaseModel extends Model
      */
     protected function userCan($permission)
     {
-        return permitted($this->getAccessParams(), $permission, auth()->user());
+        return Forum::permitted($permission, $this->getAccessParams(), auth()->user());
     }
 
     /**

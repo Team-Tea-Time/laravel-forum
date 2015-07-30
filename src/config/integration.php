@@ -8,15 +8,15 @@ return [
 	|--------------------------------------------------------------------------
 	|
 	| Here we specify which controllers to use for each component of the forum.
-	| You can optionally extend these controllers and change the namespaces
-	| here to reference your custom versions instead.
+	| You can optionally extend the provided controllers and change the
+	| namespaces here to reference your custom versions instead.
 	|
 	*/
 
 	'controllers' => [
-		'category'	=> '\Riari\Forum\Http\Controllers\CategoryController',
-		'thread'	=> '\Riari\Forum\Http\Controllers\ThreadController',
-		'post'		=> '\Riari\Forum\Http\Controllers\PostController'
+		'category'	=> Riari\Forum\Http\Controllers\CategoryController::class,
+		'thread'	=> Riari\Forum\Http\Controllers\ThreadController::class,
+		'post'		=> Riari\Forum\Http\Controllers\PostController::class
 	],
 
 	/*
@@ -30,7 +30,7 @@ return [
 	*/
 
 	'models' => [
-		'user'	=> 'App\User'
+		'user'	=> App\User::class
 	],
 
 	/*
@@ -57,11 +57,12 @@ return [
 	| NOTE: remember to override the forum views to remove the default alerts
 	| if you no longer use them.
 	|
-	| $type: The type of alert - 'success' or 'danger'.
-	| $message: The alert message.
-	|
 	*/
 
+	/**
+	 * @param  string  $type	The type of alert ('success' or 'danger')
+	 * @param  string  $message The alert message
+	 */
 	'process_alert' => function ($type, $message)
 	{
 		$alerts = [];

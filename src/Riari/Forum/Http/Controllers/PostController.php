@@ -1,8 +1,10 @@
 <?php namespace Riari\Forum\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Riari\Forum\Forum;
 use Riari\Forum\Events\UserCreatingPost;
 use Riari\Forum\Events\UserEditingPost;
+use Riari\Forum\Events\UserViewingPost;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
@@ -37,14 +39,31 @@ class PostController extends BaseController
     }
 
     /**
+     * GET: return a post view.
+     *
+     * @param  Category  $category
+     * @param  string  $categorySlug
+     * @param  Thread  $thread
+     * @param  string  $threadSlug
+     * @param  Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Category $category, $categorySlug, Thread $thread, $threadSlug, Post $post)
+    {
+        event(new UserViewingPost($post));
+
+        return view('forum::post.show', compact('category', 'thread', 'post'));
+    }
+
+    /**
      * GET: return a 'create post' (thread reply) view.
      *
      * @param  Category  $category
-     * @param  string  $categoryAlias
+     * @param  string  $categorySlug
      * @param  Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function create(Category $category, $categoryAlias, Thread $thread)
+    public function create(Category $category, $categorySlug, Thread $thread)
     {
         event(new UserCreatingPost($thread));
 
@@ -55,13 +74,13 @@ class PostController extends BaseController
      * POST: validate and store a submitted post.
      *
      * @param  Category  $category
-     * @param  string  $categoryAlias
+     * @param  string  $categorySlug
      * @param  Thread  $thread
-     * @param  string  $threadAlias
+     * @param  string  $threadSlug
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Category $category, $categoryAlias, Thread $thread, $threadAlias, Request $request)
+    public function store(Category $category, $categorySlug, Thread $thread, $threadSlug, Request $request)
     {
         $this->validate($request, $this->rules);
 
@@ -74,7 +93,7 @@ class PostController extends BaseController
         $post = $this->posts->create($post);
         $post->thread->touch();
 
-        alert('success', trans('forum::general.reply_added'));
+        Forum::alert('success', trans('forum::general.reply_added'));
 
         return redirect($post->route);
     }
@@ -83,13 +102,13 @@ class PostController extends BaseController
      * GET: return an 'edit post' view.
      *
      * @param  Category  $category
-     * @param  string  $categoryAlias
+     * @param  string  $categorySlug
      * @param  Thread  $thread
-     * @param  string  $threadAlias
+     * @param  string  $threadSlug
      * @param  Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category, $categoryAlias, Thread $thread, $threadAlias, Post $post)
+    public function edit(Category $category, $categorySlug, Thread $thread, $threadSlug, Post $post)
     {
         event(new UserEditingPost($post));
 
@@ -100,14 +119,14 @@ class PostController extends BaseController
      * PATCH: update a submitted existing post.
      *
      * @param  Category  $category
-     * @param  string  $categoryAlias
+     * @param  string  $categorySlug
      * @param  Thread  $thread
-     * @param  string  $threadAlias
+     * @param  string  $threadSlug
      * @param  Post  $post
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Category $category, $categoryAlias, Thread $thread, $threadAlias, Post $post, Request $request)
+    public function update(Category $category, $categorySlug, Thread $thread, $threadSlug, Post $post, Request $request)
     {
         $this->validate($request, $this->rules);
 
@@ -117,35 +136,8 @@ class PostController extends BaseController
             'content'   => $request->input('content')
         ]);
 
-        alert('success', trans('forum::posts.updated'));
+        Forum::alert('success', trans('forum::posts.updated'));
 
         return redirect($post->route);
-    }
-
-    /**
-     * DELETE: delete a post.
-     *
-     * @param  Category  $category
-     * @param  string  $categoryAlias
-     * @param  Thread  $thread
-     * @param  string  $threadAlias
-     * @param  Post  $post
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy(Category $category, $categoryAlias, Thread $thread, $threadAlias, Post $post, Request $request)
-    {
-        $this->posts->delete($post->id);
-
-        // Force deletion of the thread if it has no remaining posts
-        if ($thread->posts->empty())
-        {
-            $this->threads->delete($thread->id);
-            return redirect($category->route);
-        }
-
-        alert('success', trans('forum::posts.deleted'));
-
-        return redirect($thread->route);
     }
 }

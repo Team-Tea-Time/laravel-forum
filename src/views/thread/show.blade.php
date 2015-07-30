@@ -11,7 +11,7 @@
             @if ($thread->pinned)
                 [{{ trans('forum::threads.pinned') }}]
             @endif
-            {{{ $thread->title }}}
+            {{ $thread->title }}
         </h2>
 
         @if ($thread->userCanLock || $thread->userCanPin || $thread->userCanDelete)

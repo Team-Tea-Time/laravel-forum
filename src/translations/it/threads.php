@@ -6,6 +6,7 @@ return [
     'post_the_first'    => "Scrivi per primo!",
     'new_thread'        => "Nuova discussione",
     'created'           => "Discussione creata",
+    'view'              => "Vedi discussione",
     'pin'               => "Marca/smarca questa discussione",
     'pinned'            => "Marcato",
     'lock'              => "Chiudi/apri questa discussione",

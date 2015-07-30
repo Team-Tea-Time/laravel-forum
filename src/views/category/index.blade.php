@@ -29,7 +29,7 @@
                                 ({{ $category->newestThread->authorName }})</a>
                             <br>
                             {{ trans('forum::posts.last') }}:
-                            <a href="{{ $category->latestActiveThread->lastPost->route }}">
+                            <a href="{{ $category->latestActiveThread->lastPost->url }}">
                                 {{ $category->latestActiveThread->title }}
                                 ({{ $category->latestActiveThread->lastPost->authorName }})
                             </a>

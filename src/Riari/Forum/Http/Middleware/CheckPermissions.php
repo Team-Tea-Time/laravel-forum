@@ -2,6 +2,7 @@
 
 use Closure;
 use Illuminate\Http\Request;
+use Riari\Forum\Forum;
 use Riari\Forum\Http\Config\API\Error;
 
 class CheckPermissions
@@ -24,9 +25,9 @@ class CheckPermissions
 	{
 		$route = $request->route();
 
-		if (!permitted(
-			$request->all() + $route->parameters(),
+		if (!Forum::permitted(
 			$route->getName(),
+			$request->all() + $route->parameters(),
 			auth()->user()
 		)) {
 			if ('Riari\Forum\Http\Controllers\API\V1' == $route->getAction()['namespace']) {

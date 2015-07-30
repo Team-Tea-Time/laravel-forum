@@ -11,8 +11,7 @@ class Threads extends BaseRepository
      */
     public function __construct(Thread $model)
     {
-        $this->model = $model;
-        $this->perPage = config('forum.preferences.pagination.threads');
+        parent::__construct($model, config('forum.preferences.pagination.threads'));
     }
 
     /**

@@ -6,6 +6,7 @@ return [
     'post_the_first'    => "Erstelle das erste Thema!",
     'new_thread'        => "Neues Thema",
     'created'           => "Thema erstellt",
+    'view'              => "Thema ansehen",
     'pin'               => "Thema priorisieren",
     'pinned'            => "Priorisiert",
     'lock'              => "Sperren/Freigeben des Themas",
