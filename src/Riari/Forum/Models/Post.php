@@ -10,11 +10,20 @@ class Post extends BaseModel
 
     // Eloquent properties
     protected $table        = 'forum_posts';
-    protected $fillable     = ['thread_id', 'author_id', 'content'];
+    protected $fillable     = ['thread_id', 'author_id', 'post_id', 'content'];
     public    $timestamps   = true;
     protected $dates        = ['deleted_at'];
     protected $with         = ['author'];
     protected $guarded      = ['id'];
+
+    /**
+     * Create a new post model instance.
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->setPerPage(config('forum.preferences.pagination.posts'));
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -25,6 +34,16 @@ class Post extends BaseModel
     public function thread()
     {
         return $this->belongsTo('\Riari\Forum\Models\Thread');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo('\Riari\Forum\Models\Post', 'post_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany('\Riari\Forum\Models\Post', 'post_id');
     }
 
     /*
@@ -57,6 +76,11 @@ class Post extends BaseModel
     public function getDeleteRouteAttribute()
     {
         return $this->getRoute('forum.post.delete');
+    }
+
+    public function getReplyRouteAttribute()
+    {
+        return $this->thread->getRoute('forum.post.create', ['post_id' => $this->id]);
     }
 
     // Current user: permission attributes

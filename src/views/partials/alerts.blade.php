@@ -1,8 +1,11 @@
 @if (Session::has('alerts'))
 	@foreach (Session::get('alerts') as $alert)
-		<div class="alert alert-{{ $alert['type'] }} alert-dismissable">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			{!! $alert['message'] !!}
-		</div>
+		@include ('forum::partials.alert', ['type' => $alert['type'], 'message' => $alert['message']])
 	@endforeach
+@endif
+
+@if ($errors->has())
+    @foreach ($errors->all() as $error)
+		@include ('forum::partials.alert', ['type' => 'danger', 'message' => $error])
+    @endforeach
 @endif

@@ -2,39 +2,25 @@
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Riari\Forum\Repositories\Categories;
-use Riari\Forum\Repositories\Posts;
-use Riari\Forum\Repositories\Threads;
+use Riari\Forum\Models\Category;
+use Riari\Forum\Models\Post;
+use Riari\Forum\Models\Thread;
 
 class ThreadController extends BaseController
 {
     /**
-     * @var Threads
+     * @var Thread
      */
-    protected $repository;
-
-    /**
-     * @var Categories
-     */
-    protected $categories;
-
-    /**
-     * @var Posts
-     */
-    protected $posts;
+    protected $model;
 
     /**
      * Create a new Category API controller instance.
      *
-     * @param  Categories  $categories
-     * @param  Threads  $threads
-     * @param  Posts  $posts
+     * @param  Thread  $model
      */
-    public function __construct(Categories $categories, Threads $threads, Posts $posts)
+    public function __construct(Thread $model)
     {
-        $this->repository = $threads;
-        $this->categories = $categories;
-        $this->posts = $posts;
+        $this->model = $model;
 
         $rules = config('forum.preferences.validation');
         $this->rules = [
@@ -51,7 +37,7 @@ class ThreadController extends BaseController
     }
 
     /**
-     * GET: return an index of posts by thread ID.
+     * GET: return an index of threads by category ID.
      *
      * @param  Request  $request
      * @return JsonResponse
@@ -60,9 +46,9 @@ class ThreadController extends BaseController
     {
         $this->validate($request, ['category_id' => 'required|integer|exists:forum_categories,id']);
 
-        $posts = $this->repository->findBy('category_id', $request->input('category_id'));
+        $threads = $this->model->where('category_id', $request->input('category_id'))->get();
 
-        return $this->collectionResponse($posts);
+        return $this->collectionResponse($threads);
     }
 
     /**
@@ -81,7 +67,7 @@ class ThreadController extends BaseController
             array_merge_recursive($this->rules['store'], ['author_id' => ['required']])
         );
 
-        $category = $this->categories->find($request->input('category_id'));
+        $category = Category::find($request->input('category_id'));
 
         if (!$category->threadsAllowed) {
             return $this->buildFailedValidationResponse(
@@ -90,8 +76,8 @@ class ThreadController extends BaseController
             );
         }
 
-        $thread = $this->repository->create($request->all());
-        $this->posts->create($request->all() + ['thread_id' => $thread->id]);
+        $thread = $this->model->create($request->only(['category_id', 'author_id', 'title']));
+        Post::create(['thread_id' => $thread->id] + $request->only('content'));
 
         return $this->modelResponse($thread, 201);
     }

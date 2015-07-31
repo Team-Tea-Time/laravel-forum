@@ -1,21 +1,21 @@
 <?php namespace Riari\Forum\Models\Observers;
 
-class PostObserver extends BaseObserver
+class PostObserver
 {
     public function deleted($model)
     {
+        if (!is_null($model->children)) {
+            $model->children()->update(['post_id' => 0]);
+        }
+        
         if ($model->thread->posts->isEmpty()) {
-            if (!$this->softDeletes) {
-                $model->thread()->forceDelete();
-            } else {
-                $model->thread()->delete();
-            }
+            $model->thread()->delete();
         }
     }
 
     public function restored($model)
     {
-        if ($this->softDeletes && is_null($model->thread->posts)) {
+        if (is_null($model->thread->posts)) {
             $model->thread()->withTrashed()->restore();
         }
     }

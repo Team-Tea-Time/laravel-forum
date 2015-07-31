@@ -1,8 +1,6 @@
 @extends ('forum::master')
 
 @section ('content')
-    @include ('forum::partials.breadcrumbs')
-
     <div id="thread">
         <h2>
             @if ($thread->locked)

@@ -4,21 +4,20 @@ use Illuminate\Http\Request;
 use Riari\Forum\Events\UserViewingCategory;
 use Riari\Forum\Events\UserViewingIndex;
 use Riari\Forum\Models\Category;
-use Riari\Forum\Repositories\Categories;
 
 class CategoryController extends BaseController
 {
     /**
-     * @var Categories
+     * @var Category
      */
     protected $categories;
 
     /**
      * Create a category controller instance.
      *
-     * @param  Categories  $categories
+     * @param  Category  $categories
      */
-    public function __construct(Categories $categories)
+    public function __construct(Category $categories)
     {
         $this->categories = $categories;
     }
@@ -33,7 +32,7 @@ class CategoryController extends BaseController
     {
         event(new UserViewingIndex);
 
-        return view('forum::category.index', ['categories' => $this->categories->getTop()]);
+        return view('forum::category.index', ['categories' => $this->categories->where('category_id', null)->get()]);
     }
 
     /**

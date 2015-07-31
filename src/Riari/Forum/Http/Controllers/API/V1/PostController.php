@@ -2,23 +2,23 @@
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Riari\Forum\Repositories\Posts;
+use Riari\Forum\Models\Post;
 
 class PostController extends BaseController
 {
     /**
-     * @var Posts
+     * @var Post
      */
-    protected $posts;
+    protected $model;
 
     /**
      * Create a new Category API controller instance.
      *
-     * @param  Posts  $posts
+     * @param  Post  $model
      */
-    public function __construct(Posts $posts)
+    public function __construct(Post $model)
     {
-        $this->repository = $posts;
+        $this->model = $model;
 
         $rules = config('forum.preferences.validation');
         $this->rules = [
@@ -43,7 +43,7 @@ class PostController extends BaseController
     {
         $this->validate($request, ['thread_id' => 'integer|required|exists:forum_threads,id']);
 
-        $posts = $this->repository->findBy('thread_id', $request->input('thread_id'));
+        $posts = $this->model->where('thread_id', $request->input('thread_id'))->get();
 
         return $this->collectionResponse($posts);
     }
@@ -65,7 +65,7 @@ class PostController extends BaseController
             array_merge_recursive($this->rules['store'], ['thread_id' => ['required'], 'author_id' => ['required']])
         );
 
-        $post = $this->repository->create($request->all());
+        $post = $this->repository->create($request->only(['thread_id', 'author_id', 'title', 'content']));
         $post->load('thread');
 
         return $this->modelResponse($post, 201);

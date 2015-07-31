@@ -1,8 +1,6 @@
 @extends ('forum::master')
 
 @section ('content')
-    @include ('forum::partials.breadcrumbs')
-
     <h2>{{ trans('forum::general.index') }}</h2>
 
     @foreach ($categories as $category)

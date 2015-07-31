@@ -7,29 +7,28 @@ use Riari\Forum\Events\UserMarkingThreadsRead;
 use Riari\Forum\Events\UserViewingNew;
 use Riari\Forum\Events\UserViewingThread;
 use Riari\Forum\Models\Category;
+use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
-use Riari\Forum\Repositories\Posts;
-use Riari\Forum\Repositories\Threads;
 
 class ThreadController extends BaseController
 {
     /**
-     * @var Threads
+     * @var Thread
      */
     protected $threads;
 
     /**
-     * @var Posts
+     * @var Post
      */
     protected $posts;
 
     /**
      * Create a thread controller instance.
      *
-     * @param  Threads  $threads
-     * @param  Posts  $posts
+     * @param  Thread  $threads
+     * @param  Post  $posts
      */
-    public function __construct(Threads $threads, Posts $posts)
+    public function __construct(Thread $threads, Post $posts)
     {
         $this->threads = $threads;
         $this->posts = $posts;
@@ -48,7 +47,7 @@ class ThreadController extends BaseController
      */
     public function indexNew()
     {
-        $threads = $this->threads->getNewForUser();
+        $threads = $this->threads->newForReader;
 
         event(new UserViewingNew($threads));
 
@@ -63,7 +62,11 @@ class ThreadController extends BaseController
         if (auth()->check()) {
             event(new UserMarkingThreadsRead);
 
-            $this->threads->markNewForUserAsRead();
+            $threads = $this->threads->newForReader;
+
+            foreach ($threads as $thread) {
+                $thread->markAsRead(auth()->user()->id);
+            }
 
             Forum::alert('success', trans('forum::threads.marked_read'));
         }

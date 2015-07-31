@@ -20,6 +20,15 @@ class Thread extends BaseModel
     const     STATUS_UNREAD  = 'unread';
     const     STATUS_UPDATED = 'updated';
 
+    /**
+     * Create a new thread model instance.
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->perPage = config('forum.preferences.pagination.threads');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Relationships
@@ -51,7 +60,8 @@ class Thread extends BaseModel
     public function scopeRecent($query)
     {
         $cutoff = config('forum.preferences.thread.cutoff_age');
-        return $query->where('updated_at', '>', date('Y-m-d H:i:s', strtotime($cutoff)));
+        return $query->where('updated_at', '>', date('Y-m-d H:i:s', strtotime($cutoff)))
+            ->orderBy('updated_at', 'desc');
     }
 
     /*
@@ -154,6 +164,27 @@ class Thread extends BaseModel
         }
 
         return false;
+    }
+
+    public function getNewForReaderAttribute()
+    {
+        $threads = $this->recent();
+
+        // If the user is logged in, filter the threads according to read status
+        if (auth()->check()) {
+            $threads = $threads->filter(function ($thread)
+            {
+                return $thread->userReadStatus;
+            });
+        }
+
+        // Filter the threads according to the user's permissions
+        $threads = $threads->filter(function ($thread)
+        {
+            return $thread->category->userCanView;
+        });
+
+        return $threads;
     }
 
     // Current user: permission attributes

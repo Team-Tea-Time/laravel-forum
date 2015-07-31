@@ -13,7 +13,7 @@ abstract class BaseController extends Controller
     /**
      * @var mixed
      */
-    protected $repository;
+    protected $model;
 
 	/**
 	 * @var array
@@ -28,9 +28,7 @@ abstract class BaseController extends Controller
      */
     public function index(Request $request)
     {
-        $collection = $this->repository->paginate();
-
-        return $this->collectionResponse();
+        return $this->collectionResponse($this->model->paginate());
     }
 
     /**
@@ -43,7 +41,7 @@ abstract class BaseController extends Controller
     {
         $this->validate($request, $this->rules['store']);
 
-        $model = $this->repository->create($request->all());
+        $model = $this->model->create($request->all());
 
         return $this->modelResponse($model, 201);
     }
@@ -51,13 +49,13 @@ abstract class BaseController extends Controller
     /**
      * GET: return a model by ID.
      *
-     * @param  Model  $model
+     * @param  mixed  $model
      * @return JsonResponse
      */
-    public function show($model)
+    public function show($model = null)
     {
-        if (!$model->exists) {
-            return $model->notFoundResponse();
+        if (is_null($model) || !$model->exists) {
+            return $this->notFoundResponse();
         }
 
         return $this->modelResponse($model);
@@ -93,9 +91,9 @@ abstract class BaseController extends Controller
             return $this->notFoundResponse();
         }
 
-        $model = $this->repository->delete($model->id);
+        $this->model->destroy($model->id);
 
-        return $this->modelResponse($model);
+        return $this->modelResponse($model->fresh());
     }
 
     /**
@@ -110,9 +108,9 @@ abstract class BaseController extends Controller
             return $this->notFoundResponse();
         }
 
-        $this->repository->restore($model->id);
+        $this->model->find($model->id)->restore();
 
-        return $this->modelResponse($model);
+        return $this->modelResponse($model->fresh());
     }
 
     /**
@@ -127,7 +125,7 @@ abstract class BaseController extends Controller
 
         $collection = collect();
         foreach ($request->input('id') as $id) {
-            $model = $this->repository->delete($id);
+            $model = $this->model->destroy  ($id);
 
             if (!is_null($model)) {
                 $collection->push($model);
@@ -149,7 +147,7 @@ abstract class BaseController extends Controller
 
         $collection = collect();
         foreach ($request->input('id') as $id) {
-            $model = $this->repository->restore($id);
+            $model = $this->model->restore($id);
 
             if (!is_null($model)) {
                 $collection->push($model);
@@ -177,7 +175,7 @@ abstract class BaseController extends Controller
         ]);
         $collection = collect();
         foreach ($input['id'] as $id) {
-            $model = $this->repository->find($id);
+            $model = $this->model->find($id);
 
             if (!is_null($model) && $model->exists) {
                 $collection->push($this->doUpdate($model, $request));
@@ -192,7 +190,7 @@ abstract class BaseController extends Controller
      *
      * @param  Model  $model
      * @param  Request  $request
-     * @return Model
+     * @return mixed
      */
     protected function doUpdate($model, Request $request)
     {
@@ -202,7 +200,7 @@ abstract class BaseController extends Controller
 
         $this->validate($request, $this->rules['update']);
 
-        return $this->repository->update($model->id, $request->all());
+        return $this->model->where('id', $model->id)->update($request->all());
     }
 
     /**

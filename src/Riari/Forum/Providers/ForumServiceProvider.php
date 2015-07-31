@@ -21,6 +21,13 @@ class ForumServiceProvider extends ServiceProvider
     protected $namespace = 'Riari\Forum\Http\Controllers';
 
     /**
+     * Package root path.
+     *
+     * @var string
+     */
+    protected $root = __DIR__.'/../../../';
+
+    /**
      * Register the service provider.
      *
      * @return void
@@ -28,10 +35,10 @@ class ForumServiceProvider extends ServiceProvider
     public function register()
     {
         // Merge config
-        $this->mergeConfigFrom(__DIR__.'/../../../config/integration.php', 'forum.integration');
-        $this->mergeConfigFrom(__DIR__.'/../../../config/permissions.php', 'forum.permissions');
-        $this->mergeConfigFrom(__DIR__.'/../../../config/preferences.php', 'forum.preferences');
-        $this->mergeConfigFrom(__DIR__.'/../../../config/routing.php', 'forum.routing');
+        $this->mergeConfigFrom("{$this->root}config/integration.php", 'forum.integration');
+        $this->mergeConfigFrom("{$this->root}config/permissions.php", 'forum.permissions');
+        $this->mergeConfigFrom("{$this->root}config/preferences.php", 'forum.preferences');
+        $this->mergeConfigFrom("{$this->root}config/routing.php", 'forum.routing');
     }
 
     /**
@@ -44,25 +51,25 @@ class ForumServiceProvider extends ServiceProvider
     {
         // Register publishable files (config, views and migrations)
         $this->publishes([
-            __DIR__.'/../../../config/integration.php' => config_path('forum.integration.php'),
-            __DIR__.'/../../../config/permissions.php' => config_path('forum.permissions.php'),
-            __DIR__.'/../../../config/preferences.php' => config_path('forum.preferences.php'),
-            __DIR__.'/../../../config/routing.php' => config_path('forum.routing.php')
+            "{$this->root}config/integration.php" => config_path('forum.integration.php'),
+            "{$this->root}config/permissions.php" => config_path('forum.permissions.php'),
+            "{$this->root}config/preferences.php" => config_path('forum.preferences.php'),
+            "{$this->root}config/routing.php" => config_path('forum.routing.php')
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../../../views/' => base_path('/resources/views/vendor/forum')
+            "{$this->root}views/" => base_path('/resources/views/vendor/forum')
         ], 'views');
 
         $this->publishes([
-            __DIR__.'/../../../migrations/' => base_path('/database/migrations')
+            "{$this->root}migrations/" => base_path('/database/migrations')
         ], 'migrations');
 
         // Load views
-        $this->loadViewsFrom(__DIR__.'/../../../views', 'forum');
+        $this->loadViewsFrom("{$this->root}views", 'forum');
 
         // Load translations
-        $this->loadTranslationsFrom(__DIR__.'/../../../translations', 'forum');
+        $this->loadTranslationsFrom("{$this->root}translations", 'forum');
 
         // Load routes (if routing enabled)
         if (config('forum.routing.enabled')) {
@@ -71,7 +78,7 @@ class ForumServiceProvider extends ServiceProvider
                 $root = config('forum.routing.root');
                 $parameters = config('forum.routing.parameters');
                 $controllers = config('forum.integration.controllers');
-                require __DIR__.'/../../../routes.php';
+                require "{$this->root}routes.php";
             });
         }
 

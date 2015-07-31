@@ -9,9 +9,18 @@ class Category extends BaseModel
     use SoftDeletes;
 
     // Eloquent properties
-    protected $table      = 'forum_categories';
-    protected $fillable   = ['category_id', 'title', 'subtitle', 'weight', 'allows_threads'];
-    public    $timestamps = false;
+    protected $table        = 'forum_categories';
+    protected $fillable     = ['category_id', 'title', 'subtitle', 'weight', 'allows_threads'];
+    public    $timestamps   = false;
+
+    /**
+     * Create a new category model instance.
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->perPage = config('forum.preferences.pagination.categories');
+    }
 
     /*
     |--------------------------------------------------------------------------

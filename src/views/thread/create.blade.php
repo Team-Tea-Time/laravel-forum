@@ -11,7 +11,7 @@
         'form_url'          => $category->newThreadRoute,
         'method'            => 'POST',
         'show_title_field'  => true,
-        'submit_label'      => trans('forum::general.send'),
+        'submit_label'      => trans('forum::general.add'),
     ]
 )
 @overwrite

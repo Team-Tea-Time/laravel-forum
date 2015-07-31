@@ -2,23 +2,23 @@
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Riari\Forum\Repositories\Categories;
+use Riari\Forum\Model\Category;
 
 class CategoryController extends BaseController
 {
     /**
-     * @var Categories
+     * @var Category
      */
-    protected $repository;
+    protected $model;
 
     /**
      * Create a new Category API controller instance.
      *
      * @param  Categories  $categories
      */
-    public function __construct(Categories $categories)
+    public function __construct(Category $model)
     {
-        $this->repository = $categories;
+        $this->model = $model;
 
         $rules = config('forum.preferences.validation');
         $this->rules = [
@@ -42,8 +42,8 @@ class CategoryController extends BaseController
     public function index(Request $request)
     {
         $categories = ($request->has('top') && $request->input('top') == true)
-            ? $this->repository->getTop()
-            : $this->repository->paginate();
+            ? $this->model->where('category_id', null)->get()
+            : $this->model->paginate();
 
         return $this->collectionResponse($categories);
     }

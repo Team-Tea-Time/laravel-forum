@@ -1,20 +1,14 @@
 <?php namespace Riari\Forum\Models\Observers;
 
-class CategoryObserver extends BaseObserver
+class CategoryObserver
 {
     public function deleting($model)
     {
-        if (!$this->softDeletes) {
-            $model->threads()->forceDelete();
-        } else {
-            $model->threads()->delete();
-        }
+        $model->threads()->delete();
     }
 
     public function restored($model)
     {
-        if ($this->softDeletes) {
-            $model->threads()->withTrashed()->restore();
-        }
+        $model->threads()->withTrashed()->restore();
     }
 }

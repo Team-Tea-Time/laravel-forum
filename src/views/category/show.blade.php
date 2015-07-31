@@ -1,8 +1,6 @@
 @extends ('forum::master')
 
 @section ('content')
-	@include ('forum::partials.breadcrumbs')
-
 	<div id="category">
 		<h2>{{ $category->title }}</h2>
 

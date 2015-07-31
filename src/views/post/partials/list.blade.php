@@ -3,6 +3,19 @@
 		<strong>{!! $post->authorName !!}</strong>
 	</td>
 	<td>
+		@if (!is_null($post->parent))
+			<p>
+				<strong>
+					{{ trans('forum::general.response_to') }}
+					{{ $post->parent->authorName }}
+					(<a href="{{ $post->parent->url }}">{{ trans('forum::posts.view') }}</a>):
+				</strong>
+			</p>
+			<blockquote>
+				{!! str_limit(nl2br(e($post->parent->content))) !!}
+			</blockquote>
+		@endif
+		
 		{!! nl2br(e($post->content)) !!}
 	</td>
 </tr>
@@ -22,8 +35,9 @@
 		@endif
 		<span class="pull-right">
 			<a href="{{ $post->url }}">#{{ $post->id }}</a>
+			 - <a href="{{ $post->replyRoute }}">{{ trans('forum::general.reply') }}</a>
 			@if (Request::fullUrl() != $post->route)
-				(<a href="{{ $post->route }}">{{ trans('forum::posts.view') }}</a>)
+				- <a href="{{ $post->route }}">{{ trans('forum::posts.view') }}</a>
 			@endif
 		</span>
 	</td>

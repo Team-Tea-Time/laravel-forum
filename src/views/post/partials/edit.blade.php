@@ -1,6 +1,9 @@
 <form method="POST" action="{{ $form_url }}" class="{{ isset($form_classes) ? $form_classes : '' }}">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <input type="hidden" name="_method" value="{{ isset($method) ? $method : 'POST' }}">
+    @if (!is_null($post) && isset($post))
+        <input type="hidden" name="post_id" value="{{ $post->id }}">
+    @endif
 
     @if (isset($show_title_field) && $show_title_field)
         <div class="form-group">

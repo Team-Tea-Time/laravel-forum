@@ -1,8 +1,6 @@
 @extends ('forum::master')
 
 @section ('content')
-    @include ('forum::partials.breadcrumbs')
-
     <div id="post">
         <h2>{{ trans('forum::posts.view') }} ({{ $thread->title }})</h2>
 

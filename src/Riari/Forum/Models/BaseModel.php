@@ -6,6 +6,15 @@ use Riari\Forum\Forum;
 
 abstract class BaseModel extends Model
 {
+    /**
+     * Create a new model instance.
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->forceDeleting = !config('forum.preferences.misc.soft_delete');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Attributes

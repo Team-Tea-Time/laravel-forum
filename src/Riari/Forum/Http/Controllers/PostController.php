@@ -8,28 +8,26 @@ use Riari\Forum\Events\UserViewingPost;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
-use Riari\Forum\Repositories\Posts;
-use Riari\Forum\Repositories\Threads;
 
 class PostController extends BaseController
 {
     /**
-     * @var Threads
+     * @var Thread
      */
     protected $threads;
 
     /**
-     * @var Posts
+     * @var Post
      */
     protected $posts;
 
     /**
      * Create a post controller instance.
      *
-     * @param  Threads  $threads
-     * @param  Posts  $posts
+     * @param  Thread  $threads
+     * @param  Post  $posts
      */
-    public function __construct(Threads $threads, Posts $posts)
+    public function __construct(Thread $threads, Post $posts)
     {
         $this->threads = $threads;
         $this->posts = $posts;
@@ -61,13 +59,20 @@ class PostController extends BaseController
      * @param  Category  $category
      * @param  string  $categorySlug
      * @param  Thread  $thread
+     * @param  string  $threadSlug
+     * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create(Category $category, $categorySlug, Thread $thread)
+    public function create(Category $category, $categorySlug, Thread $thread, $threadSlug, Request $request)
     {
         event(new UserCreatingPost($thread));
 
-        return view('forum::post.create', compact('category', 'thread'));
+        $post = null;
+        if ($request->has('post_id')) {
+            $post = $this->posts->where(['thread_id' => $thread->id, 'id' => $request->input('post_id')])->first();
+        }
+
+        return view('forum::post.create', compact('category', 'thread', 'post'));
     }
 
     /**
@@ -84,18 +89,22 @@ class PostController extends BaseController
     {
         $this->validate($request, $this->rules);
 
-        $post = [
+        $post = null;
+        if ($request->has('post_id')) {
+            $post = $this->posts->where(['thread_id' => $thread->id, 'id' => $request->input('post_id')])->first();
+        }
+
+        $post = $this->posts->create([
             'thread_id' => $thread->id,
             'author_id' => auth()->user()->id,
+            'post_id'   => (is_null($post)) ? 0 : $post->id,
             'content'   => $request->input('content')
-        ];
-
-        $post = $this->posts->create($post);
+        ]);
         $post->thread->touch();
 
         Forum::alert('success', trans('forum::general.reply_added'));
 
-        return redirect($post->route);
+        return redirect($post->url);
     }
 
     /**
@@ -130,14 +139,12 @@ class PostController extends BaseController
     {
         $this->validate($request, $this->rules);
 
-        $post = $this->posts->update($post->id, [
-            'thread_id' => $thread->id,
-            'author_id' => auth()->user()->id,
-            'content'   => $request->input('content')
+        $post = $this->posts->where('id', $post->id)->update([
+            'content' => $request->input('content')
         ]);
 
         Forum::alert('success', trans('forum::posts.updated'));
 
-        return redirect($post->route);
+        return redirect($post->url);
     }
 }
