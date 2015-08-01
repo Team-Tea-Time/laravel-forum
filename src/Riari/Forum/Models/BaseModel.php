@@ -76,17 +76,6 @@ abstract class BaseModel extends Model
     }
 
     /**
-     * Determine if the current user has the given permission for this model.
-     *
-     * @param  string  $permission
-     * @return boolean
-     */
-    protected function userCan($permission)
-    {
-        return Forum::permitted($permission, $this->getAccessParams(), auth()->user());
-    }
-
-    /**
      * Return an array of components used to construct this model's route.
      *
      * @return array
@@ -95,18 +84,6 @@ abstract class BaseModel extends Model
     {
         $components = [];
         return $components;
-    }
-
-    /**
-     * Return an array of parameters used by the userCan() method to check
-     * permissions.
-     *
-     * @return array
-     */
-    protected function getAccessParams()
-    {
-        $parameters = [];
-        return $parameters;
     }
 
     /**

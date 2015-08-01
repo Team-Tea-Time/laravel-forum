@@ -187,28 +187,6 @@ class Thread extends BaseModel
         return $threads;
     }
 
-    // Current user: permission attributes
-
-    public function getUserCanReplyAttribute()
-    {
-        return $this->userCan('forum.post.create');
-    }
-
-    public function getUserCanPinAttribute()
-    {
-        return $this->userCan('forum.thread.pin');
-    }
-
-    public function getUserCanLockAttribute()
-    {
-        return $this->userCan('forum.thread.lock');
-    }
-
-    public function getUserCanDeleteAttribute()
-    {
-        return $this->userCan('forum.thread.delete');
-    }
-
     /*
     |--------------------------------------------------------------------------
     | Helpers
@@ -230,22 +208,6 @@ class Thread extends BaseModel
         ];
 
         return $components;
-    }
-
-    /**
-     * Return an array of parameters used by the userCan() method to check
-     * permissions.
-     *
-     * @return array
-     */
-    protected function getAccessParams()
-    {
-        $parameters = [
-            'category'  => $this->category,
-            'thread'    => $this
-        ];
-
-        return $parameters;
     }
 
     /**

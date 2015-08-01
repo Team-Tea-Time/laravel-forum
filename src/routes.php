@@ -74,7 +74,7 @@ Route::bind($parameters['post'], function ($id)
 
 function bind_forum_parameter($model, $id)
 {
-	if (\Riari\Forum\Support\Facades\Route::isAPI()) {
+	if (ForumRoute::isAPI()) {
 		return $model->find($id);
 	}
 	return $model->findOrFail($id);

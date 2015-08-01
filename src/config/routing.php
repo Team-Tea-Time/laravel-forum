@@ -4,10 +4,10 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Enable forum routes
+	| Enable/disable routes
 	|--------------------------------------------------------------------------
 	|
-	| Enable/disable forum route definitions
+	| Disable this if you want to effectively disable your entire forum.
 	|
 	*/
 

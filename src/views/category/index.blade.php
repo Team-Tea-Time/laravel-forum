@@ -1,4 +1,8 @@
-@extends ('forum::master')
+{{--
+	$category is passed as NULL to the master layout view to prevent it from
+	showing in the breadcrumbs
+--}}
+@extends ('forum::master', ['category' => null])
 
 @section ('content')
     <h2>{{ trans('forum::general.index') }}</h2>

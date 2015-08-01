@@ -4,6 +4,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Enable/disable permissions
+    |--------------------------------------------------------------------------
+    |
+    | You can disable the built-in forum permission checking here if you want
+    | to implement it yourself through some other means.
+    |
+    */
+
+    'enabled' => true,
+
+    /*
+    |--------------------------------------------------------------------------
     | Permission handling method
     |--------------------------------------------------------------------------
     |
@@ -64,50 +76,50 @@ return [
     */
 
     'callback' => [
-        'index' => function ($parameters, $user)
+        'index' => function ($user, $parameters = [])
         {
             return true;
         },
 
         'new' => [
-            'index' => function ($parameters, $user)
+            'index' => function ($user, $parameters = [])
             {
                 return true;
             },
-            'mark-read' => function ($parameters, $user)
+            'mark-read' => function ($user, $parameters = [])
             {
                 return true;
             }
         ],
 
         'category' => [
-            'index' => function ($parameters, $user)
+            'index' => function ($user, $parameters = [])
             {
                 return true;
             }
         ],
 
         'thread' => [
-            'show' => function ($parameters, $user)
+            'show' => function ($user, $parameters = [])
             {
                 return true;
             },
-            'create' => function ($parameters, $user)
+            'create' => function ($user, $parameters = [])
             {
                 return true;
             }
         ],
 
         'post' => [
-            'show' => function ($parameters, $user)
+            'show' => function ($user, $parameters = [])
             {
                 return true;
             },
-            'create' => function ($parameters, $user)
+            'create' => function ($user, $parameters = [])
             {
                 return true;
             },
-            'edit' => function ($parameters, $user)
+            'edit' => function ($user, $parameters = [])
             {
                 return ($parameters['post']->author == $user);
             }
@@ -116,79 +128,79 @@ return [
         'api' => [
             'v1' => [
                 'category' => [
-                    'index' => function ($parameters, $user)
+                    'index' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'store' => function ($parameters, $user)
+                    'store' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'show' => function ($parameters, $user)
+                    'show' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'update' => function ($parameters, $user)
+                    'update' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'destroy' => function ($parameters, $user)
+                    'destroy' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'restore' => function ($parameters, $user)
+                    'restore' => function ($user, $parameters = [])
                     {
                         return false;
                     }
                 ],
                 'thread' => [
-                    'index' => function ($parameters, $user)
+                    'index' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'store' => function ($parameters, $user)
+                    'store' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'show' => function ($parameters, $user)
+                    'show' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'update' => function ($parameters, $user)
+                    'update' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'destroy' => function ($parameters, $user)
+                    'destroy' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'restore' => function ($parameters, $user)
+                    'restore' => function ($user, $parameters = [])
                     {
                         return false;
                     }
                 ],
                 'post' => [
-                    'index' => function ($parameters, $user)
+                    'index' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'store' => function ($parameters, $user)
+                    'store' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'show' => function ($parameters, $user)
+                    'show' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'update' => function ($parameters, $user)
+                    'update' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'destroy' => function ($parameters, $user)
+                    'destroy' => function ($user, $parameters = [])
                     {
                         return false;
                     },
-                    'restore' => function ($parameters, $user)
+                    'restore' => function ($user, $parameters = [])
                     {
                         return false;
                     }

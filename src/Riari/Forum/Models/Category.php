@@ -115,18 +115,6 @@ class Category extends BaseModel
         });
     }
 
-    // Current user: permission attributes
-
-    public function getUserCanViewAttribute()
-    {
-        return $this->userCan('forum.category.index');
-    }
-
-    public function getUserCanCreateThreadsAttribute()
-    {
-        return ($this->threadsAllowed && $this->userCan('forum.thread.create'));
-    }
-
     /*
     |--------------------------------------------------------------------------
     | Helpers
@@ -146,18 +134,5 @@ class Category extends BaseModel
         ];
 
         return $components;
-    }
-
-    /**
-     * Return an array of parameters used by the userCan() method to check
-     * permissions.
-     *
-     * @return array
-     */
-    protected function getAccessParams()
-    {
-        $parameters = ['category' => $this];
-
-        return $parameters;
     }
 }

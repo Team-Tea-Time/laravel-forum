@@ -8,13 +8,6 @@ use Riari\Forum\Http\Config\API\Error;
 class CheckPermissions
 {
 	/**
-	 * The parameters to pass to the permission checker.
-	 *
-	 * @var array
-	 */
-	protected $parameters = ['category', 'post', 'thread'];
-
-	/**
 	 * Handle an incoming request.
 	 *
 	 * @param  Request  $request
@@ -25,12 +18,11 @@ class CheckPermissions
 	{
 		$route = $request->route();
 
-		if (!Forum::permitted(
+		if (!Forum::userCan(
 			$route->getName(),
-			$request->all() + $route->parameters(),
-			auth()->user()
+			$request->all() + $route->parameters()
 		)) {
-			if ('Riari\Forum\Http\Controllers\API\V1' == $route->getAction()['namespace']) {
+			if (ForumRoute::isAPI()) {
 				return response()->json([
 					'error' => 'Authenticated user does not have permission to access this resource.',
 					'code' 	=> Error::NOT_AUTHORISED

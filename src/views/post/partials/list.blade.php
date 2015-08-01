@@ -15,7 +15,7 @@
 				{!! str_limit(nl2br(e($post->parent->content))) !!}
 			</blockquote>
 		@endif
-		
+
 		{!! nl2br(e($post->content)) !!}
 	</td>
 </tr>

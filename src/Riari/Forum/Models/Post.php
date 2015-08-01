@@ -83,18 +83,6 @@ class Post extends BaseModel
         return $this->thread->getRoute('forum.post.create', ['post_id' => $this->id]);
     }
 
-    // Current user: permission attributes
-
-    public function getUserCanEditAttribute()
-    {
-        return $this->userCan('forum.post.edit');
-    }
-
-    public function getUserCanDeleteAttribute()
-    {
-        return $this->userCan('forum.post.delete');
-    }
-
     /*
     |--------------------------------------------------------------------------
     | Helpers
@@ -117,22 +105,5 @@ class Post extends BaseModel
         ];
 
         return $components;
-    }
-
-    /**
-     * Return an array of parameters used by the userCan() method to check
-     * permissions.
-     *
-     * @return array
-     */
-    protected function getAccessParams()
-    {
-        $parameters = [
-            'category'  => $this->thread->category,
-            'thread'    => $this->thread,
-            'post'      => $this
-        ];
-
-        return $parameters;
     }
 }
