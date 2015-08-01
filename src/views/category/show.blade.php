@@ -1,4 +1,8 @@
-@extends ('forum::master')
+@extends ('forum::master', ['thread' => null])
+{{--
+	$thread is set to null here to prevent breadcrumbs.blade.php from picking up
+	the last thread from the loop below.
+--}}
 
 @section ('content')
 	<div id="category">

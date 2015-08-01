@@ -139,12 +139,12 @@ class PostController extends BaseController
     {
         $this->validate($request, $this->rules);
 
-        $post = $this->posts->where('id', $post->id)->update([
+        $this->posts->where('id', $post->id)->update([
             'content' => $request->input('content')
         ]);
 
         Forum::alert('success', trans('forum::posts.updated'));
 
-        return redirect($post->url);
+        return redirect($post->fresh()->url);
     }
 }

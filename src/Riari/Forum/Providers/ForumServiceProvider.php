@@ -18,7 +18,7 @@ class ForumServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'Riari\Forum\Http\Controllers';
+    protected $namespace;
 
     /**
      * Package root path.
@@ -70,6 +70,9 @@ class ForumServiceProvider extends ServiceProvider
 
         // Load translations
         $this->loadTranslationsFrom("{$this->root}translations", 'forum');
+
+        // Set the namespace
+        $this->namespace = config('forum.integration.controllers.namespace');
 
         // Load routes (if routing enabled)
         if (config('forum.routing.enabled')) {

@@ -17,15 +17,15 @@ Route::group(['prefix' => $root], function () use ($parameters, $controllers)
 
 	// Threads
 	get("{$category}/{$thread}", ['as' => 'forum.thread.show', 'uses' => "{$controllers['thread']}@show"]);
-	get("{$category}/{$thread}/thread/create", ['as' => 'forum.thread.create', 'uses' => "{$controllers['thread']}@create"]);
-	post("{$category}/{$thread}/thread/create", ['as' => 'forum.thread.store', 'uses' => "{$controllers['thread']}@store"]);
+	get("{$category}/thread/create", ['as' => 'forum.thread.create', 'uses' => "{$controllers['thread']}@create"]);
+	post("{$category}/thread/create", ['as' => 'forum.thread.store', 'uses' => "{$controllers['thread']}@store"]);
 
 	// Posts
 	get("{$category}/{$thread}/post/{{$parameters['post']}}", ['as' => 'forum.post.show', 'uses' => "{$controllers['post']}@show"]);
 	get("{$category}/{$thread}/reply", ['as' => 'forum.post.create', 'uses' => "{$controllers['post']}@create"]);
 	post("{$category}/{$thread}/reply", ['as' => 'forum.post.store', 'uses' => "{$controllers['post']}@store"]);
 	get("{$category}/{$thread}/post/{{$parameters['post']}}/edit", ['as' => 'forum.post.edit', 'uses' => "{$controllers['post']}@edit"]);
-	patch($category . $thread . "/post/{{$parameters['post']}}/edit", ['as' => 'forum.post.update', 'uses' => "{$controllers['post']}@update"]);
+	patch("{$category}/{$thread}/post/{{$parameters['post']}}/edit", ['as' => 'forum.post.update', 'uses' => "{$controllers['post']}@update"]);
 
 	// API
 	Route::group(['name' => 'api', 'prefix' => 'api/v1', 'namespace' => 'API\V1', 'middleware' => 'forum.auth.basic'], function () use ($parameters)

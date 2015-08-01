@@ -1,8 +1,6 @@
-@extends ('forum::master')
+@extends ('forum::master', ['breadcrumb_other' => trans('forum::threads.new_updated')])
 
 @section ('content')
-	@include ('forum::partials.breadcrumbs', ['other' => trans('forum::threads.new_updated')])
-
 	<h2>{{ trans('forum::threads.new_updated') }}</h2>
 
 	@if (!$threads->isEmpty())

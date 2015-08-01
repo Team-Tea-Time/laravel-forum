@@ -7,16 +7,16 @@ return [
 	| Controllers
 	|--------------------------------------------------------------------------
 	|
-	| Here we specify which controllers to use for each component of the forum.
-	| You can optionally extend the provided controllers and change the
-	| namespaces here to reference your custom versions instead.
+	| Here we specify the namespace and controllers to use. Change these if
+	| you want to extend the provided classes and use your own instead.
 	|
 	*/
 
 	'controllers' => [
-		'category'	=> Riari\Forum\Http\Controllers\CategoryController::class,
-		'thread'	=> Riari\Forum\Http\Controllers\ThreadController::class,
-		'post'		=> Riari\Forum\Http\Controllers\PostController::class
+		'namespace'	=> 'Riari\Forum\Http\Controllers',
+		'category'	=> 'CategoryController',
+		'thread'	=> 'ThreadController',
+		'post'		=> 'PostController'
 	],
 
 	/*

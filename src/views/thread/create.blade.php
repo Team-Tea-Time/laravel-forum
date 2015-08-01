@@ -1,8 +1,6 @@
-@extends ('forum::master')
+@extends ('forum::master', ['breadcrumb_other' => trans('forum::threads.new_thread')])
 
 @section ('content')
-@include ('forum::partials.breadcrumbs', compact('category', 'thread'))
-
 <h2>{{ trans('forum::threads.new_thread') }} ({{ $category->title }})</h2>
 
 @include (

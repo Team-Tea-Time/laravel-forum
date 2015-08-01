@@ -14,7 +14,7 @@ class CategoryController extends BaseController
     /**
      * Create a new Category API controller instance.
      *
-     * @param  Categories  $categories
+     * @param  Category  $model
      */
     public function __construct(Category $model)
     {

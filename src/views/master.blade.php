@@ -16,6 +16,10 @@
     body {
         padding: 20px 0;
     }
+
+    textarea {
+        min-height: 200px;
+    }
     </style>
 </head>
 <body>
