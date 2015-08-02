@@ -2,14 +2,14 @@
 
 return [
 
-    'posts'     => "Einträge",
-    'post'      => "Eintrag",
-    'your_post' => "Dein Eintrag",
-    'latest'    => "Letzte Einträge",
+    'created'   => "Eintrag erstellt",
+    'deleted'   => "Eintrag gelöscht|Einträge gelöscht",
     'edit'      => "Eintrag bearbeiten",
-    'updated'   => "Eintrag aktualisiert",
-    'deleted'   => "Eintrag gelöscht",
     'last'      => "Letzter Eintrag",
+    'post'      => "Eintrag|Einträge",
+    'restored'  => "Eintrag restauriert|Einträge restauriert",
+    'updated'   => "Eintrag aktualisiert|Einträge aktualisiert",
     'view'      => "Eintrag ansehen",
+    'your_post' => "Dein Eintrag",
 
 ];

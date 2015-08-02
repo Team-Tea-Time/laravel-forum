@@ -2,14 +2,14 @@
 
 return [
 
-    'posts'     => "Post",
-    'post'      => "Post",
-    'your_post' => "Il tuo post",
-    'latest'    => "Ultimi post",
+    'created'   => "Post created",
+    'deleted'   => "Post eliminato|Post eliminati",
     'edit'      => "Modifica post",
-    'updated'   => "Post aggiornato",
-    'deleted'   => "Post eliminato",
     'last'      => "Ultimo post",
+    'post'      => "Post|Post",
+    'restored'  => "Post restaurato|Post restaurati",
+    'updated'   => "Post aggiornato|Post aggiornati",
     'view'      => "Vedi post",
+    'your_post' => "Il tuo post",
 
 ];

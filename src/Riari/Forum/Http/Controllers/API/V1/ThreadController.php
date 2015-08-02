@@ -9,11 +9,6 @@ use Riari\Forum\Models\Thread;
 class ThreadController extends BaseController
 {
     /**
-     * @var Thread
-     */
-    protected $model;
-
-    /**
      * Create a new Category API controller instance.
      *
      * @param  Thread  $model
@@ -34,6 +29,8 @@ class ThreadController extends BaseController
                 $rules['patch']['thread']
             )
         ];
+
+        $this->translationFile = 'threads';
     }
 
     /**

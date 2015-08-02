@@ -7,11 +7,6 @@ use Riari\Forum\Models\Post;
 class PostController extends BaseController
 {
     /**
-     * @var Post
-     */
-    protected $model;
-
-    /**
      * Create a new Category API controller instance.
      *
      * @param  Post  $model
@@ -31,6 +26,8 @@ class PostController extends BaseController
                 $rules['patch']['post']
             )
         ];
+
+        $this->translationFile = 'posts';
     }
 
     /**
@@ -68,6 +65,6 @@ class PostController extends BaseController
         $post = $this->repository->create($request->only(['thread_id', 'author_id', 'title', 'content']));
         $post->load('thread');
 
-        return $this->modelResponse($post, 201);
+        return $this->modelResponse($post, $this->trans('created'), 201);
     }
 }

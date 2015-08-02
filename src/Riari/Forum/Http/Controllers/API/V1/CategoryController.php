@@ -7,11 +7,6 @@ use Riari\Forum\Models\Category;
 class CategoryController extends BaseController
 {
     /**
-     * @var Category
-     */
-    protected $model;
-
-    /**
      * Create a new Category API controller instance.
      *
      * @param  Category  $model
@@ -31,6 +26,8 @@ class CategoryController extends BaseController
                 $rules['patch']['category']
             )
         ];
+
+        $this->translationFile = 'categories';
     }
 
     /**

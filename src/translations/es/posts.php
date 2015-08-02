@@ -2,14 +2,14 @@
 
 return [
 
-    'posts'     => "Publicaciones",
-    'post'      => "Publicación",
-    'your_post' => "Su publicación",
-    'latest'    => "Últimas publicaciones",
+    'created'   => "Publicación creado"
+    'deleted'   => "Publicación eliminada|Publicaciones eliminada",
     'edit'      => "Editar publicación",
-    'updated'   => "Publicación actualizada",
-    'deleted'   => "Publicación eliminada",
     'last'      => "Última publicación",
+    'post'      => "Publicación|Publicaciones",
+    'restored'  => "Publicación restauradas|Publicaciones restauradas",
+    'updated'   => "Publicación actualizada|Publicaciones actualizada",
     'view'      => "Ver publicación",
+    'your_post' => "Su publicación",
 
 ];

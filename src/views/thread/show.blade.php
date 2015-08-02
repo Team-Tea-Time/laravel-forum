@@ -3,31 +3,35 @@
 @section ('content')
     <div id="thread">
         <h2>
-            @if ($thread->locked)
-                [{{ trans('forum::threads.locked') }}]
-            @endif
-            @if ($thread->pinned)
-                [{{ trans('forum::threads.pinned') }}]
-            @endif
+            <span v-if="locked">[{{ trans('forum::threads.locked') }}]</span>
+            <span v-if="pinned">[{{ trans('forum::threads.pinned') }}]</span>
             {{ $thread->title }}
         </h2>
 
-        @if ($thread->userCanLock || $thread->userCanPin || $thread->userCanDelete)
+        @include ('forum::partials.alert', ['type' => 'success'])
+
+        @if (Forum::userCan(['api.v1.thread.update']))
             <div class="thread-tools dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="thread-actions" data-toggle="dropdown" aria-expanded="true">
                     {{ trans('forum::general.actions') }}
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    @if ($thread->userCanLock)
-                        <li><a href="{{ $thread->lockRoute }}" data-method="PATCH">{{ trans('forum::threads.lock') }}</a></li>
-                    @endif
-                    @if ($thread->userCanPin)
-                        <li><a href="{{ $thread->pinRoute }}" data-method="PATCH">{{ trans('forum::threads.pin') }}</a></li>
-                    @endif
-                    @if ($thread->userCanDelete)
-                        <li><a href="{{ $thread->deleteRoute }}" data-confirm data-method="DELETE">{{ trans('forum::threads.delete') }}</a></li>
-                    @endif
+                    <li>
+                        <a href="{{ $thread->updateRoute }}" data-method="PATCH">
+                            {{ trans('forum::threads.lock') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ $thread->updateRoute }}" data-method="PATCH">
+                            {{ trans('forum::threads.pin') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ $thread->deleteRoute }}" data-method="DELETE">
+                            {{ trans('forum::general.delete') }}
+                        </a>
+                    </li>
                 </ul>
             </div>
             <hr>
@@ -47,14 +51,14 @@
             </div>
         @endif
 
-        <table class="table">
+        <table class="table" v-class="deleted: deleted">
             <thead>
                 <tr>
                     <th class="col-md-2">
                         {{ trans('forum::general.author') }}
                     </th>
                     <th>
-                        {{ trans('forum::posts.post') }}
+                        {{ trans_choice('forum::posts.post', 1) }}
                     </th>
                 </tr>
             </thead>
@@ -81,4 +85,23 @@
             </div>
         @endif
     </div>
+
+    <script>
+    new Vue({
+        el: '#thread',
+
+        data: {
+            locked: {{ $thread->locked }},
+            pinned: {{ $thread->pinned }},
+            deleted: {{ $thread->deleted }},
+            message: null
+        },
+
+        ready: function() {
+        },
+
+        methods: {
+        }
+    });
+    </script>
 @overwrite

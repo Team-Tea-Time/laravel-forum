@@ -40,19 +40,17 @@ Route::group(['prefix' => $root], function () use ($parameters, $controllers)
 
 		// Posts
 		resource($parameters['post'], 'PostController', ['except' => ['create', 'edit']]);
-		patch("post/{{$parameters['thread']}}/restore", ['as' => 'forum.api.v1.post.restore', 'uses' => 'PostController@restore']);
+		patch("post/{{$parameters['post']}}/restore", ['as' => 'forum.api.v1.post.restore', 'uses' => 'PostController@restore']);
 
 		Route::group(['prefix' => 'bulk'], function ()
 		{
 			// Threads
-			patch('thread/lock', ['as' => 'forum.api.v1.bulk.thread.lock', 'uses' => 'ThreadController@bulkLock']);
-			patch('thread/pin', ['as' => 'forum.api.v1.bulk.thread.pin', 'uses' => 'ThreadController@bulkPin']);
-			patch('thread/move', ['as' => 'forum.api.v1.bulk.thread.move', 'uses' => 'ThreadController@bulkMove']);
-			delete('thread/delete', ['as' => 'forum.api.v1.bulk.thread.destroy', 'uses' => 'ThreadController@bulkDestroy']);
+			put('thread', ['as' => 'forum.api.v1.bulk.thread.update', 'uses' => 'ThreadController@bulkUpdate']);
+			delete('thread', ['as' => 'forum.api.v1.bulk.thread.destroy', 'uses' => 'ThreadController@bulkDestroy']);
 			patch('thread/restore', ['as' => 'forum.api.v1.bulk.thread.restore', 'uses' => 'ThreadController@bulkRestore']);
 
 			// Posts
-			delete('post/delete', ['as' => 'forum.api.v1.bulk.post.destroy', 'uses' => 'PostController@bulkDestroy']);
+			delete('post', ['as' => 'forum.api.v1.bulk.post.destroy', 'uses' => 'PostController@bulkDestroy']);
 			patch('post/restore', ['as' => 'forum.api.v1.bulk.post.restore', 'uses' => 'PostController@bulkRestore']);
 		});
 	});
@@ -61,21 +59,13 @@ Route::group(['prefix' => $root], function () use ($parameters, $controllers)
 // Model binding
 Route::bind($parameters['category'], function ($id)
 {
-	return bind_forum_parameter(new \Riari\Forum\Models\Category, $id);
+	return Forum::bindParameter(new \Riari\Forum\Models\Category, $id);
 });
 Route::bind($parameters['thread'], function ($id)
 {
-	return bind_forum_parameter(new \Riari\Forum\Models\Thread, $id);
+	return Forum::bindParameter(new \Riari\Forum\Models\Thread, $id);
 });
 Route::bind($parameters['post'], function ($id)
 {
-	return bind_forum_parameter(new \Riari\Forum\Models\Post, $id);
+	return Forum::bindParameter(new \Riari\Forum\Models\Post, $id);
 });
-
-function bind_forum_parameter($model, $id)
-{
-	if (ForumRoute::isAPI()) {
-		return $model->find($id);
-	}
-	return $model->findOrFail($id);
-}

@@ -1,6 +1,5 @@
 <?php namespace Riari\Forum\Models;
 
-use Cache;
 use Illuminate\Database\Eloquent\Model;
 use Riari\Forum\Forum;
 
@@ -31,21 +30,9 @@ abstract class BaseModel extends Model
         return $this->updated_at->diffForHumans();
     }
 
-    protected function rememberAttribute($item, $function)
+    public function getDeletedAttribute()
     {
-        $cacheItem = get_class($this).$this->id.$item;
-
-        $value = Cache::remember($cacheItem, config('forum.preferences.cache.lifetime'), $function);
-
-        return $value;
-    }
-
-    protected static function clearAttributeCache($model)
-    {
-        foreach ($model->appends as $attribute) {
-            $cacheItem = get_class($model).$model->id.$attribute;
-            Cache::forget($cacheItem);
-        }
+        return !is_null($this->deleted_at) ? 1 : 0;
     }
 
     /*

@@ -2,14 +2,14 @@
 
 return [
 
-    'posts'     => "Mesaje",
-    'post'      => "Mesaj",
-    'your_post' => "Mesajul tău",
-    'latest'    => "Ultimele mesaje",
+    'created'   => "Mesajul creat",
+    'deleted'   => "Mesaj șters|Mesaje șterse",
     'edit'      => "Editează mesaj",
-    'updated'   => "Mesaj actualizat",
-    'deleted'   => "Mesaj șters",
     'last'      => "Ultimul mesaj",
+    'post'      => "Mesaj|Mesaje",
+    'restored'  => "Mesajul restaurat|Mesaje restaurat",
+    'updated'   => "Mesaj actualizat|Mesaje actualizat",
     'view'      => "Vezi mesajul",
+    'your_post' => "Mesajul tău",
 
 ];

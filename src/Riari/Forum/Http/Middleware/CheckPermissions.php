@@ -1,8 +1,9 @@
 <?php namespace Riari\Forum\Http\Middleware;
 
 use Closure;
+use Forum;
+use ForumRoute;
 use Illuminate\Http\Request;
-use Riari\Forum\Forum;
 use Riari\Forum\Http\Config\API\Error;
 
 class CheckPermissions

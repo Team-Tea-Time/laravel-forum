@@ -18,6 +18,21 @@ class Forum
     }
 
     /**
+     * Helper function for binding route parameters.
+     *
+     * @param  mixed  $model
+     * @param  int  $id
+     * @return mixed
+     */
+    public static function bindParameter($model, $id)
+    {
+    	if (\Riari\Forum\Support\Facades\Route::isAPI()) {
+    		return $model->withTrashed()->find($id);
+    	}
+    	return $model->findOrFail($id);
+    }
+
+    /**
      * Determine if a permission is granted for a user.
      *
      * @param  string  $name
@@ -108,5 +123,18 @@ class Forum
         }
 
         return self::permitted($permission, $parameters, $user);
+    }
+
+    /**
+     * Fetch a translated forum string via trans() or trans_choice().
+     *
+     * @param  string  $id
+     * @param  array  $parameters
+     * @param  int  $count
+     */
+    public static function trans($id, $parameters = [], $count = 1)
+    {
+        $id = "forum::{$id}";
+        return trans_choice($id, $count, $parameters);
     }
 }

@@ -4,6 +4,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Riari\Forum\Forum;
 use Riari\Forum\Http\Config\API\Error;
 
 abstract class BaseController extends Controller
@@ -19,6 +20,11 @@ abstract class BaseController extends Controller
 	 * @var array
 	 */
 	protected $rules;
+
+    /**
+     * @var string
+     */
+    protected $translationFile;
 
     /**
      * GET: return an index of models.
@@ -43,7 +49,7 @@ abstract class BaseController extends Controller
 
         $model = $this->model->create($request->all());
 
-        return $this->modelResponse($model, 201);
+        return $this->modelResponse($model, $this->trans('created'), 201);
     }
 
     /**
@@ -76,7 +82,7 @@ abstract class BaseController extends Controller
             return $response;
         }
 
-        return $this->modelResponse($response);
+        return $this->modelResponse($response, $this->trans('updated'));
     }
 
     /**
@@ -91,9 +97,11 @@ abstract class BaseController extends Controller
             return $this->notFoundResponse();
         }
 
-        $this->model->destroy($model->id);
+        if (!$model->trashed()) {
+            $model->delete();
+        }
 
-        return $this->modelResponse($model->fresh());
+        return $this->modelResponse($model, $this->trans('deleted'));
     }
 
     /**
@@ -108,9 +116,11 @@ abstract class BaseController extends Controller
             return $this->notFoundResponse();
         }
 
-        $this->model->find($model->id)->restore();
+        if ($model->trashed()) {
+            $model->restore();
+        }
 
-        return $this->modelResponse($model->fresh());
+        return $this->modelResponse($model, $this->trans('restored'));
     }
 
     /**
@@ -125,14 +135,14 @@ abstract class BaseController extends Controller
 
         $collection = collect();
         foreach ($request->input('id') as $id) {
-            $model = $this->model->destroy  ($id);
+            $model = $this->model->destroy($id);
 
             if (!is_null($model)) {
                 $collection->push($model);
             }
         }
 
-        return $this->collectionResponse($collection);
+        return $this->collectionResponse($collection, $this->trans('deleted', $collection->count()));
     }
 
     /**
@@ -154,7 +164,7 @@ abstract class BaseController extends Controller
             }
         }
 
-        return $this->collectionResponse($collection);
+        return $this->collectionResponse($collection, $this->trans('restored', $collection->count()));
     }
 
     /**
@@ -165,14 +175,12 @@ abstract class BaseController extends Controller
      * @param  string  $rule
      * @return JsonResponse
      */
-    protected function doBulkUpdate(Request $request, $attribute, $rule)
+    protected function bulkUpdate(Request $request)
     {
-        $this->validate($request, ['id' => 'required', $attribute => $rule]);
+        $this->validate($request, ['id' => 'required']);
 
         $input = $request->all();
-        $request->replace([
-            $attribute => $input[$attribute]
-        ]);
+        $request->replace($request->except('id'));
         $collection = collect();
         foreach ($input['id'] as $id) {
             $model = $this->model->find($id);
@@ -182,7 +190,7 @@ abstract class BaseController extends Controller
             }
         }
 
-        return $this->collectionResponse($collection);
+        return $this->collectionResponse($collection, $this->trans('updated', $collection->count()));
     }
 
     /**
@@ -200,31 +208,37 @@ abstract class BaseController extends Controller
 
         $this->validate($request, $this->rules['update']);
 
-        return $this->model->where('id', $model->id)->update($request->all());
+        $model->update($request->all());
+
+        return $model;
     }
 
     /**
      * Create a Collection response.
      *
      * @param  object  $collection
+     * @param  string  $message
      * @param  int  $code
      * @return JsonResponse
      */
-    protected function collectionResponse($collection, $code = 200)
+    protected function collectionResponse($collection, $message = "", $code = 200)
     {
-        return new JsonResponse($collection, $code);
+        $message = (empty($message)) ? [] : ['message' => $message];
+        return new JsonResponse($message + ['data' => $collection], $code);
     }
 
     /**
      * Create a Model response.
      *
      * @param  object  $model
+     * @param  string  $message
      * @param  int  $code
      * @return JsonResponse
      */
-    protected function modelResponse($model, $code = 200)
+    protected function modelResponse($model, $message = "", $code = 200)
     {
-        return new JsonResponse(['data' => $model], $code);
+        $message = (empty($message)) ? [] : ['message' => $message];
+        return new JsonResponse($message + ['data' => $model], $code);
     }
 
     /**
@@ -254,5 +268,17 @@ abstract class BaseController extends Controller
             'code'              => Error::VALIDATION_FAILED,
             'validation_errors' => $errors
         ], 422);
+    }
+
+    /**
+     * Fetch a translated string.
+     *
+     * @param  string  $key
+     * @param  int  $count
+     * @return string
+     */
+    protected function trans($key, $count = 1)
+    {
+        return Forum::trans("{$this->translationFile}.{$key}", [], $count);
     }
 }
