@@ -18,18 +18,21 @@
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li>
-                        <a href="{{ $thread->updateRoute }}" data-method="PATCH">
-                            {{ trans('forum::threads.lock') }}
+                        <a href="{{ $thread->updateRoute }}" v-on="click: toggleLock">
+                            <span v-if="!locked">{{ trans('forum::threads.lock') }}</span>
+                            <span v-if="locked">{{ trans('forum::threads.unlock') }}</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ $thread->updateRoute }}" data-method="PATCH">
-                            {{ trans('forum::threads.pin') }}
+                        <a href="{{ $thread->updateRoute }}" v-on="click: togglePin">
+                            <span v-if="!pinned">{{ trans('forum::threads.pin') }}</span>
+                            <span v-if="pinned">{{ trans('forum::threads.unpin') }}</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ $thread->deleteRoute }}" data-method="DELETE">
-                            {{ trans('forum::general.delete') }}
+                        <a href="#" v-on="click: toggleDelete">
+                            <span v-if="!deleted">{{ trans('forum::general.delete') }}</span>
+                            <span v-if="deleted">{{ trans('forum::general.restore') }}</span>
                         </a>
                     </li>
                 </ul>
@@ -101,6 +104,12 @@
         },
 
         methods: {
+            toggleLock: function() {
+            },
+            togglePin: function() {
+            },
+            toggleDelete: function() {
+            }
         }
     });
     </script>

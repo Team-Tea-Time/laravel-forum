@@ -32,7 +32,12 @@ class CategoryController extends BaseController
     {
         event(new UserViewingIndex);
 
-        return view('forum::category.index', ['categories' => $this->categories->where('category_id', null)->get()]);
+        $categories = $this->categories
+            ->where('category_id', null)
+            ->with(['children', 'threads'])
+            ->get();
+
+        return view('forum::category.index', compact('categories'));
     }
 
     /**

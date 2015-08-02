@@ -29,7 +29,7 @@
 		@endif
 	</td>
 	<td class="text-muted">
-		{{ trans('forum::general.posted_at') }} {{ $post->posted }}
+		{{ trans('forum::general.posted') }} {{ $post->posted }}
 		@if ($post->wasUpdated())
 			{{ trans('forum::general.last_updated') }} {{ $post->updated }}
 		@endif

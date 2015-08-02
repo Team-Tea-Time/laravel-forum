@@ -23,6 +23,7 @@ return [
     'reply_added'       => "Post ajouté",
     'replying_to'       => "En réponse à :item",
     'response_to'       => "En réponse à :item",
+    'restore'           => "Restaurer",
     'subject'           => "Sujet",
     'title'             => "Titre",
     'undo'              => "Défaire",

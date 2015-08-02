@@ -11,9 +11,9 @@
         <table class="table table-index">
             <thead>
                 <tr>
-                    <th>{{ trans('forum::categories.category') }}</th>
-                    <th class="col-md-2">{{ trans('forum::threads.threads') }}</th>
-                    <th class="col-md-2">{{ trans('forum::posts.posts') }}</th>
+					<th>{{ trans_choice('forum::categories.category', 1) }}</th>
+					<th class="col-md-2">{{ trans_choice('forum::threads.thread', 2) }}</th>
+					<th class="col-md-2">{{ trans_choice('forum::posts.post', 2) }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,9 +43,7 @@
                 </tr>
                 @if (!$category->children->isEmpty())
                     <tr>
-                        <td>{{ trans('forum::categories.subcategories') }}</td>
-                        <th>{{ trans('forum::threads.threads') }}</th>
-                        <th>{{ trans('forum::posts.posts') }}</th>
+                        <th colspan="3">{{ trans('forum::categories.subcategories') }}</th>
                     </tr>
                     @foreach ($category->children as $subcategory)
                         @include ('forum::category.partials.list')

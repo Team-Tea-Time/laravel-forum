@@ -12,7 +12,6 @@ class Thread extends BaseModel
     protected $table        = 'forum_threads';
     protected $fillable     = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
     public    $timestamps   = true;
-    protected $dates        = ['deleted_at'];
     protected $with         = ['author'];
     protected $guarded      = ['id'];
 
@@ -42,8 +41,12 @@ class Thread extends BaseModel
 
     public function readers()
     {
-        return $this->belongsToMany(config('forum.integration.models.user'), 'forum_threads_read', 'thread_id', 'user_id')
-            ->withTimestamps();
+        return $this->belongsToMany(
+                config('forum.integration.models.user'),
+                'forum_threads_read',
+                'thread_id',
+                'user_id'
+            )->withTimestamps();
     }
 
     public function posts()
@@ -197,9 +200,9 @@ class Thread extends BaseModel
     {
         $components = [
             'category'      => $this->category->id,
-            'categoryAlias' => Str::slug($this->category->title, '-'),
+            'categorySlug'  => Str::slug($this->category->title, '-'),
             'thread'        => $this->id,
-            'threadAlias'   => Str::slug($this->title, '-')
+            'threadSlug'    => Str::slug($this->title, '-')
         ];
 
         return $components;

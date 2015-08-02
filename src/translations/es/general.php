@@ -23,6 +23,7 @@ return [
     'reply_added'       => "Respuesta agregáda",
     'replying_to'       => "Usted está respondiendo a :item",
     'response_to'       => "En respuesta a :item",
+    'restore'           => "Restaurar",
     'subject'           => "Asunto",
     'title'             => "Titulo",
     'undo'              => "Deshacer",

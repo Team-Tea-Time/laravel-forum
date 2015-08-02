@@ -35,12 +35,12 @@ class Category extends BaseModel
 
     public function children()
     {
-        return $this->hasMany('\Riari\Forum\Models\Category', 'category_id')->with('threads')->orderBy('weight');
+        return $this->hasMany('\Riari\Forum\Models\Category', 'category_id')->orderBy('weight');
     }
 
     public function threads()
     {
-        return $this->hasMany('\Riari\Forum\Models\Thread')->with('category', 'posts');
+        return $this->hasMany('\Riari\Forum\Models\Thread');
     }
 
     /*
@@ -130,7 +130,7 @@ class Category extends BaseModel
     {
         $components = [
             'category'  	=> $this->id,
-            'categoryAlias' => Str::slug($this->title, '-')
+            'categorySlug'  => Str::slug($this->title, '-')
         ];
 
         return $components;

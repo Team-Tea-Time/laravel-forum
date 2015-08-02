@@ -12,7 +12,6 @@ class Post extends BaseModel
     protected $table        = 'forum_posts';
     protected $fillable     = ['thread_id', 'author_id', 'post_id', 'content'];
     public    $timestamps   = true;
-    protected $dates        = ['deleted_at'];
     protected $with         = ['author'];
     protected $guarded      = ['id'];
 
@@ -98,9 +97,9 @@ class Post extends BaseModel
     {
         $components = [
             'category'      => $this->thread->category->id,
-            'categoryAlias' => Str::slug($this->thread->category->title, '-'),
+            'categorySlug'  => Str::slug($this->thread->category->title, '-'),
             'thread'        => $this->thread->id,
-            'threadAlias'   => Str::slug($this->thread->title, '-'),
+            'threadSlug'    => Str::slug($this->thread->title, '-'),
             'post'          => $this->id
         ];
 

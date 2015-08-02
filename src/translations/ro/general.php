@@ -23,6 +23,7 @@ return [
     'reply_added'       => "Răspuns adăugat",
     'replying_to'       => "Te răspuns la :item",
     'response_to'       => "Ca raspuns la :item",
+    'restore'           => "Restabili",
     'subject'           => "Subiect",
     'title'             => "Titlu",
     'undo'              => "Anula",

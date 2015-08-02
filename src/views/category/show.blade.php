@@ -12,9 +12,9 @@
 			<table class="table table-category">
 				<thead>
 					<tr>
-						<th>{{ trans('forum::categories.category') }}</th>
-						<th class="col-md-2">{{ trans('forum::threads.threads') }}</th>
-						<th class="col-md-2">{{ trans('forum::posts.posts') }}</th>
+						<th>{{ trans_choice('forum::categories.category', 1) }}</th>
+						<th class="col-md-2">{{ trans_choice('forum::threads.thread', 2) }}</th>
+						<th class="col-md-2">{{ trans_choice('forum::posts.post', 2) }}</th>
 					</tr>
 				</thead>
 				<tbody>

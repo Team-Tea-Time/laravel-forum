@@ -23,6 +23,7 @@ return [
     'reply_added'       => "Ответ добавлен",
     'replying_to'       => "Вы публикуете пост в :item",
     'response_to'       => "в ответ на :item",
+    'restore'           => "восстановление",
     'subject'           => "Тема",
     'title'             => "Заголовок",
     'undo'              => "аннулировать",

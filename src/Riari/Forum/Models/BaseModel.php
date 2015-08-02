@@ -1,5 +1,6 @@
 <?php namespace Riari\Forum\Models;
 
+use Cache;
 use Illuminate\Database\Eloquent\Model;
 use Riari\Forum\Forum;
 
@@ -33,6 +34,13 @@ abstract class BaseModel extends Model
     public function getDeletedAttribute()
     {
         return !is_null($this->deleted_at) ? 1 : 0;
+    }
+
+    protected function rememberAttribute($item, $function)
+    {
+        $cacheItem = get_class($this).$this->id.$item;
+        $value = Cache::remember($cacheItem, config('forum.preferences.cache.lifetime'), $function);
+        return $value;
     }
 
     /*
