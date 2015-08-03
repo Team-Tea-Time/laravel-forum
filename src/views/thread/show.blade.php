@@ -8,14 +8,10 @@
             {{ $thread->title }}
         </h2>
 
-<div class="alert alert-success alert-dismissable" v-repeat="alert in alerts">
-	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-	<div class="message">
-		@{{ alert.message }}
-	</div>
-</div>
+        @include ('forum::partials.alert', ['type' => 'success'])
+
         @if (Forum::userCan(['api.v1.thread.update']))
-            <div class="thread-tools dropdown">
+            <div class="thread-tools dropdown" v-if="!permaDeleted">
                 <button class="btn btn-default dropdown-toggle" type="button" id="thread-actions" data-toggle="dropdown" aria-expanded="true">
                     {{ trans('forum::general.actions') }}
                     <span class="caret"></span>
@@ -101,6 +97,7 @@
             locked: {{ $thread->locked }},
             pinned: {{ $thread->pinned }},
             deleted: {{ $thread->deleted }},
+            permaDeleted: 0,
             updateRoute: '{{ $thread->updateRoute }}',
             deleteRoute: '{{ $thread->deleteRoute }}',
             forceDeleteRoute: '{{ $thread->forceDeleteRoute }}',
@@ -114,29 +111,42 @@
         methods: {
             toggleLock: function(e) {
                 e.preventDefault();
-                this.$http.put(this.updateRoute, {locked: !this.$get('locked')}, function(response) {
-                    this.alerts.push({ message: response.message });
+                this.$http.put(this.updateRoute, {locked: !this.locked}, function(response) {
+                    this.addMessage(response);
                     this.$set('locked', response.data.locked);
                 });
             },
-            togglePin: function() {
+            togglePin: function(e) {
+                e.preventDefault();
+                this.$http.put(this.updateRoute, {pinned: !this.pinned}, function(response) {
+                    this.addMessage(response);
+                    this.$set('pinned', response.data.pinned);
+                });
             },
-            toggleDelete: function() {
-                if (this.deleted) {
+            toggleDelete: function(e) {
+                if (!this.deleted) {
                     if (!confirm('{{ trans('forum::general.generic_confirm') }}')) {
                         return false;
                     }
 
                     this.$http.delete(this.deleteRoute, function(response) {
-                        this.alerts.push({ message: response.message });
+                        this.addMessage(response);
                         this.$set('deleted', 1);
                     });
                 } else {
                     this.$http.patch(this.restoreRoute, function(response) {
-                        this.alerts.push({ message: response.message });
+                        this.addMessage(response);
                         this.$set('deleted', 0);
                     });
                 }
+                e.preventDefault();
+            },
+            permaDelete: function(e) {
+                e.preventDefault();
+
+            },
+            addMessage: function(response) {
+                this.alerts.push({ message: response.message });
             }
         }
     });
