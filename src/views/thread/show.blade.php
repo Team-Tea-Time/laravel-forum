@@ -8,8 +8,12 @@
             {{ $thread->title }}
         </h2>
 
-        @include ('forum::partials.alert', ['type' => 'success'])
-
+<div class="alert alert-success alert-dismissable" v-repeat="alert in alerts">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<div class="message">
+		@{{ alert.message }}
+	</div>
+</div>
         @if (Forum::userCan(['api.v1.thread.update']))
             <div class="thread-tools dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="thread-actions" data-toggle="dropdown" aria-expanded="true">
@@ -97,18 +101,42 @@
             locked: {{ $thread->locked }},
             pinned: {{ $thread->pinned }},
             deleted: {{ $thread->deleted }},
-            message: null
+            updateRoute: '{{ $thread->updateRoute }}',
+            deleteRoute: '{{ $thread->deleteRoute }}',
+            forceDeleteRoute: '{{ $thread->forceDeleteRoute }}',
+            restoreRoute: '{{ $thread->restoreRoute }}',
+            alerts: []
         },
 
         ready: function() {
         },
 
         methods: {
-            toggleLock: function() {
+            toggleLock: function(e) {
+                e.preventDefault();
+                this.$http.put(this.updateRoute, {locked: !this.$get('locked')}, function(response) {
+                    this.alerts.push({ message: response.message });
+                    this.$set('locked', response.data.locked);
+                });
             },
             togglePin: function() {
             },
             toggleDelete: function() {
+                if (this.deleted) {
+                    if (!confirm('{{ trans('forum::general.generic_confirm') }}')) {
+                        return false;
+                    }
+
+                    this.$http.delete(this.deleteRoute, function(response) {
+                        this.alerts.push({ message: response.message });
+                        this.$set('deleted', 1);
+                    });
+                } else {
+                    this.$http.patch(this.restoreRoute, function(response) {
+                        this.alerts.push({ message: response.message });
+                        this.$set('deleted', 0);
+                    });
+                }
             }
         }
     });

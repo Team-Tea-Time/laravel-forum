@@ -279,6 +279,6 @@ abstract class BaseController extends Controller
      */
     protected function trans($key, $count = 1)
     {
-        return Forum::trans("{$this->translationFile}.{$key}", [], $count);
+        return trans_choice("forum::{$this->translationFile}.{$key}", $count);
     }
 }

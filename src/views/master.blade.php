@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta id="token" name="token" value="{{ csrf_token() }}">
+    <meta id="token" name="token" content="{{ csrf_token() }}">
 
     <title>{!! trans('forum::general.home_title') !!}</title>
 
@@ -34,7 +34,7 @@
 </head>
 <body>
     <script>
-    Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('value');
+    Vue.http.headers.common['X-CSRF-TOKEN'] = $('#token').attr('content');
     </script>
 
     <div class="container">

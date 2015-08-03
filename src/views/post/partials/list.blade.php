@@ -6,8 +6,7 @@
 		@if (!is_null($post->parent))
 			<p>
 				<strong>
-					{{ trans('forum::general.response_to') }}
-					{{ $post->parent->authorName }}
+					{{ trans('forum::general.response_to', ['item' => $post->parent->authorName]) }}
 					(<a href="{{ $post->parent->url }}">{{ trans('forum::posts.view') }}</a>):
 				</strong>
 			</p>

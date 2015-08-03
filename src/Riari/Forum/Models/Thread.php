@@ -87,12 +87,22 @@ class Thread extends BaseModel
 
     public function getUpdateRouteAttribute()
     {
-        return $this->getRoute('forum.api.v1.thread.update');
+        return $this->getRoute('forum.api.v1.thread.update', ['thread' => $this->id]);
     }
 
     public function getDeleteRouteAttribute()
     {
-        return $this->getRoute('forum.api.v1.thread.destroy');
+        return $this->getRoute('forum.api.v1.thread.destroy', ['thread' => $this->id]);
+    }
+
+    public function getRestoreRouteAttribute()
+    {
+        return $this->getRoute('forum.api.v1.thread.restore', ['thread' => $this->id]);
+    }
+
+    public function getForceDeleteRouteAttribute()
+    {
+        return $this->getRoute('forum.api.v1.thread.destroy', ['thread' => $this->id, 'force' => 1]);
     }
 
     public function getLastPostUrlAttribute()

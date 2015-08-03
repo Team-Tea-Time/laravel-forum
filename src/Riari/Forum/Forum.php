@@ -124,17 +124,4 @@ class Forum
 
         return self::permitted($permission, $parameters, $user);
     }
-
-    /**
-     * Fetch a translated forum string via trans() or trans_choice().
-     *
-     * @param  string  $id
-     * @param  array  $parameters
-     * @param  int  $count
-     */
-    public static function trans($id, $parameters = [], $count = 1)
-    {
-        $id = "forum::{$id}";
-        return trans_choice($id, $count, $parameters);
-    }
 }

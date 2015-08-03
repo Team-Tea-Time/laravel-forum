@@ -89,9 +89,10 @@ abstract class BaseModel extends Model
      * @param  array  $components
      * @return string
      */
-    protected function getRoute($name, $components = array())
+    protected function getRoute($name, $components = [])
     {
-        return route($name, array_merge($this->getRouteComponents(), $components));
+        $components = (empty($components)) ? $this->getRouteComponents() : $components;
+        return route($name, $components);
     }
 
     /**
