@@ -18,6 +18,17 @@ class Forum
     }
 
     /**
+     * Render the given content.
+     *
+     * @param  string  $content
+     * @return string
+     */
+    public static function render($content)
+    {
+        return nl2br(e($content));
+    }
+
+    /**
      * Helper function for binding route parameters.
      *
      * @param  mixed  $model
@@ -100,28 +111,28 @@ class Forum
 
         $user = auth()->user();
 
-        // Are we checking for multiple permissions, or just one?
-        if (is_array($permission)) {
-            // Set the return value for the loop. We base this on $all because
-            // if we're checking to see if all permission checks pass (i.e.
-            // $all == true), we need to return false on the first denied
-            // permission, otherwise (if $all == false) we need to return true
-            // on the first granted permission.
-            $return = !$all;
-
-            foreach ($permission as $p) {
-                // Check the permission and return as appropriate
-                if ($all !== self::permitted($p, $parameters, $user)) {
-                    return $return;
-                }
-            }
-
-            // Loop completed without returning; if $all == true, that means
-            // all permission checks passed, otherwise none of them did, so just
-            // return $all
-            return $all;
+        // Are we checking for a single permission?
+        if (!is_array($permission)) {
+            return self::permitted($permission, $parameters, $user);
         }
 
-        return self::permitted($permission, $parameters, $user);
+        // Set the return value for the loop. We base this on $all because
+        // if we're checking to see if all permission checks pass (i.e.
+        // $all == true), we need to return false on the first denied
+        // permission, otherwise (if $all == false) we need to return true
+        // on the first granted permission.
+        $return = !$all;
+
+        foreach ($permission as $p) {
+            // Check the permission and return as appropriate
+            if ($all !== self::permitted($p, $parameters, $user)) {
+                return $return;
+            }
+        }
+
+        // Loop completed without returning; if $all == true, that means
+        // all permission checks passed, otherwise none of them did, so just
+        // return $all
+        return $all;
     }
 }

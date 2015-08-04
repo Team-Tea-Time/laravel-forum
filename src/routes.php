@@ -28,30 +28,30 @@ Route::group(['prefix' => $root], function () use ($parameters, $controllers)
 	patch("{$category}/{$thread}/post/{{$parameters['post']}}/edit", ['as' => 'forum.post.update', 'uses' => "{$controllers['post']}@update"]);
 
 	// API
-	Route::group(['name' => 'api', 'prefix' => 'api/v1', 'namespace' => 'API\V1', 'middleware' => 'forum.auth.basic'], function () use ($parameters)
+	Route::group(['name' => 'api', 'prefix' => 'api', 'namespace' => 'API', 'middleware' => 'forum.auth.basic'], function () use ($parameters)
 	{
 		// Categories
 		resource($parameters['category'], 'CategoryController', ['except' => ['create', 'edit']]);
-		patch("category/{{$parameters['category']}}/restore", ['as' => 'forum.api.v1.category.restore', 'uses' => 'CategoryController@restore']);
+		patch("category/{{$parameters['category']}}/restore", ['as' => 'forum.api.category.restore', 'uses' => 'CategoryController@restore']);
 
 		// Threads
 		resource($parameters['thread'], 'ThreadController', ['except' => ['create', 'edit']]);
-		patch("thread/{{$parameters['thread']}}/restore", ['as' => 'forum.api.v1.thread.restore', 'uses' => 'ThreadController@restore']);
+		patch("thread/{{$parameters['thread']}}/restore", ['as' => 'forum.api.thread.restore', 'uses' => 'ThreadController@restore']);
 
 		// Posts
 		resource($parameters['post'], 'PostController', ['except' => ['create', 'edit']]);
-		patch("post/{{$parameters['post']}}/restore", ['as' => 'forum.api.v1.post.restore', 'uses' => 'PostController@restore']);
+		patch("post/{{$parameters['post']}}/restore", ['as' => 'forum.api.post.restore', 'uses' => 'PostController@restore']);
 
 		Route::group(['prefix' => 'bulk'], function ()
 		{
 			// Threads
-			put('thread', ['as' => 'forum.api.v1.bulk.thread.update', 'uses' => 'ThreadController@bulkUpdate']);
-			delete('thread', ['as' => 'forum.api.v1.bulk.thread.destroy', 'uses' => 'ThreadController@bulkDestroy']);
-			patch('thread/restore', ['as' => 'forum.api.v1.bulk.thread.restore', 'uses' => 'ThreadController@bulkRestore']);
+			put('thread', ['as' => 'forum.api.bulk.thread.update', 'uses' => 'ThreadController@bulkUpdate']);
+			delete('thread', ['as' => 'forum.api.bulk.thread.destroy', 'uses' => 'ThreadController@bulkDestroy']);
+			patch('thread/restore', ['as' => 'forum.api.bulk.thread.restore', 'uses' => 'ThreadController@bulkRestore']);
 
 			// Posts
-			delete('post', ['as' => 'forum.api.v1.bulk.post.destroy', 'uses' => 'PostController@bulkDestroy']);
-			patch('post/restore', ['as' => 'forum.api.v1.bulk.post.restore', 'uses' => 'PostController@bulkRestore']);
+			delete('post', ['as' => 'forum.api.bulk.post.destroy', 'uses' => 'PostController@bulkDestroy']);
+			patch('post/restore', ['as' => 'forum.api.bulk.post.restore', 'uses' => 'PostController@bulkRestore']);
 		});
 	});
 });

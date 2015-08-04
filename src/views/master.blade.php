@@ -20,7 +20,7 @@
 
     <style>
     body {
-        padding: 20px 0;
+        padding: 30px 0;
     }
 
     textarea {

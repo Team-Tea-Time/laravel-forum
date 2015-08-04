@@ -40,15 +40,22 @@ return [
     */
 
     'aliases' => [
-        'thread.store'                => 'thread.create',
-        'thread.update'               => 'thread.edit',
-        'post.store'                  => 'post.create',
-        'post.update'                 => 'post.edit',
-        'api.v1.bulk.thread.update'   => 'api.v1.thread.update',
-        'api.v1.bulk.thread.destroy'  => 'api.v1.thread.destroy',
-        'api.v1.bulk.thread.restore'  => 'api.v1.thread.restore',
-        'api.v1.bulk.post.destroy'    => 'api.v1.post.destroy',
-        'api.v1.bulk.post.restore'    => 'api.v1.post.restore'
+        'thread.store'              => 'thread.create',
+        'thread.update'             => 'thread.edit',
+        'post.store'                => 'post.create',
+        'post.update'               => 'post.edit',
+        'api.bulk.category.update'  => 'api.category.update',
+        'api.bulk.category.destroy' => 'api.category.destroy',
+        'api.bulk.category.restore' => 'api.category.destroy',
+        'api.category.restore'      => 'api.category.destroy',
+        'api.bulk.thread.update'    => 'api.thread.update',
+        'api.bulk.thread.destroy'   => 'api.thread.destroy',
+        'api.bulk.thread.restore'   => 'api.thread.destroy',
+        'api.thread.restore'        => 'api.thread.destroy',
+        'api.bulk.post.update'      => 'api.post.update',
+        'api.bulk.post.destroy'     => 'api.post.destroy',
+        'api.bulk.post.restore'     => 'api.post.destroy',
+        'api.post.restore'          => 'api.post.destroy',
     ],
 
     /*
@@ -125,85 +132,71 @@ return [
         ],
 
         'api' => [
-            'v1' => [
-                'category' => [
-                    'index' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'store' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'show' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'update' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'destroy' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'restore' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    }
-                ],
-                'thread' => [
-                    'index' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'store' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'show' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'update' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'destroy' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'restore' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    }
-                ],
-                'post' => [
-                    'index' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'store' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'show' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'update' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'destroy' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    },
-                    'restore' => function ($user, $parameters = [])
-                    {
-                        return false;
-                    }
-                ]
+            'category' => [
+                'index' => function ($user, $parameters = [])
+                {
+                    return false;
+                },
+                'store' => function ($user, $parameters = [])
+                {
+                    return false;
+                },
+                'show' => function ($user, $parameters = [])
+                {
+                    return false;
+                },
+                'update' => function ($user, $parameters = [])
+                {
+                    return false;
+                },
+                'destroy' => function ($user, $parameters = [])
+                {
+                    return false;
+                }
+            ],
+            'thread' => [
+                'index' => function ($user, $parameters = [])
+                {
+                    return false;
+                },
+                'store' => function ($user, $parameters = [])
+                {
+                    return false;
+                },
+                'show' => function ($user, $parameters = [])
+                {
+                    return false;
+                },
+                'update' => function ($user, $parameters = [])
+                {
+                    return false;
+                },
+                'destroy' => function ($user, $parameters = [])
+                {
+                    return false;
+                }
+            ],
+            'post' => [
+                'index' => function ($user, $parameters = [])
+                {
+                    return false;
+                },
+                'store' => function ($user, $parameters = [])
+                {
+                    return false;
+                },
+                'show' => function ($user, $parameters = [])
+                {
+                    return false;
+                },
+                'update' => function ($user, $parameters = [])
+                {
+                    return false;
+                },
+                'destroy' => function ($user, $parameters = [])
+                {
+                    return false;
+                }
             ]
         ]
     ],

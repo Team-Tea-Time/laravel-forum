@@ -1,4 +1,4 @@
-<?php namespace Riari\Forum\Http\Controllers\API\V1;
+<?php namespace Riari\Forum\Http\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

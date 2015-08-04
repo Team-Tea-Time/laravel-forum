@@ -10,7 +10,7 @@
 
         @include ('forum::partials.alert', ['type' => 'success'])
 
-        @if (Forum::userCan(['api.v1.thread.update']))
+        @if (Forum::userCan(['api.thread.update', 'api.thread.delete', 'api.thread.restore'], compact('category', 'thread')))
             <div class="thread-tools dropdown" v-if="!permaDeleted">
                 <button class="btn btn-default dropdown-toggle" type="button" id="thread-actions" data-toggle="dropdown" aria-expanded="true">
                     {{ trans('forum::general.actions') }}
@@ -40,9 +40,9 @@
             <hr>
         @endif
 
-        @if ($thread->userCanReply)
+        @if (Forum::userCan('post.create', compact('category', 'thread')))
             <div class="row">
-                <div class="col-xs-4">
+                <div class="col-xs-4" v-if="!locked && !deleted && !permaDeleted">
                     <div class="btn-group" role="group">
                         <a href="{{ $thread->replyRoute }}" class="btn btn-default">{{ trans('forum::general.new_reply') }}</a>
                         <a href="#quick-reply" class="btn btn-default">{{ trans('forum::general.quick_reply') }}</a>
@@ -54,7 +54,7 @@
             </div>
         @endif
 
-        <table class="table" v-class="deleted: deleted">
+        <table class="table" v-class="deleted: deleted" v-if="!permaDeleted">
             <thead>
                 <tr>
                     <th class="col-md-2">
@@ -74,17 +74,19 @@
 
         {!! $thread->pageLinks !!}
 
-        @if ($thread->userCanReply)
-            <h3>{{ trans('forum::general.quick_reply') }}</h3>
-            <div id="quick-reply">
-                @include (
-                    'forum::post.partials.edit',
-                    [
-                        'form_url'          => $thread->replyRoute,
-                        'show_title_field'  => false,
-                        'submit_label'      => trans('forum::general.reply')
-                    ]
-                )
+        @if (Forum::userCan('post.create', compact('category', 'thread')))
+            <div v-if="!locked && !deleted && !permaDeleted">
+                <h3>{{ trans('forum::general.quick_reply') }}</h3>
+                <div id="quick-reply">
+                    @include (
+                        'forum::post.partials.edit',
+                        [
+                            'form_url'          => $thread->replyRoute,
+                            'show_title_field'  => false,
+                            'submit_label'      => trans('forum::general.reply')
+                        ]
+                    )
+                </div>
             </div>
         @endif
     </div>
@@ -98,6 +100,7 @@
             pinned: {{ $thread->pinned }},
             deleted: {{ $thread->deleted }},
             permaDeleted: 0,
+            categoryRoute: '{{ $thread->category->route }}',
             updateRoute: '{{ $thread->updateRoute }}',
             deleteRoute: '{{ $thread->deleteRoute }}',
             forceDeleteRoute: '{{ $thread->forceDeleteRoute }}',
@@ -105,47 +108,44 @@
             alerts: []
         },
 
-        ready: function() {
-        },
-
         methods: {
-            toggleLock: function(e) {
+            toggleLock: function (e) {
                 e.preventDefault();
-                this.$http.put(this.updateRoute, {locked: !this.locked}, function(response) {
+                this.$http.put(this.updateRoute, { locked: !this.locked }, function (response) {
                     this.addMessage(response);
                     this.$set('locked', response.data.locked);
                 });
             },
-            togglePin: function(e) {
+            togglePin: function (e) {
                 e.preventDefault();
-                this.$http.put(this.updateRoute, {pinned: !this.pinned}, function(response) {
+                this.$http.put(this.updateRoute, { pinned: !this.pinned }, function (response) {
                     this.addMessage(response);
                     this.$set('pinned', response.data.pinned);
                 });
             },
-            toggleDelete: function(e) {
+            toggleDelete: function (e) {
                 if (!this.deleted) {
                     if (!confirm('{{ trans('forum::general.generic_confirm') }}')) {
                         return false;
                     }
 
-                    this.$http.delete(this.deleteRoute, function(response) {
+                    this.$http.delete(this.deleteRoute, function (response) {
                         this.addMessage(response);
                         this.$set('deleted', 1);
                     });
                 } else {
-                    this.$http.patch(this.restoreRoute, function(response) {
+                    this.$http.patch(this.restoreRoute, function (response) {
                         this.addMessage(response);
                         this.$set('deleted', 0);
                     });
                 }
                 e.preventDefault();
             },
-            permaDelete: function(e) {
+            permaDelete: function (e) {
                 e.preventDefault();
 
             },
-            addMessage: function(response) {
+            addMessage: function (response) {
                 this.alerts.push({ message: response.message });
             }
         }

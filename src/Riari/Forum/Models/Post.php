@@ -74,7 +74,7 @@ class Post extends BaseModel
 
     public function getDeleteRouteAttribute()
     {
-        return $this->getRoute('forum.post.delete');
+        return $this->getRoute('forum.api.post.destroy');
     }
 
     public function getReplyRouteAttribute()

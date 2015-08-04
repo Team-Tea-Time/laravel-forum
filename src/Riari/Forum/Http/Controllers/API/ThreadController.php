@@ -1,4 +1,4 @@
-<?php namespace Riari\Forum\Http\Controllers\API\V1;
+<?php namespace Riari\Forum\Http\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -77,38 +77,5 @@ class ThreadController extends BaseController
         Post::create(['thread_id' => $thread->id] + $request->only('content'));
 
         return $this->modelResponse($thread, 201);
-    }
-
-    /**
-     * PATCH: bulk lock/unlock threads.
-     *
-     * @param  Request  $request
-     * @return JsonResponse
-     */
-    public function bulkLock(Request $request)
-    {
-        return $this->doBulkUpdate($request, 'locked', 'required|boolean');
-    }
-
-    /**
-     * PATCH: bulk pin/unpin threads.
-     *
-     * @param  Request  $request
-     * @return JsonResponse
-     */
-    public function bulkPin(Request $request)
-    {
-        return $this->doBulkUpdate($request, 'pinned', 'required|boolean');
-    }
-
-    /**
-     * PATCH: bulk move threads.
-     *
-     * @param  Request  $request
-     * @return JsonResponse
-     */
-    public function bulkMove(Request $request)
-    {
-        return $this->doBulkUpdate($request, 'category_id', 'required|integer|exists:forum_categories,id');
     }
 }

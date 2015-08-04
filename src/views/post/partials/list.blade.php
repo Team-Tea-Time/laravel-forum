@@ -11,19 +11,19 @@
 				</strong>
 			</p>
 			<blockquote>
-				{!! str_limit(nl2br(e($post->parent->content))) !!}
+				{!! str_limit(Forum::render($post->parent->content)) !!}
 			</blockquote>
 		@endif
 
-		{!! nl2br(e($post->content)) !!}
+		{!! Forum::render($post->content) !!}
 	</td>
 </tr>
 <tr>
 	<td>
-		@if ($post->userCanEdit)
-			<a href="{{ $post->editRoute }}">{{ trans('forum::general.edit')}}</a>
+		@if (Forum::userCan('post.edit', compact('category', 'thread', 'post')))
+			<a href="{{ $post->editRoute }}">{{ trans('forum::general.edit') }}</a>
 		@endif
-		@if ($post->userCanDelete)
+		@if (Forum::userCan('api.post.destroy', compact('category', 'thread', 'post')))
 			<a href="{{ $post->deleteRoute }}" data-confirm data-method="delete">{{ trans('forum::general.delete') }}</a>
 		@endif
 	</td>
@@ -34,9 +34,13 @@
 		@endif
 		<span class="pull-right">
 			<a href="{{ $post->url }}">#{{ $post->id }}</a>
-			 - <a href="{{ $post->replyRoute }}">{{ trans('forum::general.reply') }}</a>
+			<span v-if="!locked && !deleted && !permaDeleted">
+				- <a href="{{ $post->replyRoute }}">{{ trans('forum::general.reply') }}</a>
+			</span>
 			@if (Request::fullUrl() != $post->route)
-				- <a href="{{ $post->route }}">{{ trans('forum::posts.view') }}</a>
+				<span v-if="!deleted && !permaDeleted">
+					- <a href="{{ $post->route }}">{{ trans('forum::posts.view') }}</a>
+				</span>
 			@endif
 		</span>
 	</td>
