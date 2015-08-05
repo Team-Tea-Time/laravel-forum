@@ -5,6 +5,7 @@ return [
     'created'           => "Thread created",
     'delete'            => "Delete this thread",
     'deleted'           => "Thread deleted|Threads deleted",
+    'perma_deleted'     => "Thread permanently deleted|Threads permanently deleted",
     'lock'              => "Lock",
     'locked'            => "Locked",
     'marked_read'       => "All threads have been marked as read",

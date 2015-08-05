@@ -91,17 +91,21 @@ abstract class BaseController extends Controller
      * @param  Model  $model
      * @return JsonResponse
      */
-    public function destroy($model)
+    public function destroy($model, Request $request)
     {
         if (!$model->exists) {
             return $this->notFoundResponse();
         }
 
-        if (!$model->trashed()) {
+        if ($request->has('force') && $request->input('force') == 1) {
+            $model->forceDelete();
+            $message = $this->trans('perma_deleted');
+        } elseif (!$model->trashed()) {
             $model->delete();
+            $message = $this->trans('deleted');
         }
 
-        return $this->modelResponse($model, $this->trans('deleted'));
+        return $this->modelResponse($model, $message);
     }
 
     /**

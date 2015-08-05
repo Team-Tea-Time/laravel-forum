@@ -7,6 +7,7 @@ return [
     'author'            => "Autor",
     'cancel'            => "Anulează",
     'delete'            => "Șterge",
+    'perma_delete'      => "Șterge definitiv",
     'edit'              => "Editează",
     'editing'           => "Editezi :item",
     'generic_confirm'   => "Ești sigur?",

@@ -5,6 +5,7 @@ return [
     'created'           => "Thema erstellt",
     'delete'            => "Dieses Thema löschen",
     'deleted'           => "Thema gelöscht|Themen gelöscht",
+    'perma_deleted'     => "Thema dauerhaft gelöscht|Themen dauerhaft gelöscht",
     'lock'              => "Verschließen",
     'locked'            => "Verschlossen",
     'marked_read'       => "Wurden alle Themen als gelesen markiert",

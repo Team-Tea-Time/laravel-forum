@@ -5,6 +5,7 @@ return [
     'created'           => "Sujet créé",
     'delete'            => "Supprimer ce sujet",
     'deleted'           => "Sujet supprimé|Sujets supprimés",
+    'perma_deleted'     => "Sujet définitivement supprimé|Sujets définitivement supprimés",
     'lock'              => "Fermer",
     'locked'            => "Fermé",
     'marked_read'       => "Toutes les discussions ont été marqués comme lus",

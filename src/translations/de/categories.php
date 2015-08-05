@@ -5,6 +5,7 @@ return [
     'category'              => "Kategorie|Kategorien",
     'created'               => "Kategorie erstellt",
     'deleted'               => "Kategorie gelöscht|Kategorien gelöscht",
+    'perma_deleted'         => "Kategorie dauerhaft gelöscht|Kategorien dauerhaft gelöscht",
     'none_found'            => "Keine Kategorien gefunden",
     'restored'              => "Kategorie restauriert|Kategorien restauriert",
     'subcategories'         => "Subkategorien",

@@ -5,6 +5,7 @@ return [
     'created'           => "Discuție creată",
     'delete'            => "Șterge această discuție",
     'deleted'           => "Discuție ștearsă|Discuții eliminat",
+    'perma_deleted'     => "Discuție șters definitiv|Discuții șters definitiv",
     'lock'              => "Bloca",
     'locked'            => "Blocat",
     'marked_read'       => "Toate discuțiile au fost marcate ca citite",

@@ -2,9 +2,13 @@
 
 class CategoryObserver
 {
-    public function deleting($model)
+    public function deleted($model)
     {
-        $model->threads()->delete();
+        if (!$model->exists) {
+            $model->threads()->forceDelete();
+        } else {
+            $model->threads()->delete();
+        }
     }
 
     public function restored($model)

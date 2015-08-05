@@ -7,9 +7,13 @@ class PostObserver
         if (!is_null($model->children)) {
             $model->children()->update(['post_id' => 0]);
         }
-        
+
         if ($model->thread->posts->isEmpty()) {
-            $model->thread()->delete();
+            if (!$model->exists) {
+                $model->thread()->forceDelete();
+            } else {
+                $model->thread()->delete();
+            }
         }
     }
 

@@ -4,7 +4,8 @@ return [
 
     'category'              => "Categorie|Categorii",
     'created'               => "Categorie creat",
-    'deleted'               => "Categorie eliminat|Categorii eliminat",
+    'deleted'               => "Categorie șters|Categorii șters",
+    'perma_deleted'         => "Categorie șters definitiv|Categorii șters definitiv",
     'none_found'            => "Nicio categorie găsită",
     'restored'              => "Categorie restaurat|Categorii restaurat",
     'subcategories'         => "Subcategorii",

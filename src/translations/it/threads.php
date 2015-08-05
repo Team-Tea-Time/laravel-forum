@@ -5,6 +5,7 @@ return [
     'created'           => "Discussione creata",
     'delete'            => "Elimina questa discussione",
     'deleted'           => "Discussione eliminata|Discussioni eliminati",
+    'perma_deleted'     => "Discussione eliminati in modo permanente|Discussioni eliminati definitivamente",
     'lock'              => "Serrare",
     'locked'            => "Bloccato",
     'marked_read'       => "Tutte le discussioni sono marcate come lette",

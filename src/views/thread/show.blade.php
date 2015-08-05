@@ -137,13 +137,16 @@
                     this.$http.patch(this.restoreRoute, function (response) {
                         this.addMessage(response);
                         this.$set('deleted', 0);
-                    });
+                    }, { emulateHTTP: true });
                 }
                 e.preventDefault();
             },
             permaDelete: function (e) {
                 e.preventDefault();
-
+                this.$http.delete(this.forceDeleteRoute, function (response) {
+                    this.addMessage(response);
+                    this.$set('permaDeleted', 0);
+                });
             },
             addMessage: function (response) {
                 this.alerts.push({ message: response.message });
