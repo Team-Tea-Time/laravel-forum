@@ -16,10 +16,10 @@
     },
     "autoload": {
         "classmap": [
-            "src/migrations"
+            "migrations"
         ],
-        "psr-0": {
-            "Riari\\Forum\\": "src/"
+        "psr-4": {
+            "Riari\\Forum\\": "src"
         }
     },
     "minimum-stability": "dev"
