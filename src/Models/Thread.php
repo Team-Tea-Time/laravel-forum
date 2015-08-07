@@ -10,14 +10,18 @@ class Thread extends BaseModel
 {
     use SoftDeletes, HasAuthor, HasSlug;
 
-    // Eloquent properties
+    /**
+     * Eloquent attributes
+     */
     protected $table            = 'forum_threads';
     protected $fillable         = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
     public    $timestamps       = true;
     protected $with             = ['author'];
     protected $guarded          = ['id'];
 
-    // Thread constants
+    /**
+     * Constants
+     */
     const     STATUS_UNREAD     = 'unread';
     const     STATUS_UPDATED    = 'updated';
 
@@ -30,19 +34,23 @@ class Thread extends BaseModel
     {
         parent::__construct($attributes);
         $this->perPage = config('forum.preferences.pagination.threads');
-        $this->routeParameters = [
-            'category'      => $this->category->id,
-            'category_slug' => $this->category->slug,
-            'thread'        => $this->id,
-            'thread_slug'   => $this->slug
-        ];
     }
 
+    /**
+     * Relationship: Category.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function category()
     {
         return $this->belongsTo('\Riari\Forum\Models\Category');
     }
 
+    /**
+     * Relationship: Readers.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function readers()
     {
         return $this->belongsToMany(
@@ -53,17 +61,22 @@ class Thread extends BaseModel
             )->withTimestamps();
     }
 
+    /**
+     * Relationship: Posts.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function posts()
     {
         return $this->hasMany('\Riari\Forum\Models\Post');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Scopes
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * Scope: Recent threads.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return \Illuminate\Database\Query\Builder
+     */
     public function scopeRecent($query)
     {
         $cutoff = config('forum.preferences.old_thread_threshold');
@@ -71,89 +84,152 @@ class Thread extends BaseModel
             ->orderBy('updated_at', 'desc');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Attributes
-    |--------------------------------------------------------------------------
-    */
-
-    // Route attributes
-
+    /**
+     * Attribute: Thread route.
+     *
+     * @return string
+     */
     public function getRouteAttribute()
     {
         return $this->buildRoute('forum.thread.show');
     }
 
+    /**
+     * Attribute: Reply route.
+     *
+     * @return string
+     */
     public function getReplyRouteAttribute()
     {
         return $this->buildRoute('forum.post.create');
     }
 
+    /**
+     * Attribute: Update route.
+     *
+     * @return string
+     */
     public function getUpdateRouteAttribute()
     {
         return $this->buildRoute('forum.api.thread.update');
     }
 
+    /**
+     * Attribute: Delete route.
+     *
+     * @return string
+     */
     public function getDeleteRouteAttribute()
     {
         return $this->buildRoute('forum.api.thread.destroy');
     }
 
+    /**
+     * Attribute: Restore route.
+     *
+     * @return string
+     */
     public function getRestoreRouteAttribute()
     {
         return $this->buildRoute('forum.api.thread.restore');
     }
 
+    /**
+     * Attribute: Force delete route.
+     *
+     * @return string
+     */
     public function getForceDeleteRouteAttribute()
     {
         return $this->buildRoute('forum.api.thread.destroy', ['force' => 1]);
     }
 
+    /**
+     * Attribute: Last post URL.
+     *
+     * @return string
+     */
     public function getLastPostUrlAttribute()
     {
         return "{$this->route}?page={$this->lastPage}#post-{$this->lastPost->id}";
     }
 
-    // General attributes
-
+    /**
+     * Attribute: Paginated posts.
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
     public function getPostsPaginatedAttribute()
     {
         return $this->posts()->paginate(config('forum.preferences.pagination.posts'));
     }
 
+    /**
+     * Attribute: Pagination links.
+     *
+     * @return string
+     */
     public function getPageLinksAttribute()
     {
         return $this->postsPaginated->render();
     }
 
+    /**
+     * Attribute: The last page number of the thread.
+     *
+     * @return int
+     */
     public function getLastPageAttribute()
     {
         return $this->postsPaginated->lastPage();
     }
 
+    /**
+     * Attribute: The last post in the thread.
+     *
+     * @return Post
+     */
     public function getLastPostAttribute()
     {
         return $this->posts()->orderBy('created_at', 'desc')->first();
     }
 
+    /**
+     * Attribute: Creation time of the last post in the thread.
+     *
+     * @return \Carbon\Carbon
+     */
     public function getLastPostTimeAttribute()
     {
         return $this->lastPost->created_at;
     }
 
+    /**
+     * Attribute: Number of thread replies.
+     *
+     * @return int
+     */
     public function getReplyCountAttribute()
     {
         return ($this->posts->count() - 1);
     }
 
+    /**
+     * Attribute: 'Old' flag.
+     *
+     * @return boolean
+     */
     public function getOldAttribute()
     {
         $cutoff = config('forum.preferences.old_thread_threshold');
         return (!$cutoff || $this->updated_at->timestamp < strtotime($cutoff));
     }
 
-    // Current user: reader attributes
-
+    /**
+     * Attribute: Currently authenticated reader.
+     *
+     * @return mixed
+     */
     public function getReaderAttribute()
     {
         if (auth()->check()) {
@@ -165,6 +241,11 @@ class Thread extends BaseModel
         return null;
     }
 
+    /**
+     * Attribute: Read/unread/updated status for current reader.
+     *
+     * @return mixed
+     */
     public function getUserReadStatusAttribute()
     {
         if (!$this->old && auth()->check()) {
@@ -178,6 +259,11 @@ class Thread extends BaseModel
         return false;
     }
 
+    /**
+     * Attribute: Current reader's new/updated threads.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getNewForReaderAttribute()
     {
         $threads = $this->recent();
@@ -199,11 +285,20 @@ class Thread extends BaseModel
         return $threads;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Helpers
-    |--------------------------------------------------------------------------
-    */
+    /**
+     * Helper: Get route parameters.
+     *
+     * @return array
+     */
+    public function getRouteParameters()
+    {
+        return [
+            'category'      => $this->category->id,
+            'category_slug' => $this->category->slug,
+            'thread'        => $this->id,
+            'thread_slug'   => $this->slug
+        ];
+    }
 
     /**
      * Helper: Mark this thread as read for the given user ID.

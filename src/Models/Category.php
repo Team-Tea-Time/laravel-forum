@@ -57,20 +57,15 @@ class Category extends BaseModel
 
     public function getRouteAttribute()
     {
-        return $this->getRoute('forum.category.index');
+        return $this->buildRoute('forum.category.index');
     }
 
     public function getNewThreadRouteAttribute()
     {
-        return $this->getRoute('forum.thread.create');
+        return $this->buildRoute('forum.thread.create');
     }
 
     // General attributes
-
-    public function getSlugAttribute()
-    {
-        return Str::slug($this->title);
-    }
 
     public function getThreadsPaginatedAttribute()
     {
@@ -124,24 +119,16 @@ class Category extends BaseModel
         });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Helpers
-    |--------------------------------------------------------------------------
-    */
-
     /**
-     * Return an array of components used to construct this model's route.
+     * Helper: Get route parameters.
      *
      * @return array
      */
-    protected function getRouteComponents()
+    public function getRouteParameters()
     {
-        $components = [
-            'category'  	=> $this->id,
-            'categorySlug'  => Str::slug($this->title, '-')
+        return [
+            'category'      => $this->id,
+            'category_slug' => $this->slug
         ];
-
-        return $components;
     }
 }

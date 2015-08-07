@@ -11,7 +11,7 @@ class PostObserver
         }
 
         if ($model->thread->posts->isEmpty()) {
-            if (!$model->exists) {
+            if ((!$model->thread->trashed() && !$model->thread->exists) || !$model->thread->exists) {
                 $model->thread()->forceDelete();
             } else {
                 $model->thread()->delete();

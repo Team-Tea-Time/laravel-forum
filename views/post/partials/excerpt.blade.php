@@ -5,7 +5,7 @@
                 {{ trans('forum::general.author') }}
             </th>
             <th>
-                {{ trans('forum::posts.post') }}
+                {{ trans_choice('forum::posts.post', 1) }}
             </th>
         </tr>
     </thead>
@@ -15,7 +15,7 @@
                 <strong>{!! $post->authorName !!}</strong>
             </td>
             <td>
-                {!! nl2br(e($post->content)) !!}
+                {!! Forum::render($post->content) !!}
             </td>
         </tr>
     </tbody>

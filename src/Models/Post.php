@@ -67,45 +67,37 @@ class Post extends BaseModel
 
     public function getRouteAttribute()
     {
-        return $this->getRoute('forum.post.show');
+        return $this->buildRoute('forum.post.show');
     }
 
     public function getEditRouteAttribute()
     {
-        return $this->getRoute('forum.post.edit');
+        return $this->buildRoute('forum.post.edit');
     }
 
     public function getDeleteRouteAttribute()
     {
-        return $this->getRoute('forum.api.post.destroy');
+        return $this->buildRoute('forum.api.post.destroy');
     }
 
     public function getReplyRouteAttribute()
     {
-        return $this->thread->getRoute('forum.post.create', ['post_id' => $this->id]);
+        return $this->buildRoute('forum.post.create', ['post_id' => $this->id]);
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Helpers
-    |--------------------------------------------------------------------------
-    */
-
     /**
-     * Return an array of components used to construct this model's route.
+     * Helper: Get route parameters.
      *
      * @return array
      */
-    protected function getRouteComponents()
+    protected function getRouteParameters()
     {
-        $components = [
+        return [
             'category'      => $this->thread->category->id,
-            'categorySlug'  => Str::slug($this->thread->category->title, '-'),
+            'category_slug'  => $this->thread->category->slug,
             'thread'        => $this->thread->id,
-            'threadSlug'    => Str::slug($this->thread->title, '-'),
+            'thread_slug'    => $this->thread->slug,
             'post'          => $this->id
         ];
-
-        return $components;
     }
 }

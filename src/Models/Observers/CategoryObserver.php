@@ -6,7 +6,7 @@ class CategoryObserver
 {
     public function deleted($model)
     {
-        if (!$model->exists) {
+        if (!$model->withTrashed()->exists) {
             $model->threads()->forceDelete();
         } else {
             $model->threads()->delete();

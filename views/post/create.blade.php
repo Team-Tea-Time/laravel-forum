@@ -4,7 +4,7 @@
     <h2>{{ trans('forum::general.new_reply') }} ({{ $thread->title }})</h2>
 
     @if (!is_null($post))
-        <h3>{{ trans('forum::general.replying_to') }}...</h3>
+        <h3>{{ trans('forum::general.replying_to', ['item' => $post->authorName]) }}...</h3>
 
         @include ('forum::post.partials.excerpt')
     @endif

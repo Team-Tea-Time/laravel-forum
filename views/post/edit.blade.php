@@ -4,7 +4,7 @@
     <h2>{{ trans('forum::posts.edit') }} ({{ $thread->title }})</h2>
 
     @if ($post->parent)
-        <h3>{{ trans('forum::general.response_to') }}...</h3>
+        <h3>{{ trans('forum::general.response_to', ['item' => $post->parent->authorName]) }}...</h3>
 
         @include ('forum::post.partials.excerpt', ['post' => $post->parent])
     @endif

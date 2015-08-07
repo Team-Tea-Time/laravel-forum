@@ -6,7 +6,7 @@ class ThreadObserver
 {
     public function deleted($model)
     {
-        if (!$model->exists) {
+        if ((!$model->trashed() && !$model->exists) || !$model->exists) {
             $model->posts()->forceDelete();
         } else {
             $model->posts()->delete();

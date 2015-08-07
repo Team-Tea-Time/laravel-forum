@@ -2,6 +2,7 @@
 
 namespace Riari\Forum\Models;
 
+use App;
 use Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -10,9 +11,9 @@ use Riari\Forum\Forum;
 abstract class BaseModel extends Model
 {
     /**
-     * @var array
+     * @var Router
      */
-    protected $routeParameters;
+    protected $router;
 
     /**
      * Create a new model instance.
@@ -23,6 +24,7 @@ abstract class BaseModel extends Model
     {
         parent::__construct($attributes);
         $this->forceDeleting = !config('forum.preferences.soft_deletes');
+        $this->router = App::make('Illuminate\Routing\Router');
     }
 
     /*
@@ -63,11 +65,15 @@ abstract class BaseModel extends Model
      * Build a named route using the parameters set by the model.
      *
      * @param  string  $name
+     * @param  array  $extraParameters
      * @return string
      */
-    public function buildRoute($name)
+    public function buildRoute($name, $extraParameters = [])
     {
-        dd(route($name));
+        $parameterNames = array_flip($this->router->getRoutes()->getByName($name)->parameterNames());
+        $parameters = array_intersect_key($this->getRouteParameters(), $parameterNames);
+
+        return route($name, array_merge($parameters, $extraParameters));
     }
 
     /**
@@ -86,7 +92,7 @@ abstract class BaseModel extends Model
      *
      * @return boolean
      */
-    public function wasUpdated()
+    public function hasBeenUpdated()
     {
         return ($this->updated_at > $this->created_at);
     }
