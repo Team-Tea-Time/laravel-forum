@@ -40,10 +40,10 @@ class Forum
      */
     public static function bindParameter($model, $id)
     {
-    	if (ForumRoute::isAPI()) {
-    		return $model->withTrashed()->find($id);
-    	}
-    	return $model->findOrFail($id);
+        if (ForumRoute::isAPI()) {
+            return $model->withTrashed()->find($id);
+        }
+        return $model->findOrFail($id);
     }
 
     /**

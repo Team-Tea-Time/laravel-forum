@@ -16,19 +16,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Permission handling method
-    |--------------------------------------------------------------------------
-    |
-    | Here we specify the method to use for handling permissions. It defaults
-    | to 'callback', which refers to the permission callbacks listed below.
-    | Set to 'class' if you'd rather specify a class to handle this.
-    |
-    */
-
-    'method' => 'callback',
-
-    /*
-    |--------------------------------------------------------------------------
     | Permission aliases
     |--------------------------------------------------------------------------
     |
@@ -57,6 +44,19 @@ return [
         'api.bulk.post.restore'     => 'api.post.destroy',
         'api.post.restore'          => 'api.post.destroy',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Permission handling method
+    |--------------------------------------------------------------------------
+    |
+    | Here we specify the method to use for handling permissions. It defaults
+    | to 'callback', which refers to the permission callbacks listed below.
+    | Set to 'class' if you'd rather specify a class to handle this.
+    |
+    */
+
+    'method' => 'callback',
 
     /*
     |--------------------------------------------------------------------------
@@ -200,5 +200,23 @@ return [
             ]
         ]
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Callback: access denied
+    |--------------------------------------------------------------------------
+    |
+    | This function is called when a permission check fails in the
+    | CheckPermission middleware. Does not apply to API routes.
+    |
+    */
+
+    /**
+     * @param  \Illuminate\Http\Request  $request
+     */
+    'access_denied' => function ($request)
+    {
+        return abort(403);
+    },
 
 ];

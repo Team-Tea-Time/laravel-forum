@@ -17,10 +17,10 @@ abstract class BaseController extends Controller
      */
     protected $model;
 
-	/**
-	 * @var array
-	 */
-	protected $rules;
+    /**
+     * @var array
+     */
+    protected $rules;
 
     /**
      * @var string

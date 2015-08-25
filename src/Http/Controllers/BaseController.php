@@ -7,10 +7,10 @@ use Illuminate\Routing\Controller;
 
 abstract class BaseController extends Controller
 {
-	use ValidatesRequests;
+    use ValidatesRequests;
 
-	/**
-	 * @var array
-	 */
-	protected $rules;
+    /**
+     * @var array
+     */
+    protected $rules;
 }

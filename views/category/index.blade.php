@@ -1,6 +1,6 @@
 {{--
-	$category is passed as NULL to the master layout view to prevent it from
-	showing in the breadcrumbs
+    $category is passed as NULL to the master layout view to prevent it from
+    showing in the breadcrumbs
 --}}
 @extends ('forum::master', ['category' => null])
 
@@ -11,9 +11,9 @@
         <table class="table table-index">
             <thead>
                 <tr>
-					<th>{{ trans_choice('forum::categories.category', 1) }}</th>
-					<th class="col-md-2">{{ trans_choice('forum::threads.thread', 2) }}</th>
-					<th class="col-md-2">{{ trans_choice('forum::posts.post', 2) }}</th>
+                    <th>{{ trans_choice('forum::categories.category', 1) }}</th>
+                    <th class="col-md-2">{{ trans_choice('forum::threads.thread', 2) }}</th>
+                    <th class="col-md-2">{{ trans_choice('forum::posts.post', 2) }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,7 +23,7 @@
                         {{ $category->subtitle }}
 
                         @if ($category->newestThread)
-        				<div class="text-muted">
+                        <div class="text-muted">
                             <br>
                             {{ trans('forum::threads.newest') }}:
                             <a href="{{ $category->newestThread->route }}">
@@ -35,7 +35,7 @@
                                 {{ $category->latestActiveThread->title }}
                                 ({{ $category->latestActiveThread->lastPost->authorName }})
                             </a>
-        				</div>
+                        </div>
                         @endif
                     </td>
                     <td>{{ $category->threadCount }}</td>
