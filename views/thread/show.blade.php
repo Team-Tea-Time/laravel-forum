@@ -8,7 +8,9 @@
             {{ $thread->title }}
         </h2>
 
-        @include ('forum::partials.alert', ['type' => 'success'])
+        <div v-repeat="alert in alerts" v-transition="fade">
+            @include ('forum::partials.alert', ['type' => 'success', 'message' => '@{{ alert.message }}'])
+        </div>
 
         @if (Forum::userCan(['api.thread.update', 'api.thread.delete', 'api.thread.restore'], compact('category', 'thread')))
             <div class="thread-tools dropdown" v-if="!permaDeleted">
@@ -125,6 +127,7 @@
                 });
             },
             toggleDelete: function (e) {
+                e.preventDefault();
                 if (!this.deleted) {
                     if (!confirm('{{ trans('forum::general.generic_confirm') }}')) {
                         return false;
@@ -140,7 +143,6 @@
                         this.$set('deleted', 0);
                     }, { emulateHTTP: true });
                 }
-                e.preventDefault();
             },
             permaDelete: function (e) {
                 e.preventDefault();

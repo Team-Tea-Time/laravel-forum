@@ -40,9 +40,9 @@ return [
     */
 
     'parameters' => [
-        'category'    => 'category',
+        'category'  => 'category',
         'thread'    => 'thread',
-        'post'        => 'post'
+        'post'      => 'post'
     ]
 
 ];

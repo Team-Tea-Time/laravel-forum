@@ -14,6 +14,9 @@
     <!-- Vue.js plugin: vue-resource -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.1.10/vue-resource.min.js"></script>
 
+    <!-- Pace.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -29,6 +32,39 @@
 
     .deleted {
         opacity: 0.35;
+    }
+
+    /* Vue.js transitions */
+    .fade-transition {
+        transition: opacity .3s ease;
+    }
+
+    .fade-enter, .fade-leave {
+        opacity: 0;
+    }
+
+    /* Pace.js */
+    .pace {
+        -webkit-pointer-events: none;
+        pointer-events: none;
+
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    .pace-inactive {
+        display: none;
+    }
+
+    .pace .pace-progress {
+        background: #000000;
+        position: fixed;
+        z-index: 2000;
+        top: 0;
+        right: 100%;
+        width: 100%;
+        height: 2px;
     }
     </style>
 </head>

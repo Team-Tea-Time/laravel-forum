@@ -94,9 +94,9 @@ class Post extends BaseModel
     {
         return [
             'category'      => $this->thread->category->id,
-            'category_slug'  => $this->thread->category->slug,
+            'category_slug' => $this->thread->category->slug,
             'thread'        => $this->thread->id,
-            'thread_slug'    => $this->thread->slug,
+            'thread_slug'   => $this->thread->slug,
             'post'          => $this->id
         ];
     }
