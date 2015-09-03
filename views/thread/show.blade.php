@@ -95,7 +95,7 @@
     </div>
 
     <script>
-    new Vue({
+    new Forum({
         el: '#thread',
 
         data: {
@@ -114,6 +114,7 @@
         methods: {
             toggleLock: function (e) {
                 e.preventDefault();
+                Pace.restart();
                 this.$http.put(this.updateRoute, { locked: !this.locked }, function (response) {
                     this.addMessage(response);
                     this.$set('locked', response.data.locked);
@@ -121,6 +122,7 @@
             },
             togglePin: function (e) {
                 e.preventDefault();
+                Pace.restart();
                 this.$http.put(this.updateRoute, { pinned: !this.pinned }, function (response) {
                     this.addMessage(response);
                     this.$set('pinned', response.data.pinned);
@@ -128,6 +130,7 @@
             },
             toggleDelete: function (e) {
                 e.preventDefault();
+                Pace.restart();
                 if (!this.deleted) {
                     if (!confirm('{{ trans('forum::general.generic_confirm') }}')) {
                         return false;
@@ -146,13 +149,11 @@
             },
             permaDelete: function (e) {
                 e.preventDefault();
+                Pace.restart();
                 this.$http.delete(this.forceDeleteRoute, function (response) {
                     this.addMessage(response);
                     this.$set('permaDeleted', 0);
                 });
-            },
-            addMessage: function (response) {
-                this.alerts.push({ message: response.message });
             }
         }
     });

@@ -71,6 +71,23 @@
 <body>
     <script>
     Vue.http.headers.common['X-CSRF-TOKEN'] = $('#token').attr('content');
+
+    var Forum = Vue.extend({
+        data: {
+            alerts: []
+        },
+
+        methods: {
+            addMessage: function (response) {
+                this.alerts.push({ message: response.message });
+                var self = this;
+                setTimeout(function () { self.deleteMessage(self.alerts.length - 1)}, 3000);
+            },
+            deleteMessage: function (index) {
+                this.alerts.splice(index, 1);
+            }
+        }
+    });
     </script>
 
     <div class="container">
