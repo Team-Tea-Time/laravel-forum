@@ -72,6 +72,7 @@
     <script>
     Vue.http.headers.common['X-CSRF-TOKEN'] = $('#token').attr('content');
 
+    var confirmMessage = '{{ trans('forum::general.generic_confirm') }}';
     var Forum = Vue.extend({
         data: {
             alerts: []

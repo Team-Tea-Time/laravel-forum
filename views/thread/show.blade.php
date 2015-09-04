@@ -13,7 +13,7 @@
         </div>
 
         @if (Forum::userCan(['api.thread.update', 'api.thread.delete', 'api.thread.restore'], compact('category', 'thread')))
-            <div class="thread-tools dropdown" v-if="!permaDeleted">
+            <div class="thread-tools dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="thread-actions" data-toggle="dropdown" aria-expanded="true">
                     {{ trans('forum::general.actions') }}
                     <span class="caret"></span>
@@ -37,6 +37,11 @@
                             <span v-if="deleted">{{ trans('forum::general.restore') }}</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="#" v-on="click: permaDelete">
+                            {{ trans('forum::general.perma_delete') }}
+                        </a>
+                    </li>
                 </ul>
             </div>
             <hr>
@@ -44,7 +49,7 @@
 
         @if (Forum::userCan('post.create', compact('category', 'thread')))
             <div class="row">
-                <div class="col-xs-4" v-if="!locked && !deleted && !permaDeleted">
+                <div class="col-xs-4" v-if="!locked && !deleted">
                     <div class="btn-group" role="group">
                         <a href="{{ $thread->replyRoute }}" class="btn btn-default">{{ trans('forum::general.new_reply') }}</a>
                         <a href="#quick-reply" class="btn btn-default">{{ trans('forum::general.quick_reply') }}</a>
@@ -56,7 +61,7 @@
             </div>
         @endif
 
-        <table class="table" v-class="deleted: deleted" v-if="!permaDeleted">
+        <table class="table" v-class="deleted: deleted">
             <thead>
                 <tr>
                     <th class="col-md-2">
@@ -102,7 +107,6 @@
             locked: {{ $thread->locked }},
             pinned: {{ $thread->pinned }},
             deleted: {{ $thread->deleted }},
-            permaDeleted: 0,
             categoryRoute: '{{ $thread->category->route }}',
             updateRoute: '{{ $thread->updateRoute }}',
             deleteRoute: '{{ $thread->deleteRoute }}',
@@ -132,7 +136,7 @@
                 e.preventDefault();
                 Pace.restart();
                 if (!this.deleted) {
-                    if (!confirm('{{ trans('forum::general.generic_confirm') }}')) {
+                    if (!confirm(confirmMessage)) {
                         return false;
                     }
 
@@ -150,9 +154,11 @@
             permaDelete: function (e) {
                 e.preventDefault();
                 Pace.restart();
+                if (!confirm(confirmMessage)) {
+                    return false;
+                }
                 this.$http.delete(this.forceDeleteRoute, function (response) {
-                    this.addMessage(response);
-                    this.$set('permaDeleted', 0);
+                    window.location.replace('{{ $thread->category->route }}');
                 });
             }
         }
