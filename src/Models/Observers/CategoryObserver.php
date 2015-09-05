@@ -2,12 +2,12 @@
 
 namespace Riari\Forum\Models\Observers;
 
-class CategoryObserver
+class CategoryObserver extends BaseObserver
 {
     public function deleted($model)
     {
-        if (!$model->withTrashed()->exists) {
-            $model->threads()->forceDelete();
+        if ($model->deleted_at != $this->carbon->now()) {
+            $model->threads()->withTrashed()->forceDelete();
         } else {
             $model->threads()->delete();
         }

@@ -2,7 +2,7 @@
 
 namespace Riari\Forum\Models\Observers;
 
-class PostObserver
+class PostObserver extends BaseObserver
 {
     public function deleted($model)
     {
@@ -11,8 +11,8 @@ class PostObserver
         }
 
         if ($model->thread->posts->isEmpty()) {
-            if ((!$model->thread->trashed() && !$model->thread->exists) || !$model->thread->exists) {
-                $model->thread()->forceDelete();
+            if ($model->deleted_at != $this->carbon->now()) {
+                $model->thread()->withTrashed()->forceDelete();
             } else {
                 $model->thread()->delete();
             }

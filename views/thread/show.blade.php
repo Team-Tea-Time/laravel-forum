@@ -8,10 +8,6 @@
             {{ $thread->title }}
         </h2>
 
-        <div v-repeat="alert in alerts" v-transition="fade">
-            @include ('forum::partials.alert', ['type' => 'success', 'message' => '@{{ alert.message }}'])
-        </div>
-
         @if (Forum::userCan(['api.thread.update', 'api.thread.delete', 'api.thread.restore'], compact('category', 'thread')))
             <div class="thread-tools dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="thread-actions" data-toggle="dropdown" aria-expanded="true">
@@ -46,6 +42,8 @@
             </div>
             <hr>
         @endif
+
+        <alert v-repeat="alerts" v-transition="fade"></alert>
 
         @if (Forum::userCan('post.create', compact('category', 'thread')))
             <div class="row">
@@ -82,7 +80,7 @@
         {!! $thread->pageLinks !!}
 
         @if (Forum::userCan('post.create', compact('category', 'thread')))
-            <div v-if="!locked && !deleted && !permaDeleted">
+            <div v-if="!locked && !deleted">
                 <h3>{{ trans('forum::general.quick_reply') }}</h3>
                 <div id="quick-reply">
                     @include (
@@ -120,7 +118,7 @@
                 e.preventDefault();
                 Pace.restart();
                 this.$http.put(this.updateRoute, { locked: !this.locked }, function (response) {
-                    this.addMessage(response);
+                    this.createAlert('success', response.message);
                     this.$set('locked', response.data.locked);
                 });
             },
@@ -128,7 +126,7 @@
                 e.preventDefault();
                 Pace.restart();
                 this.$http.put(this.updateRoute, { pinned: !this.pinned }, function (response) {
-                    this.addMessage(response);
+                    this.createAlert('success', response.message);
                     this.$set('pinned', response.data.pinned);
                 });
             },
@@ -141,12 +139,12 @@
                     }
 
                     this.$http.delete(this.deleteRoute, function (response) {
-                        this.addMessage(response);
+                        this.createAlert('success', response.message);
                         this.$set('deleted', 1);
                     });
                 } else {
                     this.$http.patch(this.restoreRoute, function (response) {
-                        this.addMessage(response);
+                        this.createAlert('success', response.message);
                         this.$set('deleted', 0);
                     }, { emulateHTTP: true });
                 }

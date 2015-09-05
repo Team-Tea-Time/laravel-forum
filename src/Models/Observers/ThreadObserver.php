@@ -2,12 +2,12 @@
 
 namespace Riari\Forum\Models\Observers;
 
-class ThreadObserver
+class ThreadObserver extends BaseObserver
 {
     public function deleted($model)
     {
-        if ((!$model->trashed() && !$model->exists) || !$model->exists) {
-            $model->posts()->forceDelete();
+        if ($model->deleted_at != $this->carbon->now()) {
+            $model->posts()->withTrashed()->forceDelete();
         } else {
             $model->posts()->delete();
         }

@@ -79,13 +79,19 @@
         },
 
         methods: {
-            addMessage: function (response) {
-                this.alerts.push({ message: response.message });
+            createAlert: function (type, message) {
+                this.alerts.push({ type: type, message: message });
                 var self = this;
-                setTimeout(function () { self.deleteMessage(self.alerts.length - 1)}, 3000);
+                setTimeout(function () { self.deleteAlert(self.alerts.length - 1)}, 3000);
             },
-            deleteMessage: function (index) {
+            deleteAlert: function (index) {
                 this.alerts.splice(index, 1);
+            }
+        },
+
+        components: {
+            'alert': {
+                template: '<div class="alert alert-@{{ type }}"><div class="message">@{{ message }}</div></div>'
             }
         }
     });
