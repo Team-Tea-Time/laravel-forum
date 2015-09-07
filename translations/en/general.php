@@ -7,6 +7,7 @@ return [
     'author'            => "Author",
     'cancel'            => "Cancel",
     'delete'            => "Delete",
+    'deleted'           => "Deleted",
     'edit'              => "Edit",
     'editing'           => "You're editing :item",
     'generic_confirm'   => "Are you sure?",

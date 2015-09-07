@@ -35,17 +35,17 @@ class Post extends BaseModel
 
     public function thread()
     {
-        return $this->belongsTo('\Riari\Forum\Models\Thread');
+        return $this->belongsTo('\Riari\Forum\Models\Thread')->withTrashed();
     }
 
     public function parent()
     {
-        return $this->belongsTo('\Riari\Forum\Models\Post', 'post_id');
+        return $this->belongsTo('\Riari\Forum\Models\Post', 'post_id')->withTrashed();
     }
 
     public function children()
     {
-        return $this->hasMany('\Riari\Forum\Models\Post', 'post_id');
+        return $this->hasMany('\Riari\Forum\Models\Post', 'post_id')->withTrashed();
     }
 
     /*

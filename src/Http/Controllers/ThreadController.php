@@ -88,7 +88,11 @@ class ThreadController extends BaseController
     {
         event(new UserViewingThread($thread));
 
-        return view('forum::thread.show', compact('category', 'thread'));
+        $posts = Forum::userCan('api.post.destroy', compact('category', 'thread'))
+            ? $thread->postsWithTrashedPaginated
+            : $thread->postsPaginated;
+
+        return view('forum::thread.show', compact('category', 'thread', 'posts'));
     }
 
     /**

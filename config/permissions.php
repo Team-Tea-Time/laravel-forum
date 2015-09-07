@@ -108,6 +108,10 @@ return [
         'thread' => [
             'show' => function ($user, $parameters = [])
             {
+                if ($parameters['thread']->trashed() && !Forum::userCan('api.thread.destroy', $parameters)) {
+                    return false;
+                }
+
                 return true;
             },
             'create' => function ($user, $parameters = [])
@@ -119,6 +123,10 @@ return [
         'post' => [
             'show' => function ($user, $parameters = [])
             {
+                if ($parameters['post']->trashed() && !Forum::userCan('api.post.destroy', $parameters)) {
+                    return false;
+                }
+
                 return true;
             },
             'create' => function ($user, $parameters = [])

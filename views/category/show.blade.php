@@ -46,9 +46,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (!$category->threadsPaginated->isEmpty())
-                        @foreach ($category->threadsPaginated as $thread)
-                            <tr>
+                    @if (!$threads->isEmpty())
+                        @foreach ($threads as $thread)
+                            <tr class="{{ ($thread->trashed()) ? "deleted" : "" }}">
                                 <td>
                                     <span class="pull-right">
                                         @if ($thread->locked)
@@ -57,8 +57,11 @@
                                         @if ($thread->pinned)
                                             <span class="label label-info">{{ trans('forum::threads.pinned') }}</span>
                                         @endif
-                                        @if ($thread->userReadStatus)
+                                        @if ($thread->userReadStatus && !$thread->trashed())
                                             <span class="label label-primary">{{ trans($thread->userReadStatus) }}</span>
+                                        @endif
+                                        @if ($thread->trashed())
+                                            <span class="label label-danger">{{ trans('forum::general.deleted') }}</span>
                                         @endif
                                     </span>
                                     <p class="lead">
@@ -66,14 +69,18 @@
                                     </p>
                                     <p>{{ $thread->authorName }} <span class="text-muted">({{ $thread->posted }})</span></p>
                                 </td>
-                                <td class="text-right">
-                                    {{ $thread->replyCount }}
-                                </td>
-                                <td class="text-right">
-                                    {{ $thread->lastPost->authorName }}
-                                    <p class="text-muted">({{ $thread->lastPost->posted }})</p>
-                                    <a href="{{ URL::to( $thread->lastPostRoute ) }}" class="btn btn-primary btn-xs">{{ trans('forum::posts.view') }} &raquo;</a>
-                                </td>
+                                @if ($thread->trashed())
+                                    <td colspan="2">&nbsp;</td>
+                                @else
+                                    <td class="text-right">
+                                        {{ $thread->replyCount }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ $thread->lastPost->authorName }}
+                                        <p class="text-muted">({{ $thread->lastPost->posted }})</p>
+                                        <a href="{{ url( $thread->lastPostRoute ) }}" class="btn btn-primary btn-xs">{{ trans('forum::posts.view') }} &raquo;</a>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     @else

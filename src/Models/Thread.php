@@ -72,6 +72,16 @@ class Thread extends BaseModel
     }
 
     /**
+     * Relationship: Posts (including soft-deleted).
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function postsWithTrashed()
+    {
+        return $this->posts()->withTrashed();
+    }
+
+    /**
      * Scope: Recent threads.
      *
      * @param  \Illuminate\Database\Query\Builder  $query
@@ -162,6 +172,16 @@ class Thread extends BaseModel
     public function getPostsPaginatedAttribute()
     {
         return $this->posts()->paginate(config('forum.preferences.pagination.posts'));
+    }
+
+    /**
+     * Attribute: Paginated posts (including soft-deleted).
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPostsWithTrashedPaginatedAttribute()
+    {
+        return $this->posts()->withTrashed()->paginate(config('forum.preferences.pagination.posts'));
     }
 
     /**

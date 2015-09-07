@@ -47,6 +47,16 @@ class Category extends BaseModel
         return $this->hasMany('\Riari\Forum\Models\Thread');
     }
 
+    /**
+     * Relationship: Threads (including soft-deleted).
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function threadsWithTrashed()
+    {
+        return $this->threads()->withTrashed();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Attributes
@@ -70,6 +80,14 @@ class Category extends BaseModel
     public function getThreadsPaginatedAttribute()
     {
         return $this->threads()
+            ->orderBy('pinned', 'desc')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(config('forum.preferences.pagination.threads'));
+    }
+
+    public function getThreadsWithTrashedPaginatedAttribute()
+    {
+        return $this->threadsWithTrashed()
             ->orderBy('pinned', 'desc')
             ->orderBy('updated_at', 'desc')
             ->paginate(config('forum.preferences.pagination.threads'));

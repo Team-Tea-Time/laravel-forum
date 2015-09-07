@@ -8,7 +8,7 @@
             {{ $thread->title }}
         </h2>
 
-        @if (Forum::userCan(['api.thread.update', 'api.thread.delete', 'api.thread.restore'], compact('category', 'thread')))
+        @if (Forum::userCan(['api.thread.update', 'api.thread.destroy', 'api.thread.restore'], compact('category', 'thread')))
             <div class="thread-tools dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="thread-actions" data-toggle="dropdown" aria-expanded="true">
                     {{ trans('forum::general.actions') }}
@@ -27,17 +27,19 @@
                             <span v-if="pinned">{{ trans('forum::threads.unpin') }}</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="#" v-on="click: toggleDelete">
-                            <span v-if="!deleted">{{ trans('forum::general.delete') }}</span>
-                            <span v-if="deleted">{{ trans('forum::general.restore') }}</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" v-on="click: permaDelete">
-                            {{ trans('forum::general.perma_delete') }}
-                        </a>
-                    </li>
+                    @if (Forum::usercan('api.thread.destroy', compact('category', 'thread')))
+                        <li>
+                            <a href="#" v-on="click: toggleDelete">
+                                <span v-if="!deleted">{{ trans('forum::general.delete') }}</span>
+                                <span v-if="deleted">{{ trans('forum::general.restore') }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" v-on="click: permaDelete">
+                                {{ trans('forum::general.perma_delete') }}
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
             <hr>
@@ -71,7 +73,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($thread->postsPaginated as $post)
+                @foreach ($posts as $post)
                     @include ('forum::post.partials.list', compact('post'))
                 @endforeach
             </tbody>

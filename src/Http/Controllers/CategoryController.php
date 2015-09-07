@@ -3,6 +3,7 @@
 namespace Riari\Forum\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Forum;
 use Riari\Forum\Events\UserViewingCategory;
 use Riari\Forum\Events\UserViewingIndex;
 use Riari\Forum\Models\Category;
@@ -53,6 +54,10 @@ class CategoryController extends BaseController
     {
         event(new UserViewingCategory($category));
 
-        return view('forum::category.show', compact('category'));
+        $threads = Forum::userCan('api.thread.destroy', compact('category'))
+            ? $category->threadsWithTrashedPaginated
+            : $category->threadsPaginated;
+
+        return view('forum::category.show', compact('category', 'threads'));
     }
 }
