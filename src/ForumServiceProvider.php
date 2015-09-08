@@ -83,20 +83,14 @@ class ForumServiceProvider extends ServiceProvider
         $this->namespace = config('forum.integration.controllers.namespace');
 
         // Load routes (if routing enabled)
-        $middleware = (config('forum.permissions.enabled')) ? ['middleware' => 'forum.permissions'] : [];
         if (config('forum.routing.enabled')) {
-            $router->group(['namespace' => $this->namespace] + $middleware, function ($router) use ($dir)
+            $router->group(['namespace' => $this->namespace], function ($router) use ($dir)
             {
                 $root = config('forum.routing.root');
                 $parameters = config('forum.routing.parameters');
                 $controllers = config('forum.integration.controllers');
                 require "{$dir}routes.php";
             });
-        }
-
-        // Register middleware
-        if (config('forum.permissions.enabled')) {
-            $router->middleware('forum.permissions', 'Riari\Forum\Http\Middleware\CheckPermissions');
         }
 
         // Register model observers
