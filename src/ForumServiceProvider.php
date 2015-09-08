@@ -35,15 +35,10 @@ class ForumServiceProvider extends ServiceProvider
         {
             return new \Riari\Forum\Forum;
         });
-        $this->app->bind('forumroute', function()
-        {
-            return new \Riari\Forum\Routing\Route;
-        });
 
         // Create facade aliases
         $loader = AliasLoader::getInstance();
         $loader->alias('Forum', 'Riari\Forum\Support\Facades\Forum');
-        $loader->alias('ForumRoute', 'Riari\Forum\Support\Facades\ForumRoute');
     }
 
     /**
@@ -100,7 +95,6 @@ class ForumServiceProvider extends ServiceProvider
         }
 
         // Register middleware
-        $router->middleware('forum.auth.basic', 'Riari\Forum\Http\Middleware\BasicAuth');
         if (config('forum.permissions.enabled')) {
             $router->middleware('forum.permissions', 'Riari\Forum\Http\Middleware\CheckPermissions');
         }
