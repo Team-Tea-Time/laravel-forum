@@ -6,5 +6,8 @@ use Illuminate\Support\Facades\Facade;
 
 class ForumRoute extends Facade
 {
-    protected static function getFacadeAccessor() { return 'forumroute'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'forumroute';
+    }
 }

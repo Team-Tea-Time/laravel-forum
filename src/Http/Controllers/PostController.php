@@ -123,6 +123,10 @@ class PostController extends BaseController
     {
         event(new UserEditingPost($post));
 
+        if ($post->trashed()) {
+            return abort(404);
+        }
+
         return view('forum::post.edit', compact('category', 'thread', 'post'));
     }
 

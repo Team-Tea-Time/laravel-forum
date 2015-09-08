@@ -218,6 +218,20 @@ abstract class BaseController extends Controller
     }
 
     /**
+     * Create a generic response.
+     *
+     * @param  object  $data
+     * @param  string  $message
+     * @param  int  $code
+     * @return JsonResponse
+     */
+    protected function response($data, $message = "", $code = 200)
+    {
+        $message = (empty($message)) ? [] : ['message' => $message];
+        return new JsonResponse($message + compact('data'), $code);
+    }
+
+    /**
      * Create a Collection response.
      *
      * @param  object  $collection
@@ -227,8 +241,7 @@ abstract class BaseController extends Controller
      */
     protected function collectionResponse($collection, $message = "", $code = 200)
     {
-        $message = (empty($message)) ? [] : ['message' => $message];
-        return new JsonResponse($message + ['data' => $collection], $code);
+        return $this->response($collection, $message, $code);
     }
 
     /**
@@ -241,8 +254,7 @@ abstract class BaseController extends Controller
      */
     protected function modelResponse($model, $message = "", $code = 200)
     {
-        $message = (empty($message)) ? [] : ['message' => $message];
-        return new JsonResponse($message + ['data' => $model], $code);
+        return $this->response($model, $message, $code);
     }
 
     /**

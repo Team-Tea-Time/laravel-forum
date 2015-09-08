@@ -63,7 +63,7 @@ return [
             $alerts = Session::get('alerts');
         }
 
-        Session::flash('alerts', array_merge($alerts, [['type' => $type, 'message' => $message]]));
+        Session::flash('alerts', array_push($alerts, compact('type', 'message')));
     },
 
 ];

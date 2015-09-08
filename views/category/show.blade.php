@@ -43,6 +43,9 @@
                         <th>{{ trans('forum::general.subject') }}</th>
                         <th class="col-md-2 text-right">{{ trans('forum::general.replies') }}</th>
                         <th class="col-md-2 text-right">{{ trans('forum::posts.last') }}</th>
+                        @if (Forum::userCan(['api.bulk.thread.destroy', 'api.bulk.thread.update', 'api.bulk.thread.restore'], compact('category')))
+                            <th class="col-md-1 text-right"><input type="checkbox" data-toggle-all></th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -81,6 +84,11 @@
                                         <a href="{{ url( $thread->lastPostRoute ) }}" class="btn btn-primary btn-xs">{{ trans('forum::posts.view') }} &raquo;</a>
                                     </td>
                                 @endif
+                                @if (Forum::userCan(['api.bulk.thread.destroy', 'api.bulk.thread.update', 'api.bulk.thread.restore'], compact('category')))
+                                    <td class="text-right">
+                                        <input type="checkbox" name="threads[{{ $thread->id }}]">
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     @else
@@ -88,7 +96,7 @@
                             <td>
                                 {{ trans('forum::threads.none_found') }}
                             </td>
-                            <td class="text-right" colspan="2">
+                            <td class="text-right" colspan="3">
                                 @if ($category->userCanCreateThreads)
                                     <a href="{{ $category->newThreadRoute }}">{{ trans('forum::threads.post_the_first') }}</a>
                                 @endif
@@ -97,6 +105,12 @@
                     @endif
                 </tbody>
             </table>
+        @endif
+
+        @if (Forum::userCan(['api.bulk.thread.destroy', 'api.bulk.thread.update', 'api.bulk.thread.restore'], compact('category')))
+            <div class="actions hidden">
+                You can do stuff!
+            </div>
         @endif
 
         <div class="row">
@@ -111,4 +125,19 @@
         </div>
     </div>
 
+    <script>
+    $('input[type=checkbox][data-toggle-all]').click(function() {
+        var checkboxes = $('table tbody input[type=checkbox]');
+        var actions = $('.actions');
+
+        checkboxes.prop('checked', $(this).is(':checked')).change();
+
+        checkboxes.change(function() {
+            var tr = $(this).parents('tr');
+            $(this).is(':checked') ? tr.addClass('active') : tr.removeClass('active');
+            
+            checkboxes.filter(':checked').length ? actions.removeClass('hidden') : actions.addClass('hidden');
+        });
+    });
+    </script>
 @overwrite

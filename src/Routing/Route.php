@@ -2,9 +2,7 @@
 
 namespace Riari\Forum\Routing;
 
-use Illuminate\Support\Facades\Route as BaseRoute;
-
-class Route extends BaseRoute
+class Route extends \Illuminate\Support\Facades\Route
 {
     public static function isAPI()
     {

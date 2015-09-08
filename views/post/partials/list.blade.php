@@ -20,11 +20,13 @@
 </tr>
 <tr>
     <td>
-        @if (Forum::userCan('post.edit', compact('category', 'thread', 'post')))
-            <a href="{{ $post->editRoute }}">{{ trans('forum::general.edit') }}</a>
-        @endif
-        @if (Forum::userCan('api.post.destroy', compact('category', 'thread', 'post')))
-            <a href="{{ $post->deleteRoute }}" data-confirm data-method="delete">{{ trans('forum::general.delete') }}</a>
+        @if (!$post->trashed())
+            @if (Forum::userCan('post.edit', compact('category', 'thread', 'post')))
+                <a href="{{ $post->editRoute }}">{{ trans('forum::general.edit') }}</a>
+            @endif
+            @if (Forum::userCan('api.post.destroy', compact('category', 'thread', 'post')))
+                <a href="{{ $post->deleteRoute }}" data-confirm data-method="delete">{{ trans('forum::general.delete') }}</a>
+            @endif
         @endif
     </td>
     <td class="text-muted">
@@ -34,11 +36,11 @@
         @endif
         <span class="pull-right">
             <a href="{{ $post->url }}">#{{ $post->id }}</a>
-            <span v-if="!locked && !deleted && !permaDeleted">
+            <span v-if="!locked && !deleted">
                 - <a href="{{ $post->replyRoute }}">{{ trans('forum::general.reply') }}</a>
             </span>
             @if (Request::fullUrl() != $post->route)
-                <span v-if="!deleted && !permaDeleted">
+                <span v-if="!deleted">
                     - <a href="{{ $post->route }}">{{ trans('forum::posts.view') }}</a>
                 </span>
             @endif

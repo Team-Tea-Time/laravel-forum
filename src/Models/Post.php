@@ -9,7 +9,9 @@ class Post extends BaseModel
 {
     use SoftDeletes, HasAuthor;
 
-    // Eloquent properties
+    /**
+     * Eloquent attributes
+     */
     protected $table        = 'forum_posts';
     protected $fillable     = ['thread_id', 'author_id', 'post_id', 'content'];
     public    $timestamps   = true;
@@ -27,35 +29,41 @@ class Post extends BaseModel
         $this->setPerPage(config('forum.preferences.pagination.posts'));
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Relationships
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * Relationship: Thread.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function thread()
     {
         return $this->belongsTo('\Riari\Forum\Models\Thread')->withTrashed();
     }
 
+    /**
+     * Relationship: Parent post.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function parent()
     {
         return $this->belongsTo('\Riari\Forum\Models\Post', 'post_id')->withTrashed();
     }
 
+    /**
+     * Relationship: Child posts.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function children()
     {
         return $this->hasMany('\Riari\Forum\Models\Post', 'post_id')->withTrashed();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Attributes
-    |--------------------------------------------------------------------------
-    */
-
-    // Route attributes
-
+    /**
+     * Attribute: URL.
+     *
+     * @return string
+     */
     public function getUrlAttribute()
     {
         $perPage = config('forum.preferences.pagination.threads');
@@ -65,21 +73,41 @@ class Post extends BaseModel
         return "{$this->thread->route}?page={$page}#post-{$this->id}";
     }
 
+    /**
+     * Attribute: Route.
+     *
+     * @return string
+     */
     public function getRouteAttribute()
     {
         return $this->buildRoute('forum.post.show');
     }
 
+    /**
+     * Attribute: Edit route.
+     *
+     * @return string
+     */
     public function getEditRouteAttribute()
     {
         return $this->buildRoute('forum.post.edit');
     }
 
+    /**
+     * Attribute: Delete route.
+     *
+     * @return string
+     */
     public function getDeleteRouteAttribute()
     {
         return $this->buildRoute('forum.api.post.destroy');
     }
 
+    /**
+     * Attribute: Reply route.
+     *
+     * @return string
+     */
     public function getReplyRouteAttribute()
     {
         return $this->buildRoute('forum.post.create', ['post_id' => $this->id]);

@@ -5,7 +5,7 @@ namespace Riari\Forum\Models\Traits;
 trait HasAuthor
 {
     /**
-     * Relationship: Author
+     * Relationship: Author.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -15,7 +15,7 @@ trait HasAuthor
     }
 
     /**
-     * Attribute: Author name
+     * Attribute: Author name.
      *
      * @return mixed
      */
