@@ -88,9 +88,6 @@ class ForumServiceProvider extends ServiceProvider
 
         // Register policies
         $this->registerPolicies($gate);
-
-        // Register abilities
-        $this->registerAbilities($gate);
     }
 
     /**
@@ -177,55 +174,5 @@ class ForumServiceProvider extends ServiceProvider
             Thread::class   => $policies['thread'],
             Post::class     => $policies['post']
         ];
-    }
-
-    /**
-     * Register gate abilities.
-     *
-     * @param  GateContract  $gate
-     * @return void
-     */
-    protected function registerAbilities(GateContract $gate)
-    {
-        $this->registerAbilitiesWithPolicy($gate, [
-            'create-category'   => 'create',
-            'view-category'     => 'show',
-            'update-category'   => 'update',
-            'delete-category'   => 'delete',
-            'pin-threads'       => 'pinThreads',
-            'delete-threads'    => 'deleteThreads',
-        ], 'category');
-
-        $this->registerAbilitiesWithPolicy($gate, [
-            'create-thread'     => 'create',
-            'view-thread'       => 'show',
-            'update-thread'     => 'update',
-            'reply-to-thread'   => 'reply',
-            'delete-thread'     => 'delete',
-            'delete-posts'      => 'deletePosts',
-        ], 'thread');
-
-        $this->registerAbilitiesWithPolicy($gate, [
-            'view-post'     => 'show',
-            'update-post'   => 'update',
-            'delete-post'   => 'delete',
-        ], 'post');
-    }
-
-    /**
-     * Register the given gate abilities using the specified policy.
-     *
-     * @param  GateContract  $gate
-     * @param  array  $abilities
-     * @param  string  $policyName
-     * @return void
-     */
-    protected function registerAbilitiesWithPolicy(GateContract $gate, $abilities, $policyName)
-    {
-        $class = config("forum.integration.policies.{$policyName}");
-
-        foreach ($abilities as $ability => $method) {
-            $gate->define($ability, "{$class}@{$method}");
-        }
     }
 }

@@ -31,6 +31,54 @@ class CategoryPolicy
     }
 
     /**
+     * Permission: Delete threads in category.
+     *
+     * @param  object  $user
+     * @param  Category  $category
+     * @return bool
+     */
+    public function deleteThreads($user, Category $category)
+    {
+        return false;
+    }
+
+    /**
+     * Permission: Move threads from/to category.
+     *
+     * @param  object  $user
+     * @param  Category  $category
+     * @return bool
+     */
+    public function moveThreads($user, Category $category)
+    {
+        return false;
+    }
+
+    /**
+     * Permission: Lock threads in category.
+     *
+     * @param  object  $user
+     * @param  Category  $category
+     * @return bool
+     */
+    public function lockThreads($user, Category $category)
+    {
+        return false;
+    }
+
+    /**
+     * Permission: Pin threads in category.
+     *
+     * @param  object  $user
+     * @param  Category  $category
+     * @return bool
+     */
+    public function pinThreads($user, Category $category)
+    {
+        return false;
+    }
+
+    /**
      * Permission: View category.
      *
      * @param  object  $user
@@ -43,15 +91,27 @@ class CategoryPolicy
     }
 
     /**
-     * Permission: Update category.
+     * Permission: Rename category.
      *
      * @param  object  $user
      * @param  Category  $category
      * @return bool
      */
-    public function update($user, Category $category)
+    public function rename($user, Category $category)
     {
-        return $user->id === $thread->user_id;
+        return false;
+    }
+
+    /**
+     * Permission: Move category.
+     *
+     * @param  object  $user
+     * @param  Category  $category
+     * @return bool
+     */
+    public function move($user, Category $category)
+    {
+        return false;
     }
 
     /**
@@ -63,6 +123,6 @@ class CategoryPolicy
      */
     public function delete($user, Category $category)
     {
-        return $user->id === $thread->user_id;
+        return false;
     }
 }
