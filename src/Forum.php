@@ -3,7 +3,6 @@
 namespace Riari\Forum;
 
 use App;
-use ForumRoute;
 
 class Forum
 {
@@ -40,9 +39,6 @@ class Forum
      */
     public static function bindParameter($model, $id)
     {
-        if (ForumRoute::isAPI()) {
-            return $model->withTrashed()->find($id);
-        }
-        return $model->findOrFail($id);
+        return $model->withTrashed()->findOrFail($id);
     }
 }

@@ -21,6 +21,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Policies
+    |--------------------------------------------------------------------------
+    |
+    | Here we specify the policy classes to use. Change these if you want to
+    | extend the provided classes and use your own instead.
+    |
+    */
+
+    'policies' => [
+        'category'  => Riari\Forum\Policies\CategoryPolicy::class,
+        'thread'    => Riari\Forum\Policies\ThreadPolicy::class,
+        'post'      => Riari\Forum\Policies\PostPolicy::class
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Application user model
     |--------------------------------------------------------------------------
     |

@@ -2,8 +2,8 @@
 
 namespace Riari\Forum\Http\Controllers;
 
+use Gate;
 use Illuminate\Http\Request;
-use Forum;
 use Riari\Forum\Events\UserViewingCategory;
 use Riari\Forum\Events\UserViewingIndex;
 use Riari\Forum\Models\Category;
@@ -54,7 +54,9 @@ class CategoryController extends BaseController
     {
         event(new UserViewingCategory($category));
 
-        $threads = Forum::userCan('api.thread.destroy', compact('category'))
+        $this->authorize($category);
+
+        $threads = config('forum.preferences.list_trashed_threads')
             ? $category->threadsWithTrashedPaginated
             : $category->threadsPaginated;
 

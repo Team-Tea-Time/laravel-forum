@@ -2,6 +2,7 @@
 
 namespace Riari\Forum\Models;
 
+use Gate;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Riari\Forum\Models\Traits\HasAuthor;
 use Riari\Forum\Models\Traits\HasSlug;
@@ -299,7 +300,7 @@ class Thread extends BaseModel
         // Filter the threads according to the user's permissions
         $threads = $threads->filter(function ($thread)
         {
-            return $thread->category->userCanView;
+            return Gate::allows('view', $thread->category);
         });
 
         return $threads;

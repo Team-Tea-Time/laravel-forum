@@ -52,6 +52,8 @@ class PostController extends BaseController
     {
         event(new UserViewingPost($post));
 
+        $this->authorize($post);
+
         return view('forum::post.show', compact('category', 'thread', 'post'));
     }
 
@@ -68,6 +70,8 @@ class PostController extends BaseController
     public function create(Category $category, $categorySlug, Thread $thread, $threadSlug, Request $request)
     {
         event(new UserCreatingPost($thread));
+
+        $this->authorize('reply', $thread);
 
         $post = null;
         if ($request->has('post_id')) {
@@ -90,6 +94,8 @@ class PostController extends BaseController
     public function store(Category $category, $categorySlug, Thread $thread, $threadSlug, Request $request)
     {
         $this->validate($request, $this->rules);
+
+        $this->authorize('reply', $thread);
 
         $post = null;
         if ($request->has('post_id')) {
@@ -127,6 +133,8 @@ class PostController extends BaseController
             return abort(404);
         }
 
+        $this->authorize('update', $post);
+
         return view('forum::post.edit', compact('category', 'thread', 'post'));
     }
 
@@ -144,6 +152,8 @@ class PostController extends BaseController
     public function update(Category $category, $categorySlug, Thread $thread, $threadSlug, Post $post, Request $request)
     {
         $this->validate($request, $this->rules);
+
+        $this->authorize($post);
 
         $this->posts->where('id', $post->id)->update([
             'content' => $request->input('content')

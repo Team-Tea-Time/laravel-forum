@@ -112,6 +112,21 @@ return [
     |
     */
 
-    'soft_deletes' => true
+    'soft_deletes' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | List soft-deleted threads/posts
+    |--------------------------------------------------------------------------
+    |
+    | Enable these if you want to include soft-deleted threads and posts in
+    | categories and threads (respectively). Note that this does not affect
+    | the ability to view a soft-deleted thread or post directly, which
+    | is determined by the forum policies.
+    |
+    */
+
+    'list_trashed_threads' => false,
+    'list_trashed_posts' => false
 
 ];

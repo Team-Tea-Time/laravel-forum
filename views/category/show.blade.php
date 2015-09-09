@@ -27,9 +27,9 @@
 
         <div class="row">
             <div class="col-xs-4">
-                @if (Forum::userCan('thread.create', compact('category')))
+                @can ('create-thread', $category)
                     <a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
-                @endif
+                @endcan
             </div>
             <div class="col-xs-8 text-right">
                 {!! $category->pageLinks !!}
@@ -135,7 +135,7 @@
         checkboxes.change(function() {
             var tr = $(this).parents('tr');
             $(this).is(':checked') ? tr.addClass('active') : tr.removeClass('active');
-            
+
             checkboxes.filter(':checked').length ? actions.removeClass('hidden') : actions.addClass('hidden');
         });
     });
