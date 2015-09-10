@@ -2,10 +2,10 @@
 
 namespace Riari\Forum;
 
-use Blade;
+use Illuminate\Auth\Access\Gate;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\AliasLoader;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
@@ -44,15 +44,8 @@ class ForumServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Bind the forum facade
-        $this->app->bind('forum', function()
-        {
-            return new \Riari\Forum\Forum;
-        });
-
-        // Create facade alias
-        $loader = AliasLoader::getInstance();
-        $loader->alias('Forum', 'Riari\Forum\Support\Facades\Forum');
+        $this->registerFacades();
+        $this->registerAccessGate();
     }
 
     /**
@@ -64,39 +57,29 @@ class ForumServiceProvider extends ServiceProvider
      */
     public function boot(Router $router, GateContract $gate)
     {
-        // Set the package base directory
         $this->baseDir = __DIR__.'/../';
 
-        // Register publishable files
-        $this->registerPublishables();
-
-        // Load config/views/translations
+        $this->setPublishables();
         $this->loadStaticFiles();
 
-        // Set the package namespace
         $this->namespace = config('forum.integration.controllers.namespace');
 
-        // Load routes (if routing enabled)
+        $this->observeModels();
+
+        $this->setPolicies();
+        $this->registerPolicies($gate);
+
         if (config('forum.routing.enabled')) {
             $this->loadRoutes($router);
         }
-
-        // Register model observers
-        $this->registerObservers();
-
-        // Set the package policies
-        $this->setPolicies();
-
-        // Register policies
-        $this->registerPolicies($gate);
     }
 
     /**
-     * Register files published by this package.
+     * Define files published by this package.
      *
      * @return void
      */
-    protected function registerPublishables()
+    protected function setPublishables()
     {
         $this->publishes([
             "{$this->baseDir}config/integration.php" => config_path('forum.integration.php'),
@@ -133,29 +116,11 @@ class ForumServiceProvider extends ServiceProvider
     }
 
     /**
-     * Load routes.
-     *
-     * @param  Router  $router
-     * @return void
-     */
-    protected function loadRoutes(Router $router)
-    {
-        $dir = $this->baseDir;
-        $router->group(['namespace' => $this->namespace], function ($router) use ($dir)
-        {
-            $root = config('forum.routing.root');
-            $parameters = config('forum.routing.parameters');
-            $controllers = config('forum.integration.controllers');
-            require "{$dir}routes.php";
-        });
-    }
-
-    /**
-     * Register model observers.
+     * Initialise model observers.
      *
      * @return void
      */
-    protected function registerObservers()
+    protected function observeModels()
     {
         Category::observe(new CategoryObserver);
         Thread::observe(new ThreadObserver);
@@ -175,5 +140,72 @@ class ForumServiceProvider extends ServiceProvider
             Thread::class   => $policies['thread'],
             Post::class     => $policies['post']
         ];
+    }
+
+    /**
+     * Register the package policies.
+     *
+     * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
+     * @return void
+     */
+    public function registerPolicies(GateContract $gate)
+    {
+        foreach ($this->policies as $key => $value) {
+            $gate->policy($key, $value);
+        }
+    }
+
+    /**
+     * Load routes.
+     *
+     * @param  Router  $router
+     * @return void
+     */
+    protected function loadRoutes(Router $router)
+    {
+        $dir = $this->baseDir;
+        $router->group(['namespace' => $this->namespace], function ($router) use ($dir)
+        {
+            $root = config('forum.routing.root');
+            $parameters = config('forum.routing.parameters');
+            $controllers = config('forum.integration.controllers');
+            require "{$dir}routes.php";
+        });
+    }
+
+    /**
+     * Register the package facades.
+     *
+     * @return void
+     */
+    public function registerFacades()
+    {
+        // Bind the forum facade
+        $this->app->bind('forum', function()
+        {
+            return new \Riari\Forum\Forum;
+        });
+
+        // Create facade alias
+        $loader = AliasLoader::getInstance();
+        $loader->alias('Forum', 'Riari\Forum\Support\Facades\Forum');
+    }
+
+    /**
+     * Register the access gate service for the package.
+     *
+     * @return void
+     */
+    protected function registerAccessGate()
+    {
+        $this->app->bindShared(GateContract::class, function ($app) {
+            return new Gate($app, function () use ($app) {
+                if (!$app['auth']->check()) {
+                    return (object) ['id' => 0];
+                }
+
+                return $app['auth']->user();
+            });
+        });
     }
 }
