@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Policies;
+namespace Riari\Forum\Policies;
 
 use Riari\Forum\Models\Thread;
 

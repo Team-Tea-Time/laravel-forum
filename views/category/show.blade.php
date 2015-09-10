@@ -27,7 +27,7 @@
 
         <div class="row">
             <div class="col-xs-4">
-                @can ('create-thread', $category)
+                @can ('createThread', $category)
                     <a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
                 @endcan
             </div>
@@ -43,9 +43,9 @@
                         <th>{{ trans('forum::general.subject') }}</th>
                         <th class="col-md-2 text-right">{{ trans('forum::general.replies') }}</th>
                         <th class="col-md-2 text-right">{{ trans('forum::posts.last') }}</th>
-                        @if (Forum::userCan(['api.bulk.thread.destroy', 'api.bulk.thread.update', 'api.bulk.thread.restore'], compact('category')))
+                        @canany (['deleteThreads', 'moveThreads', 'lockThreads', 'pinThreads'], $category)
                             <th class="col-md-1 text-right"><input type="checkbox" data-toggle-all></th>
-                        @endif
+                        @endcanany
                     </tr>
                 </thead>
                 <tbody>
@@ -84,11 +84,11 @@
                                         <a href="{{ url( $thread->lastPostRoute ) }}" class="btn btn-primary btn-xs">{{ trans('forum::posts.view') }} &raquo;</a>
                                     </td>
                                 @endif
-                                @if (Forum::userCan(['api.bulk.thread.destroy', 'api.bulk.thread.update', 'api.bulk.thread.restore'], compact('category')))
+                                @canany (['deleteThreads', 'moveThreads', 'lockThreads', 'pinThreads'], $category)
                                     <td class="text-right">
                                         <input type="checkbox" name="threads[{{ $thread->id }}]">
                                     </td>
-                                @endif
+                                @endcanany
                             </tr>
                         @endforeach
                     @else
@@ -107,17 +107,17 @@
             </table>
         @endif
 
-        @if (Forum::userCan(['api.bulk.thread.destroy', 'api.bulk.thread.update', 'api.bulk.thread.restore'], compact('category')))
+        @canany (['deleteThreads', 'moveThreads', 'lockThreads', 'pinThreads'], $category)
             <div class="actions hidden">
                 You can do stuff!
             </div>
-        @endif
+        @endcanany
 
         <div class="row">
             <div class="col-xs-4">
-                @if (Forum::userCan('thread.create', compact('category')))
+                @can ('createThread', $category)
                     <a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
-                @endif
+                @endcan
             </div>
             <div class="col-xs-8 text-right">
                 {!! $category->pageLinks !!}
