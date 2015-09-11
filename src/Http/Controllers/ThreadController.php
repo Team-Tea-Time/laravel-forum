@@ -88,8 +88,6 @@ class ThreadController extends BaseController
     {
         event(new UserViewingThread($thread));
 
-        $this->authorize($thread);
-
         $posts = config('forum.preferences.list_trashed_posts')
             ? $thread->postsWithTrashedPaginated
             : $thread->postsPaginated;

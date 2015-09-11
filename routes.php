@@ -35,11 +35,9 @@ Route::bind($parameters['category'], function ($id)
 });
 Route::bind($parameters['thread'], function ($id)
 {
-    $model = new \Riari\Forum\Models\Thread;
-    return Forum::bindParameter($model->withTrashed(), $id);
+    return Forum::bindParameter(new \Riari\Forum\Models\Thread, $id);
 });
 Route::bind($parameters['post'], function ($id)
 {
-    $model = new \Riari\Forum\Models\Post;
-    return Forum::bindParameter($model->withTrashed(), $id);
+    return Forum::bindParameter(new \Riari\Forum\Models\Post, $id);
 });

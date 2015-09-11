@@ -21,12 +21,12 @@
 <tr>
     <td>
         @if (!$post->trashed())
-            @if (Forum::userCan('post.edit', compact('category', 'thread', 'post')))
+            @can ('edit', $post)
                 <a href="{{ $post->editRoute }}">{{ trans('forum::general.edit') }}</a>
-            @endif
-            @if (Forum::userCan('api.post.destroy', compact('category', 'thread', 'post')))
+            @endcan
+            @can ('delete', $post)
                 <a href="{{ $post->deleteRoute }}" data-confirm data-method="delete">{{ trans('forum::general.delete') }}</a>
-            @endif
+            @endcan
         @endif
     </td>
     <td class="text-muted">

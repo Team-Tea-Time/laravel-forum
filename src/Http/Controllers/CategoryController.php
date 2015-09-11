@@ -54,8 +54,6 @@ class CategoryController extends BaseController
     {
         event(new UserViewingCategory($category));
 
-        $this->authorize($category);
-
         $threads = config('forum.preferences.list_trashed_threads')
             ? $category->threadsWithTrashedPaginated
             : $category->threadsPaginated;

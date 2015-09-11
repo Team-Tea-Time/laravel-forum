@@ -52,8 +52,6 @@ class PostController extends BaseController
     {
         event(new UserViewingPost($post));
 
-        $this->authorize($post);
-
         return view('forum::post.show', compact('category', 'thread', 'post'));
     }
 

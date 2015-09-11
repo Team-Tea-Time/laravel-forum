@@ -8,7 +8,7 @@
             {{ $thread->title }}
         </h2>
 
-        @if (Forum::userCan(['api.thread.update', 'api.thread.destroy', 'api.thread.restore'], compact('category', 'thread')))
+        @can (['lockThreads', 'pinThreads', 'moveThreads', 'deleteThreads'], $category)
             <div class="thread-tools dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="thread-actions" data-toggle="dropdown" aria-expanded="true">
                     {{ trans('forum::general.actions') }}
@@ -27,7 +27,7 @@
                             <span v-if="pinned">{{ trans('forum::threads.unpin') }}</span>
                         </a>
                     </li>
-                    @if (Forum::usercan('api.thread.destroy', compact('category', 'thread')))
+                    @can ('deleteThreads', $category)
                         <li>
                             <a href="#" v-on="click: toggleDelete">
                                 <span v-if="!deleted">{{ trans('forum::general.delete') }}</span>
@@ -39,15 +39,15 @@
                                 {{ trans('forum::general.perma_delete') }}
                             </a>
                         </li>
-                    @endif
+                    @endcan
                 </ul>
             </div>
             <hr>
-        @endif
+        @endcan
 
         <alert v-repeat="alerts" v-transition="fade"></alert>
 
-        @if (Forum::userCan('post.create', compact('category', 'thread')))
+        @can ('reply', $thread)
             <div class="row">
                 <div class="col-xs-4" v-if="!locked && !deleted">
                     <div class="btn-group" role="group">
@@ -59,7 +59,7 @@
                     {!! $thread->pageLinks !!}
                 </div>
             </div>
-        @endif
+        @endcan
 
         <table class="table" v-class="deleted: deleted">
             <thead>
@@ -81,7 +81,7 @@
 
         {!! $thread->pageLinks !!}
 
-        @if (Forum::userCan('post.create', compact('category', 'thread')))
+        @can ('createThreads', $category)
             <div v-if="!locked && !deleted">
                 <h3>{{ trans('forum::general.quick_reply') }}</h3>
                 <div id="quick-reply">
@@ -96,7 +96,7 @@
                     )
                 </div>
             </div>
-        @endif
+        @endcan
     </div>
 
     <script>

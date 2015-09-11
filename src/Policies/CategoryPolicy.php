@@ -79,18 +79,6 @@ class CategoryPolicy
     }
 
     /**
-     * Permission: View category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function show($user, Category $category)
-    {
-        return true;
-    }
-
-    /**
      * Permission: Rename category.
      *
      * @param  object  $user

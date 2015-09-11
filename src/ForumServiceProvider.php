@@ -3,10 +3,10 @@
 namespace Riari\Forum;
 
 use Illuminate\Auth\Access\Gate;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
+use Illuminate\Support\ServiceProvider;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
@@ -24,13 +24,6 @@ class ForumServiceProvider extends ServiceProvider
     protected $namespace;
 
     /**
-     * The policy mappings for the package.
-     *
-     * @var array
-     */
-    protected $policies;
-
-    /**
      * The base directory for the package.
      *
      * @var string
@@ -45,7 +38,6 @@ class ForumServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerFacades();
-        $this->registerAccessGate();
     }
 
     /**
@@ -66,7 +58,6 @@ class ForumServiceProvider extends ServiceProvider
 
         $this->observeModels();
 
-        $this->setPolicies();
         $this->registerPolicies($gate);
 
         if (config('forum.routing.enabled')) {
@@ -128,21 +119,6 @@ class ForumServiceProvider extends ServiceProvider
     }
 
     /**
-     * Set the package policies.
-     *
-     * @return void
-     */
-    protected function setPolicies()
-    {
-        $policies = config('forum.integration.policies');
-        $this->policies = [
-            Category::class => $policies['category'],
-            Thread::class   => $policies['thread'],
-            Post::class     => $policies['post']
-        ];
-    }
-
-    /**
      * Register the package policies.
      *
      * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
@@ -150,7 +126,7 @@ class ForumServiceProvider extends ServiceProvider
      */
     public function registerPolicies(GateContract $gate)
     {
-        foreach ($this->policies as $key => $value) {
+        foreach (config('forum.integration.policies') as $key => $value) {
             $gate->policy($key, $value);
         }
     }
@@ -189,23 +165,5 @@ class ForumServiceProvider extends ServiceProvider
         // Create facade alias
         $loader = AliasLoader::getInstance();
         $loader->alias('Forum', 'Riari\Forum\Support\Facades\Forum');
-    }
-
-    /**
-     * Register the access gate service for the package.
-     *
-     * @return void
-     */
-    protected function registerAccessGate()
-    {
-        $this->app->bindShared(GateContract::class, function ($app) {
-            return new Gate($app, function () use ($app) {
-                if (!$app['auth']->check()) {
-                    return (object) ['id' => 0];
-                }
-
-                return $app['auth']->user();
-            });
-        });
     }
 }

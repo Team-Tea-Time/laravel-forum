@@ -7,18 +7,6 @@ use Riari\Forum\Models\Post;
 class PostPolicy
 {
     /**
-     * Permission: View post.
-     *
-     * @param  object  $user
-     * @param  Post  $post
-     * @return bool
-     */
-    public function show($user, Post $post)
-    {
-        return true;
-    }
-
-    /**
      * Permission: Update post.
      *
      * @param  object  $user
