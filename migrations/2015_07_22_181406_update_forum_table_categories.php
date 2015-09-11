@@ -25,9 +25,9 @@ class UpdateForumTableCategories extends Migration
 
         DB::table('forum_categories')->insert(
             [
-                ['parent_category' => null, 'title' => 'Top level category', 'subtitle' => 'Contains categories and threads', 'weight' => 0, 'allows_threads' => 1],
-                ['parent_category' => 1, 'title' => 'Level 1 child category', 'subtitle' => 'Contains threads', 'weight' => 0, 'allows_threads' => 1],
-                ['parent_category' => 2, 'title' => 'Level 2 child category', 'subtitle' => 'Contains more threads', 'weight' => 1, 'allows_threads' => 1]
+                ['category_id' => null, 'title' => 'Top level category', 'subtitle' => 'Contains categories and threads', 'weight' => 0, 'allows_threads' => 1],
+                ['category_id' => 1, 'title' => 'Level 1 child category', 'subtitle' => 'Contains threads', 'weight' => 0, 'allows_threads' => 1],
+                ['category_id' => 2, 'title' => 'Level 2 child category', 'subtitle' => 'Contains more threads', 'weight' => 1, 'allows_threads' => 1]
             ]
         );
     }
