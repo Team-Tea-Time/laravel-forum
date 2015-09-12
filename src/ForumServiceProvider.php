@@ -2,6 +2,7 @@
 
 namespace Riari\Forum;
 
+use Blade;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\AliasLoader;
@@ -59,6 +60,8 @@ class ForumServiceProvider extends ServiceProvider
         $this->observeModels();
 
         $this->registerPolicies($gate);
+
+        $this->registerBladeDirectives();
 
         if (config('forum.routing.enabled')) {
             $this->loadRoutes($router);
@@ -165,5 +168,21 @@ class ForumServiceProvider extends ServiceProvider
         // Create facade alias
         $loader = AliasLoader::getInstance();
         $loader->alias('Forum', 'Riari\Forum\Support\Facades\Forum');
+    }
+
+    /**
+     * Register blade directives used by the package.
+     *
+     * @return void
+     */
+    public function registerBladeDirectives()
+    {
+        Blade::directive('canany', function($expression) {
+            return "<?php if (Forum::userCanAny{$expression}): ?>";
+        });
+
+        Blade::directive('endcanany', function() {
+            return "<?php endif; ?>";
+        });
     }
 }

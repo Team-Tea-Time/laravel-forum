@@ -131,7 +131,7 @@ class PostController extends BaseController
             return abort(404);
         }
 
-        $this->authorize('update', $post);
+        $this->authorize($post);
 
         return view('forum::post.edit', compact('category', 'thread', 'post'));
     }
@@ -151,7 +151,7 @@ class PostController extends BaseController
     {
         $this->validate($request, $this->rules);
 
-        $this->authorize($post);
+        $this->authorize('edit', $post);
 
         $this->posts->where('id', $post->id)->update([
             'content' => $request->input('content')

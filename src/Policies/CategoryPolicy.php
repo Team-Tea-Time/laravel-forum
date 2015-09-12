@@ -39,7 +39,7 @@ class CategoryPolicy
      */
     public function deleteThreads($user, Category $category)
     {
-        return false;
+        return true;
     }
 
     /**

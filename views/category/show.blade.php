@@ -126,18 +126,19 @@
     </div>
 
     <script>
-    $('input[type=checkbox][data-toggle-all]').click(function() {
-        var checkboxes = $('table tbody input[type=checkbox]');
-        var actions = $('.actions');
+    var toggle = $('input[type=checkbox][data-toggle-all]');
+    var checkboxes = $('table tbody input[type=checkbox]');
+    var actions = $('.actions');
 
-        checkboxes.prop('checked', $(this).is(':checked')).change();
+    toggle.click(function() {
+        checkboxes.prop('checked', toggle.is(':checked')).change();
+    });
 
-        checkboxes.change(function() {
-            var tr = $(this).parents('tr');
-            $(this).is(':checked') ? tr.addClass('active') : tr.removeClass('active');
+    checkboxes.change(function() {
+        var tr = $(this).parents('tr');
+        toggle.is(':checked') ? tr.addClass('active') : tr.removeClass('active');
 
-            checkboxes.filter(':checked').length ? actions.removeClass('hidden') : actions.addClass('hidden');
-        });
+        checkboxes.filter(':checked').length ? actions.removeClass('hidden') : actions.addClass('hidden');
     });
     </script>
 @overwrite

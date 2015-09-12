@@ -3,6 +3,7 @@
 namespace Riari\Forum;
 
 use App;
+use Gate;
 
 class Forum
 {
@@ -40,5 +41,23 @@ class Forum
     public static function bindParameter($model, $id)
     {
         return $model->withTrashed()->findOrFail($id);
+    }
+
+    /**
+     * Determine if the user has one of multiple abilities.
+     *
+     * @param  array  $abilities
+     * @param  array|mixed  $arguments
+     * @return bool
+     */
+    public static function userCanAny($abilities, $arguments = [])
+    {
+        foreach ($abilities as $ability) {
+            if (Gate::check($ability, $arguments)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

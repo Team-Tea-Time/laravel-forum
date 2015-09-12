@@ -7,13 +7,13 @@ use Riari\Forum\Models\Thread;
 class ThreadPolicy
 {
     /**
-     * Permission: Update thread.
+     * Permission: Edit thread (title).
      *
      * @param  object  $user
      * @param  Thread  $thread
      * @return bool
      */
-    public function update($user, Thread $thread)
+    public function edit($user, Thread $thread)
     {
         return $user->id === $thread->user_id;
     }
