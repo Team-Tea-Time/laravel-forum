@@ -24,7 +24,7 @@ class AccessControl {
         if (!$permission_granted && $abort)
         {
             $denied_callback = config('forum.integration.process_denied');
-            return  $denied_callback($context, $user);
+            $denied_callback($context, $user);
         }
 
         return $permission_granted;
