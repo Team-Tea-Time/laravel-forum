@@ -10,6 +10,7 @@ class Category extends BaseModel {
     protected $table      = 'forum_categories';
     public    $timestamps = false;
     protected $appends    = ['threadCount', 'replyCount', 'route', 'newThreadRoute'];
+    protected $guarded    = ['id'];
 
     /*
     |--------------------------------------------------------------------------
