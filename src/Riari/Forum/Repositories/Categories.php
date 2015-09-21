@@ -11,7 +11,7 @@ class Categories extends BaseRepository {
 
     public function getAll()
     {
-        return $this->model->where('parent_category', '=', null)->get();
+        return $this->model->where('parent_category', '=', null)->orderBy('weight', 'DESC')->get();
     }
 
 }
