@@ -143,7 +143,7 @@ trait UsesBBCode {
      */
     public function getQuoteAttribute()
     {
-        return '[quote="'.$this->authorName.']'.$this->content.'[/quote]';
+        return '[quote='.$this->authorName.']'.$this->content.'[/quote]';
     }
 
     /**
