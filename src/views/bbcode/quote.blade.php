@@ -1,0 +1,1 @@
+<blockquote>@if(isset($author))<cite>{{$author}} {{ trans('forum::base.wrote') }}:</cite>@endif<div>{!! $content  !!}</div></blockquote>

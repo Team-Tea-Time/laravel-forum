@@ -21,6 +21,8 @@ return [
     'new_reply'         => "Neue Antwort",
     'quick_reply'       => "Schnelle Antwort",
     'reply_added'       => "Antwort hinzugefügt",
+    'quote'             => "Zitat",
+    'quick_quote'       => "Schnelles Zitat",
     'send'              => "Senden",
     'posting_into'      => "Du schreibst in",
     'you_are_editing'   => "Du bearbeitest",
@@ -66,5 +68,8 @@ return [
     'post_deleted'      => "Eintrag gelöscht",
     'last_post'         => "Letzter Eintrag",
     'view_post'         => "Eintrag ansehen",
+
+    // BBCODE-related strings
+    'wrote'             => "hat geschrieben",
 
 ];

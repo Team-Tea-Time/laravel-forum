@@ -22,6 +22,8 @@ return [
     'new_reply'         => "New reply",
     'quick_reply'       => "Quick reply",
     'reply_added'       => "Reply added",
+    'quote'             => "Quote",
+    'quick_quote'       => "Quick quote",
     'send'              => "Send",
     'posting_into'      => "You're posting into",
     'you_are_editing'   => "You're editing",
@@ -67,5 +69,8 @@ return [
     'post_deleted'      => "Post deleted",
     'last_post'         => "Last post",
     'view_post'         => "View post",
+
+    // BBCODE-related strings
+    'wrote'             => "wrote",
 
 ];

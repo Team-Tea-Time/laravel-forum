@@ -11,7 +11,7 @@
         'form_url'          => $thread->replyRoute,
         'form_classes'      => '',
         'show_title_field'  => false,
-        'post_content'      => '',
+        'post_content'      => (isset($post->quote)?$post->quote:''),
         'submit_label'      => trans('forum::base.reply'),
         'cancel_url'        => $thread->route
     )

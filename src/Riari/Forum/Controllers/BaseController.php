@@ -6,6 +6,7 @@ use Event;
 use Input;
 use Illuminate\Routing\Controller;
 use Redirect;
+use Request;
 use Riari\Forum\Events\ThreadWasViewed;
 use Riari\Forum\Repositories\Categories;
 use Riari\Forum\Repositories\Threads;
@@ -191,7 +192,14 @@ abstract class BaseController extends Controller {
 
     public function getReplyToThread($categoryID, $categoryAlias, $threadID, $threadAlias)
     {
-        $this->load(['category' => $categoryID, 'thread' => $threadID]);
+
+        $itemsToLoad = ['category' => $categoryID, 'thread' => $threadID];
+
+        if (Request::has('postID')) {
+            $itemsToLoad['post'] = Request::input('postID');
+        }
+
+        $this->load($itemsToLoad);
 
         if (!$this->collections['thread']->canReply)
         {
