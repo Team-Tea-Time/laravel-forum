@@ -4,10 +4,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Riari\Forum\Libraries\AccessControl;
 use Riari\Forum\Models\Traits\HasAuthor;
+use Riari\Forum\Models\Traits\UsesBBCode;
 
 class Post extends BaseModel {
 
-    use SoftDeletes, HasAuthor;
+    use SoftDeletes, HasAuthor, UsesBBCode;
 
     // Eloquent properties
     protected $table      = 'forum_posts';

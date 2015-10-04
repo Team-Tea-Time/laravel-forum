@@ -8,7 +8,7 @@
 @endif
 
 <div class="form-group">
-    {!! Form::textarea('content', $post_content, ['class' => 'form-control']) !!}
+    {!! Form::textarea('content', $post_content, ['class' => 'form-control', 'data-add-wysibb' => true]) !!}
 </div>
 
 <button type="submit" class="btn btn-primary">{{ $submit_label }}</button>

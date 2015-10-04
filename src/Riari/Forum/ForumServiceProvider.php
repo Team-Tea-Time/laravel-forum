@@ -51,6 +51,11 @@ class ForumServiceProvider extends ServiceProvider {
             __DIR__.'/../../migrations/' => database_path('migrations')
         ], 'migrations');
 
+        // Publish public assets (emoticon-images as well as the WysiBB-JS).
+        $this->publishes([
+            __DIR__.'/../../public/' => public_path('vendor/riari/laravel-forum'),
+        ], 'public');
+
         // Load views
         $this->loadViewsFrom(__DIR__.'/../../views', 'forum');
 
