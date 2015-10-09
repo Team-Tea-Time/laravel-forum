@@ -7,27 +7,30 @@ use Riari\Forum\Models\Category;
 class CategoryPolicy
 {
     /**
-     * Permission: Create category.
+     * Permission: Create threads.
      *
      * @param  object  $user
      * @param  Category  $category
      * @return bool
      */
-    public function create($user, Category $category)
+    public function createThreads($user, Category $category)
     {
-        return false;
+        return true;
     }
 
     /**
-     * Permission: Create thread.
+     * Permission: Manage threads.
      *
      * @param  object  $user
      * @param  Category  $category
      * @return bool
      */
-    public function createThread($user, Category $category)
+    public function manageThreads($user, Category $category)
     {
-        return true;
+        return $this->deleteThreads($user, $category) ||
+               $this->moveThreads($user, $category) ||
+               $this->lockThreads($user, $category) ||
+               $this->pinThreads($user, $category);
     }
 
     /**
@@ -43,7 +46,7 @@ class CategoryPolicy
     }
 
     /**
-     * Permission: Move threads from/to category.
+     * Permission: Move threads to category.
      *
      * @param  object  $user
      * @param  Category  $category

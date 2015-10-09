@@ -6,25 +6,9 @@ use Gate;
 use Illuminate\Http\Request;
 use Riari\Forum\Events\UserViewingCategory;
 use Riari\Forum\Events\UserViewingIndex;
-use Riari\Forum\Models\Category;
 
 class CategoryController extends BaseController
 {
-    /**
-     * @var Category
-     */
-    protected $categories;
-
-    /**
-     * Create a category controller instance.
-     *
-     * @param  Category  $categories
-     */
-    public function __construct(Category $categories)
-    {
-        $this->categories = $categories;
-    }
-
     /**
      * GET: return an index of categories view (the forum index).
      *
@@ -33,12 +17,9 @@ class CategoryController extends BaseController
      */
     public function index(Request $request)
     {
-        event(new UserViewingIndex);
+        $categories = $this->dispatcher->route('forum.api.category.index')->get();
 
-        $categories = $this->categories
-            ->where('category_id', null)
-            ->with(['children', 'threads'])
-            ->get();
+        event(new UserViewingIndex);
 
         return view('forum::category.index', compact('categories'));
     }

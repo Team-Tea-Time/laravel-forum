@@ -61,9 +61,8 @@ class ForumServiceProvider extends ServiceProvider
 
         $this->registerPolicies($gate);
 
-        $this->registerBladeDirectives();
-
         if (config('forum.routing.enabled')) {
+            $this->registerMiddleware($router);
             $this->loadRoutes($router);
         }
     }
@@ -132,6 +131,10 @@ class ForumServiceProvider extends ServiceProvider
         foreach (config('forum.integration.policies') as $key => $value) {
             $gate->policy($key, $value);
         }
+
+        foreach (get_class_methods(new \Riari\Forum\Policies\ForumPolicy) as $method) {
+            $gate->define($method, "Riari\Forum\Policies\ForumPolicy@{$method}");
+        }
     }
 
     /**
@@ -171,18 +174,12 @@ class ForumServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register blade directives used by the package.
+     * Register middleware.
      *
      * @return void
      */
-    public function registerBladeDirectives()
+    public function registerMiddleware(Router $router)
     {
-        Blade::directive('canany', function($expression) {
-            return "<?php if (Forum::userCanAny{$expression}): ?>";
-        });
-
-        Blade::directive('endcanany', function() {
-            return "<?php endif; ?>";
-        });
+        $router->middleware('forum.api.auth.basic', 'Riari\Forum\Http\Middleware\BasicAuth');
     }
 }

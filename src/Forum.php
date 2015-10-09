@@ -44,20 +44,15 @@ class Forum
     }
 
     /**
-     * Determine if the user has one of multiple abilities.
+     * Translation wrapper.
      *
-     * @param  array  $abilities
-     * @param  array|mixed  $arguments
-     * @return bool
+     * @param  string  $file
+     * @param  string  $key
+     * @param  int  $count
+     * @return string
      */
-    public static function userCanAny($abilities, $arguments = [])
+    public static function trans($file, $key, $count = 1)
     {
-        foreach ($abilities as $ability) {
-            if (Gate::check($ability, $arguments)) {
-                return true;
-            }
-        }
-
-        return false;
+        return trans_choice("forum::{$file}.{$key}", $count);
     }
 }
