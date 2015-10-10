@@ -14,8 +14,8 @@ class Category extends BaseModel
      * Eloquent attributes
      */
     protected $table        = 'forum_categories';
-    protected $fillable     = ['category_id', 'title', 'subtitle', 'weight', 'allows_threads'];
     public    $timestamps   = false;
+    protected $fillable     = ['category_id', 'title', 'subtitle', 'weight', 'allows_threads'];
 
     /**
      * Create a new category model instance.

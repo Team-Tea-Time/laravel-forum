@@ -2,7 +2,6 @@
 
 namespace Riari\Forum\Http\Controllers;
 
-use Gate;
 use Illuminate\Http\Request;
 use Riari\Forum\Events\UserViewingCategory;
 use Riari\Forum\Events\UserViewingIndex;
@@ -17,7 +16,9 @@ class CategoryController extends BaseController
      */
     public function index(Request $request)
     {
-        $categories = $this->dispatcher->route('forum.api.category.index')->get();
+        $categories = $this->dispatcher->route('forum.api.category.index')
+                                       ->parameters(['with' => ['children']])
+                                       ->get();
 
         event(new UserViewingIndex);
 
@@ -27,12 +28,14 @@ class CategoryController extends BaseController
     /**
      * GET: return a category view.
      *
-     * @param  Category  $category
+     * @param  int  $categoryID
      * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category, Request $request)
+    public function show($categoryID, Request $request)
     {
+        $category = $this->api('category.show', $categoryID)->get();
+
         event(new UserViewingCategory($category));
 
         $threads = config('forum.preferences.list_trashed_threads')

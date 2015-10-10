@@ -149,7 +149,6 @@ class ForumServiceProvider extends ServiceProvider
         $router->group(['namespace' => $this->namespace], function ($router) use ($dir)
         {
             $root = config('forum.routing.root');
-            $parameters = config('forum.routing.parameters');
             $controllers = config('forum.integration.controllers');
             require "{$dir}routes.php";
         });

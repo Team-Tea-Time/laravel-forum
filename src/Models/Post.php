@@ -13,10 +13,10 @@ class Post extends BaseModel
      * Eloquent attributes
      */
     protected $table        = 'forum_posts';
-    protected $fillable     = ['thread_id', 'author_id', 'post_id', 'content'];
     public    $timestamps   = true;
-    protected $with         = ['author'];
+    protected $fillable     = ['thread_id', 'author_id', 'post_id', 'content'];
     protected $guarded      = ['id'];
+    protected $with         = ['author'];
 
     /**
      * Create a new post model instance.

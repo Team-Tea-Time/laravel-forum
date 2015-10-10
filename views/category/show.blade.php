@@ -43,9 +43,9 @@
                         <th>{{ trans('forum::general.subject') }}</th>
                         <th class="col-md-2 text-right">{{ trans('forum::general.replies') }}</th>
                         <th class="col-md-2 text-right">{{ trans('forum::posts.last') }}</th>
-                        @canany (['deleteThreads', 'moveThreads', 'lockThreads', 'pinThreads'], $category)
+                        @can ('manageThreads', $category)
                             <th class="col-md-1 text-right"><input type="checkbox" data-toggle-all></th>
-                        @endcanany
+                        @endcan
                     </tr>
                 </thead>
                 <tbody>
@@ -84,11 +84,11 @@
                                         <a href="{{ url( $thread->lastPostRoute ) }}" class="btn btn-primary btn-xs">{{ trans('forum::posts.view') }} &raquo;</a>
                                     </td>
                                 @endif
-                                @canany (['deleteThreads', 'moveThreads', 'lockThreads', 'pinThreads'], $category)
+                                @can ('manageThreads', $category)
                                     <td class="text-right">
                                         <input type="checkbox" name="threads[{{ $thread->id }}]">
                                     </td>
-                                @endcanany
+                                @endcan
                             </tr>
                         @endforeach
                     @else
@@ -107,11 +107,11 @@
             </table>
         @endif
 
-        @canany (['deleteThreads', 'moveThreads', 'lockThreads', 'pinThreads'], $category)
+        @can ('manageThreads', $category)
             <div class="actions hidden">
                 You can do stuff!
             </div>
-        @endcanany
+        @endcan
 
         <div class="row">
             <div class="col-xs-4">

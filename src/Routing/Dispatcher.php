@@ -10,14 +10,29 @@ use Illuminate\Routing\Router;
 class Dispatcher
 {
     /**
+     * @var Request
+     */
+    protected $currentRequest;
+
+    /**
      * @var string
      */
-    protected $requestURI;
+    protected $uri;
 
     /**
      * @var array
      */
-    protected $requestParameters = [];
+    protected $parameters = [];
+
+    /**
+     * Create a new dispatcher instance.
+     *
+     * @param  Request  $request
+     */
+    public function __construct(Request $request)
+    {
+        $this->currentRequest = $request;
+    }
 
     /**
      * Set the request URI via a named route.
@@ -39,7 +54,7 @@ class Dispatcher
      */
     public function uri($uri)
     {
-        $this->requestURI = $uri;
+        $this->uri = $uri;
         return $this;
     }
 
@@ -51,7 +66,7 @@ class Dispatcher
      */
     public function parameters($parameters)
     {
-        $this->requestParameters = $parameters;
+        $this->parameters = $parameters;
         return $this;
     }
 
@@ -112,7 +127,14 @@ class Dispatcher
      */
     public function dispatch($verb = 'GET')
     {
-        $request = Request::create($this->requestURI, $verb, $this->requestParameters);
-        return Route::dispatch($request);
+        $request = Request::create($this->uri, $verb, $this->parameters);
+
+        // Replace the request input for the duration of the dispatched request
+        $input = $this->currentRequest->input();
+        $this->currentRequest->replace($request->input());
+        $response = Route::dispatch($request);
+        $this->currentRequest->replace($input);
+
+        return $response->getOriginalContent();
     }
 }

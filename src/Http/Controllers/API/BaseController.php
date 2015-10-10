@@ -1,6 +1,6 @@
 <?php
 
-namespace Riari\Forum\API\Http\Controllers;
+namespace Riari\Forum\Http\Controllers\API;
 
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
@@ -18,6 +18,11 @@ abstract class BaseController extends Controller
     protected $model;
 
     /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
      * @var array
      */
     protected $rules;
@@ -28,12 +33,32 @@ abstract class BaseController extends Controller
     protected $translationFile;
 
     /**
+     * Create a new API controller instance.
+     *
+     * @param  object  $model
+     * @param  Request  $request
+     */
+    public function __construct($model, Request $request)
+    {
+        $this->model = $model;
+
+        if ($request->has('with')) {
+            $this->model = $this->model->with($request->input('with'));
+        }
+
+        if ($request->has('append')) {
+            $this->model = $this->model->append($request->input('append'));
+        }
+
+        $this->request = $request;
+    }
+
+    /**
      * GET: return an index of models.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    public function index(Request $request)
+    public function index()
     {
         return $this->collectionResponse($this->model->paginate());
     }
@@ -41,14 +66,13 @@ abstract class BaseController extends Controller
     /**
      * POST: create a new model.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        $this->validate($request, $this->rules['store']);
+        $this->validate($this->request, $this->rules['store']);
 
-        $model = $this->model->create($request->all());
+        $model = $this->model->create($this->request->all());
 
         return $this->modelResponse($model, $this->trans('created'), 201);
     }
@@ -56,11 +80,13 @@ abstract class BaseController extends Controller
     /**
      * GET: return a model by ID.
      *
-     * @param  mixed  $model
-     * @return JsonResponse
+     * @param  int  $id
+     * @return JsonResponse|Response
      */
-    public function show($model = null)
+    public function show($id)
     {
+        $model = $this->model->find($id);
+
         if (is_null($model) || !$model->exists) {
             return $this->notFoundResponse();
         }
@@ -72,14 +98,13 @@ abstract class BaseController extends Controller
      * PUT/PATCH: update a model.
      *
      * @param  Model  $model
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    public function update($model, Request $request)
+    public function update($model)
     {
         $this->authorize('edit', $model);
 
-        $response = $this->doUpdate($model, $request);
+        $response = $this->doUpdate($model, $this->request);
 
         if ($response instanceof JsonResponse) {
             return $response;
@@ -92,10 +117,9 @@ abstract class BaseController extends Controller
      * DELETE: delete a model.
      *
      * @param  Model  $model
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    public function destroy($model, Request $request)
+    public function destroy($model)
     {
         if (!$model->exists) {
             return $this->notFoundResponse();
@@ -103,7 +127,7 @@ abstract class BaseController extends Controller
 
         $this->authorize('delete', $model);
 
-        if ($request->has('force') && $request->input('force') == 1) {
+        if ($this->request->has('force') && $this->request->input('force') == 1) {
             $model->forceDelete();
             $message = $this->trans('perma_deleted');
         } elseif (!$model->trashed()) {
@@ -118,7 +142,7 @@ abstract class BaseController extends Controller
      * PATCH: restore a model.
      *
      * @param  Model  $model
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
     public function restore($model)
     {
@@ -138,15 +162,14 @@ abstract class BaseController extends Controller
     /**
      * DELETE: bulk delete models.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    public function bulkDestroy(Request $request)
+    public function bulkDestroy()
     {
-        $this->validate($request, ['id' => 'required']);
+        $this->validate($this->request, ['id' => 'required']);
 
         $collection = collect();
-        foreach ($request->input('id') as $id) {
+        foreach ($this->request->input('id') as $id) {
             $this->authorize('delete', $model);
 
             $model = $this->model->destroy($id);
@@ -162,15 +185,14 @@ abstract class BaseController extends Controller
     /**
      * PATCH: bulk restore models.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    public function bulkRestore(Request $request)
+    public function bulkRestore()
     {
-        $this->validate($request, ['id' => 'required']);
+        $this->validate($this->request, ['id' => 'required']);
 
         $collection = collect();
-        foreach ($request->input('id') as $id) {
+        foreach ($this->request->input('id') as $id) {
             $this->authorize('delete', $model);
 
             $model = $this->model->restore($id);
@@ -186,15 +208,14 @@ abstract class BaseController extends Controller
     /**
      * Bulk update an attribute.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    protected function bulkUpdate(Request $request)
+    protected function bulkUpdate()
     {
-        $this->validate($request, ['id' => 'required']);
+        $this->validate($this->request, ['id' => 'required']);
 
-        $input = $request->all();
-        $request->replace($request->except('id'));
+        $input = $this->request->all();
+        $this->request->replace($this->request->except('id'));
         $collection = collect();
         foreach ($input['id'] as $id) {
             $this->authorize('edit', $model);
@@ -202,7 +223,7 @@ abstract class BaseController extends Controller
             $model = $this->model->find($id);
 
             if (!is_null($model) && $model->exists) {
-                $collection->push($this->doUpdate($model, $request));
+                $collection->push($this->doUpdate($model, $this->request));
             }
         }
 
@@ -213,18 +234,17 @@ abstract class BaseController extends Controller
      * Update a model.
      *
      * @param  Model  $model
-     * @param  Request  $request
      * @return mixed
      */
-    protected function doUpdate($model, Request $request)
+    protected function doUpdate($model)
     {
         if (is_null($model) || !$model->exists) {
             return $this->notFoundResponse();
         }
 
-        $this->validate($request, $this->rules['update']);
+        $this->validate($this->request, $this->rules['update']);
 
-        $model->update($request->all());
+        $model->update($this->request->all());
 
         return $model;
     }
@@ -235,12 +255,16 @@ abstract class BaseController extends Controller
      * @param  object  $data
      * @param  string  $message
      * @param  int  $code
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
     protected function response($data, $message = "", $code = 200)
     {
-        $message = (empty($message)) ? [] : ['message' => $message];
-        return new JsonResponse($message + compact('data'), $code);
+        if ($this->request->ajax() || $this->request->wantsJson()) {
+            $message = (empty($message)) ? [] : ['message' => $message];
+            return new JsonResponse($message + compact('data'), $code);
+        }
+
+        return $data;
     }
 
     /**
@@ -249,7 +273,7 @@ abstract class BaseController extends Controller
      * @param  object  $collection
      * @param  string  $message
      * @param  int  $code
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
     protected function collectionResponse($collection, $message = "", $code = 200)
     {
@@ -262,7 +286,7 @@ abstract class BaseController extends Controller
      * @param  object  $model
      * @param  string  $message
      * @param  int  $code
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
     protected function modelResponse($model, $message = "", $code = 200)
     {
@@ -272,11 +296,15 @@ abstract class BaseController extends Controller
     /**
      * Create a 'not found' response.
      *
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
     protected function notFoundResponse()
     {
-        return new JsonResponse(['error' => "The requested URL is invalid."], 404);
+        if ($this->request->ajax() || $this->request->wantsJson()) {
+            return new JsonResponse(['error' => "The requested URL is invalid."], 404);
+        }
+
+        abort(404);
     }
 
     /**
@@ -284,14 +312,18 @@ abstract class BaseController extends Controller
      *
      * @param  Request  $request
      * @param  array  $errors
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
     protected function buildFailedValidationResponse(Request $request, array $errors)
     {
-        return new JsonResponse([
-            'error'             => "The submitted data did not pass validation.",
-            'validation_errors' => $errors
-        ], 422);
+        if ($request->ajax() || $request->wantsJson()) {
+            return new JsonResponse([
+                'error'             => "The submitted data did not pass validation.",
+                'validation_errors' => $errors
+            ], 422);
+        }
+
+        abort(422);
     }
 
     /**

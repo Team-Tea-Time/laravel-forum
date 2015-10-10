@@ -1,10 +1,7 @@
 <?php
 
-Route::group(['prefix' => $root], function () use ($parameters, $controllers)
+Route::group(['prefix' => $root], function () use ($controllers)
 {
-    $category = "{{$parameters['category']}}-{category_slug}";
-    $thread = "{{$parameters['thread']}}-{thread_slug}";
-
     // Forum index
     get('/', ['as' => 'forum.index', 'uses' => "{$controllers['category']}@index"]);
 
@@ -13,37 +10,37 @@ Route::group(['prefix' => $root], function () use ($parameters, $controllers)
     patch('new/read', ['as' => 'forum.new.mark-read', 'uses' => "{$controllers['thread']}@markRead"]);
 
     // Categories
-    Route::group(['prefix' => $category], function () use ($thread, $parameters, $controllers)
+    Route::group(['prefix' => '{category}-{category_slug}'], function () use ($controllers)
     {
         get('/', ['as' => 'forum.category.index', 'uses' => "{$controllers['category']}@show"]);
 
         // Threads
-        get("{$thread}", ['as' => 'forum.thread.show', 'uses' => "{$controllers['thread']}@show"]);
+        get("{thread}-{thread_slug}", ['as' => 'forum.thread.show', 'uses' => "{$controllers['thread']}@show"]);
         get("thread/create", ['as' => 'forum.thread.create', 'uses' => "{$controllers['thread']}@create"]);
         post("thread/create", ['as' => 'forum.thread.store', 'uses' => "{$controllers['thread']}@store"]);
 
         // Posts
-        get("{$thread}/post/{{$parameters['post']}}", ['as' => 'forum.post.show', 'uses' => "{$controllers['post']}@show"]);
-        get("{$thread}/reply", ['as' => 'forum.post.create', 'uses' => "{$controllers['post']}@create"]);
-        post("{$thread}/reply", ['as' => 'forum.post.store', 'uses' => "{$controllers['post']}@store"]);
-        get("{$thread}/post/{{$parameters['post']}}/edit", ['as' => 'forum.post.edit', 'uses' => "{$controllers['post']}@edit"]);
-        patch("{$thread}/post/{{$parameters['post']}}/edit", ['as' => 'forum.post.update', 'uses' => "{$controllers['post']}@update"]);
+        get("{thread}-{thread_slug}/post/{post}", ['as' => 'forum.post.show', 'uses' => "{$controllers['post']}@show"]);
+        get("{thread}-{thread_slug}/reply", ['as' => 'forum.post.create', 'uses' => "{$controllers['post']}@create"]);
+        post("{thread}-{thread_slug}/reply", ['as' => 'forum.post.store', 'uses' => "{$controllers['post']}@store"]);
+        get("{thread}-{thread_slug}/post/{post}/edit", ['as' => 'forum.post.edit', 'uses' => "{$controllers['post']}@edit"]);
+        patch("{thread}-{thread_slug}/post/{post}/edit", ['as' => 'forum.post.update', 'uses' => "{$controllers['post']}@update"]);
     });
 
     // API
-    Route::group(['prefix' => 'api', 'middleware' => 'auth.basic'], function () use ($parameters, $controllers)
+    Route::group(['prefix' => 'api', 'namespace' => 'API', 'middleware' => 'auth.basic'], function () use ($controllers)
     {
         // Categories
-        resource($parameters['category'], 'CategoryController', ['except' => ['create', 'edit']]);
-        patch("category/{{$parameters['category']}}/restore", ['as' => 'forum.api.category.restore', 'uses' => 'CategoryController@restore']);
+        resource('category', 'CategoryController', ['except' => ['create', 'edit']]);
+        patch("category/{category}/restore", ['as' => 'forum.api.category.restore', 'uses' => 'CategoryController@restore']);
 
         // Threads
-        resource($parameters['thread'], 'ThreadController', ['except' => ['create', 'edit']]);
-        patch("thread/{{$parameters['thread']}}/restore", ['as' => 'forum.api.thread.restore', 'uses' => 'ThreadController@restore']);
+        resource('thread', 'ThreadController', ['except' => ['create', 'edit']]);
+        patch("thread/{thread}/restore", ['as' => 'forum.api.thread.restore', 'uses' => 'ThreadController@restore']);
 
         // Posts
-        resource($parameters['post'], 'PostController', ['except' => ['create', 'edit']]);
-        patch("post/{{$parameters['post']}}/restore", ['as' => 'forum.api.post.restore', 'uses' => 'PostController@restore']);
+        resource('post', 'PostController', ['except' => ['create', 'edit']]);
+        patch("post/{post}/restore", ['as' => 'forum.api.post.restore', 'uses' => 'PostController@restore']);
 
         Route::group(['prefix' => 'bulk'], function ()
         {
@@ -66,18 +63,4 @@ Route::group(['prefix' => $root], function () use ($parameters, $controllers)
             patch('post/restore', ['as' => 'forum.api.bulk.post.restore', 'uses' => 'PostController@bulkRestore']);
         });
     });
-});
-
-// Model binding
-Route::bind($parameters['category'], function ($id)
-{
-    return Forum::bindParameter(new \Riari\Forum\Models\Category, $id);
-});
-Route::bind($parameters['thread'], function ($id)
-{
-    return Forum::bindParameter(new \Riari\Forum\Models\Thread, $id);
-});
-Route::bind($parameters['post'], function ($id)
-{
-    return Forum::bindParameter(new \Riari\Forum\Models\Post, $id);
 });

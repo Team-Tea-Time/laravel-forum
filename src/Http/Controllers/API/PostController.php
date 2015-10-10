@@ -1,6 +1,6 @@
 <?php
 
-namespace Riari\Forum\API\Http\Controllers;
+namespace Riari\Forum\Http\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,10 +13,11 @@ class PostController extends BaseController
      * Create a new Category API controller instance.
      *
      * @param  Post  $model
+     * @param  Request  $request
      */
-    public function __construct(Post $model)
+    public function __construct(Post $model, Request $request)
     {
-        $this->model = $model;
+        parent::__construct($model, $request);
 
         $rules = config('forum.preferences.validation');
         $this->rules = [

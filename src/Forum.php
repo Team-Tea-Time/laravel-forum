@@ -32,18 +32,6 @@ class Forum
     }
 
     /**
-     * Helper function for binding route parameters.
-     *
-     * @param  mixed  $model
-     * @param  int  $id
-     * @return mixed
-     */
-    public static function bindParameter($model, $id)
-    {
-        return $model->withTrashed()->findOrFail($id);
-    }
-
-    /**
      * Translation wrapper.
      *
      * @param  string  $file

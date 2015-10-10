@@ -15,10 +15,10 @@ class Thread extends BaseModel
      * Eloquent attributes
      */
     protected $table            = 'forum_threads';
-    protected $fillable         = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
     public    $timestamps       = true;
-    protected $with             = ['author'];
+    protected $fillable         = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
     protected $guarded          = ['id'];
+    protected $with             = ['author'];
 
     /**
      * Constants

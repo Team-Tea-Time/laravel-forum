@@ -30,4 +30,16 @@ abstract class BaseController extends Controller
     {
         $this->dispatcher = $dispatcher;
     }
+
+    /**
+     * Return an API dispatcher instance.
+     *
+     * @param  string  $route
+     * @param  array  $parameters
+     * @return Dispatcher
+     */
+    public function api($route, $parameters = [])
+    {
+        return $this->dispatcher->route("forum.api.{$route}", $parameters);
+    }
 }

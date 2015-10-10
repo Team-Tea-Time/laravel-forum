@@ -1,6 +1,6 @@
 <?php
 
-namespace Riari\Forum\API\Http\Controllers;
+namespace Riari\Forum\Http\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,10 +12,11 @@ class CategoryController extends BaseController
      * Create a new Category API controller instance.
      *
      * @param  Category  $model
+     * @param  Request  $request
      */
-    public function __construct(Category $model)
+    public function __construct(Category $model, Request $request)
     {
-        $this->model = $model;
+        parent::__construct($model, $request);
 
         $rules = config('forum.preferences.validation');
         $this->rules = [
@@ -35,12 +36,14 @@ class CategoryController extends BaseController
     /**
      * GET: return an index of categories.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $categories = $this->model->where('category_id', $request->input('category_id'))->get();
+        $this->validate($this->request, ['category_id' => 'integer|exists:forum_categories,id']);
+
+        $categories = $this->model->where('category_id', $this->request->input('category_id'));
+        $categories = $this->request->has('with') ? $categories->with($this->request->input('with'))->get() : $categories->get();
 
         return $this->collectionResponse($categories);
     }
@@ -48,10 +51,9 @@ class CategoryController extends BaseController
     /**
      * POST: create a new category model.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    public function store(Request $request)
+    public function store()
     {
         $this->validate('createCategories');
 
