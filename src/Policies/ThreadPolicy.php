@@ -7,6 +7,18 @@ use Riari\Forum\Models\Thread;
 class ThreadPolicy
 {
     /**
+     * Permission: Delete posts in thread.
+     *
+     * @param  object  $user
+     * @param  Thread  $thread
+     * @return bool
+     */
+    public function deletePosts($user, Thread $thread)
+    {
+        return false;
+    }
+
+    /**
      * Permission: Edit thread (title).
      *
      * @param  object  $user

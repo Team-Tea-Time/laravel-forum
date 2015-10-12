@@ -11,13 +11,14 @@ class Forum
      * Process an alert message to display to the user.
      *
      * @param  string  $type
-     * @param  string  $message
+     * @param  string  $transFile
+     * @param  string  $transKey
      * @return void
      */
-    public static function alert($type, $message)
+    public static function alert($type, $transFile, $transKey)
     {
         $processAlert = config('forum.integration.process_alert');
-        $processAlert($type, $message);
+        $processAlert($type, self::trans($transFile, $transKey));
     }
 
     /**

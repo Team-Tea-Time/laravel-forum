@@ -10,7 +10,7 @@ use Riari\Forum\Models\Thread;
 class PostController extends BaseController
 {
     /**
-     * Create a new Category API controller instance.
+     * Create a new Post API controller instance.
      *
      * @param  Post  $model
      * @param  Request  $request
@@ -37,14 +37,13 @@ class PostController extends BaseController
     /**
      * GET: return an index of posts by thread ID.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $this->validate($request, ['thread_id' => 'integer|required|exists:forum_threads,id']);
+        $this->validate(['thread_id' => 'integer|required|exists:forum_threads,id']);
 
-        $posts = $this->model->where('thread_id', $request->input('thread_id'))->get();
+        $posts = $this->model->where('thread_id', $this->request->input('thread_id'))->get();
 
         return $this->collectionResponse($posts);
     }
@@ -52,23 +51,22 @@ class PostController extends BaseController
     /**
      * POST: create a new post.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    public function store(Request $request)
+    public function store()
     {
         // For regular frontend requests, thread_id and author_id are set
         // automatically using the current thread and user, so they're not
         // required parameters. For this endpoint, they're set manually, so we
         // need to make them required.
         $this->validate(
-            $request,
-            array_merge_recursive($this->rules['store'], ['thread_id' => ['integer|required|exists:forum_threads,id'], 'author_id' => ['required']])
+            array_merge_recursive($this->rules['store'], ['thread_id' => ['integer', 'required', 'exists:forum_threads,id'], 'author_id' => ['required']])
         );
 
-        $this->authorize('reply', Thread::find($request->input('thread_id')));
+        $thread = Thread::find($this->request->input('thread_id'));
+        $this->authorize('reply', $thread);
 
-        $post = $this->model->create($request->only(['thread_id', 'author_id', 'title', 'content']));
+        $post = $this->model->create($this->request->only(['thread_id', 'post_id', 'author_id', 'title', 'content']));
         $post->load('thread');
 
         return $this->modelResponse($post, $this->trans('created'), 201);

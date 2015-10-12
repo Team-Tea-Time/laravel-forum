@@ -2,6 +2,7 @@
 
 namespace Riari\Forum\Http\Controllers\API;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,7 +11,7 @@ use Riari\Forum\Forum;
 
 abstract class BaseController extends Controller
 {
-    use ValidatesRequests;
+    use AuthorizesRequests, ValidatesRequests;
 
     /**
      * @var mixed
@@ -70,7 +71,7 @@ abstract class BaseController extends Controller
      */
     public function store()
     {
-        $this->validate($this->request, $this->rules['store']);
+        $this->validate($this->rules['store']);
 
         $model = $this->model->create($this->request->all());
 
@@ -95,13 +96,19 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * PUT/PATCH: update a model.
+     * PUT/PATCH: update a model by ID.
      *
-     * @param  Model  $model
+     * @param  int  $id
      * @return JsonResponse|Response
      */
-    public function update($model)
+    public function update($id)
     {
+        $model = $this->model->find($id);
+
+        if (is_null($model) || !$model->exists) {
+            return $this->notFoundResponse();
+        }
+
         $this->authorize('edit', $model);
 
         $response = $this->doUpdate($model, $this->request);
@@ -114,14 +121,16 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * DELETE: delete a model.
+     * DELETE: delete a model by ID.
      *
-     * @param  Model  $model
+     * @param  int  $id
      * @return JsonResponse|Response
      */
-    public function destroy($model)
+    public function destroy($id)
     {
-        if (!$model->exists) {
+        $model = $this->model->find($id);
+
+        if (is_null($model) || !$model->exists) {
             return $this->notFoundResponse();
         }
 
@@ -139,14 +148,16 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * PATCH: restore a model.
+     * PATCH: restore a model by ID.
      *
-     * @param  Model  $model
+     * @param  int  $id
      * @return JsonResponse|Response
      */
-    public function restore($model)
+    public function restore($id)
     {
-        if (!$model->exists) {
+        $model = $this->model->withTrashed()->find($id);
+
+        if (is_null($model) || !$model->exists) {
             return $this->notFoundResponse();
         }
 
@@ -166,7 +177,7 @@ abstract class BaseController extends Controller
      */
     public function bulkDestroy()
     {
-        $this->validate($this->request, ['id' => 'required']);
+        $this->validate(['id' => 'required']);
 
         $collection = collect();
         foreach ($this->request->input('id') as $id) {
@@ -189,7 +200,7 @@ abstract class BaseController extends Controller
      */
     public function bulkRestore()
     {
-        $this->validate($this->request, ['id' => 'required']);
+        $this->validate(['id' => 'required']);
 
         $collection = collect();
         foreach ($this->request->input('id') as $id) {
@@ -212,7 +223,7 @@ abstract class BaseController extends Controller
      */
     protected function bulkUpdate()
     {
-        $this->validate($this->request, ['id' => 'required']);
+        $this->validate(['id' => 'required']);
 
         $input = $this->request->all();
         $this->request->replace($this->request->except('id'));
@@ -242,7 +253,7 @@ abstract class BaseController extends Controller
             return $this->notFoundResponse();
         }
 
-        $this->validate($this->request, $this->rules['update']);
+        $this->validate($this->rules['update']);
 
         $model->update($this->request->all());
 
@@ -264,7 +275,7 @@ abstract class BaseController extends Controller
             return new JsonResponse($message + compact('data'), $code);
         }
 
-        return $data;
+        return response($data, $code);
     }
 
     /**
@@ -336,5 +347,24 @@ abstract class BaseController extends Controller
     protected function trans($key, $count = 1)
     {
         return Forum::trans($this->translationFile, $key, $count);
+    }
+
+    /**
+     * Validate the given request with the given rules.
+     *
+     * @param  array  $rules
+     * @param  array  $messages
+     * @param  array  $customAttributes
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exception\HttpResponseException
+     */
+    public function validate(array $rules, array $messages = [], array $customAttributes = [])
+    {
+        $validator = $this->getValidationFactory()->make($this->request->all(), $rules, $messages, $customAttributes);
+
+        if ($validator->fails()) {
+            $this->throwValidationException($this->request, $validator);
+        }
     }
 }

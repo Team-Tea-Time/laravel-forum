@@ -16,9 +16,9 @@ class CategoryController extends BaseController
      */
     public function index(Request $request)
     {
-        $categories = $this->dispatcher->route('forum.api.category.index')
-                                       ->parameters(['with' => ['children']])
-                                       ->get();
+        $categories = $this->api('category.index')
+                           ->parameters(['with' => ['children']])
+                           ->get();
 
         event(new UserViewingIndex);
 

@@ -79,7 +79,9 @@ return [
             $alerts = Session::get('alerts');
         }
 
-        Session::flash('alerts', array_push($alerts, compact('type', 'message')));
+        array_push($alerts, compact('type', 'message'));
+
+        Session::flash('alerts', $alerts);
     },
 
 ];

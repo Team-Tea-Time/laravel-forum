@@ -39,14 +39,13 @@ class ThreadController extends BaseController
     /**
      * GET: return an index of threads by category ID.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $this->validate($request, ['category_id' => 'required|integer|exists:forum_categories,id']);
+        $this->validate(['category_id' => 'required|integer|exists:forum_categories,id']);
 
-        $threads = $this->model->where('category_id', $request->input('category_id'))->get();
+        $threads = $this->model->where('category_id', $this->request->input('category_id'))->get();
 
         return $this->collectionResponse($threads);
     }
@@ -54,33 +53,58 @@ class ThreadController extends BaseController
     /**
      * POST: create a new thread.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
-    public function store(Request $request)
+    public function store()
     {
         // For regular frontend requests, author_id is set automatically using
         // the current user, so it's not a required parameter. For this
         // endpoint, it's set manually, so we need to make it required.
         $this->validate(
-            $request,
             array_merge_recursive($this->rules['store'], ['author_id' => ['required']])
         );
 
-        $category = Category::find($request->input('category_id'));
+        $category = Category::find($this->request->input('category_id'));
 
         $this->authorize('createThreads', $category);
 
         if (!$category->threadsAllowed) {
             return $this->buildFailedValidationResponse(
-                $request,
+                $this->request,
                 ['category_id' => "The specified category does not allow threads."]
             );
         }
 
-        $thread = $this->model->create($request->only(['category_id', 'author_id', 'title']));
-        Post::create(['thread_id' => $thread->id] + $request->only('content'));
+        $thread = $this->model->create($this->request->only(['category_id', 'author_id', 'title']));
+        Post::create(['thread_id' => $thread->id] + $this->request->only('content'));
 
         return $this->modelResponse($thread, 201);
+    }
+
+    /**
+     * GET: return a thread by ID.
+     *
+     * @param  int  $id
+     * @return JsonResponse|Response
+     */
+    public function show($id)
+    {
+        $model = $this->model;
+
+        if (
+            $this->request->input('include_deleted') &&
+            config('forum.preferences.list_trashed_posts') &&
+            $this->request->user()->can('deletePosts', $model)
+        ) {
+            $model = $model->with('postsWithTrashed');
+        }
+
+        $model = $model->find($id);
+
+        if (is_null($model) || !$model->exists) {
+            return $this->notFoundResponse();
+        }
+
+        return $this->modelResponse($model);
     }
 }

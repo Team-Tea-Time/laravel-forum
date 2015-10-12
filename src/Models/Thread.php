@@ -156,17 +156,7 @@ class Thread extends BaseModel
     }
 
     /**
-     * Attribute: Last post URL.
-     *
-     * @return string
-     */
-    public function getLastPostUrlAttribute()
-    {
-        return "{$this->route}?page={$this->lastPage}#post-{$this->lastPost->id}";
-    }
-
-    /**
-     * Attribute: Paginated posts.
+     * Attribute: Paginated threads.
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
@@ -176,13 +166,23 @@ class Thread extends BaseModel
     }
 
     /**
-     * Attribute: Paginated posts (including soft-deleted).
+     * Attribute: Paginated threads (including soft-deleted).
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function getPostsWithTrashedPaginatedAttribute()
     {
-        return $this->posts()->withTrashed()->paginate(config('forum.preferences.pagination.posts'));
+        return $this->postsWithTrashed()->paginate(config('forum.preferences.pagination.posts'));
+    }
+
+    /**
+     * Attribute: Last post URL.
+     *
+     * @return string
+     */
+    public function getLastPostUrlAttribute()
+    {
+        return "{$this->route}?page={$this->lastPage}#post-{$this->lastPost->id}";
     }
 
     /**

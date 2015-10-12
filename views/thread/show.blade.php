@@ -12,7 +12,7 @@
             {{ $thread->title }}
         </h2>
 
-        @canany (['lockThreads', 'pinThreads', 'moveThreads', 'deleteThreads'], $category)
+        @can ('manageThreads', $thread->category)
             <div class="thread-tools dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="thread-actions" data-toggle="dropdown" aria-expanded="true">
                     {{ trans('forum::general.actions') }}
@@ -29,7 +29,7 @@
                             {{ $thread->pinned ? trans('forum::threads.unpin') : trans('forum::threads.pin') }}
                         </a>
                     </li>
-                    @can ('deleteThreads', $category)
+                    @can ('deleteThreads', $thread->category)
                         <li>
                             <a href="#">
                                 {{ $thread->trashed() ? trans('forum::general.restore') : trans('forum::general.delete') }}
@@ -44,7 +44,7 @@
                 </ul>
             </div>
             <hr>
-        @endcanany
+        @endcan
 
         @can ('reply', $thread)
             <div class="row">
@@ -80,7 +80,7 @@
 
         {!! $thread->pageLinks !!}
 
-        @can ('createThread', $category)
+        @can ('reply', $thread)
             <h3>{{ trans('forum::general.quick_reply') }}</h3>
             <div id="quick-reply">
                 @include (

@@ -7,7 +7,7 @@ use Riari\Forum\Models\Category;
 class CategoryPolicy
 {
     /**
-     * Permission: Create threads.
+     * Permission: Create threads in category.
      *
      * @param  object  $user
      * @param  Category  $category
@@ -19,7 +19,7 @@ class CategoryPolicy
     }
 
     /**
-     * Permission: Manage threads.
+     * Permission: Manage threads in category.
      *
      * @param  object  $user
      * @param  Category  $category

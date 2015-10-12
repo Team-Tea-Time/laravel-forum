@@ -38,7 +38,6 @@ return [
             'content'               => ['min:5'],
             'locked'                => ['boolean'],
             'pinned'                => ['boolean'],
-            'post_id'               => ['integer', 'exists:forum_posts,id'],
             'subtitle'              => ['string', 'min:5'],
             'thread_id'             => ['integer', 'exists:forum_threads,id'],
             'title'                 => ['string', 'min:5'],

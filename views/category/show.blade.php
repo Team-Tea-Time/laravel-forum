@@ -27,7 +27,7 @@
 
         <div class="row">
             <div class="col-xs-4">
-                @can ('createThread', $category)
+                @can ('createThreads', $category)
                     <a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
                 @endcan
             </div>
@@ -115,7 +115,7 @@
 
         <div class="row">
             <div class="col-xs-4">
-                @can ('createThread', $category)
+                @can ('createThreads', $category)
                     <a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
                 @endcan
             </div>

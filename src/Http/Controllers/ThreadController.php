@@ -3,14 +3,15 @@
 namespace Riari\Forum\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Riari\Forum\Forum;
 use Riari\Forum\Events\UserCreatingThread;
 use Riari\Forum\Events\UserMarkingThreadsRead;
 use Riari\Forum\Events\UserViewingNew;
 use Riari\Forum\Events\UserViewingThread;
+use Riari\Forum\Forum;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
+use Riari\Forum\Routing\Dispatcher;
 
 class ThreadController extends BaseController
 {
@@ -27,13 +28,11 @@ class ThreadController extends BaseController
     /**
      * Create a thread controller instance.
      *
-     * @param  Thread  $threads
-     * @param  Post  $posts
+     * @param  Dispatcher  $dispatcher
      */
-    public function __construct(Thread $threads, Post $posts)
+    public function __construct(Dispatcher $dispatcher)
     {
-        $this->threads = $threads;
-        $this->posts = $posts;
+        parent::__construct($dispatcher);
 
         $rules = config('forum.preferences.validation');
         $this->rules = [
@@ -70,7 +69,7 @@ class ThreadController extends BaseController
                 $thread->markAsRead(auth()->user()->id);
             }
 
-            Forum::alert('success', trans('forum::threads.marked_read'));
+            Forum::alert('success', 'threads', 'marked_read');
         }
 
         return redirect(config('forum.routing.root'));
@@ -79,18 +78,22 @@ class ThreadController extends BaseController
     /**
      * GET: return a thread view.
      *
-     * @param  Category  $category
+     * @param  int  $categoryID
      * @param  string  $categorySlug
-     * @param  Thread  $thread
+     * @param  int  $threadID
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category, $categorySlug, Thread $thread)
+    public function show($categoryID, $categorySlug, $threadID)
     {
+        $thread = $this->api('thread.show', $threadID)
+                       ->parameters(['include_deleted' => true])
+                       ->get();
+
         event(new UserViewingThread($thread));
 
-        $posts = config('forum.preferences.list_trashed_posts')
-            ? $thread->postsWithTrashedPaginated
-            : $thread->postsPaginated;
+        $posts = config('forum.preferences.list_trashed_posts') ? $thread->postsWithTrashedPaginated : $thread->postsPaginated;
+
+        $category = $thread->category;
 
         return view('forum::thread.show', compact('category', 'thread', 'posts'));
     }
@@ -98,11 +101,13 @@ class ThreadController extends BaseController
     /**
      * GET: return a 'create thread' view.
      *
-     * @param  Category  $category
+     * @param  int  $categoryID
      * @return \Illuminate\Http\Response
      */
-    public function create(Category $category)
+    public function create($categoryID)
     {
+        $category = $this->api('category.show', $categoryID)->get();
+
         if (!$category->threadsAllowed) {
             Forum::alert('warning', trans('forum::categories.threads_disallowed'));
 
@@ -117,13 +122,15 @@ class ThreadController extends BaseController
     /**
      * POST: validate and store a submitted thread.
      *
-     * @param  Category  $category
+     * @param  int  $categoryID
      * @param  string  $categorySlug
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Category $category, $categorySlug, Request $request)
+    public function store($categoryID, $categorySlug, Request $request)
     {
+        $category = $this->api('category.show', $categoryID)->get();
+
         if (!$category->threadsAllowed) {
             Forum::alert('warning', trans('forum::categories.threads_disallowed'));
 
@@ -136,18 +143,12 @@ class ThreadController extends BaseController
         $thread = [
             'author_id'     => auth()->user()->id,
             'category_id'   => $category->id,
-            'title'         => $request->input('title')
+            'title'         => $request->input('title'),
+            'content'       => $request->input('content')
         ];
-        $thread = $this->threads->create($thread);
+        $thread = $this->api('thread.store')->parameters($thread)->post();
 
-        $post = [
-            'thread_id' => $thread->id,
-            'author_id' => auth()->user()->id,
-            'content'   => $request->input('content')
-        ];
-        $this->posts->create($post);
-
-        Forum::alert('success', trans('forum::threads.created'));
+        Forum::alert('success', 'threads', 'created');
 
         return redirect($thread->route);
     }

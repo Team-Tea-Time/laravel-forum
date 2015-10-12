@@ -40,7 +40,7 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $this->validate($this->request, ['category_id' => 'integer|exists:forum_categories,id']);
+        $this->validate(['category_id' => 'integer|exists:forum_categories,id']);
 
         $categories = $this->model->where('category_id', $this->request->input('category_id'));
         $categories = $this->request->has('with') ? $categories->with($this->request->input('with'))->get() : $categories->get();
@@ -55,7 +55,7 @@ class CategoryController extends BaseController
      */
     public function store()
     {
-        $this->validate('createCategories');
+        $this->authorize('createCategories');
 
         parent::store($request);
     }
