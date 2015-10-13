@@ -51,6 +51,60 @@ class ThreadController extends BaseController
     }
 
     /**
+     * GET: return an index of new/updated threads for the current user, optionally filtered by category ID.
+     *
+     * @return JsonResponse|Response
+     */
+    public function indexNew()
+    {
+        $this->validate(['category_id' => 'integer|exists:forum_categories,id']);
+
+        $threads = $this->model->recent();
+
+        if ($this->request->has('category_id')) {
+            $threads = $threads->where('category_id', $this->request->input('category_id'));
+        }
+
+        // If the user is logged in, filter the threads according to read status
+        if (auth()->check()) {
+            $threads = $threads->filter(function ($thread)
+            {
+                return $thread->userReadStatus;
+            });
+        }
+
+        // Filter the threads according to the user's permissions
+        $threads = $threads->filter(function ($thread)
+        {
+            return Gate::allows('view', $thread->category);
+        });
+
+        $threads = $this->model->where('category_id', $this->request->input('category_id'))->get();
+
+        return $this->collectionResponse($threads);
+    }
+
+    /**
+     * PATCH: mark the current user's new/updated threads as read, optionally limited by category ID.
+     *
+     * @return JsonResponse|Response
+     */
+    public function markNew()
+    {
+        $threads = $this->indexNew();
+
+        if (auth()->check()) {
+            foreach ($threads as $thread) {
+                $thread->markAsRead(auth()->user()->id);
+            }
+
+            $threads = $this->indexNew();
+        }
+
+        return $this->collectionResponse($threads, $this->trans('marked_read'));
+    }
+
+    /**
      * POST: create a new thread.
      *
      * @return JsonResponse|Response
@@ -71,7 +125,7 @@ class ThreadController extends BaseController
         if (!$category->threadsAllowed) {
             return $this->buildFailedValidationResponse(
                 $this->request,
-                ['category_id' => "The specified category does not allow threads."]
+                ['category_id' => "The specified category does not allow tahreads."]
             );
         }
 

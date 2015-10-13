@@ -48,7 +48,7 @@ class ThreadController extends BaseController
      */
     public function indexNew()
     {
-        $threads = $this->threads->newForReader;
+        $threads = $this->api('thread.new.index')->get();
 
         event(new UserViewingNew($threads));
 
@@ -63,11 +63,7 @@ class ThreadController extends BaseController
         if (auth()->check()) {
             event(new UserMarkingThreadsRead);
 
-            $threads = $this->threads->newForReader;
-
-            foreach ($threads as $thread) {
-                $thread->markAsRead(auth()->user()->id);
-            }
+            $threads = $this->api('thread.new.mark')->patch();
 
             Forum::alert('success', 'threads', 'marked_read');
         }

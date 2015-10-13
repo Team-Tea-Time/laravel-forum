@@ -281,32 +281,6 @@ class Thread extends BaseModel
     }
 
     /**
-     * Attribute: Current reader's new/updated threads.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getNewForReaderAttribute()
-    {
-        $threads = $this->recent();
-
-        // If the user is logged in, filter the threads according to read status
-        if (auth()->check()) {
-            $threads = $threads->filter(function ($thread)
-            {
-                return $thread->userReadStatus;
-            });
-        }
-
-        // Filter the threads according to the user's permissions
-        $threads = $threads->filter(function ($thread)
-        {
-            return Gate::allows('view', $thread->category);
-        });
-
-        return $threads;
-    }
-
-    /**
      * Helper: Get route parameters.
      *
      * @return array

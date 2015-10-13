@@ -146,9 +146,8 @@ class ForumServiceProvider extends ServiceProvider
     protected function loadRoutes(Router $router)
     {
         $dir = $this->baseDir;
-        $router->group(['namespace' => $this->namespace], function ($router) use ($dir)
+        $router->group(['namespace' => $this->namespace, 'as' => 'forum.', 'root' => config('forum.routing.root')], function ($router) use ($dir)
         {
-            $root = config('forum.routing.root');
             $controllers = config('forum.integration.controllers');
             require "{$dir}routes.php";
         });
