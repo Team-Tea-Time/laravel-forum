@@ -51,6 +51,64 @@ class ThreadController extends BaseController
     }
 
     /**
+     * GET: return a thread by ID.
+     *
+     * @param  int  $id
+     * @return JsonResponse|Response
+     */
+    public function show($id)
+    {
+        $model = $this->model;
+
+        if (
+            $this->request->input('include_deleted') &&
+            config('forum.preferences.list_trashed_posts') &&
+            $this->request->user()->can('deletePosts', $model)
+        ) {
+            $model = $model->with('postsWithTrashed');
+        }
+
+        $model = $model->find($id);
+
+        if (is_null($model) || !$model->exists) {
+            return $this->notFoundResponse();
+        }
+
+        return $this->modelResponse($model);
+    }
+
+    /**
+     * POST: create a new thread.
+     *
+     * @return JsonResponse|Response
+     */
+    public function store()
+    {
+        // For regular frontend requests, author_id is set automatically using
+        // the current user, so it's not a required parameter. For this
+        // endpoint, it's set manually, so we need to make it required.
+        $this->validate(
+            array_merge_recursive($this->rules['store'], ['author_id' => ['required']])
+        );
+
+        $category = Category::find($this->request->input('category_id'));
+
+        $this->authorize('createThreads', $category);
+
+        if (!$category->threadsAllowed) {
+            return $this->buildFailedValidationResponse(
+                $this->request,
+                ['category_id' => "The specified category does not allow tahreads."]
+            );
+        }
+
+        $thread = $this->model->create($this->request->only(['category_id', 'author_id', 'title']));
+        Post::create(['thread_id' => $thread->id] + $this->request->only('content'));
+
+        return $this->modelResponse($thread, 201);
+    }
+
+    /**
      * GET: return an index of new/updated threads for the current user, optionally filtered by category ID.
      *
      * @return JsonResponse|Response
@@ -102,63 +160,5 @@ class ThreadController extends BaseController
         }
 
         return $this->collectionResponse($threads, $this->trans('marked_read'));
-    }
-
-    /**
-     * POST: create a new thread.
-     *
-     * @return JsonResponse|Response
-     */
-    public function store()
-    {
-        // For regular frontend requests, author_id is set automatically using
-        // the current user, so it's not a required parameter. For this
-        // endpoint, it's set manually, so we need to make it required.
-        $this->validate(
-            array_merge_recursive($this->rules['store'], ['author_id' => ['required']])
-        );
-
-        $category = Category::find($this->request->input('category_id'));
-
-        $this->authorize('createThreads', $category);
-
-        if (!$category->threadsAllowed) {
-            return $this->buildFailedValidationResponse(
-                $this->request,
-                ['category_id' => "The specified category does not allow tahreads."]
-            );
-        }
-
-        $thread = $this->model->create($this->request->only(['category_id', 'author_id', 'title']));
-        Post::create(['thread_id' => $thread->id] + $this->request->only('content'));
-
-        return $this->modelResponse($thread, 201);
-    }
-
-    /**
-     * GET: return a thread by ID.
-     *
-     * @param  int  $id
-     * @return JsonResponse|Response
-     */
-    public function show($id)
-    {
-        $model = $this->model;
-
-        if (
-            $this->request->input('include_deleted') &&
-            config('forum.preferences.list_trashed_posts') &&
-            $this->request->user()->can('deletePosts', $model)
-        ) {
-            $model = $model->with('postsWithTrashed');
-        }
-
-        $model = $model->find($id);
-
-        if (is_null($model) || !$model->exists) {
-            return $this->notFoundResponse();
-        }
-
-        return $this->modelResponse($model);
     }
 }

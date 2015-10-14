@@ -75,6 +75,7 @@ class ForumServiceProvider extends ServiceProvider
     protected function setPublishables()
     {
         $this->publishes([
+            "{$this->baseDir}config/api.php" => config_path('forum.api.php'),
             "{$this->baseDir}config/integration.php" => config_path('forum.integration.php'),
             "{$this->baseDir}config/preferences.php" => config_path('forum.preferences.php'),
             "{$this->baseDir}config/routing.php" => config_path('forum.routing.php')
@@ -97,6 +98,7 @@ class ForumServiceProvider extends ServiceProvider
     protected function loadStaticFiles()
     {
         // Merge config
+        $this->mergeConfigFrom("{$this->baseDir}config/api.php", 'forum.api');
         $this->mergeConfigFrom("{$this->baseDir}config/integration.php", 'forum.integration');
         $this->mergeConfigFrom("{$this->baseDir}config/preferences.php", 'forum.preferences');
         $this->mergeConfigFrom("{$this->baseDir}config/routing.php", 'forum.routing');
@@ -178,6 +180,6 @@ class ForumServiceProvider extends ServiceProvider
      */
     public function registerMiddleware(Router $router)
     {
-        $router->middleware('forum.api.auth.basic', 'Riari\Forum\Http\Middleware\BasicAuth');
+        $router->middleware('forum.api.auth', 'Riari\Forum\Http\Middleware\APIAuth');
     }
 }

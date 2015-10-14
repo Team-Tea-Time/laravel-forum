@@ -1,11 +1,11 @@
 <?php
 
-namespace Riari\Forum\API\Http\Middleware;
+namespace Riari\Forum\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 
-class BasicAuth
+class APIAuth
 {
     /**
      * Handle an incoming request.
@@ -16,6 +16,11 @@ class BasicAuth
      */
     public function handle(Request $request, Closure $next)
     {
+        if ('Token token="' . config('forum.api.token') . '"' == $request->header('Authorization')) {
+            // Valid API token provided; continue the request
+            return $next($request);
+        }
+
         if (auth()->check()) {
             // User is authenticated; continue the request
             return $next($request);

@@ -129,6 +129,10 @@ class Dispatcher
     {
         $request = Request::create($this->uri, $verb, $this->parameters);
 
+        // Set token authorization header
+        $token = config('forum.api.token');
+        $request->headers->set('Authorization', "Token token=\"{$token}\"");
+
         // Replace the request input for the duration of the dispatched request
         $input = $this->currentRequest->input();
         $this->currentRequest->replace($request->input());

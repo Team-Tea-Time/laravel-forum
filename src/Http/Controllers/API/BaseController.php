@@ -5,6 +5,7 @@ namespace Riari\Forum\Http\Controllers\API;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Riari\Forum\Forum;
@@ -65,20 +66,6 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * POST: create a new model.
-     *
-     * @return JsonResponse|Response
-     */
-    public function store()
-    {
-        $this->validate($this->rules['store']);
-
-        $model = $this->model->create($this->request->all());
-
-        return $this->modelResponse($model, $this->trans('created'), 201);
-    }
-
-    /**
      * GET: return a model by ID.
      *
      * @param  int  $id
@@ -93,6 +80,20 @@ abstract class BaseController extends Controller
         }
 
         return $this->modelResponse($model);
+    }
+
+    /**
+     * POST: create a new model.
+     *
+     * @return JsonResponse|Response
+     */
+    public function store()
+    {
+        $this->validate($this->rules['store']);
+
+        $model = $this->model->create($this->request->all());
+
+        return $this->modelResponse($model, $this->trans('created'), 201);
     }
 
     /**
@@ -271,11 +272,11 @@ abstract class BaseController extends Controller
     protected function response($data, $message = "", $code = 200)
     {
         if ($this->request->ajax() || $this->request->wantsJson()) {
-            $message = (empty($message)) ? [] : ['message' => $message];
+            $message = empty($message) ? [] : ['message' => $message];
             return new JsonResponse($message + compact('data'), $code);
         }
 
-        return response($data, $code);
+        return new Response($data, $code);
     }
 
     /**

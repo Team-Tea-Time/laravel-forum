@@ -26,7 +26,7 @@ Route::group(['prefix' => '{category}-{category_slug}'], function () use ($contr
 });
 
 // API
-Route::group(['prefix' => 'api', 'namespace' => 'API', 'middleware' => 'auth.basic'], function () use ($controllers)
+Route::group(['prefix' => 'api', 'namespace' => 'API', 'middleware' => 'forum.api.auth'], function () use ($controllers)
 {
     // Categories
     resource('category', 'CategoryController', ['except' => ['create', 'edit']]);
