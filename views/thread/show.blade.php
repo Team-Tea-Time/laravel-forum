@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="col-xs-8 text-right">
-                    {!! $thread->pageLinks !!}
+                    {!! $posts->render() !!}
                 </div>
             </div>
         @endcan
@@ -78,7 +78,7 @@
             </tbody>
         </table>
 
-        {!! $thread->pageLinks !!}
+        {!! $posts->render() !!}
 
         @can ('reply', $thread)
             <h3>{{ trans('forum::general.quick_reply') }}</h3>

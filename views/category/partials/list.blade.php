@@ -1,24 +1,24 @@
 <tr>
     <td>
-        <a href="{{ $subcategory->route }}">{{ $subcategory->title }}</a>
-        <br>
-        {{ $subcategory->subtitle }}
-        @if ($subcategory->newestThread)
-            <div class="text-muted">
-                <br>
-                {{ trans('forum::threads.newest') }}:
-                <a href="{{ $subcategory->newestThread->route }}">
-                    {{ $subcategory->newestThread->title }}
-                    ({{ $subcategory->newestThread->authorName }})</a>
-                <br>
-                {{ trans('forum::posts.last') }}:
-                <a href="{{ $subcategory->latestActiveThread->lastPost->url }}">
-                    {{ $subcategory->latestActiveThread->title }}
-                    ({{ $subcategory->latestActiveThread->lastPost->authorName }})
-                </a>
-            </div>
+        <p class="{{ isset($titleClass) ? $titleClass : '' }}"><a href="{{ $category->route }}">{{ $category->title }}</a></p>
+        <span class="text-muted">{{ $category->subtitle }}</span>
+    </td>
+    <td>{{ $category->threadCount }}</td>
+    <td>{{ $category->postCount }}</td>
+    <td>
+        @if ($category->newestThread)
+            <a href="{{ $category->newestThread->route }}">
+                {{ $category->newestThread->title }}
+                ({{ $category->newestThread->authorName }})
+            </a>
         @endif
     </td>
-    <td>{{ $subcategory->threadCount }}</td>
-    <td>{{ $subcategory->postCount }}</td>
+    <td>
+        @if ($category->latestActiveThread)
+            <a href="{{ $category->latestActiveThread->lastPost->url }}">
+                {{ $category->latestActiveThread->title }}
+                ({{ $category->latestActiveThread->lastPost->authorName }})
+            </a>
+        @endif
+    </td>
 </tr>

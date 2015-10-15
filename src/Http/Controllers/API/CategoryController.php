@@ -45,7 +45,7 @@ class CategoryController extends BaseController
         $categories = $this->model->where('category_id', $this->request->input('category_id'));
         $categories = $this->request->has('with') ? $categories->with($this->request->input('with'))->get() : $categories->get();
 
-        return $this->collectionResponse($categories);
+        return $this->response($categories);
     }
 
     /**

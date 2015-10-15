@@ -14,43 +14,24 @@
                     <th>{{ trans_choice('forum::categories.category', 1) }}</th>
                     <th class="col-md-2">{{ trans_choice('forum::threads.thread', 2) }}</th>
                     <th class="col-md-2">{{ trans_choice('forum::posts.post', 2) }}</th>
+                    <th class="col-md-2">{{ trans('forum::threads.newest') }}</th>
+                    <th class="col-md-2">{{ trans('forum::posts.last') }}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>
-                        <p class="lead"><a href="{{ $category->route }}">{{ $category->title }}</a></p>
-                        {{ $category->subtitle }}
-
-                        @if ($category->newestThread)
-                        <div class="text-muted">
-                            <br>
-                            {{ trans('forum::threads.newest') }}:
-                            <a href="{{ $category->newestThread->route }}">
-                                {{ $category->newestThread->title }}
-                                ({{ $category->newestThread->authorName }})</a>
-                            <br>
-                            {{ trans('forum::posts.last') }}:
-                            <a href="{{ $category->latestActiveThread->lastPost->url }}">
-                                {{ $category->latestActiveThread->title }}
-                                ({{ $category->latestActiveThread->lastPost->authorName }})
-                            </a>
-                        </div>
-                        @endif
-                    </td>
-                    <td>{{ $category->threadCount }}</td>
-                    <td>{{ $category->postCount }}</td>
+                    @include ('forum::category.partials.list', ['titleClass' => 'lead'])
                 </tr>
                 @if (!$category->children->isEmpty())
                     <tr>
-                        <th colspan="3">{{ trans('forum::categories.subcategories') }}</th>
+                        <th colspan="5">{{ trans('forum::categories.subcategories') }}</th>
                     </tr>
                     @foreach ($category->children as $subcategory)
-                        @include ('forum::category.partials.list')
+                        @include ('forum::category.partials.list', ['category' => $subcategory])
                     @endforeach
                 @else
                     <tr>
-                        <th colspan="3">
+                        <th colspan="5">
                             {{ trans('forum::categories.none_found') }}
                         </th>
                     </tr>

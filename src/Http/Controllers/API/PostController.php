@@ -45,7 +45,7 @@ class PostController extends BaseController
 
         $posts = $this->model->where('thread_id', $this->request->input('thread_id'))->get();
 
-        return $this->collectionResponse($posts);
+        return $this->response($posts);
     }
 
     /**
@@ -69,6 +69,6 @@ class PostController extends BaseController
         $post = $this->model->create($this->request->only(['thread_id', 'post_id', 'author_id', 'title', 'content']));
         $post->load('thread');
 
-        return $this->modelResponse($post, $this->trans('created'), 201);
+        return $this->response($post, $this->trans('created'), 201);
     }
 }

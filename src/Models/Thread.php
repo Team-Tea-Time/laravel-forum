@@ -4,6 +4,8 @@ namespace Riari\Forum\Models;
 
 use Gate;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Riari\Forum\Models\Category;
+use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Traits\HasAuthor;
 use Riari\Forum\Models\Traits\HasSlug;
 
@@ -44,7 +46,7 @@ class Thread extends BaseModel
      */
     public function category()
     {
-        return $this->belongsTo('\Riari\Forum\Models\Category');
+        return $this->belongsTo(Category::class);
     }
 
     /**
@@ -55,11 +57,11 @@ class Thread extends BaseModel
     public function readers()
     {
         return $this->belongsToMany(
-                config('forum.integration.user_model'),
-                'forum_threads_read',
-                'thread_id',
-                'user_id'
-            )->withTimestamps();
+            config('forum.integration.user_model'),
+            'forum_threads_read',
+            'thread_id',
+            'user_id'
+        )->withTimestamps();
     }
 
     /**
@@ -69,7 +71,7 @@ class Thread extends BaseModel
      */
     public function posts()
     {
-        return $this->hasMany('\Riari\Forum\Models\Post');
+        return $this->hasMany(Post::class);
     }
 
     /**
@@ -183,16 +185,6 @@ class Thread extends BaseModel
     public function getLastPostUrlAttribute()
     {
         return "{$this->route}?page={$this->lastPage}#post-{$this->lastPost->id}";
-    }
-
-    /**
-     * Attribute: Pagination links.
-     *
-     * @return string
-     */
-    public function getPageLinksAttribute()
-    {
-        return $this->postsPaginated->render();
     }
 
     /**

@@ -4,17 +4,21 @@ namespace Riari\Forum\Models\Observers;
 
 class ThreadObserver extends BaseObserver
 {
-    public function deleted($model)
+    public function deleted($thread)
     {
-        if ($model->deleted_at != $this->carbon->now()) {
-            $model->posts()->withTrashed()->forceDelete();
+        // Delete the thread's posts
+        if ($thread->deleted_at != $this->carbon->now()) {
+            // The thread was force-deleted, so the posts should be too
+            $thread->posts()->withTrashed()->forceDelete();
         } else {
-            $model->posts()->delete();
+            // The thread was soft-deleted, so just soft-delete its posts
+            $thread->posts()->delete();
         }
     }
 
-    public function restored($model)
+    public function restored($thread)
     {
-        $model->posts()->withTrashed()->restore();
+        // Restore the thread's posts
+        $thread->posts()->withTrashed()->restore();
     }
 }

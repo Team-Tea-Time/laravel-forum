@@ -3,6 +3,7 @@
 namespace Riari\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Thread;
 use Riari\Forum\Models\Traits\HasSlug;
 
@@ -35,7 +36,7 @@ class Category extends BaseModel
      */
     public function parent()
     {
-        return $this->belongsTo('\Riari\Forum\Models\Category', 'category_id')->orderBy('weight');
+        return $this->belongsTo(Category::class, 'category_id')->orderBy('weight');
     }
 
     /**
@@ -45,7 +46,7 @@ class Category extends BaseModel
      */
     public function children()
     {
-        return $this->hasMany('\Riari\Forum\Models\Category', 'category_id')->orderBy('weight');
+        return $this->hasMany(Category::class, 'category_id')->orderBy('weight');
     }
 
     /**
@@ -55,7 +56,7 @@ class Category extends BaseModel
      */
     public function threads()
     {
-        return $this->hasMany('\Riari\Forum\Models\Thread');
+        return $this->hasMany(Thread::class);
     }
 
     /**
@@ -112,16 +113,6 @@ class Category extends BaseModel
             ->orderBy('pinned', 'desc')
             ->orderBy('updated_at', 'desc')
             ->paginate(config('forum.preferences.pagination.threads'));
-    }
-
-    /**
-     * Attribute: Pagination links.
-     *
-     * @return string
-     */
-    public function getPageLinksAttribute()
-    {
-        return $this->threadsPaginated->render();
     }
 
     /**

@@ -62,7 +62,7 @@ abstract class BaseController extends Controller
      */
     public function index()
     {
-        return $this->collectionResponse($this->model->paginate());
+        return $this->response($this->model->paginate());
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class BaseController extends Controller
             return $this->notFoundResponse();
         }
 
-        return $this->modelResponse($model);
+        return $this->response($model);
     }
 
     /**
@@ -93,7 +93,7 @@ abstract class BaseController extends Controller
 
         $model = $this->model->create($this->request->all());
 
-        return $this->modelResponse($model, $this->trans('created'), 201);
+        return $this->response($model, $this->trans('created'), 201);
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class BaseController extends Controller
             return $response;
         }
 
-        return $this->modelResponse($response, $this->trans('updated'));
+        return $this->response($response, $this->trans('updated'));
     }
 
     /**
@@ -145,7 +145,7 @@ abstract class BaseController extends Controller
             $message = $this->trans('deleted');
         }
 
-        return $this->modelResponse($model, $message);
+        return $this->response($model, $message);
     }
 
     /**
@@ -168,7 +168,7 @@ abstract class BaseController extends Controller
             $model->restore();
         }
 
-        return $this->modelResponse($model, $this->trans('restored'));
+        return $this->response($model, $this->trans('restored'));
     }
 
     /**
@@ -191,7 +191,7 @@ abstract class BaseController extends Controller
             }
         }
 
-        return $this->collectionResponse($collection, $this->trans('deleted', $collection->count()));
+        return $this->response($collection, $this->trans('deleted', $collection->count()));
     }
 
     /**
@@ -214,7 +214,7 @@ abstract class BaseController extends Controller
             }
         }
 
-        return $this->collectionResponse($collection, $this->trans('restored', $collection->count()));
+        return $this->response($collection, $this->trans('restored', $collection->count()));
     }
 
     /**
@@ -239,7 +239,7 @@ abstract class BaseController extends Controller
             }
         }
 
-        return $this->collectionResponse($collection, $this->trans('updated', $collection->count()));
+        return $this->response($collection, $this->trans('updated', $collection->count()));
     }
 
     /**
@@ -271,38 +271,13 @@ abstract class BaseController extends Controller
      */
     protected function response($data, $message = "", $code = 200)
     {
+        $message = empty($message) ? [] : compact('message');
+
         if ($this->request->ajax() || $this->request->wantsJson()) {
-            $message = empty($message) ? [] : ['message' => $message];
             return new JsonResponse($message + compact('data'), $code);
         }
 
-        return new Response($data, $code);
-    }
-
-    /**
-     * Create a Collection response.
-     *
-     * @param  object  $collection
-     * @param  string  $message
-     * @param  int  $code
-     * @return JsonResponse|Response
-     */
-    protected function collectionResponse($collection, $message = "", $code = 200)
-    {
-        return $this->response($collection, $message, $code);
-    }
-
-    /**
-     * Create a Model response.
-     *
-     * @param  object  $model
-     * @param  string  $message
-     * @param  int  $code
-     * @return JsonResponse|Response
-     */
-    protected function modelResponse($model, $message = "", $code = 200)
-    {
-        return $this->response($model, $message, $code);
+        return new Response($message + compact('data'), $code);
     }
 
     /**

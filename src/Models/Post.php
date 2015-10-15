@@ -3,6 +3,8 @@
 namespace Riari\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Riari\Forum\Models\Post;
+use Riari\Forum\Models\Thread;
 use Riari\Forum\Models\Traits\HasAuthor;
 
 class Post extends BaseModel
@@ -36,7 +38,7 @@ class Post extends BaseModel
      */
     public function thread()
     {
-        return $this->belongsTo('\Riari\Forum\Models\Thread')->withTrashed();
+        return $this->belongsTo(Thread::class)->withTrashed();
     }
 
     /**
@@ -46,7 +48,7 @@ class Post extends BaseModel
      */
     public function parent()
     {
-        return $this->belongsTo('\Riari\Forum\Models\Post', 'post_id')->withTrashed();
+        return $this->belongsTo(Post::class, 'post_id')->withTrashed();
     }
 
     /**
@@ -56,7 +58,7 @@ class Post extends BaseModel
      */
     public function children()
     {
-        return $this->hasMany('\Riari\Forum\Models\Post', 'post_id')->withTrashed();
+        return $this->hasMany(Post::class, 'post_id')->withTrashed();
     }
 
     /**

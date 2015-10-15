@@ -16,16 +16,12 @@ class APIAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        if ('Token token="' . config('forum.api.token') . '"' == $request->header('Authorization')) {
-            // Valid API token provided; continue the request
-            return $next($request);
-        }
-
-        if (auth()->check()) {
-            // User is authenticated; continue the request
+        $tokenHeader = 'Token token="' . config('forum.api.token') . '"';
+        if (auth()->check() || $request->header('Authorization') == $tokenHeader) {
+            // User is authenticated or a valid API token was provided; continue the request
             return $next($request);
         } else {
-            // User is not authenticated
+            // No authentication/authorization
 
             if ($request->ajax()) {
                 // For AJAX requests, just return the appropriate response

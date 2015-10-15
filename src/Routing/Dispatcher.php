@@ -139,6 +139,6 @@ class Dispatcher
         $response = Route::dispatch($request);
         $this->currentRequest->replace($input);
 
-        return $response->getOriginalContent();
+        return $response->getOriginalContent()['data'];
     }
 }

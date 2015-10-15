@@ -47,7 +47,7 @@ class ThreadController extends BaseController
 
         $threads = $this->model->where('category_id', $this->request->input('category_id'))->get();
 
-        return $this->collectionResponse($threads);
+        return $this->response($threads);
     }
 
     /**
@@ -74,7 +74,7 @@ class ThreadController extends BaseController
             return $this->notFoundResponse();
         }
 
-        return $this->modelResponse($model);
+        return $this->response($model);
     }
 
     /**
@@ -105,7 +105,7 @@ class ThreadController extends BaseController
         $thread = $this->model->create($this->request->only(['category_id', 'author_id', 'title']));
         Post::create(['thread_id' => $thread->id] + $this->request->only('content'));
 
-        return $this->modelResponse($thread, 201);
+        return $this->response($thread, 201);
     }
 
     /**
@@ -139,7 +139,7 @@ class ThreadController extends BaseController
 
         $threads = $this->model->where('category_id', $this->request->input('category_id'))->get();
 
-        return $this->collectionResponse($threads);
+        return $this->response($threads);
     }
 
     /**
@@ -159,6 +159,6 @@ class ThreadController extends BaseController
             $threads = $this->indexNew();
         }
 
-        return $this->collectionResponse($threads, $this->trans('marked_read'));
+        return $this->response($threads, $this->trans('marked_read'));
     }
 }

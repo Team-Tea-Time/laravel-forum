@@ -32,7 +32,7 @@
                 @endcan
             </div>
             <div class="col-xs-8 text-right">
-                {!! $category->pageLinks !!}
+                {!! $threads->render() !!}
             </div>
         </div>
 
@@ -51,7 +51,7 @@
                 <tbody>
                     @if (!$threads->isEmpty())
                         @foreach ($threads as $thread)
-                            <tr class="{{ ($thread->trashed()) ? "deleted" : "" }}">
+                            <tr class="{{ $thread->trashed() ? "deleted" : "" }}">
                                 <td>
                                     <span class="pull-right">
                                         @if ($thread->locked)
@@ -97,9 +97,9 @@
                                 {{ trans('forum::threads.none_found') }}
                             </td>
                             <td class="text-right" colspan="3">
-                                @if ($category->userCanCreateThreads)
+                                @can ('createThreads', $category)
                                     <a href="{{ $category->newThreadRoute }}">{{ trans('forum::threads.post_the_first') }}</a>
-                                @endif
+                                @endcan
                             </td>
                         </tr>
                     @endif
@@ -120,7 +120,7 @@
                 @endcan
             </div>
             <div class="col-xs-8 text-right">
-                {!! $category->pageLinks !!}
+                {!! $threads->render() !!}
             </div>
         </div>
     </div>
