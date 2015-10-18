@@ -3,15 +3,16 @@
 namespace Riari\Forum\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Riari\Forum\Events\UserCreatingThread;
 use Riari\Forum\Events\UserMarkingThreadsRead;
 use Riari\Forum\Events\UserViewingNew;
 use Riari\Forum\Events\UserViewingThread;
 use Riari\Forum\Forum;
+use Riari\Forum\Http\Requests\CreateThreadRequest;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
-use Riari\Forum\Routing\Dispatcher;
 
 class ThreadController extends BaseController
 {
@@ -24,22 +25,6 @@ class ThreadController extends BaseController
      * @var Post
      */
     protected $posts;
-
-    /**
-     * Create a thread controller instance.
-     *
-     * @param  Dispatcher  $dispatcher
-     */
-    public function __construct(Dispatcher $dispatcher)
-    {
-        parent::__construct($dispatcher);
-
-        $rules = config('forum.preferences.validation');
-        $this->rules = [
-            'thread'    => array_merge_recursive($rules['base'], $rules['post|put']['thread']),
-            'post'      => array_merge_recursive($rules['base'], $rules['post|put']['post'])
-        ];
-    }
 
     /**
      * GET: return a new/updated threads view.
@@ -81,7 +66,7 @@ class ThreadController extends BaseController
      */
     public function show($categoryID, $categorySlug, $threadID)
     {
-        $thread = $this->api('thread.show', $threadID)
+        $thread = $this->api('thread.fetch', $threadID)
                        ->parameters(['include_deleted' => true])
                        ->get();
 
@@ -95,14 +80,14 @@ class ThreadController extends BaseController
     }
 
     /**
-     * GET: return a 'create thread' view.
+     * GET: Return a 'create thread' view.
      *
      * @param  int  $categoryID
      * @return \Illuminate\Http\Response
      */
     public function create($categoryID)
     {
-        $category = $this->api('category.show', $categoryID)->get();
+        $category = $this->api('category.fetch', $categoryID)->get();
 
         if (!$category->threadsAllowed) {
             Forum::alert('warning', trans('forum::categories.threads_disallowed'));
@@ -116,16 +101,14 @@ class ThreadController extends BaseController
     }
 
     /**
-     * POST: validate and store a submitted thread.
+     * POST: Store a new thread.
      *
-     * @param  int  $categoryID
-     * @param  string  $categorySlug
-     * @param  Request  $request
+     * @param  CreateThreadRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store($categoryID, $categorySlug, Request $request)
+    public function store(CreateThreadRequest $request)
     {
-        $category = $this->api('category.show', $categoryID)->get();
+        $category = $this->api('category.fetch', $request->route('category'))->get();
 
         if (!$category->threadsAllowed) {
             Forum::alert('warning', trans('forum::categories.threads_disallowed'));
@@ -133,19 +116,32 @@ class ThreadController extends BaseController
             return redirect($category->route);
         }
 
-        $this->validate($request, $this->rules['thread']);
-        $this->validate($request, $this->rules['post']);
-
         $thread = [
             'author_id'     => auth()->user()->id,
             'category_id'   => $category->id,
             'title'         => $request->input('title'),
             'content'       => $request->input('content')
         ];
+
         $thread = $this->api('thread.store')->parameters($thread)->post();
 
         Forum::alert('success', 'threads', 'created');
 
         return redirect($thread->route);
+    }
+
+    /**
+     * PATCH: Update threads in bulk.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function bulkUpdate(Request $request)
+    {
+        $threads = $this->api('bulk.thread.move')->parameters($request->all())->patch();
+
+        Forum::alert('success', 'threads', 'updated', $threads->count());
+
+        return redirect()->back();
     }
 }

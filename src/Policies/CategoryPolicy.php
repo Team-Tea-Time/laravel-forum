@@ -42,7 +42,7 @@ class CategoryPolicy
      */
     public function deleteThreads($user, Category $category)
     {
-        return false;
+        return true;
     }
 
     /**
@@ -54,7 +54,7 @@ class CategoryPolicy
      */
     public function moveThreads($user, Category $category)
     {
-        return false;
+        return true;
     }
 
     /**
@@ -66,7 +66,7 @@ class CategoryPolicy
      */
     public function lockThreads($user, Category $category)
     {
-        return false;
+        return true;
     }
 
     /**
@@ -78,7 +78,7 @@ class CategoryPolicy
      */
     public function pinThreads($user, Category $category)
     {
-        return false;
+        return true;
     }
 
     /**

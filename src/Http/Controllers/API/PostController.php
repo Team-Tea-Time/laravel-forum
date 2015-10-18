@@ -4,46 +4,43 @@ namespace Riari\Forum\Http\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Riari\Forum\Http\Requests\CreatePostRequest;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
 
 class PostController extends BaseController
 {
     /**
-     * Create a new Post API controller instance.
+     * Return the model to use for this controller.
      *
-     * @param  Post  $model
-     * @param  Request  $request
+     * @return Post
      */
-    public function __construct(Post $model, Request $request)
+    protected function model()
     {
-        parent::__construct($model, $request);
+        return new Post;
+    }
 
-        $rules = config('forum.preferences.validation');
-        $this->rules = [
-            'store' => array_merge_recursive(
-                $rules['base'],
-                $rules['post|put']['post']
-            ),
-            'update' => array_merge_recursive(
-                $rules['base'],
-                $rules['patch']['post']
-            )
-        ];
-
-        $this->translationFile = 'posts';
+    /**
+     * Return the translation file name to use for this controller.
+     *
+     * @return string
+     */
+    protected function translationFile()
+    {
+        return 'posts';
     }
 
     /**
      * GET: return an index of posts by thread ID.
      *
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $this->validate(['thread_id' => 'integer|required|exists:forum_threads,id']);
+        $this->validate($request, ['thread_id' => 'integer|required|exists:forum_threads,id']);
 
-        $posts = $this->model->where('thread_id', $this->request->input('thread_id'))->get();
+        $posts = $this->model->where('thread_id', $request->input('thread_id'))->get();
 
         return $this->response($posts);
     }
@@ -51,22 +48,17 @@ class PostController extends BaseController
     /**
      * POST: create a new post.
      *
+     * @param  CreatePostRequest  $request
      * @return JsonResponse|Response
      */
-    public function store()
+    public function store(CreatePostRequest $request)
     {
-        // For regular frontend requests, thread_id and author_id are set
-        // automatically using the current thread and user, so they're not
-        // required parameters. For this endpoint, they're set manually, so we
-        // need to make them required.
-        $this->validate(
-            array_merge_recursive($this->rules['store'], ['thread_id' => ['integer', 'required', 'exists:forum_threads,id'], 'author_id' => ['required']])
-        );
+        $this->validate($request, ['thread_id' => 'required|exists:forum_threads,id', 'author_id' => 'required|integer']);
 
-        $thread = Thread::find($this->request->input('thread_id'));
+        $thread = Thread::find($request->input('thread_id'));
         $this->authorize('reply', $thread);
 
-        $post = $this->model->create($this->request->only(['thread_id', 'post_id', 'author_id', 'title', 'content']));
+        $post = $this->model->create($request->only(['thread_id', 'post_id', 'author_id', 'title', 'content']));
         $post->load('thread');
 
         return $this->response($post, $this->trans('created'), 201);

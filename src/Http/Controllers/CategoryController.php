@@ -3,6 +3,7 @@
 namespace Riari\Forum\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Events\UserViewingCategory;
 use Riari\Forum\Events\UserViewingIndex;
 
@@ -17,7 +18,7 @@ class CategoryController extends BaseController
     public function index(Request $request)
     {
         $categories = $this->api('category.index')
-                           ->parameters(['with' => ['children']])
+                           ->parameters(['where' => ['category_id' => null]], ['with' => ['children']])
                            ->get();
 
         event(new UserViewingIndex);
@@ -34,7 +35,7 @@ class CategoryController extends BaseController
      */
     public function show($categoryID, Request $request)
     {
-        $category = $this->api('category.show', $categoryID)->get();
+        $category = $this->api('category.fetch', $categoryID)->get();
 
         event(new UserViewingCategory($category));
 
@@ -42,6 +43,11 @@ class CategoryController extends BaseController
             ? $category->threadsWithTrashedPaginated
             : $category->threadsPaginated;
 
-        return view('forum::category.show', compact('category', 'threads'));
+        $categories = [];
+        if (Gate::allows('moveThreads', $category)) {
+            $categories = $this->api('category.index')->parameters(['where' => ['allows_threads' => 1]])->get();
+        }
+
+        return view('forum::category.show', compact('categories', 'category', 'threads'));
     }
 }

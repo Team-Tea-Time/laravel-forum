@@ -3,18 +3,12 @@
 namespace Riari\Forum\Http\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
-use Riari\Forum\Routing\Dispatcher;
+use Riari\Forum\API\Dispatcher;
 
 abstract class BaseController extends Controller
 {
-    use AuthorizesRequests, ValidatesRequests;
-
-    /**
-     * @var array
-     */
-    protected $rules;
+    use AuthorizesRequests;
 
     /**
      * @var Dispatcher
@@ -26,9 +20,9 @@ abstract class BaseController extends Controller
      *
      * @param  Dispatcher  $dispatcher
      */
-    public function __construct(Dispatcher $dispatcher)
+    public function __construct()
     {
-        $this->dispatcher = $dispatcher;
+        $this->dispatcher = new Dispatcher;
     }
 
     /**

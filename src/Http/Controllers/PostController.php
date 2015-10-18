@@ -7,39 +7,22 @@ use Riari\Forum\Events\UserCreatingPost;
 use Riari\Forum\Events\UserEditingPost;
 use Riari\Forum\Events\UserViewingPost;
 use Riari\Forum\Forum;
+use Riari\Forum\Http\Requests\CreatePostRequest;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
-use Riari\Forum\Routing\Dispatcher;
 
 class PostController extends BaseController
 {
     /**
-     * Create a post controller instance.
-     *
-     * @param  Dispatcher  $dispatcher
-     */
-    public function __construct(Dispatcher $dispatcher)
-    {
-        parent::__construct($dispatcher);
-
-        $rules = config('forum.preferences.validation');
-        $this->rules = array_merge_recursive($rules['base'], $rules['post|put']['post']);
-    }
-
-    /**
      * GET: return a post view.
      *
-     * @param  int  $categoryID
-     * @param  string  $categorySlug
-     * @param  int  $threadID
-     * @param  string  $threadSlug
-     * @param  int  $postID
+     * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($categoryID, $categorySlug, $threadID, $threadSlug, $postID)
+    public function show(Request $request)
     {
-        $post = $this->api('post.show', $postID)->parameters(['with' => ['thread', 'thread.category', 'parent']])->get();
+        $post = $this->api('post.show', $request->route('post'))->parameters(['with' => ['thread', 'thread.category', 'parent']])->get();
 
         event(new UserViewingPost($post));
 
@@ -49,20 +32,16 @@ class PostController extends BaseController
     /**
      * GET: return a 'create post' (thread reply) view.
      *
-     * @param  int  $categoryID
-     * @param  string  $categorySlug
-     * @param  int  $threadID
-     * @param  string  $threadSlug
      * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create($categoryID, $categorySlug, $threadID, $threadSlug, Request $request)
+    public function create(Request $request)
     {
-        $thread = $this->api('thread.show', $threadID)->parameters($request->only('post_id') + ['with' => ['posts']])->get();
-
-        event(new UserCreatingPost($thread));
+        $thread = $this->api('thread.fetch', $request->route('thread'))->parameters($request->only('post_id') + ['with' => ['posts']])->get();
 
         $this->authorize('reply', $thread);
+
+        event(new UserCreatingPost($thread));
 
         $post = null;
         if ($request->has('post_id')) {
@@ -75,18 +54,12 @@ class PostController extends BaseController
     /**
      * POST: validate and store a submitted post.
      *
-     * @param  int  $categoryID
-     * @param  string  $categorySlug
-     * @param  int  $threadID
-     * @param  string  $threadSlug
-     * @param  Request  $request
+     * @param  CreatePostRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store($categoryID, $categorySlug, $threadID, $threadSlug, Request $request)
+    public function store(CreatePostRequest $request)
     {
-        $this->validate($request, $this->rules);
-
-        $thread = $this->api('thread.show', $threadID)->parameters(['with' => ['posts']])->get();
+        $thread = $this->api('thread.fetch', $request->route('thread'))->parameters(['with' => ['posts']])->get();
 
         $this->authorize('reply', $thread);
 

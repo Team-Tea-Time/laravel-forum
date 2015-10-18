@@ -4,48 +4,46 @@ namespace Riari\Forum\Http\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Riari\Forum\API\Cache;
 use Riari\Forum\Models\Category;
 
 class CategoryController extends BaseController
 {
     /**
-     * Create a new Category API controller instance.
+     * Return the model to use for this controller.
      *
-     * @param  Category  $model
-     * @param  Request  $request
+     * @return Category
      */
-    public function __construct(Category $model, Request $request)
+    protected function model()
     {
-        parent::__construct($model, $request);
+        return new Category;
+    }
 
-        $rules = config('forum.preferences.validation');
-        $this->rules = [
-            'store' => array_merge_recursive(
-                $rules['base'],
-                $rules['post|put']['category']
-            ),
-            'update' => array_merge_recursive(
-                $rules['base'],
-                $rules['patch']['category']
-            )
-        ];
-
-        $this->translationFile = 'categories';
+    /**
+     * Return the translation file name to use for this controller.
+     *
+     * @return string
+     */
+    protected function translationFile()
+    {
+        return 'categories';
     }
 
     /**
      * GET: return an index of categories.
      *
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $this->validate(['category_id' => 'integer|exists:forum_categories,id']);
+        $this->validate($request, ['category_id' => 'integer|exists:forum_categories,id']);
 
-        $categories = $this->model->where('category_id', $this->request->input('category_id'));
-        $categories = $this->request->has('with') ? $categories->with($this->request->input('with'))->get() : $categories->get();
+        $categories = new Category;
+        if ($request->has('where')) $categories = $categories->where($request->input('where'));
+        if ($request->has('with')) $categories = $categories->with($request->input('with'));
 
-        return $this->response($categories);
+        return $this->response($categories->get());
     }
 
     /**

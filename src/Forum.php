@@ -13,12 +13,13 @@ class Forum
      * @param  string  $type
      * @param  string  $transFile
      * @param  string  $transKey
+     * @param  string  $transCount
      * @return void
      */
-    public static function alert($type, $transFile, $transKey)
+    public static function alert($type, $transFile, $transKey, $transCount = 1)
     {
         $processAlert = config('forum.integration.process_alert');
-        $processAlert($type, self::trans($transFile, $transKey));
+        $processAlert($type, self::trans($transFile, $transKey, $transCount));
     }
 
     /**

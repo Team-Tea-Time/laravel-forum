@@ -8,12 +8,12 @@
     @if (isset($show_title_field) && $show_title_field)
         <div class="form-group">
             <label for="title">{{ trans('forum::general.title') }}</label>
-            <input type="text" name="title" value="{{ Input::old('title') }}" class="form-control">
+            <input type="text" name="title" value="{{ old('title') }}" class="form-control">
         </div>
     @endif
 
     <div class="form-group">
-        <textarea name="content" class="form-control">{{ isset($post_content) ? $post_content : '' }}</textarea>
+        <textarea name="content" class="form-control">{{ old('content') }}</textarea>
     </div>
 
     <button type="submit" class="btn btn-primary">{{ $submit_label }}</button>

@@ -16,6 +16,7 @@ $r->group(['prefix' => '{category}-{category_slug}'], function ($r) use ($contro
     $r->get('{thread}-{thread_slug}', ['as' => 'thread.show', 'uses' => "{$controllers['thread']}@show"]);
     $r->get('thread/create', ['as' => 'thread.create', 'uses' => "{$controllers['thread']}@create"]);
     $r->post('thread/create', ['as' => 'thread.store', 'uses' => "{$controllers['thread']}@store"]);
+    $r->patch('thread/{thread}', ['as' => 'thread.update', 'uses' => "{$controllers['thread']}@update"]);
 
     // Posts
     $r->get('{thread}-{thread_slug}/post/{post}', ['as' => 'post.show', 'uses' => "{$controllers['post']}@show"]);
@@ -23,6 +24,12 @@ $r->group(['prefix' => '{category}-{category_slug}'], function ($r) use ($contro
     $r->post('{thread}-{thread_slug}/reply', ['as' => 'post.store', 'uses' => "{$controllers['post']}@store"]);
     $r->get('{thread}-{thread_slug}/post/{post}/edit', ['as' => 'post.edit', 'uses' => "{$controllers['post']}@edit"]);
     $r->patch('{thread}-{thread_slug}/post/{post}/edit', ['as' => 'post.update', 'uses' => "{$controllers['post']}@update"]);
+});
+
+// Bulk actions
+$r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r) use ($controllers)
+{
+    $r->patch('thread', ['as' => 'thread.update', 'uses' => "{$controllers['thread']}@bulkUpdate"]);
 });
 
 // API
@@ -68,6 +75,7 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
         $r->match(['post', 'patch'], '{post}', ['as' => 'update', 'uses' => 'PostController@update']);
     });
 
+    // Bulk actions
     $r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r)
     {
         // Categories

@@ -78,7 +78,8 @@ class ForumServiceProvider extends ServiceProvider
             "{$this->baseDir}config/api.php" => config_path('forum.api.php'),
             "{$this->baseDir}config/integration.php" => config_path('forum.integration.php'),
             "{$this->baseDir}config/preferences.php" => config_path('forum.preferences.php'),
-            "{$this->baseDir}config/routing.php" => config_path('forum.routing.php')
+            "{$this->baseDir}config/routing.php" => config_path('forum.routing.php'),
+            "{$this->baseDir}config/validation.php" => config_path('forum.validation.php')
         ], 'config');
 
         $this->publishes([
@@ -98,10 +99,9 @@ class ForumServiceProvider extends ServiceProvider
     protected function loadStaticFiles()
     {
         // Merge config
-        $this->mergeConfigFrom("{$this->baseDir}config/api.php", 'forum.api');
-        $this->mergeConfigFrom("{$this->baseDir}config/integration.php", 'forum.integration');
-        $this->mergeConfigFrom("{$this->baseDir}config/preferences.php", 'forum.preferences');
-        $this->mergeConfigFrom("{$this->baseDir}config/routing.php", 'forum.routing');
+        foreach (['api', 'integration', 'preferences', 'routing', 'validation'] as $name) {
+            $this->mergeConfigFrom("{$this->baseDir}config/{$name}.php", "forum.{$name}");
+        }
 
         // Load views
         $this->loadViewsFrom("{$this->baseDir}views", 'forum');
@@ -148,7 +148,7 @@ class ForumServiceProvider extends ServiceProvider
     protected function loadRoutes(Router $router)
     {
         $dir = $this->baseDir;
-        $router->group(['namespace' => $this->namespace, 'as' => 'forum.', 'root' => config('forum.routing.root')], function ($r) use ($dir)
+        $router->group(['namespace' => $this->namespace, 'as' => 'forum.', 'prefix' => config('forum.routing.root')], function ($r) use ($dir)
         {
             $controllers = config('forum.integration.controllers');
             require "{$dir}routes.php";

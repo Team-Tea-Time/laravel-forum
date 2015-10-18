@@ -4,6 +4,7 @@ namespace Riari\Forum\Http\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Riari\Forum\Http\Requests\CreateThreadRequest;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
@@ -11,41 +12,36 @@ use Riari\Forum\Models\Thread;
 class ThreadController extends BaseController
 {
     /**
-     * Create a new Category API controller instance.
+     * Return the model to use for this controller.
      *
-     * @param  Thread  $model
-     * @param  Request  $request
+     * @return Thread
      */
-    public function __construct(Thread $model, Request $request)
+    protected function model()
     {
-        parent::__construct($model, $request);
+        return new Thread;
+    }
 
-        $rules = config('forum.preferences.validation');
-        $this->rules = [
-            'store' => array_merge_recursive(
-                $rules['base'],
-                $rules['post|put']['thread'],
-                $rules['post|put']['post']
-            ),
-            'update' => array_merge_recursive(
-                $rules['base'],
-                $rules['patch']['thread']
-            )
-        ];
-
-        $this->translationFile = 'threads';
+    /**
+     * Return the translation file name to use for this controller.
+     *
+     * @return string
+     */
+    protected function translationFile()
+    {
+        return 'threads';
     }
 
     /**
      * GET: return an index of threads by category ID.
      *
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $this->validate(['category_id' => 'required|integer|exists:forum_categories,id']);
+        $this->validate($request, ['category_id' => 'required|integer|exists:forum_categories,id']);
 
-        $threads = $this->model->where('category_id', $this->request->input('category_id'))->get();
+        $threads = $this->model->where('category_id', $request->input('category_id'))->get();
 
         return $this->response($threads);
     }
@@ -54,16 +50,17 @@ class ThreadController extends BaseController
      * GET: return a thread by ID.
      *
      * @param  int  $id
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function show($id)
+    public function fetch($id, Request $request)
     {
         $model = $this->model;
 
         if (
-            $this->request->input('include_deleted') &&
+            $request->input('include_deleted') &&
             config('forum.preferences.list_trashed_posts') &&
-            $this->request->user()->can('deletePosts', $model)
+            $request->user()->can('deletePosts', $model)
         ) {
             $model = $model->with('postsWithTrashed');
         }
@@ -80,30 +77,26 @@ class ThreadController extends BaseController
     /**
      * POST: create a new thread.
      *
+     * @param  CreateThreadRequest  $request
      * @return JsonResponse|Response
      */
-    public function store()
+    public function store(CreateThreadRequest $request)
     {
-        // For regular frontend requests, author_id is set automatically using
-        // the current user, so it's not a required parameter. For this
-        // endpoint, it's set manually, so we need to make it required.
-        $this->validate(
-            array_merge_recursive($this->rules['store'], ['author_id' => ['required']])
-        );
+        $this->validate($request, ['author_id' => 'required|integer']);
 
-        $category = Category::find($this->request->input('category_id'));
+        $category = Category::find($request->input('category_id'));
 
         $this->authorize('createThreads', $category);
 
         if (!$category->threadsAllowed) {
             return $this->buildFailedValidationResponse(
-                $this->request,
-                ['category_id' => "The specified category does not allow tahreads."]
+                $request,
+                ['category_id' => "The specified category does not allow threads."]
             );
         }
 
-        $thread = $this->model->create($this->request->only(['category_id', 'author_id', 'title']));
-        Post::create(['thread_id' => $thread->id] + $this->request->only('content'));
+        $thread = $this->model->create($request->only(['category_id', 'author_id', 'title']));
+        Post::create(['thread_id' => $thread->id] + $request->only('author_id', 'content'));
 
         return $this->response($thread, 201);
     }
@@ -119,8 +112,8 @@ class ThreadController extends BaseController
 
         $threads = $this->model->recent();
 
-        if ($this->request->has('category_id')) {
-            $threads = $threads->where('category_id', $this->request->input('category_id'));
+        if ($request->has('category_id')) {
+            $threads = $threads->where('category_id', $request->input('category_id'));
         }
 
         // If the user is logged in, filter the threads according to read status
@@ -137,7 +130,7 @@ class ThreadController extends BaseController
             return Gate::allows('view', $thread->category);
         });
 
-        $threads = $this->model->where('category_id', $this->request->input('category_id'))->get();
+        $threads = $this->model->where('category_id', $request->input('category_id'))->get();
 
         return $this->response($threads);
     }
@@ -160,5 +153,46 @@ class ThreadController extends BaseController
         }
 
         return $this->response($threads, $this->trans('marked_read'));
+    }
+
+    /**
+     * PATCH: Move a thread.
+     *
+     * @param  Request  $request
+     */
+    public function move(Request $request)
+    {
+        $thread = $this->model->find($request->input('id'));
+        $category = Category::find($request->input('category'));
+
+        if ($thread && $category) {
+            $this->authorize('moveThreads', $category);
+
+            $thread->category_id = $category->id;
+            $thread->save();
+        }
+
+        return $this->response($thread, $this->trans('updated'));
+    }
+
+    /**
+     * PATCH: Move threads in bulk.
+     *
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function bulkMove(Request $request)
+    {
+        $input = $request->except('threads');
+        $threadIDs = $request->input('threads');
+
+        $threads = collect();
+        foreach ($threadIDs as $id) {
+            $request->replace($input + ['id' => $id]);
+            $thread = $this->move($request);
+            $threads->push($thread);
+        }
+
+        return $this->response($threads, $this->trans('threads_updated', $threads->count()));
     }
 }

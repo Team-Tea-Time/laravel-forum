@@ -7,6 +7,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Routing\Controller;
 use Riari\Forum\Forum;
 
@@ -30,19 +31,13 @@ abstract class BaseController extends Controller
     protected $rules;
 
     /**
-     * @var string
-     */
-    protected $translationFile;
-
-    /**
      * Create a new API controller instance.
      *
-     * @param  object  $model
      * @param  Request  $request
      */
-    public function __construct($model, Request $request)
+    public function __construct(Request $request)
     {
-        $this->model = $model;
+        $this->model = $this->model();
 
         if ($request->has('with')) {
             $this->model = $this->model->with($request->input('with'));
@@ -51,27 +46,47 @@ abstract class BaseController extends Controller
         if ($request->has('append')) {
             $this->model = $this->model->append($request->input('append'));
         }
-
-        $this->request = $request;
     }
+
+    /**
+     * Return the model to use for this controller.
+     *
+     * @return string
+     */
+    abstract protected function model();
+
+    /**
+     * Return the translation file name to use for this controller.
+     *
+     * @return string
+     */
+    abstract protected function translationFile();
 
     /**
      * GET: return an index of models.
      *
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return $this->response($this->model->paginate());
+        $model = $this->model;
+
+        $data = $this->cache->remember(function() use ($model) {
+            return $this->model->paginate();
+        });
+
+        return $this->response($data);
     }
 
     /**
      * GET: return a model by ID.
      *
      * @param  int  $id
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function show($id)
+    public function fetch($id, Request $request)
     {
         $model = $this->model->find($id);
 
@@ -80,20 +95,6 @@ abstract class BaseController extends Controller
         }
 
         return $this->response($model);
-    }
-
-    /**
-     * POST: create a new model.
-     *
-     * @return JsonResponse|Response
-     */
-    public function store()
-    {
-        $this->validate($this->rules['store']);
-
-        $model = $this->model->create($this->request->all());
-
-        return $this->response($model, $this->trans('created'), 201);
     }
 
     /**
@@ -273,11 +274,11 @@ abstract class BaseController extends Controller
     {
         $message = empty($message) ? [] : compact('message');
 
-        if ($this->request->ajax() || $this->request->wantsJson()) {
+        if (request()->ajax() || request()->wantsJson()) {
             return new JsonResponse($message + compact('data'), $code);
         }
 
-        return new Response($message + compact('data'), $code);
+        return new Response($data, $code);
     }
 
     /**
@@ -310,7 +311,7 @@ abstract class BaseController extends Controller
             ], 422);
         }
 
-        abort(422);
+        return new Response($errors, 422);
     }
 
     /**
@@ -322,25 +323,6 @@ abstract class BaseController extends Controller
      */
     protected function trans($key, $count = 1)
     {
-        return Forum::trans($this->translationFile, $key, $count);
-    }
-
-    /**
-     * Validate the given request with the given rules.
-     *
-     * @param  array  $rules
-     * @param  array  $messages
-     * @param  array  $customAttributes
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exception\HttpResponseException
-     */
-    public function validate(array $rules, array $messages = [], array $customAttributes = [])
-    {
-        $validator = $this->getValidationFactory()->make($this->request->all(), $rules, $messages, $customAttributes);
-
-        if ($validator->fails()) {
-            $this->throwValidationException($this->request, $validator);
-        }
+        return Forum::trans($this->translationFile(), $key, $count);
     }
 }
