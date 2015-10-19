@@ -63,7 +63,7 @@ abstract class BaseController extends Controller
     abstract protected function translationFile();
 
     /**
-     * GET: return an index of models.
+     * GET: Return an index of models.
      *
      * @param  Request  $request
      * @return JsonResponse|Response
@@ -80,7 +80,7 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * GET: return a model by ID.
+     * GET: Return a model by ID.
      *
      * @param  int  $id
      * @param  Request  $request
@@ -98,7 +98,7 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * PUT/PATCH: update a model by ID.
+     * PUT/PATCH: Update a model by ID.
      *
      * @param  int  $id
      * @return JsonResponse|Response
@@ -123,143 +123,50 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * DELETE: delete a model by ID.
+     * DELETE: Delete a model by ID.
      *
-     * @param  int  $id
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $model = $this->model->find($id);
+        $model = $this->model->find($request->input('id'));
 
         if (is_null($model) || !$model->exists) {
             return $this->notFoundResponse();
         }
 
-        $this->authorize('delete', $model);
-
-        if ($this->request->has('force') && $this->request->input('force') == 1) {
+        if ($request->has('force') && $request->input('force') == 1) {
             $model->forceDelete();
-            $message = $this->trans('perma_deleted');
+            return $this->response($model, $this->trans('perma_deleted'));
         } elseif (!$model->trashed()) {
             $model->delete();
-            $message = $this->trans('deleted');
+            return $this->response($model, $this->trans('deleted'));
         }
 
-        return $this->response($model, $message);
+        return $this->notFoundResponse();
     }
 
     /**
-     * PATCH: restore a model by ID.
+     * PATCH: Restore a model by ID.
      *
-     * @param  int  $id
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function restore($id)
+    public function restore(Request $request)
     {
-        $model = $this->model->withTrashed()->find($id);
+        $model = $this->model->withTrashed()->find($request->input('id'));
 
         if (is_null($model) || !$model->exists) {
             return $this->notFoundResponse();
         }
-
-        $this->authorize('delete', $model);
 
         if ($model->trashed()) {
             $model->restore();
+            return $this->response($model, $this->trans('restored'));
         }
 
-        return $this->response($model, $this->trans('restored'));
-    }
-
-    /**
-     * DELETE: bulk delete models.
-     *
-     * @return JsonResponse|Response
-     */
-    public function bulkDestroy()
-    {
-        $this->validate(['id' => 'required']);
-
-        $collection = collect();
-        foreach ($this->request->input('id') as $id) {
-            $this->authorize('delete', $model);
-
-            $model = $this->model->destroy($id);
-
-            if (!is_null($model)) {
-                $collection->push($model);
-            }
-        }
-
-        return $this->response($collection, $this->trans('deleted', $collection->count()));
-    }
-
-    /**
-     * PATCH: bulk restore models.
-     *
-     * @return JsonResponse|Response
-     */
-    public function bulkRestore()
-    {
-        $this->validate(['id' => 'required']);
-
-        $collection = collect();
-        foreach ($this->request->input('id') as $id) {
-            $this->authorize('delete', $model);
-
-            $model = $this->model->restore($id);
-
-            if (!is_null($model)) {
-                $collection->push($model);
-            }
-        }
-
-        return $this->response($collection, $this->trans('restored', $collection->count()));
-    }
-
-    /**
-     * Bulk update an attribute.
-     *
-     * @return JsonResponse|Response
-     */
-    protected function bulkUpdate()
-    {
-        $this->validate(['id' => 'required']);
-
-        $input = $this->request->all();
-        $this->request->replace($this->request->except('id'));
-        $collection = collect();
-        foreach ($input['id'] as $id) {
-            $this->authorize('edit', $model);
-
-            $model = $this->model->find($id);
-
-            if (!is_null($model) && $model->exists) {
-                $collection->push($this->doUpdate($model, $this->request));
-            }
-        }
-
-        return $this->response($collection, $this->trans('updated', $collection->count()));
-    }
-
-    /**
-     * Update a model.
-     *
-     * @param  Model  $model
-     * @return mixed
-     */
-    protected function doUpdate($model)
-    {
-        if (is_null($model) || !$model->exists) {
-            return $this->notFoundResponse();
-        }
-
-        $this->validate($this->rules['update']);
-
-        $model->update($this->request->all());
-
-        return $model;
+        return $this->notFoundResponse();
     }
 
     /**
@@ -274,11 +181,9 @@ abstract class BaseController extends Controller
     {
         $message = empty($message) ? [] : compact('message');
 
-        if (request()->ajax() || request()->wantsJson()) {
-            return new JsonResponse($message + compact('data'), $code);
-        }
-
-        return new Response($data, $code);
+        return (request()->ajax() || request()->wantsJson())
+            ? new JsonResponse($message + compact('data'), $code)
+            : new Response($data, $code);
     }
 
     /**
@@ -288,11 +193,11 @@ abstract class BaseController extends Controller
      */
     protected function notFoundResponse()
     {
-        if ($this->request->ajax() || $this->request->wantsJson()) {
-            return new JsonResponse(['error' => "The requested URL is invalid."], 404);
-        }
+        $content = ['error' => "Resource not found."];
 
-        abort(404);
+        return (request()->ajax() || request()->wantsJson())
+            ? new JsonResponse($content, 404)
+            : new Response($content, 404);
     }
 
     /**
@@ -304,14 +209,14 @@ abstract class BaseController extends Controller
      */
     protected function buildFailedValidationResponse(Request $request, array $errors)
     {
-        if ($request->ajax() || $request->wantsJson()) {
-            return new JsonResponse([
-                'error'             => "The submitted data did not pass validation.",
-                'validation_errors' => $errors
-            ], 422);
-        }
+        $content = [
+            'error'             => "The submitted data did not pass validation.",
+            'validation_errors' => $errors
+        ];
 
-        return new Response($errors, 422);
+        return ($request->ajax() || $request->wantsJson())
+            ? new JsonResponse($content, 422)
+            : new Response($content, 422);
     }
 
     /**

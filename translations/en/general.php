@@ -13,6 +13,7 @@ return [
     'generic_confirm'   => "Are you sure?",
     'home_title'        => "Forum",
     'index'             => "Index",
+    'invalid_selection' => "Invalid selection",
     'last_updated'      => "Last updated",
     'mark_read'         => "Mark as read",
     'move'              => "Move",

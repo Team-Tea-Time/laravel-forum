@@ -76,7 +76,7 @@ return [
     |
     */
 
-    'list_trashed_threads' => false,
+    'list_trashed_threads' => true,
     'list_trashed_posts' => false
 
 ];

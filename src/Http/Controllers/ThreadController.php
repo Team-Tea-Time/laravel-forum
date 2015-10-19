@@ -4,6 +4,7 @@ namespace Riari\Forum\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use Riari\Forum\Events\UserCreatingThread;
 use Riari\Forum\Events\UserMarkingThreadsRead;
 use Riari\Forum\Events\UserViewingNew;
@@ -132,7 +133,20 @@ class ThreadController extends BaseController
     }
 
     /**
-     * DELETE|PATCH: Delete/update threads in bulk.
+     * DELETE: Delete threads in bulk.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function bulkDestroy(Request $request)
+    {
+        $threads = $this->api('bulk.thread.delete')->parameters($request->all())->delete();
+
+        return $this->bulkActionResponse($threads, 'deleted');
+    }
+
+    /**
+     * PATCH: Update threads in bulk.
      *
      * @param  BulkUpdateThreadsRequest  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -140,25 +154,26 @@ class ThreadController extends BaseController
     public function bulkUpdate(BulkUpdateThreadsRequest $request)
     {
         $action = $request->input('action');
-        $method = $request->method();
 
-        $threads = $this->api("bulk.thread.{$action}")->parameters($request->all())->{$method}();
+        $threads = $this->api("bulk.thread.{$action}")->parameters($request->all())->patch();
 
-        $transKey = '';
-        switch ($action) {
-            case 'delete':
-                $transKey = 'deleted';
-                break;
-            case 'move':
-            case 'pin':
-            case 'unpin':
-            case 'lock':
-            case 'unlock':
-                $transKey = 'updated';
-                break;
+        return $this->bulkActionResponse($threads, 'updated');
+    }
+
+    /**
+     * Helper: Bulk action response.
+     *
+     * @param  Collection  $threads
+     * @param  string  $transKey
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function bulkActionResponse(Collection $threads, $transKey)
+    {
+        if ($threads->count()) {
+            Forum::alert('success', 'threads', $transKey, $threads->count());
+        } else {
+            Forum::alert('warning', 'general', 'invalid_selection');
         }
-
-        Forum::alert('success', 'threads', $transKey, $threads->count());
 
         return redirect()->back();
     }

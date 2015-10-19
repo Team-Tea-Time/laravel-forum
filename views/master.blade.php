@@ -21,6 +21,10 @@
     textarea {
         min-height: 200px;
     }
+
+    .deleted {
+        opacity: 0.65;
+    }
     </style>
 </head>
 <body>

@@ -38,7 +38,7 @@
         @can ('manageThreads', $category)
             <form action="{{ route('forum.bulk.thread.update') }}" method="POST" data-actions-form>
                 {!! csrf_field() !!}
-                {!! method_field('patch') !!}
+                {!! method_field('delete') !!}
         @endcan
 
         @if ($category->threadsAllowed)
@@ -148,21 +148,21 @@
     });
 
     actions.change(function() {
-        var action = $(this).find(':selected').val();
+        var action = $(this).find(':selected');
+
+        if (action.attr('data-method')) {
+            method.val(action.data('method'));
+        } else {
+            method.val('patch');
+        }
 
         $('[data-depends]').each(function() {
-            (action == $(this).data('depends')) ? $(this).removeClass('hidden') : $(this).addClass('hidden');
+            (action.val() == $(this).data('depends')) ? $(this).removeClass('hidden') : $(this).addClass('hidden');
         })
     });
 
     form.submit(function() {
         var action = actions.find(':selected');
-
-        if (action.attr('data-method')) {
-            method.val(action.data('method'));
-        } else {
-            method.val('PATCH');
-        }
 
         if (action.attr('data-confirm')) {
             return confirm("{{ trans('forum::general.generic_confirm') }}");

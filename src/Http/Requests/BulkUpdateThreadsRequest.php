@@ -11,6 +11,6 @@ class BulkUpdateThreadsRequest extends BaseRequest
      */
     public function rules()
     {
-        return ['action' => 'in:delete,move,pin,unpin,lock,unlock'];
+        return ['action' => 'in:move,restore,pin,unpin,lock,unlock'];
     }
 }

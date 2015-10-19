@@ -29,7 +29,8 @@ $r->group(['prefix' => '{category}-{category_slug}'], function ($r) use ($contro
 // Bulk actions
 $r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r) use ($controllers)
 {
-    $r->match(['delete', 'patch'], 'thread', ['as' => 'thread.update', 'uses' => "{$controllers['thread']}@bulkUpdate"]);
+    $r->patch('thread', ['as' => 'thread.update', 'uses' => "{$controllers['thread']}@bulkUpdate"]);
+    $r->delete('thread', ['as' => 'thread.delete', 'uses' => "{$controllers['thread']}@bulkDestroy"]);
 });
 
 // API
@@ -40,9 +41,9 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
     {
         $r->get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
         $r->post('/', ['as' => 'store', 'uses' => 'CategoryController@store']);
-        $r->get('{category}', ['as' => 'fetch', 'uses' => 'CategoryController@fetch']);
-        $r->delete('{category}', ['as' => 'delete', 'uses' => 'CategoryController@destroy']);
-        $r->patch('{category}/restore', ['as' => 'restore', 'uses' => 'CategoryController@restore']);
+        $r->get('{id}', ['as' => 'fetch', 'uses' => 'CategoryController@fetch']);
+        $r->delete('{id}', ['as' => 'delete', 'uses' => 'CategoryController@destroy']);
+        $r->patch('{id}/restore', ['as' => 'restore', 'uses' => 'CategoryController@restore']);
         $r->match(['post', 'patch'], '{category}', ['as' => 'update', 'uses' => 'CategoryController@update']);
     });
 
@@ -51,9 +52,9 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
     {
         $r->get('/', ['as' => 'index', 'uses' => 'ThreadController@index']);
         $r->post('/', ['as' => 'store', 'uses' => 'ThreadController@store']);
-        $r->get('{thread}', ['as' => 'fetch', 'uses' => 'ThreadController@fetch']);
-        $r->delete('{thread}', ['as' => 'delete', 'uses' => 'ThreadController@destroy']);
-        $r->patch('{thread}/restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
+        $r->get('{id}', ['as' => 'fetch', 'uses' => 'ThreadController@fetch']);
+        $r->delete('{id}', ['as' => 'delete', 'uses' => 'ThreadController@destroy']);
+        $r->patch('{id}/restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
         $r->match(['post', 'patch'], '{thread}', ['as' => 'update', 'uses' => 'ThreadController@update']);
         $r->get('new', ['as' => 'index-new', 'uses' => 'ThreadController@indexNew']);
         $r->patch('new/read', ['as' => 'mark-new', 'uses' => 'ThreadController@markNew']);
@@ -69,9 +70,9 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
     {
         $r->get('/', ['as' => 'index', 'uses' => 'PostController@index']);
         $r->post('/', ['as' => 'store', 'uses' => 'PostController@store']);
-        $r->get('{post}', ['as' => 'fetch', 'uses' => 'PostController@fetch']);
-        $r->delete('{post}', ['as' => 'delete', 'uses' => 'PostController@destroy']);
-        $r->patch('{post}/restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
+        $r->get('{id}', ['as' => 'fetch', 'uses' => 'PostController@fetch']);
+        $r->delete('{id}', ['as' => 'delete', 'uses' => 'PostController@destroy']);
+        $r->patch('{id}/restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
         $r->match(['post', 'patch'], '{post}', ['as' => 'update', 'uses' => 'PostController@update']);
     });
 
@@ -89,18 +90,19 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
         // Threads
         $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
         {
+            $r->delete('/', ['as' => 'delete', 'uses' => 'ThreadController@bulkDestroy']);
+            $r->patch('restore', ['as' => 'restore', 'uses' => 'ThreadController@bulkRestore']);
             $r->patch('move', ['as' => 'move', 'uses' => 'ThreadController@bulkMove']);
             $r->patch('lock', ['as' => 'lock', 'uses' => 'ThreadController@bulkLock']);
             $r->patch('unlock', ['as' => 'unlock', 'uses' => 'ThreadController@bulkUnlock']);
             $r->patch('pin', ['as' => 'pin', 'uses' => 'ThreadController@bulkPin']);
             $r->patch('unpin', ['as' => 'unpin', 'uses' => 'ThreadController@bulkUnpin']);
-            $r->delete('/', ['as' => 'delete', 'uses' => 'ThreadController@bulkDestroy']);
-            $r->patch('restore', ['as' => 'restore', 'uses' => 'ThreadController@bulkRestore']);
         });
 
         // Posts
         $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
         {
+            $r->patch('/', ['as' => 'update', 'uses' => 'PostController@bulkUpdate']);
             $r->delete('/', ['as' => 'delete', 'uses' => 'PostController@bulkDestroy']);
             $r->patch('restore', ['as' => 'restore', 'uses' => 'PostController@bulkRestore']);
         });

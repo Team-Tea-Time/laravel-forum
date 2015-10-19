@@ -13,6 +13,7 @@ return [
     'generic_confirm'   => "Bist du sicher?",
     'home_title'        => "Forum",
     'index'             => "Forum",
+    'invalid_selection' => "Ungültige Auswahl",
     'last_updated'      => "Letzte Aktualisierung",
     'mark_read'         => "Als gelesen markieren",
     'move'              => "Bewegen sich",

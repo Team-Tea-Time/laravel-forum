@@ -13,6 +13,7 @@ return [
     'generic_confirm'   => "Ești sigur?",
     'home_title'        => "Forum",
     'index'             => "Index",
+    'invalid_selection' => "Selecție invalid",
     'last_updated'      => "Ultima actualizare",
     'mark_read'         => "Marchează ca citit",
     'move'              => "Muta",

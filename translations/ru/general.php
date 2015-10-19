@@ -13,6 +13,7 @@ return [
     'generic_confirm'   => "Вы уверены?",
     'home_title'        => "Форум",
     'index'             => "Индекс",
+    'invalid_selection' => "Неверный выбор",
     'last_updated'      => "Последнее обновление",
     'mark_read'         => "Отметить как прочитаное",
     'move'              => "Перемещать",
