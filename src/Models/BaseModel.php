@@ -3,7 +3,6 @@
 namespace Riari\Forum\Models;
 
 use App;
-use Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Riari\Forum\Forum;
@@ -27,42 +26,28 @@ abstract class BaseModel extends Model
         $this->router = App::make('Illuminate\Routing\Router');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Attributes
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * Attribute: "X ago" created date.
+     *
+     * @return string
+     */
     public function getPostedAttribute()
     {
         return $this->created_at->diffForHumans();
     }
 
+    /**
+     * Attribute: "X ago" updated date.
+     *
+     * @return string
+     */
     public function getUpdatedAttribute()
     {
         return $this->updated_at->diffForHumans();
     }
 
-    public function getDeletedAttribute()
-    {
-        return !is_null($this->deleted_at) ? 1 : 0;
-    }
-
-    protected function rememberAttribute($item, $function)
-    {
-        $cacheItem = get_class($this).$this->id.$item;
-        $value = Cache::remember($cacheItem, config('forum.preferences.cache_lifetime'), $function);
-        return $value;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Helpers
-    |--------------------------------------------------------------------------
-    */
-
     /**
-     * Build a named route using the parameters set by the model.
+     * Helper: Build a named route using the parameters set by the model.
      *
      * @param  string  $name
      * @param  array  $extraParameters
@@ -77,7 +62,7 @@ abstract class BaseModel extends Model
     }
 
     /**
-     * Determine if this model has been updated since the given model.
+     * Helper: Determine if this model has been updated since the given model.
      *
      * @param  Model  $model
      * @return boolean
@@ -88,7 +73,7 @@ abstract class BaseModel extends Model
     }
 
     /**
-     * Determine if this model has been updated.
+     * Helper: Determine if this model has been updated.
      *
      * @return boolean
      */
@@ -98,7 +83,7 @@ abstract class BaseModel extends Model
     }
 
     /**
-     * Toggle an attribute on this model.
+     * Helper: Toggle an attribute on this model.
      *
      * @param  string  $attribute
      * @return void

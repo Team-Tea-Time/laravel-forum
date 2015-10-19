@@ -29,7 +29,7 @@ $r->group(['prefix' => '{category}-{category_slug}'], function ($r) use ($contro
 // Bulk actions
 $r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r) use ($controllers)
 {
-    $r->patch('thread', ['as' => 'thread.update', 'uses' => "{$controllers['thread']}@bulkUpdate"]);
+    $r->match(['delete', 'patch'], 'thread', ['as' => 'thread.update', 'uses' => "{$controllers['thread']}@bulkUpdate"]);
 });
 
 // API
@@ -82,7 +82,7 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
         $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
         {
             $r->patch('move', ['as' => 'move', 'uses' => 'CategoryController@bulkMove']);
-            $r->delete('/', ['as' => 'destroy', 'uses' => 'CategoryController@bulkDestroy']);
+            $r->delete('/', ['as' => 'delete', 'uses' => 'CategoryController@bulkDestroy']);
             $r->patch('restore', ['as' => 'restore', 'uses' => 'CategoryController@bulkRestore']);
         });
 
@@ -94,14 +94,14 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
             $r->patch('unlock', ['as' => 'unlock', 'uses' => 'ThreadController@bulkUnlock']);
             $r->patch('pin', ['as' => 'pin', 'uses' => 'ThreadController@bulkPin']);
             $r->patch('unpin', ['as' => 'unpin', 'uses' => 'ThreadController@bulkUnpin']);
-            $r->delete('/', ['as' => 'destroy', 'uses' => 'ThreadController@bulkDestroy']);
+            $r->delete('/', ['as' => 'delete', 'uses' => 'ThreadController@bulkDestroy']);
             $r->patch('restore', ['as' => 'restore', 'uses' => 'ThreadController@bulkRestore']);
         });
 
         // Posts
         $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
         {
-            $r->delete('/', ['as' => 'destroy', 'uses' => 'PostController@bulkDestroy']);
+            $r->delete('/', ['as' => 'delete', 'uses' => 'PostController@bulkDestroy']);
             $r->patch('restore', ['as' => 'restore', 'uses' => 'PostController@bulkRestore']);
         });
     });

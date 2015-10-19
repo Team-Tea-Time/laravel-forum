@@ -234,8 +234,8 @@ class Thread extends BaseModel
      */
     public function getOldAttribute()
     {
-        $cutoff = config('forum.preferences.old_thread_threshold');
-        return (!$cutoff || $this->updated_at->timestamp < strtotime($cutoff));
+        $age = config('forum.preferences.old_thread_threshold');
+        return (!$age || $this->updated_at->timestamp < (time() - strtotime($age, 0)));
     }
 
     /**

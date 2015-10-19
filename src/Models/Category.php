@@ -5,11 +5,12 @@ namespace Riari\Forum\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Thread;
+use Riari\Forum\Models\Traits\CachesData;
 use Riari\Forum\Models\Traits\HasSlug;
 
 class Category extends BaseModel
 {
-    use SoftDeletes, HasSlug;
+    use CachesData, HasSlug, SoftDeletes;
 
     /**
      * Eloquent attributes
@@ -152,7 +153,7 @@ class Category extends BaseModel
      */
     public function getThreadCountAttribute()
     {
-        return $this->rememberAttribute('threadCount', function()
+        return $this->remember('threadCount', function()
         {
             return $this->threads->count();
         });
@@ -165,7 +166,7 @@ class Category extends BaseModel
      */
     public function getPostCountAttribute()
     {
-        return $this->rememberAttribute('postCount', function()
+        return $this->remember('postCount', function()
         {
             $replyCount = 0;
 
@@ -176,6 +177,47 @@ class Category extends BaseModel
             }
 
             return $replyCount;
+        });
+    }
+
+    /**
+     * Attribute: Deepest child.
+     *
+     * @return int
+     */
+    public function getDeepestChildAttribute()
+    {
+        $category = $this;
+
+        return $this->remember('deepestChild', function() use ($category)
+        {
+            while ($category->parent) {
+                $category = $category->parent;
+            }
+
+            return $category;
+        });
+    }
+
+    /**
+     * Attribute: Depth.
+     *
+     * @return int
+     */
+    public function getDepthAttribute()
+    {
+        $category = $this;
+
+        return $this->remember('depth', function() use ($category)
+        {
+            $depth = 0;
+
+            while ($category->parent) {
+                $depth++;
+                $category = $category->parent;
+            }
+
+            return $depth;
         });
     }
 

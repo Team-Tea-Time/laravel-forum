@@ -159,6 +159,7 @@ class ThreadController extends BaseController
      * PATCH: Move a thread.
      *
      * @param  Request  $request
+     * @return JsonResponse|Response
      */
     public function move(Request $request)
     {
@@ -173,6 +174,28 @@ class ThreadController extends BaseController
         }
 
         return $this->response($thread, $this->trans('updated'));
+    }
+
+    /**
+     * DELETE: Delete threads in bulk.
+     *
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function bulkDestroy(Request $request)
+    {
+        $input = $request->except('threads');
+        $threadIDs = $request->input('threads');
+
+        $threads = collect();
+
+        foreach ($threadIDs as $id) {
+            $request->replace($input + ['id' => $id]);
+            $thread = $this->destroy($id);
+            $threads->push($thread);
+        }
+
+        return $this->response($threads, $this->trans('deleted', $threads->count()));
     }
 
     /**
@@ -193,6 +216,6 @@ class ThreadController extends BaseController
             $threads->push($thread);
         }
 
-        return $this->response($threads, $this->trans('threads_updated', $threads->count()));
+        return $this->response($threads, $this->trans('updated', $threads->count()));
     }
 }

@@ -18,7 +18,7 @@ class CategoryController extends BaseController
     public function index(Request $request)
     {
         $categories = $this->api('category.index')
-                           ->parameters(['where' => ['category_id' => null]], ['with' => ['children']])
+                           ->parameters(['where' => ['category_id' => null]], ['orderBy' => 'weight'], ['with' => ['children']])
                            ->get();
 
         event(new UserViewingIndex);
@@ -29,13 +29,12 @@ class CategoryController extends BaseController
     /**
      * GET: return a category view.
      *
-     * @param  int  $categoryID
      * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($categoryID, Request $request)
+    public function show(Request $request)
     {
-        $category = $this->api('category.fetch', $categoryID)->get();
+        $category = $this->api('category.fetch', $request->route('category'))->get();
 
         event(new UserViewingCategory($category));
 
@@ -45,7 +44,7 @@ class CategoryController extends BaseController
 
         $categories = [];
         if (Gate::allows('moveThreads', $category)) {
-            $categories = $this->api('category.index')->parameters(['where' => ['allows_threads' => 1]])->get();
+            $categories = $this->api('category.index')->parameters(['where' => ['category_id' => null]], ['where' => ['allows_threads' => 1]])->get();
         }
 
         return view('forum::category.show', compact('categories', 'category', 'threads'));

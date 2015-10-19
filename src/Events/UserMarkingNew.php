@@ -2,7 +2,7 @@
 
 namespace Riari\Forum\Events;
 
-class UserMarkingThreadsRead
+class UserMarkingNew
 {
 
 }

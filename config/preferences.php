@@ -9,37 +9,47 @@ return [
     |
     | The minimum age of a thread before it should be considered old. This
     | determines whether or not a thread can be considered new or unread for
-    | any logged in user. Increasing this value to cover a longer period will
-    | increase the ultimate size of your forum_threads_read table. Must be a
-    | valid strtotime() string, or set to false to completely disable
-    | age-sensitive thread features.
+    | any user. Increasing this value to cover a longer period will increase
+    | the ultimate size of your forum_threads_read table. Must be a valid
+    | strtotime() string, or set to false to completely disable age-sensitive
+    | thread features.
     |
     */
 
-    'old_thread_threshold' => '-1 month',
+    'old_thread_threshold' => '7 days',
 
     /*
     |--------------------------------------------------------------------------
-    | Pagination settings
+    | Pagination
     |--------------------------------------------------------------------------
     */
 
     'pagination' => [
-        'categories'    => 20, // Categories per page (only applies to the API)
+        'categories'    => 20, // Categories per page (API only)
         'threads'       => 20, // Threads per page
         'posts'         => 15  // Posts per page
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Cache lifetime
+    | Cache lifetimes
     |--------------------------------------------------------------------------
     |
-    | Cache lifetime, in minutes.
+    | Here we specify cache lifetimes (in minutes) for various model data. Any
+    | falsey values set here will cause the cache to use the default lifetime
+    | for corresponding models/attributes.
     |
     */
 
-    'cache_lifetime' => 5,
+    'cache_lifetimes' => [
+        'default' => 5,
+        'Category' => [
+            'threadCount'   => 5,
+            'postCount'     => 5,
+            'deepestChild'  => 720,
+            'depth'         => 720
+        ]
+    ],
 
     /*
     |--------------------------------------------------------------------------

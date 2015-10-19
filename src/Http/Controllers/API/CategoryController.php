@@ -42,8 +42,10 @@ class CategoryController extends BaseController
         $categories = new Category;
         if ($request->has('where')) $categories = $categories->where($request->input('where'));
         if ($request->has('with')) $categories = $categories->with($request->input('with'));
+        if ($request->has('orderBy')) $categories = $categories->orderBy($request->input('orderBy'), ($request->has('orderDir')) ? $request->input('orderDir') : 'DESC');
+        $categories = ($request->input('paginate')) ? $categories->paginate() : $categories->get();
 
-        return $this->response($categories->get());
+        return $this->response($categories);
     }
 
     /**

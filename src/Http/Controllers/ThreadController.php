@@ -9,6 +9,7 @@ use Riari\Forum\Events\UserMarkingThreadsRead;
 use Riari\Forum\Events\UserViewingNew;
 use Riari\Forum\Events\UserViewingThread;
 use Riari\Forum\Forum;
+use Riari\Forum\Http\Requests\BulkUpdateThreadsRequest;
 use Riari\Forum\Http\Requests\CreateThreadRequest;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
@@ -46,7 +47,7 @@ class ThreadController extends BaseController
     public function markRead()
     {
         if (auth()->check()) {
-            event(new UserMarkingThreadsRead);
+            event(new UserMarkingNew);
 
             $threads = $this->api('thread.new.mark')->patch();
 
@@ -131,16 +132,33 @@ class ThreadController extends BaseController
     }
 
     /**
-     * PATCH: Update threads in bulk.
+     * DELETE|PATCH: Delete/update threads in bulk.
      *
-     * @param  Request  $request
+     * @param  BulkUpdateThreadsRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function bulkUpdate(Request $request)
+    public function bulkUpdate(BulkUpdateThreadsRequest $request)
     {
-        $threads = $this->api('bulk.thread.move')->parameters($request->all())->patch();
+        $action = $request->input('action');
+        $method = $request->method();
 
-        Forum::alert('success', 'threads', 'updated', $threads->count());
+        $threads = $this->api("bulk.thread.{$action}")->parameters($request->all())->{$method}();
+
+        $transKey = '';
+        switch ($action) {
+            case 'delete':
+                $transKey = 'deleted';
+                break;
+            case 'move':
+            case 'pin':
+            case 'unpin':
+            case 'lock':
+            case 'unlock':
+                $transKey = 'updated';
+                break;
+        }
+
+        Forum::alert('success', 'threads', $transKey, $threads->count());
 
         return redirect()->back();
     }
