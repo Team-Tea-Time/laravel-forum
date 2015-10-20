@@ -2,7 +2,7 @@
     <div class="panel-heading">{{ trans('forum::general.with_selection') }}</div>
     <div class="panel-body">
         <div class="form-group">
-            <label for="action">{{ trans('forum::general.actions') }}</label>
+            <label for="action">{{ trans_choice('forum::general.actions', 1) }}</label>
             <select name="action" id="action" class="form-control">
                 @can ('deleteThreads', $category)
                     <option value="delete" data-confirm="true" data-method="delete">{{ trans('forum::general.delete') }}</option>
@@ -27,6 +27,8 @@
                 @include ('forum::category.partials.options')
             </select>
         </div>
-        <button type="submit" class="btn btn-default">{{ trans('forum::general.proceed') }}</button>
+    </div>
+    <div class="panel-footer clearfix">
+        <button type="submit" class="btn btn-default pull-right">{{ trans('forum::general.proceed') }}</button>
     </div>
 </div>

@@ -5,6 +5,7 @@ namespace Riari\Forum\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Events\UserCreatingThread;
 use Riari\Forum\Events\UserMarkingThreadsRead;
 use Riari\Forum\Events\UserViewingNew;
@@ -78,7 +79,12 @@ class ThreadController extends BaseController
 
         $category = $thread->category;
 
-        return view('forum::thread.show', compact('category', 'thread', 'posts'));
+        $categories = [];
+        if (Gate::allows('moveThreads', $category)) {
+            $categories = $this->api('category.index')->parameters(['where' => ['category_id' => null]], ['where' => ['allows_threads' => 1]])->get();
+        }
+
+        return view('forum::thread.show', compact('categories', 'category', 'thread', 'posts'));
     }
 
     /**

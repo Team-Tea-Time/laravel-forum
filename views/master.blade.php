@@ -59,7 +59,7 @@
     function setActionStates() {
         var action = actions.find(':selected');
 
-        if (option.attr('data-method')) {
+        if (action.attr('data-method')) {
             method.val(action.data('method'));
         } else {
             method.val('patch');
@@ -72,7 +72,7 @@
 
     setToggleStates();
     setSelectionStates();
-    setMethodFromOption();
+    setActionStates();
 
     toggle.click(setToggleStates);
     checkboxes.change(setSelectionStates);

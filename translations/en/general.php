@@ -2,7 +2,7 @@
 
 return [
 
-    'actions'           => "Actions",
+    'actions'           => "Action|Actions",
     'add'               => "Add",
     'author'            => "Author",
     'cancel'            => "Cancel",
@@ -23,6 +23,7 @@ return [
     'posted'            => "Posted",
     'proceed'           => "Proceed",
     'quick_reply'       => "Quick reply",
+    'rename'            => "Rename",
     'replies'           => "Replies",
     'reply'             => "Reply",
     'reply_added'       => "Reply added",

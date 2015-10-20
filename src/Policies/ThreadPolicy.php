@@ -28,7 +28,7 @@ class ThreadPolicy
      */
     public function rename($user, Thread $thread)
     {
-        return $user->id === $thread->user_id;
+        return $user->id === $thread->author_id;
     }
 
     /**
