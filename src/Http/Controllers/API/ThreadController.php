@@ -200,15 +200,11 @@ class ThreadController extends BaseController
         $thread = $this->model->find($request->input('id'));
         $category = Category::find($request->input('destination_category'));
 
-        if ($thread && $category) {
-            $this->authorize('moveThreads', $category);
-            $thread->category_id = $category->id;
-            $thread->save();
+        $this->authorize('moveThreads', $category);
 
-            return $this->response($thread, $this->trans('updated'));
-        }
-
-        return $this->notFoundResponse();
+        return ($thread)
+            ? $this->updateAttributes($thread, ['category_id' => $category->id])
+            : $this->notFoundResponse();
     }
 
     /**
@@ -220,7 +216,10 @@ class ThreadController extends BaseController
     public function lock(Request $request)
     {
         $thread = $this->model->where('locked', 0)->find($request->input('id'));
-        return $this->updateAttributes($thread, 'lockThreads', ['locked' => 1]);
+
+        return ($thread)
+            ? $this->updateAttributes($thread, ['locked' => 1], ['lockThreads', $thread->category])
+            : $this->notFoundResponse();
     }
 
     /**
@@ -232,7 +231,10 @@ class ThreadController extends BaseController
     public function unlock(Request $request)
     {
         $thread = $this->model->where('locked', 1)->find($request->input('id'));
-        return $this->updateAttributes($thread, 'lockThreads', ['locked' => 0]);
+
+        return ($thread)
+            ? $this->updateAttributes($thread, ['locked' => 0], ['lockThreads', $thread->category])
+            : $this->notFoundResponse();
     }
 
     /**
@@ -244,7 +246,10 @@ class ThreadController extends BaseController
     public function pin(Request $request)
     {
         $thread = $this->model->where('pinned', 0)->find($request->input('id'));
-        return $this->updateAttributes($thread, 'pinThreads', ['pinned' => 1]);
+
+        return ($thread)
+            ? $this->updateAttributes($thread, ['pinned' => 1], ['pinThreads', $thread->category])
+            : $this->notFoundResponse();
     }
 
     /**
@@ -256,7 +261,10 @@ class ThreadController extends BaseController
     public function unpin(Request $request)
     {
         $thread = $this->model->where('pinned', 1)->find($request->input('id'));
-        return $this->updateAttributes($thread, 'pinThreads', ['pinned' => 0]);
+
+        return ($thread)
+            ? $this->updateAttributes($thread, ['pinned' => 0], ['pinThreads', $thread->category])
+            : $this->notFoundResponse();
     }
 
     /**
@@ -267,19 +275,7 @@ class ThreadController extends BaseController
      */
     public function bulkDestroy(Request $request)
     {
-        $this->validate($request, ['threads' => 'required']);
-
-        $threads = collect();
-        foreach ($request->input('threads') as $id) {
-            $request->replace(compact('id'));
-            $response = $this->destroy($request);
-
-            if (!$response->isNotFound()) {
-                $threads->push($response->getOriginalContent());
-            }
-        }
-
-        return $this->response($threads, $this->trans('deleted', $threads->count()));
+        return $this->bulk($request, 'destroy', 'updated');
     }
 
     /**
@@ -290,19 +286,7 @@ class ThreadController extends BaseController
      */
     public function bulkRestore(Request $request)
     {
-        $this->validate($request, ['threads' => 'required']);
-
-        $threads = collect();
-        foreach ($request->input('threads') as $id) {
-            $request->replace(compact('id'));
-            $response = $this->restore($request);
-
-            if (!$response->isNotFound()) {
-                $threads->push($response->getOriginalContent());
-            }
-        }
-
-        return $this->response($threads, $this->trans('updated', $threads->count()));
+        return $this->bulk($request, 'restore', 'updated');
     }
 
     /**
@@ -313,19 +297,7 @@ class ThreadController extends BaseController
      */
     public function bulkMove(Request $request)
     {
-        $this->validate($request, ['threads' => 'required']);
-
-        $threads = collect();
-        foreach ($request->input('threads') as $id) {
-            $request->replace($request->only('destination_category') + compact('id'));
-            $response = $this->move($request);
-
-            if (!$response->isNotFound()) {
-                $threads->push($response->getOriginalContent());
-            }
-        }
-
-        return $this->response($threads, $this->trans('updated', $threads->count()));
+        return $this->bulk($request, 'move', 'updated', $request->only('destination_category'));
     }
 
     /**
@@ -336,19 +308,7 @@ class ThreadController extends BaseController
      */
     public function bulkLock(Request $request)
     {
-        $this->validate($request, ['threads' => 'required']);
-
-        $threads = collect();
-        foreach ($request->input('threads') as $id) {
-            $request->replace(compact('id'));
-            $response = $this->lock($request);
-
-            if (!$response->isNotFound()) {
-                $threads->push($response->getOriginalContent());
-            }
-        }
-
-        return $this->response($threads, $this->trans('updated', $threads->count()));
+        return $this->bulk($request, 'lock', 'updated');
     }
 
     /**
@@ -359,19 +319,7 @@ class ThreadController extends BaseController
      */
     public function bulkUnlock(Request $request)
     {
-        $this->validate($request, ['threads' => 'required']);
-
-        $threads = collect();
-        foreach ($request->input('threads') as $id) {
-            $request->replace(compact('id'));
-            $response = $this->unlock($request);
-
-            if (!$response->isNotFound()) {
-                $threads->push($response->getOriginalContent());
-            }
-        }
-
-        return $this->response($threads, $this->trans('updated', $threads->count()));
+        return $this->bulk($request, 'unlock', 'updated');
     }
 
     /**
@@ -382,19 +330,7 @@ class ThreadController extends BaseController
      */
     public function bulkPin(Request $request)
     {
-        $this->validate($request, ['threads' => 'required']);
-
-        $threads = collect();
-        foreach ($request->input('threads') as $id) {
-            $request->replace(compact('id'));
-            $response = $this->pin($request);
-
-            if (!$response->isNotFound()) {
-                $threads->push($response->getOriginalContent());
-            }
-        }
-
-        return $this->response($threads, $this->trans('updated', $threads->count()));
+        return $this->bulk($request, 'pin', 'updated');
     }
 
     /**
@@ -405,42 +341,6 @@ class ThreadController extends BaseController
      */
     public function bulkUnpin(Request $request)
     {
-        $this->validate($request, ['threads' => 'required']);
-
-        $threads = collect();
-        foreach ($request->input('threads') as $id) {
-            $request->replace(compact('id'));
-            $response = $this->unpin($request);
-
-            if (!$response->isNotFound()) {
-                $threads->push($response->getOriginalContent());
-            }
-        }
-
-        return $this->response($threads, $this->trans('updated', $threads->count()));
+        return $this->bulk($request, 'unpin', 'updated');
     }
-
-    /**
-     * Helper: Update a a given thread's attributes, or return a 404 if no
-     * thread given.
-     *
-     * @param  Thread|null  $thread
-     * @param  string  $ability
-     * @param  array  $attributes
-     * @return JsonResponse|Response
-     */
-    private function updateAttributes($thread, $ability, array $attributes)
-    {
-        if ($thread) {
-            $this->authorize($ability, $thread->category);
-            $thread->timestamps = false;
-            $thread->update($attributes);
-            $thread->timestamps = true;
-
-            return $this->response($thread, $this->trans('updated'));
-        }
-
-        return $this->notFoundResponse();
-    }
-
 }

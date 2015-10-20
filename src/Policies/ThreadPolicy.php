@@ -2,6 +2,7 @@
 
 namespace Riari\Forum\Policies;
 
+use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Models\Thread;
 
 class ThreadPolicy
@@ -19,13 +20,13 @@ class ThreadPolicy
     }
 
     /**
-     * Permission: Edit thread (title).
+     * Permission: Rename thread.
      *
      * @param  object  $user
      * @param  Thread  $thread
      * @return bool
      */
-    public function edit($user, Thread $thread)
+    public function rename($user, Thread $thread)
     {
         return $user->id === $thread->user_id;
     }
@@ -51,6 +52,6 @@ class ThreadPolicy
      */
     public function delete($user, Thread $thread)
     {
-        return $user->id === $thread->user_id;
+        return Gate::allows('deleteThreads', $thread->category) || $$user->id === $thread->user_id;
     }
 }

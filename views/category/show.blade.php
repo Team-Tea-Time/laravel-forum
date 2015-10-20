@@ -91,7 +91,7 @@
                                 @endif
                                 @can ('manageThreads', $category)
                                     <td class="text-right">
-                                        <input type="checkbox" name="threads[]" value="{{ $thread->id }}">
+                                        <input type="checkbox" name="items[]" value="{{ $thread->id }}">
                                     </td>
                                 @endcan
                             </tr>
@@ -128,47 +128,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-    var toggle = $('input[type=checkbox][data-toggle-all]');
-    var checkboxes = $('table tbody input[type=checkbox]');
-    var actions = $('[data-actions]');
-    var form = $('[data-actions-form]');
-    var method = form.find('input[name=_method]');
-
-    toggle.click(function() {
-        checkboxes.prop('checked', toggle.is(':checked')).change();
-    });
-
-    checkboxes.change(function() {
-        var tr = $(this).parents('tr');
-        $(this).is(':checked') ? tr.addClass('active') : tr.removeClass('active');
-
-        checkboxes.filter(':checked').length ? actions.removeClass('hidden') : actions.addClass('hidden');
-    });
-
-    actions.change(function() {
-        var action = $(this).find(':selected');
-
-        if (action.attr('data-method')) {
-            method.val(action.data('method'));
-        } else {
-            method.val('patch');
-        }
-
-        $('[data-depends]').each(function() {
-            (action.val() == $(this).data('depends')) ? $(this).removeClass('hidden') : $(this).addClass('hidden');
-        })
-    });
-
-    form.submit(function() {
-        var action = actions.find(':selected');
-
-        if (action.attr('data-confirm')) {
-            return confirm("{{ trans('forum::general.generic_confirm') }}");
-        }
-
-        return true;
-    });
-    </script>
 @overwrite

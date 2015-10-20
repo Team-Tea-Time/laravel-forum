@@ -12,6 +12,14 @@
             {{ $thread->title }}
         </h2>
 
+        @can ('manageThreads', $category)
+            <form action="{{ route('forum.thread.update', $thread->id) }}" method="POST" data-actions-form>
+                {!! csrf_field() !!}
+                {!! method_field('patch') !!}
+
+                @include ('forum::thread.partials.actions')
+        @endcan
+
         @can ('manageThreads', $thread->category)
             <div class="thread-tools dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="thread-actions" data-toggle="dropdown" aria-expanded="true">
@@ -79,6 +87,10 @@
         </table>
 
         {!! $posts->render() !!}
+
+        @can ('manageThreads', $thread->category)
+            </form>
+        @endcan
 
         @can ('reply', $thread)
             <h3>{{ trans('forum::general.quick_reply') }}</h3>

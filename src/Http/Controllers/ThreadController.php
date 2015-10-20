@@ -133,6 +133,40 @@ class ThreadController extends BaseController
     }
 
     /**
+     * PATCH: Update a thread.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request)
+    {
+        $action = $request->input('action');
+
+        $thread = $this->api("thread.{$action}", $request->input('id'))->parameters($request->all())->patch();
+
+        Forum::alert('success', 'threads', 'updated', 1);
+
+        return redirect($thread->route);
+    }
+
+    /**
+     * DELETE: Delete a thread.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Request $request)
+    {
+        $action = $request->input('action');
+
+        $thread = $this->api('thread.delete', $request->input('id'))->parameters($request->all())->delete();
+
+        Forum::alert('success', 'threads', 'deleted', 1);
+
+        return redirect($thread->route);
+    }
+
+    /**
      * DELETE: Delete threads in bulk.
      *
      * @param  Request  $request

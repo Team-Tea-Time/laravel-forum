@@ -4,6 +4,7 @@ namespace Riari\Forum\Models;
 
 use App;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Riari\Forum\Forum;
 
@@ -27,6 +28,71 @@ abstract class BaseModel extends Model
     }
 
     /**
+     * Scope: Conditionally apply where() to the query based on the current request.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  Request  $request
+     * @return Model
+     */
+    public function scopeRequestWhere($query, Request $request)
+    {
+        if ($request->has('where')) {
+            $query->where($request->input('where'));
+        }
+
+        return $query;
+    }
+
+    /**
+     * Scope: Conditionally apply with() to the query based on the current request.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  Request  $request
+     * @return Model
+     */
+    public function scopeRequestWith($query, Request $request)
+    {
+        if ($request->has('with')) {
+            $query->with($request->input('with'));
+        }
+
+        return $query;
+    }
+
+    /**
+     * Scope: Conditionally apply append() to the query based on the current request.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  Request  $request
+     * @return Model
+     */
+    public function scopeRequestAppend($query, Request $request)
+    {
+        if ($request->has('append')) {
+            $query->append($request->input('append'));
+        }
+
+        return $query;
+    }
+
+    /**
+     * Scope: Coditionally apply orderBy() to the query based on the current request.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  Request  $request
+     * @return Model
+     */
+    public function scopeRequestOrder($query, Request $request)
+    {
+        if ($request->has('orderBy')) {
+            $direction = ($request->has('orderDir')) ? $request->input('orderDir') : 'desc';
+            $query->orderBy($request->input('orderBy'), $direction);
+        }
+
+        return $query;
+    }
+
+    /**
      * Attribute: "X ago" created date.
      *
      * @return string
@@ -44,6 +110,17 @@ abstract class BaseModel extends Model
     public function getUpdatedAttribute()
     {
         return $this->updated_at->diffForHumans();
+    }
+
+    /**
+     * Helper: Apply request-based scopes to the model query.
+     *
+     * @param  Request  $request
+     * @return Model
+     */
+    public function withRequestScopes(Request $request)
+    {
+        return $this->requestWhere($request)->requestWith($request)->requestAppend($request)->requestOrder($request);
     }
 
     /**

@@ -37,15 +37,14 @@ abstract class BaseController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->model = $this->model();
+        $this->validate($request, [
+            'with'      => 'array',
+            'append'    => 'array',
+            'orderBy'   => 'string',
+            'orderDir'  => 'in:desc,asc'
+        ]);
 
-        if ($request->has('with')) {
-            $this->model = $this->model->with($request->input('with'));
-        }
-
-        if ($request->has('append')) {
-            $this->model = $this->model->append($request->input('append'));
-        }
+        $this->model = $this->model()->withRequestScopes($request);
     }
 
     /**
@@ -70,13 +69,7 @@ abstract class BaseController extends Controller
      */
     public function index(Request $request)
     {
-        $model = $this->model;
-
-        $data = $this->cache->remember(function() use ($model) {
-            return $this->model->paginate();
-        });
-
-        return $this->response($data);
+        return $this->response($this->model->paginate());
     }
 
     /**
@@ -167,6 +160,54 @@ abstract class BaseController extends Controller
         }
 
         return $this->notFoundResponse();
+    }
+
+    /**
+     * Update a given model's attributes.
+     *
+     * @param  Model  $model
+     * @param  array  $attributes
+     * @param  null|array  $authorize
+     * @return JsonResponse|Response
+     */
+    protected function updateAttributes($model, array $attributes, $authorize = null)
+    {
+        if ($authorize) {
+            list($ability, $authorizeModel) = $authorize;
+            $this->authorize($ability, $authorizeModel);
+        }
+
+        $model->timestamps = false;
+        $model->update($attributes);
+        $model->timestamps = true;
+
+        return $this->response($model, $this->trans('updated'));
+    }
+
+    /**
+     * Carry out a bulk action.
+     *
+     * @param  Request  $request
+     * @param  string  $action
+     * @param  string  $transKey
+     * @param  array  $input
+     * @return JsonResponse|Response
+     */
+    protected function bulk(Request $request, $action, $transKey, array $input = [])
+    {
+        $this->validate($request, ['items' => 'required']);
+
+        $threads = collect();
+        foreach ($request->input('items') as $id) {
+            $request->replace($input + compact('id'));
+            $response = $this->{$action}($request);
+
+            if (!$response->isNotFound()) {
+                $threads->push($response->getOriginalContent());
+            }
+        }
+
+        return $this->response($threads, $this->trans($transKey, $threads->count()));
     }
 
     /**

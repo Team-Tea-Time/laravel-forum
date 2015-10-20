@@ -34,5 +34,59 @@
 
         @yield('content')
     </div>
+
+    <script>
+    var toggle = $('input[type=checkbox][data-toggle-all]');
+    var checkboxes = $('table tbody input[type=checkbox]');
+    var actions = $('[data-actions]');
+    var form = $('[data-actions-form]');
+    var method = form.find('input[name=_method]');
+
+    function setToggleStates() {
+        checkboxes.prop('checked', toggle.is(':checked')).change();
+    }
+
+    function setSelectionStates() {
+        checkboxes.each(function() {
+            var tr = $(this).parents('tr');
+
+            $(this).is(':checked') ? tr.addClass('active') : tr.removeClass('active');
+
+            checkboxes.filter(':checked').length ? actions.removeClass('hidden') : actions.addClass('hidden');
+        });
+    }
+
+    function setActionStates() {
+        var action = actions.find(':selected');
+
+        if (option.attr('data-method')) {
+            method.val(action.data('method'));
+        } else {
+            method.val('patch');
+        }
+
+        $('[data-depends]').each(function() {
+            (action.val() == $(this).data('depends')) ? $(this).removeClass('hidden') : $(this).addClass('hidden');
+        })
+    }
+
+    setToggleStates();
+    setSelectionStates();
+    setMethodFromOption();
+
+    toggle.click(setToggleStates);
+    checkboxes.change(setSelectionStates);
+    actions.change(setActionStates);
+
+    form.submit(function() {
+        var action = actions.find(':selected');
+
+        if (action.attr('data-confirm')) {
+            return confirm("{{ trans('forum::general.generic_confirm') }}");
+        }
+
+        return true;
+    });
+    </script>
 </body>
 </html>
