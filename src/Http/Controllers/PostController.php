@@ -15,22 +15,25 @@ use Riari\Forum\Models\Thread;
 class PostController extends BaseController
 {
     /**
-     * GET: return a post view.
+     * GET: Return a post view.
      *
      * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
     {
-        $post = $this->api('post.show', $request->route('post'))->parameters(['with' => ['thread', 'thread.category', 'parent']])->get();
+        $post = $this->api('post.fetch', $request->route('post'))->parameters(['with' => ['thread', 'thread.category', 'parent']])->get();
 
         event(new UserViewingPost($post));
 
-        return view('forum::post.show', compact('post'));
+        $thread = $post->thread;
+        $category = $thread->category;
+
+        return view('forum::post.show', compact('category', 'thread', 'post'));
     }
 
     /**
-     * GET: return a 'create post' (thread reply) view.
+     * GET: Return a 'create post' (thread reply) view.
      *
      * @param  Request  $request
      * @return \Illuminate\Http\Response
@@ -52,12 +55,12 @@ class PostController extends BaseController
     }
 
     /**
-     * POST: validate and store a submitted post.
+     * POST: Create a post.
      *
-     * @param  CreatePostRequest  $request
+     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(CreatePostRequest $request)
+    public function store(Request $request)
     {
         $thread = $this->api('thread.fetch', $request->route('thread'))->parameters(['with' => ['posts']])->get();
 
@@ -83,7 +86,7 @@ class PostController extends BaseController
     }
 
     /**
-     * GET: return an 'edit post' view.
+     * GET: Return an 'edit post' view.
      *
      * @param  int  $categoryID
      * @param  string  $categorySlug
@@ -94,7 +97,7 @@ class PostController extends BaseController
      */
     public function edit($categoryID, $categorySlug, $threadID, $threadSlug, $postID)
     {
-        $post = $this->api('post.show', $postID)->get();
+        $post = $this->api('post.fetch', $postID)->get();
 
         event(new UserEditingPost($post));
 
@@ -104,25 +107,21 @@ class PostController extends BaseController
 
         $this->authorize($post);
 
-        return view('forum::post.edit', compact('post'));
+        $thread = $post->thread;
+
+        return view('forum::post.edit', compact('thread', 'post'));
     }
 
     /**
-     * PATCH: update a submitted existing post.
+     * PATCH: Update an existing post.
      *
-     * @param  int  $categoryID
-     * @param  string  $categorySlug
-     * @param  int  $threadID
-     * @param  string  $threadSlug
      * @param  int  $postID
-     * @param  Request  $request
+     * @param  CreatePostRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update($categoryID, $categorySlug, $threadID, $threadSlug, $postID, Request $request)
+    public function update($postID, CreatePostRequest $request)
     {
-        $this->validate($request, $this->rules);
-
-        $post = $this->api('post.show', $postID)->get();
+        $post = $this->api('post.fetch', $postID)->get();
 
         $this->authorize('edit', $post);
 

@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'           => "Thema Aktionen",
     'created'           => "Thema erstellt",
     'delete'            => "Dieses Thema löschen",
     'deleted'           => "Thema gelöscht|Themen gelöscht",

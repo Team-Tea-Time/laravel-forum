@@ -2,7 +2,7 @@
 
 return [
 
-    'actions'           => "Actions",
+    'actions'           => "Åtgärd|Åtgärder",
     'add'               => "Tillägga",
     'author'            => "Författare",
     'cancel'            => "Avbryt",

@@ -1,5 +1,9 @@
 @extends ('forum::master')
 
+@section ('breadcrumbs')
+    @include ('forum::partials.breadcrumbs', ['breadcrumb_other' => trans('forum::posts.view')])
+@overwrite
+
 @section ('content')
     <div id="post">
         <h2>{{ trans('forum::posts.view') }} ({{ $thread->title }})</h2>
@@ -13,7 +17,7 @@
                         {{ trans('forum::general.author') }}
                     </th>
                     <th>
-                        {{ trans('forum::posts.post') }}
+                        {{ trans_choice('forum::posts.post', 1) }}
                     </th>
                 </tr>
             </thead>

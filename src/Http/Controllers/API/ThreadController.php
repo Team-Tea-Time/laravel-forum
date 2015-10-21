@@ -4,7 +4,7 @@ namespace Riari\Forum\Http\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Riari\Forum\Http\Requests\CreateThreadRequest;
+use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
@@ -41,7 +41,10 @@ class ThreadController extends BaseController
     {
         $this->validate($request, ['category_id' => 'required|integer|exists:forum_categories,id']);
 
-        $threads = $this->model->where('category_id', $request->input('category_id'))->get();
+        $threads = $this->model()
+            ->withRequestScopes($request)
+            ->where('category_id', $request->input('category_id'))
+            ->get();
 
         return $this->response($threads);
     }
@@ -55,34 +58,30 @@ class ThreadController extends BaseController
      */
     public function fetch($id, Request $request)
     {
-        $model = $this->model;
+        if ($request->input('include_deleted')) {
+            $thread = $this->model()->withTrashed()->find($id);
 
-        if (
-            $request->input('include_deleted') &&
-            config('forum.preferences.list_trashed_posts') &&
-            $request->user()->can('deletePosts', $model)
-        ) {
-            $model = $model->with('postsWithTrashed');
+            if ($thread && Gate::allows('delete', $thread)) {
+                return $this->response($thread);
+            }
         }
 
-        $model = $model->find($id);
-
-        if (is_null($model) || !$model->exists) {
-            return $this->notFoundResponse();
-        }
-
-        return $this->response($model);
+        return parent::fetch($id, $request);
     }
 
     /**
      * POST: Create a new thread.
      *
-     * @param  CreateThreadRequest  $request
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function store(CreateThreadRequest $request)
+    public function store(Request $request)
     {
-        $this->validate($request, ['author_id' => 'required|integer']);
+        $this->validate($request, [
+            'author_id' => ['required', 'integer'],
+            'title'     => ['required'],
+            'content'   => ['required']
+        ]);
 
         $category = Category::find($request->input('category_id'));
 
@@ -95,56 +94,55 @@ class ThreadController extends BaseController
             );
         }
 
-        $thread = $this->model->create($request->only(['category_id', 'author_id', 'title']));
+        $thread = $this->model()->create($request->only(['category_id', 'author_id', 'title']));
         Post::create(['thread_id' => $thread->id] + $request->only('author_id', 'content'));
 
         return $this->response($thread, 201);
     }
 
     /**
-     * DELETE: Delete a thread by ID.
+     * DELETE: Delete a thread.
      *
+     * @param  int  $id
      * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function destroy(Request $request)
+    public function destroy($id, Request $request)
     {
-        $this->validate($request, ['id' => 'required']);
-
-        $thread = $this->model->find($request->input('id'));
+        $thread = $this->model()->withTrashed()->find($id);
 
         $this->authorize('deleteThreads', $thread->category);
 
-        return parent::destroy($request);
+        return parent::destroy($id, $request);
     }
 
     /**
-     * PATCH: Restore a thread by ID.
+     * PATCH: Restore a thread.
      *
+     * @param  int  $id
      * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function restore(Request $request)
+    public function restore($id, Request $request)
     {
-        $this->validate($request, ['id' => 'required']);
-
-        $thread = $this->model->withTrashed()->find($request->input('id'));
+        $thread = $this->model()->withTrashed()->find($id);
 
         $this->authorize('deleteThreads', $thread->category);
 
-        return parent::restore($request);
+        return parent::restore($id, $request);
     }
 
     /**
      * GET: return an index of new/updated threads for the current user, optionally filtered by category ID.
      *
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function indexNew()
+    public function indexNew(Request $request)
     {
         $this->validate(['category_id' => 'integer|exists:forum_categories,id']);
 
-        $threads = $this->model->recent();
+        $threads = $this->model()->recent();
 
         if ($request->has('category_id')) {
             $threads = $threads->where('category_id', $request->input('category_id'));
@@ -164,7 +162,7 @@ class ThreadController extends BaseController
             return Gate::allows('view', $thread->category);
         });
 
-        $threads = $this->model->where('category_id', $request->input('category_id'))->get();
+        $threads = $this->model()->where('category_id', $request->input('category_id'))->get();
 
         return $this->response($threads);
     }
@@ -192,30 +190,33 @@ class ThreadController extends BaseController
     /**
      * PATCH: Move a thread.
      *
+     * @param  int  $id
      * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function move(Request $request)
+    public function move($id, Request $request)
     {
-        $thread = $this->model->find($request->input('id'));
+        $this->validate($request, ['destination_category' => 'required|integer|exists:forum_categories,id']);
+
+        $thread = $this->model()->find($id);
+
         $category = Category::find($request->input('destination_category'));
 
-        $this->authorize('moveThreads', $category);
-
         return ($thread)
-            ? $this->updateAttributes($thread, ['category_id' => $category->id])
+            ? $this->updateAttributes($thread, ['category_id' => $category->id], ['moveThreads', $category])
             : $this->notFoundResponse();
     }
 
     /**
      * PATCH: Lock a thread.
      *
+     * @param  int  $id
      * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function lock(Request $request)
+    public function lock($id, Request $request)
     {
-        $thread = $this->model->where('locked', 0)->find($request->input('id'));
+        $thread = $this->model()->where('locked', 0)->find($id);
 
         return ($thread)
             ? $this->updateAttributes($thread, ['locked' => 1], ['lockThreads', $thread->category])
@@ -225,12 +226,13 @@ class ThreadController extends BaseController
     /**
      * PATCH: Unlock a thread.
      *
+     * @param  int  $id
      * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function unlock(Request $request)
+    public function unlock($id, Request $request)
     {
-        $thread = $this->model->where('locked', 1)->find($request->input('id'));
+        $thread = $this->model()->where('locked', 1)->find($id);
 
         return ($thread)
             ? $this->updateAttributes($thread, ['locked' => 0], ['lockThreads', $thread->category])
@@ -240,12 +242,13 @@ class ThreadController extends BaseController
     /**
      * PATCH: Pin a thread.
      *
+     * @param  int  $id
      * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function pin(Request $request)
+    public function pin($id, Request $request)
     {
-        $thread = $this->model->where('pinned', 0)->find($request->input('id'));
+        $thread = $this->model()->where('pinned', 0)->find($id);
 
         return ($thread)
             ? $this->updateAttributes($thread, ['pinned' => 1], ['pinThreads', $thread->category])
@@ -255,15 +258,34 @@ class ThreadController extends BaseController
     /**
      * PATCH: Unpin a thread.
      *
+     * @param  int  $id
      * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function unpin(Request $request)
+    public function unpin($id, Request $request)
     {
-        $thread = $this->model->where('pinned', 1)->find($request->input('id'));
+        $thread = $this->model()->where('pinned', 1)->find($id);
 
         return ($thread)
             ? $this->updateAttributes($thread, ['pinned' => 0], ['pinThreads', $thread->category])
+            : $this->notFoundResponse();
+    }
+
+    /**
+     * PATCH: Rename a thread.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function rename($id, Request $request)
+    {
+        $this->validate($request, ['title' => ['required']]);
+
+        $thread = $this->model()->find($id);
+
+        return ($thread)
+            ? $this->updateAttributes($thread, ['title' => $request->input('title')], ['rename', $thread])
             : $this->notFoundResponse();
     }
 
@@ -275,7 +297,7 @@ class ThreadController extends BaseController
      */
     public function bulkDestroy(Request $request)
     {
-        return $this->bulk($request, 'destroy', 'updated');
+        return $this->bulk($request, 'destroy', 'updated', $request->only('force'));
     }
 
     /**

@@ -1,5 +1,8 @@
 <div class="panel panel-default" data-actions>
-    <div class="panel-heading"><a href="#" data-toggle="collapse" data-target=".collapse">{{ trans_choice('forum::general.actions', 2) }}</a></div>
+    <div class="panel-heading">
+        <span class="glyphicon glyphicon-option-vertical"></span>
+        <a href="#" data-toggle="collapse" data-target=".collapse">{{ trans('forum::threads.actions') }}</a>
+    </div>
     <div class="collapse">
         <div class="panel-body">
             <div class="form-group">
@@ -11,27 +14,31 @@
                         @else
                             <option value="delete" data-confirm="true" data-method="delete">{{ trans('forum::general.delete') }}</option>
                         @endif
+                        <option value="permadelete" data-confirm="true" data-method="delete">{{ trans('forum::general.perma_delete') }}</option>
                     @endcan
-                    @can ('moveThreads', $category)
-                        <option value="move">{{ trans('forum::general.move') }}</option>
-                    @endcan
-                    @can ('lockThreads', $category)
-                        @if ($thread->locked)
-                            <option value="unlock">{{ trans('forum::threads.unlock') }}</option>
-                        @else
-                            <option value="lock">{{ trans('forum::threads.lock') }}</option>
-                        @endif
-                    @endcan
-                    @can ('pinThreads', $category)
-                        @if ($thread->pinned)
-                            <option value="unpin">{{ trans('forum::threads.unpin') }}</option>
-                        @else
-                            <option value="pin">{{ trans('forum::threads.pin') }}</option>
-                        @endif
-                    @endcan
-                    @can ('rename', $thread)
-                        <option value="rename">{{ trans('forum::general.rename') }}</option>
-                    @endcan
+
+                    @if (!$thread->trashed())
+                        @can ('moveThreads', $category)
+                            <option value="move">{{ trans('forum::general.move') }}</option>
+                        @endcan
+                        @can ('lockThreads', $category)
+                            @if ($thread->locked)
+                                <option value="unlock">{{ trans('forum::threads.unlock') }}</option>
+                            @else
+                                <option value="lock">{{ trans('forum::threads.lock') }}</option>
+                            @endif
+                        @endcan
+                        @can ('pinThreads', $category)
+                            @if ($thread->pinned)
+                                <option value="unpin">{{ trans('forum::threads.unpin') }}</option>
+                            @else
+                                <option value="pin">{{ trans('forum::threads.pin') }}</option>
+                            @endif
+                        @endcan
+                        @can ('rename', $thread)
+                            <option value="rename">{{ trans('forum::general.rename') }}</option>
+                        @endcan
+                    @endif
                 </select>
             </div>
             <div class="form-group hidden" data-depends="move">

@@ -5,9 +5,15 @@ namespace Riari\Forum\API;
 use Illuminate\Http\Request;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Support\Facades\Route;
+use Riari\Forum\Contracts\API\ReceiverContract;
 
 class Dispatcher
 {
+    /**
+     * @var ReceiverContract
+     */
+    protected $receiver;
+
     /**
      * @var Request
      */
@@ -30,9 +36,12 @@ class Dispatcher
 
     /**
      * Create a new dispatcher instance.
+     *
+     * @param  ReceiverContract  $caller
      */
-    public function __construct()
+    public function __construct(ReceiverContract $receiver)
     {
+        $this->receiver = $receiver;
         $this->currentRequest = request();
     }
 
@@ -131,6 +140,6 @@ class Dispatcher
         $response = Route::dispatch($request);
         $this->currentRequest->replace($input);
 
-        return $response->getOriginalContent();
+        return $this->receiver->handleResponse($request, $response);
     }
 }

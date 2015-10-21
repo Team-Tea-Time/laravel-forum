@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'           => "Acțiuni de discuții",
     'created'           => "Discuție creată",
     'delete'            => "Șterge această discuție",
     'deleted'           => "Discuție ștearsă|Discuții eliminat",

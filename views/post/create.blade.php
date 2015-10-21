@@ -9,14 +9,17 @@
         @include ('forum::post.partials.excerpt')
     @endif
 
-    @include (
-        'forum::post.partials.edit',
-        [
-            'form_url'          => $thread->replyRoute,
-            'method'            => 'POST',
-            'show_title_field'  => false,
-            'submit_label'      => trans('forum::general.reply'),
-            'cancel_url'        => $thread->route
-        ]
-    )
+    <form method="POST" action="{{ route('forum.post.store', $thread->id) }}">
+        {!! csrf_field() !!}
+        @if (!is_null($post))
+            <input type="hidden" name="post_id" value="{{ $post->id }}">
+        @endif
+
+        <div class="form-group">
+            <textarea name="content" class="form-control">{{ old('content') }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">{{ trans('forum::general.reply') }}</button>
+        <a href="{{ URL::previous() }}" class="btn btn-default">{{ trans('forum::general.cancel') }}</a>
+    </form>
 @overwrite

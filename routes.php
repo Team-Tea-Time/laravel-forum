@@ -15,16 +15,21 @@ $r->group(['prefix' => '{category}-{category_slug}'], function ($r) use ($contro
     // Threads
     $r->get('{thread}-{thread_slug}', ['as' => 'thread.show', 'uses' => "{$controllers['thread']}@show"]);
     $r->get('thread/create', ['as' => 'thread.create', 'uses' => "{$controllers['thread']}@create"]);
-    $r->post('thread/create', ['as' => 'thread.store', 'uses' => "{$controllers['thread']}@store"]);
-    $r->patch('thread/{thread}', ['as' => 'thread.update', 'uses' => "{$controllers['thread']}@update"]);
 
     // Posts
     $r->get('{thread}-{thread_slug}/post/{post}', ['as' => 'post.show', 'uses' => "{$controllers['post']}@show"]);
     $r->get('{thread}-{thread_slug}/reply', ['as' => 'post.create', 'uses' => "{$controllers['post']}@create"]);
-    $r->post('{thread}-{thread_slug}/reply', ['as' => 'post.store', 'uses' => "{$controllers['post']}@store"]);
     $r->get('{thread}-{thread_slug}/post/{post}/edit', ['as' => 'post.edit', 'uses' => "{$controllers['post']}@edit"]);
-    $r->patch('{thread}-{thread_slug}/post/{post}/edit', ['as' => 'post.update', 'uses' => "{$controllers['post']}@update"]);
 });
+
+// Actions
+$r->patch('category/{category}', ['as' => 'category.update', 'uses' => "{$controllers['category']}@update"]);
+$r->delete('category/{category}', ['as' => 'category.delete', 'uses' => "{$controllers['category']}@destroy"]);
+$r->post('category/{category}/thread/create', ['as' => 'thread.store', 'uses' => "{$controllers['thread']}@store"]);
+$r->patch('thread/{thread}', ['as' => 'thread.update', 'uses' => "{$controllers['thread']}@update"]);
+$r->delete('thread/{thread}', ['as' => 'thread.delete', 'uses' => "{$controllers['thread']}@destroy"]);
+$r->post('thread/{thread}/reply', ['as' => 'post.store', 'uses' => "{$controllers['post']}@store"]);
+$r->patch('post/{post}', ['as' => 'post.update', 'uses' => "{$controllers['post']}@update"]);
 
 // Bulk actions
 $r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r) use ($controllers)
@@ -44,7 +49,8 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
         $r->get('{id}', ['as' => 'fetch', 'uses' => 'CategoryController@fetch']);
         $r->delete('{id}', ['as' => 'delete', 'uses' => 'CategoryController@destroy']);
         $r->patch('{id}/restore', ['as' => 'restore', 'uses' => 'CategoryController@restore']);
-        $r->match(['post', 'patch'], '{category}', ['as' => 'update', 'uses' => 'CategoryController@update']);
+        $r->patch('{id}/move', ['as' => 'move', 'uses' => 'CategoryController@move']);
+        $r->patch('{id}/rename', ['as' => 'rename', 'uses' => 'CategoryController@rename']);
     });
 
     // Threads
@@ -55,14 +61,14 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
         $r->get('{id}', ['as' => 'fetch', 'uses' => 'ThreadController@fetch']);
         $r->delete('{id}', ['as' => 'delete', 'uses' => 'ThreadController@destroy']);
         $r->patch('{id}/restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
-        $r->match(['post', 'patch'], '{thread}', ['as' => 'update', 'uses' => 'ThreadController@update']);
         $r->get('new', ['as' => 'index-new', 'uses' => 'ThreadController@indexNew']);
         $r->patch('new/read', ['as' => 'mark-new', 'uses' => 'ThreadController@markNew']);
-        $r->patch('move', ['as' => 'move', 'uses' => 'ThreadController@move']);
-        $r->patch('lock', ['as' => 'lock', 'uses' => 'ThreadController@lock']);
-        $r->patch('unlock', ['as' => 'unlock', 'uses' => 'ThreadController@unlock']);
-        $r->patch('pin', ['as' => 'pin', 'uses' => 'ThreadController@pin']);
-        $r->patch('unpin', ['as' => 'unpin', 'uses' => 'ThreadController@unpin']);
+        $r->patch('{id}/move', ['as' => 'move', 'uses' => 'ThreadController@move']);
+        $r->patch('{id}/lock', ['as' => 'lock', 'uses' => 'ThreadController@lock']);
+        $r->patch('{id}/unlock', ['as' => 'unlock', 'uses' => 'ThreadController@unlock']);
+        $r->patch('{id}/pin', ['as' => 'pin', 'uses' => 'ThreadController@pin']);
+        $r->patch('{id}/unpin', ['as' => 'unpin', 'uses' => 'ThreadController@unpin']);
+        $r->patch('{id}/rename', ['as' => 'rename', 'uses' => 'ThreadController@rename']);
     });
 
     // Posts

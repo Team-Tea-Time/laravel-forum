@@ -16,11 +16,6 @@ abstract class BaseController extends Controller
     use AuthorizesRequests, ValidatesRequests;
 
     /**
-     * @var mixed
-     */
-    protected $model;
-
-    /**
      * @var Request
      */
     protected $request;
@@ -43,8 +38,6 @@ abstract class BaseController extends Controller
             'orderBy'   => 'string',
             'orderDir'  => 'in:desc,asc'
         ]);
-
-        $this->model = $this->model()->withRequestScopes($request);
     }
 
     /**
@@ -69,7 +62,7 @@ abstract class BaseController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->response($this->model->paginate());
+        return $this->response($this->model()->paginate());
     }
 
     /**
@@ -81,7 +74,7 @@ abstract class BaseController extends Controller
      */
     public function fetch($id, Request $request)
     {
-        $model = $this->model->find($id);
+        $model = $this->model()->find($id);
 
         if (is_null($model) || !$model->exists) {
             return $this->notFoundResponse();
@@ -91,39 +84,35 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * PUT/PATCH: Update a model by ID.
+     * PUT/PATCH: Update a model.
      *
      * @param  int  $id
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function update($id)
+    public function update($id, Request $request)
     {
-        $model = $this->model->find($id);
+        $model = $this->model()->find($id);
 
         if (is_null($model) || !$model->exists) {
             return $this->notFoundResponse();
         }
 
-        $this->authorize('edit', $model);
-
-        $response = $this->doUpdate($model, $this->request);
-
-        if ($response instanceof JsonResponse) {
-            return $response;
-        }
-
-        return $this->response($response, $this->trans('updated'));
+        return $this->updateAttributes($model, $request->all(), ['edit', $model], true);
     }
 
     /**
      * DELETE: Delete a model by ID.
      *
+     * @param  int  $id
      * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function destroy(Request $request)
+    public function destroy($id, Request $request)
     {
-        $model = $this->model->find($request->input('id'));
+        $this->validate($request, ['force' => ['boolean']]);
+
+        $model = $this->model()->withTrashed()->find($id);
 
         if (is_null($model) || !$model->exists) {
             return $this->notFoundResponse();
@@ -141,14 +130,15 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * PATCH: Restore a model by ID.
+     * PATCH: Restore a model.
      *
+     * @param  int  $id
      * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function restore(Request $request)
+    public function restore($id, Request $request)
     {
-        $model = $this->model->withTrashed()->find($request->input('id'));
+        $model = $this->model()->withTrashed()->find($id);
 
         if (is_null($model) || !$model->exists) {
             return $this->notFoundResponse();
@@ -168,16 +158,17 @@ abstract class BaseController extends Controller
      * @param  Model  $model
      * @param  array  $attributes
      * @param  null|array  $authorize
+     * @param  bool  $touch
      * @return JsonResponse|Response
      */
-    protected function updateAttributes($model, array $attributes, $authorize = null)
+    protected function updateAttributes($model, array $attributes, $authorize = null, $touch = false)
     {
         if ($authorize) {
             list($ability, $authorizeModel) = $authorize;
             $this->authorize($ability, $authorizeModel);
         }
 
-        $model->timestamps = false;
+        $model->timestamps = $touch;
         $model->update($attributes);
         $model->timestamps = true;
 
@@ -197,17 +188,41 @@ abstract class BaseController extends Controller
     {
         $this->validate($request, ['items' => 'required']);
 
-        $threads = collect();
-        foreach ($request->input('items') as $id) {
-            $request->replace($input + compact('id'));
-            $response = $this->{$action}($request);
+        $items = $request->input('items');
+        $request->replace($input);
+        $models = collect();
+
+        foreach ($items as $id) {
+            $response = $this->{$action}($id, $request);
 
             if (!$response->isNotFound()) {
-                $threads->push($response->getOriginalContent());
+                $models->push($response->getOriginalContent());
             }
         }
 
-        return $this->response($threads, $this->trans($transKey, $threads->count()));
+        return $this->response($models, $this->trans($transKey, $models->count()));
+    }
+
+    /**
+     * Validate the given request with the given rules.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  array  $rules
+     * @param  array  $messages
+     * @param  array  $customAttributes
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exception\HttpResponseException
+     */
+    public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
+    {
+        $rules = array_merge_recursive(config('forum.validation.rules'), $rules);
+
+        $validator = $this->getValidationFactory()->make($request->all(), $rules, $messages, $customAttributes);
+
+        if ($validator->fails()) {
+            $this->throwValidationException($request, $validator);
+        }
     }
 
     /**

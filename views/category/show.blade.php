@@ -5,6 +5,17 @@
     <div id="category">
         <h2>{{ $category->title }}</h2>
 
+        <hr>
+
+        @can ('manageCategories')
+            <form action="{{ route('forum.category.update', $category->id) }}" method="POST" data-actions-form>
+                {!! csrf_field() !!}
+                {!! method_field('patch') !!}
+
+                @include ('forum::category.partials.actions')
+            </form>
+        @endcan
+
         @if (!$category->children->isEmpty())
             <table class="table table-category">
                 <thead>
@@ -60,7 +71,7 @@
                                 <td>
                                     <span class="pull-right">
                                         @if ($thread->locked)
-                                            <span class="label label-danger">{{ trans('forum::threads.locked') }}</span>
+                                            <span class="label label-warning">{{ trans('forum::threads.locked') }}</span>
                                         @endif
                                         @if ($thread->pinned)
                                             <span class="label label-info">{{ trans('forum::threads.pinned') }}</span>

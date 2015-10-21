@@ -40,7 +40,7 @@ class PostController extends BaseController
     {
         $this->validate($request, ['thread_id' => 'integer|required|exists:forum_threads,id']);
 
-        $posts = $this->model->where('thread_id', $request->input('thread_id'))->get();
+        $posts = $this->model()->where('thread_id', $request->input('thread_id'))->get();
 
         return $this->response($posts);
     }
@@ -58,7 +58,7 @@ class PostController extends BaseController
         $thread = Thread::find($request->input('thread_id'));
         $this->authorize('reply', $thread);
 
-        $post = $this->model->create($request->only(['thread_id', 'post_id', 'author_id', 'title', 'content']));
+        $post = $this->model()->create($request->only(['thread_id', 'post_id', 'author_id', 'title', 'content']));
         $post->load('thread');
 
         return $this->response($post, $this->trans('created'), 201);

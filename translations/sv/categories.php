@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'               => "Kategori åtgärder",
     'category'              => "Kategori",
     'created'               => "Kategori skapad",
     'deleted'               => "Kategori utgår|Kategorier utgår",

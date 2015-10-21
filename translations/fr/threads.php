@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'           => "Actions Sujet",
     'created'           => "Sujet créé",
     'delete'            => "Supprimer ce sujet",
     'deleted'           => "Sujet supprimé|Sujets supprimés",

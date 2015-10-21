@@ -3,14 +3,19 @@
 @section ('content')
     <div id="thread">
         <h2>
+            @if ($thread->trashed())
+                <span class="label label-danger">{{ trans('forum::general.deleted') }}</span>
+            @endif
             @if ($thread->locked)
-                [{{ trans('forum::threads.locked') }}]
+                <span class="label label-warning">{{ trans('forum::threads.locked') }}</span>
             @endif
             @if ($thread->pinned)
-                [{{ trans('forum::threads.pinned') }}]
+                <span class="label label-info">{{ trans('forum::threads.pinned') }}</span>
             @endif
             {{ $thread->title }}
         </h2>
+
+        <hr>
 
         @can ('manageThreads', $category)
             <form action="{{ route('forum.thread.update', $thread->id) }}" method="POST" data-actions-form>
@@ -18,6 +23,7 @@
                 {!! method_field('patch') !!}
 
                 @include ('forum::thread.partials.actions')
+            </form>
         @endcan
 
         @can ('reply', $thread)
@@ -29,12 +35,12 @@
                     </div>
                 </div>
                 <div class="col-xs-8 text-right">
-                    {!! $posts->render() !!}
+                    {!! $thread->postsPaginated->render() !!}
                 </div>
             </div>
         @endcan
 
-        <table class="table">
+        <table class="table {{ $thread->trashed() ? 'deleted' : '' }}">
             <thead>
                 <tr>
                     <th class="col-md-2">
@@ -46,30 +52,26 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($posts as $post)
+                @foreach ($thread->postsPaginated as $post)
                     @include ('forum::post.partials.list', compact('post'))
                 @endforeach
             </tbody>
         </table>
 
-        {!! $posts->render() !!}
-
-        @can ('manageThreads', $thread->category)
-            </form>
-        @endcan
+        {!! $thread->postsPaginated->render() !!}
 
         @can ('reply', $thread)
             <h3>{{ trans('forum::general.quick_reply') }}</h3>
             <div id="quick-reply">
-                @include (
-                    'forum::post.partials.edit',
-                    [
-                        'form_url'          => $thread->replyRoute,
-                        'show_title_field'  => false,
-                        'submit_label'      => trans('forum::general.reply'),
-                        'post'              => null
-                    ]
-                )
+                <form method="POST" action="{{ route('forum.post.store', $thread->id) }}">
+                    {!! csrf_field() !!}
+
+                    <div class="form-group">
+                        <textarea name="content" class="form-control">{{ old('content') }}</textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">{{ trans('forum::general.reply') }}</button>
+                </form>
             </div>
         @endcan
     </div>

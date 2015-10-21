@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Events\UserViewingCategory;
 use Riari\Forum\Events\UserViewingIndex;
+use Riari\Forum\Forum;
 
 class CategoryController extends BaseController
 {
@@ -17,8 +18,18 @@ class CategoryController extends BaseController
      */
     public function index(Request $request)
     {
+        $parameters = [
+            'where' => ['category_id' => null],
+            'orderBy' => 'weight',
+            'with' => ['children']
+        ];
+
+        if (config('forum.preferences.list_trashed_categories')) {
+            $parameters = $parameters + ['include_deleted' => true];
+        }
+
         $categories = $this->api('category.index')
-                           ->parameters(['where' => ['category_id' => null]], ['orderBy' => 'weight'], ['with' => ['children']])
+                           ->parameters($parameters)
                            ->get();
 
         event(new UserViewingIndex);
@@ -48,5 +59,41 @@ class CategoryController extends BaseController
         }
 
         return view('forum::category.show', compact('categories', 'category', 'threads'));
+    }
+
+    /**
+     * PATCH: Update a category.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update($id, Request $request)
+    {
+        $action = $request->input('action');
+
+        $category = $this->api("category.{$action}", $id)->parameters($request->all())->patch();
+
+        Forum::alert('success', 'categories', 'updated', 1);
+
+        return redirect($category->route);
+    }
+
+    /**
+     * DELETE: Delete a category.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($id, Request $request)
+    {
+        $action = $request->input('action');
+
+        $category = $this->api('category.delete', $id)->parameters($request->all())->delete();
+
+        Forum::alert('success', 'categories', 'deleted', 1);
+
+        return redirect()->route('forum.index');
     }
 }

@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'           => "Acciones Discusión",
     'created'           => "Discusión creada",
     'delete'            => "Eliminar esta discusión",
     'deleted'           => "Discusión eliminada|Discusiones eliminada",

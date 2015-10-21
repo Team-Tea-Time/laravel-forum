@@ -2,8 +2,8 @@
 
 namespace Riari\Forum\Models;
 
-use Gate;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Traits\HasAuthor;
@@ -71,17 +71,9 @@ class Thread extends BaseModel
      */
     public function posts()
     {
-        return $this->hasMany(Post::class);
-    }
-
-    /**
-     * Relationship: Posts (including soft-deleted).
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function postsWithTrashed()
-    {
-        return $this->posts()->withTrashed();
+        $withTrashed = config('forum.preferences.display_trashed_posts') || Gate::allows('viewTrashedPosts');
+        $posts = $this->hasMany(Post::class);
+        return $withTrashed ? $posts->withTrashed() : $posts;
     }
 
     /**
@@ -158,23 +150,13 @@ class Thread extends BaseModel
     }
 
     /**
-     * Attribute: Paginated threads.
+     * Attribute: Paginated posts.
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function getPostsPaginatedAttribute()
     {
         return $this->posts()->paginate(config('forum.preferences.pagination.posts'));
-    }
-
-    /**
-     * Attribute: Paginated threads (including soft-deleted).
-     *
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    public function getPostsWithTrashedPaginatedAttribute()
-    {
-        return $this->postsWithTrashed()->paginate(config('forum.preferences.pagination.posts'));
     }
 
     /**

@@ -2,7 +2,7 @@
 
 return [
 
-    'actions'           => "Acciones",
+    'actions'           => "Acción|Acciones",
     'add'               => "Enviar",
     'author'            => "Autor",
     'cancel'            => "Cancelar",

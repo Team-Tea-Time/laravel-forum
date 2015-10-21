@@ -29,7 +29,10 @@
 </head>
 <body>
     <div class="container">
-        @include ('forum::partials.breadcrumbs')
+        @section ('breadcrumbs')
+            @include ('forum::partials.breadcrumbs')
+        @show
+
         @include ('forum::partials.alerts')
 
         @yield('content')
@@ -39,8 +42,7 @@
     var toggle = $('input[type=checkbox][data-toggle-all]');
     var checkboxes = $('table tbody input[type=checkbox]');
     var actions = $('[data-actions]');
-    var form = $('[data-actions-form]');
-    var method = form.find('input[name=_method]');
+    var forms = $('[data-actions-form]');
 
     function setToggleStates() {
         checkboxes.prop('checked', toggle.is(':checked')).change();
@@ -52,22 +54,29 @@
 
             $(this).is(':checked') ? tr.addClass('active') : tr.removeClass('active');
 
-            checkboxes.filter(':checked').length ? actions.removeClass('hidden') : actions.addClass('hidden');
+            checkboxes.filter(':checked').length ? $('[data-bulk-actions]').removeClass('hidden') : $('[data-bulk-actions]').addClass('hidden');
         });
     }
 
     function setActionStates() {
-        var action = actions.find(':selected');
+        forms.each(function () {
+            var form = $(this);
+            var method = form.find('input[name=_method]');
+            var selected = form.find('select[name=action] option:selected');
+            var depends = form.find('[data-depends]');
 
-        if (action.attr('data-method')) {
-            method.val(action.data('method'));
-        } else {
-            method.val('patch');
-        }
+            selected.each(function () {
+                if ($(this).attr('data-method')) {
+                    method.val($(this).data('method'));
+                } else {
+                    method.val('patch');
+                }
+            });
 
-        $('[data-depends]').each(function() {
-            (action.val() == $(this).data('depends')) ? $(this).removeClass('hidden') : $(this).addClass('hidden');
-        })
+            depends.each(function () {
+                (selected.val() == $(this).data('depends')) ? $(this).removeClass('hidden') : $(this).addClass('hidden');
+            });
+        });
     }
 
     setToggleStates();
@@ -78,8 +87,8 @@
     checkboxes.change(setSelectionStates);
     actions.change(setActionStates);
 
-    form.submit(function() {
-        var action = actions.find(':selected');
+    forms.submit(function () {
+        var action = $(this).find('[data-actions]').find(':selected');
 
         if (action.attr('data-confirm')) {
             return confirm("{{ trans('forum::general.generic_confirm') }}");

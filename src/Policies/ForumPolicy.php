@@ -16,4 +16,83 @@ class ForumPolicy
     {
         return false;
     }
+
+    /**
+     * Permission: Manage category.
+     *
+     * @param  object  $user
+     * @return bool
+     */
+    public function manageCategories($user)
+    {
+        return $this->renameCategories($user) ||
+               $this->moveCategories($user) ||
+               $this->deleteCategories($user);
+    }
+
+    /**
+     * Permission: Rename categories.
+     *
+     * @param  object  $user
+     * @return bool
+     */
+    public function renameCategories($user)
+    {
+        return true;
+    }
+
+    /**
+     * Permission: Move categories.
+     *
+     * @param  object  $user
+     * @return bool
+     */
+    public function moveCategories($user)
+    {
+        return true;
+    }
+
+    /**
+     * Permission: Delete categories.
+     *
+     * @param  object  $user
+     * @return bool
+     */
+    public function deleteCategories($user)
+    {
+        return true;
+    }
+
+    /**
+     * Permission: View trashed categories.
+     *
+     * @param  object  $user
+     * @return bool
+     */
+    public function viewTrashedCategories($user)
+    {
+        return true;
+    }
+
+    /**
+     * Permission: View trashed threads.
+     *
+     * @param  object  $user
+     * @return bool
+     */
+    public function viewTrashedThreads($user)
+    {
+        return true;
+    }
+
+    /**
+     * Permission: View trashed posts.
+     *
+     * @param  object  $user
+     * @return bool
+     */
+    public function viewTrashedPosts($user)
+    {
+        return true;
+    }
 }

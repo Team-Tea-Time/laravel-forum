@@ -10,6 +10,9 @@ class ThreadObserver extends BaseObserver
         if ($thread->deleted_at != $this->carbon->now()) {
             // The thread was force-deleted, so the posts should be too
             $thread->posts()->withTrashed()->forceDelete();
+
+            // Also detach readers
+            $thread->readers()->detach();
         } else {
             // The thread was soft-deleted, so just soft-delete its posts
             $thread->posts()->delete();

@@ -66,17 +66,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | List soft-deleted threads/posts
+    | Display trashed (soft-deleted) posts
     |--------------------------------------------------------------------------
     |
-    | Enable these if you want to include soft-deleted threads and posts in
-    | categories and threads (respectively). Note that this does not affect
-    | the ability to view a soft-deleted thread or post directly, which
-    | is determined by the forum policies.
+    | Enable this if you want to display messages in place of soft-deleted
+    | posts instead of hiding them altogether.
+    |
+    | Note: Enabling will override the viewTrashedPosts ability (and vice-versa
+    | for authenticated users).
     |
     */
 
-    'list_trashed_threads' => true,
-    'list_trashed_posts' => false
+    'display_trashed_posts' => true
 
 ];

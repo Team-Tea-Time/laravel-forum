@@ -57,17 +57,8 @@ class Category extends BaseModel
      */
     public function threads()
     {
-        return $this->hasMany(Thread::class);
-    }
-
-    /**
-     * Relationship: Threads (including soft-deleted).
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function threadsWithTrashed()
-    {
-        return $this->threads()->withTrashed();
+        $threads = $this->hasMany(Thread::class);
+        return config('forum.preferences.list_trashed_threads') ? $threads->withTrashed() : $threads;
     }
 
     /**
@@ -97,23 +88,9 @@ class Category extends BaseModel
      */
     public function getThreadsPaginatedAttribute()
     {
-        return $this->threads()
-            ->orderBy('pinned', 'desc')
-            ->orderBy('updated_at', 'desc')
-            ->paginate(config('forum.preferences.pagination.threads'));
-    }
-
-    /**
-     * Attribute: Paginated threads (including soft-deleted).
-     *
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    public function getThreadsWithTrashedPaginatedAttribute()
-    {
-        return $this->threadsWithTrashed()
-            ->orderBy('pinned', 'desc')
-            ->orderBy('updated_at', 'desc')
-            ->paginate(config('forum.preferences.pagination.threads'));
+        $threads = $this->threads()->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc');
+        $threads = config('forum.preferences.list_trashed_threads') ? $threads->withTrashed() : $threads;
+        return $threads->paginate(config('forum.preferences.pagination.threads'));
     }
 
     /**

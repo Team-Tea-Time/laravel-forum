@@ -5,9 +5,12 @@ namespace Riari\Forum;
 use Blade;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
+use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Riari\Forum\Events\UserViewingThread;
+use Riari\Forum\Listeners\MarkThreadAsRead;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
@@ -32,6 +35,17 @@ class ForumServiceProvider extends ServiceProvider
     protected $baseDir;
 
     /**
+     * The event listener mappings for the application.
+     *
+     * @var array
+     */
+    protected $listen = [
+        UserViewingThread::class => [
+            MarkThreadAsRead::class,
+        ],
+    ];
+
+    /**
      * Register the service provider.
      *
      * @return void
@@ -46,9 +60,10 @@ class ForumServiceProvider extends ServiceProvider
      *
      * @param  Router  $router
      * @param  GateContract  $gate
+     * @param  DispatcherContract  $events
      * @return void
      */
-    public function boot(Router $router, GateContract $gate)
+    public function boot(Router $router, GateContract $gate, DispatcherContract $events)
     {
         $this->baseDir = __DIR__.'/../';
 
@@ -60,6 +75,8 @@ class ForumServiceProvider extends ServiceProvider
         $this->observeModels();
 
         $this->registerPolicies($gate);
+
+        $this->registerListeners($events);
 
         if (config('forum.routing.enabled')) {
             $this->registerMiddleware($router);
@@ -125,7 +142,7 @@ class ForumServiceProvider extends ServiceProvider
     /**
      * Register the package policies.
      *
-     * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
+     * @param  GateContract  $gate
      * @return void
      */
     public function registerPolicies(GateContract $gate)
@@ -136,6 +153,21 @@ class ForumServiceProvider extends ServiceProvider
 
         foreach (get_class_methods(new \Riari\Forum\Policies\ForumPolicy) as $method) {
             $gate->define($method, "Riari\Forum\Policies\ForumPolicy@{$method}");
+        }
+    }
+
+    /**
+     * Register the package listeners.
+     *
+     * @param  DispatcherContract  $events
+     * @return void
+     */
+    public function registerListeners(DispatcherContract $events)
+    {
+        foreach ($this->listen as $event => $listeners) {
+            foreach ($listeners as $listener) {
+                $events->listen($event, $listener);
+            }
         }
     }
 

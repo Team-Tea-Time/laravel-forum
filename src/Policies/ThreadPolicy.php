@@ -52,6 +52,6 @@ class ThreadPolicy
      */
     public function delete($user, Thread $thread)
     {
-        return Gate::allows('deleteThreads', $thread->category) || $$user->id === $thread->user_id;
+        return Gate::allows('deleteThreads', $thread->category) || $user->id === $thread->author_id;
     }
 }

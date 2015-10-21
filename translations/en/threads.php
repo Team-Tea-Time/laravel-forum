@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'           => "Thread actions",
     'created'           => "Thread created",
     'delete'            => "Delete this thread",
     'deleted'           => "Thread deleted|Threads deleted",

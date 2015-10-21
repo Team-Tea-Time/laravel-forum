@@ -80,40 +80,4 @@ class CategoryPolicy
     {
         return true;
     }
-
-    /**
-     * Permission: Rename category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function rename($user, Category $category)
-    {
-        return false;
-    }
-
-    /**
-     * Permission: Move category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function move($user, Category $category)
-    {
-        return false;
-    }
-
-    /**
-     * Permission: Delete category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function delete($user, Category $category)
-    {
-        return false;
-    }
 }

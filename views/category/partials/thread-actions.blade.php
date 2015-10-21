@@ -1,12 +1,13 @@
-<div class="panel panel-default hidden" data-actions>
+<div class="panel panel-default hidden" data-actions data-bulk-actions>
     <div class="panel-heading">{{ trans('forum::general.with_selection') }}</div>
     <div class="panel-body">
         <div class="form-group">
-            <label for="action">{{ trans_choice('forum::general.actions', 1) }}</label>
-            <select name="action" id="action" class="form-control">
+            <label for="thread-action">{{ trans_choice('forum::general.actions', 1) }}</label>
+            <select name="action" id="thread-action" class="form-control">
                 @can ('deleteThreads', $category)
                     <option value="delete" data-confirm="true" data-method="delete">{{ trans('forum::general.delete') }}</option>
                     <option value="restore" data-confirm="true">{{ trans('forum::general.restore') }}</option>
+                    <option value="permadelete" data-confirm="true" data-method="delete">{{ trans('forum::general.perma_delete') }}</option>
                 @endcan
                 @can ('moveThreads', $category)
                     <option value="move">{{ trans('forum::general.move') }}</option>

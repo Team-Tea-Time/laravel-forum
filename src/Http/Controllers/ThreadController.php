@@ -11,8 +11,6 @@ use Riari\Forum\Events\UserMarkingThreadsRead;
 use Riari\Forum\Events\UserViewingNew;
 use Riari\Forum\Events\UserViewingThread;
 use Riari\Forum\Forum;
-use Riari\Forum\Http\Requests\BulkUpdateThreadsRequest;
-use Riari\Forum\Http\Requests\CreateThreadRequest;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
@@ -30,13 +28,13 @@ class ThreadController extends BaseController
     protected $posts;
 
     /**
-     * GET: return a new/updated threads view.
+     * GET: Return a new/updated threads view.
      *
      * @return \Illuminate\Http\Response
      */
     public function indexNew()
     {
-        $threads = $this->api('thread.new.index')->get();
+        $threads = $this->api('thread.index-new')->get();
 
         event(new UserViewingNew($threads));
 
@@ -44,7 +42,7 @@ class ThreadController extends BaseController
     }
 
     /**
-     * PATCH: mark new/updated threads as read for the current user.
+     * PATCH: Mark new/updated threads as read for the current user.
      */
     public function markRead()
     {
@@ -60,7 +58,7 @@ class ThreadController extends BaseController
     }
 
     /**
-     * GET: return a thread view.
+     * GET: Return a thread view.
      *
      * @param  int  $categoryID
      * @param  string  $categorySlug
@@ -70,12 +68,10 @@ class ThreadController extends BaseController
     public function show($categoryID, $categorySlug, $threadID)
     {
         $thread = $this->api('thread.fetch', $threadID)
-                       ->parameters(['include_deleted' => true])
+                       ->parameters(['include_deleted' => auth()->check()])
                        ->get();
 
         event(new UserViewingThread($thread));
-
-        $posts = config('forum.preferences.list_trashed_posts') ? $thread->postsWithTrashedPaginated : $thread->postsPaginated;
 
         $category = $thread->category;
 
@@ -84,7 +80,7 @@ class ThreadController extends BaseController
             $categories = $this->api('category.index')->parameters(['where' => ['category_id' => null]], ['where' => ['allows_threads' => 1]])->get();
         }
 
-        return view('forum::thread.show', compact('categories', 'category', 'thread', 'posts'));
+        return view('forum::thread.show', compact('categories', 'category', 'thread'));
     }
 
     /**
@@ -111,10 +107,10 @@ class ThreadController extends BaseController
     /**
      * POST: Store a new thread.
      *
-     * @param  CreateThreadRequest  $request
+     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(CreateThreadRequest $request)
+    public function store(Request $request)
     {
         $category = $this->api('category.fetch', $request->route('category'))->get();
 
@@ -141,14 +137,15 @@ class ThreadController extends BaseController
     /**
      * PATCH: Update a thread.
      *
+     * @param  int  $id
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request)
+    public function update($id, Request $request)
     {
         $action = $request->input('action');
 
-        $thread = $this->api("thread.{$action}", $request->input('id'))->parameters($request->all())->patch();
+        $thread = $this->api("thread.{$action}", $id)->parameters($request->all())->patch();
 
         Forum::alert('success', 'threads', 'updated', 1);
 
@@ -158,18 +155,27 @@ class ThreadController extends BaseController
     /**
      * DELETE: Delete a thread.
      *
+     * @param  int  $id
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request)
+    public function destroy($id, Request $request)
     {
-        $action = $request->input('action');
+        $this->validate($request, ['action' => 'in:delete,permadelete']);
 
-        $thread = $this->api('thread.delete', $request->input('id'))->parameters($request->all())->delete();
+        $permanent = !config('forum.preferences.soft_deletes') || ($request->input('action') == 'permadelete');
+
+        $parameters = $request->all();
+
+        if ($permanent) {
+            $parameters += ['force' => 1];
+        }
+
+        $thread = $this->api('thread.delete', $id)->parameters($parameters)->delete();
 
         Forum::alert('success', 'threads', 'deleted', 1);
 
-        return redirect($thread->route);
+        return redirect($permanent ? $thread->category->route : $thread->route);
     }
 
     /**
@@ -180,7 +186,15 @@ class ThreadController extends BaseController
      */
     public function bulkDestroy(Request $request)
     {
-        $threads = $this->api('bulk.thread.delete')->parameters($request->all())->delete();
+        $this->validate($request, ['action' => 'in:delete,permadelete']);
+
+        $parameters = $request->all();
+
+        if (!config('forum.preferences.soft_deletes') || ($request->input('action') == 'permadelete')) {
+            $parameters += ['force' => 1];
+        }
+
+        $threads = $this->api('bulk.thread.delete')->parameters($parameters)->delete();
 
         return $this->bulkActionResponse($threads, 'deleted');
     }
@@ -188,11 +202,13 @@ class ThreadController extends BaseController
     /**
      * PATCH: Update threads in bulk.
      *
-     * @param  BulkUpdateThreadsRequest  $request
+     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function bulkUpdate(BulkUpdateThreadsRequest $request)
+    public function bulkUpdate(Request $request)
     {
+        $this->validate($request, ['action' => 'in:restore,move,pin,unpin,lock,unlock']);
+
         $action = $request->input('action');
 
         $threads = $this->api("bulk.thread.{$action}")->parameters($request->all())->patch();

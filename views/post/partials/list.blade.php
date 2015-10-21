@@ -1,4 +1,4 @@
-<tr id="post-{{ $post->id }}">
+<tr id="post-{{ $post->id }}" class="{{ $post->trashed() ? 'deleted' : '' }}">
     <td>
         <strong>{!! $post->authorName !!}</strong>
     </td>
@@ -15,7 +15,11 @@
             </blockquote>
         @endif
 
-        {!! Forum::render($post->content) !!}
+        @if ($post->trashed())
+            <span class="label label-danger">{{ trans('forum::general.deleted') }}</span>
+        @else
+            {!! Forum::render($post->content) !!}
+        @endif
     </td>
 </tr>
 <tr>
@@ -32,7 +36,7 @@
     <td class="text-muted">
         {{ trans('forum::general.posted') }} {{ $post->posted }}
         @if ($post->hasBeenUpdated())
-            {{ trans('forum::general.last_updated') }} {{ $post->updated }}
+            | {{ trans('forum::general.last_updated') }} {{ $post->updated }}
         @endif
         <span class="pull-right">
             <a href="{{ $post->url }}">#{{ $post->id }}</a>

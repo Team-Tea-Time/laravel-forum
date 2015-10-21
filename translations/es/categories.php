@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'               => "Acciones categoría",
     'category'              => "Categoría|Categorías",
     'created'               => "Categoría creado|Categorías creado",
     'deleted'               => "Categoría eliminada|Categorías eliminada",

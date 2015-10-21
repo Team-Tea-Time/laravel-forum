@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'           => "Tråd åtgärder"
     'created'           => "Tråd skapad",
     'delete'            => "Radera den här tråden",
     'deleted'           => "Tråd utgår|Trådar utgår",

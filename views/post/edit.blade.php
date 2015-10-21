@@ -9,14 +9,15 @@
         @include ('forum::post.partials.excerpt', ['post' => $post->parent])
     @endif
 
-    @include (
-        'forum::post.partials.edit',
-        [
-            'form_url'          => $post->editRoute,
-            'method'            => 'PATCH',
-            'post_content'      => $post->content,
-            'submit_label'      => trans('forum::posts.edit'),
-            'cancel_url'        => $post->thread->route
-        ]
-    )
+    <form method="POST" action="{{ route('forum.post.update', $post->id) }}">
+        {!! csrf_field() !!}
+        {!! method_field('patch') !!}
+
+        <div class="form-group">
+            <textarea name="content" class="form-control">{{ !is_null(old('content')) ? old('content') : $post->content }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">{{ trans('forum::general.reply') }}</button>
+        <a href="{{ URL::previous() }}" class="btn btn-default">{{ trans('forum::general.cancel') }}</a>
+    </form>
 @overwrite
