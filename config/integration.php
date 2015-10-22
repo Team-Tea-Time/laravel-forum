@@ -63,7 +63,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Change this if your app has its own user alert/notification system.
-    | NOTE: remember to override the forum views to remove the default alerts
+    | NOTE: Remember to override the forum views to remove the default alerts
     | if you no longer use them.
     |
     */

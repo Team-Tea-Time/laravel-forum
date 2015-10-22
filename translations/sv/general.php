@@ -3,9 +3,9 @@
 return [
 
     'actions'           => "Åtgärd|Åtgärder",
-    'add'               => "Tillägga",
     'author'            => "Författare",
     'cancel'            => "Avbryt",
+    'create'            => "Skapa",
     'delete'            => "Radera",
     'deleted'           => "Utgår",
     'edit'              => "Ändra",
@@ -31,7 +31,6 @@ return [
     'restore'           => "Restore",
     'subject'           => "Ämne",
     'title'             => "Titel",
-    'undo'              => "Ångra",
     'with_selection'    => "Med val…",
 
 ];

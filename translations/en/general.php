@@ -3,9 +3,9 @@
 return [
 
     'actions'           => "Action|Actions",
-    'add'               => "Add",
     'author'            => "Author",
     'cancel'            => "Cancel",
+    'create'            => "Create",
     'delete'            => "Delete",
     'deleted'           => "Deleted",
     'edit'              => "Edit",
@@ -19,6 +19,7 @@ return [
     'move'              => "Move",
     'new'               => "New",
     'new_reply'         => "New reply",
+    'none'              => "None",
     'perma_delete'      => "Permanently delete",
     'posted'            => "Posted",
     'proceed'           => "Proceed",
@@ -32,7 +33,7 @@ return [
     'restore'           => "Restore",
     'subject'           => "Subject",
     'title'             => "Title",
-    'undo'              => "Undo",
+    'weight'            => "Weight",
     'with_selection'    => "With selection…",
 
 ];

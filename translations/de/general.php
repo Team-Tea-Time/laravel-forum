@@ -6,6 +6,7 @@ return [
     'add'               => "Hinzufügen",
     'author'            => "Autor",
     'cancel'            => "Abbrechen",
+    'create'            => "Schaffen",
     'delete'            => "Löschen",
     'deleted'           => "Gelöscht",
     'edit'              => "Bearbeiten",

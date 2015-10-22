@@ -4,7 +4,15 @@
     <meta charset="utf-8">
     <meta id="token" name="token" content="{{ csrf_token() }}">
 
-    <title>{!! trans('forum::general.home_title') !!}</title>
+    <title>
+        @if (isset($thread))
+            {{ $thread->title }} -
+        @endif
+        @if (isset($category))
+            {{ $category->title }} - 
+        @endif
+        {!! trans('forum::general.home_title') !!}
+    </title>
 
     <!-- jQuery -->
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -29,10 +37,7 @@
 </head>
 <body>
     <div class="container">
-        @section ('breadcrumbs')
-            @include ('forum::partials.breadcrumbs')
-        @show
-
+        @include ('forum::partials.breadcrumbs')
         @include ('forum::partials.alerts')
 
         @yield('content')

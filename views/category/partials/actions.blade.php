@@ -1,9 +1,9 @@
 <div class="panel panel-default" data-actions>
     <div class="panel-heading">
         <span class="glyphicon glyphicon-option-vertical"></span>
-        <a href="#" data-toggle="collapse" data-target=".collapse">{{ trans('forum::categories.actions') }}</a>
+        <a href="#" data-toggle="collapse" data-target=".collapse.category-options">{{ trans('forum::categories.actions') }}</a>
     </div>
-    <div class="collapse">
+    <div class="collapse category-options">
         <div class="panel-body">
             <div class="form-group">
                 <label for="category-action">{{ trans_choice('forum::general.actions', 1) }}</label>
@@ -14,6 +14,7 @@
                     @endcan
                     @can ('moveCategories')
                         <option value="move">{{ trans('forum::general.move') }}</option>
+                        <option value="reorder">{{ trans('forum::general.reorder') }}</option>
                     @endcan
                     @can ('renameCategories')
                         <option value="rename">{{ trans('forum::general.rename') }}</option>
@@ -26,9 +27,13 @@
                     @include ('forum::category.partials.options')
                 </select>
             </div>
+            <div class="form-group hidden" data-depends="reorder">
+                <label for="new-weight">{{ trans('forum::general.weight') }}</label>
+                <input type="number" name="weight" value="{{ $category->weight }}" class="form-control">
+            </div>
             <div class="form-group hidden" data-depends="rename">
                 <label for="new-title">{{ trans('forum::general.title') }}</label>
-                <input name="title" value="{{ $category->title }}" class="form-control">
+                <input type="text" name="title" value="{{ $category->title }}" class="form-control">
             </div>
         </div>
         <div class="panel-footer clearfix">

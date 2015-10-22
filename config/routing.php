@@ -18,7 +18,7 @@ return [
     | Forum root
     |--------------------------------------------------------------------------
     |
-    | The base URL to use for all forum routes
+    | The base URL to use for all forum routes.
     |
     */
 

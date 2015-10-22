@@ -3,9 +3,9 @@
 return [
 
     'actions'           => "Acțiune|Acțiuni",
-    'add'               => "Trimite",
     'author'            => "Autor",
     'cancel'            => "Anulează",
+    'create'            => "Crea",
     'delete'            => "Șterge",
     'deleted'           => "Șters",
     'edit'              => "Editează",
@@ -31,7 +31,6 @@ return [
     'restore'           => "Restabili",
     'subject'           => "Subiect",
     'title'             => "Titlu",
-    'undo'              => "Anula",
     'with_selection'    => "Cu selecție…",
 
 ];

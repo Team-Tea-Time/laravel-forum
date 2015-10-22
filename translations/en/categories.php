@@ -3,7 +3,9 @@
 return [
 
     'actions'               => "Category actions",
+    'allow_threads'         => "Allow threads",
     'category'              => "Category|Categories",
+    'create'                => "Create category",
     'created'               => "Category created",
     'deleted'               => "Category deleted|Categories deleted",
     'none_found'            => "No categories found",

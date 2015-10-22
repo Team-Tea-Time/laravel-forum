@@ -14,7 +14,7 @@ class ForumPolicy
      */
     public function createCategories($user)
     {
-        return false;
+        return true;
     }
 
     /**

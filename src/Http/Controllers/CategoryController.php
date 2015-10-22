@@ -54,11 +54,26 @@ class CategoryController extends BaseController
             : $category->threadsPaginated;
 
         $categories = [];
-        if (Gate::allows('moveThreads', $category)) {
-            $categories = $this->api('category.index')->parameters(['where' => ['category_id' => null]], ['where' => ['allows_threads' => 1]])->get();
+        if (Gate::allows('moveCategories')) {
+            $categories = $this->api('category.index')->parameters(['where' => ['category_id' => null]])->get();
         }
 
         return view('forum::category.show', compact('categories', 'category', 'threads'));
+    }
+
+    /**
+     * POST: Store a new category.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request)
+    {
+        $category = $this->api('category.store')->parameters($request->all())->post();
+
+        Forum::alert('success', 'categories', 'created');
+
+        return redirect($category->route);
     }
 
     /**

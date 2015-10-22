@@ -196,11 +196,11 @@ class ThreadController extends BaseController
      */
     public function move($id, Request $request)
     {
-        $this->validate($request, ['destination_category' => 'required|integer|exists:forum_categories,id']);
+        $this->validate($request, ['category_id' => 'required|integer|exists:forum_categories,id']);
 
         $thread = $this->model()->find($id);
 
-        $category = Category::find($request->input('destination_category'));
+        $category = Category::find($request->input('category_id'));
 
         return ($thread)
             ? $this->updateAttributes($thread, ['category_id' => $category->id], ['moveThreads', $category])
@@ -319,7 +319,7 @@ class ThreadController extends BaseController
      */
     public function bulkMove(Request $request)
     {
-        return $this->bulk($request, 'move', 'updated', $request->only('destination_category'));
+        return $this->bulk($request, 'move', 'updated', $request->only('category_id'));
     }
 
     /**

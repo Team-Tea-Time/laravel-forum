@@ -3,6 +3,10 @@
 
 @section ('content')
     <div id="category">
+        @can ('createCategories')
+            @include ('forum::category.partials.form-create')
+        @endcan
+
         <h2>{{ $category->title }}</h2>
 
         <hr>

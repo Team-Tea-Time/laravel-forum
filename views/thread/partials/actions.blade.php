@@ -44,12 +44,12 @@
             <div class="form-group hidden" data-depends="move">
                 <label for="destination-category">{{ trans_choice('forum::categories.category', 1) }}</label>
                 <select name="destination_category" id="destination-category" class="form-control">
-                    @include ('forum::category.partials.options')
+                    @include ('forum::category.partials.options', ['hide' => $thread->category])
                 </select>
             </div>
             <div class="form-group hidden" data-depends="rename">
                 <label for="new-title">{{ trans('forum::general.title') }}</label>
-                <input name="title" value="{{ $thread->title }}" class="form-control">
+                <input type="text" name="title" value="{{ $thread->title }}" class="form-control">
             </div>
         </div>
         <div class="panel-footer clearfix">

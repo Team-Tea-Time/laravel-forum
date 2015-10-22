@@ -23,6 +23,7 @@ $r->group(['prefix' => '{category}-{category_slug}'], function ($r) use ($contro
 });
 
 // Actions
+$r->post('category/create', ['as' => 'category.store', 'uses' => "{$controllers['category']}@store"]);
 $r->patch('category/{category}', ['as' => 'category.update', 'uses' => "{$controllers['category']}@update"]);
 $r->delete('category/{category}', ['as' => 'category.delete', 'uses' => "{$controllers['category']}@destroy"]);
 $r->post('category/{category}/thread/create', ['as' => 'thread.store', 'uses' => "{$controllers['thread']}@store"]);

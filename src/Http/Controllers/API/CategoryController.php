@@ -38,9 +38,7 @@ class CategoryController extends BaseController
      */
     public function index(Request $request)
     {
-        $this->validate($request, ['category_id' => 'integer|exists:forum_categories,id']);
-
-        $categories = $this->model()->where($request->only('category_id'));
+        $categories = $this->model()->withRequestScopes($request);
 
         if ($request->input('include_deleted') && Gate::allows('deleteCategories')) {
             $categories = $categories->withTrashed();
@@ -52,15 +50,23 @@ class CategoryController extends BaseController
     }
 
     /**
-     * POST: create a new category model.
+     * POST: Create a new category.
      *
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function store()
+    public function store(Request $request)
     {
         $this->authorize('createCategories');
 
-        parent::store($request);
+        $this->validate($request, [
+            'title'             => ['required'],
+            'weight'            => ['required']
+        ]);
+
+        $category = $this->model()->create($request->only(['category_id', 'title', 'weight', 'allows_threads']));
+
+        return $this->response($category, 201);
     }
 
     /**
@@ -77,7 +83,7 @@ class CategoryController extends BaseController
         $category = $this->model()->find($id);
 
         return ($category)
-            ? $this->updateAttributes($category, ['category_id' => $request->input('destination_category')])
+            ? $this->updateAttributes($category, ['category_id' => $request->input('category_id')])
             : $this->notFoundResponse();
     }
 

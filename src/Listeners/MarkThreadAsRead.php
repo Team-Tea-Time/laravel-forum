@@ -4,8 +4,6 @@ namespace Riari\Forum\Listeners;
 
 use Riari\Forum\Events\UserViewingThread;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class MarkThreadAsRead
 {

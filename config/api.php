@@ -8,9 +8,9 @@ return [
     |--------------------------------------------------------------------------
     |
     | Here we specify a unique API access token. Passing this along with API
-    | requests in an authorization header eliminates the need for user-based
-    | authentication, so make sure to keep this safe. By default, it's used for
-    | internally dispatched requests to the API.
+    | requests in an authorization header will bypass user-based
+    | authentication, so make sure to keep this safe. By default, it's used
+    | for internally dispatched requests to the API.
     |
     | Out of the box, a random string is used here to prevent unwanted access.
     |

@@ -1,8 +1,4 @@
-@extends ('forum::master')
-
-@section ('breadcrumbs')
-    @include ('forum::partials.breadcrumbs', ['breadcrumb_other' => trans('forum::posts.view')])
-@overwrite
+@extends ('forum::master', ['breadcrumb_other' => trans('forum::posts.view')])
 
 @section ('content')
     <div id="post">

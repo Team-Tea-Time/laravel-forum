@@ -3,9 +3,9 @@
 return [
 
     'actions'           => "Azione|Azioni",
-    'add'               => "Invia",
     'author'            => "Autore",
     'cancel'            => "Cancella",
+    'create'            => "Creare",
     'delete'            => "Eliminare",
     'deleted'           => "Cancellato",
     'edit'              => "Modifica",
@@ -31,7 +31,6 @@ return [
     'restore'           => "Ripristinare",
     'subject'           => "Oggetto",
     'title'             => "Titolo",
-    'undo'              => "Annullare",
     'with_selection'    => "Con la selezione…",
 
 ];
