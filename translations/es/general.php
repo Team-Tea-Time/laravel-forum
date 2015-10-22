@@ -19,10 +19,13 @@ return [
     'move'              => "Mover",
     'new'               => "Nuevo",
     'new_reply'         => "Nueva respuesta",
+    'none'              => "Ninguno",
     'perma_delete'      => "Eliminar permanentemente",
     'posted'            => "Publicado",
     'proceed'           => "Proceder",
     'quick_reply'       => "Respuesta rápida",
+    'rename'            => "Rebautizar",
+    'reorder'           => "Reordenar",
     'replies'           => "Respuestas",
     'reply'             => "Responder",
     'reply_added'       => "Respuesta agregáda",
@@ -31,6 +34,7 @@ return [
     'restore'           => "Restaurar",
     'subject'           => "Asunto",
     'title'             => "Titulo",
+    'weight'            => "Peso",
     'with_selection'    => "Con la selección…",
 
 ];

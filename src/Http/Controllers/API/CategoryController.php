@@ -60,8 +60,8 @@ class CategoryController extends BaseController
         $this->authorize('createCategories');
 
         $this->validate($request, [
-            'title'             => ['required'],
-            'weight'            => ['required']
+            'title'     => ['required'],
+            'weight'    => ['required']
         ]);
 
         $category = $this->model()->create($request->only(['category_id', 'title', 'weight', 'allows_threads']));
@@ -80,6 +80,8 @@ class CategoryController extends BaseController
     {
         $this->authorize('moveCategories');
 
+        $this->validate($request, ['category_id' => ['required']]);
+
         $category = $this->model()->find($id);
 
         return ($category)
@@ -88,7 +90,7 @@ class CategoryController extends BaseController
     }
 
     /**
-     * PATCH: Rename a thread.
+     * PATCH: Rename a category.
      *
      * @param  int  $id
      * @param  Request  $request
@@ -98,10 +100,32 @@ class CategoryController extends BaseController
     {
         $this->authorize('renameCategories');
 
+        $this->validate($request, ['title' => ['required']]);
+
         $category = $this->model()->find($id);
 
         return ($category)
             ? $this->updateAttributes($category, ['title' => $request->input('title')])
+            : $this->notFoundResponse();
+    }
+
+    /**
+     * PATCH: Reorder a category.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function reorder($id, Request $request)
+    {
+        $this->authorize('moveCategories');
+
+        $this->validate($request, ['weight' => ['required']]);
+
+        $category = $this->model()->find($id);
+
+        return ($category)
+            ? $this->updateAttributes($category, ['weight' => $request->input('weight')])
             : $this->notFoundResponse();
     }
 }

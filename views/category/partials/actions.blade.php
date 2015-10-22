@@ -24,7 +24,7 @@
             <div class="form-group hidden" data-depends="move">
                 <label for="destination-category">{{ trans_choice('forum::categories.category', 1) }}</label>
                 <select name="destination_category" id="destination-category" class="form-control">
-                    @include ('forum::category.partials.options')
+                    @include ('forum::category.partials.options', ['hide' => $category])
                 </select>
             </div>
             <div class="form-group hidden" data-depends="reorder">

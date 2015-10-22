@@ -25,6 +25,7 @@ return [
     'proceed'           => "Proceed",
     'quick_reply'       => "Quick reply",
     'rename'            => "Rename",
+    'reorder'           => "Reorder",
     'replies'           => "Replies",
     'reply'             => "Reply",
     'reply_added'       => "Reply added",

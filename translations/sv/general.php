@@ -19,10 +19,13 @@ return [
     'move'              => "Flytta",
     'new'               => "Ny",
     'new_reply'         => "Nytt svar",
+    'none'              => "Inget",
     'perma_delete'      => "Radera permanent",
     'posted'            => "Publicerad",
     'proceed'           => "Fortsätt",
     'quick_reply'       => "Snabbsvar",
+    'rename'            => "Byt namn",
+    'reorder'           => "Ändra ordning",
     'replies'           => "Svar",
     'reply'             => "Svara",
     'reply_added'       => "Svar sparat",
@@ -31,6 +34,7 @@ return [
     'restore'           => "Restore",
     'subject'           => "Ämne",
     'title'             => "Titel",
+    'weight'            => "Vikt",
     'with_selection'    => "Med val…",
 
 ];

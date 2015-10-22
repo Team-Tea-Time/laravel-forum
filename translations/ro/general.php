@@ -19,10 +19,13 @@ return [
     'move'              => "Muta",
     'new'               => "Nou",
     'new_reply'         => "Răspuns nou",
+    'none'              => "Nici unul",
     'perma_delete'      => "Șterge definitiv",
     'posted'            => "Adăugat",
     'proceed'           => "Continua",
     'quick_reply'       => "Răspuns rapid",
+    'rename'            => "Redenumiți",
+    'reorder'           => "Reordona",
     'replies'           => "Răspunsuri",
     'reply'             => "Răspunde",
     'reply_added'       => "Răspuns adăugat",
@@ -31,6 +34,7 @@ return [
     'restore'           => "Restabili",
     'subject'           => "Subiect",
     'title'             => "Titlu",
+    'weight'            => "Greutate",
     'with_selection'    => "Cu selecție…",
 
 ];

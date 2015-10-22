@@ -52,6 +52,7 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
         $r->patch('{id}/restore', ['as' => 'restore', 'uses' => 'CategoryController@restore']);
         $r->patch('{id}/move', ['as' => 'move', 'uses' => 'CategoryController@move']);
         $r->patch('{id}/rename', ['as' => 'rename', 'uses' => 'CategoryController@rename']);
+        $r->patch('{id}/reorder', ['as' => 'reorder', 'uses' => 'CategoryController@reorder']);
     });
 
     // Threads

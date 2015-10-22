@@ -3,7 +3,6 @@
 return [
 
     'actions'           => "Aktion|Aktionen",
-    'add'               => "Hinzufügen",
     'author'            => "Autor",
     'cancel'            => "Abbrechen",
     'create'            => "Schaffen",
@@ -20,10 +19,13 @@ return [
     'move'              => "Bewegen sich",
     'new'               => "Neu",
     'new_reply'         => "Neue Antwort",
+    'none'              => "Keine",
     'perma_delete'      => "Endgültig löschen",
     'posted'            => "Geschrieben am",
     'proceed'           => "Vorgehen",
     'quick_reply'       => "Schnelle Antwort",
+    'rename'            => "Umbenennen",
+    'reorder'           => "Umordnen",
     'replies'           => "Antworten",
     'reply'             => "Antworten",
     'reply_added'       => "Antwort hinzugefügt",
@@ -32,7 +34,7 @@ return [
     'restore'           => "Wiederherstellen",
     'subject'           => "Thema",
     'title'             => "Titel",
-    'undo'              => "Rückgängig machen",
+    'weight'            => "Gewicht",
     'with_selection'    => "Mit Auswahl…",
 
 ];
