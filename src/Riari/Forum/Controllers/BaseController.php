@@ -19,12 +19,12 @@ use Validator;
 abstract class BaseController extends Controller {
 
     // Repositories
-    private $categories;
-    private $threads;
-    private $posts;
+    protected $categories;
+    protected $threads;
+    protected $posts;
 
     // Collections cache
-    private $collections = array();
+    protected $collections = array();
 
     public function __construct(Categories $categories, Threads $threads, Posts $posts)
     {
