@@ -25,7 +25,7 @@
                 </div>
                 <div class="form-group">
                     <label>
-                        <input type="checkbox" id="allows-threads" name="allows_threads" value="1">
+                        <input type="checkbox" id="allows-threads" name="allows_threads" value="1" checked>
                         {{ trans('forum::categories.allow_threads') }}
                     </label>
                 </div>

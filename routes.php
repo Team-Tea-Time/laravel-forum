@@ -31,12 +31,15 @@ $r->patch('thread/{thread}', ['as' => 'thread.update', 'uses' => "{$controllers[
 $r->delete('thread/{thread}', ['as' => 'thread.delete', 'uses' => "{$controllers['thread']}@destroy"]);
 $r->post('thread/{thread}/reply', ['as' => 'post.store', 'uses' => "{$controllers['post']}@store"]);
 $r->patch('post/{post}', ['as' => 'post.update', 'uses' => "{$controllers['post']}@update"]);
+$r->delete('post/{post}', ['as' => 'post.delete', 'uses' => "{$controllers['post']}@destroy"]);
 
 // Bulk actions
 $r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r) use ($controllers)
 {
     $r->patch('thread', ['as' => 'thread.update', 'uses' => "{$controllers['thread']}@bulkUpdate"]);
     $r->delete('thread', ['as' => 'thread.delete', 'uses' => "{$controllers['thread']}@bulkDestroy"]);
+    $r->patch('post', ['as' => 'post.update', 'uses' => "{$controllers['post']}@bulkUpdate"]);
+    $r->delete('post', ['as' => 'post.delete', 'uses' => "{$controllers['post']}@bulkDestroy"]);
 });
 
 // API

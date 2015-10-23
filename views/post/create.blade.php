@@ -22,4 +22,4 @@
         <button type="submit" class="btn btn-primary">{{ trans('forum::general.reply') }}</button>
         <a href="{{ URL::previous() }}" class="btn btn-default">{{ trans('forum::general.cancel') }}</a>
     </form>
-@overwrite
+@stop

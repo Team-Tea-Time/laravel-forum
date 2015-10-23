@@ -9,9 +9,9 @@
             {{ $thread->title }} -
         @endif
         @if (isset($category))
-            {{ $category->title }} - 
+            {{ $category->title }} -
         @endif
-        {!! trans('forum::general.home_title') !!}
+        {{ trans('forum::general.home_title') }}
     </title>
 
     <!-- jQuery -->
@@ -102,5 +102,7 @@
         return true;
     });
     </script>
+
+    @yield('footer')
 </body>
 </html>

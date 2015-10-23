@@ -7,7 +7,12 @@
             @include ('forum::category.partials.form-create')
         @endcan
 
-        <h2>{{ $category->title }}</h2>
+        <h2>
+            @if ($category->trashed())
+                <span class="label label-danger">{{ trans('forum::general.deleted') }}</span>
+            @endif
+            {{ $category->title }}
+        </h2>
 
         <hr>
 
@@ -46,7 +51,7 @@
                 @endcan
             </div>
             <div class="col-xs-8 text-right">
-                {!! $threads->render() !!}
+                {!! $category->threadsPaginated->render() !!}
             </div>
         </div>
 
@@ -69,8 +74,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (!$threads->isEmpty())
-                        @foreach ($threads as $thread)
+                    @if (!$category->threadsPaginated->isEmpty())
+                        @foreach ($category->threadsPaginated as $thread)
                             <tr class="{{ $thread->trashed() ? "deleted" : "" }}">
                                 <td>
                                     <span class="pull-right">
@@ -139,8 +144,8 @@
                 @endcan
             </div>
             <div class="col-xs-8 text-right">
-                {!! $threads->render() !!}
+                {!! $category->threadsPaginated->render() !!}
             </div>
         </div>
     </div>
-@overwrite
+@stop

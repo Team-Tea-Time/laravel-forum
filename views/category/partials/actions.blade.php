@@ -9,21 +9,28 @@
                 <label for="category-action">{{ trans_choice('forum::general.actions', 1) }}</label>
                 <select name="action" id="category-action" class="form-control">
                     @can ('deleteCategories')
-                        <option value="delete" data-confirm="true" data-method="delete">{{ trans('forum::general.delete') }}</option>
+                        @if ($category->trashed())
+                            <option value="restore" data-confirm="true">{{ trans('forum::general.restore') }}</option>
+                        @else
+                            <option value="delete" data-confirm="true" data-method="delete">{{ trans('forum::general.delete') }}</option>
+                        @endif
                         <option value="permadelete" data-confirm="true" data-method="delete">{{ trans('forum::general.perma_delete') }}</option>
                     @endcan
-                    @can ('moveCategories')
-                        <option value="move">{{ trans('forum::general.move') }}</option>
-                        <option value="reorder">{{ trans('forum::general.reorder') }}</option>
-                    @endcan
-                    @can ('renameCategories')
-                        <option value="rename">{{ trans('forum::general.rename') }}</option>
-                    @endcan
+
+                    @if (!$category->trashed())
+                        @can ('moveCategories')
+                            <option value="move">{{ trans('forum::general.move') }}</option>
+                            <option value="reorder">{{ trans('forum::general.reorder') }}</option>
+                        @endcan
+                        @can ('renameCategories')
+                            <option value="rename">{{ trans('forum::general.rename') }}</option>
+                        @endcan
+                    @endif
                 </select>
             </div>
             <div class="form-group hidden" data-depends="move">
-                <label for="destination-category">{{ trans_choice('forum::categories.category', 1) }}</label>
-                <select name="destination_category" id="destination-category" class="form-control">
+                <label for="category-id">{{ trans_choice('forum::categories.category', 1) }}</label>
+                <select name="category_id" id="category-id" class="form-control">
                     @include ('forum::category.partials.options', ['hide' => $category])
                 </select>
             </div>

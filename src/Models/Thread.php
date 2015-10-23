@@ -72,8 +72,8 @@ class Thread extends BaseModel
     public function posts()
     {
         $withTrashed = config('forum.preferences.display_trashed_posts') || Gate::allows('viewTrashedPosts');
-        $posts = $this->hasMany(Post::class);
-        return $withTrashed ? $posts->withTrashed() : $posts;
+        $query = $this->hasMany(Post::class);
+        return $withTrashed ? $query->withTrashed() : $query;
     }
 
     /**
@@ -177,6 +177,16 @@ class Thread extends BaseModel
     public function getLastPageAttribute()
     {
         return $this->postsPaginated->lastPage();
+    }
+
+    /**
+     * Attribute: The first post in the thread.
+     *
+     * @return Post
+     */
+    public function getFirstPostAttribute()
+    {
+        return $this->posts()->orderBy('created_at', 'asc')->first();
     }
 
     /**

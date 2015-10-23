@@ -19,13 +19,13 @@ class CategoryController extends BaseController
     public function index(Request $request)
     {
         $parameters = [
-            'where' => ['category_id' => null],
+            'where' => ['category_id' => 0],
             'orderBy' => 'weight',
             'with' => ['children']
         ];
 
-        if (config('forum.preferences.list_trashed_categories')) {
-            $parameters = $parameters + ['include_deleted' => true];
+        if (Gate::allows('viewTrashedCategories')) {
+            $parameters += ['include_deleted' => true];
         }
 
         $categories = $this->api('category.index')
@@ -45,17 +45,14 @@ class CategoryController extends BaseController
      */
     public function show(Request $request)
     {
-        $category = $this->api('category.fetch', $request->route('category'))->get();
+        $parameters = Gate::allows('viewTrashedCategories') ? ['include_deleted' => true] : [];
+        $category = $this->api('category.fetch', $request->route('category'))->parameters($parameters)->get();
 
         event(new UserViewingCategory($category));
 
-        $threads = config('forum.preferences.list_trashed_threads')
-            ? $category->threadsWithTrashedPaginated
-            : $category->threadsPaginated;
-
         $categories = [];
         if (Gate::allows('moveCategories')) {
-            $categories = $this->api('category.index')->parameters(['where' => ['category_id' => null]])->get();
+            $categories = $this->api('category.index')->parameters(['where' => ['category_id' => 0]])->get();
         }
 
         return view('forum::category.show', compact('categories', 'category', 'threads'));

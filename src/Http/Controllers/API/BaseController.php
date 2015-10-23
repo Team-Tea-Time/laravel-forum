@@ -118,6 +118,8 @@ abstract class BaseController extends Controller
             return $this->notFoundResponse();
         }
 
+        $model->timestamps = false;
+
         if ($request->has('force') && $request->input('force') == 1) {
             $model->forceDelete();
             return $this->response($model, $this->trans('perma_deleted'));
@@ -125,6 +127,8 @@ abstract class BaseController extends Controller
             $model->delete();
             return $this->response($model, $this->trans('deleted'));
         }
+
+        $model->timestamps = true;
 
         return $this->notFoundResponse();
     }
@@ -145,7 +149,10 @@ abstract class BaseController extends Controller
         }
 
         if ($model->trashed()) {
+            $model->timestamps = false;
             $model->restore();
+            $model->timestamps = true;
+
             return $this->response($model, $this->trans('restored'));
         }
 
@@ -153,26 +160,25 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Update a given model's attributes.
+     * DELETE: Delete models in bulk.
      *
-     * @param  Model  $model
-     * @param  array  $attributes
-     * @param  null|array  $authorize
-     * @param  bool  $touch
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    protected function updateAttributes($model, array $attributes, $authorize = null, $touch = false)
+    public function bulkDestroy(Request $request)
     {
-        if ($authorize) {
-            list($ability, $authorizeModel) = $authorize;
-            $this->authorize($ability, $authorizeModel);
-        }
+        return $this->bulk($request, 'destroy', 'updated', $request->only('force'));
+    }
 
-        $model->timestamps = $touch;
-        $model->update($attributes);
-        $model->timestamps = true;
-
-        return $this->response($model, $this->trans('updated'));
+    /**
+     * PATCH: Restore models in bulk.
+     *
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function bulkRestore(Request $request)
+    {
+        return $this->bulk($request, 'restore', 'updated');
     }
 
     /**
@@ -204,6 +210,29 @@ abstract class BaseController extends Controller
     }
 
     /**
+     * Update a given model's attributes.
+     *
+     * @param  Model  $model
+     * @param  array  $attributes
+     * @param  null|array  $authorize
+     * @param  bool  $touch
+     * @return JsonResponse|Response
+     */
+    protected function updateAttributes($model, array $attributes, $authorize = null, $touch = false)
+    {
+        if ($authorize) {
+            list($ability, $authorizeModel) = $authorize;
+            $this->authorize($ability, $authorizeModel);
+        }
+
+        $model->timestamps = $touch;
+        $model->update($attributes);
+        $model->timestamps = true;
+
+        return $this->response($model, $this->trans('updated'));
+    }
+
+    /**
      * Validate the given request with the given rules.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -214,7 +243,7 @@ abstract class BaseController extends Controller
      *
      * @throws \Illuminate\Http\Exception\HttpResponseException
      */
-    public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
+    public function validate(Request $request, array $rules = [], array $messages = [], array $customAttributes = [])
     {
         $rules = array_merge_recursive(config('forum.validation.rules'), $rules);
 

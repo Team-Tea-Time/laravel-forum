@@ -140,7 +140,7 @@ class ThreadController extends BaseController
      */
     public function indexNew(Request $request)
     {
-        $this->validate(['category_id' => 'integer|exists:forum_categories,id']);
+        $this->validate($request);
 
         $threads = $this->model()->recent();
 
@@ -196,7 +196,7 @@ class ThreadController extends BaseController
      */
     public function move($id, Request $request)
     {
-        $this->validate($request, ['category_id' => 'required|integer|exists:forum_categories,id']);
+        $this->validate($request, ['category_id' => ['required']]);
 
         $thread = $this->model()->find($id);
 
@@ -287,28 +287,6 @@ class ThreadController extends BaseController
         return ($thread)
             ? $this->updateAttributes($thread, ['title' => $request->input('title')], ['rename', $thread])
             : $this->notFoundResponse();
-    }
-
-    /**
-     * DELETE: Delete threads in bulk.
-     *
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function bulkDestroy(Request $request)
-    {
-        return $this->bulk($request, 'destroy', 'updated', $request->only('force'));
-    }
-
-    /**
-     * PATCH: Restore threads in bulk.
-     *
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function bulkRestore(Request $request)
-    {
-        return $this->bulk($request, 'restore', 'updated');
     }
 
     /**

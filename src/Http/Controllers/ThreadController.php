@@ -4,16 +4,12 @@ namespace Riari\Forum\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Events\UserCreatingThread;
 use Riari\Forum\Events\UserMarkingThreadsRead;
 use Riari\Forum\Events\UserViewingNew;
 use Riari\Forum\Events\UserViewingThread;
 use Riari\Forum\Forum;
-use Riari\Forum\Models\Category;
-use Riari\Forum\Models\Post;
-use Riari\Forum\Models\Thread;
 
 class ThreadController extends BaseController
 {
@@ -196,7 +192,7 @@ class ThreadController extends BaseController
 
         $threads = $this->api('bulk.thread.delete')->parameters($parameters)->delete();
 
-        return $this->bulkActionResponse($threads, 'deleted');
+        return $this->bulkActionResponse($threads, 'threads', 'deleted');
     }
 
     /**
@@ -213,24 +209,6 @@ class ThreadController extends BaseController
 
         $threads = $this->api("bulk.thread.{$action}")->parameters($request->all())->patch();
 
-        return $this->bulkActionResponse($threads, 'updated');
-    }
-
-    /**
-     * Helper: Bulk action response.
-     *
-     * @param  Collection  $threads
-     * @param  string  $transKey
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private function bulkActionResponse(Collection $threads, $transKey)
-    {
-        if ($threads->count()) {
-            Forum::alert('success', 'threads', $transKey, $threads->count());
-        } else {
-            Forum::alert('warning', 'general', 'invalid_selection');
-        }
-
-        return redirect()->back();
+        return $this->bulkActionResponse($threads, 'threads', 'updated');
     }
 }

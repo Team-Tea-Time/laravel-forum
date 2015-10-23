@@ -116,6 +116,16 @@ class Post extends BaseModel
     }
 
     /**
+     * Attribute: First post flag.
+     *
+     * @return boolean
+     */
+    public function getIsFirstAttribute()
+    {
+        return $this->id == $this->thread->firstPost->id;
+    }
+
+    /**
      * Helper: Get route parameters.
      *
      * @return array

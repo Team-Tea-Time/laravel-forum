@@ -30,7 +30,9 @@ class MarkThreadAsRead
      */
     public function handle(UserViewingThread $event)
     {
-        $primaryKey = $this->auth->user()->getKeyName();
-        $event->thread->markAsRead($this->auth->user()->{$primaryKey});
+        if ($this->auth->check()) {
+            $primaryKey = $this->auth->user()->getKeyName();
+            $event->thread->markAsRead($this->auth->user()->{$primaryKey});
+        }
     }
 }

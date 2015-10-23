@@ -50,6 +50,26 @@ class CategoryController extends BaseController
     }
 
     /**
+     * GET: Return a model by ID.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function fetch($id, Request $request)
+    {
+        $model = $this->model();
+
+        $model = Gate::allows('viewTrashedCategories') ? $model->withTrashed()->find($id) : $model->find($id);
+
+        if (is_null($model) || !$model->exists) {
+            return $this->notFoundResponse();
+        }
+
+        return $this->response($model);
+    }
+
+    /**
      * POST: Create a new category.
      *
      * @param  Request  $request
@@ -67,6 +87,20 @@ class CategoryController extends BaseController
         $category = $this->model()->create($request->only(['category_id', 'title', 'weight', 'allows_threads']));
 
         return $this->response($category, 201);
+    }
+
+    /**
+     * PATCH: Restore a category.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function restore($id, Request $request)
+    {
+        $this->authorize('deleteCategories');
+
+        return parent::restore($id, $request);
     }
 
     /**

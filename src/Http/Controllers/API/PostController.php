@@ -4,7 +4,6 @@ namespace Riari\Forum\Http\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Riari\Forum\Http\Requests\CreatePostRequest;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
 
@@ -31,14 +30,14 @@ class PostController extends BaseController
     }
 
     /**
-     * GET: return an index of posts by thread ID.
+     * GET: Return an index of posts by thread ID.
      *
      * @param  Request  $request
      * @return JsonResponse|Response
      */
     public function index(Request $request)
     {
-        $this->validate($request, ['thread_id' => 'integer|required|exists:forum_threads,id']);
+        $this->validate($request, ['thread_id' => ['required']]);
 
         $posts = $this->model()->where('thread_id', $request->input('thread_id'))->get();
 
@@ -46,14 +45,14 @@ class PostController extends BaseController
     }
 
     /**
-     * POST: create a new post.
+     * POST: Create a new post.
      *
-     * @param  CreatePostRequest  $request
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function store(CreatePostRequest $request)
+    public function store(Request $request)
     {
-        $this->validate($request, ['thread_id' => 'required|exists:forum_threads,id', 'author_id' => 'required|integer']);
+        $this->validate($request, ['thread_id' => ['required'], 'author_id' => ['required']]);
 
         $thread = Thread::find($request->input('thread_id'));
         $this->authorize('reply', $thread);

@@ -3,6 +3,7 @@
 namespace Riari\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Thread;
 use Riari\Forum\Models\Traits\CachesData;
@@ -37,7 +38,8 @@ class Category extends BaseModel
      */
     public function parent()
     {
-        return $this->belongsTo(Category::class, 'category_id')->orderBy('weight');
+        $query = $this->belongsTo(Category::class, 'category_id')->orderBy('weight');
+        return Gate::allows('viewTrashedCategories') ? $query->withTrashed() : $query;
     }
 
     /**
@@ -47,7 +49,8 @@ class Category extends BaseModel
      */
     public function children()
     {
-        return $this->hasMany(Category::class, 'category_id')->orderBy('weight');
+        $query = $this->hasMany(Category::class, 'category_id')->orderBy('weight');
+        return Gate::allows('viewTrashedCategories') ? $query->withTrashed() : $query;
     }
 
     /**
@@ -57,8 +60,8 @@ class Category extends BaseModel
      */
     public function threads()
     {
-        $threads = $this->hasMany(Thread::class);
-        return config('forum.preferences.list_trashed_threads') ? $threads->withTrashed() : $threads;
+        $query = $this->hasMany(Thread::class);
+        return Gate::allows('viewTrashedThreads') ? $query->withTrashed() : $query;
     }
 
     /**

@@ -7,10 +7,6 @@ use Riari\Forum\Events\UserCreatingPost;
 use Riari\Forum\Events\UserEditingPost;
 use Riari\Forum\Events\UserViewingPost;
 use Riari\Forum\Forum;
-use Riari\Forum\Http\Requests\CreatePostRequest;
-use Riari\Forum\Models\Category;
-use Riari\Forum\Models\Post;
-use Riari\Forum\Models\Thread;
 
 class PostController extends BaseController
 {
@@ -116,10 +112,10 @@ class PostController extends BaseController
      * PATCH: Update an existing post.
      *
      * @param  int  $postID
-     * @param  CreatePostRequest  $request
+     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update($postID, CreatePostRequest $request)
+    public function update($postID, Request $request)
     {
         $post = $this->api('post.fetch', $postID)->get();
 
@@ -130,5 +126,43 @@ class PostController extends BaseController
         Forum::alert('success', 'posts', 'updated');
 
         return redirect($post->url);
+    }
+
+    /**
+     * DELETE: Delete posts in bulk.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function bulkDestroy(Request $request)
+    {
+        $this->validate($request, ['action' => 'in:delete,permadelete']);
+
+        $parameters = $request->all();
+
+        if (!config('forum.preferences.soft_deletes') || ($request->input('action') == 'permadelete')) {
+            $parameters += ['force' => 1];
+        }
+
+        $posts = $this->api('bulk.post.delete')->parameters($parameters)->delete();
+
+        return $this->bulkActionResponse($posts, 'posts', 'deleted');
+    }
+
+    /**
+     * PATCH: Update posts in bulk.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function bulkUpdate(Request $request)
+    {
+        $this->validate($request, ['action' => 'in:restore']);
+
+        $action = $request->input('action');
+
+        $threads = $this->api("bulk.post.{$action}")->parameters($request->all())->patch();
+
+        return $this->bulkActionResponse($threads, 'posts', 'updated');
     }
 }

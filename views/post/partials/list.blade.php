@@ -29,7 +29,9 @@
                 <a href="{{ $post->editRoute }}">{{ trans('forum::general.edit') }}</a>
             @endcan
             @can ('delete', $post)
-                <a href="{{ $post->deleteRoute }}" data-confirm data-method="delete">{{ trans('forum::general.delete') }}</a>
+                @if (!$post->isFirst)
+                    <a href="{{ route('forum.post.delete', $post->id) }}" data-confirm data-method="delete">{{ trans('forum::general.delete') }}</a>
+                @endif
             @endcan
         @endif
     </td>
@@ -40,13 +42,16 @@
         @endif
         <span class="pull-right">
             <a href="{{ $post->url }}">#{{ $post->id }}</a>
-            <span v-if="!locked && !deleted">
-                - <a href="{{ $post->replyRoute }}">{{ trans('forum::general.reply') }}</a>
-            </span>
+            - <a href="{{ $post->replyRoute }}">{{ trans('forum::general.reply') }}</a>
             @if (Request::fullUrl() != $post->route)
-                <span v-if="!deleted">
-                    - <a href="{{ $post->route }}">{{ trans('forum::posts.view') }}</a>
-                </span>
+                - <a href="{{ $post->route }}">{{ trans('forum::posts.view') }}</a>
+            @endif
+            @if (isset($thread))
+                @can ('deletePosts', $thread)
+                    @if (!$post->isFirst)
+                        <input type="checkbox" name="items[]" value="{{ $post->id }}">
+                    @endif
+                @endcan
             @endif
         </span>
     </td>

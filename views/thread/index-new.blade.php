@@ -58,4 +58,4 @@
             {{ trans('forum::threads.none_found') }}
         </p>
     @endif
-@overwrite
+@stop

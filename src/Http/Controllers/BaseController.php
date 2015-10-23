@@ -8,8 +8,10 @@ use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Collection;
 use Riari\Forum\API\Dispatcher;
 use Riari\Forum\Contracts\API\ReceiverContract;
+use Riari\Forum\Forum;
 
 abstract class BaseController extends Controller implements ReceiverContract
 {
@@ -60,5 +62,24 @@ abstract class BaseController extends Controller implements ReceiverContract
         }
 
         return $response->isNotFound() ? abort(404) : $response->getOriginalContent();
+    }
+
+    /**
+     * Helper: Bulk action response.
+     *
+     * @param  Collection  $models
+     * @param  string  $transFile
+     * @param  string  $transKey
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function bulkActionResponse(Collection $models, $transFile, $transKey)
+    {
+        if ($models->count()) {
+            Forum::alert('success', $transFile, $transKey, $models->count());
+        } else {
+            Forum::alert('warning', 'general', 'invalid_selection');
+        }
+
+        return redirect()->back();
     }
 }

@@ -26,6 +26,12 @@
             </form>
         @endcan
 
+        @can ('deletePosts', $thread)
+            <form action="{{ route('forum.bulk.post.update') }}" method="POST" data-actions-form>
+                {!! csrf_field() !!}
+                {!! method_field('delete') !!}
+        @endcan
+
         @can ('reply', $thread)
             <div class="row">
                 <div class="col-xs-4">
@@ -48,6 +54,11 @@
                     </th>
                     <th>
                         {{ trans_choice('forum::posts.post', 1) }}
+                        @can ('deletePosts', $thread)
+                            <span class="pull-right">
+                                <input type="checkbox" data-toggle-all>
+                            </span>
+                        @endcan
                     </th>
                 </tr>
             </thead>
@@ -57,6 +68,11 @@
                 @endforeach
             </tbody>
         </table>
+
+        @can ('deletePosts', $thread)
+                @include ('forum::thread.partials.post-actions')
+            </form>
+        @endcan
 
         {!! $thread->postsPaginated->render() !!}
 
@@ -75,4 +91,13 @@
             </div>
         @endcan
     </div>
-@overwrite
+@stop
+
+@section ('footer')
+    <script>
+    $('tr input[type=checkbox]').change(function () {
+        var postRow = $(this).closest('tr').prev('tr');
+        $(this).is(':checked') ? postRow.addClass('active') : postRow.removeClass('active');
+    });
+    </script>
+@stop
