@@ -53,6 +53,10 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
         $r->get('{id}', ['as' => 'fetch', 'uses' => 'CategoryController@fetch']);
         $r->delete('{id}', ['as' => 'delete', 'uses' => 'CategoryController@destroy']);
         $r->patch('{id}/restore', ['as' => 'restore', 'uses' => 'CategoryController@restore']);
+        $r->patch('{id}/enable-threads', ['as' => 'enable-threads', 'uses' => 'CategoryController@enableThreads']);
+        $r->patch('{id}/disable-threads', ['as' => 'disable-threads', 'uses' => 'CategoryController@disableThreads']);
+        $r->patch('{id}/make-public', ['as' => 'make-public', 'uses' => 'CategoryController@makePublic']);
+        $r->patch('{id}/make-private', ['as' => 'make-private', 'uses' => 'CategoryController@makePrivate']);
         $r->patch('{id}/move', ['as' => 'move', 'uses' => 'CategoryController@move']);
         $r->patch('{id}/rename', ['as' => 'rename', 'uses' => 'CategoryController@rename']);
         $r->patch('{id}/reorder', ['as' => 'reorder', 'uses' => 'CategoryController@reorder']);

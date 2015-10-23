@@ -21,7 +21,7 @@ class CategoryObserver extends BaseObserver
     public function restored($category)
     {
         // Restore any soft-deleted categories threads inside the category
-        $category->categories()->withTrashed()->restore();
+        $category->children()->withTrashed()->restore();
         $category->threads()->withTrashed()->restore();
     }
 }

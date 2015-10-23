@@ -22,6 +22,7 @@ return [
     'none'              => "None",
     'perma_delete'      => "Permanently delete",
     'posted'            => "Posted",
+    'private'           => "Private",
     'proceed'           => "Proceed",
     'quick_reply'       => "Quick reply",
     'rename'            => "Rename",

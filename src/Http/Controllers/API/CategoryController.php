@@ -44,13 +44,19 @@ class CategoryController extends BaseController
             $categories = $categories->withTrashed();
         }
 
-        $categories = $request->input('paginate') ? $categories->paginate() : $categories->get();
+        $categories = $categories->get()->filter(function ($category) {
+            if ($category->private) {
+                return Gate::allows('view', $category);
+            }
+
+            return true;
+        });
 
         return $this->response($categories);
     }
 
     /**
-     * GET: Return a model by ID.
+     * GET: Return a category by ID.
      *
      * @param  int  $id
      * @param  Request  $request
@@ -58,15 +64,19 @@ class CategoryController extends BaseController
      */
     public function fetch($id, Request $request)
     {
-        $model = $this->model();
+        $category = $this->model();
 
-        $model = Gate::allows('viewTrashedCategories') ? $model->withTrashed()->find($id) : $model->find($id);
+        $category = Gate::allows('viewTrashedCategories') ? $category->withTrashed()->find($id) : $category->find($id);
 
-        if (is_null($model) || !$model->exists) {
+        if (is_null($category) || !$category->exists) {
             return $this->notFoundResponse();
         }
 
-        return $this->response($model);
+        if ($category->private) {
+            $this->authorize('view', $category);
+        }
+
+        return $this->response($category);
     }
 
     /**
@@ -80,11 +90,13 @@ class CategoryController extends BaseController
         $this->authorize('createCategories');
 
         $this->validate($request, [
-            'title'     => ['required'],
-            'weight'    => ['required']
+            'title'             => ['required'],
+            'weight'            => ['required'],
+            'enable_threads'    => ['required'],
+            'private'           => ['required']
         ]);
 
-        $category = $this->model()->create($request->only(['category_id', 'title', 'weight', 'allows_threads']));
+        $category = $this->model()->create($request->only(['category_id', 'title', 'weight', 'enable_threads', 'private']));
 
         return $this->response($category, 201);
     }
@@ -120,6 +132,78 @@ class CategoryController extends BaseController
 
         return ($category)
             ? $this->updateAttributes($category, ['category_id' => $request->input('category_id')])
+            : $this->notFoundResponse();
+    }
+
+    /**
+     * PATCH: Enable threads in a category.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function enableThreads($id, Request $request)
+    {
+        $this->authorize('createCategories');
+
+        $category = $this->model()->where('enable_threads', 0)->find($id);
+
+        return ($category)
+            ? $this->updateAttributes($category, ['enable_threads' => 1])
+            : $this->notFoundResponse();
+    }
+
+    /**
+     * PATCH: Disable threads in a category.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function disableThreads($id, Request $request)
+    {
+        $this->authorize('createCategories');
+
+        $category = $this->model()->where('enable_threads', 1)->find($id);
+
+        return ($category)
+            ? $this->updateAttributes($category, ['enable_threads' => 0])
+            : $this->notFoundResponse();
+    }
+
+    /**
+     * PATCH: Make a category public.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function makePublic($id, Request $request)
+    {
+        $this->authorize('createCategories');
+
+        $category = $this->model()->where('private', 1)->find($id);
+
+        return ($category)
+            ? $this->updateAttributes($category, ['private' => 0])
+            : $this->notFoundResponse();
+    }
+
+    /**
+     * PATCH: Make a category private.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function makePrivate($id, Request $request)
+    {
+        $this->authorize('createCategories');
+
+        $category = $this->model()->where('private', 0)->find($id);
+
+        return ($category)
+            ? $this->updateAttributes($category, ['private' => 1])
             : $this->notFoundResponse();
     }
 

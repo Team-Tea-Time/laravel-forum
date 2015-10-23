@@ -100,12 +100,20 @@ class CategoryController extends BaseController
      */
     public function destroy($id, Request $request)
     {
-        $action = $request->input('action');
+        $this->validate($request, ['action' => 'in:delete,permadelete']);
 
-        $category = $this->api('category.delete', $id)->parameters($request->all())->delete();
+        $permanent = !config('forum.preferences.soft_deletes') || ($request->input('action') == 'permadelete');
+
+        $parameters = $request->all();
+
+        if ($permanent) {
+            $parameters += ['force' => 1];
+        }
+
+        $thread = $this->api('category.delete', $id)->parameters($parameters)->delete();
 
         Forum::alert('success', 'categories', 'deleted', 1);
 
-        return redirect()->route('forum.index');
+        return redirect($permanent ? config('forum.routing.root') : $category->route);
     }
 }

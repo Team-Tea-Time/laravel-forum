@@ -22,6 +22,7 @@ return [
     'none'              => "Inget",
     'perma_delete'      => "Radera permanent",
     'posted'            => "Publicerad",
+    'private'           => "Privat",
     'proceed'           => "Fortsätt",
     'quick_reply'       => "Snabbsvar",
     'rename'            => "Byt namn",

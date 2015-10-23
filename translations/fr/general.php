@@ -23,6 +23,7 @@ return [
     'perma_delete'      => "Supprimer définitivement",
     'posted'            => "Posté",
     'proceed'           => "Procéder",
+    'private'           => "Confidential",
     'quick_reply'       => "Réponse rapide",
     'rename'            => "Renommer",
     'reorder'           => "Réorganiser",

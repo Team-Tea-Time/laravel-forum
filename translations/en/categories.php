@@ -3,16 +3,18 @@
 return [
 
     'actions'               => "Category actions",
-    'allow_threads'         => "Allow threads",
     'category'              => "Category|Categories",
     'create'                => "Create category",
     'created'               => "Category created",
     'deleted'               => "Category deleted|Categories deleted",
-    'none_found'            => "No categories found",
+    'disable_threads'       => "Disable threads",
+    'enable_threads'        => "Enable threads",
+    'make_private'          => "Make private",
+    'make_public'           => "Make public",
     'perma_deleted'         => "Category permanently deleted|Categories permanently deleted",
     'restored'              => "Category restored|Categories restored",
     'subcategories'         => "Subcategories",
-    'threads_disallowed'    => "You can't create threads in this category",
+    'threads_disabled'      => "New thread creation is disabled in this category",
     'updated'               => "Category updated|Categories updated",
 
 ];

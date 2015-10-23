@@ -46,9 +46,11 @@
 
         <div class="row">
             <div class="col-xs-4">
-                @can ('createThreads', $category)
-                    <a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
-                @endcan
+                @if ($category->threadsEnabled)
+                    @can ('createThreads', $category)
+                        <a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
+                    @endcan
+                @endif
             </div>
             <div class="col-xs-8 text-right">
                 {!! $category->threadsPaginated->render() !!}
@@ -61,7 +63,7 @@
                 {!! method_field('delete') !!}
         @endcan
 
-        @if ($category->threadsAllowed)
+        @if ($category->threadsEnabled)
             <table class="table table-thread">
                 <thead>
                     <tr>
@@ -139,9 +141,11 @@
 
         <div class="row">
             <div class="col-xs-4">
-                @can ('createThreads', $category)
-                    <a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
-                @endcan
+                @if ($category->threadsEnabled)
+                    @can ('createThreads', $category)
+                        <a href="{{ $category->newThreadRoute }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
+                    @endcan
+                @endif
             </div>
             <div class="col-xs-8 text-right">
                 {!! $category->threadsPaginated->render() !!}

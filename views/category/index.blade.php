@@ -30,12 +30,6 @@
                     @foreach ($category->children as $subcategory)
                         @include ('forum::category.partials.list', ['category' => $subcategory])
                     @endforeach
-                @else
-                    <tr>
-                        <th colspan="5">
-                            {{ trans('forum::categories.none_found') }}
-                        </th>
-                    </tr>
                 @endif
             </tbody>
         </table>

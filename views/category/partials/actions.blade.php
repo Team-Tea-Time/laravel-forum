@@ -18,6 +18,18 @@
                     @endcan
 
                     @if (!$category->trashed())
+                        @can ('createCategories')
+                            @if ($category->threadsEnabled)
+                                <option value="disable-threads">{{ trans('forum::categories.disable_threads') }}</option>
+                            @else
+                                <option value="enable-threads">{{ trans('forum::categories.enable_threads') }}</option>
+                            @endif
+                            @if ($category->private)
+                                <option value="make-public">{{ trans('forum::categories.make_public') }}</option>
+                            @else
+                                <option value="make-private">{{ trans('forum::categories.make_private') }}</option>
+                            @endif
+                        @endcan
                         @can ('moveCategories')
                             <option value="move">{{ trans('forum::general.move') }}</option>
                             <option value="reorder">{{ trans('forum::general.reorder') }}</option>

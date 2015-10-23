@@ -14,11 +14,12 @@ return [
 
     'rules' => [
         'author_id'         => ['integer'],
-        'allows_threads'    => ['boolean'],
+        'enable_threads'    => ['boolean'],
         'category_id'       => ['integer'],
         'content'           => ['min:5'],
         'locked'            => ['boolean'],
         'pinned'            => ['boolean'],
+        'private'           => ['boolean'],
         'subtitle'          => ['string', 'min:5'],
         'thread_id'         => ['integer', 'exists:forum_threads,id'],
         'title'             => ['string', 'min:5'],

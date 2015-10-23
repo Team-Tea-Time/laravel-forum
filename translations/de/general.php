@@ -22,6 +22,7 @@ return [
     'none'              => "Keine",
     'perma_delete'      => "Endgültig löschen",
     'posted'            => "Geschrieben am",
+    'private'           => "Geheim",
     'proceed'           => "Vorgehen",
     'quick_reply'       => "Schnelle Antwort",
     'rename'            => "Umbenennen",

@@ -22,6 +22,7 @@ return [
     'none'              => "Ninguno",
     'perma_delete'      => "Eliminar permanentemente",
     'posted'            => "Publicado",
+    'private'           => "Confidencial",
     'proceed'           => "Proceder",
     'quick_reply'       => "Respuesta rápida",
     'rename'            => "Rebautizar",

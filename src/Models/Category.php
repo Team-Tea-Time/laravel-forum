@@ -18,7 +18,7 @@ class Category extends BaseModel
      */
     protected $table        = 'forum_categories';
     public    $timestamps   = false;
-    protected $fillable     = ['category_id', 'title', 'subtitle', 'weight', 'allows_threads'];
+    protected $fillable     = ['category_id', 'title', 'subtitle', 'weight', 'enable_threads', 'private'];
 
     /**
      * Create a new category model instance.
@@ -85,6 +85,26 @@ class Category extends BaseModel
     }
 
     /**
+     * Attribute: Child categories.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getChildrenAttribute()
+    {
+        $children = $this->children()->get();
+
+        $children = $children->filter(function ($category) {
+            if ($category->private) {
+                return Gate::allows('view', $category);
+            }
+
+            return true;
+        });
+
+        return $children;
+    }
+
+    /**
      * Attribute: Paginated threads.
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
@@ -117,13 +137,13 @@ class Category extends BaseModel
     }
 
     /**
-     * Attribute: Threads allowed.
+     * Attribute: New threads enabled.
      *
      * @return bool
      */
-    public function getThreadsAllowedAttribute()
+    public function getThreadsEnabledAttribute()
     {
-        return $this->allows_threads;
+        return $this->enable_threads;
     }
 
     /**

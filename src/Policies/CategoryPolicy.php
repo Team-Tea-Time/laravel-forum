@@ -80,4 +80,16 @@ class CategoryPolicy
     {
         return true;
     }
+
+    /**
+     * Permission: View category.
+     *
+     * @param  object  $user
+     * @param  Category  $category
+     * @return bool
+     */
+    public function view($user, Category $category)
+    {
+        return true;
+    }
 }

@@ -17,20 +17,14 @@ class UpdateForumTableCategories extends Migration
             $table->renameColumn('parent_category', 'category_id');
             $table->integer('category_id')->default(0)->change();
             $table->string('subtitle')->nullable()->change();
-            $table->integer('weight')->nullable()->change();
-            $table->boolean('allows_threads');
+            $table->integer('weight')->default(0)->change();
+
+            $table->boolean('enable_threads')->default(0);
+            $table->boolean('private')->default(0);
 
             $table->timestamps();
             $table->softDeletes();
         });
-
-        DB::table('forum_categories')->insert(
-            [
-                ['category_id' => null, 'title' => 'Top level category', 'subtitle' => 'Contains categories and threads', 'weight' => 0, 'allows_threads' => 1],
-                ['category_id' => 1, 'title' => 'Level 1 child category', 'subtitle' => 'Contains threads', 'weight' => 0, 'allows_threads' => 1],
-                ['category_id' => 2, 'title' => 'Level 2 child category', 'subtitle' => 'Contains more threads', 'weight' => 1, 'allows_threads' => 1]
-            ]
-        );
     }
 
     /**

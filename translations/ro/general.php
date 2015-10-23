@@ -22,6 +22,7 @@ return [
     'none'              => "Nici unul",
     'perma_delete'      => "Șterge definitiv",
     'posted'            => "Adăugat",
+    'private'           => "Privat",
     'proceed'           => "Continua",
     'quick_reply'       => "Răspuns rapid",
     'rename'            => "Redenumiți",

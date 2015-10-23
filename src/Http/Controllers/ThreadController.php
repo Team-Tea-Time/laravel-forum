@@ -73,7 +73,7 @@ class ThreadController extends BaseController
 
         $categories = [];
         if (Gate::allows('moveThreads', $category)) {
-            $categories = $this->api('category.index')->parameters(['where' => ['category_id' => null]], ['where' => ['allows_threads' => 1]])->get();
+            $categories = $this->api('category.index')->parameters(['where' => ['category_id' => null]], ['where' => ['enable_threads' => 1]])->get();
         }
 
         return view('forum::thread.show', compact('categories', 'category', 'thread'));
@@ -89,8 +89,8 @@ class ThreadController extends BaseController
     {
         $category = $this->api('category.fetch', $categoryID)->get();
 
-        if (!$category->threadsAllowed) {
-            Forum::alert('warning', trans('forum::categories.threads_disallowed'));
+        if (!$category->threadsEnabled) {
+            Forum::alert('warning', 'categories', 'threads_disabled');
 
             return redirect($category->route);
         }
@@ -110,8 +110,8 @@ class ThreadController extends BaseController
     {
         $category = $this->api('category.fetch', $request->route('category'))->get();
 
-        if (!$category->threadsAllowed) {
-            Forum::alert('warning', trans('forum::categories.threads_disallowed'));
+        if (!$category->threadsEnabled) {
+            Forum::alert('warning', 'categories', 'threads_disabled');
 
             return redirect($category->route);
         }

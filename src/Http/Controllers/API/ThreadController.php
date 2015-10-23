@@ -58,15 +58,22 @@ class ThreadController extends BaseController
      */
     public function fetch($id, Request $request)
     {
-        if ($request->input('include_deleted')) {
-            $thread = $this->model()->withTrashed()->find($id);
+        $thread = $this->model();
+        $thread = $request->input('include_deleted') ? $thread->withTrashed()->find($id) : $thread->find($id);
 
-            if ($thread && Gate::allows('delete', $thread)) {
-                return $this->response($thread);
-            }
+        if (is_null($thread) || !$thread->exists) {
+            return $this->notFoundResponse();
         }
 
-        return parent::fetch($id, $request);
+        if ($thread->trashed()) {
+            $this->authorize('delete', $thread);
+        }
+
+        if ($thread->category->private) {
+            $this->authorize('view', $thread->category);
+        }
+
+        return $this->response($thread);
     }
 
     /**
@@ -87,7 +94,7 @@ class ThreadController extends BaseController
 
         $this->authorize('createThreads', $category);
 
-        if (!$category->threadsAllowed) {
+        if (!$category->threadsEnabled) {
             return $this->buildFailedValidationResponse(
                 $request,
                 ['category_id' => "The specified category does not allow threads."]

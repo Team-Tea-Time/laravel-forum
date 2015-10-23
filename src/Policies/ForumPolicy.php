@@ -25,18 +25,18 @@ class ForumPolicy
      */
     public function manageCategories($user)
     {
-        return $this->renameCategories($user) ||
+        return $this->deleteCategories($user) ||
                $this->moveCategories($user) ||
-               $this->deleteCategories($user);
+               $this->renameCategories($user);
     }
 
     /**
-     * Permission: Rename categories.
+     * Permission: Delete categories.
      *
      * @param  object  $user
      * @return bool
      */
-    public function renameCategories($user)
+    public function deleteCategories($user)
     {
         return true;
     }
@@ -53,12 +53,12 @@ class ForumPolicy
     }
 
     /**
-     * Permission: Delete categories.
+     * Permission: Rename categories.
      *
      * @param  object  $user
      * @return bool
      */
-    public function deleteCategories($user)
+    public function renameCategories($user)
     {
         return true;
     }
