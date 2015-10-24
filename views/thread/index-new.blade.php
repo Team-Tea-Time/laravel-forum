@@ -48,11 +48,14 @@
             </tbody>
         </table>
 
-        @if (auth()->check())
+        @can ('markNewThreadsAsRead')
             <div class="text-center">
-                <a href="{{ URL::route('forum.post.mark.read') }}"class="btn btn-primary btn-small" data-confirm data-method="post">{{ trans('forum::general.mark_read') }}</a>
+                <form action="{{ route('forum.mark-new') }}" method="POST" data-confirm>
+                    {!! method_field('patch') !!}
+                    <button class="btn btn-primary btn-small">{{ trans('forum::general.mark_read') }}</button>
+                </form>
             </div>
-        @endif
+        @endcan
     @else
         <p class="text-center">
             {{ trans('forum::threads.none_found') }}

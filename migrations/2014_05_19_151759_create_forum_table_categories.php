@@ -17,7 +17,7 @@ class CreateForumTableCategories extends Migration
             $table->increments('id');
             $table->integer('parent_category')->unsigned();
             $table->string('title');
-            $table->string('subtitle');
+            $table->string('description');
             $table->integer('weight');
         });
     }

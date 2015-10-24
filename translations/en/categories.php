@@ -11,6 +11,8 @@ return [
     'enable_threads'        => "Enable threads",
     'make_private'          => "Make private",
     'make_public'           => "Make public",
+    'mark_read'             => "Mark threads in this category as read",
+    'marked_read'           => "New/updated threads in :category have been marked as read",
     'perma_deleted'         => "Category permanently deleted|Categories permanently deleted",
     'restored'              => "Category restored|Categories restored",
     'subcategories'         => "Subcategories",

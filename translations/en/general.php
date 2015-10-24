@@ -8,6 +8,7 @@ return [
     'create'            => "Create",
     'delete'            => "Delete",
     'deleted'           => "Deleted",
+    'description'       => "Description",
     'edit'              => "Edit",
     'editing'           => "You're editing :item",
     'generic_confirm'   => "Are you sure?",

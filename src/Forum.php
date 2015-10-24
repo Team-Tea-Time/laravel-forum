@@ -16,10 +16,10 @@ class Forum
      * @param  string  $transCount
      * @return void
      */
-    public static function alert($type, $transFile, $transKey, $transCount = 1)
+    public static function alert($type, $transFile, $transKey, $transCount = 1, $transParameters = [])
     {
         $processAlert = config('forum.integration.process_alert');
-        $processAlert($type, self::trans($transFile, $transKey, $transCount));
+        $processAlert($type, self::trans($transFile, $transKey, $transCount, $transParameters));
     }
 
     /**
@@ -41,8 +41,8 @@ class Forum
      * @param  int  $count
      * @return string
      */
-    public static function trans($file, $key, $count = 1)
+    public static function trans($file, $key, $count = 1, $parameters = [])
     {
-        return trans_choice("forum::{$file}.{$key}", $count);
+        return trans_choice("forum::{$file}.{$key}", $count, $parameters);
     }
 }

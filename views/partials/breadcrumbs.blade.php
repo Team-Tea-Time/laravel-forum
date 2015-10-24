@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-    <li><a href="/{{ config('forum.routing.root') }}">{{ trans('forum::general.index') }}</a></li>
+    <li><a href="{{ url(config('forum.routing.root')) }}">{{ trans('forum::general.index') }}</a></li>
     @if (isset($category) && $category)
         @include ('forum::partials.breadcrumb-categories', ['category' => $category])
     @endif

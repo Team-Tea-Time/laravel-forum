@@ -82,7 +82,7 @@ class CategoryPolicy
     }
 
     /**
-     * Permission: View category.
+     * Permission: View category. Only takes effect for 'private' categories.
      *
      * @param  object  $user
      * @param  Category  $category

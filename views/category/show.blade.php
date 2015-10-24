@@ -12,6 +12,9 @@
                 <span class="label label-danger">{{ trans('forum::general.deleted') }}</span>
             @endif
             {{ $category->title }}
+            @if ($category->description)
+                <small>{{ $category->description }}</small>
+            @endif
         </h2>
 
         <hr>
@@ -151,5 +154,16 @@
                 {!! $category->threadsPaginated->render() !!}
             </div>
         </div>
+
+        @can ('markNewThreadsAsRead')
+            <hr>
+            <div class="text-center">
+                <form action="{{ route('forum.mark-new') }}" method="POST" data-confirm>
+                    {!! method_field('patch') !!}
+                    <input type="hidden" name="category_id" value="{{ $category->id }}">
+                    <button class="btn btn-default btn-small">{{ trans('forum::categories.mark_read') }}</button>
+                </form>
+            </div>
+        @endcan
     </div>
 @stop

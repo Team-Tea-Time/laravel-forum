@@ -4,8 +4,8 @@
 $r->get('/', ['as' => 'index', 'uses' => "{$controllers['category']}@index"]);
 
 // New/updated threads
-$r->get('new', ['as' => 'new.index', 'uses' => "{$controllers['thread']}@indexNew"]);
-$r->patch('new/read', ['as' => 'new.mark-read', 'uses' => "{$controllers['thread']}@markRead"]);
+$r->get('new', ['as' => 'index-new', 'uses' => "{$controllers['thread']}@indexNew"]);
+$r->patch('new', ['as' => 'mark-new', 'uses' => "{$controllers['thread']}@markNew"]);
 
 // Categories
 $r->group(['prefix' => '{category}-{category_slug}'], function ($r) use ($controllers)
@@ -66,12 +66,12 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
     $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
     {
         $r->get('/', ['as' => 'index', 'uses' => 'ThreadController@index']);
+        $r->get('new', ['as' => 'index-new', 'uses' => 'ThreadController@indexNew']);
+        $r->patch('new', ['as' => 'mark-new', 'uses' => 'ThreadController@markNew']);
         $r->post('/', ['as' => 'store', 'uses' => 'ThreadController@store']);
         $r->get('{id}', ['as' => 'fetch', 'uses' => 'ThreadController@fetch']);
         $r->delete('{id}', ['as' => 'delete', 'uses' => 'ThreadController@destroy']);
         $r->patch('{id}/restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
-        $r->get('new', ['as' => 'index-new', 'uses' => 'ThreadController@indexNew']);
-        $r->patch('new/read', ['as' => 'mark-new', 'uses' => 'ThreadController@markNew']);
         $r->patch('{id}/move', ['as' => 'move', 'uses' => 'ThreadController@move']);
         $r->patch('{id}/lock', ['as' => 'lock', 'uses' => 'ThreadController@lock']);
         $r->patch('{id}/unlock', ['as' => 'unlock', 'uses' => 'ThreadController@unlock']);

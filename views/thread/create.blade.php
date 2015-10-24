@@ -16,7 +16,7 @@
             <textarea name="content" class="form-control">{{ old('content') }}</textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">{{ trans('forum::general.create') }}</button>
+        <button type="submit" class="btn btn-success pull-right">{{ trans('forum::general.create') }}</button>
         <a href="{{ URL::previous() }}" class="btn btn-default">{{ trans('forum::general.cancel') }}</a>
     </form>
 @stop

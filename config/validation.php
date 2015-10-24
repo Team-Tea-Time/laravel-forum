@@ -20,7 +20,7 @@ return [
         'locked'            => ['boolean'],
         'pinned'            => ['boolean'],
         'private'           => ['boolean'],
-        'subtitle'          => ['string', 'min:5'],
+        'description'       => ['string'],
         'thread_id'         => ['integer', 'exists:forum_threads,id'],
         'title'             => ['string', 'min:5'],
         'weight'            => ['integer'],

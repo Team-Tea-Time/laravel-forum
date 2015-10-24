@@ -147,12 +147,13 @@ class ForumServiceProvider extends ServiceProvider
      */
     public function registerPolicies(GateContract $gate)
     {
-        foreach (config('forum.integration.policies') as $key => $value) {
-            $gate->policy($key, $value);
+        $forumPolicy = config('forum.integration.policies.forum');
+        foreach (get_class_methods(new $forumPolicy()) as $method) {
+            $gate->define($method, "{$forumPolicy}@{$method}");
         }
 
-        foreach (get_class_methods(new \Riari\Forum\Policies\ForumPolicy) as $method) {
-            $gate->define($method, "Riari\Forum\Policies\ForumPolicy@{$method}");
+        foreach (config('forum.integration.policies.model') as $model => $policy) {
+            $gate->policy($model, $policy);
         }
     }
 

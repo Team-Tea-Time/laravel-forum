@@ -96,7 +96,7 @@ class CategoryController extends BaseController
             'private'           => ['required']
         ]);
 
-        $category = $this->model()->create($request->only(['category_id', 'title', 'weight', 'enable_threads', 'private']));
+        $category = $this->model()->create($request->only(['category_id', 'title', 'description', 'weight', 'enable_threads', 'private']));
 
         return $this->response($category, 201);
     }

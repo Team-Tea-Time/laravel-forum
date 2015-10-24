@@ -16,7 +16,7 @@ class ThreadPolicy
      */
     public function deletePosts($user, Thread $thread)
     {
-        return true;
+        return false;
     }
 
     /**

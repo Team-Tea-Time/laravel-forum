@@ -52,7 +52,9 @@
             </div>
             <div class="form-group hidden" data-depends="rename">
                 <label for="new-title">{{ trans('forum::general.title') }}</label>
-                <input type="text" name="title" value="{{ $category->title }}" class="form-control">
+                <input type="text" id="new-title" name="title" value="{{ $category->title }}" class="form-control">
+                <label for="new-description">{{ trans('forum::general.description') }}</label>
+                <input type="text" id="new-description" name="description" value="{{ $category->description }}" class="form-control">
             </div>
         </div>
         <div class="panel-footer clearfix">

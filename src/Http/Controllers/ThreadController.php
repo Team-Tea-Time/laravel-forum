@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Events\UserCreatingThread;
-use Riari\Forum\Events\UserMarkingThreadsRead;
+use Riari\Forum\Events\UserMarkingNew;
 use Riari\Forum\Events\UserViewingNew;
 use Riari\Forum\Events\UserViewingThread;
 use Riari\Forum\Forum;
@@ -34,22 +34,30 @@ class ThreadController extends BaseController
 
         event(new UserViewingNew($threads));
 
-        return view('forum::thread.index-new', ['threads' => $threads]);
+        return view('forum::thread.index-new', compact('threads'));
     }
 
     /**
      * PATCH: Mark new/updated threads as read for the current user.
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function markRead()
+    public function markNew(Request $request)
     {
-        if (auth()->check()) {
-            event(new UserMarkingNew);
+        $threads = $this->api('thread.mark-new')->parameters($request->only('category_id'))->patch();
 
-            $threads = $this->api('thread.new.mark')->patch();
+        event(new UserMarkingNew);
 
-            Forum::alert('success', 'threads', 'marked_read');
+        if ($request->has('category_id')) {
+            $category = $this->api('category.fetch', $request->input('category_id'))->get();
+
+            if ($category) {
+                Forum::alert('success', 'categories', 'marked_read', 0, ['category' => $category->title]);
+                return redirect($category->route);
+            }
         }
 
+        Forum::alert('success', 'threads', 'marked_read');
         return redirect(config('forum.routing.root'));
     }
 

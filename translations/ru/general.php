@@ -8,6 +8,7 @@ return [
     'create'            => "Создайте",
     'delete'            => "Удалить",
     'deleted'           => "Удаленный",
+    'description'       => "Описание",
     'edit'              => "Редактировать",
     'editing'           => "Вы редактируете :item",
     'generic_confirm'   => "Вы уверены?",

@@ -18,7 +18,7 @@ class Category extends BaseModel
      */
     protected $table        = 'forum_categories';
     public    $timestamps   = false;
-    protected $fillable     = ['category_id', 'title', 'subtitle', 'weight', 'enable_threads', 'private'];
+    protected $fillable     = ['category_id', 'title', 'description', 'weight', 'enable_threads', 'private'];
     protected $appends      = ['route'];
 
     /**

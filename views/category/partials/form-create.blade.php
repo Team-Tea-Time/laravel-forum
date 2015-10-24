@@ -9,8 +9,12 @@
         <div class="collapse create-category">
             <div class="panel-body">
                 <div class="form-group">
-                    <label for="new-title">{{ trans('forum::general.title') }}</label>
+                    <label for="title">{{ trans('forum::general.title') }}</label>
                     <input type="text" name="title" value="{{ old('title') }}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="description">{{ trans('forum::general.description') }}</label>
+                    <input type="text" name="description" value="{{ old('description') }}" class="form-control">
                 </div>
                 <div class="form-group">
                     <label for="category-id">{{ trans_choice('forum::categories.category', 1) }}</label>

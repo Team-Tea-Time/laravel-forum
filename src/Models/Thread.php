@@ -85,7 +85,10 @@ class Thread extends BaseModel
      */
     public function scopeRecent($query)
     {
-        $cutoff = config('forum.preferences.old_thread_threshold');
+        $time = time();
+        $age = strtotime(config('forum.preferences.old_thread_threshold'), 0);
+        $cutoff = $time - $age;
+
         return $query->where('updated_at', '>', date('Y-m-d H:i:s', strtotime($cutoff)))
             ->orderBy('updated_at', 'desc');
     }
@@ -295,5 +298,7 @@ class Thread extends BaseModel
                 $this->reader->touch();
             }
         }
+
+        return $this;
     }
 }

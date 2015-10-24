@@ -110,7 +110,7 @@ class CategoryController extends BaseController
             $parameters += ['force' => 1];
         }
 
-        $thread = $this->api('category.delete', $id)->parameters($parameters)->delete();
+        $category = $this->api('category.delete', $id)->parameters($parameters)->delete();
 
         Forum::alert('success', 'categories', 'deleted', 1);
 

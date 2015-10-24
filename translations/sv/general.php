@@ -8,6 +8,7 @@ return [
     'create'            => "Skapa",
     'delete'            => "Radera",
     'deleted'           => "Utgår",
+    'description'       => "Beskrivning",
     'edit'              => "Ändra",
     'editing'           => "Du redigerar :item",
     'generic_confirm'   => "Är du säker?",

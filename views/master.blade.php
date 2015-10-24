@@ -48,6 +48,7 @@
     var checkboxes = $('table tbody input[type=checkbox]');
     var actions = $('[data-actions]');
     var forms = $('[data-actions-form]');
+    var confirmString = "{{ trans('forum::general.generic_confirm') }}";
 
     function setToggleStates() {
         checkboxes.prop('checked', toggle.is(':checked')).change();
@@ -96,10 +97,14 @@
         var action = $(this).find('[data-actions]').find(':selected');
 
         if (action.is('[data-confirm]')) {
-            return confirm("{{ trans('forum::general.generic_confirm') }}");
+            return confirm(confirmString);
         }
 
         return true;
+    });
+
+    $('form[data-confirm]').submit(function () {
+        return confirm(confirmString);
     });
     </script>
 

@@ -140,7 +140,7 @@ class ThreadController extends BaseController
     }
 
     /**
-     * GET: return an index of new/updated threads for the current user, optionally filtered by category ID.
+     * GET: Return an index of new/updated threads for the current user, optionally filtered by category ID.
      *
      * @param  Request  $request
      * @return JsonResponse|Response
@@ -154,6 +154,8 @@ class ThreadController extends BaseController
         if ($request->has('category_id')) {
             $threads = $threads->where('category_id', $request->input('category_id'));
         }
+
+        $threads = $threads->get();
 
         // If the user is logged in, filter the threads according to read status
         if (auth()->check()) {
@@ -169,27 +171,28 @@ class ThreadController extends BaseController
             return Gate::allows('view', $thread->category);
         });
 
-        $threads = $this->model()->where('category_id', $request->input('category_id'))->get();
-
         return $this->response($threads);
     }
 
     /**
-     * PATCH: mark the current user's new/updated threads as read, optionally limited by category ID.
+     * PATCH: Mark the current user's new/updated threads as read, optionally limited by category ID.
      *
+     * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function markNew()
+    public function markNew(Request $request)
     {
-        $threads = $this->indexNew();
+        $this->authorize('markNewThreadsAsRead');
 
-        if (auth()->check()) {
-            foreach ($threads as $thread) {
-                $thread->markAsRead(auth()->user()->id);
-            }
+        $threads = $this->indexNew($request)->getOriginalContent();
 
-            $threads = $this->indexNew();
-        }
+        $primaryKey = auth()->user()->getKeyName();
+        $userID = auth()->user()->{$primaryKey};
+
+        $threads->transform(function ($thread, $key) use ($userID)
+        {
+            return $thread->markAsRead($userID);
+        });
 
         return $this->response($threads, $this->trans('marked_read'));
     }

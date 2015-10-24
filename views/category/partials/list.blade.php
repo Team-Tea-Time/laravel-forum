@@ -4,7 +4,7 @@
         @if ($category->trashed())
             <span class="label label-danger">{{ trans('forum::general.deleted') }}</span>
         @endif
-        <span class="text-muted">{{ $category->subtitle }}</span>
+        <span class="text-muted">{{ $category->description }}</span>
     </td>
     @if ($category->threadsEnabled)
         <td>{{ $category->threadCount }}</td>

@@ -64,6 +64,17 @@ class ForumPolicy
     }
 
     /**
+     * Permission: Mark new/updated threads as read.
+     *
+     * @param  object  $user
+     * @return bool
+     */
+    public function markNewThreadsAsRead($user)
+    {
+        return true;
+    }
+
+    /**
      * Permission: View trashed categories.
      *
      * @param  object  $user

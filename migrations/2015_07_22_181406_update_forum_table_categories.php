@@ -17,6 +17,7 @@ class UpdateForumTableCategories extends Migration
             $table->renameColumn('parent_category', 'category_id');
             $table->integer('category_id')->default(0)->change();
             $table->string('subtitle')->nullable()->change();
+            $table->renameColumn('subtitle', 'description');
             $table->integer('weight')->default(0)->change();
 
             $table->boolean('enable_threads')->default(0);
