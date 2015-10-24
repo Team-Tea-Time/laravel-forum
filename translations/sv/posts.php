@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'       => "Inlägg åtgärder",
     'created'       => "Inlägg som skapas",
     'deleted'       => "Inlägg raderad|Inlägg raderad",
     'edit'          => "Redigera inlägg",

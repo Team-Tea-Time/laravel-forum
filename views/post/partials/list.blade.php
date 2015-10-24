@@ -28,11 +28,6 @@
             @can ('edit', $post)
                 <a href="{{ $post->editRoute }}">{{ trans('forum::general.edit') }}</a>
             @endcan
-            @can ('delete', $post)
-                @if (!$post->isFirst)
-                    <a href="{{ route('forum.post.delete', $post->id) }}" data-confirm data-method="delete">{{ trans('forum::general.delete') }}</a>
-                @endif
-            @endcan
         @endif
     </td>
     <td class="text-muted">
@@ -42,7 +37,9 @@
         @endif
         <span class="pull-right">
             <a href="{{ $post->url }}">#{{ $post->id }}</a>
-            - <a href="{{ $post->replyRoute }}">{{ trans('forum::general.reply') }}</a>
+            @if (!$post->trashed())
+                - <a href="{{ $post->replyRoute }}">{{ trans('forum::general.reply') }}</a>
+            @endif
             @if (Request::fullUrl() != $post->route)
                 - <a href="{{ $post->route }}">{{ trans('forum::posts.view') }}</a>
             @endif

@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'       => "Entrag Aktionen",
     'created'       => "Eintrag erstellt",
     'deleted'       => "Eintrag gelöscht|Einträge gelöscht",
     'edit'          => "Eintrag bearbeiten",

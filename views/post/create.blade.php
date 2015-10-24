@@ -3,7 +3,7 @@
 @section ('content')
     <h2>{{ trans('forum::general.new_reply') }} ({{ $thread->title }})</h2>
 
-    @if (!is_null($post))
+    @if (!is_null($post) && !$post->trashed())
         <h3>{{ trans('forum::general.replying_to', ['item' => $post->authorName]) }}...</h3>
 
         @include ('forum::post.partials.excerpt')

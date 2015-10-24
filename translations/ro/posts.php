@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'       => "Acțiuni mesaj",
     'created'       => "Mesajul creat",
     'deleted'       => "Mesaj șters|Mesaje șterse",
     'edit'          => "Editează mesaj",

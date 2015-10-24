@@ -104,8 +104,9 @@ class PostController extends BaseController
         $this->authorize($post);
 
         $thread = $post->thread;
+        $category = $post->thread->category;
 
-        return view('forum::post.edit', compact('thread', 'post'));
+        return view('forum::post.edit', compact('category', 'thread', 'post'));
     }
 
     /**
@@ -126,6 +127,30 @@ class PostController extends BaseController
         Forum::alert('success', 'posts', 'updated');
 
         return redirect($post->url);
+    }
+
+    /**
+     * DELETE: Delete a post.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($id, Request $request)
+    {
+        $permanent = !config('forum.preferences.soft_deletes');
+
+        $parameters = $request->all();
+
+        if ($permanent) {
+            $parameters += ['force' => 1];
+        }
+
+        $post = $this->api('post.delete', $id)->parameters($parameters)->delete();
+
+        Forum::alert('success', 'posts', 'deleted', 1);
+
+        return redirect($post->thread->route);
     }
 
     /**

@@ -28,6 +28,6 @@ class PostPolicy
      */
     public function delete($user, Post $post)
     {
-        return Gate::forUser($user)->enable_threads('deletePosts', $post->thread) || $user->id === $post->user_id;
+        return Gate::forUser($user)->allows('deletePosts', $post->thread) || $user->id === $post->user_id;
     }
 }

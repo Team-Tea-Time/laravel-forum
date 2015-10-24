@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'       => "Azioni post",
     'created'       => "Post creato",
     'deleted'       => "Post eliminato|Post eliminati",
     'edit'          => "Modifica post",

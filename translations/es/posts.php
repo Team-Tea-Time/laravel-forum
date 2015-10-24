@@ -2,6 +2,7 @@
 
 return [
 
+    'actions'       => "Acciones de Publicación",
     'created'       => "Publicación creado",
     'deleted'       => "Publicación eliminada|Publicaciones eliminada",
     'edit'          => "Editar publicación",

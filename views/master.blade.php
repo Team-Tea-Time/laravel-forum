@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta id="token" name="token" content="{{ csrf_token() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>
         @if (isset($thread))
@@ -95,7 +95,7 @@
     forms.submit(function () {
         var action = $(this).find('[data-actions]').find(':selected');
 
-        if (action.attr('data-confirm')) {
+        if (action.is('[data-confirm]')) {
             return confirm("{{ trans('forum::general.generic_confirm') }}");
         }
 

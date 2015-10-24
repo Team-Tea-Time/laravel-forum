@@ -19,6 +19,7 @@ class Post extends BaseModel
     protected $fillable     = ['thread_id', 'author_id', 'post_id', 'content'];
     protected $guarded      = ['id'];
     protected $with         = ['author'];
+    protected $appends      = ['route'];
 
     /**
      * Create a new post model instance.
@@ -48,7 +49,7 @@ class Post extends BaseModel
      */
     public function parent()
     {
-        return $this->belongsTo(Post::class, 'post_id')->withTrashed();
+        return $this->belongsTo(Post::class, 'post_id');
     }
 
     /**
