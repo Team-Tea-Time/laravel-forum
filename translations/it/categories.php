@@ -13,7 +13,6 @@ return [
     'make_public'           => "Rendere pubblico",
     'mark_read'             => "Segna discussioni in questa categoria come letti",
     'marked_read'           => "Nuove discussioni / aggiornati a :category sono stati contrassegnati come letto",
-    'perma_deleted'         => "Categoria eliminati in modo permanente|Categorie eliminati definitivamente",
     'restored'              => "Categoria restaurato|Categorie restaurato",
     'subcategories'         => "Sotto-categorie",
     'threads_disabled'      => "Nuova creazione discussione è disabilitato in questa categoria",

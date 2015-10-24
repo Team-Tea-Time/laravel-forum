@@ -2,6 +2,7 @@
 
 namespace Riari\Forum\Policies;
 
+use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Models\Category;
 
 class CategoryPolicy
@@ -28,7 +29,7 @@ class CategoryPolicy
     public function manageThreads($user, Category $category)
     {
         return $this->deleteThreads($user, $category) ||
-               $this->moveThreads($user, $category) ||
+               $this->moveThreadsFrom($user, $category) ||
                $this->lockThreads($user, $category) ||
                $this->pinThreads($user, $category);
     }
@@ -46,15 +47,27 @@ class CategoryPolicy
     }
 
     /**
+     * Permission: Move threads from category.
+     *
+     * @param  object  $user
+     * @param  Category  $category
+     * @return bool
+     */
+    public function moveThreadsFrom($user, Category $category)
+    {
+        return true;
+    }
+
+    /**
      * Permission: Move threads to category.
      *
      * @param  object  $user
      * @param  Category  $category
      * @return bool
      */
-    public function moveThreads($user, Category $category)
+    public function moveThreadsTo($user, Category $category)
     {
-        return true;
+        return $category->threadsEnabled;
     }
 
     /**
@@ -91,5 +104,17 @@ class CategoryPolicy
     public function view($user, Category $category)
     {
         return true;
+    }
+
+    /**
+     * Permission: Delete category.
+     *
+     * @param  object  $user
+     * @param  Category  $category
+     * @return bool
+     */
+    public function delete($user, Category $category)
+    {
+        return $category->children->isEmpty() && $category->threads->isEmpty();
     }
 }

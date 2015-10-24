@@ -52,7 +52,6 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
         $r->post('/', ['as' => 'store', 'uses' => 'CategoryController@store']);
         $r->get('{id}', ['as' => 'fetch', 'uses' => 'CategoryController@fetch']);
         $r->delete('{id}', ['as' => 'delete', 'uses' => 'CategoryController@destroy']);
-        $r->patch('{id}/restore', ['as' => 'restore', 'uses' => 'CategoryController@restore']);
         $r->patch('{id}/enable-threads', ['as' => 'enable-threads', 'uses' => 'CategoryController@enableThreads']);
         $r->patch('{id}/disable-threads', ['as' => 'disable-threads', 'uses' => 'CategoryController@disableThreads']);
         $r->patch('{id}/make-public', ['as' => 'make-public', 'uses' => 'CategoryController@makePublic']);
@@ -88,20 +87,12 @@ $r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware'
         $r->get('{id}', ['as' => 'fetch', 'uses' => 'PostController@fetch']);
         $r->delete('{id}', ['as' => 'delete', 'uses' => 'PostController@destroy']);
         $r->patch('{id}/restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
-        $r->match(['post', 'patch'], '{post}', ['as' => 'update', 'uses' => 'PostController@update']);
+        $r->patch('{id}', ['as' => 'update', 'uses' => 'PostController@update']);
     });
 
     // Bulk actions
     $r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r)
     {
-        // Categories
-        $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
-        {
-            $r->patch('move', ['as' => 'move', 'uses' => 'CategoryController@bulkMove']);
-            $r->delete('/', ['as' => 'delete', 'uses' => 'CategoryController@bulkDestroy']);
-            $r->patch('restore', ['as' => 'restore', 'uses' => 'CategoryController@bulkRestore']);
-        });
-
         // Threads
         $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
         {

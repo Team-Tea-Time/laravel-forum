@@ -84,7 +84,7 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * PUT/PATCH: Update a model.
+     * PATCH: Update a model.
      *
      * @param  int  $id
      * @param  Request  $request
@@ -92,17 +92,11 @@ abstract class BaseController extends Controller
      */
     public function update($id, Request $request)
     {
-        $model = $this->model()->find($id);
-
-        if (is_null($model) || !$model->exists) {
-            return $this->notFoundResponse();
-        }
-
-        return $this->updateAttributes($model, $request->all(), ['edit', $model], true);
+        return $this->updateAttributes($this->model()->find($id), $request->all(), 'edit');
     }
 
     /**
-     * DELETE: Delete a model by ID.
+     * DELETE: Delete a model.
      *
      * @param  int  $id
      * @param  Request  $request
@@ -214,20 +208,29 @@ abstract class BaseController extends Controller
      *
      * @param  Model  $model
      * @param  array  $attributes
-     * @param  null|array  $authorize
-     * @param  bool  $touch
+     * @param  array|string  $authorize
      * @return JsonResponse|Response
      */
-    protected function updateAttributes($model, array $attributes, $authorize = null, $touch = false)
+    protected function updateAttributes($model, array $attributes, $authorize = [])
     {
-        if ($authorize) {
+        if (is_null($model) || !$model->exists) {
+            return $this->notFoundResponse();
+        }
+
+        if (!empty($authorize)) {
+            // We need to authorize this change
+
+            if (is_string($authorize)) {
+                // Only an ability name was given, so use $model
+                $authorize = [$authorize, $model];
+            }
+
             list($ability, $authorizeModel) = $authorize;
+
             $this->authorize($ability, $authorizeModel);
         }
 
-        $model->timestamps = $touch;
         $model->update($attributes);
-        $model->timestamps = true;
 
         return $this->response($model, $this->trans('updated'));
     }

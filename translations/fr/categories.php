@@ -13,7 +13,6 @@ return [
     'make_public'           => "Rendre public",
     'mark_read'             => "Marquer les sujets dans cette catégorie comme lu",
     'marked_read'           => "De nouveaux sujets / mises à jour en :category ont été marqués comme lus",
-    'perma_deleted'         => "Catégorie définitivement supprimé|Catégories définitivement supprimés",
     'restored'              => "Catégorie restauré|Catégories restaurés",
     'subcategories'         => "Les sous-catégories",
     'threads_disabled'      => "Nueva creación sujeto está desactivada en esta categoría",

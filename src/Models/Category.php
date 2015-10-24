@@ -11,7 +11,7 @@ use Riari\Forum\Models\Traits\HasSlug;
 
 class Category extends BaseModel
 {
-    use CachesData, HasSlug, SoftDeletes;
+    use CachesData, HasSlug;
 
     /**
      * Eloquent attributes
@@ -39,8 +39,7 @@ class Category extends BaseModel
      */
     public function parent()
     {
-        $query = $this->belongsTo(Category::class, 'category_id')->orderBy('weight');
-        return Gate::allows('viewTrashedCategories') ? $query->withTrashed() : $query;
+        return $this->belongsTo(Category::class, 'category_id')->orderBy('weight');
     }
 
     /**
@@ -50,8 +49,7 @@ class Category extends BaseModel
      */
     public function children()
     {
-        $query = $this->hasMany(Category::class, 'category_id')->orderBy('weight');
-        return Gate::allows('viewTrashedCategories') ? $query->withTrashed() : $query;
+        return $this->hasMany(Category::class, 'category_id')->orderBy('weight');
     }
 
     /**
@@ -61,8 +59,7 @@ class Category extends BaseModel
      */
     public function threads()
     {
-        $query = $this->hasMany(Thread::class);
-        return Gate::allows('viewTrashedThreads') ? $query->withTrashed() : $query;
+        return $this->hasMany(Thread::class);
     }
 
     /**
@@ -112,9 +109,8 @@ class Category extends BaseModel
      */
     public function getThreadsPaginatedAttribute()
     {
-        $threads = $this->threads()->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc');
-        $threads = config('forum.preferences.list_trashed_threads') ? $threads->withTrashed() : $threads;
-        return $threads->paginate(config('forum.preferences.pagination.threads'));
+        return $this->threads()->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc')
+            ->paginate(config('forum.preferences.pagination.threads'));
     }
 
     /**

@@ -11,10 +11,8 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Riari\Forum\Events\UserViewingThread;
 use Riari\Forum\Listeners\MarkThreadAsRead;
-use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
-use Riari\Forum\Models\Observers\CategoryObserver;
 use Riari\Forum\Models\Observers\PostObserver;
 use Riari\Forum\Models\Observers\ThreadObserver;
 
@@ -134,7 +132,6 @@ class ForumServiceProvider extends ServiceProvider
      */
     protected function observeModels()
     {
-        Category::observe(new CategoryObserver);
         Thread::observe(new ThreadObserver);
         Post::observe(new PostObserver);
     }

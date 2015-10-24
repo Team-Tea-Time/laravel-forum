@@ -56,9 +56,9 @@ return [
     | Soft deletes
     |--------------------------------------------------------------------------
     |
-    | Disable this if you want categories, threads and posts to be permanently
-    | removed from your database when they're deleted. Note that by default,
-    | the option exists to force delete models regardless of this setting.
+    | Disable this if you want threads and posts to be permanently removed from
+    | your database when they're deleted. Note that by default, the option
+    | to force delete threads and posts regardless of this setting.
     |
     */
 

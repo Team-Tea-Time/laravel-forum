@@ -13,7 +13,6 @@ return [
     'make_public'           => "Face privat",
     'mark_read'             => "Discuții Mark din această categorie ca fiind citit",
     'marked_read'           => "Discuții noi / actualizate din :category au fost marcate ca citite",
-    'perma_deleted'         => "Categorie șters definitiv|Categorii șters definitiv",
     'restored'              => "Categorie restaurat|Categorii restaurat",
     'subcategories'         => "Subcategorii",
     'threads_disabled'      => "Crearea discuție nouă este dezactivată în această categorie",

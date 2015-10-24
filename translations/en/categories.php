@@ -13,7 +13,6 @@ return [
     'make_public'           => "Make public",
     'mark_read'             => "Mark threads in this category as read",
     'marked_read'           => "New/updated threads in :category have been marked as read",
-    'perma_deleted'         => "Category permanently deleted|Categories permanently deleted",
     'restored'              => "Category restored|Categories restored",
     'subcategories'         => "Subcategories",
     'threads_disabled'      => "New thread creation is disabled in this category",

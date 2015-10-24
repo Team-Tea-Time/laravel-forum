@@ -23,7 +23,11 @@ abstract class BaseModel extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->forceDeleting = !config('forum.preferences.soft_deletes');
+
+        if ($this->forceDeleting) {
+            $this->forceDeleting = !config('forum.preferences.soft_deletes');
+        }
+
         $this->router = App::make('Illuminate\Routing\Router');
     }
 

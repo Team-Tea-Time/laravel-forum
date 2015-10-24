@@ -25,20 +25,8 @@ class ForumPolicy
      */
     public function manageCategories($user)
     {
-        return $this->deleteCategories($user) ||
-               $this->moveCategories($user) ||
+        return $this->moveCategories($user) ||
                $this->renameCategories($user);
-    }
-
-    /**
-     * Permission: Delete categories.
-     *
-     * @param  object  $user
-     * @return bool
-     */
-    public function deleteCategories($user)
-    {
-        return true;
     }
 
     /**
@@ -70,17 +58,6 @@ class ForumPolicy
      * @return bool
      */
     public function markNewThreadsAsRead($user)
-    {
-        return true;
-    }
-
-    /**
-     * Permission: View trashed categories.
-     *
-     * @param  object  $user
-     * @return bool
-     */
-    public function viewTrashedCategories($user)
     {
         return true;
     }

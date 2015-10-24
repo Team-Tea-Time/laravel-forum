@@ -1,9 +1,6 @@
-<tr class="{{ $category->trashed() ? 'deleted' : '' }}">
+<tr>
     <td {{ $category->threadsEnabled ? '' : 'colspan=5'}}>
         <p class="{{ isset($titleClass) ? $titleClass : '' }}"><a href="{{ $category->route }}">{{ $category->title }}</a></p>
-        @if ($category->trashed())
-            <span class="label label-danger">{{ trans('forum::general.deleted') }}</span>
-        @endif
         <span class="text-muted">{{ $category->description }}</span>
     </td>
     @if ($category->threadsEnabled)

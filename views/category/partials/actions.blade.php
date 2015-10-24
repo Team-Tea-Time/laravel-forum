@@ -8,36 +8,29 @@
             <div class="form-group">
                 <label for="category-action">{{ trans_choice('forum::general.actions', 1) }}</label>
                 <select name="action" id="category-action" class="form-control">
-                    @can ('deleteCategories')
-                        @if ($category->trashed())
-                            <option value="restore" data-confirm="true">{{ trans('forum::general.restore') }}</option>
-                        @else
-                            <option value="delete" data-confirm="true" data-method="delete">{{ trans('forum::general.delete') }}</option>
-                        @endif
-                        <option value="permadelete" data-confirm="true" data-method="delete">{{ trans('forum::general.perma_delete') }}</option>
+                    @can ('delete', $category)
+                        <option value="delete" data-confirm="true" data-method="delete">{{ trans('forum::general.delete') }}</option>
                     @endcan
 
-                    @if (!$category->trashed())
-                        @can ('createCategories')
-                            @if ($category->threadsEnabled)
-                                <option value="disable-threads">{{ trans('forum::categories.disable_threads') }}</option>
-                            @else
-                                <option value="enable-threads">{{ trans('forum::categories.enable_threads') }}</option>
-                            @endif
-                            @if ($category->private)
-                                <option value="make-public">{{ trans('forum::categories.make_public') }}</option>
-                            @else
-                                <option value="make-private">{{ trans('forum::categories.make_private') }}</option>
-                            @endif
-                        @endcan
-                        @can ('moveCategories')
-                            <option value="move">{{ trans('forum::general.move') }}</option>
-                            <option value="reorder">{{ trans('forum::general.reorder') }}</option>
-                        @endcan
-                        @can ('renameCategories')
-                            <option value="rename">{{ trans('forum::general.rename') }}</option>
-                        @endcan
-                    @endif
+                    @can ('createCategories')
+                        @if ($category->threadsEnabled)
+                            <option value="disable-threads">{{ trans('forum::categories.disable_threads') }}</option>
+                        @else
+                            <option value="enable-threads">{{ trans('forum::categories.enable_threads') }}</option>
+                        @endif
+                        @if ($category->private)
+                            <option value="make-public">{{ trans('forum::categories.make_public') }}</option>
+                        @else
+                            <option value="make-private">{{ trans('forum::categories.make_private') }}</option>
+                        @endif
+                    @endcan
+                    @can ('moveCategories')
+                        <option value="move">{{ trans('forum::general.move') }}</option>
+                        <option value="reorder">{{ trans('forum::general.reorder') }}</option>
+                    @endcan
+                    @can ('renameCategories')
+                        <option value="rename">{{ trans('forum::general.rename') }}</option>
+                    @endcan
                 </select>
             </div>
             <div class="form-group hidden" data-depends="move">

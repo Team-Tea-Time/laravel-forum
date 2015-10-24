@@ -5,7 +5,6 @@ namespace Riari\Forum\Http\Controllers\API;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Riari\Forum\API\Cache;
 use Riari\Forum\Models\Category;
 
 class CategoryController extends BaseController
@@ -102,17 +101,25 @@ class CategoryController extends BaseController
     }
 
     /**
-     * PATCH: Restore a category.
+     * DELETE: Delete a category.
      *
      * @param  int  $id
      * @param  Request  $request
      * @return JsonResponse|Response
      */
-    public function restore($id, Request $request)
+    public function destroy($id, Request $request)
     {
-        $this->authorize('deleteCategories');
+        $category = $this->model()->find($id);
 
-        return parent::restore($id, $request);
+        if (is_null($category) || !$category->exists) {
+            return $this->notFoundResponse();
+        }
+
+        $this->authorize('delete', $category);
+
+        $category->delete();
+
+        return $this->response($category, $this->trans('deleted'));
     }
 
     /**
@@ -125,14 +132,11 @@ class CategoryController extends BaseController
     public function move($id, Request $request)
     {
         $this->authorize('moveCategories');
-
         $this->validate($request, ['category_id' => ['required']]);
 
         $category = $this->model()->find($id);
 
-        return ($category)
-            ? $this->updateAttributes($category, ['category_id' => $request->input('category_id')])
-            : $this->notFoundResponse();
+        return $this->updateAttributes($category, ['category_id' => $request->input('category_id')]);
     }
 
     /**
@@ -148,9 +152,7 @@ class CategoryController extends BaseController
 
         $category = $this->model()->where('enable_threads', 0)->find($id);
 
-        return ($category)
-            ? $this->updateAttributes($category, ['enable_threads' => 1])
-            : $this->notFoundResponse();
+        return $this->updateAttributes($category, ['enable_threads' => 1]);
     }
 
     /**
@@ -166,9 +168,7 @@ class CategoryController extends BaseController
 
         $category = $this->model()->where('enable_threads', 1)->find($id);
 
-        return ($category)
-            ? $this->updateAttributes($category, ['enable_threads' => 0])
-            : $this->notFoundResponse();
+        return $this->updateAttributes($category, ['enable_threads' => 0]);
     }
 
     /**
@@ -184,9 +184,7 @@ class CategoryController extends BaseController
 
         $category = $this->model()->where('private', 1)->find($id);
 
-        return ($category)
-            ? $this->updateAttributes($category, ['private' => 0])
-            : $this->notFoundResponse();
+        return $this->updateAttributes($category, ['private' => 0]);
     }
 
     /**
@@ -202,9 +200,7 @@ class CategoryController extends BaseController
 
         $category = $this->model()->where('private', 0)->find($id);
 
-        return ($category)
-            ? $this->updateAttributes($category, ['private' => 1])
-            : $this->notFoundResponse();
+        return $this->updateAttributes($category, ['private' => 1]);
     }
 
     /**
@@ -217,14 +213,11 @@ class CategoryController extends BaseController
     public function rename($id, Request $request)
     {
         $this->authorize('renameCategories');
-
         $this->validate($request, ['title' => ['required']]);
 
         $category = $this->model()->find($id);
 
-        return ($category)
-            ? $this->updateAttributes($category, ['title' => $request->input('title')])
-            : $this->notFoundResponse();
+        return $this->updateAttributes($category, $request->only(['title', 'description']));
     }
 
     /**
@@ -237,13 +230,10 @@ class CategoryController extends BaseController
     public function reorder($id, Request $request)
     {
         $this->authorize('moveCategories');
-
         $this->validate($request, ['weight' => ['required']]);
 
         $category = $this->model()->find($id);
 
-        return ($category)
-            ? $this->updateAttributes($category, ['weight' => $request->input('weight')])
-            : $this->notFoundResponse();
+        return $this->updateAttributes($category, ['weight' => $request->input('weight')]);
     }
 }

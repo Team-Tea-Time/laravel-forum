@@ -212,9 +212,7 @@ class ThreadController extends BaseController
 
         $category = Category::find($request->input('category_id'));
 
-        return ($thread)
-            ? $this->updateAttributes($thread, ['category_id' => $category->id], ['moveThreads', $category])
-            : $this->notFoundResponse();
+        return $this->updateAttributes($thread, ['category_id' => $category->id], ['moveThreadsTo', $category]);
     }
 
     /**
@@ -228,9 +226,9 @@ class ThreadController extends BaseController
     {
         $thread = $this->model()->where('locked', 0)->find($id);
 
-        return ($thread)
-            ? $this->updateAttributes($thread, ['locked' => 1], ['lockThreads', $thread->category])
-            : $this->notFoundResponse();
+        $category = !is_null($thread) ? $thread->category : [];
+
+        return $this->updateAttributes($thread, ['locked' => 1], ['lockThreads', $category]);
     }
 
     /**
@@ -244,9 +242,9 @@ class ThreadController extends BaseController
     {
         $thread = $this->model()->where('locked', 1)->find($id);
 
-        return ($thread)
-            ? $this->updateAttributes($thread, ['locked' => 0], ['lockThreads', $thread->category])
-            : $this->notFoundResponse();
+        $category = !is_null($thread) ? $thread->category : [];
+
+        return $this->updateAttributes($thread, ['locked' => 0], ['lockThreads', $category]);
     }
 
     /**
@@ -260,9 +258,9 @@ class ThreadController extends BaseController
     {
         $thread = $this->model()->where('pinned', 0)->find($id);
 
-        return ($thread)
-            ? $this->updateAttributes($thread, ['pinned' => 1], ['pinThreads', $thread->category])
-            : $this->notFoundResponse();
+        $category = !is_null($thread) ? $thread->category : [];
+
+        return $this->updateAttributes($thread, ['pinned' => 1], ['pinThreads', $category]);
     }
 
     /**
@@ -276,9 +274,9 @@ class ThreadController extends BaseController
     {
         $thread = $this->model()->where('pinned', 1)->find($id);
 
-        return ($thread)
-            ? $this->updateAttributes($thread, ['pinned' => 0], ['pinThreads', $thread->category])
-            : $this->notFoundResponse();
+        $category = ($thread) ? $thread->category : [];
+
+        return $this->updateAttributes($thread, ['pinned' => 0], ['pinThreads', $category]);
     }
 
     /**
@@ -294,9 +292,7 @@ class ThreadController extends BaseController
 
         $thread = $this->model()->find($id);
 
-        return ($thread)
-            ? $this->updateAttributes($thread, ['title' => $request->input('title')], ['rename', $thread])
-            : $this->notFoundResponse();
+        return $this->updateAttributes($thread, ['title' => $request->input('title')], 'rename');
     }
 
     /**

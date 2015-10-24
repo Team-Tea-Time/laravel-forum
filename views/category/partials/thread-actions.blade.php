@@ -9,7 +9,7 @@
                     <option value="restore" data-confirm="true">{{ trans('forum::general.restore') }}</option>
                     <option value="permadelete" data-confirm="true" data-method="delete">{{ trans('forum::general.perma_delete') }}</option>
                 @endcan
-                @can ('moveThreads', $category)
+                @can ('moveThreadsFrom', $category)
                     <option value="move">{{ trans('forum::general.move') }}</option>
                 @endcan
                 @can ('lockThreads', $category)

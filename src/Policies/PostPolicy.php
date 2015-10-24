@@ -2,7 +2,7 @@
 
 namespace Riari\Forum\Policies;
 
-use Gate;
+use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Models\Post;
 
 class PostPolicy

@@ -24,7 +24,6 @@ class UpdateForumTableCategories extends Migration
             $table->boolean('private')->default(0);
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -38,7 +37,8 @@ class UpdateForumTableCategories extends Migration
         Schema::table('forum_categories', function (Blueprint $table)
         {
             $table->renameColumn('category_id', 'parent_category');
-            $table->dropColumn(['created_at', 'updated_at', 'deleted_at']);
+            $table->dropColumn(['created_at', 'updated_at', 'enable_threads', 'private']);
+            $table->renameColumn('description', 'subtitle');
         });
     }
 }
