@@ -80,7 +80,7 @@ abstract class BaseController extends Controller {
 
         foreach ($select as $model => $id)
         {
-            $this->collections[$model] = $this->$map_model_repos[$model]->getByID($id, $with);
+            $this->collections[$model] = $this->{$map_model_repos[$model]}->getByID($id, $with);
 
             if (isset($map_route_permissions[$route_name]) && $model == $map_route_models[$route_name])
             {
