@@ -18,18 +18,8 @@ class CategoryController extends BaseController
      */
     public function index(Request $request)
     {
-        $parameters = [
-            'where' => ['category_id' => 0],
-            'orderBy' => 'weight',
-            'with' => ['children']
-        ];
-
-        if (Gate::allows('viewTrashedCategories')) {
-            $parameters += ['include_deleted' => true];
-        }
-
         $categories = $this->api('category.index')
-                           ->parameters($parameters)
+                           ->parameters(['where' => ['category_id' => 0], 'orderBy' => 'weight', 'with' => ['children']])
                            ->get();
 
         event(new UserViewingIndex);
@@ -45,8 +35,7 @@ class CategoryController extends BaseController
      */
     public function show(Request $request)
     {
-        $parameters = Gate::allows('viewTrashedCategories') ? ['include_deleted' => true] : [];
-        $category = $this->api('category.fetch', $request->route('category'))->parameters($parameters)->get();
+        $category = $this->api('category.fetch', $request->route('category'))->get();
 
         event(new UserViewingCategory($category));
 

@@ -28,6 +28,7 @@ class CategoryPolicy
     public function manageThreads($user, Category $category)
     {
         return $this->deleteThreads($user, $category) ||
+               $this->enableThreads($user, $category) ||
                $this->moveThreadsFrom($user, $category) ||
                $this->lockThreads($user, $category) ||
                $this->pinThreads($user, $category);
@@ -41,6 +42,18 @@ class CategoryPolicy
      * @return bool
      */
     public function deleteThreads($user, Category $category)
+    {
+        return true;
+    }
+
+    /**
+     * Permission: Enable threads in category.
+     *
+     * @param  object  $user
+     * @param  Category  $category
+     * @return bool
+     */
+    public function enableThreads($user, Category $category)
     {
         return true;
     }
@@ -66,7 +79,7 @@ class CategoryPolicy
      */
     public function moveThreadsTo($user, Category $category)
     {
-        return $category->threadsEnabled;
+        return true;
     }
 
     /**
@@ -114,6 +127,6 @@ class CategoryPolicy
      */
     public function delete($user, Category $category)
     {
-        return $category->children->isEmpty() && $category->threads->isEmpty();
+        return true;
     }
 }

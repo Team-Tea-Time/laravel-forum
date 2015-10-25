@@ -2,8 +2,8 @@
 
 namespace Riari\Forum;
 
-use App;
-use Gate;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Gate;
 
 class Forum
 {

@@ -45,6 +45,24 @@ class PostController extends BaseController
     }
 
     /**
+     * GET: Return a post.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function fetch($id, Request $request)
+    {
+        $post = $this->model()->find($id);
+
+        if (is_null($post) || !$post->exists) {
+            return $this->notFoundResponse();
+        }
+
+        return $this->response($post);
+    }
+
+    /**
      * POST: Create a new post.
      *
      * @param  Request  $request
