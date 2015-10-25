@@ -17,11 +17,11 @@ return [
     'pin' => "Pin",
     'pinned' => "Pinned",
     'post_the_first' => "Poste o primeiro!",
-    'restored' => "Thread restored|Tópicos restored",
-    'thread' => "Thread|Tópicos",
-    'updated' => "Thread updated|Tópicos updated",
-    'unlock' => "Unlock",
+    'restored' => "Tópico restaurado|Tópicos restaurados",
+    'thread' => "Tópico|Tópicos",
+    'updated' => "Tópico atualizado|Tópicos atualizados",
+    'unlock' => "Abrir",
     'unpin' => "Unpin",
-    'view' => "View thread",
+    'view' => "Ver tópico",
 
 ];
