@@ -4,9 +4,9 @@ return [
 
     'actions' => "Ações de categoria",
     'category' => "Categoria|Categorias",
-    'create' => "Create category",
-    'created' => "Category created",
-    'deleted' => "Category deleted|Categories deleted",
+    'create' => "Criar categoria",
+    'created' => "Categoria criada",
+    'deleted' => "Categoria deletada|Categorias deletadas",
     'disable_threads' => "Disable threads",
     'enable_threads' => "Enable threads",
     'make_private' => "Make private",
