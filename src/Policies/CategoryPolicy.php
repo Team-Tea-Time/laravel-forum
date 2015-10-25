@@ -2,7 +2,6 @@
 
 namespace Riari\Forum\Policies;
 
-use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Models\Category;
 
 class CategoryPolicy

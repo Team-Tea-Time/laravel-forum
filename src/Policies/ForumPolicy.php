@@ -2,8 +2,6 @@
 
 namespace Riari\Forum\Policies;
 
-use Riari\Forum\Models\Category;
-
 class ForumPolicy
 {
     /**

@@ -3,7 +3,6 @@
 namespace Riari\Forum\API;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Support\Facades\Route;
 use Riari\Forum\Contracts\API\ReceiverContract;
 
@@ -37,7 +36,7 @@ class Dispatcher
     /**
      * Create a new dispatcher instance.
      *
-     * @param  ReceiverContract  $caller
+     * @param  ReceiverContract  $receiver
      */
     public function __construct(ReceiverContract $receiver)
     {
@@ -50,7 +49,7 @@ class Dispatcher
      *
      * @param  string  $name
      * @param  array  $parameters
-     * @return this
+     * @return Dispatcher
      */
     public function route($name, $parameters = [])
     {
@@ -61,7 +60,7 @@ class Dispatcher
      * Set the request URI.
      *
      * @param  string  $uri
-     * @return this
+     * @return Dispatcher
      */
     public function uri($uri)
     {
@@ -73,7 +72,7 @@ class Dispatcher
      * Set the request parameters.
      *
      * @param  array  $parameters
-     * @return this
+     * @return Dispatcher
      */
     public function parameters($parameters)
     {
@@ -84,7 +83,7 @@ class Dispatcher
     /**
      * Dispatch a GET request.
      *
-     * @return Response
+     * @return mixed
      */
     public function get()
     {
@@ -94,7 +93,7 @@ class Dispatcher
     /**
      * Dispatch a POST request.
      *
-     * @return Response
+     * @return mixed
      */
     public function post()
     {
@@ -104,7 +103,7 @@ class Dispatcher
     /**
      * Dispatch a PATCH request.
      *
-     * @return Response
+     * @return mixed
      */
     public function patch()
     {
@@ -114,7 +113,7 @@ class Dispatcher
     /**
      * Dispatch a DELETE request.
      *
-     * @return Response
+     * @return mixed
      */
     public function delete()
     {
@@ -124,8 +123,8 @@ class Dispatcher
     /**
      * Dispatch a request.
      *
-     * @param  array  $headers
-     * @return Response
+     * @param  string  $verb
+     * @return mixed
      */
     public function dispatch($verb = 'GET')
     {

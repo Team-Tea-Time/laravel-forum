@@ -2,7 +2,6 @@
 
 namespace Riari\Forum\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Thread;
@@ -180,7 +179,7 @@ class Category extends BaseModel
     /**
      * Attribute: Deepest child.
      *
-     * @return int
+     * @return Category
      */
     public function getDeepestChildAttribute()
     {

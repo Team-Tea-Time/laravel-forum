@@ -189,7 +189,7 @@ class ThreadController extends BaseController
         $primaryKey = auth()->user()->getKeyName();
         $userID = auth()->user()->{$primaryKey};
 
-        $threads->transform(function ($thread, $key) use ($userID)
+        $threads->transform(function ($thread) use ($userID)
         {
             return $thread->markAsRead($userID);
         });

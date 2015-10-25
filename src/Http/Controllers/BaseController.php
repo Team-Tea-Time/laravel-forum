@@ -24,8 +24,6 @@ abstract class BaseController extends Controller implements ReceiverContract
 
     /**
      * Create a frontend controller instance.
-     *
-     * @param  Dispatcher  $dispatcher
      */
     public function __construct()
     {

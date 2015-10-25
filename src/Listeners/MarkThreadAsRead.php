@@ -25,7 +25,7 @@ class MarkThreadAsRead
     /**
      * Handle the event.
      *
-     * @param  PodcastWasPurchased  $event
+     * @param  UserViewingThread  $event
      * @return void
      */
     public function handle(UserViewingThread $event)

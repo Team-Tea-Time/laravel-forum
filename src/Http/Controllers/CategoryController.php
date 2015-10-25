@@ -100,7 +100,7 @@ class CategoryController extends BaseController
      */
     public function destroy($id, Request $request)
     {
-        $category = $this->api('category.delete', $id)->parameters($request->all())->delete();
+        $this->api('category.delete', $id)->parameters($request->all())->delete();
 
         Forum::alert('success', 'categories', 'deleted', 1);
 
