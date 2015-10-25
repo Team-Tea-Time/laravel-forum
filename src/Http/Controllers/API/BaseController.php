@@ -43,7 +43,7 @@ abstract class BaseController extends Controller
     /**
      * Return the model to use for this controller.
      *
-     * @return string
+     * @return \Illuminate\Database\Eloquent\Model
      */
     abstract protected function model();
 
@@ -66,24 +66,6 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * GET: Return a model by ID.
-     *
-     * @param  int  $id
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function fetch($id, Request $request)
-    {
-        $model = $this->model()->find($id);
-
-        if (is_null($model) || !$model->exists) {
-            return $this->notFoundResponse();
-        }
-
-        return $this->response($model);
-    }
-
-    /**
      * PATCH: Update a model.
      *
      * @param  int  $id
@@ -92,7 +74,7 @@ abstract class BaseController extends Controller
      */
     public function update($id, Request $request)
     {
-        return $this->updateAttributes($this->model()->find($id), $request->all(), 'edit');
+        return $this->updateModel($this->model()->find($id), $request->all(), 'edit');
     }
 
     /**
@@ -104,27 +86,17 @@ abstract class BaseController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $this->validate($request, ['force' => ['boolean']]);
+        $model = $this->model();
 
-        $model = $this->model()->withTrashed()->find($id);
+        $force = false;
+        if (method_exists($model, 'forceDelete')) {
+            $this->validate($request, ['force' => ['boolean']]);
 
-        if (is_null($model) || !$model->exists) {
-            return $this->notFoundResponse();
+            $model = $model->withTrashed();
+            $force = (bool) $request->input('force');
         }
 
-        $model->timestamps = false;
-
-        if ($request->has('force') && $request->input('force') == 1) {
-            $model->forceDelete();
-            return $this->response($model, $this->trans('perma_deleted'));
-        } elseif (!$model->trashed()) {
-            $model->delete();
-            return $this->response($model, $this->trans('deleted'));
-        }
-
-        $model->timestamps = true;
-
-        return $this->notFoundResponse();
+        return $this->deleteModel($model->find($id), 'delete', $force);
     }
 
     /**
@@ -195,6 +167,10 @@ abstract class BaseController extends Controller
         foreach ($items as $id) {
             $response = $this->{$action}($id, $request);
 
+            if ($response->isClientError()) {
+                return $response;
+            }
+
             if (!$response->isNotFound()) {
                 $models->push($response->getOriginalContent());
             }
@@ -211,12 +187,57 @@ abstract class BaseController extends Controller
      * @param  array|string  $authorize
      * @return JsonResponse|Response
      */
-    protected function updateAttributes($model, array $attributes, $authorize = [])
+    protected function updateModel($model, array $attributes, $authorize = [])
     {
         if (is_null($model) || !$model->exists) {
             return $this->notFoundResponse();
         }
 
+        $this->parseAuthorization($model, $authorize);
+
+        $model->update($attributes);
+
+        return $this->response($model, $this->trans('updated'));
+    }
+
+    /**
+     * Delete a model.
+     *
+     * @param  Model  $model
+     * @param  array|string  $authorize
+     * @param  bool  $force
+     * @return JsonResponse|Response
+     */
+    protected function deleteModel($model, $authorize = [], $force = false)
+    {
+        if (is_null($model) || !$model->exists) {
+            return $this->notFoundResponse();
+        }
+
+        $this->parseAuthorization($model, $authorize);
+
+        if ($force) {
+            $model->forceDelete();
+
+            return $this->response($model, $this->trans('perma_deleted'));
+        } else {
+            $model->timestamps = false;
+            $model->delete();
+            $model->timestamps = true;
+
+            return $this->response($model, $this->trans('deleted'));
+        }
+    }
+
+    /**
+     * Parse an authorization parameter and authorize if applicable.
+     *
+     * @param  Model  $model
+     * @param  array|string  $authorize
+     * @return JsonResponse|Response
+     */
+    protected function parseAuthorization($model, $authorize = [])
+    {
         if (!empty($authorize)) {
             // We need to authorize this change
 
@@ -229,10 +250,6 @@ abstract class BaseController extends Controller
 
             $this->authorize($ability, $authorizeModel);
         }
-
-        $model->update($attributes);
-
-        return $this->response($model, $this->trans('updated'));
     }
 
     /**
@@ -292,14 +309,14 @@ abstract class BaseController extends Controller
      * Create the response for when a request fails validation.
      *
      * @param  Request  $request
-     * @param  array  $errors
+     * @param  array|string  $errors
      * @return JsonResponse|Response
      */
-    protected function buildFailedValidationResponse(Request $request, array $errors)
+    protected function buildFailedValidationResponse(Request $request, $errors)
     {
         $content = [
             'error'             => "The submitted data did not pass validation.",
-            'validation_errors' => $errors
+            'validation_errors' => (array) $errors
         ];
 
         return ($request->ajax() || $request->wantsJson())

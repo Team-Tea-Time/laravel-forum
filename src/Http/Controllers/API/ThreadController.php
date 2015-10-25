@@ -5,6 +5,7 @@ namespace Riari\Forum\Http\Controllers\API;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Riari\Forum\Forum;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
@@ -95,32 +96,13 @@ class ThreadController extends BaseController
         $this->authorize('createThreads', $category);
 
         if (!$category->threadsEnabled) {
-            return $this->buildFailedValidationResponse(
-                $request,
-                ['category_id' => "The specified category does not allow threads."]
-            );
+            return $this->buildFailedValidationResponse($request, Forum::trans('validation', 'category_threads_enabled'));
         }
 
         $thread = $this->model()->create($request->only(['category_id', 'author_id', 'title']));
         Post::create(['thread_id' => $thread->id] + $request->only('author_id', 'content'));
 
         return $this->response($thread, 201);
-    }
-
-    /**
-     * DELETE: Delete a thread.
-     *
-     * @param  int  $id
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function destroy($id, Request $request)
-    {
-        $thread = $this->model()->withTrashed()->find($id);
-
-        $this->authorize('deleteThreads', $thread->category);
-
-        return parent::destroy($id, $request);
     }
 
     /**
@@ -212,7 +194,11 @@ class ThreadController extends BaseController
 
         $category = Category::find($request->input('category_id'));
 
-        return $this->updateAttributes($thread, ['category_id' => $category->id], ['moveThreadsTo', $category]);
+        if (!$category->threadsEnabled) {
+            return $this->buildFailedValidationResponse($request, Forum::trans('validation', 'category_threads_enabled'));
+        }
+
+        return $this->updateModel($thread, ['category_id' => $category->id], ['moveThreadsTo', $category]);
     }
 
     /**
@@ -228,7 +214,7 @@ class ThreadController extends BaseController
 
         $category = !is_null($thread) ? $thread->category : [];
 
-        return $this->updateAttributes($thread, ['locked' => 1], ['lockThreads', $category]);
+        return $this->updateModel($thread, ['locked' => 1], ['lockThreads', $category]);
     }
 
     /**
@@ -244,7 +230,7 @@ class ThreadController extends BaseController
 
         $category = !is_null($thread) ? $thread->category : [];
 
-        return $this->updateAttributes($thread, ['locked' => 0], ['lockThreads', $category]);
+        return $this->updateModel($thread, ['locked' => 0], ['lockThreads', $category]);
     }
 
     /**
@@ -260,7 +246,7 @@ class ThreadController extends BaseController
 
         $category = !is_null($thread) ? $thread->category : [];
 
-        return $this->updateAttributes($thread, ['pinned' => 1], ['pinThreads', $category]);
+        return $this->updateModel($thread, ['pinned' => 1], ['pinThreads', $category]);
     }
 
     /**
@@ -276,7 +262,7 @@ class ThreadController extends BaseController
 
         $category = ($thread) ? $thread->category : [];
 
-        return $this->updateAttributes($thread, ['pinned' => 0], ['pinThreads', $category]);
+        return $this->updateModel($thread, ['pinned' => 0], ['pinThreads', $category]);
     }
 
     /**
@@ -292,7 +278,7 @@ class ThreadController extends BaseController
 
         $thread = $this->model()->find($id);
 
-        return $this->updateAttributes($thread, ['title' => $request->input('title')], 'rename');
+        return $this->updateModel($thread, ['title' => $request->input('title')], 'rename');
     }
 
     /**

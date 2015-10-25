@@ -5,6 +5,7 @@ namespace Riari\Forum\Http\Controllers\API;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Riari\Forum\Forum;
 use Riari\Forum\Models\Category;
 
 class CategoryController extends BaseController
@@ -111,15 +112,11 @@ class CategoryController extends BaseController
     {
         $category = $this->model()->find($id);
 
-        if (is_null($category) || !$category->exists) {
-            return $this->notFoundResponse();
+        if (!$category->threads->isEmpty() || !$category->children->isEmpty()) {
+            return $this->buildFailedValidationResponse($request, Forum::trans('validation', 'category_is_empty'));
         }
 
-        $this->authorize('delete', $category);
-
-        $category->delete();
-
-        return $this->response($category, $this->trans('deleted'));
+        return $this->deleteModel($category, 'delete');
     }
 
     /**
@@ -136,7 +133,7 @@ class CategoryController extends BaseController
 
         $category = $this->model()->find($id);
 
-        return $this->updateAttributes($category, ['category_id' => $request->input('category_id')]);
+        return $this->updateModel($category, ['category_id' => $request->input('category_id')]);
     }
 
     /**
@@ -148,11 +145,9 @@ class CategoryController extends BaseController
      */
     public function enableThreads($id, Request $request)
     {
-        $this->authorize('createCategories');
-
         $category = $this->model()->where('enable_threads', 0)->find($id);
 
-        return $this->updateAttributes($category, ['enable_threads' => 1]);
+        return $this->updateModel($category, ['enable_threads' => 1], 'enableThreads');
     }
 
     /**
@@ -164,11 +159,13 @@ class CategoryController extends BaseController
      */
     public function disableThreads($id, Request $request)
     {
-        $this->authorize('createCategories');
-
         $category = $this->model()->where('enable_threads', 1)->find($id);
 
-        return $this->updateAttributes($category, ['enable_threads' => 0]);
+        if (!$category->threads->isEmpty()) {
+            return $this->buildFailedValidationResponse($request, Forum::trans('validation', 'category_has_no_threads'));
+        }
+
+        return $this->updateModel($category, ['enable_threads' => 0], 'enableThreads');
     }
 
     /**
@@ -184,7 +181,7 @@ class CategoryController extends BaseController
 
         $category = $this->model()->where('private', 1)->find($id);
 
-        return $this->updateAttributes($category, ['private' => 0]);
+        return $this->updateModel($category, ['private' => 0]);
     }
 
     /**
@@ -200,7 +197,7 @@ class CategoryController extends BaseController
 
         $category = $this->model()->where('private', 0)->find($id);
 
-        return $this->updateAttributes($category, ['private' => 1]);
+        return $this->updateModel($category, ['private' => 1]);
     }
 
     /**
@@ -217,7 +214,7 @@ class CategoryController extends BaseController
 
         $category = $this->model()->find($id);
 
-        return $this->updateAttributes($category, $request->only(['title', 'description']));
+        return $this->updateModel($category, $request->only(['title', 'description']));
     }
 
     /**
@@ -234,6 +231,6 @@ class CategoryController extends BaseController
 
         $category = $this->model()->find($id);
 
-        return $this->updateAttributes($category, ['weight' => $request->input('weight')]);
+        return $this->updateModel($category, ['weight' => $request->input('weight')]);
     }
 }
