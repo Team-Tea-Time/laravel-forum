@@ -12,10 +12,10 @@ return [
     'make_private' => "Deixar privado",
     'make_public' => "Deixar público",
     'mark_read' => "Marcar tópicos nesta categoria como lidos",
-    'marked_read' => "New/updated threads in :category have been marked as read",
-    'restored' => "Category restored|Categories restored",
-    'subcategories' => "Subcategories",
-    'threads_disabled' => "New thread creation is disabled in this category",
-    'updated' => "Category updated|Categories updated",
+    'marked_read' => "Tópicos novos/atualizados em :category foram marcados como lidos",
+    'restored' => "Categoria restaurada|Categorias restauradas",
+    'subcategories' => "Subcategorias",
+    'threads_disabled' => "A criação de tópicos está desabilitada nessa categoria",
+    'updated' => "Categoria atualizada|Categorias atualizadas",
 
 ];
