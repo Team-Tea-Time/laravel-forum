@@ -52,10 +52,10 @@ class ForumServiceProvider extends ServiceProvider {
         ], 'migrations');
 
         // Load views
-        $this->loadViewsFrom(__DIR__.'/../../views', 'forum');
+        $this->loadViewsFrom(__DIR__.'/../../../../../../resources/views/vendor/forum', 'forum');
 
         // Load translations
-        $this->loadTranslationsFrom(__DIR__.'/../../translations', 'forum');
+        $this->loadTranslationsFrom(__DIR__.'/../../../../.././resources/lang/vendor/forum', 'forum');
 
         // Load routes, if enabled
         if (config('forum.routing.enabled')) {
