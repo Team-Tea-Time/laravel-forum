@@ -1,4 +1,4 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=l5-refactor)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=l5-refactor)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=3.0)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=3.0)
 
 **This is a pre-release of version 3, which introduces many new features and improvements over version 2. Some parts of it may be broken and it's not well-optimised yet, but feel free to explore it. Full documentation will be published on [teamteatime.net](http://teamteatime.net/) prior to the first stable release.**
 
