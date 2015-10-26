@@ -1,6 +1,6 @@
 <?php
 
-namespace Riari\Forum\Models\Traits;
+namespace Riari\Forum\Support\Traits;
 
 use Cache;
 use ReflectionClass;
@@ -8,7 +8,8 @@ use ReflectionClass;
 trait CachesData
 {
     /**
-     * Helper: Cache a model attribute/value.
+     * Cache a value from the given callback based on the current class name, the given key and the configured cache
+     * lifetime.
      *
      * @param  string  $key
      * @param  callable  $function

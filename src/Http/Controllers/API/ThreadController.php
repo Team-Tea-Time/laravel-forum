@@ -40,7 +40,7 @@ class ThreadController extends BaseController
      */
     public function index(Request $request)
     {
-        $this->validate($request, ['category_id' => 'required|integer|exists:forum_categories,id']);
+        $this->validate($request, ['category_id' => ['required']]);
 
         $threads = $this->model()
             ->withRequestScopes($request)
