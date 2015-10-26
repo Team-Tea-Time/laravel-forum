@@ -58,7 +58,7 @@ return [
     |
     | Disable this if you want threads and posts to be permanently removed from
     | your database when they're deleted. Note that by default, the option
-    | to force delete threads and posts regardless of this setting.
+    | to force delete threads and posts exists regardless of this setting.
     |
     */
 

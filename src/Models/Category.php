@@ -5,8 +5,8 @@ namespace Riari\Forum\Models;
 use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Thread;
-use Riari\Forum\Models\Traits\CachesData;
 use Riari\Forum\Models\Traits\HasSlug;
+use Riari\Forum\Support\Traits\CachesData;
 
 class Category extends BaseModel
 {

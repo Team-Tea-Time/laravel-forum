@@ -55,17 +55,6 @@ abstract class BaseController extends Controller
     abstract protected function translationFile();
 
     /**
-     * GET: Return an index of models.
-     *
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
-    public function index(Request $request)
-    {
-        return $this->response($this->model()->paginate());
-    }
-
-    /**
      * PATCH: Update a model.
      *
      * @param  int  $id

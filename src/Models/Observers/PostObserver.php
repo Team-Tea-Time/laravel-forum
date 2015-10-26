@@ -2,6 +2,8 @@
 
 namespace Riari\Forum\Models\Observers;
 
+use Carbon\Carbon;
+
 class PostObserver extends BaseObserver
 {
     public function created($post)
@@ -20,7 +22,7 @@ class PostObserver extends BaseObserver
 
         if ($post->thread->posts->isEmpty()) {
             // The containing thread is now empty, so delete the thread accordingly
-            if ($post->deleted_at != $this->carbon->now()) {
+            if ($post->deleted_at != Carbon::now()) {
                 // The post was force-deleted, so the thread should be too
                 $post->thread()->withTrashed()->forceDelete();
             } else {
