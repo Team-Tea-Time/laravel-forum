@@ -2,12 +2,14 @@
 
 namespace Riari\Forum\Models\Observers;
 
-class ThreadObserver extends BaseObserver
+use Carbon\Carbon;
+
+class ThreadObserver
 {
     public function deleted($thread)
     {
         // Delete the thread's posts
-        if ($thread->deleted_at != $this->carbon->now()) {
+        if ($thread->deleted_at != Carbon::now()) {
             // The thread was force-deleted, so the posts should be too
             $thread->posts()->withTrashed()->forceDelete();
 
