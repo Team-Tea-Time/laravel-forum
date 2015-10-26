@@ -41,7 +41,7 @@
                         <td class="text-right">
                             {{ $thread->lastPost->authorName }}
                             <p class="text-muted">({{ $thread->lastPost->posted }})</p>
-                            <a href="{{ URL::to( $thread->lastPostRoute ) }}" class="btn btn-primary btn-xs">{{ trans('forum::posts.view') }} &raquo;</a>
+                            <a href="{{ $thread->lastPostUrl }}" class="btn btn-primary btn-xs">{{ trans('forum::posts.view') }} &raquo;</a>
                         </td>
                     </tr>
                 @endforeach
