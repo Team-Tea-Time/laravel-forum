@@ -11,7 +11,7 @@
 Install the package via composer:
 
 ```
-composer require riari/laravel-forum:~3.0
+composer require riari/laravel-forum:~3.0@dev
 ```
 
 Then add the following service provider to your `config/app.php`:
