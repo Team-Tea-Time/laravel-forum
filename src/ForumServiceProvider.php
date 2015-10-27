@@ -2,7 +2,6 @@
 
 namespace Riari\Forum;
 
-use Blade;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
@@ -10,6 +9,7 @@ use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Riari\Forum\Events\UserViewingThread;
+use Riari\Forum\Forum;
 use Riari\Forum\Listeners\MarkThreadAsRead;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
@@ -195,7 +195,7 @@ class ForumServiceProvider extends ServiceProvider
         // Bind the forum facade
         $this->app->bind('forum', function()
         {
-            return new \Riari\Forum\Forum;
+            return new Forum;
         });
 
         // Create facade alias
