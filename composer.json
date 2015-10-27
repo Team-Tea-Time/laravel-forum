@@ -15,9 +15,6 @@
 		"doctrine/dbal": "^2.5"
     },
     "autoload": {
-        "classmap": [
-            "migrations"
-        ],
         "psr-4": {
             "Riari\\Forum\\": "src"
         }
