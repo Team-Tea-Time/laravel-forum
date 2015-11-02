@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
-use Riari\Forum\Forum;
 
 abstract class BaseModel extends Model
 {

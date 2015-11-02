@@ -9,7 +9,6 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Routing\Controller;
-use Riari\Forum\Forum;
 
 abstract class BaseController extends Controller
 {
@@ -322,6 +321,7 @@ abstract class BaseController extends Controller
      */
     protected function trans($key, $count = 1)
     {
-        return Forum::trans($this->translationFile(), $key, $count);
+        $file = $this->translationFile();
+        return trans_choice("forum::{$file}.{$key}", $count);
     }
 }

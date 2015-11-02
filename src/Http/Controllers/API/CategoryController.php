@@ -5,7 +5,6 @@ namespace Riari\Forum\Http\Controllers\API;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Riari\Forum\Forum;
 use Riari\Forum\Models\Category;
 
 class CategoryController extends BaseController
@@ -113,7 +112,7 @@ class CategoryController extends BaseController
         $category = $this->model()->find($id);
 
         if (!$category->threads->isEmpty() || !$category->children->isEmpty()) {
-            return $this->buildFailedValidationResponse($request, Forum::trans('validation', 'category_is_empty'));
+            return $this->buildFailedValidationResponse($request, trans('forum::validation.category_is_empty'));
         }
 
         return $this->deleteModel($category, 'delete');
@@ -162,7 +161,7 @@ class CategoryController extends BaseController
         $category = $this->model()->where('enable_threads', 1)->find($id);
 
         if (!$category->threads->isEmpty()) {
-            return $this->buildFailedValidationResponse($request, Forum::trans('validation', 'category_has_no_threads'));
+            return $this->buildFailedValidationResponse($request, trans('forum::validation.category_has_no_threads'));
         }
 
         return $this->updateModel($category, ['enable_threads' => 0], 'enableThreads');

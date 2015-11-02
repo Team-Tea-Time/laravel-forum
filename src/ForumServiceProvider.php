@@ -4,13 +4,9 @@ namespace Riari\Forum;
 
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
-use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
-use Riari\Forum\Events\UserViewingThread;
-use Riari\Forum\Forum;
-use Riari\Forum\Listeners\MarkThreadAsRead;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
 use Riari\Forum\Models\Observers\PostObserver;
@@ -33,24 +29,12 @@ class ForumServiceProvider extends ServiceProvider
     protected $baseDir;
 
     /**
-     * The event listener mappings for the application.
-     *
-     * @var array
-     */
-    protected $listen = [
-        UserViewingThread::class => [
-            MarkThreadAsRead::class,
-        ],
-    ];
-
-    /**
      * Register the service provider.
      *
      * @return void
      */
     public function register()
     {
-        $this->registerFacades();
     }
 
     /**
@@ -58,23 +42,20 @@ class ForumServiceProvider extends ServiceProvider
      *
      * @param  Router  $router
      * @param  GateContract  $gate
-     * @param  DispatcherContract  $events
      * @return void
      */
-    public function boot(Router $router, GateContract $gate, DispatcherContract $events)
+    public function boot(Router $router, GateContract $gate)
     {
         $this->baseDir = __DIR__.'/../';
 
         $this->setPublishables();
         $this->loadStaticFiles();
 
-        $this->namespace = config('forum.integration.controllers.namespace');
+        $this->namespace = 'Riari\Forum\Http\Controllers';
 
         $this->observeModels();
 
         $this->registerPolicies($gate);
-
-        $this->registerListeners($events);
 
         if (config('forum.routing.enabled')) {
             $this->registerMiddleware($router);
@@ -98,10 +79,6 @@ class ForumServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            "{$this->baseDir}views/" => base_path('/resources/views/vendor/forum')
-        ], 'views');
-
-        $this->publishes([
             "{$this->baseDir}migrations/" => base_path('/database/migrations')
         ], 'migrations');
     }
@@ -117,9 +94,6 @@ class ForumServiceProvider extends ServiceProvider
         foreach (['api', 'integration', 'preferences', 'routing', 'validation'] as $name) {
             $this->mergeConfigFrom("{$this->baseDir}config/{$name}.php", "forum.{$name}");
         }
-
-        // Load views
-        $this->loadViewsFrom("{$this->baseDir}views", 'forum');
 
         // Load translations
         $this->loadTranslationsFrom("{$this->baseDir}translations", 'forum');
@@ -155,21 +129,6 @@ class ForumServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the package listeners.
-     *
-     * @param  DispatcherContract  $events
-     * @return void
-     */
-    public function registerListeners(DispatcherContract $events)
-    {
-        foreach ($this->listen as $event => $listeners) {
-            foreach ($listeners as $listener) {
-                $events->listen($event, $listener);
-            }
-        }
-    }
-
-    /**
      * Load routes.
      *
      * @param  Router  $router
@@ -180,27 +139,8 @@ class ForumServiceProvider extends ServiceProvider
         $dir = $this->baseDir;
         $router->group(['namespace' => $this->namespace, 'as' => 'forum.', 'prefix' => config('forum.routing.root')], function ($r) use ($dir)
         {
-            $controllers = config('forum.integration.controllers');
             require "{$dir}routes.php";
         });
-    }
-
-    /**
-     * Register the package facades.
-     *
-     * @return void
-     */
-    public function registerFacades()
-    {
-        // Bind the forum facade
-        $this->app->bind('forum', function()
-        {
-            return new Forum;
-        });
-
-        // Create facade alias
-        $loader = AliasLoader::getInstance();
-        $loader->alias('Forum', 'Riari\Forum\Support\Facades\Forum');
     }
 
     /**

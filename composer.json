@@ -19,5 +19,8 @@
             "Riari\\Forum\\": "src"
         }
     },
+    "suggest": {
+        "riari/laravel-forum-frontend": "The standard forum frontend that provides views written with Bootstrap 3"
+    },
     "minimum-stability": "dev"
 }
