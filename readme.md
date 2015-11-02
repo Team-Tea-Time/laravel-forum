@@ -20,7 +20,7 @@ Then add the service provider to your `config/app.php`:
 'Riari\Forum\Providers\ForumServiceProvider',
 ```
 
-Installing the [standard front-end](https://github.com/Riari/laravel-forum-front-end) is recommended:
+Installing the [standard front-end](https://github.com/Riari/laravel-forum-frontend) is recommended:
 
 ```
 composer require riari/laravel-forum-front-end
