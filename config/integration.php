@@ -32,4 +32,15 @@ return [
 
     'user_model' => App\User::class,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Application user name
+    |--------------------------------------------------------------------------
+    |
+    | The attribute to use for the username.
+    |
+    */
+
+    'user_name' => 'name',
+
 ];
