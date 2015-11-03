@@ -17,17 +17,17 @@ composer require riari/laravel-forum:~3.0@dev
 Then add the service provider to your `config/app.php`:
 
 ```php
-'Riari\Forum\Providers\ForumServiceProvider',
+'Riari\Forum\ForumServiceProvider',
 ```
 
 Installing the [standard front-end](https://github.com/Riari/laravel-forum-frontend) is recommended:
 
 ```
-composer require riari/laravel-forum-front-end
+composer require riari/laravel-forum-frontend
 ```
 
 ```php
-'Riari\Forum\Frontend\Providers\ForumFrontendServiceProvider',
+'Riari\Forum\Frontend\ForumFrontendServiceProvider',
 ```
 
 ### Step 2: Publish the package files
