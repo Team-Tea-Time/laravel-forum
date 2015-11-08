@@ -44,6 +44,10 @@ Run your migrations:
 
 ### Additional steps
 
+#### Server configuration
+
+> If you installed Xdebug before version 2.3, you may need to modify `xdebug.max_nesting_level`. The suggested and new default value from version 2.3 onwards is `256`.
+
 #### Configuration
 
 Several configuration files are published to your application's config directory, each prefixed with `forum.`. Refer to these for a variety of options for changing the behaviour of the forum and how it integrates with key parts of your application code.
