@@ -3,8 +3,6 @@
 namespace Riari\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Riari\Forum\Models\Post;
-use Riari\Forum\Models\Thread;
 use Riari\Forum\Models\Traits\HasAuthor;
 
 class Post extends BaseModel
