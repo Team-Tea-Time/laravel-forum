@@ -11,7 +11,7 @@
 Install the package via composer:
 
 ```
-composer require riari/laravel-forum:~3.0@dev
+composer require riari/laravel-forum:~3.0@RC
 ```
 
 Then add the service provider to your `config/app.php`:
@@ -23,7 +23,7 @@ Then add the service provider to your `config/app.php`:
 Installing the [standard front-end](https://github.com/Riari/laravel-forum-frontend) is recommended:
 
 ```
-composer require riari/laravel-forum-frontend
+composer require riari/laravel-forum-frontend:master@dev
 ```
 
 ```php

@@ -39,10 +39,6 @@ class CategoryController extends BaseController
     {
         $categories = $this->model()->withRequestScopes($request);
 
-        if ($request->input('include_deleted') && Gate::allows('deleteCategories')) {
-            $categories = $categories->withTrashed();
-        }
-
         $categories = $categories->get()->filter(function ($category) {
             if ($category->private) {
                 return Gate::allows('view', $category);
@@ -63,9 +59,7 @@ class CategoryController extends BaseController
      */
     public function fetch($id, Request $request)
     {
-        $category = $this->model();
-
-        $category = Gate::allows('viewTrashedCategories') ? $category->withTrashed()->find($id) : $category->find($id);
+        $category = $this->model()->find($id);
 
         if (is_null($category) || !$category->exists) {
             return $this->notFoundResponse();

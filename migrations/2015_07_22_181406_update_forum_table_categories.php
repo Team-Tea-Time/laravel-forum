@@ -15,9 +15,13 @@ class UpdateForumTableCategories extends Migration
         Schema::table('forum_categories', function (Blueprint $table)
         {
             $table->renameColumn('parent_category', 'category_id');
+            $table->renameColumn('subtitle', 'description');
+        });
+
+        Schema::table('forum_categories', function (Blueprint $table)
+        {
             $table->integer('category_id')->default(0)->change();
             $table->string('subtitle')->nullable()->change();
-            $table->renameColumn('subtitle', 'description');
             $table->integer('weight')->default(0)->change();
 
             $table->boolean('enable_threads')->default(0);
