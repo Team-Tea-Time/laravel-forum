@@ -2,16 +2,16 @@
 
 return [
 
-    'actions'       => "Entrag Aktionen",
-    'created'       => "Eintrag erstellt",
-    'deleted'       => "Eintrag gelöscht|Einträge gelöscht",
-    'edit'          => "Eintrag bearbeiten",
-    'last'          => "Letzter Eintrag",
-    'perma_deleted' => "Eintrag dauerhaft gelöscht|Einträge dauerhaft gelöscht",
-    'post'          => "Eintrag|Einträge",
-    'restored'      => "Eintrag restauriert|Einträge restauriert",
-    'updated'       => "Eintrag aktualisiert|Einträge aktualisiert",
-    'view'          => "Eintrag ansehen",
-    'your_post'     => "Dein Eintrag",
+    'actions'       => "Beitrag Aktionen",
+    'created'       => "Beitrag erstellt",
+    'deleted'       => "Beitrag gelöscht|Beiträge gelöscht",
+    'edit'          => "Beitrag bearbeiten",
+    'last'          => "Letzter Beitrag",
+    'perma_deleted' => "Beitrag dauerhaft gelöscht|Beiträge dauerhaft gelöscht",
+    'post'          => "Beitrag|Beiträge",
+    'restored'      => "Beitrag wiederhergestellt|Beiträge wiederhergestellt",
+    'updated'       => "Beitrag aktualisiert|Beiträge aktualisiert",
+    'view'          => "Beitrag ansehen",
+    'your_post'     => "Dein Beitrag",
 
 ];

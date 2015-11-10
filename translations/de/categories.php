@@ -2,20 +2,20 @@
 
 return [
 
-    'actions'               => "Kategorie Aktionen",
+    'actions'               => "Kategorie-Aktionen",
     'category'              => "Kategorie|Kategorien",
     'create'                => "Kategorie erstellen",
     'created'               => "Kategorie erstellt",
     'deleted'               => "Kategorie gelöscht|Kategorien gelöscht",
-    'disable_threads'       => "Disable Themen",
-    'enable_threads'        => "Aktivieren Themen",
-    'make_private'          => "Machen privat",
-    'make_public'           => "Veröffentlichen",
-    'mark_read'             => "Mark Themen in dieser Kategorie als gelesen",
-    'marked_read'           => "Neue / aktualisierte Themen in :category wurden als gelesen markiert",
-    'restored'              => "Kategorie restauriert|Kategorien restauriert",
-    'subcategories'         => "Subkategorien",
-    'threads_disabled'      => "Neues Thema Schöpfung in dieser Kategorie deaktiviert",
-    'updated'               => "Kategorie auf dem Laufenden|Kategorien aktualisiert",
+    'disable_threads'       => "Themen deaktivieren",
+    'enable_threads'        => "Themen aktivieren",
+    'make_private'          => "Privat machen",
+    'make_public'           => "Öffentlich machen",
+    'mark_read'             => "Themen in dieser Kategorie als gelesen markieren",
+    'marked_read'           => "Neue / geänderte Themen in :category wurden als gelesen markiert",
+    'restored'              => "Kategorie wiederhergestellt|Kategorien wiederhergestellt",
+    'subcategories'         => "Unterkategorien",
+    'threads_disabled'      => "Erstellung neuer Themen ist in dieser Kategorie deaktiviert",
+    'updated'               => "Kategorie geändert|Kategorien geändert",
 
 ];
