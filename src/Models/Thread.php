@@ -47,8 +47,7 @@ class Thread extends BaseModel
      */
     public function category()
     {
-        $query = $this->belongsTo(Category::class);
-        return Gate::allows('viewTrashedCategories') ? $query->withTrashed() : $query;
+        return $this->belongsTo(Category::class);
     }
 
     /**
