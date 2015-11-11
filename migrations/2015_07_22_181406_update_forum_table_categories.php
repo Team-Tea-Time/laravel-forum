@@ -21,7 +21,7 @@ class UpdateForumTableCategories extends Migration
         Schema::table('forum_categories', function (Blueprint $table)
         {
             $table->integer('category_id')->default(0)->change();
-            $table->string('subtitle')->nullable()->change();
+            $table->string('description')->nullable()->change();
             $table->integer('weight')->default(0)->change();
 
             $table->boolean('enable_threads')->default(0);
