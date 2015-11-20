@@ -8,7 +8,7 @@ use Illuminate\Http\Response;
 interface ReceiverContract
 {
     /**
-     * Handle a response from the dispatcher.
+     * Handle a response from the dispatcher for the given request.
      *
      * @param  Request  $request
      * @param  Response  $response
