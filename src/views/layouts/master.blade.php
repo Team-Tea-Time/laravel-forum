@@ -22,13 +22,17 @@
         }
     });
     $('[data-method]:not(.disabled)').click(function(event) {
-        $('<form action="' + $(this).attr('href') + '" method="POST">' +
+        var actionForm = '<form action="' + $(this).attr('href') + '" method="POST">' +
         '<input type="hidden" name="_method" value="' + $(this).data('method') + '">' +
         '<input type="hidden" name="_token" value="{!! Session::getToken() !!}"' +
-        '</form>').submit();
-		
+        '</form>';
+
+        $('[data-action-form]').append(actionForm);
+        $('[data-action-form] form').submit();
+
         event.preventDefault();
     });
     </script>
+    <div data-action-form></div>
 </body>
 </html>
