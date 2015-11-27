@@ -1,8 +1,6 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=3.0)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=3.0)
 
-**This is a pre-release of version 3, which introduces many new features and improvements over version 2. Some parts of it may be broken and it's not well-optimised yet, but feel free to explore it. Full documentation will be published on [teamteatime.net](http://teamteatime.net/) prior to the first stable release.**
-
-**Please refer to the [laravel-5](https://github.com/Riari/laravel-forum/tree/laravel-5) and [laravel-4](https://github.com/Riari/laravel-forum/tree/laravel-4) branches for current stable versions.**
+**Complete documentation is available on [teamteatime.net](http://teamteatime.mbp/docs/laravel-forum/introduction.md).**
 
 ## Installation
 
@@ -11,7 +9,7 @@
 Install the package via composer:
 
 ```
-composer require riari/laravel-forum:~3.0@RC
+composer require riari/laravel-forum:~3.0
 ```
 
 Then add the service provider to your `config/app.php`:
@@ -23,7 +21,7 @@ Then add the service provider to your `config/app.php`:
 Installing the [standard front-end](https://github.com/Riari/laravel-forum-frontend) is recommended:
 
 ```
-composer require riari/laravel-forum-frontend:master@dev
+composer require riari/laravel-forum-frontend:~1.0
 ```
 
 ```php
