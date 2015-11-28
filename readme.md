@@ -1,6 +1,6 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=3.0)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=3.0)
 
-**Complete documentation is available on [teamteatime.net](http://teamteatime.mbp/docs/laravel-forum/introduction.md).**
+**Complete documentation is available on [teamteatime.net](http://teamteatime.net/docs/laravel-forum/introduction.md).**
 
 ## Installation
 
