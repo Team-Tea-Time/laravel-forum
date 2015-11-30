@@ -21,7 +21,7 @@ class Thread extends BaseModel
     protected $fillable         = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
     protected $guarded          = ['id'];
     protected $with             = ['author'];
-    protected $appends      = ['route'];
+    protected $appends          = ['route'];
 
     /**
      * Constants

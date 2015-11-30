@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Riari\Forum\Http\Middleware\APIAuth;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
 use Riari\Forum\Models\Observers\PostObserver;
@@ -79,9 +80,9 @@ class ForumServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            "{$this->baseDir}migrations/" => base_path('/database/migrations')
+            "{$this->baseDir}migrations/" => base_path('database/migrations')
         ], 'migrations');
-        
+
         $this->publishes([
             "{$this->baseDir}translations/" => base_path('resources/lang/vendor/forum'),
         ], 'translations');
@@ -154,6 +155,6 @@ class ForumServiceProvider extends ServiceProvider
      */
     public function registerMiddleware(Router $router)
     {
-        $router->middleware('forum.api.auth', 'Riari\Forum\Http\Middleware\APIAuth');
+        $router->middleware('forum.api.auth', APIAuth::class);
     }
 }
