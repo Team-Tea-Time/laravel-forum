@@ -149,7 +149,7 @@ class ThreadController extends BaseController
         // Filter the threads according to the user's permissions
         $threads = $threads->filter(function ($thread)
         {
-            return Gate::allows('view', $thread->category);
+            return (!$thread->category->private || Gate::allows('view', $thread->category));
         });
 
         return $this->response($threads);

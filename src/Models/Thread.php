@@ -89,8 +89,7 @@ class Thread extends BaseModel
         $age = strtotime(config('forum.preferences.old_thread_threshold'), 0);
         $cutoff = $time - $age;
 
-        return $query->where('updated_at', '>', date('Y-m-d H:i:s', strtotime($cutoff)))
-            ->orderBy('updated_at', 'desc');
+        return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
     }
 
     /**
