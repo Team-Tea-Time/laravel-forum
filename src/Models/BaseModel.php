@@ -10,11 +10,6 @@ use Illuminate\Support\Str;
 abstract class BaseModel extends Model
 {
     /**
-     * @var Router
-     */
-    protected $router;
-
-    /**
      * Create a new model instance.
      *
      * @param  array  $attributes
@@ -26,8 +21,6 @@ abstract class BaseModel extends Model
         if ($this->forceDeleting) {
             $this->forceDeleting = !config('forum.preferences.soft_deletes');
         }
-
-        $this->router = App::make('Illuminate\Routing\Router');
     }
 
     /**
@@ -124,21 +117,6 @@ abstract class BaseModel extends Model
     public function withRequestScopes(Request $request)
     {
         return $this->requestWhere($request)->requestWith($request)->requestAppend($request)->requestOrder($request);
-    }
-
-    /**
-     * Helper: Build a named route using the parameters set by the model.
-     *
-     * @param  string  $name
-     * @param  array  $extraParameters
-     * @return string
-     */
-    public function buildRoute($name, $extraParameters = [])
-    {
-        $parameterNames = array_flip($this->router->getRoutes()->getByName($name)->parameterNames());
-        $parameters = array_intersect_key($this->getRouteParameters(), $parameterNames);
-
-        return route($name, array_merge($parameters, $extraParameters));
     }
 
     /**

@@ -16,7 +16,6 @@ class Category extends BaseModel
     protected $table        = 'forum_categories';
     public    $timestamps   = false;
     protected $fillable     = ['category_id', 'title', 'description', 'weight', 'enable_threads', 'private'];
-    protected $appends      = ['route'];
 
     /**
      * Create a new category model instance.
@@ -57,26 +56,6 @@ class Category extends BaseModel
     public function threads()
     {
         return $this->hasMany(Thread::class);
-    }
-
-    /**
-     * Attribute: Route.
-     *
-     * @return string
-     */
-    public function getRouteAttribute()
-    {
-        return $this->buildRoute('forum.category.index');
-    }
-
-    /**
-     * Attribute: New thread route.
-     *
-     * @return string
-     */
-    public function getNewThreadRouteAttribute()
-    {
-        return $this->buildRoute('forum.thread.create');
     }
 
     /**
@@ -213,18 +192,5 @@ class Category extends BaseModel
 
             return $depth;
         });
-    }
-
-    /**
-     * Helper: Get route parameters.
-     *
-     * @return array
-     */
-    public function getRouteParameters()
-    {
-        return [
-            'category'      => $this->id,
-            'category_slug' => $this->slug
-        ];
     }
 }

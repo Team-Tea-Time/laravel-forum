@@ -21,7 +21,6 @@ class Thread extends BaseModel
     protected $fillable         = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
     protected $guarded          = ['id'];
     protected $with             = ['author'];
-    protected $appends          = ['route'];
 
     /**
      * Constants
@@ -93,66 +92,6 @@ class Thread extends BaseModel
     }
 
     /**
-     * Attribute: Thread route.
-     *
-     * @return string
-     */
-    public function getRouteAttribute()
-    {
-        return $this->buildRoute('forum.thread.show');
-    }
-
-    /**
-     * Attribute: Reply route.
-     *
-     * @return string
-     */
-    public function getReplyRouteAttribute()
-    {
-        return $this->buildRoute('forum.post.create');
-    }
-
-    /**
-     * Attribute: Update route.
-     *
-     * @return string
-     */
-    public function getUpdateRouteAttribute()
-    {
-        return $this->buildRoute('forum.api.thread.update');
-    }
-
-    /**
-     * Attribute: Delete route.
-     *
-     * @return string
-     */
-    public function getDeleteRouteAttribute()
-    {
-        return $this->buildRoute('forum.api.thread.destroy');
-    }
-
-    /**
-     * Attribute: Restore route.
-     *
-     * @return string
-     */
-    public function getRestoreRouteAttribute()
-    {
-        return $this->buildRoute('forum.api.thread.restore');
-    }
-
-    /**
-     * Attribute: Force delete route.
-     *
-     * @return string
-     */
-    public function getForceDeleteRouteAttribute()
-    {
-        return $this->buildRoute('forum.api.thread.destroy', ['force' => 1]);
-    }
-
-    /**
      * Attribute: Paginated posts.
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
@@ -160,16 +99,6 @@ class Thread extends BaseModel
     public function getPostsPaginatedAttribute()
     {
         return $this->posts()->paginate(config('forum.preferences.pagination.posts'));
-    }
-
-    /**
-     * Attribute: Last post URL.
-     *
-     * @return string
-     */
-    public function getLastPostUrlAttribute()
-    {
-        return "{$this->route}?page={$this->lastPage}#post-{$this->lastPost->id}";
     }
 
     /**
@@ -265,21 +194,6 @@ class Thread extends BaseModel
         }
 
         return false;
-    }
-
-    /**
-     * Helper: Get route parameters.
-     *
-     * @return array
-     */
-    public function getRouteParameters()
-    {
-        return [
-            'category'      => $this->category->id,
-            'category_slug' => $this->category->slug,
-            'thread'        => $this->id,
-            'thread_slug'   => $this->slug
-        ];
     }
 
     /**
