@@ -17,7 +17,6 @@ class Post extends BaseModel
     protected $fillable     = ['thread_id', 'author_id', 'post_id', 'content'];
     protected $guarded      = ['id'];
     protected $with         = ['author'];
-    protected $appends      = ['route'];
 
     /**
      * Create a new post model instance.
@@ -64,6 +63,9 @@ class Post extends BaseModel
      * Attribute: URL.
      *
      * @return string
+     *
+     * @deprecated as of 3.0.2
+     * @todo remove before 3.1.0
      */
     public function getUrlAttribute()
     {
@@ -78,6 +80,9 @@ class Post extends BaseModel
      * Attribute: Route.
      *
      * @return string
+     *
+     * @deprecated as of 3.0.2
+     * @todo remove before 3.1.0
      */
     public function getRouteAttribute()
     {
@@ -88,6 +93,9 @@ class Post extends BaseModel
      * Attribute: Edit route.
      *
      * @return string
+     *
+     * @deprecated as of 3.0.2
+     * @todo remove before 3.1.0
      */
     public function getEditRouteAttribute()
     {
@@ -98,6 +106,9 @@ class Post extends BaseModel
      * Attribute: Delete route.
      *
      * @return string
+     *
+     * @deprecated as of 3.0.2
+     * @todo remove before 3.1.0
      */
     public function getDeleteRouteAttribute()
     {
@@ -108,6 +119,9 @@ class Post extends BaseModel
      * Attribute: Reply route.
      *
      * @return string
+     *
+     * @deprecated as of 3.0.2
+     * @todo remove before 3.1.0
      */
     public function getReplyRouteAttribute()
     {
@@ -128,6 +142,9 @@ class Post extends BaseModel
      * Helper: Get route parameters.
      *
      * @return array
+     *
+     * @deprecated as of 3.0.2
+     * @todo remove before 3.1.0
      */
     protected function getRouteParameters()
     {

@@ -11,6 +11,8 @@ abstract class BaseModel extends Model
 {
     /**
      * @var Router
+     *
+     * @todo remove before 3.1.0
      */
     protected $router;
 
@@ -27,6 +29,7 @@ abstract class BaseModel extends Model
             $this->forceDeleting = !config('forum.preferences.soft_deletes');
         }
 
+        // @todo remove before 3.1.0
         $this->router = App::make('Illuminate\Routing\Router');
     }
 
@@ -132,6 +135,9 @@ abstract class BaseModel extends Model
      * @param  string  $name
      * @param  array  $extraParameters
      * @return string
+     *
+     * @deprecated as of 3.0.2
+     * @todo remove before 3.1.0
      */
     public function buildRoute($name, $extraParameters = [])
     {

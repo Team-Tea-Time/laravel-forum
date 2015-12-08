@@ -16,7 +16,6 @@ class Category extends BaseModel
     protected $table        = 'forum_categories';
     public    $timestamps   = false;
     protected $fillable     = ['category_id', 'title', 'description', 'weight', 'enable_threads', 'private'];
-    protected $appends      = ['route'];
 
     /**
      * Create a new category model instance.
@@ -63,6 +62,9 @@ class Category extends BaseModel
      * Attribute: Route.
      *
      * @return string
+     *
+     * @deprecated as of 3.0.2
+     * @todo remove before 3.1.0
      */
     public function getRouteAttribute()
     {
@@ -73,6 +75,9 @@ class Category extends BaseModel
      * Attribute: New thread route.
      *
      * @return string
+     *
+     * @deprecated as of 3.0.2
+     * @todo remove before 3.1.0
      */
     public function getNewThreadRouteAttribute()
     {
@@ -219,6 +224,9 @@ class Category extends BaseModel
      * Helper: Get route parameters.
      *
      * @return array
+     *
+     * @deprecated as of 3.0.2
+     * @todo remove before 3.1.0
      */
     public function getRouteParameters()
     {
