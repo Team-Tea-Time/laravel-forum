@@ -55,7 +55,9 @@ class Category extends BaseModel
      */
     public function threads()
     {
-        return $this->hasMany(Thread::class);
+        $withTrashed = Gate::allows('viewTrashedThreads');
+        $query = $this->hasMany(Thread::class);
+        return $withTrashed ? $query->withTrashed() : $query;
     }
 
     /**
