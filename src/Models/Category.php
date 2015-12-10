@@ -70,7 +70,7 @@ class Category extends BaseModel
      */
     public function getRouteAttribute()
     {
-        return $this->buildRoute('forum.category.index');
+        return $this->buildRoute('forum.category.show');
     }
 
     /**
