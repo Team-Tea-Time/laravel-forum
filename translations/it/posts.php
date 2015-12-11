@@ -9,7 +9,7 @@ return [
     'last'          => "Ultimo post",
     'perma_deleted' => "Post eliminati in modo permanente|Post eliminati definitivamente",
     'post'          => "Post|Post",
-    'restored'      => "Post restaurato|Post restaurati",
+    'restored'      => "Post ripristinato|Post ripristinati",
     'updated'       => "Post aggiornato|Post aggiornati",
     'view'          => "Vedi post",
     'your_post'     => "Il tuo post",
