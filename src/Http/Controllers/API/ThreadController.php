@@ -61,6 +61,9 @@ class ThreadController extends BaseController
         $thread = $this->model();
         $thread = $request->input('include_deleted') ? $thread->withTrashed()->find($id) : $thread->find($id);
 
+        $thread->view_count = $thread->view_count + 1;
+        $thread->save();
+
         if (is_null($thread) || !$thread->exists) {
             return $this->notFoundResponse();
         }

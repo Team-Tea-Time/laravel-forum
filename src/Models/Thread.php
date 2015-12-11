@@ -18,7 +18,7 @@ class Thread extends BaseModel
      */
     protected $table            = 'forum_threads';
     public    $timestamps       = true;
-    protected $fillable         = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
+    protected $fillable         = ['category_id', 'author_id', 'title', 'locked', 'pinned', 'view_count'];
     protected $guarded          = ['id'];
     protected $with             = ['author'];
 
