@@ -2,6 +2,11 @@
 
 **Complete documentation is available on [teamteatime.net](http://teamteatime.net/docs/laravel-forum/introduction.md).**
 
+## Requirements
+
++ PHP 5.4 or above
++ Laravel 5.1 or above
+
 ## Installation
 
 ### Step 1: Install the package
