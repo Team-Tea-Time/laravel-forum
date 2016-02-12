@@ -17,6 +17,7 @@ class Post extends BaseModel
     protected $fillable     = ['thread_id', 'author_id', 'post_id', 'content'];
     protected $guarded      = ['id'];
     protected $with         = ['author'];
+    protected $appends      = ['posted'];
 
     /**
      * Create a new post model instance.
