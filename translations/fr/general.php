@@ -2,7 +2,7 @@
 
 return [
 
-    'actions'           => "Action|Actes",
+    'actions'           => "Action|Actions",
     'author'            => "Auteur",
     'cancel'            => "Annuler",
     'create'            => "Créer",
@@ -17,7 +17,7 @@ return [
     'invalid_selection' => "Sélection invalide",
     'last_updated'      => "Dernière mise à jour",
     'mark_read'         => "Marquer comme lu",
-    'move'              => "Spostare",
+    'move'              => "Déplacer",
     'new'               => "Nouveau",
     'new_reply'         => "Nouvelle réponse",
     'none'              => "Aucun",
@@ -30,13 +30,13 @@ return [
     'reorder'           => "Réorganiser",
     'replies'           => "Réponses",
     'reply'             => "Répondre",
-    'reply_added'       => "Post ajouté",
+    'reply_added'       => "Message ajouté",
     'replying_to'       => "En réponse à :item",
     'response_to'       => "En réponse à :item",
     'restore'           => "Restaurer",
     'subject'           => "Sujet",
     'title'             => "Titre",
-    'weight'            => "Réorganiser",
+    'weight'            => "Position",
     'with_selection'    => "Avec la sélection…",
 
 ];
