@@ -2,16 +2,16 @@
 
 return [
 
-    'actions'       => "Post actions",
-    'created'       => "Post créé",
-    'deleted'       => "Post supprimé|Posts supprimés",
-    'edit'          => "Modifier un post",
-    'last'          => "Dernière post",
-    'perma_deleted' => "Post définitivement supprimé|Posts définitivement supprimés",
-    'post'          => "Post|Posts",
-    'restored'      => "Post restauré|Posts restaurés",
-    'updated'       => "Post mis à jour|Posts mis à jour",
-    'view'          => "Voir le post",
-    'your_post'     => "Votre post",
+    'actions'       => "Actions sur les messages",
+    'created'       => "Message créé",
+    'deleted'       => "Message supprimé|Messages supprimés",
+    'edit'          => "Modifier un message",
+    'last'          => "Dernière message",
+    'perma_deleted' => "Message définitivement supprimé|Messages définitivement supprimés",
+    'post'          => "Message|Messages",
+    'restored'      => "Message restauré|Messages restaurés",
+    'updated'       => "Message mis à jour|Messages mis à jour",
+    'view'          => "Voir le message",
+    'your_post'     => "Votre message",
 
 ];
