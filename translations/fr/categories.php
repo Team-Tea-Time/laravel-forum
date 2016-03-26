@@ -9,13 +9,13 @@ return [
     'deleted'               => "Catégorie supprimé|Catégories supprimés",
     'disable_threads'       => "Désactiver sujets",
     'enable_threads'        => "Activer sujets",
-    'make_private'          => "Assurez-privé",
-    'make_public'           => "Rendre public",
+    'make_private'          => "Rendre privée",
+    'make_public'           => "Rendre publique",
     'mark_read'             => "Marquer les sujets dans cette catégorie comme lu",
-    'marked_read'           => "De nouveaux sujets / mises à jour en :category ont été marqués comme lus",
+    'marked_read'           => "Les nouveaux sujets dans :category ont été marqués comme lus",
     'restored'              => "Catégorie restauré|Catégories restaurés",
     'subcategories'         => "Les sous-catégories",
-    'threads_disabled'      => "Nueva creación sujeto está desactivada en esta categoría",
+    'threads_disabled'      => "La création de sujets a été désactivé dans cette catégorie",
     'updated'               => "Catégorie mis à jour|Catégories mis à jour",
 
 ];
