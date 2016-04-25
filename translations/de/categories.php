@@ -4,8 +4,8 @@ return [
 
     'actions'               => "Kategorie-Aktionen",
     'category'              => "Kategorie|Kategorien",
-    'create'                => "Kategorie erstellen",
-    'created'               => "Kategorie erstellt",
+    'create'                => "Kategorie anlegen",
+    'created'               => "Kategorie angelegt",
     'deleted'               => "Kategorie gelöscht|Kategorien gelöscht",
     'disable_threads'       => "Themen deaktivieren",
     'enable_threads'        => "Themen aktivieren",
