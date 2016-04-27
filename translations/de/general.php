@@ -25,7 +25,7 @@ return [
     'posted'            => "Geschrieben am",
     'private'           => "Privat",
     'proceed'           => "Fortfahren",
-    'quick_reply'       => "Schnelle Antwort",
+    'quick_reply'       => "Direktantwort",
     'rename'            => "Umbenennen",
     'reorder'           => "Umsortieren",
     'replies'           => "Antworten",
