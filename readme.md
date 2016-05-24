@@ -20,7 +20,7 @@ composer require riari/laravel-forum:~3.0
 Then add the service provider to your `config/app.php`:
 
 ```php
-'Riari\Forum\ForumServiceProvider',
+Riari\Forum\ForumServiceProvider::class,
 ```
 
 Installing the [standard front-end](https://github.com/Riari/laravel-forum-frontend) is recommended:
@@ -30,7 +30,7 @@ composer require riari/laravel-forum-frontend:~1.0
 ```
 
 ```php
-'Riari\Forum\Frontend\ForumFrontendServiceProvider',
+Riari\Forum\Frontend\ForumFrontendServiceProvider::class,
 ```
 
 ### Step 2: Publish the package files
@@ -49,7 +49,7 @@ Run your migrations:
 
 #### Server configuration
 
-> If you installed Xdebug before version 2.3, you may need to modify `xdebug.max_nesting_level`. The suggested and new default value from version 2.3 onwards is `256`.
+If you installed Xdebug before version 2.3, you may need to modify `xdebug.max_nesting_level`. The suggested and new default value from version 2.3 onwards is `256`.
 
 #### Configuration
 
