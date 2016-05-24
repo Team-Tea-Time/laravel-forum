@@ -48,6 +48,9 @@ return [
             'postCount'     => 5,
             'deepestChild'  => 720,
             'depth'         => 720
+        ],
+        'Post' => [
+            'sequenceNumber' => 5
         ]
     ],
 

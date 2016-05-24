@@ -2,10 +2,11 @@
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Riari\Forum\Models\Traits\HasAuthor;
+use Riari\Forum\Support\Traits\CachesData;
 
 class Post extends BaseModel
 {
-    use SoftDeletes, HasAuthor;
+    use SoftDeletes, HasAuthor, CachesData;
 
     /**
      * The table associated with the model.
@@ -77,5 +78,23 @@ class Post extends BaseModel
     public function getIsFirstAttribute()
     {
         return $this->id == $this->thread->firstPost->id;
+    }
+
+    /**
+     * Attribute: Sequence number in thread.
+     *
+     * @return int
+     */
+    public function getSequenceNumberAttribute()
+    {
+        $self = $this;
+
+        return $this->remember('sequenceNumber', function () use ($self) {
+            foreach ($self->thread->posts as $index => $post) {
+                if ($post->id == $self->id) {
+                    return $index + 1;
+                }
+            }
+        });
     }
 }
