@@ -305,7 +305,7 @@ abstract class BaseController extends Controller
             'validation_errors' => (array) $errors
         ];
 
-        return ($request->ajax() || $request->wantsJson())
+        return ($request->ajax() && !$request->pjax() || $request->wantsJson())
             ? new JsonResponse($content, 422)
             : new Response($content, 422);
     }
