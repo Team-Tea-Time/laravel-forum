@@ -1,6 +1,4 @@
-<?php
-
-namespace Riari\Forum;
+<?php namespace Riari\Forum;
 
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
@@ -142,8 +140,11 @@ class ForumServiceProvider extends ServiceProvider
     protected function loadRoutes(Router $router)
     {
         $dir = $this->baseDir;
-        $router->group(['namespace' => $this->namespace, 'as' => 'forum.', 'prefix' => config('forum.routing.root')], function ($r) use ($dir)
-        {
+        $router->group([
+            'namespace' => $this->namespace,
+            'as' => config('forum.routing.as'),
+            'prefix' => config('forum.routing.root')
+        ], function ($r) use ($dir) {
             require "{$dir}routes.php";
         });
     }

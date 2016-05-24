@@ -1,6 +1,4 @@
-<?php
-
-namespace Riari\Forum\Policies;
+<?php namespace Riari\Forum\Policies;
 
 use Riari\Forum\Models\Category;
 

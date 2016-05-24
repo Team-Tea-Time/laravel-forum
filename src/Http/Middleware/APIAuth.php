@@ -1,6 +1,4 @@
-<?php
-
-namespace Riari\Forum\Http\Middleware;
+<?php namespace Riari\Forum\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;

@@ -15,13 +15,24 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Forum root
+    | Prefix
     |--------------------------------------------------------------------------
     |
-    | The base URL to use for all forum routes.
+    | The prefix to use for all forum routes.
     |
     */
 
-    'root' => 'forum'
+    'prefix' => 'forum',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Alias prefix
+    |--------------------------------------------------------------------------
+    |
+    | The 'as' value to use for the encompassing route groups.
+    |
+    */
+
+    'as' => 'forum.',
 
 ];

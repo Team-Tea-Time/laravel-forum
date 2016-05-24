@@ -1,21 +1,32 @@
-<?php
-
-namespace Riari\Forum\Models;
+<?php namespace Riari\Forum\Models;
 
 use Illuminate\Support\Facades\Gate;
-use Riari\Forum\Models\Traits\HasSlug;
 use Riari\Forum\Support\Traits\CachesData;
 
 class Category extends BaseModel
 {
-    use CachesData, HasSlug;
+    use CachesData;
 
-    /**
-     * Eloquent attributes
-     */
-    protected $table        = 'forum_categories';
-    public    $timestamps   = false;
-    protected $fillable     = ['category_id', 'title', 'description', 'weight', 'enable_threads', 'private'];
+	/**
+	 * The table associated with the model.
+	 *
+	 * @var string
+	 */
+    protected $table = 'forum_categories';
+
+	/**
+	 * Indicates if the model should be timestamped.
+	 *
+	 * @var bool
+	 */
+    public $timestamps = false;
+
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
+    protected $fillable = ['category_id', 'title', 'description', 'weight', 'enable_threads', 'private'];
 
     /**
      * Create a new category model instance.
@@ -58,32 +69,6 @@ class Category extends BaseModel
         $withTrashed = Gate::allows('viewTrashedThreads');
         $query = $this->hasMany(Thread::class);
         return $withTrashed ? $query->withTrashed() : $query;
-    }
-
-    /**
-     * Attribute: Route.
-     *
-     * @return string
-     *
-     * @deprecated as of 3.0.2
-     * @todo remove before 3.1.0
-     */
-    public function getRouteAttribute()
-    {
-        return $this->buildRoute('forum.category.show');
-    }
-
-    /**
-     * Attribute: New thread route.
-     *
-     * @return string
-     *
-     * @deprecated as of 3.0.2
-     * @todo remove before 3.1.0
-     */
-    public function getNewThreadRouteAttribute()
-    {
-        return $this->buildRoute('forum.thread.create');
     }
 
     /**
@@ -154,8 +139,7 @@ class Category extends BaseModel
      */
     public function getThreadCountAttribute()
     {
-        return $this->remember('threadCount', function()
-        {
+        return $this->remember('threadCount', function () {
             return $this->threads->count();
         });
     }
@@ -167,8 +151,7 @@ class Category extends BaseModel
      */
     public function getPostCountAttribute()
     {
-        return $this->remember('postCount', function()
-        {
+        return $this->remember('postCount', function () {
             $replyCount = 0;
 
             $threads = $this->threads()->get(['id']);
@@ -190,8 +173,7 @@ class Category extends BaseModel
     {
         $category = $this;
 
-        return $this->remember('deepestChild', function() use ($category)
-        {
+        return $this->remember('deepestChild', function () use ($category) {
             while ($category->parent) {
                 $category = $category->parent;
             }
@@ -209,8 +191,7 @@ class Category extends BaseModel
     {
         $category = $this;
 
-        return $this->remember('depth', function() use ($category)
-        {
+        return $this->remember('depth', function () use ($category) {
             $depth = 0;
 
             while ($category->parent) {
@@ -220,21 +201,5 @@ class Category extends BaseModel
 
             return $depth;
         });
-    }
-
-    /**
-     * Helper: Get route parameters.
-     *
-     * @return array
-     *
-     * @deprecated as of 3.0.2
-     * @todo remove before 3.1.0
-     */
-    public function getRouteParameters()
-    {
-        return [
-            'category'      => $this->id,
-            'category_slug' => $this->slug
-        ];
     }
 }

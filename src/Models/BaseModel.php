@@ -1,21 +1,10 @@
-<?php
-
-namespace Riari\Forum\Models;
+<?php namespace Riari\Forum\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Str;
 
 abstract class BaseModel extends Model
 {
-    /**
-     * @var Router
-     *
-     * @todo remove before 3.1.0
-     */
-    protected $router;
-
     /**
      * Create a new model instance.
      *
@@ -28,9 +17,6 @@ abstract class BaseModel extends Model
         if ($this->forceDeleting) {
             $this->forceDeleting = !config('forum.preferences.soft_deletes');
         }
-
-        // @todo remove before 3.1.0
-        $this->router = App::make('Illuminate\Routing\Router');
     }
 
     /**
@@ -127,24 +113,6 @@ abstract class BaseModel extends Model
     public function withRequestScopes(Request $request)
     {
         return $this->requestWhere($request)->requestWith($request)->requestAppend($request)->requestOrder($request);
-    }
-
-    /**
-     * Helper: Build a named route using the parameters set by the model.
-     *
-     * @param  string  $name
-     * @param  array  $extraParameters
-     * @return string
-     *
-     * @deprecated as of 3.0.2
-     * @todo remove before 3.1.0
-     */
-    public function buildRoute($name, $extraParameters = [])
-    {
-        $parameterNames = array_flip($this->router->getRoutes()->getByName($name)->parameterNames());
-        $parameters = array_intersect_key($this->getRouteParameters(), $parameterNames);
-
-        return route($name, array_merge($parameters, $extraParameters));
     }
 
     /**

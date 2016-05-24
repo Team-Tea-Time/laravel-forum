@@ -1,32 +1,43 @@
-<?php
-
-namespace Riari\Forum\Models;
+<?php namespace Riari\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Traits\HasAuthor;
-use Riari\Forum\Models\Traits\HasSlug;
 
 class Thread extends BaseModel
 {
-    use SoftDeletes, HasAuthor, HasSlug;
+    use SoftDeletes, HasAuthor;
 
     /**
      * Eloquent attributes
      */
-    protected $table            = 'forum_threads';
-    public    $timestamps       = true;
-    protected $fillable         = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
-    protected $guarded          = ['id'];
-    protected $with             = ['author'];
+    protected $table = 'forum_threads';
 
     /**
-     * Constants
+     * The attributes that are mass assignable.
+     *
+     * @var array
      */
-    const     STATUS_UNREAD     = 'unread';
-    const     STATUS_UPDATED    = 'updated';
+    protected $fillable = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
+
+	/**
+	 * The relations to eager load on every query.
+	 *
+	 * @var array
+	 */
+    protected $with = ['author'];
+
+    /**
+     * @var string
+     */
+    const STATUS_UNREAD = 'unread';
+
+    /**
+     * @var string
+     */
+    const STATUS_UPDATED = 'updated';
 
     /**
      * Create a new thread model instance.
@@ -92,84 +103,6 @@ class Thread extends BaseModel
     }
 
     /**
-     * Attribute: Thread route.
-     *
-     * @return string
-     *
-     * @deprecated as of 3.0.2
-     * @todo remove before 3.1.0
-     */
-    public function getRouteAttribute()
-    {
-        return $this->buildRoute('forum.thread.show');
-    }
-
-    /**
-     * Attribute: Reply route.
-     *
-     * @return string
-     *
-     * @deprecated as of 3.0.2
-     * @todo remove before 3.1.0
-     */
-    public function getReplyRouteAttribute()
-    {
-        return $this->buildRoute('forum.post.create');
-    }
-
-    /**
-     * Attribute: Update route.
-     *
-     * @return string
-     *
-     * @deprecated as of 3.0.2
-     * @todo remove before 3.1.0
-     */
-    public function getUpdateRouteAttribute()
-    {
-        return $this->buildRoute('forum.api.thread.update');
-    }
-
-    /**
-     * Attribute: Delete route.
-     *
-     * @return string
-     *
-     * @deprecated as of 3.0.2
-     * @todo remove before 3.1.0
-     */
-    public function getDeleteRouteAttribute()
-    {
-        return $this->buildRoute('forum.api.thread.destroy');
-    }
-
-    /**
-     * Attribute: Restore route.
-     *
-     * @return string
-     *
-     * @deprecated as of 3.0.2
-     * @todo remove before 3.1.0
-     */
-    public function getRestoreRouteAttribute()
-    {
-        return $this->buildRoute('forum.api.thread.restore');
-    }
-
-    /**
-     * Attribute: Force delete route.
-     *
-     * @return string
-     *
-     * @deprecated as of 3.0.2
-     * @todo remove before 3.1.0
-     */
-    public function getForceDeleteRouteAttribute()
-    {
-        return $this->buildRoute('forum.api.thread.destroy', ['force' => 1]);
-    }
-
-    /**
      * Attribute: Paginated posts.
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
@@ -177,19 +110,6 @@ class Thread extends BaseModel
     public function getPostsPaginatedAttribute()
     {
         return $this->posts()->paginate(config('forum.preferences.pagination.posts'));
-    }
-
-    /**
-     * Attribute: Last post URL.
-     *
-     * @return string
-     *
-     * @deprecated as of 3.0.2
-     * @todo remove before 3.1.0
-     */
-    public function getLastPostUrlAttribute()
-    {
-        return "{$this->route}?page={$this->lastPage}#post-{$this->lastPost->id}";
     }
 
     /**
@@ -285,24 +205,6 @@ class Thread extends BaseModel
         }
 
         return false;
-    }
-
-    /**
-     * Helper: Get route parameters.
-     *
-     * @return array
-     *
-     * @deprecated as of 3.0.2
-     * @todo remove before 3.1.0
-     */
-    public function getRouteParameters()
-    {
-        return [
-            'category'      => $this->category->id,
-            'category_slug' => $this->category->slug,
-            'thread'        => $this->id,
-            'thread_slug'   => $this->slug
-        ];
     }
 
     /**
