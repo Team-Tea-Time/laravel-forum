@@ -26,7 +26,7 @@ class ThreadPolicy
      */
     public function rename($user, Thread $thread)
     {
-        return $user->id === $thread->author_id;
+        return $user->getKey() === $thread->author_id;
     }
 
     /**
@@ -50,6 +50,6 @@ class ThreadPolicy
      */
     public function delete($user, Thread $thread)
     {
-        return Gate::allows('deleteThreads', $thread->category) || $user->id === $thread->author_id;
+        return Gate::allows('deleteThreads', $thread->category) || $user->getKey() === $thread->author_id;
     }
 }

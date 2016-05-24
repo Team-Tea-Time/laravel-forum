@@ -181,7 +181,7 @@ class Thread extends BaseModel
     public function getReaderAttribute()
     {
         if (auth()->check()) {
-            $reader = $this->readers()->where('user_id', auth()->user()->id)->first();
+            $reader = $this->readers()->where('user_id', auth()->user()->getKey())->first();
 
             return (!is_null($reader)) ? $reader->pivot : null;
         }
