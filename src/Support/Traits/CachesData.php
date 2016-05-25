@@ -19,7 +19,7 @@ trait CachesData
         $class = $class->getShortName();
 
         $lifetimes = config('forum.preferences.cache_lifetimes');
-        $lifetime = ($lifetimes[$class][$key]) ? $lifetimes[$class][$key] : $lifetimes['default'];
+        $lifetime = isset($lifetimes[$class][$key]) ? $lifetimes[$class][$key] : $lifetimes['default'];
 
         return Cache::remember($class.$this->id.$key, $lifetime, $function);
     }
