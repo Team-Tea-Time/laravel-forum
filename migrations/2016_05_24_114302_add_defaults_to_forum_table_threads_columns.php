@@ -14,8 +14,8 @@ class AddDefaultsToForumTableThreadsColumns extends Migration
     {
         Schema::table('forum_threads', function (Blueprint $table)
         {
-            $table->column('pinned')->nullable()->default(0)->change();
-            $table->column('locked')->nullable()->default(0)->change();
+            $table->boolean('pinned')->nullable()->default(0)->change();
+            $table->boolean('locked')->nullable()->default(0)->change();
         });
     }
 
@@ -28,8 +28,8 @@ class AddDefaultsToForumTableThreadsColumns extends Migration
     {
         Schema::table('forum_threads', function (Blueprint $table)
         {
-            $table->column('pinned')->nullable(false)->default(null)->change();
-            $table->column('locked')->nullable(false)->default(null)->change();
+            $table->boolean('pinned')->nullable(false)->default(null)->change();
+            $table->boolean('locked')->nullable(false)->default(null)->change();
         });
     }
 }
