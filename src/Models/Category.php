@@ -54,7 +54,7 @@ class Category extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function children()
+    public function categories()
     {
         return $this->hasMany(Category::class, 'category_id')->orderBy('weight');
     }
@@ -78,7 +78,7 @@ class Category extends BaseModel
      */
     public function getChildrenAttribute()
     {
-        $children = $this->children()->get();
+        $children = $this->categories;
 
         $children = $children->filter(function ($category) {
             if ($category->private) {

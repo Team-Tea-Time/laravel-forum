@@ -2,13 +2,14 @@
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
+use Riari\Forum\Support\Traits\CachesData;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Traits\HasAuthor;
 
 class Thread extends BaseModel
 {
-    use SoftDeletes, HasAuthor;
+    use SoftDeletes, CachesData, HasAuthor;
 
     /**
      * Eloquent attributes
@@ -28,6 +29,16 @@ class Thread extends BaseModel
 	 * @var array
 	 */
     protected $with = ['author'];
+
+    /**
+     * @var Post
+     */
+    private $firstPost;
+
+    /**
+     * @var Post
+     */
+    private $lastPost;
 
     /**
      * @var string
@@ -129,7 +140,11 @@ class Thread extends BaseModel
      */
     public function getFirstPostAttribute()
     {
-        return $this->posts()->orderBy('created_at', 'asc')->first();
+        if (!isset($this->firstPost)) {
+            $this->firstPost = $this->posts()->orderBy('created_at', 'asc')->first();
+        }
+
+        return $this->firstPost;
     }
 
     /**
@@ -139,7 +154,11 @@ class Thread extends BaseModel
      */
     public function getLastPostAttribute()
     {
-        return $this->posts()->orderBy('created_at', 'desc')->first();
+        if (!isset($this->lastPost)) {
+            $this->lastPost = $this->posts()->orderBy('created_at', 'desc')->first();
+        }
+
+        return $this->lastPost;
     }
 
     /**
