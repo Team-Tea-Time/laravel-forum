@@ -2,14 +2,14 @@
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
-use Riari\Forum\Support\Traits\CachesData;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Traits\HasAuthor;
+use Riari\Forum\Support\Traits\CachesData;
 
 class Thread extends BaseModel
 {
-    use SoftDeletes, CachesData, HasAuthor;
+    use SoftDeletes, HasAuthor, CachesData;
 
     /**
      * Eloquent attributes
@@ -21,24 +21,7 @@ class Thread extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['category_id', 'author_id', 'title', 'locked', 'pinned'];
-
-	/**
-	 * The relations to eager load on every query.
-	 *
-	 * @var array
-	 */
-    protected $with = ['author'];
-
-    /**
-     * @var Post
-     */
-    private $firstPost;
-
-    /**
-     * @var Post
-     */
-    private $lastPost;
+    protected $fillable = ['category_id', 'author_id', 'title', 'locked', 'pinned', 'reply_count'];
 
     /**
      * @var string
@@ -120,7 +103,7 @@ class Thread extends BaseModel
      */
     public function getPostsPaginatedAttribute()
     {
-        return $this->posts()->orderBy('created_at')->paginate(config('forum.preferences.pagination.posts'));
+        return $this->posts()->paginate(config('forum.preferences.pagination.posts'));
     }
 
     /**
@@ -140,11 +123,7 @@ class Thread extends BaseModel
      */
     public function getFirstPostAttribute()
     {
-        if (!isset($this->firstPost)) {
-            $this->firstPost = $this->posts()->orderBy('created_at', 'asc')->first();
-        }
-
-        return $this->firstPost;
+        return $this->posts()->orderBy('created_at', 'asc')->first();
     }
 
     /**
@@ -154,11 +133,7 @@ class Thread extends BaseModel
      */
     public function getLastPostAttribute()
     {
-        if (!isset($this->lastPost)) {
-            $this->lastPost = $this->posts()->orderBy('created_at', 'desc')->first();
-        }
-
-        return $this->lastPost;
+        return $this->posts()->orderBy('created_at', 'desc')->first();
     }
 
     /**
@@ -171,15 +146,6 @@ class Thread extends BaseModel
         return $this->lastPost->created_at;
     }
 
-    /**
-     * Attribute: Number of thread replies.
-     *
-     * @return int
-     */
-    public function getReplyCountAttribute()
-    {
-        return ($this->posts->count() - 1);
-    }
 
     /**
      * Attribute: 'Old' flag.

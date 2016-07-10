@@ -5,6 +5,7 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Riari\Forum\Console\Commands\RefreshStats;
 use Riari\Forum\Http\Middleware\APIAuth;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
@@ -34,6 +35,7 @@ class ForumServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->commands([RefreshStats::class]);
     }
 
     /**

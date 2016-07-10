@@ -26,7 +26,7 @@ class Category extends BaseModel
 	 *
 	 * @var array
 	 */
-    protected $fillable = ['category_id', 'title', 'description', 'weight', 'enable_threads', 'private'];
+    protected $fillable = ['category_id', 'title', 'description', 'weight', 'enable_threads', 'private', 'thread_count', 'post_count'];
 
     /**
      * Create a new category model instance.
@@ -130,38 +130,6 @@ class Category extends BaseModel
     public function getThreadsEnabledAttribute()
     {
         return $this->enable_threads;
-    }
-
-    /**
-     * Attribute: Thread count.
-     *
-     * @return int
-     */
-    public function getThreadCountAttribute()
-    {
-        return $this->remember('threadCount', function () {
-            return $this->threads->count();
-        });
-    }
-
-    /**
-     * Attribute: Post (reply) count.
-     *
-     * @return int
-     */
-    public function getPostCountAttribute()
-    {
-        return $this->remember('postCount', function () {
-            $replyCount = 0;
-
-            $threads = $this->threads()->get(['id']);
-
-            foreach ($threads as $thread) {
-                $replyCount += $thread->posts->count() - 1;
-            }
-
-            return $replyCount;
-        });
     }
 
     /**

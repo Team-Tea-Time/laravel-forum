@@ -44,8 +44,6 @@ return [
     'cache_lifetimes' => [
         'default' => 5,
         'Category' => [
-            'threadCount'   => 5,
-            'postCount'     => 5,
             'deepestChild'  => 720,
             'depth'         => 720
         ],

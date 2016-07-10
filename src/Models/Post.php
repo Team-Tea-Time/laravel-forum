@@ -22,13 +22,6 @@ class Post extends BaseModel
 	 */
     protected $fillable = ['thread_id', 'author_id', 'post_id', 'content'];
 
-	/**
-	 * The relations to eager load on every query.
-	 *
-	 * @var array
-	 */
-    protected $with = ['author'];
-
     /**
      * Create a new post model instance.
      *

@@ -15,7 +15,7 @@ class UpdateForumTablePosts extends Migration
         Schema::table('forum_posts', function (Blueprint $table)
         {
             $table->renameColumn('parent_thread', 'thread_id');
-            $table->integer('post_id')->unsigned()->nullable();
+            $table->integer('post_id')->after('content')->unsigned()->nullable();
         });
     }
 

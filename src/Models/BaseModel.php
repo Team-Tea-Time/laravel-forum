@@ -147,4 +147,16 @@ abstract class BaseModel extends Model
         $this->$attribute = !$this->$attribute;
         $this->save();
     }
+
+    /**
+     * Helper: save without touching updated_at.
+     *
+     * @return null
+     */
+    public function saveWithoutTouch()
+    {
+        $this->timestamps = false;
+        $this->save();
+        $this->timestamps = true;
+    }
 }
