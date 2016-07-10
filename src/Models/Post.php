@@ -74,20 +74,16 @@ class Post extends BaseModel
     }
 
     /**
-     * Attribute: Sequence number in thread.
+     * Helper: Sequence number in thread.
      *
      * @return int
      */
-    public function getSequenceNumberAttribute()
+    public function getSequenceNumber()
     {
-        $self = $this;
-
-        return $this->remember('sequenceNumber', function () use ($self) {
-            foreach ($self->thread->posts as $index => $post) {
-                if ($post->id == $self->id) {
-                    return $index + 1;
-                }
+        foreach ($this->thread->posts as $index => $post) {
+            if ($post->id == $this->id) {
+                return $index + 1;
             }
-        });
+        }
     }
 }
