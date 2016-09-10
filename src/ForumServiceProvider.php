@@ -1,5 +1,6 @@
 <?php namespace Riari\Forum;
 
+use Carbon\Carbon;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\AliasLoader;
@@ -51,6 +52,9 @@ class ForumServiceProvider extends ServiceProvider
             $this->registerMiddleware($router);
             $this->loadRoutes($router);
         }
+
+        // Make sure Carbon's locale is set to the application locale
+        Carbon::setLocale($this->app->getLocale());
     }
 
     /**
