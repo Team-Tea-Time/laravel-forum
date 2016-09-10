@@ -1,6 +1,7 @@
 <?php namespace Riari\Forum\Models\Observers;
 
 use Carbon\Carbon;
+use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Thread;
 use Riari\Forum\Support\Stats;
 
@@ -10,6 +11,20 @@ class ThreadObserver
     {
         // Increment thread count on the category
         $thread->category->increment('thread_count');
+    }
+
+    public function updating($thread)
+    {
+        $oldCategory = Category::find($thread->getOriginal('category_id'));
+        $postCount = $thread->posts->count();
+
+        // Decrement the old category's thread and post counts
+        $oldCategory->decrement('thread_count');
+        $oldCategory->decrement('post_count', $postCount);
+
+        // Increment the new category's thread and post counts
+        $thread->category->increment('thread_count');
+        $thread->category->increment('post_count', $postCount);
     }
 
     public function deleted($thread)
