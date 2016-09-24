@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Routing\Controller;
+use Illuminate\Validation\ValidationException;
 
 abstract class BaseController extends Controller
 {
@@ -256,7 +257,7 @@ abstract class BaseController extends Controller
         $validator = $this->getValidationFactory()->make($request->all(), $rules, $messages, $customAttributes);
 
         if ($validator->fails()) {
-            $this->throwValidationException($request, $validator);
+            throw new ValidationException($validator);
         }
     }
 
