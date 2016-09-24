@@ -15,16 +15,18 @@ class ThreadObserver
 
     public function updating($thread)
     {
-        $oldCategory = Category::find($thread->getOriginal('category_id'));
-        $postCount = $thread->posts->count();
+        if ($thread->getOriginal('category_id') != $thread->category_id) {
+            $oldCategory = Category::find($thread->getOriginal('category_id'));
+            $postCount = $thread->posts->count();
 
-        // Decrement the old category's thread and post counts
-        $oldCategory->decrement('thread_count');
-        $oldCategory->decrement('post_count', $postCount);
+            // Decrement the old category's thread and post counts
+            $oldCategory->decrement('thread_count');
+            $oldCategory->decrement('post_count', $postCount);
 
-        // Increment the new category's thread and post counts
-        $thread->category->increment('thread_count');
-        $thread->category->increment('post_count', $postCount);
+            // Increment the new category's thread and post counts
+            $thread->category->increment('thread_count');
+            $thread->category->increment('post_count', $postCount);
+        }
     }
 
     public function deleted($thread)
