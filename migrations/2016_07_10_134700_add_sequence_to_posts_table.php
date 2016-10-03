@@ -25,7 +25,7 @@ class AddSequenceToPostsTable extends Migration
     public function down()
     {
         Schema::table('forum_posts', function (Blueprint $table) {
-            $table->dropColumn('reply_count');
+            $table->dropColumn('sequence');
         });
     }
 }
