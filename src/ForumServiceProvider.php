@@ -16,13 +16,6 @@ use Riari\Forum\Models\Observers\ThreadObserver;
 class ForumServiceProvider extends ServiceProvider
 {
     /**
-     * The base directory for the package.
-     *
-     * @var string
-     */
-    const BASE_DIR = __DIR__ . '/../';
-
-    /**
      * Register the service provider.
      *
      * @return void
@@ -58,6 +51,16 @@ class ForumServiceProvider extends ServiceProvider
     }
 
     /**
+     * Returns the package's base directory path.
+     *
+     * @return string
+     */
+    protected function baseDir()
+    {
+        return __DIR__ . '/../';
+    }
+
+    /**
      * Define files published by this package.
      *
      * @return void
@@ -65,19 +68,19 @@ class ForumServiceProvider extends ServiceProvider
     protected function setPublishables()
     {
         $this->publishes([
-            static::BASE_DIR . "config/api.php" => config_path('forum.api.php'),
-            static::BASE_DIR . "config/integration.php" => config_path('forum.integration.php'),
-            static::BASE_DIR . "config/preferences.php" => config_path('forum.preferences.php'),
-            static::BASE_DIR . "config/routing.php" => config_path('forum.routing.php'),
-            static::BASE_DIR . "config/validation.php" => config_path('forum.validation.php')
+            "{$this->baseDir()}config/api.php" => config_path('forum.api.php'),
+            "{$this->baseDir()}config/integration.php" => config_path('forum.integration.php'),
+            "{$this->baseDir()}config/preferences.php" => config_path('forum.preferences.php'),
+            "{$this->baseDir()}config/routing.php" => config_path('forum.routing.php'),
+            "{$this->baseDir()}config/validation.php" => config_path('forum.validation.php')
         ], 'config');
 
         $this->publishes([
-            static::BASE_DIR . "migrations/" => base_path('database/migrations')
+            "{$this->baseDir()}migrations/" => base_path('database/migrations')
         ], 'migrations');
 
         $this->publishes([
-            static::BASE_DIR . "translations/" => base_path('resources/lang/vendor/forum'),
+            "{$this->baseDir()}translations/" => base_path('resources/lang/vendor/forum'),
         ], 'translations');
     }
 
@@ -90,11 +93,11 @@ class ForumServiceProvider extends ServiceProvider
     {
         // Merge config
         foreach (['api', 'integration', 'preferences', 'routing', 'validation'] as $name) {
-            $this->mergeConfigFrom(static::BASE_DIR . "config/{$name}.php", "forum.{$name}");
+            $this->mergeConfigFrom("{$this->baseDir()}config/{$name}.php", "forum.{$name}");
         }
 
         // Load translations
-        $this->loadTranslationsFrom(static::BASE_DIR . "translations", 'forum');
+        $this->loadTranslationsFrom("{$this->baseDir()}translations", 'forum');
     }
 
     /**
@@ -134,7 +137,7 @@ class ForumServiceProvider extends ServiceProvider
      */
     protected function loadRoutes(Router $router)
     {
-        $dir = self::BASE_DIR;
+        $dir = $this->baseDir();
         $router->group([
             'namespace' => 'Riari\Forum\Http\Controllers',
             'as' => config('forum.routing.as'),
