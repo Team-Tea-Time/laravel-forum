@@ -1,6 +1,12 @@
 <?php
 
-$r->group(['prefix' => 'api', 'namespace' => 'API', 'as' => 'api.', 'middleware' => 'forum.api.auth'], function ($r)
+$r->group(
+    [
+        'prefix' => config('forum.routing.api_prefix', "api"),
+        'namespace' => 'API',
+        'as' => 'api.',
+        'middleware' => config('forum.routing.middleware', 'forum.api.auth')
+    ], function ($r)
 {
     // Categories
     $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
