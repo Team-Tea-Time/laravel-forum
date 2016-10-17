@@ -35,17 +35,16 @@ class CategoryController extends BaseController
      */
     public function index(Request $request)
     {
-        $categories = $this->model()->withRequestScopes($request);
+        $categoriesQuery = $this->model()->withRequestScopes($request);
 
-        $categories = $categories->get()->filter(function ($category) {
+        // the paging will not receive ideal count
+        return $this->responseWithQueryAndFilter($categoriesQuery, "categories", function ($category) {
             if ($category->private) {
                 return Gate::allows('view', $category);
             }
 
             return true;
         });
-
-        return $this->response($categories);
     }
 
     /**

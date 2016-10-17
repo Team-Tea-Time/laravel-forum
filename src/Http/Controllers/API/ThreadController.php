@@ -32,19 +32,20 @@ class ThreadController extends BaseController
     /**
      * GET: return an index of threads by category ID.
      *
-     * @param  Request  $request
+     * @param  Request $request
+     *
      * @return JsonResponse|Response
      */
     public function index(Request $request)
     {
         $this->validate($request, ['category_id' => ['required']]);
 
-        $threads = $this->model()
-            ->withRequestScopes($request)
-            ->where('category_id', $request->input('category_id'))
-            ->get();
-
-        return $this->response($threads);
+        return $this->responseWithQuery(
+            $this->model()
+                ->withRequestScopes($request)
+                ->where('category_id', $request->input('category_id')),
+            "threads"
+        );
     }
 
     /**

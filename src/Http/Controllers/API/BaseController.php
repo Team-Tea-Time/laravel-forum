@@ -1,12 +1,15 @@
 <?php namespace Riari\Forum\Http\Controllers\API;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Collection;
 
 abstract class BaseController extends Controller
 {
@@ -23,6 +26,12 @@ abstract class BaseController extends Controller
     protected $rules;
 
     /**
+     * Is the pagination enabled
+     * @var bool
+     */
+    protected $paginateEnabled = false;
+
+    /**
      * Create a new API controller instance.
      *
      * @param  Request  $request
@@ -35,6 +44,9 @@ abstract class BaseController extends Controller
             'orderBy'   => 'string',
             'orderDir'  => 'in:desc,asc'
         ]);
+
+        // determine if we can paginate
+        $this->paginateEnabled = config("forum.preferences.pagination.enabled", false);
     }
 
     /**
@@ -275,6 +287,103 @@ abstract class BaseController extends Controller
         return (request()->ajax() || request()->wantsJson())
             ? new JsonResponse($message + compact('data'), $code)
             : new Response($data, $code);
+    }
+
+    /**
+     * Based on config decides if we can run paginate or standard get query and returns the response json
+     *
+     * @param Builder       $query
+     * @param string        $configKeyForPaginate
+     * @param \Closure|null $handleCollectionCallback must returns the final collection or paginate
+     *
+     * @return JsonResponse|Response
+     */
+    protected function responseWithQuery($query, $configKeyForPaginate, $handleCollectionCallback = null)
+    {
+        // run the response query
+        $response = $this->runResponseQuery($query, $configKeyForPaginate, $handleCollectionCallback);
+
+        // response the data via internal method
+        return $this->response($response);
+    }
+
+    /**
+     * Based on config decides if we can run paginate or standard get query and filters the entries via provided function
+     * or value
+     *
+     * @param Builder         $query
+     * @param string          $configKeyForPaginate
+     * @param string|\Closure $filter
+     *
+     * @return JsonResponse|Response
+     */
+    protected function responseWithQueryAndFilter($query, $configKeyForPaginate, $filter)
+    {
+        // run the response with query
+        return $this->responseWithQuery($query, $configKeyForPaginate, function ($paginateOrCollection) use ($filter) {
+
+            // checks if the content is paginate and runs the filter on the collection
+            // in the paginate object
+            if ($paginateOrCollection instanceof AbstractPaginator) {
+                // filter the items
+                /** @var AbstractPaginator $paginateOrCollection */
+                $filteredActivities = $paginateOrCollection->filter($filter);
+
+                // replace the paginate items
+                // this will not update the total items, we could change the numbers but could
+                // corrupt next page detection
+                return $paginateOrCollection->setCollection($filteredActivities);
+            } else {
+                return $paginateOrCollection->filter($filter);
+            }
+        });
+    }
+
+
+    /**
+     * Based on config decides if we can run paginate or standard get query and return paginate or collection
+     *
+     * @param Builder       $query
+     * @param string        $configKeyForPaginate
+     * @param \Closure|null $handleCollectionCallback must returns the final collection or paginate
+     *
+     * @return Collection|AbstractPaginator
+     */
+    protected function runResponseQuery($query, $configKeyForPaginate, $handleCollectionCallback = null)
+    {
+        // check if paging is enabled and not zero
+        $perPage = $this->getPerPageForConfigKey($configKeyForPaginate);
+
+        if ($perPage > 0) {
+            // run the paginate
+            $response = $query->paginate($perPage);
+        } else {
+            $response = $query->get();
+        }
+
+        // adapt the data by custom logic (for paginate not ideal...)
+        if (is_callable($handleCollectionCallback)) {
+            return $handleCollectionCallback($response);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Returns the count of items per page for given config key.
+     * If 0 is returned, the paginate is disabled
+     *
+     * @param string $configKeyForPaginate
+     *
+     * @return int|mixed
+     */
+    protected function getPerPageForConfigKey($configKeyForPaginate)
+    {
+        if (!$this->paginateEnabled) {
+            return 0;
+        }
+
+        return config("forum.preferences.pagination.".$configKeyForPaginate, 20);
     }
 
     /**
