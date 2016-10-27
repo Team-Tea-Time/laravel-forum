@@ -38,7 +38,7 @@ class PostController extends BaseController
         $this->validate($request, ['thread_id' => ['required']]);
 
         return $this->responseWithQuery(
-            $this->model()->where('thread_id', $request->input('thread_id')),
+            $this->model()->withRequestScopes($request)->where('thread_id', $request->input('thread_id')),
             "posts"
         );
     }
