@@ -1,5 +1,6 @@
 <?php namespace Riari\Forum\Http\Controllers\API;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Riari\Forum\Models\Post;
@@ -42,6 +43,56 @@ class PostController extends BaseController
             "posts"
         );
     }
+
+    /**
+     * Runs the paginate query
+     *
+     * @param Builder $query
+     * @param int     $perPage
+     *
+     * @return AbstractPaginator
+     */
+    protected function runPaginateQuery($query, $perPage)
+    {
+        // when paginating is enabled, we need to return only parent posts
+        // then load recursively the children's
+        $query->whereNull("post_id")->with("children");
+
+        $paginator = parent::runPaginateQuery($query, $perPage);
+
+        if (!$paginator->isEmpty()) {
+            $this->loadChildrenRecursively($paginator->getCollection());
+        }
+
+        return $paginator;
+    }
+
+    /**
+     * Loads the posts children recursively via relation
+     *
+     * @param Collection $items
+     *
+     * @return $this
+     */
+    protected function loadChildrenRecursively($items)
+    {
+        if ($items->isEmpty()) {
+            return $this;
+        }
+
+        /** @var Post $item */
+        foreach ($items as $item) {
+            if (!$item->relationLoaded("children")) {
+                $item->load("children");
+            }
+
+            // load the children items
+            $this->loadChildrenRecursively($item->children);
+        }
+
+        return $this;
+    }
+
 
     /**
      * GET: Return a post.

@@ -1,9 +1,15 @@
 <?php namespace Riari\Forum\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Riari\Forum\Models\Traits\HasAuthor;
 use Riari\Forum\Support\Traits\CachesData;
 
+/**
+ * @property Collection children
+ * @property Thread     thread
+ * @property int        id
+ */
 class Post extends BaseModel
 {
     use SoftDeletes, HasAuthor, CachesData;
