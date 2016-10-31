@@ -292,16 +292,17 @@ abstract class BaseController extends Controller
     /**
      * Based on config decides if we can run paginate or standard get query and returns the response json
      *
+     * @param Request       $request
      * @param Builder       $query
      * @param string        $configKeyForPaginate
      * @param \Closure|null $handleCollectionCallback must returns the final collection or paginate
      *
      * @return JsonResponse|Response
      */
-    protected function responseWithQuery($query, $configKeyForPaginate, $handleCollectionCallback = null)
+    protected function responseWithQuery($request, $query, $configKeyForPaginate, $handleCollectionCallback = null)
     {
         // run the response query
-        $response = $this->runResponseQuery($query, $configKeyForPaginate, $handleCollectionCallback);
+        $response = $this->runResponseQuery($request, $query, $configKeyForPaginate, $handleCollectionCallback);
 
         // response the data via internal method
         return $this->response($response);
@@ -311,16 +312,17 @@ abstract class BaseController extends Controller
      * Based on config decides if we can run paginate or standard get query and filters the entries via provided function
      * or value
      *
+     * @param Request          $request
      * @param Builder         $query
      * @param string          $configKeyForPaginate
      * @param string|\Closure $filter
      *
      * @return JsonResponse|Response
      */
-    protected function responseWithQueryAndFilter($query, $configKeyForPaginate, $filter)
+    protected function responseWithQueryAndFilter($request, $query, $configKeyForPaginate, $filter)
     {
         // run the response with query
-        return $this->responseWithQuery($query, $configKeyForPaginate, function ($paginateOrCollection) use ($filter) {
+        return $this->responseWithQuery($request, $query, $configKeyForPaginate, function ($paginateOrCollection) use ($filter) {
 
             // checks if the content is paginate and runs the filter on the collection
             // in the paginate object
@@ -343,23 +345,26 @@ abstract class BaseController extends Controller
     /**
      * Based on config decides if we can run paginate or standard get query and return paginate or collection
      *
+     * @param Request       $request
      * @param Builder       $query
      * @param string        $configKeyForPaginate
      * @param \Closure|null $handleCollectionCallback must returns the final collection or paginate
      *
      * @return Collection|AbstractPaginator
      */
-    protected function runResponseQuery($query, $configKeyForPaginate, $handleCollectionCallback = null)
+    protected function runResponseQuery($request, $query, $configKeyForPaginate, $handleCollectionCallback = null)
     {
+        // apply request scopes
+        $query->withRequestScopes($request);
 
         // check if paging is enabled and not zero
         $perPage = $this->getPerPageForConfigKey($configKeyForPaginate);
 
         if ($perPage > 0) {
             // run the paginate
-            $response = $this->runPaginateQuery($query, $perPage);
+            $response = $this->runPaginateQuery($query, $perPage, $request);
         } else {
-            $response = $this->runGetQuery($query);
+            $response = $this->runGetQuery($query, $request);
         }
 
         // adapt the data by custom logic (for paginate not ideal...)
@@ -374,11 +379,12 @@ abstract class BaseController extends Controller
      * Runs the paginate query
      *
      * @param Builder $query
-     * @param int $perPage
+     * @param int     $perPage
+     * @param Request $request
      *
      * @return AbstractPaginator
      */
-    protected function runPaginateQuery($query, $perPage)
+    protected function runPaginateQuery($query, $perPage, $request)
     {
         return $query->paginate($perPage);
     }
@@ -387,10 +393,11 @@ abstract class BaseController extends Controller
      * Runs the get query
      *
      * @param Builder $query
+     * @param Request $request
      *
      * @return Collection
      */
-    protected function runGetQuery($query)
+    protected function runGetQuery($query, $request)
     {
         return $query->get();
     }

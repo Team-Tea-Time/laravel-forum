@@ -1,5 +1,6 @@
 <?php namespace Riari\Forum\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -113,6 +114,22 @@ abstract class BaseModel extends Model
     public function withRequestScopes(Request $request)
     {
         return $this->requestWhere($request)->requestWith($request)->requestAppend($request)->requestOrder($request);
+    }
+
+    /**
+     * Helper: Apply request-based scopes to the model query.
+     *
+     * @param Builder $builder
+     * @param Request $request
+     *
+     * @return Model
+     */
+    public function scopeWithRequestScopes($builder, Request $request)
+    {
+        return $this->scopeRequestWhere($builder, $request)
+                    ->requestWith($request)
+                    ->requestAppend($request)
+                    ->requestOrder($request);
     }
 
     /**

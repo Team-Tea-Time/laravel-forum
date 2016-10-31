@@ -39,7 +39,8 @@ class PostController extends BaseController
         $this->validate($request, ['thread_id' => ['required']]);
 
         return $this->responseWithQuery(
-            $this->model()->withRequestScopes($request)->where('thread_id', $request->input('thread_id')),
+            $request,
+            $this->model()->where('thread_id', $request->input('thread_id')),
             "posts"
         );
     }
@@ -49,19 +50,26 @@ class PostController extends BaseController
      *
      * @param Builder $query
      * @param int     $perPage
+     * @param Request $request
      *
      * @return AbstractPaginator
      */
-    protected function runPaginateQuery($query, $perPage)
+    protected function runPaginateQuery($query, $perPage, $request)
     {
+        $childRelations = [
+            "children" => function($builder) use ($request) {
+                $builder->withRequestScopes($request);
+            }
+        ];
+
         // when paginating is enabled, we need to return only parent posts
         // then load recursively the children's
-        $query->whereNull("post_id")->with("children");
+        $query->whereNull("post_id")->with($childRelations);
 
-        $paginator = parent::runPaginateQuery($query, $perPage);
+        $paginator = parent::runPaginateQuery($query, $perPage, $request);
 
         if (!$paginator->isEmpty()) {
-            $this->loadChildrenRecursively($paginator->getCollection());
+            $this->loadChildrenRecursively($paginator->getCollection(), $childRelations);
         }
 
         return $paginator;
@@ -71,10 +79,11 @@ class PostController extends BaseController
      * Loads the posts children recursively via relation
      *
      * @param Collection $items
+     * @param array      $childRelations a settings to setup the same scopes for the relation loading
      *
      * @return $this
      */
-    protected function loadChildrenRecursively($items)
+    protected function loadChildrenRecursively($items, $childRelations)
     {
         if ($items->isEmpty()) {
             return $this;
@@ -83,11 +92,11 @@ class PostController extends BaseController
         /** @var Post $item */
         foreach ($items as $item) {
             if (!$item->relationLoaded("children")) {
-                $item->load("children");
+                $item->load($childRelations);
             }
 
             // load the children items
-            $this->loadChildrenRecursively($item->children);
+            $this->loadChildrenRecursively($item->children, $childRelations);
         }
 
         return $this;

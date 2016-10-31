@@ -38,7 +38,7 @@ class CategoryController extends BaseController
         $categoriesQuery = $this->model()->withRequestScopes($request);
 
         // the paging will not receive ideal count
-        return $this->responseWithQueryAndFilter($categoriesQuery, "categories", function ($category) {
+        return $this->responseWithQueryAndFilter($request, $categoriesQuery, "categories", function ($category) {
             if ($category->private) {
                 return Gate::allows('view', $category);
             }

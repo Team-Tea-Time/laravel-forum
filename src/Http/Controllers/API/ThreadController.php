@@ -41,8 +41,8 @@ class ThreadController extends BaseController
         $this->validate($request, ['category_id' => ['required']]);
 
         return $this->responseWithQuery(
+            $request,
             $this->model()
-                ->withRequestScopes($request)
                 ->where('category_id', $request->input('category_id')),
             "threads"
         );
