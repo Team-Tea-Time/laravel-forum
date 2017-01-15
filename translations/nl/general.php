@@ -27,7 +27,7 @@ return [
     'proceed'           => "Ga door",
     'quick_reply'       => "Snelle reactie",
     'rename'            => "Hernoem",
-    'reorder'           => "Herschikken",
+    'reorder'           => "Prioriteit rangschikken",
     'replies'           => "Reacties",
     'reply'             => "Reactie",
     'reply_added'       => "Reactie toegevoegd",
@@ -36,7 +36,7 @@ return [
     'restore'           => "Herstel",
     'subject'           => "Onderwerp",
     'title'             => "Titel",
-    'weight'            => "Gewicht",
+    'weight'            => "Prioriteit",
     'with_selection'    => "Met selectie…",
 
 ];
