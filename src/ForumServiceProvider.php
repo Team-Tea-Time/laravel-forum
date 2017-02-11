@@ -154,6 +154,6 @@ class ForumServiceProvider extends ServiceProvider
      */
     public function registerMiddleware(Router $router)
     {
-        $router->middleware('forum.api.auth', APIAuth::class);
+        $router->aliasMiddleware('forum.api.auth', APIAuth::class);
     }
 }
