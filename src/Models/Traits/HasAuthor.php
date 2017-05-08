@@ -9,7 +9,7 @@ trait HasAuthor
      */
     public function author()
     {
-        return $this->belongsTo(config('forum.integration.user_model'));
+        return $this->belongsTo(config('forum.integration.user_model'), 'author_id');
     }
 
     /**
