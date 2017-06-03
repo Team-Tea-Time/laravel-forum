@@ -13,7 +13,7 @@ return [
     'editing'           => "Şunu düzenliyorsunuz :item",
     'generic_confirm'   => "Emin misiniz?",
     'home_title'        => "Forum",
-    'index'             => "Index",
+    'index'             => "Anasayfa",
     'invalid_selection' => "Hatalı seçim",
     'last_updated'      => "Son güncelleme",
     'mark_read'         => "Okundu olarak işaretle",
