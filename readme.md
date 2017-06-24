@@ -65,7 +65,7 @@ Several configuration files are published to your application's config directory
 
 #### Translations
 
-Laravel Forum currently supports 11 languages: German, English, Spanish, French, Italian, Romanian, Russian, Turquish, Serbian, Portuguese (Brazil) and Swedish. The translation files are published to `resources/lang/vendor/forum/{locale}`. **Please be aware that much of the translation work in 3.0 has been done using Google Translate and probably isn't accurate. Pull requests are welcome to rectify this.**
+Laravel Forum currently supports 11 languages: German, English, Spanish, French, Italian, Romanian, Russian, Turkish, Serbian, Portuguese (Brazil) and Swedish. The translation files are published to `resources/lang/vendor/forum/{locale}`. **Please be aware that much of the translation work in 3.0 has been done using Google Translate and probably isn't accurate. Pull requests are welcome to rectify this.**
 
 #### Policies (user permissions)
 
