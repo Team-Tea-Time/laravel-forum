@@ -36,7 +36,7 @@ class PostObserver
 
         if ($post->thread->posts->isEmpty()) {
             // The containing thread is now empty, so delete the thread accordingly
-            if ($post->deleted_at != Carbon::now()) {
+            if ($post->deleted_at->toDateTimeString() != Carbon::now()->toDateTimeString()) {
                 // The post was force-deleted, so the thread should be too
                 $post->thread()->withTrashed()->forceDelete();
             } else {

@@ -32,7 +32,7 @@ class ThreadObserver
     public function deleted($thread)
     {
         // Delete the thread's posts
-        if ($thread->deleted_at != Carbon::now()) {
+        if ($thread->deleted_at->toDateTimeString() != Carbon::now()->toDateTimeString()) {
             // The thread was force-deleted, so the posts should be too
             $thread->posts()->withTrashed()->forceDelete();
 
