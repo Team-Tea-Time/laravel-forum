@@ -1,5 +1,6 @@
 <?php namespace Riari\Forum\Http\Controllers\API;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Riari\Forum\Models\Post;
@@ -37,10 +38,70 @@ class PostController extends BaseController
     {
         $this->validate($request, ['thread_id' => ['required']]);
 
-        $posts = $this->model()->where('thread_id', $request->input('thread_id'))->get();
-
-        return $this->response($posts);
+        return $this->responseWithQuery(
+            $request,
+            $this->model()->where('thread_id', $request->input('thread_id')),
+            "posts"
+        );
     }
+
+    /**
+     * Runs the paginate query
+     *
+     * @param Builder $query
+     * @param int     $perPage
+     * @param Request $request
+     *
+     * @return AbstractPaginator
+     */
+    protected function runPaginateQuery($query, $perPage, $request)
+    {
+        $childRelations = [
+            "children" => function($builder) use ($request) {
+                $builder->withRequestScopes($request);
+            }
+        ];
+
+        // when paginating is enabled, we need to return only parent posts
+        // then load recursively the children's
+        $query->whereNull("post_id")->with($childRelations);
+
+        $paginator = parent::runPaginateQuery($query, $perPage, $request);
+
+        if (!$paginator->isEmpty()) {
+            $this->loadChildrenRecursively($paginator->getCollection(), $childRelations);
+        }
+
+        return $paginator;
+    }
+
+    /**
+     * Loads the posts children recursively via relation
+     *
+     * @param Collection $items
+     * @param array      $childRelations a settings to setup the same scopes for the relation loading
+     *
+     * @return $this
+     */
+    protected function loadChildrenRecursively($items, $childRelations)
+    {
+        if ($items->isEmpty()) {
+            return $this;
+        }
+
+        /** @var Post $item */
+        foreach ($items as $item) {
+            if (!$item->relationLoaded("children")) {
+                $item->load($childRelations);
+            }
+
+            // load the children items
+            $this->loadChildrenRecursively($item->children, $childRelations);
+        }
+
+        return $this;
+    }
+
 
     /**
      * GET: Return a post.

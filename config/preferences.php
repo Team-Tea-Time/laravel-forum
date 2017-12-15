@@ -25,9 +25,10 @@ return [
     */
 
     'pagination' => [
-        'categories'    => 20, // Categories per page (API only)
-        'threads'       => 20, // Threads per page
-        'posts'         => 15  // Posts per page
+        'enabled'       => false, // enables pagination (API only)
+        'categories'    => 20, // Categories per page (API only), 0 disables the paging
+        'threads'       => 20, // Threads per page, 0 disables the paging
+        'posts'         => 15  // Posts per page, 0 disables the paging
     ],
 
     /*
