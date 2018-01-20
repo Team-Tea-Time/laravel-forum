@@ -9,7 +9,12 @@ trait HasAuthor
      */
     public function author()
     {
-        return $this->belongsTo(config('forum.integration.user_model'), 'author_id');
+        $model = config('forum.integration.user_model');
+        if (method_exists($model, 'withTrashed')) {
+            return $this->belongsTo($model, 'author_id')->withTrashed();
+        }
+
+        return $this->belongsTo($model, 'author_id');
     }
 
     /**
