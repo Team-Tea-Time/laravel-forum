@@ -1,5 +1,5 @@
 {
-    "name": "riari/laravel-forum",
+    "name": "seka19/laravel-forum",
     "description": "A Laravel 4/5 package providing a solid foundation for building discussion forums",
     "keywords": ["laravel", "laravel-4", "laravel-5", "forum", "discuss"],
     "license": "MIT",
