@@ -204,6 +204,9 @@ abstract class BaseController extends Controller
         $this->parseAuthorization($model, $authorize);
 
         if ($force) {
+            if($model->deleted_at == null) {
+                $model->delete();
+            }
             $model->forceDelete();
 
             return $this->response($model, $this->trans('perma_deleted'));
