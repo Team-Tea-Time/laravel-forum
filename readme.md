@@ -2,6 +2,8 @@
 
 **Complete documentation is available on [teamteatime.net](https://teamteatime.net/docs/laravel-forum/4.x/introduction.md).**
 
+**NOTE: Version 3.0 is no longer supported. If you're using a version of Laravel below 5.3, consider upgrading it!**
+
 ## Requirements
 
 + PHP 5.4 or above
@@ -12,12 +14,6 @@
 ### Step 1: Install the package
 
 Install the package via composer:
-
-```
-composer require riari/laravel-forum:~3.0
-```
-
-If you're using Laravel 5.3 or above, you'll need version ~4.0:
 
 ```
 composer require riari/laravel-forum:~4.0
