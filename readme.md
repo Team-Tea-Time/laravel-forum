@@ -7,7 +7,7 @@
 ## Requirements
 
 + PHP 5.4 or above
-+ Laravel 5.1 or above (5.3 or above for package version ~4.0)
++ Laravel 5.3 or above
 
 ## Installation
 
