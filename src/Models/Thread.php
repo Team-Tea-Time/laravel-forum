@@ -108,7 +108,7 @@ class Thread extends BaseModel
      */
     public function getPostsPaginatedAttribute()
     {
-        return $this->posts()->paginate(config('forum.preferences.pagination.posts'));
+        return $this->posts()->orderBy('id')->paginate(config('forum.preferences.pagination.posts'));
     }
 
     /**
