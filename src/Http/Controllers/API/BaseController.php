@@ -13,6 +13,8 @@ abstract class BaseController extends Controller
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    const ATTRS_WITHOUT_TIMESTAMP = ['pinned', 'locked', 'category_id'];
+
     /**
      * @var Request
      */
@@ -181,6 +183,10 @@ abstract class BaseController extends Controller
         }
 
         $this->parseAuthorization($model, $authorize);
+
+        if (!empty(array_intersect(array_keys($attributes), BaseController::ATTRS_WITHOUT_TIMESTAMP))) {
+            $model->timestamps = false;
+        }
 
         $model->update($attributes);
 
