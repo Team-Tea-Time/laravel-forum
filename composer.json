@@ -1,12 +1,12 @@
 {
     "name": "riari/laravel-forum",
-    "description": "A Laravel 4/5 package providing a solid foundation for building discussion forums",
-    "keywords": ["laravel", "laravel-4", "laravel-5", "forum", "discuss"],
+    "description": "A Laravel 5 package providing a solid foundation for building discussion forums",
+    "keywords": ["laravel", "laravel-5", "forum", "discuss"],
     "license": "MIT",
     "authors": [
         {
             "name": "Riari",
-            "email": "hello@ricko.me"
+            "email": "riari@teamteatime.net"
         }
     ],
     "require": {
@@ -20,6 +20,6 @@
         }
     },
     "suggest": {
-        "riari/laravel-forum-frontend": "The standard forum frontend that provides views written with Bootstrap 3"
+        "riari/laravel-forum-frontend": "The standard forum frontend that provides views written with Bootstrap 4"
     }
 }
