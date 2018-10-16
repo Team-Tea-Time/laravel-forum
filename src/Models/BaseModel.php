@@ -121,7 +121,7 @@ abstract class BaseModel extends Model
      * @param  Model  $model
      * @return boolean
      */
-    public function updatedSince(&$model)
+    public function updatedSince(Model $model)
     {
         return ($this->updated_at > $model->updated_at);
     }

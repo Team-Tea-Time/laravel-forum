@@ -7,8 +7,8 @@ class PostObserver
 {
     public function created($post)
     {
-        // Update the thread's updated_at timestamp to match the created_at timestamp of the new post
-        $post->thread->updated_at = $post->created_at;
+        // Update the thread's last_replied_at timestamps to match the created_at timestamp of the new post
+        $post->thread->last_replied_at = $post->created_at;
         $post->thread->save();
 
         // Set the post's sequence number
@@ -51,8 +51,8 @@ class PostObserver
             $post->saveWithoutTouch();
         });
 
-        // Update the thread's updated_at timestamp to match the created_at timestamp of its latest post
-        $post->thread->updated_at = $post->thread->lastPostTime;
+        // Update the thread's last_replied_at timestamps to match the created_at timestamp of its latest post
+        $post->thread->last_replied_at = $post->thread->lastPostTime;
         $post->thread->save();
 
         Stats::updateThread($post->thread);
