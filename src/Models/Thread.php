@@ -19,7 +19,7 @@ class Thread extends BaseModel
     /**
      * @var array
      */
-    protected $dates = ['last_replied_at', 'deleted_at'];
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that are mass assignable.
@@ -98,7 +98,7 @@ class Thread extends BaseModel
         $age = strtotime(config('forum.preferences.old_thread_threshold'), 0);
         $cutoff = $time - $age;
 
-        return $query->where('last_replied_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('last_replied_at', 'desc');
+        return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
     }
 
     /**
@@ -160,7 +160,7 @@ class Thread extends BaseModel
     public function getOldAttribute()
     {
         $age = config('forum.preferences.old_thread_threshold');
-        return (!$age || $this->last_replied_at && $this->last_replied_at->timestamp < (time() - strtotime($age, 0)));
+        return (!$age || $this->updated_at->timestamp < (time() - strtotime($age, 0)));
     }
 
     /**
@@ -191,21 +191,10 @@ class Thread extends BaseModel
                 return self::STATUS_UNREAD;
             }
 
-            return ($this->repliedToSince($this->reader)) ? self::STATUS_UPDATED : false;
+            return ($this->updatedSince($this->reader)) ? self::STATUS_UPDATED : false;
         }
 
         return false;
-    }
-
-    /**
-     * Helper: Determine if this thread has been replied to since the given model was updated.
-     *
-     * @param  Model  $model
-     * @return boolean
-     */
-    public function repliedToSince(&$model)
-    {
-        return ($this->last_replied_at && $this->last_replied_at > $model->updated_at);
     }
 
     /**
@@ -219,7 +208,7 @@ class Thread extends BaseModel
         if (!$this->old) {
             if (is_null($this->reader)) {
                 $this->readers()->attach($userID);
-            } elseif ($this->repliedToSince($this->reader)) {
+            } elseif ($this->updatedSince($this->reader)) {
                 $this->reader->touch();
             }
         }

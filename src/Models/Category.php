@@ -98,10 +98,7 @@ class Category extends BaseModel
      */
     public function getThreadsPaginatedAttribute()
     {
-        return $this->threads()
-            ->orderBy('pinned', 'desc')
-            ->orderBy('last_replied_at', 'desc')
-            ->orderBy('created_at', 'desc')
+        return $this->threads()->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc')
             ->paginate(config('forum.preferences.pagination.threads'));
     }
 
