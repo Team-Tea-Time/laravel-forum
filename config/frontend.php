@@ -7,7 +7,7 @@ return [
     | Enable/disable
     |--------------------------------------------------------------------------
     |
-    | Set to false if you want to effectively disable the API.
+    | Set to false if you want to effectively disable the frontend.
     |
     */
 
@@ -18,15 +18,15 @@ return [
     | Router
     |--------------------------------------------------------------------------
     |
-    | API router config.
+    | Frontend router config.
     |
     */
 
     'router' => [
-        'prefix' => '/forum/api',
-        'as' => 'forum.api.',
-        'namespace' => '\Riari\Forum\HTTP\Controllers\API',
-        'middleware' => ['api', 'auth:api']
+        'prefix' => '/forum',
+        'as' => 'forum.',
+        'namespace' => '\Riari\Forum\HTTP\Controllers\Frontend',
+        'middleware' => []
     ],
 
 ];

@@ -1,4 +1,4 @@
-<?php namespace Riari\Forum\Http\Controllers\API;
+<?php namespace Riari\Forum\HTTP\Controllers\API;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -31,10 +31,10 @@ abstract class BaseController extends Controller
     public function __construct(Request $request)
     {
         $this->validate($request, [
-            'with'      => 'array',
-            'append'    => 'array',
-            'orderBy'   => 'string',
-            'orderDir'  => 'in:desc,asc'
+            'with' => 'array',
+            'append' => 'array',
+            'orderBy' => 'string',
+            'orderDir' => 'in:desc,asc'
         ]);
     }
 

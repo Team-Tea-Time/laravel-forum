@@ -25,9 +25,8 @@ return [
     */
 
     'pagination' => [
-        'categories'    => 20, // Categories per page (API only)
-        'threads'       => 20, // Threads per page
-        'posts'         => 15  // Posts per page
+        'threads' => 20, // Threads per page
+        'posts' => 15  // Posts per page
     ],
 
     /*
@@ -75,6 +74,30 @@ return [
     |
     */
 
-    'display_trashed_posts' => true
+    'display_trashed_posts' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Validation rules
+    |--------------------------------------------------------------------------
+    |
+    | Here we define validation rules for all of the fields in the package.
+    | Note that the 'required' rule is automatically enforced where applicable.
+    |
+    */
+
+    'validation_rules' => [
+        'author_id' => ['integer'],
+        'enable_threads' => ['boolean'],
+        'category_id' => ['integer'],
+        'content' => ['min:5'],
+        'locked' => ['boolean'],
+        'pinned' => ['boolean'],
+        'private' => ['boolean'],
+        'description' => ['string'],
+        'thread_id' => ['integer', 'exists:forum_threads,id'],
+        'title' => ['string', 'min:5'],
+        'weight' => ['integer'],
+    ]
 
 ];

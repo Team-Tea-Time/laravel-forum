@@ -6,8 +6,6 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
-use Riari\Forum\Console\Commands\RefreshStats;
-use Riari\Forum\Http\Middleware\APIAuth;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
 use Riari\Forum\Models\Observers\PostObserver;
@@ -15,16 +13,6 @@ use Riari\Forum\Models\Observers\ThreadObserver;
 
 class ForumServiceProvider extends ServiceProvider
 {
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->commands([RefreshStats::class]);
-    }
-
     /**
      * Bootstrap the application events.
      *
@@ -34,79 +22,50 @@ class ForumServiceProvider extends ServiceProvider
      */
     public function boot(Router $router, GateContract $gate)
     {
-        $this->setPublishables();
-        $this->loadStaticFiles();
-
-        $this->observeModels();
-
-        $this->registerPolicies($gate);
-
-        if (config('forum.routing.enabled')) {
-            $this->registerMiddleware($router);
-            $this->loadRoutes($router);
-        }
-
-        // Make sure Carbon's locale is set to the application locale
-        Carbon::setLocale($this->app->getLocale());
-    }
-
-    /**
-     * Returns the package's base directory path.
-     *
-     * @return string
-     */
-    protected function baseDir()
-    {
-        return __DIR__ . '/../';
-    }
-
-    /**
-     * Define files published by this package.
-     *
-     * @return void
-     */
-    protected function setPublishables()
-    {
         $this->publishes([
-            "{$this->baseDir()}config/api.php" => config_path('forum.api.php'),
-            "{$this->baseDir()}config/integration.php" => config_path('forum.integration.php'),
-            "{$this->baseDir()}config/preferences.php" => config_path('forum.preferences.php'),
-            "{$this->baseDir()}config/routing.php" => config_path('forum.routing.php'),
-            "{$this->baseDir()}config/validation.php" => config_path('forum.validation.php')
+            __DIR__.'/../config/api.php' => config_path('forum.api.php'),
+            __DIR__.'/../config/frontend.php' => config_path('forum.frontend.php'),
+            __DIR__.'/../config/general.php' => config_path('forum.general.php'),
+            __DIR__.'/../config/integration.php' => config_path('forum.integration.php')
         ], 'config');
 
         $this->publishes([
-            "{$this->baseDir()}migrations/" => base_path('database/migrations')
+            __DIR__.'/../database/migrations/' => database_path('migrations')
         ], 'migrations');
 
         $this->publishes([
-            "{$this->baseDir()}translations/" => base_path('resources/lang/vendor/forum'),
+            __DIR__.'/../translations/' => resource_path('lang/vendor/forum'),
         ], 'translations');
-    }
 
-    /**
-     * Load config, views and translations (including application-overridden versions).
-     *
-     * @return void
-     */
-    protected function loadStaticFiles()
-    {
-        // Merge config
-        foreach (['api', 'integration', 'preferences', 'routing', 'validation'] as $name) {
-            $this->mergeConfigFrom("{$this->baseDir()}config/{$name}.php", "forum.{$name}");
+        foreach (['api', 'frontend', 'general', 'integration'] as $name) {
+            $this->mergeConfigFrom(__DIR__."/../config/{$name}.php", "forum.{$name}");
         }
 
-        // Load translations
-        $this->loadTranslationsFrom("{$this->baseDir()}translations", 'forum');
-    }
+        if (config('forum.api.enabled')) {
+            $router->group(config('forum.api.router'), function ($r) {
+                require __DIR__.'/../routes/api.php';
+            });
+        }
 
-    /**
-     * Initialise model observers.
-     *
-     * @return void
-     */
-    protected function observeModels()
-    {
+        if (config('forum.frontend.enabled')) {
+            $this->publishes([
+                __DIR__.'/../views/' => resource_path('views/vendor/forum')
+            ], 'views');
+
+            $router->group(config('forum.frontend.router'), function ($r) {
+                require __DIR__.'/../routes/frontend.php';
+            });
+
+            $this->loadViewsFrom(__DIR__.'/../views', 'forum');
+        }
+
+        $this->loadTranslationsFrom(__DIR__.'/../translations', 'forum');
+
+        $this->registerPolicies($gate);
+
+        // Make sure Carbon's locale is set to the application locale
+        Carbon::setLocale(config('app.locale'));
+
         Thread::observe(new ThreadObserver);
         Post::observe(new PostObserver);
     }
@@ -127,33 +86,5 @@ class ForumServiceProvider extends ServiceProvider
         foreach (config('forum.integration.policies.model') as $model => $policy) {
             $gate->policy($model, $policy);
         }
-    }
-
-    /**
-     * Load routes.
-     *
-     * @param  Router  $router
-     * @return void
-     */
-    protected function loadRoutes(Router $router)
-    {
-        $dir = $this->baseDir();
-        $router->group([
-            'namespace' => 'Riari\Forum\Http\Controllers',
-            'as' => config('forum.routing.as'),
-            'prefix' => config('forum.routing.root')
-        ], function ($r) use ($dir) {
-            require "{$dir}routes.php";
-        });
-    }
-
-    /**
-     * Register middleware.
-     *
-     * @return void
-     */
-    public function registerMiddleware(Router $router)
-    {
-        $router->aliasMiddleware('forum.api.auth', APIAuth::class);
     }
 }
