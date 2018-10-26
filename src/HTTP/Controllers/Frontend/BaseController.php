@@ -15,32 +15,6 @@ abstract class BaseController extends Controller
     use AuthorizesRequests, ValidatesRequests;
 
     /**
-     * @var Dispatcher
-     */
-    protected $dispatcher;
-
-    /**
-     * Create a frontend controller instance.
-     */
-    public function __construct()
-    {
-        $this->dispatcher = new Dispatcher($this);
-    }
-
-    /**
-     * Return a prepared API dispatcher instance.
-     *
-     * @param  string  $route
-     * @param  array  $parameters
-     * @return Dispatcher
-     */
-    protected function api($route, $parameters = [])
-    {
-        $prefix = config('forum.routing.as');
-        return $this->dispatcher->route("{$prefix}api.{$route}", $parameters);
-    }
-
-    /**
      * Handle a response from the dispatcher for the given request.
      *
      * @param  Request  $request

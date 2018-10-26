@@ -1,4 +1,6 @@
-<?php namespace Riari\Forum\Support;
+<?php
+
+namespace Riari\Forum\Support;
 
 class Stats
 {

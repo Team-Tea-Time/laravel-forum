@@ -29,4 +29,16 @@ return [
         'middleware' => []
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Utility Class
+    |--------------------------------------------------------------------------
+    |
+    | Here we specify the class to use for various frontend utility methods.
+    | This is automatically aliased to 'Forum' for ease of use in views.
+    |
+    */
+
+    'utility_class' => Riari\Forum\Support\Frontend\Forum::class,
+
 ];

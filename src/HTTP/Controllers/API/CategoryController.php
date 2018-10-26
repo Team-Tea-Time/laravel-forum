@@ -1,51 +1,40 @@
-<?php namespace Riari\Forum\HTTP\Controllers\API;
+<?php
+
+namespace Riari\Forum\HTTP\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Riari\Forum\Models\Category;
 
-class CategoryController extends BaseController
+use Riari\Forum\Services\CategoryService;
+
+class CategoryController
 {
-    /**
-     * Return the model to use for this controller.
-     *
-     * @return Category
-     */
-    protected function model()
+    /** @var CategoryService */
+    protected $service;
+
+    public function __construct(CategoryService $service)
     {
-        return new Category;
+        $this->service = $service;
     }
 
-    /**
-     * Return the translation file name to use for this controller.
-     *
-     * @return string
-     */
-    protected function translationFile()
-    {
-        return 'categories';
-    }
-
-    /**
-     * GET: Return an index of categories.
-     *
-     * @param  Request  $request
-     * @return JsonResponse|Response
-     */
     public function index(Request $request)
     {
-        $categories = $this->model()->withRequestScopes($request);
+        $categories = $this->service->getAll();
 
-        $categories = $categories->get()->filter(function ($category) {
-            if ($category->private) {
-                return Gate::allows('view', $category);
-            }
+        return response($categories);
 
-            return true;
-        });
+        // $categories = $this->model()->withRequestScopes($request);
 
-        return $this->response($categories);
+        // $categories = $categories->get()->filter(function ($category) {
+        //     if ($category->private) {
+        //         return Gate::allows('view', $category);
+        //     }
+
+        //     return true;
+        // });
+
+        // return $this->response($categories);
     }
 
     /**
@@ -57,17 +46,17 @@ class CategoryController extends BaseController
      */
     public function fetch($id, Request $request)
     {
-        $category = $this->model()->find($id);
+        // $category = $this->model()->find($id);
 
-        if (is_null($category) || !$category->exists) {
-            return $this->notFoundResponse();
-        }
+        // if (is_null($category) || !$category->exists) {
+        //     return $this->notFoundResponse();
+        // }
 
-        if ($category->private) {
-            $this->authorize('view', $category);
-        }
+        // if ($category->private) {
+        //     $this->authorize('view', $category);
+        // }
 
-        return $this->response($category);
+        // return $this->response($category);
     }
 
     /**
@@ -78,18 +67,18 @@ class CategoryController extends BaseController
      */
     public function store(Request $request)
     {
-        $this->authorize('createCategories');
+        // $this->authorize('createCategories');
 
-        $this->validate($request, [
-            'title'             => ['required'],
-            'weight'            => ['required'],
-            'enable_threads'    => ['required'],
-            'private'           => ['required']
-        ]);
+        // $this->validate($request, [
+        //     'title'             => ['required'],
+        //     'weight'            => ['required'],
+        //     'enable_threads'    => ['required'],
+        //     'private'           => ['required']
+        // ]);
 
-        $category = $this->model()->create($request->only(['category_id', 'title', 'description', 'weight', 'enable_threads', 'private']));
+        // $category = $this->model()->create($request->only(['category_id', 'title', 'description', 'weight', 'enable_threads', 'private']));
 
-        return $this->response($category, 201);
+        // return $this->response($category, 201);
     }
 
     /**
@@ -101,13 +90,13 @@ class CategoryController extends BaseController
      */
     public function destroy($id, Request $request)
     {
-        $category = $this->model()->find($id);
+        // $category = $this->model()->find($id);
 
-        if (!$category->threads->isEmpty() || !$category->children->isEmpty()) {
-            return $this->buildFailedValidationResponse($request, trans('forum::validation.category_is_empty'));
-        }
+        // if (!$category->threads->isEmpty() || !$category->children->isEmpty()) {
+        //     return $this->buildFailedValidationResponse($request, trans('forum::validation.category_is_empty'));
+        // }
 
-        return $this->deleteModel($category, 'delete');
+        // return $this->deleteModel($category, 'delete');
     }
 
     /**
@@ -119,12 +108,12 @@ class CategoryController extends BaseController
      */
     public function move($id, Request $request)
     {
-        $this->authorize('moveCategories');
-        $this->validate($request, ['category_id' => ['required']]);
+        // $this->authorize('moveCategories');
+        // $this->validate($request, ['category_id' => ['required']]);
 
-        $category = $this->model()->find($id);
+        // $category = $this->model()->find($id);
 
-        return $this->updateModel($category, ['category_id' => $request->input('category_id')]);
+        // return $this->updateModel($category, ['category_id' => $request->input('category_id')]);
     }
 
     /**
@@ -136,9 +125,9 @@ class CategoryController extends BaseController
      */
     public function enableThreads($id, Request $request)
     {
-        $category = $this->model()->where('enable_threads', 0)->find($id);
+        // $category = $this->model()->where('enable_threads', 0)->find($id);
 
-        return $this->updateModel($category, ['enable_threads' => 1], 'enableThreads');
+        // return $this->updateModel($category, ['enable_threads' => 1], 'enableThreads');
     }
 
     /**
@@ -150,13 +139,13 @@ class CategoryController extends BaseController
      */
     public function disableThreads($id, Request $request)
     {
-        $category = $this->model()->where('enable_threads', 1)->find($id);
+        // $category = $this->model()->where('enable_threads', 1)->find($id);
 
-        if (!$category->threads->isEmpty()) {
-            return $this->buildFailedValidationResponse($request, trans('forum::validation.category_has_no_threads'));
-        }
+        // if (!$category->threads->isEmpty()) {
+        //     return $this->buildFailedValidationResponse($request, trans('forum::validation.category_has_no_threads'));
+        // }
 
-        return $this->updateModel($category, ['enable_threads' => 0], 'enableThreads');
+        // return $this->updateModel($category, ['enable_threads' => 0], 'enableThreads');
     }
 
     /**
@@ -168,11 +157,11 @@ class CategoryController extends BaseController
      */
     public function makePublic($id, Request $request)
     {
-        $this->authorize('createCategories');
+        // $this->authorize('createCategories');
 
-        $category = $this->model()->where('private', 1)->find($id);
+        // $category = $this->model()->where('private', 1)->find($id);
 
-        return $this->updateModel($category, ['private' => 0]);
+        // return $this->updateModel($category, ['private' => 0]);
     }
 
     /**
@@ -184,11 +173,11 @@ class CategoryController extends BaseController
      */
     public function makePrivate($id, Request $request)
     {
-        $this->authorize('createCategories');
+        // $this->authorize('createCategories');
 
-        $category = $this->model()->where('private', 0)->find($id);
+        // $category = $this->model()->where('private', 0)->find($id);
 
-        return $this->updateModel($category, ['private' => 1]);
+        // return $this->updateModel($category, ['private' => 1]);
     }
 
     /**
@@ -200,12 +189,12 @@ class CategoryController extends BaseController
      */
     public function rename($id, Request $request)
     {
-        $this->authorize('renameCategories');
-        $this->validate($request, ['title' => ['required']]);
+        // $this->authorize('renameCategories');
+        // $this->validate($request, ['title' => ['required']]);
 
-        $category = $this->model()->find($id);
+        // $category = $this->model()->find($id);
 
-        return $this->updateModel($category, $request->only(['title', 'description']));
+        // return $this->updateModel($category, $request->only(['title', 'description']));
     }
 
     /**
@@ -217,11 +206,11 @@ class CategoryController extends BaseController
      */
     public function reorder($id, Request $request)
     {
-        $this->authorize('moveCategories');
-        $this->validate($request, ['weight' => ['required']]);
+        // $this->authorize('moveCategories');
+        // $this->validate($request, ['weight' => ['required']]);
 
-        $category = $this->model()->find($id);
+        // $category = $this->model()->find($id);
 
-        return $this->updateModel($category, ['weight' => $request->input('weight')]);
+        // return $this->updateModel($category, ['weight' => $request->input('weight')]);
     }
 }

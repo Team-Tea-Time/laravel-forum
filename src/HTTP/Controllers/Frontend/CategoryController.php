@@ -3,11 +3,21 @@
 use Forum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Riari\Forum\Frontend\Events\UserViewingCategory;
-use Riari\Forum\Frontend\Events\UserViewingIndex;
+use Riari\Forum\Events\UserViewingCategory;
+use Riari\Forum\Events\UserViewingIndex;
+
+use Riari\Forum\Services\CategoryService;
 
 class CategoryController extends BaseController
 {
+    /** @var CategoryService */
+    protected $service;
+
+    public function __construct(CategoryService $service)
+    {
+        $this->service = $service;
+    }
+
     /**
      * GET: Return an index of categories view (the forum index).
      *
@@ -16,9 +26,10 @@ class CategoryController extends BaseController
      */
     public function index(Request $request)
     {
-        $categories = $this->api('category.index')
-                           ->parameters(['where' => ['category_id' => 0], 'orderBy' => 'weight', 'orderDir' => 'asc', 'with' => ['categories', 'threads']])
-                           ->get();
+        $categories = $this->service->getAll();
+        // $categories = $this->api('category.index')
+        //                    ->parameters(['where' => ['category_id' => 0], 'orderBy' => 'weight', 'orderDir' => 'asc', 'with' => ['categories', 'threads']])
+        //                    ->get();
 
         event(new UserViewingIndex);
 

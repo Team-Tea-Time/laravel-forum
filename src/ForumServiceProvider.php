@@ -68,6 +68,9 @@ class ForumServiceProvider extends ServiceProvider
 
         Thread::observe(new ThreadObserver);
         Post::observe(new PostObserver);
+
+        $loader = AliasLoader::getInstance();
+        $loader->alias('Forum', config('forum.frontend.utility_class'));
     }
 
     /**
