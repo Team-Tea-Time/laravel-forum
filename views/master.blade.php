@@ -47,17 +47,17 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url(config('forum.routing.prefix')) }}">Laravel Forum</a>
+        <a class="navbar-brand" href="{{ url(config('forum.frontend.router.prefix')) }}">Laravel Forum</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url(config('forum.routing.prefix')) }}">{{ trans('forum::general.index') }} <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{ url(config('forum.frontend.router.prefix')) }}">{{ trans('forum::general.index') }} <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url(config('forum.routing.prefix') . '/new') }}">{{ trans('forum::threads.new_updated') }} <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{ url(config('forum.frontend.router.prefix') . '/new') }}">{{ trans('forum::threads.new_updated') }} <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
         </div>
