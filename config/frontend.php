@@ -26,7 +26,7 @@ return [
         'prefix' => '/forum',
         'as' => 'forum.',
         'namespace' => '\Riari\Forum\HTTP\Controllers\Frontend',
-        'middleware' => []
+        'middleware' => ['web']
     ],
 
     /*

@@ -1,11 +1,12 @@
 <?php namespace Riari\Forum\Models;
 
 use Illuminate\Support\Facades\Gate;
+use Kalnoy\Nestedset\NodeTrait;
 use Riari\Forum\Support\Traits\CachesData;
 
 class Category extends BaseModel
 {
-    use CachesData;
+    use CachesData, NodeTrait;
 
 	/**
 	 * The table associated with the model.
@@ -26,7 +27,7 @@ class Category extends BaseModel
 	 *
 	 * @var array
 	 */
-    protected $fillable = ['category_id', 'title', 'description', 'weight', 'enable_threads', 'private', 'thread_count', 'post_count'];
+    protected $fillable = ['title', 'description', 'enable_threads', 'private', 'thread_count', 'post_count'];
 
     /**
      * Create a new category model instance.
