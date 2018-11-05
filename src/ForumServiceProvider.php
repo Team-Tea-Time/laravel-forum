@@ -5,7 +5,9 @@ use Illuminate\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Riari\Forum\Http\ViewComposers\MasterComposer;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
 use Riari\Forum\Models\Observers\PostObserver;
@@ -71,6 +73,13 @@ class ForumServiceProvider extends ServiceProvider
 
         $loader = AliasLoader::getInstance();
         $loader->alias('Forum', config('forum.frontend.utility_class'));
+
+        View::composer('forum::master', function ($view) {
+            if (auth()->check()) {
+                $nameAttribute = config('forum.integration.user_name');
+                $view->username = auth()->user()->{$nameAttribute};
+            }
+        });
     }
 
     /**

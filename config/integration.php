@@ -37,7 +37,7 @@ return [
     | Application user name
     |--------------------------------------------------------------------------
     |
-    | The attribute to use for the username.
+    | The user model attribute to use for displaying usernames.
     |
     */
 
