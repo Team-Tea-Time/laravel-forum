@@ -41,26 +41,6 @@ class Category extends BaseModel
     }
 
     /**
-     * Relationship: Parent category.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function parent()
-    {
-        return $this->belongsTo(Category::class, 'category_id')->orderBy('weight');
-    }
-
-    /**
-     * Relationship: Child categories.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function categories()
-    {
-        return $this->hasMany(Category::class, 'category_id')->orderBy('weight');
-    }
-
-    /**
      * Relationship: Threads.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -70,26 +50,6 @@ class Category extends BaseModel
         $withTrashed = Gate::allows('viewTrashedThreads');
         $query = $this->hasMany(Thread::class);
         return $withTrashed ? $query->withTrashed() : $query;
-    }
-
-    /**
-     * Attribute: Child categories.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getChildrenAttribute()
-    {
-        $children = $this->categories;
-
-        $children = $children->filter(function ($category) {
-            if ($category->private) {
-                return Gate::allows('view', $category);
-            }
-
-            return true;
-        });
-
-        return $children;
     }
 
     /**

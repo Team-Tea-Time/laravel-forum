@@ -18,4 +18,14 @@ class CategoryService
     {
         return $this->model->all();
     }
+
+    public function getByID(Number $id)
+    {
+        return $this->model->findOrFail($id);
+    }
+
+    public function create($attributes)
+    {
+        return $this->model->create($attributes);
+    }
 }

@@ -11,7 +11,7 @@
     @foreach ($categories as $category)
         @include ('forum::category.partials.list', ['titleClass' => 'lead'])
 
-        @if (!$category->children->isEmpty())
+        @if ($category->children)
             <ul class="list-group text-center text-md-left">
                 @foreach ($category->children as $subcategory)
                     <li class="list-group-item">

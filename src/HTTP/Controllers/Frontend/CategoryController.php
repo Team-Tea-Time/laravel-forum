@@ -1,7 +1,10 @@
 <?php namespace Riari\Forum\HTTP\Controllers\Frontend;
 
 use Forum;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Events\UserViewingCategory;
 use Riari\Forum\Events\UserViewingIndex;
@@ -18,13 +21,7 @@ class CategoryController extends BaseController
         $this->service = $service;
     }
 
-    /**
-     * GET: Return an index of categories view (the forum index).
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $categories = $this->service->getAll();
         // $categories = $this->api('category.index')
@@ -36,13 +33,7 @@ class CategoryController extends BaseController
         return view('forum::category.index', compact('categories'));
     }
 
-    /**
-     * GET: Return a category view.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request)
+    public function show(Request $request): View
     {
         $category = $this->api('category.fetch', $request->route('category'))->get();
 
@@ -58,28 +49,20 @@ class CategoryController extends BaseController
         return view('forum::category.show', compact('categories', 'category', 'threads'));
     }
 
-    /**
-     * POST: Store a new category.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $category = $this->api('category.store')->parameters($request->all())->post();
+        $category = $this->service->create(
+            $request->only('title', 'colour', 'description', 'accepts_threads', 'is_private')
+        );
+
+        // $category = $this->api('category.store')->parameters($request->all())->post();
 
         Forum::alert('success', 'categories.created');
 
         return redirect(Forum::route('category.show', $category));
     }
 
-    /**
-     * PATCH: Update a category.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         $action = $request->input('action');
 
@@ -90,13 +73,7 @@ class CategoryController extends BaseController
         return redirect(Forum::route('category.show', $category));
     }
 
-    /**
-     * DELETE: Delete a category.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy(Request $request)
+    public function destroy(Request $request): RedirectResponse
     {
         $this->api('category.delete', $request->route('category'))->parameters($request->all())->delete();
 

@@ -25,6 +25,8 @@ return [
     'router' => [
         'prefix' => '/forum',
         'as' => 'forum.',
+        'thread_prefix' => 't',
+        'category_prefix' => 'c',
         'namespace' => '\Riari\Forum\HTTP\Controllers\Frontend',
         'middleware' => ['web']
     ],
