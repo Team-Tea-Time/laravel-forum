@@ -1,4 +1,4 @@
-<?php namespace Riari\Forum\HTTP\Controllers\Frontend;
+<?php namespace Riari\Forum\Http\Controllers\Frontend;
 
 use Forum;
 use Illuminate\Http\RedirectResponse;
@@ -8,6 +8,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Events\UserViewingCategory;
 use Riari\Forum\Events\UserViewingIndex;
+use Riari\Forum\Http\Requests\StoreCategory;
 
 use Riari\Forum\Services\CategoryService;
 
@@ -35,13 +36,13 @@ class CategoryController extends BaseController
 
     public function show(Request $request): View
     {
-        $category = $this->api('category.fetch', $request->route('category'))->get();
+        $category = $this->service->getByID($request->route('category'));
 
         event(new UserViewingCategory($category));
 
         $categories = [];
         if (Gate::allows('moveCategories')) {
-            $categories = $this->api('category.index')->parameters(['where' => ['category_id' => 0]])->get();
+            $categories = $this->service->getTopLevel();
         }
 
         $threads = $category->threadsPaginated;
@@ -49,7 +50,7 @@ class CategoryController extends BaseController
         return view('forum::category.show', compact('categories', 'category', 'threads'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreCategory $request): RedirectResponse
     {
         $category = $this->service->create(
             $request->only('title', 'colour', 'description', 'accepts_threads', 'is_private')

@@ -60,7 +60,7 @@ class Category extends BaseModel
     public function getThreadsPaginatedAttribute()
     {
         return $this->threads()->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc')
-            ->paginate(config('forum.preferences.pagination.threads'));
+            ->paginate(config('forum.general.pagination.threads'));
     }
 
     /**
@@ -93,12 +93,7 @@ class Category extends BaseModel
         return $this->enable_threads;
     }
 
-    /**
-     * Attribute: Deepest child.
-     *
-     * @return Category
-     */
-    public function getDeepestChildAttribute()
+    public function getDeepestChildAttribute(): Category
     {
         $category = $this;
 
@@ -111,12 +106,7 @@ class Category extends BaseModel
         });
     }
 
-    /**
-     * Attribute: Depth.
-     *
-     * @return int
-     */
-    public function getDepthAttribute()
+    public function getDepthAttribute(): int
     {
         $category = $this;
 

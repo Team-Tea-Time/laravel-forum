@@ -1,38 +1,23 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=4.0)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=4.0)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=5.0)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=5.0)
 
-**Complete documentation is available on [teamteatime.net](https://teamteatime.net/docs/laravel-forum/4.x/introduction.md).**
-
-**NOTE: Version 3.0 is no longer supported. If you're using a version of Laravel below 5.3, consider upgrading it!**
-
-## Requirements
-
-+ PHP 5.4 or above
-+ Laravel 5.3 or above
+**Complete documentation is available on [teamteatime.net](https://teamteatime.net/docs/laravel-forum/5.x/).**
 
 ## Installation
+
+Requires Laravel 6.
 
 ### Step 1: Install the package
 
 Install the package via composer:
 
 ```
-composer require riari/laravel-forum:~4.0
+composer require riari/laravel-forum:~5.0
 ```
 
 Then add the service provider to your `config/app.php`:
 
 ```php
 Riari\Forum\ForumServiceProvider::class,
-```
-
-Installing the [standard front-end](https://github.com/Riari/laravel-forum-frontend) is recommended:
-
-```
-composer require riari/laravel-forum-frontend:~1.0
-```
-
-```php
-Riari\Forum\Frontend\ForumFrontendServiceProvider::class,
 ```
 
 ### Step 2: Publish the package files

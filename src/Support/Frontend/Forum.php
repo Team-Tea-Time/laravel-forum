@@ -3,6 +3,7 @@
 namespace Riari\Forum\Support\Frontend;
 
 use Illuminate\Routing\Router;
+use Illuminate\Support\Str;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
@@ -52,7 +53,7 @@ class Forum
      */
     public static function route($route, $model = null)
     {
-        if (!starts_with($route, config('forum.frontend.router.as'))) {
+        if (!Str::startsWith($route, config('forum.frontend.router.as'))) {
             $route = config('forum.frontend.router.as') . $route;
         }
 
@@ -63,24 +64,24 @@ class Forum
             switch (true) {
                 case $model instanceof Category:
                     $params = [
-                        'category'      => $model->id,
-                        'category_slug' => static::slugify($model->title)
+                        'category' => $model->id,
+                        'category_slug' => static::slugify($model->title),
                     ];
                     break;
                 case $model instanceof Thread:
                     $params = [
-                        'category'      => $model->category->id,
+                        'category' => $model->category->id,
                         'category_slug' => static::slugify($model->category->title),
-                        'thread'        => $model->id,
-                        'thread_slug'   => static::slugify($model->title)
+                        'thread' => $model->id,
+                        'thread_slug' => static::slugify($model->title),
                     ];
                     break;
                 case $model instanceof Post:
                     $params = [
-                        'category'      => $model->thread->category->id,
+                        'category' => $model->thread->category->id,
                         'category_slug' => static::slugify($model->thread->category->title),
-                        'thread'        => $model->thread->id,
-                        'thread_slug'   => static::slugify($model->thread->title)
+                        'thread' => $model->thread->id,
+                        'thread_slug' => static::slugify($model->thread->title),
                     ];
 
                     if ($route == config('forum.routing.as') . 'thread.show') {
@@ -156,6 +157,6 @@ class Forum
      */
     public static function slugify($string)
     {
-        return str_slug($string, '-');
+        return Str::slug($string, '-');
     }
 }

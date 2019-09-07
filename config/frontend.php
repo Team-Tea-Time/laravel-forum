@@ -27,7 +27,7 @@ return [
         'as' => 'forum.',
         'thread_prefix' => 't',
         'category_prefix' => 'c',
-        'namespace' => '\Riari\Forum\HTTP\Controllers\Frontend',
+        'namespace' => '\Riari\Forum\Http\Controllers\Frontend',
         'middleware' => ['web']
     ],
 

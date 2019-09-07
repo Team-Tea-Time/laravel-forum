@@ -19,7 +19,12 @@ class CategoryService
         return $this->model->all();
     }
 
-    public function getByID(Number $id)
+    public function getTopLevel()
+    {
+        return $this->model->where('parent_id', 0)->get();
+    }
+
+    public function getByID(int $id)
     {
         return $this->model->findOrFail($id);
     }

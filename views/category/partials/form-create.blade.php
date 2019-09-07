@@ -25,15 +25,15 @@
                     </div>
                     <div class="form-group">
                         <label>
-                            <input type="hidden" name="enable_threads" value="0">
-                            <input type="checkbox" name="enable_threads" value="1" checked>
+                            <input type="hidden" name="accepts_threads" value="0">
+                            <input type="checkbox" name="accepts_threads" value="1" checked>
                             {{ trans('forum::categories.enable_threads') }}
                         </label>
                     </div>
                     <div class="form-group">
                         <label>
-                            <input type="hidden" name="private" value="0">
-                            <input type="checkbox" name="private" value="1">
+                            <input type="hidden" name="is_private" value="0">
+                            <input type="checkbox" name="is_private" value="1">
                             {{ trans('forum::categories.make_private') }}
                         </label>
                     </div>

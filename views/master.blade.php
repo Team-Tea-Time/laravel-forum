@@ -22,6 +22,7 @@
     <style>
     body {
         padding: 0;
+        background: #f8fafc;
     }
 
     textarea {
@@ -40,50 +41,56 @@
         padding: 2em;
     }
 
+    .shadow-sm {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
     .card.category {
         margin-bottom: 1em;
     }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url(config('forum.frontend.router.prefix')) }}">Laravel Forum</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url(config('forum.frontend.router.prefix')) }}">{{ trans('forum::general.index') }} <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url(config('forum.frontend.router.prefix') . '/new') }}">{{ trans('forum::threads.new_updated') }} <span class="sr-only">(current)</span></a>
-                </li>
-            </ul>
-            <ul class="navbar-nav">
-                @if (Auth::check())
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Logged in as {{ $username }}
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                Log out
+    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url(config('forum.frontend.router.prefix')) }}">Laravel Forum</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url(config('forum.frontend.router.prefix')) }}">{{ trans('forum::general.index') }} <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url(config('forum.frontend.router.prefix') . '/new') }}">{{ trans('forum::threads.new_updated') }} <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    @if (Auth::check())
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ $username }}
                             </a>
-                            <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                {{ csrf_field() }}
-                            </form>
-                        </div>
-                    </li>
-                @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/login') }}">Log in</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/register') }}">Register</a>
-                    </li>
-                @endif
-            </ul>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    Log out
+                                </a>
+                                <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
+                            </div>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/login') }}">Log in</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/register') }}">Register</a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
         </div>
     </nav>
 

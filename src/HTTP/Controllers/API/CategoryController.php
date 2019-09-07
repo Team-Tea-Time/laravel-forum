@@ -1,6 +1,6 @@
 <?php
 
-namespace Riari\Forum\HTTP\Controllers\API;
+namespace Riari\Forum\Http\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -25,7 +25,7 @@ return [
     'router' => [
         'prefix' => '/forum/api',
         'as' => 'forum.api.',
-        'namespace' => '\Riari\Forum\HTTP\Controllers\API',
+        'namespace' => '\Riari\Forum\Http\Controllers\API',
         'middleware' => ['api', 'auth:api']
     ],
 

@@ -1,4 +1,4 @@
-<?php namespace Riari\Forum\HTTP\Controllers\Frontend;
+<?php namespace Riari\Forum\Http\Controllers\Frontend;
 
 use Forum;
 use Illuminate\Http\Request;
