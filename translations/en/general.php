@@ -6,6 +6,7 @@ return [
     'author' => "Author",
     'cancel' => "Cancel",
     'create' => "Create",
+    'color' => "Color",
     'delete' => "Delete",
     'deleted' => "Deleted",
     'description' => "Description",

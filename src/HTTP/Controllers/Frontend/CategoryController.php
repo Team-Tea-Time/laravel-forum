@@ -53,7 +53,7 @@ class CategoryController extends BaseController
     public function store(StoreCategory $request): RedirectResponse
     {
         $category = $this->service->create(
-            $request->only('title', 'colour', 'description', 'accepts_threads', 'is_private')
+            $request->only('title', 'description', 'accepts_threads', 'is_private', 'color')
         );
 
         // $category = $this->api('category.store')->parameters($request->all())->post();

@@ -2,11 +2,13 @@
 @extends ('forum::master', ['category' => null])
 
 @section ('content')
-    @can ('createCategories')
-        @include ('forum::category.partials.form-create')
-    @endcan
+    <div class="d-flex flex-row justify-content-between mb-2">
+        <h2>{{ trans('forum::general.index') }}</h2>
 
-    <h2>{{ trans('forum::general.index') }}</h2>
+        @can ('createCategories')
+            @include ('forum::category.partials.form-create')
+        @endcan
+    </div>
 
     @foreach ($categories as $category)
         @include ('forum::category.partials.list', ['titleClass' => 'lead'])

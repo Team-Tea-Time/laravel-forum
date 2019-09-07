@@ -43,8 +43,8 @@ return [
     'cache_lifetimes' => [
         'default' => 5,
         'Category' => [
-            'deepestChild'  => 720,
-            'depth'         => 720
+            'deepestChild' => 720,
+            'depth' => 720
         ]
     ],
 

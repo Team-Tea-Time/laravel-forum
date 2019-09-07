@@ -2,14 +2,16 @@
     <div class="card-body">
         <div class="row align-items-center text-center">
             <div class="col-sm text-md-left">
-                <h5 class="card-title"><a href="{{ Forum::route('category.show', $category) }}">{{ $category->title }}</a></h5>
+                <h5 class="card-title">
+                    <a href="{{ Forum::route('category.show', $category) }}" style="color: {{ $category->color }};">{{ $category->title }}</a>
+                </h5>
                 <p class="card-text text-muted">{{ $category->description }}</p>
             </div>
             <div class="col-sm text-md-right">
-                <span class="badge badge-primary">
+                <span class="badge badge-primary" style="background: {{ $category->color }};">
                     {{ trans_choice('forum::threads.thread', 2) }}: {{ $category->thread_count }}
                 </span><br>
-                <span class="badge badge-primary">
+                <span class="badge badge-primary" style="background: {{ $category->color }};">
                     {{ trans_choice('forum::posts.post', 2) }}: {{ $category->post_count }}
                 </span>
             </div>
