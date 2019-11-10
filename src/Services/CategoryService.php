@@ -19,11 +19,6 @@ class CategoryService
         return $this->model->all();
     }
 
-    public function getAsTree()
-    {
-        return $this->model->get()->toTree();
-    }
-
     public function getTopLevel()
     {
         return $this->model->where('parent_id', 0)->get();

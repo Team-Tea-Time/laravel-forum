@@ -24,7 +24,7 @@ class CategoryController extends BaseController
 
     public function index(Request $request): View
     {
-        $categories = $this->service->getAsTree();
+        $categories = $this->service->getAll()->toTree();
         // $categories = $this->api('category.index')
         //                    ->parameters(['where' => ['category_id' => 0], 'orderBy' => 'weight', 'orderDir' => 'asc', 'with' => ['categories', 'threads']])
         //                    ->get();
@@ -85,6 +85,8 @@ class CategoryController extends BaseController
 
     public function manage(Request $request): View
     {
-        return view('forum::category.manage', ['categories' => $this->service->getAsTree()]);
+        $categories = $this->service->getAll();
+        $categories->makeHidden(['thread_count', 'post_count']);
+        return view('forum::category.manage', ['categories' => $categories->toTree()]);
     }
 }

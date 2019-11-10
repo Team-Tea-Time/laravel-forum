@@ -36,6 +36,22 @@
                 @endif
             </div>
         </div>
+
+        @if ($category->children)
+            <ul class="list-group text-center text-md-left mt-2">
+                @foreach ($category->children as $subcategory)
+                    <li class="list-group-item">
+                        <a href="{{ Forum::route('category.show', $subcategory) }}">{{ $subcategory->title }}</a>
+                        <span class="badge badge-light">
+                            {{ trans_choice('forum::threads.thread', 2) }}: {{ $subcategory->thread_count }}
+                        </span>
+                        <span class="badge badge-light">
+                            {{ trans_choice('forum::posts.post', 2) }}: {{ $subcategory->post_count }}
+                        </span>
+                    </li>
+                @endforeach
+            </ul>
+        @endif
     </div>
 </div>
 

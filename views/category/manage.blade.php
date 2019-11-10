@@ -12,17 +12,17 @@
     <div class="v-manage-categories">
         <draggable-category-list :categories="categories"></draggable-category-list>
 
-        <hr>
-
         <transition name="fade">
             <div v-show="changesApplied" class="alert alert-success" role="alert">
                 {{ trans('forum::general.changes_applied') }}
             </div>
         </transition>
 
-        <button type="button" class="btn btn-primary" :disabled="isSavingDisabled" @click="onSave">
-            {{ trans('forum::general.save') }}
-        </button>
+        <div class="text-right py-3">
+            <button type="button" class="btn btn-primary btn-lg" :disabled="isSavingDisabled" @click="onSave">
+                {{ trans('forum::general.save') }}
+            </button>
+        </div>
     </div>
 
     <script type="text/x-template" id="draggable-category-list-template">
@@ -54,8 +54,12 @@
             changesApplied: false
         },
         watch: {
-            categories: function (categories) {
-                this.isSavingDisabled = false;
+            categories: {
+                handler: function (categories) {
+                    console.log('wat')
+                    this.isSavingDisabled = false;
+                },
+                deep: true
             }
         },
         methods: {
