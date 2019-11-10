@@ -82,4 +82,14 @@ class CategoryController extends BaseController
 
         return redirect(config('forum.routing.prefix'));
     }
+
+    public function reorder(Request $request): View
+    {
+        return view('forum::category.reorder', ['categories' => $this->service->getAsTree()]);
+    }
+
+    public function setOrder(ReorderCategoriesRequest $request): RedirectResponse
+    {
+
+    }
 }

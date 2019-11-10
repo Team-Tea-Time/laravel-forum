@@ -35,6 +35,12 @@ $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
 // Bulk actions
 $r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r)
 {
+    // Categories
+    $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
+    {
+        $r->post('position', ['as' => 'position', 'uses' => 'CategoryController@bulkPosition']);
+    });
+
     // Threads
     $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
     {

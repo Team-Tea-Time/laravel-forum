@@ -2,7 +2,7 @@
     {!! csrf_field() !!}
 
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createCategoryModal">
-    {{ trans('forum::categories.create') }}
+        {{ trans('forum::categories.create') }}
     </button>
 
     <div class="modal fade" id="createCategoryModal" tabindex="-1" role="dialog" aria-labelledby="createCategoryModal" aria-hidden="true">
@@ -86,14 +86,19 @@ $(document).ready(function() {
                 input: true,
                 save: true
             }
+        },
+
+        strings: {
+            save: 'Apply'
         }
     });
 
     pickr
+        .on('save', instance => pickr.hide())
         .on('clear', instance => {
             $input.val('').trigger('change');
         })
-        .on("cancel", instance => {
+        .on('cancel', instance => {
             const selectedColor = instance
                 .getSelectedColor()
                 .toHEXA()

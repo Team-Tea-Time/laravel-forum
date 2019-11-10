@@ -3,7 +3,7 @@
 
 @section ('content')
     <div class="d-flex flex-row justify-content-between mb-2">
-        <h2>{{ trans('forum::general.index') }}</h2>
+        <h2 class="flex-grow-1">{{ trans('forum::general.index') }}</h2>
 
         @can ('createCategories')
             @include ('forum::category.partials.form-create')

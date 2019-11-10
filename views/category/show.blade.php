@@ -2,17 +2,19 @@
 @extends ('forum::master', ['thread' => null])
 
 @section ('content')
-    <div id="category">
-        @can ('createCategories')
-            @include ('forum::category.partials.form-create')
-        @endcan
-
+    <div class="d-flex flex-row justify-content-between mb-2">
         <h2>
             {{ $category->title }}
             @if ($category->description)
                 <small>{{ $category->description }}</small>
             @endif
         </h2>
+
+        @can ('createCategories')
+            @include ('forum::category.partials.form-create')
+        @endcan
+    </div>
+    <div id="category">
 
         <hr>
 
