@@ -24,7 +24,7 @@ class CategoryController extends BaseController
 
     public function index(Request $request): View
     {
-        $categories = $this->service->getAll();
+        $categories = $this->service->getAsTree();
         // $categories = $this->api('category.index')
         //                    ->parameters(['where' => ['category_id' => 0], 'orderBy' => 'weight', 'orderDir' => 'asc', 'with' => ['categories', 'threads']])
         //                    ->get();
@@ -83,13 +83,8 @@ class CategoryController extends BaseController
         return redirect(config('forum.routing.prefix'));
     }
 
-    public function reorder(Request $request): View
+    public function manage(Request $request): View
     {
-        return view('forum::category.reorder', ['categories' => $this->service->getAsTree()]);
-    }
-
-    public function setOrder(ReorderCategoriesRequest $request): RedirectResponse
-    {
-
+        return view('forum::category.manage', ['categories' => $this->service->getAsTree()]);
     }
 }

@@ -214,7 +214,7 @@ class CategoryController
         // return $this->updateModel($category, ['weight' => $request->input('weight')]);
     }
 
-    public function bulkPosition(Request $request)
+    public function bulkManage(Request $request)
     {
         return $this->service->rebuildTree($request->categories);
     }

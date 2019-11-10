@@ -5,8 +5,7 @@ $r->get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
 $r->get('new', ['as' => 'new.index', 'uses' => 'ThreadController@indexNew']);
 $r->patch('new', ['as' => 'new.mark-read', 'uses' => 'ThreadController@markNewAsRead']);
 
-$r->get('reorder', ['as' => 'categories.reorder', 'uses' => 'CategoryController@reorder']);
-$r->patch('reorder', ['as' => 'categories.reorder', 'uses' => 'CategoryController@setOrder']);
+$r->get('manage', ['as' => 'category.manage', 'uses' => 'CategoryController@manage']);
 
 $categoryPrefix = config('forum.frontend.router.category_prefix');
 $r->post($categoryPrefix . '/create', ['as' => 'category.store', 'uses' => 'CategoryController@store']);

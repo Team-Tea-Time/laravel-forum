@@ -14,7 +14,7 @@ class AddColorToCategories extends Migration
     public function up()
     {
         Schema::table('forum_categories', function (Blueprint $table) {
-            $table->string('color');
+            $table->string('color')->nullable();
         });
     }
 

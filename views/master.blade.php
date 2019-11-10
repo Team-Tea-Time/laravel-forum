@@ -14,17 +14,23 @@
         {{ trans('forum::general.home_title') }}
     </title>
 
+    <!-- Bootstrap (https://github.com/twbs/bootstrapS) -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- Vue (https://github.com/vuejs/vue) -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <!-- Axios (https://github.com/axios/axios) -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <!-- Pickr (https://github.com/Simonwep/pickr) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
 
     <!-- Sortable (https://github.com/SortableJS/Sortable) -->
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.1/Sortable.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.10.1/Sortable.min.js"></script>
+    <!-- Vue.Draggable (https://github.com/SortableJS/Vue.Draggable) -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.23.2/vuedraggable.umd.min.js"></script>
 
     <style>
     body {
@@ -55,36 +61,69 @@
     .card.category {
         margin-bottom: 1em;
     }
+
+    .modal {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
+
+    .list-group .list-group {
+        min-height: 1em;
+        margin-top: .5em;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .3s ease;
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+    }
+
+    .slide-fade-enter-active, .slide-fade-leave-active {
+        transition: .3s ease;
+    }
+    .slide-fade-enter {
+        opacity: 0;
+        transform: translateY(-5%);
+    }
+    .slide-fade-leave-to {
+        opacity: 0;
+        transform: translateY(-5%);
+    }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+    <nav class="v-navbar navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ url(config('forum.frontend.router.prefix')) }}">Laravel Forum</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" @click="isExpanded = !isExpanded">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" :class="{ show: isExpanded }">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url(config('forum.frontend.router.prefix')) }}">{{ trans('forum::general.index') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url(config('forum.frontend.router.prefix') . '/new') }}">{{ trans('forum::threads.new_updated') }}</a>
+                        <a class="nav-link" href="{{ route('forum.new.index') }}">{{ trans('forum::threads.new_updated') }}</a>
                     </li>
                     @can ('moveCategories')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url(config('forum.frontend.router.prefix') . '/reorder') }}">{{ trans('forum::general.reorder') }}</a>
+                            <a class="nav-link" href="{{ route('forum.category.manage') }}">{{ trans('forum::general.manage') }}</a>
                         </li>
                     @endcan
                 </ul>
                 <ul class="navbar-nav">
                     @if (Auth::check())
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" @click="isUserDropdownOpen = !isUserDropdownOpen">
                                 {{ $username }}
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <div class="dropdown-menu" :class="{ show: isUserDropdownOpen }" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Log out
                                 </a>
@@ -114,70 +153,24 @@
     </div>
 
     <script>
-    var toggle = $('input[type=checkbox][data-toggle-all]');
-    var checkboxes = $('table tbody input[type=checkbox]');
-    var actions = $('[data-actions]');
-    var forms = $('[data-actions-form]');
-    var confirmString = "{{ trans('forum::general.generic_confirm') }}";
-
-    function setToggleStates() {
-        checkboxes.prop('checked', toggle.is(':checked')).change();
-    }
-
-    function setSelectionStates() {
-        checkboxes.each(function() {
-            var tr = $(this).parents('tr');
-
-            $(this).is(':checked') ? tr.addClass('table-active') : tr.removeClass('table-active');
-
-            checkboxes.filter(':checked').length ? $('[data-bulk-actions]').removeClass('hidden') : $('[data-bulk-actions]').addClass('hidden');
-        });
-    }
-
-    function setActionStates() {
-        forms.each(function() {
-            var form = $(this);
-            var method = form.find('input[name=_method]');
-            var selected = form.find('select[name=action] option:selected');
-            var depends = form.find('[data-depends]');
-
-            selected.each(function() {
-                if ($(this).attr('data-method')) {
-                    method.val($(this).data('method'));
-                } else {
-                    method.val('patch');
-                }
-            });
-
-            depends.each(function() {
-                (selected.val() == $(this).data('depends')) ? $(this).removeClass('hidden') : $(this).addClass('hidden');
-            });
-        });
-    }
-
-    setToggleStates();
-    setSelectionStates();
-    setActionStates();
-
-    toggle.click(setToggleStates);
-    checkboxes.change(setSelectionStates);
-    actions.change(setActionStates);
-
-    forms.submit(function() {
-        var action = $(this).find('[data-actions]').find(':selected');
-
-        if (action.is('[data-confirm]')) {
-            return confirm(confirmString);
+    new Vue({
+        el: '.v-navbar',
+        data: {
+            isExpanded: false,
+            isUserDropdownOpen: false
+        },
+        methods: {
+            onWindowClick (event) {
+                if (event.target.classList.contains('dropdown-toggle')) return;
+                if (this.isExpanded) this.isExpanded = false;
+                if (this.isUserDropdownOpen) this.isUserDropdownOpen = false;
+            }
+        },
+        created: function () {
+            window.addEventListener('click', this.onWindowClick);
         }
-
-        return true;
-    });
-
-    $('form[data-confirm]').submit(function() {
-        return confirm(confirmString);
     });
     </script>
-
     @yield('footer')
 </body>
 </html>
