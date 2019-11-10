@@ -13,7 +13,7 @@
         <draggable-category-list :categories="categories"></draggable-category-list>
 
         <transition name="fade">
-            <div v-show="changesApplied" class="alert alert-success" role="alert">
+            <div v-show="changesApplied" class="alert alert-success mt-3" role="alert">
                 {{ trans('forum::general.changes_applied') }}
             </div>
         </transition>
@@ -75,6 +75,7 @@
                 axios.post('{{ route('forum.api.bulk.category.manage') }}', payload, options)
                     .then(response => {
                         this.changesApplied = true;
+                        setTimeout(() => this.changesApplied = false, 3000);
                     })
                     .catch(error => {
                         this.isSavingDisabled = false;
