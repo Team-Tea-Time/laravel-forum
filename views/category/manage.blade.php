@@ -1,4 +1,4 @@
-@extends ('forum::master', ['category' => null, 'thread' => null])
+@extends ('forum::master', ['category' => null, 'thread' => null, 'breadcrumb_other' => trans('forum::general.manage') ])
 
 @section ('content')
     <div class="d-flex flex-row justify-content-between mb-2">
@@ -29,6 +29,7 @@
         <draggable tag="ul" class="list-group" :list="categories" group="categories" :invertSwap="true">
             <li class="list-group-item" v-for="category in categories" :data-id="category.id" :key="category.id">
                 <strong :style="{ color: category.color }">@{{ category.title }}</strong>
+                <button class="float-right btn btn-sm ml-2">{{ trans('forum::general.edit') }}</button>
                 <span class="float-right text-muted">@{{ category.description }}</span>
 
                 <draggable-category-list :categories="category.children"></draggable-category-list>
@@ -56,7 +57,6 @@
         watch: {
             categories: {
                 handler: function (categories) {
-                    console.log('wat')
                     this.isSavingDisabled = false;
                 },
                 deep: true

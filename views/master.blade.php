@@ -73,7 +73,7 @@
 
     .list-group .list-group {
         min-height: 1em;
-        margin-top: .5em;
+        margin-top: 1em;
     }
 
     .fade-enter-active, .fade-leave-active {
