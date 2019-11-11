@@ -83,16 +83,6 @@ class Category extends BaseModel
         return $this->threads()->orderBy('updated_at', 'desc')->first();
     }
 
-    /**
-     * Attribute: New threads enabled.
-     *
-     * @return bool
-     */
-    public function getThreadsEnabledAttribute()
-    {
-        return $this->enable_threads;
-    }
-
     public function getDeepestChildAttribute(): Category
     {
         $category = $this;

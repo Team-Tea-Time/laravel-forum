@@ -15,7 +15,6 @@
         @endcan
     </div>
     <div id="category">
-
         <hr>
 
         @can ('manageCategories')
@@ -28,22 +27,9 @@
         @endcan
 
         @if (!$category->children->isEmpty())
-            <table class="table table-category">
-                <thead>
-                    <tr>
-                        <th>{{ trans_choice('forum::categories.category', 1) }}</th>
-                        <th class="col col-md-2">{{ trans_choice('forum::threads.thread', 2) }}</th>
-                        <th class="col col-md-2">{{ trans_choice('forum::posts.post', 2) }}</th>
-                        <th class="col col-md-2">{{ trans('forum::threads.newest') }}</th>
-                        <th class="col col-md-2">{{ trans('forum::posts.last') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($category->children as $subcategory)
-                        @include ('forum::category.partials.list', ['category' => $subcategory])
-                    @endforeach
-                </tbody>
-            </table>
+            @foreach ($category->children as $subcategory)
+                @include ('forum::category.partials.list', ['category' => $subcategory])
+            @endforeach
         @endif
 
         <div class="row">
@@ -70,7 +56,7 @@
                 {!! method_field('delete') !!}
         @endcan
 
-        @if ($category->threadsEnabled)
+        @if ($category->accepts_threads)
             <table class="table table-thread">
                 <thead>
                     <tr>
@@ -146,7 +132,7 @@
 
         <div class="row">
             <div class="col col-xs-4">
-                @if ($category->threadsEnabled)
+                @if ($category->accepts_threads)
                     @can ('createThreads', $category)
                         <a href="{{ Forum::route('thread.create', $category) }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
                     @endcan
@@ -156,19 +142,5 @@
                 {!! $threads->render() !!}
             </div>
         </div>
-
-        @if ($category->threadsEnabled)
-            @can ('markNewThreadsAsRead')
-                <hr>
-                <div class="text-center">
-                    <form action="{{ Forum::route('mark-new') }}" method="POST" data-confirm>
-                        {!! csrf_field() !!}
-                        {!! method_field('patch') !!}
-                        <input type="hidden" name="category_id" value="{{ $category->id }}">
-                        <button class="btn btn-default btn-small">{{ trans('forum::categories.mark_read') }}</button>
-                    </form>
-                </div>
-            @endcan
-        @endif
     </div>
 @stop
