@@ -95,16 +95,11 @@
     background: #fff;
 }
 
-.category .subcategories .list-group-item {
-    opacity: 0.5;
-    transition: opacity .3s ease;
+.category > .list-group-item {
+    z-index: 1000;
 }
 
 .category .subcategories .list-group-item:first-child {
     border-radius: 0;
-}
-
-.category:hover .subcategories .list-group-item {
-    opacity: 1;
 }
 </style>
