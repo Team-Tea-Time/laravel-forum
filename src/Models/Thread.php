@@ -82,7 +82,7 @@ class Thread extends BaseModel
     public function posts()
     {
         $withTrashed = config('forum.preferences.display_trashed_posts') || Gate::allows('viewTrashedPosts');
-        $query = $this->hasMany(Post::class);
+        $query = $this->hasMany(Post::class)->orderBy('created_at');
         return $withTrashed ? $query->withTrashed() : $query;
     }
 
