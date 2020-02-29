@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamTeaTime\Forum\Http\Controllers\API;
+namespace TeamTeaTime\Forum\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
