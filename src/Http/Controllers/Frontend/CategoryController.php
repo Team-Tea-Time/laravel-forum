@@ -6,87 +6,70 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Gate;
+use TeamTeaTime\Forum\Actions\CreateCategory;
+use TeamTeaTime\Forum\Actions\GetAllCategories;
+use TeamTeaTime\Forum\Actions\GetCategoryById;
+use TeamTeaTime\Forum\Actions\GetCategoryTree;
+use TeamTeaTime\Forum\Actions\UpdateCategory;
 use TeamTeaTime\Forum\Events\UserViewingCategory;
 use TeamTeaTime\Forum\Events\UserViewingIndex;
 use TeamTeaTime\Forum\Http\Requests\StoreCategory;
 
-use TeamTeaTime\Forum\Services\CategoryService;
-
 class CategoryController extends BaseController
 {
-    /** @var CategoryService */
-    protected $service;
-
-    public function __construct(CategoryService $service)
+    public function index(Request $request, GetAllCategories $action): View
     {
-        $this->service = $service;
-    }
-
-    public function index(Request $request): View
-    {
-        $categories = $this->service->getAll()->toTree();
-        // $categories = $this->api('category.index')
-        //                    ->parameters(['where' => ['category_id' => 0], 'orderBy' => 'weight', 'orderDir' => 'asc', 'with' => ['categories', 'threads']])
-        //                    ->get();
+        $categories = $action->execute()->toTree();
 
         event(new UserViewingIndex);
 
         return view('forum::category.index', compact('categories'));
     }
 
-    public function show(Request $request): View
+    public function show(Request $request, GetCategoryById $getCategoryById, GetTopLevelCategories $getTopLevelCategories): View
     {
-        $category = $this->service->getByID($request->route('category'));
+        $category = $getCategoryById->execute($request->route('category'));
 
         event(new UserViewingCategory($category));
 
-        $categories = [];
-        if (Gate::allows('moveCategories')) {
-            $categories = $this->service->getTopLevel();
-        }
-
+        $categories = Gate::allows('moveCategories') ? $getTopLevelCategories->execute() : [];
         $threads = $category->threadsPaginated;
 
         return view('forum::category.show', compact('categories', 'category', 'threads'));
     }
 
-    public function store(StoreCategory $request): RedirectResponse
+    public function store(StoreCategory $request, CreateCategory $action): RedirectResponse
     {
-        $category = $this->service->create(
-            $request->only('title', 'description', 'accepts_threads', 'is_private', 'color')
-        );
-
-        // $category = $this->api('category.store')->parameters($request->all())->post();
+        $category = $action->execute($request->only('title', 'description', 'accepts_threads', 'is_private', 'color'));
 
         Forum::alert('success', 'categories.created');
 
         return redirect(Forum::route('category.show', $category));
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(Request $request, UpdateCategory $action): RedirectResponse
     {
-        $action = $request->input('action');
-
-        $category = $this->api("category.{$action}", $request->route('category'))->parameters($request->all())->patch();
+        $action->execute($request->route('category'), $request->only('title', 'description', 'accepts_threads', 'is_private', 'color'));
 
         Forum::alert('success', 'categories.updated', 1);
 
         return redirect(Forum::route('category.show', $category));
     }
 
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request, DeleteCategory $action): RedirectResponse
     {
-        $this->api('category.delete', $request->route('category'))->parameters($request->all())->delete();
+        $action->execute($request->route('category'));
 
         Forum::alert('success', 'categories.deleted', 1);
 
         return redirect(config('forum.routing.prefix'));
     }
 
-    public function manage(Request $request): View
+    public function manage(Request $request, GetAllCategories $action): View
     {
-        $categories = $this->service->getAll();
+        $categories = $action->execute();
         $categories->makeHidden(['thread_count', 'post_count']);
+
         return view('forum::category.manage', ['categories' => $categories->toTree()]);
     }
 }

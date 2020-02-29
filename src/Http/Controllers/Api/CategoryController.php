@@ -6,18 +6,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
-use TeamTeaTime\Forum\Services\CategoryService;
-
 class CategoryController
 {
-    /** @var CategoryService */
-    protected $service;
-
-    public function __construct(CategoryService $service)
-    {
-        $this->service = $service;
-    }
-
     public function index(Request $request)
     {
         $categories = $this->service->getAll();
