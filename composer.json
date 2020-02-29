@@ -19,6 +19,9 @@
         "doctrine/dbal": "^2.9",
         "kalnoy/nestedset": "^5.0"
     },
+    "require-dev": {
+        "orchestra/testbench": "^4.0"
+    },
     "autoload": {
         "psr-4": {
             "TeamTeaTime\\Forum\\": "src"
