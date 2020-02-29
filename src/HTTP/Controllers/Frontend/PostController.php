@@ -1,10 +1,10 @@
-<?php namespace Riari\Forum\Http\Controllers\Frontend;
+<?php namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
 
 use Forum;
 use Illuminate\Http\Request;
-use Riari\Forum\Frontend\Events\UserCreatingPost;
-use Riari\Forum\Frontend\Events\UserEditingPost;
-use Riari\Forum\Frontend\Events\UserViewingPost;
+use TeamTeaTime\Forum\Frontend\Events\UserCreatingPost;
+use TeamTeaTime\Forum\Frontend\Events\UserEditingPost;
+use TeamTeaTime\Forum\Frontend\Events\UserViewingPost;
 
 class PostController extends BaseController
 {

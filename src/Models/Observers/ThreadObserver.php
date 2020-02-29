@@ -1,9 +1,9 @@
-<?php namespace Riari\Forum\Models\Observers;
+<?php namespace TeamTeaTime\Forum\Models\Observers;
 
 use Carbon\Carbon;
-use Riari\Forum\Models\Category;
-use Riari\Forum\Models\Thread;
-use Riari\Forum\Support\Stats;
+use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Models\Thread;
+use TeamTeaTime\Forum\Support\Stats;
 
 class ThreadObserver
 {

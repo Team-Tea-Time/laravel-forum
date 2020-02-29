@@ -1,12 +1,12 @@
 <?php
 
-namespace Riari\Forum\Support\Frontend;
+namespace TeamTeaTime\Forum\Support\Frontend;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Str;
-use Riari\Forum\Models\Category;
-use Riari\Forum\Models\Post;
-use Riari\Forum\Models\Thread;
+use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\Models\Thread;
 use Session;
 
 class Forum

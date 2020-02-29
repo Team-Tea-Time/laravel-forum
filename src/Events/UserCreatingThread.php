@@ -1,8 +1,8 @@
 <?php
 
-namespace Riari\Forum\Events;
+namespace TeamTeaTime\Forum\Events;
 
-use Riari\Forum\Events\Types\CategoryEvent;
+use TeamTeaTime\Forum\Events\Types\CategoryEvent;
 
 class UserCreatingThread extends CategoryEvent
 {

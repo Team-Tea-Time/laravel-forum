@@ -1,4 +1,4 @@
-<?php namespace Riari\Forum\Http\Controllers\Frontend;
+<?php namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
 
 use Forum;
 use Illuminate\Http\RedirectResponse;
@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Gate;
-use Riari\Forum\Events\UserViewingCategory;
-use Riari\Forum\Events\UserViewingIndex;
-use Riari\Forum\Http\Requests\StoreCategory;
+use TeamTeaTime\Forum\Events\UserViewingCategory;
+use TeamTeaTime\Forum\Events\UserViewingIndex;
+use TeamTeaTime\Forum\Http\Requests\StoreCategory;
 
-use Riari\Forum\Services\CategoryService;
+use TeamTeaTime\Forum\Services\CategoryService;
 
 class CategoryController extends BaseController
 {

@@ -1,4 +1,4 @@
-<?php namespace Riari\Forum\Http\Controllers\Frontend;
+<?php namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
 
 use Forum;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
-use Riari\Forum\Api\Dispatcher;
+use TeamTeaTime\Forum\Api\Dispatcher;
 
 abstract class BaseController extends Controller
 {

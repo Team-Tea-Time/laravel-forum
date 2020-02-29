@@ -1,6 +1,6 @@
 <?php
 
-namespace Riari\Forum\Http\Requests;
+namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

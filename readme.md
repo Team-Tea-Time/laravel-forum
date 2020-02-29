@@ -17,7 +17,7 @@ composer require riari/laravel-forum:~5.0
 Then add the service provider to your `config/app.php`:
 
 ```php
-Riari\Forum\ForumServiceProvider::class,
+TeamTeaTime\Forum\ForumServiceProvider::class,
 ```
 
 ### Step 2: Publish the package files

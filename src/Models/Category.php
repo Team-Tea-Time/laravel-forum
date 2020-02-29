@@ -1,8 +1,8 @@
-<?php namespace Riari\Forum\Models;
+<?php namespace TeamTeaTime\Forum\Models;
 
 use Illuminate\Support\Facades\Gate;
 use Kalnoy\Nestedset\NodeTrait;
-use Riari\Forum\Support\Traits\CachesData;
+use TeamTeaTime\Forum\Support\Traits\CachesData;
 
 class Category extends BaseModel
 {

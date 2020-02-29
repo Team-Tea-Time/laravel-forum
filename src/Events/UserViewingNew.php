@@ -1,6 +1,6 @@
 <?php
 
-namespace Riari\Forum\Events;
+namespace TeamTeaTime\Forum\Events;
 
 use Illuminate\Database\Eloquent\Collection;
 

@@ -1,6 +1,6 @@
-<?php namespace Riari\Forum\Policies;
+<?php namespace TeamTeaTime\Forum\Policies;
 
-use Riari\Forum\Models\Category;
+use TeamTeaTime\Forum\Models\Category;
 
 class CategoryPolicy
 {

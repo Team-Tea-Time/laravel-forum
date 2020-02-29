@@ -1,4 +1,4 @@
-<?php namespace Riari\Forum\Http\Controllers\API;
+<?php namespace TeamTeaTime\Forum\Http\Controllers\API;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;

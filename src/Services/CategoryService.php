@@ -1,8 +1,8 @@
 <?php
 
-namespace Riari\Forum\Services;
+namespace TeamTeaTime\Forum\Services;
 
-use Riari\Forum\Models\Category;
+use TeamTeaTime\Forum\Models\Category;
 
 class CategoryService
 {

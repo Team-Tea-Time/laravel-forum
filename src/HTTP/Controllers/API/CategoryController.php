@@ -1,12 +1,12 @@
 <?php
 
-namespace Riari\Forum\Http\Controllers\API;
+namespace TeamTeaTime\Forum\Http\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
-use Riari\Forum\Services\CategoryService;
+use TeamTeaTime\Forum\Services\CategoryService;
 
 class CategoryController
 {

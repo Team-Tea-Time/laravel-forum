@@ -1,8 +1,8 @@
 <?php
 
-namespace Riari\Forum\Events;
+namespace TeamTeaTime\Forum\Events;
 
-use Riari\Forum\Events\Types\PostEvent;
+use TeamTeaTime\Forum\Events\Types\PostEvent;
 
 class UserViewingPost extends PostEvent
 {

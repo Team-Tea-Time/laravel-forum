@@ -1,8 +1,8 @@
 <?php
 
-namespace Riari\Forum\Events\Types;
+namespace TeamTeaTime\Forum\Events\Types;
 
-use Riari\Forum\Models\Post;
+use TeamTeaTime\Forum\Models\Post;
 
 class PostEvent
 {

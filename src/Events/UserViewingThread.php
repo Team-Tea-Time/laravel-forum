@@ -1,8 +1,8 @@
 <?php
 
-namespace Riari\Forum\Events;
+namespace TeamTeaTime\Forum\Events;
 
-use Riari\Forum\Events\Types\ThreadEvent;
+use TeamTeaTime\Forum\Events\Types\ThreadEvent;
 
 class UserViewingThread extends ThreadEvent
 {

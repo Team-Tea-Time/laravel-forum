@@ -1,4 +1,4 @@
-<?php namespace Riari\Forum\Models;
+<?php namespace TeamTeaTime\Forum\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;

@@ -1,13 +1,13 @@
-<?php namespace Riari\Forum\Http\Controllers\Frontend;
+<?php namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
 
 use Forum;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
-use Riari\Forum\Frontend\Events\UserCreatingThread;
-use Riari\Forum\Frontend\Events\UserMarkingNew;
-use Riari\Forum\Frontend\Events\UserViewingNew;
-use Riari\Forum\Frontend\Events\UserViewingThread;
+use TeamTeaTime\Forum\Frontend\Events\UserCreatingThread;
+use TeamTeaTime\Forum\Frontend\Events\UserMarkingNew;
+use TeamTeaTime\Forum\Frontend\Events\UserViewingNew;
+use TeamTeaTime\Forum\Frontend\Events\UserViewingThread;
 
 class ThreadController extends BaseController
 {

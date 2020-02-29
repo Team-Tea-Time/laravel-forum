@@ -1,6 +1,6 @@
 <?php
 
-namespace Riari\Forum\Support\Traits;
+namespace TeamTeaTime\Forum\Support\Traits;
 
 use Cache;
 use ReflectionClass;

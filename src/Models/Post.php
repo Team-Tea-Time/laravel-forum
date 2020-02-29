@@ -1,8 +1,8 @@
-<?php namespace Riari\Forum\Models;
+<?php namespace TeamTeaTime\Forum\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Riari\Forum\Models\Traits\HasAuthor;
-use Riari\Forum\Support\Traits\CachesData;
+use TeamTeaTime\Forum\Models\Traits\HasAuthor;
+use TeamTeaTime\Forum\Support\Traits\CachesData;
 
 class Post extends BaseModel
 {

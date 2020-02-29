@@ -1,4 +1,4 @@
-<?php namespace Riari\Forum;
+<?php namespace TeamTeaTime\Forum;
 
 use Carbon\Carbon;
 use Illuminate\Auth\Access\Gate;
@@ -7,11 +7,11 @@ use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Riari\Forum\Http\ViewComposers\MasterComposer;
-use Riari\Forum\Models\Post;
-use Riari\Forum\Models\Thread;
-use Riari\Forum\Models\Observers\PostObserver;
-use Riari\Forum\Models\Observers\ThreadObserver;
+use TeamTeaTime\Forum\Http\ViewComposers\MasterComposer;
+use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\Models\Thread;
+use TeamTeaTime\Forum\Models\Observers\PostObserver;
+use TeamTeaTime\Forum\Models\Observers\ThreadObserver;
 
 class ForumServiceProvider extends ServiceProvider
 {

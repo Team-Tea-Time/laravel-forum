@@ -1,7 +1,7 @@
-<?php namespace Riari\Forum\Models\Observers;
+<?php namespace TeamTeaTime\Forum\Models\Observers;
 
 use Carbon\Carbon;
-use Riari\Forum\Support\Stats;
+use TeamTeaTime\Forum\Support\Stats;
 
 class PostObserver
 {

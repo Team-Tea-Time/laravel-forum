@@ -1,7 +1,7 @@
-<?php namespace Riari\Forum\Policies;
+<?php namespace TeamTeaTime\Forum\Policies;
 
 use Illuminate\Support\Facades\Gate;
-use Riari\Forum\Models\Thread;
+use TeamTeaTime\Forum\Models\Thread;
 
 class ThreadPolicy
 {

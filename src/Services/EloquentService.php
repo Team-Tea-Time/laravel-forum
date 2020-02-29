@@ -1,6 +1,6 @@
 <?php
 
-namespace Riari\Forum\Services;
+namespace TeamTeaTime\Forum\Services;
 
 use Illuminate\Database\Eloquent\Model;
 

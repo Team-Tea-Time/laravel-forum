@@ -27,7 +27,7 @@ return [
         'as' => 'forum.',
         'thread_prefix' => 't',
         'category_prefix' => 'c',
-        'namespace' => '\Riari\Forum\Http\Controllers\Frontend',
+        'namespace' => '\TeamTeaTime\Forum\Http\Controllers\Frontend',
         'middleware' => ['web']
     ],
 
@@ -52,6 +52,6 @@ return [
     |
     */
 
-    'utility_class' => Riari\Forum\Support\Frontend\Forum::class,
+    'utility_class' => TeamTeaTime\Forum\Support\Frontend\Forum::class,
 
 ];

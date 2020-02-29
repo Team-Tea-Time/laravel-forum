@@ -1,6 +1,6 @@
 <?php
 
-namespace Riari\Forum\Support;
+namespace TeamTeaTime\Forum\Support;
 
 class Stats
 {
