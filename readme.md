@@ -11,7 +11,7 @@ Requires Laravel 6.
 Install the package via composer:
 
 ```
-composer require riari/laravel-forum:~5.0
+composer require teamteatime/laravel-forum:~5.0
 ```
 
 Then add the service provider to your `config/app.php`:
