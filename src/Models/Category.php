@@ -51,12 +51,12 @@ class Category extends BaseModel
             ->paginate(config('forum.general.pagination.threads'));
     }
 
-    public function getNewestThreadAttribute(): Thread
+    public function getNewestThreadAttribute(): ?Thread
     {
         return $this->threads()->orderBy('created_at', 'desc')->first();
     }
 
-    public function getLatestActiveThreadAttribute(): Thread
+    public function getLatestActiveThreadAttribute(): ?Thread
     {
         return $this->threads()->orderBy('updated_at', 'desc')->first();
     }
