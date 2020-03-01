@@ -3,30 +3,20 @@
 use Forum;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
-use TeamTeaTime\Forum\Frontend\Events\UserCreatingThread;
-use TeamTeaTime\Forum\Frontend\Events\UserMarkingNew;
-use TeamTeaTime\Forum\Frontend\Events\UserViewingNew;
-use TeamTeaTime\Forum\Frontend\Events\UserViewingThread;
+use Illuminate\View\View;
+use TeamTeaTime\Forum\Events\UserCreatingThread;
+use TeamTeaTime\Forum\Events\UserMarkingNew;
+use TeamTeaTime\Forum\Events\UserViewingNew;
+use TeamTeaTime\Forum\Events\UserViewingThread;
+use TeamTeaTime\Forum\Http\Requests\CreateThread;
+use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Models\Thread;
 
 class ThreadController extends BaseController
 {
-    /**
-     * @var Thread
-     */
-    protected $threads;
-
-    /**
-     * @var Post
-     */
-    protected $posts;
-
-    /**
-     * GET: Return a new/updated threads view.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function indexNew()
+    public function indexNew(): View
     {
         $threads = $this->api('thread.index-new')->get();
 
@@ -35,13 +25,7 @@ class ThreadController extends BaseController
         return view('forum::thread.index-new', compact('threads'));
     }
 
-    /**
-     * PATCH: Mark new/updated threads as read for the current user.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function markNew(Request $request)
+    public function markNew(Request $request): RedirectResponse
     {
         $threads = $this->api('thread.mark-new')->parameters($request->only('category_id'))->patch();
 
@@ -60,13 +44,7 @@ class ThreadController extends BaseController
         return redirect(config('forum.routing.prefix'));
     }
 
-    /**
-     * GET: Return a thread view.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request)
+    public function show(Request $request): View
     {
         $thread = $this->api('thread.fetch', $request->route('thread'))
                        ->parameters(['include_deleted' => auth()->check()])
@@ -86,17 +64,10 @@ class ThreadController extends BaseController
         return view('forum::thread.show', compact('categories', 'category', 'thread', 'posts'));
     }
 
-    /**
-     * GET: Return a 'create thread' view.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
+    public function create(Request $request, Category $category)
     {
-        $category = $this->api('category.fetch', $request->route('category'))->get();
-
-        if (!$category->threadsEnabled) {
+        if (! $category->accepts_threads)
+        {
             Forum::alert('warning', 'categories.threads_disabled');
 
             return redirect(Forum::route('category.show', $category));
@@ -107,30 +78,16 @@ class ThreadController extends BaseController
         return view('forum::thread.create', compact('category'));
     }
 
-    /**
-     * POST: Store a new thread.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(CreateThread $request, Category $category)
     {
-        $category = $this->api('category.fetch', $request->route('category'))->get();
-
-        if (!$category->threadsEnabled) {
+        if (! $category->accepts_threads)
+        {
             Forum::alert('warning', 'categories.threads_disabled');
 
             return redirect(Forum::route('category.show', $category));
         }
-
-        $thread = [
-            'author_id'     => auth()->user()->getKey(),
-            'category_id'   => $category->id,
-            'title'         => $request->input('title'),
-            'content'       => $request->input('content')
-        ];
-
-        $thread = $this->api('thread.store')->parameters($thread)->post();
+        
+        $thread = $request->fulfill();
 
         Forum::alert('success', 'threads.created');
 
