@@ -17,25 +17,16 @@
                 </span>
             </div>
             <div class="col-sm text-md-right text-muted">
-                <em><a href="#" style="color: {{ $category->color }};">Saltuna</a> 3 hours ago</em>
-                <br>
-                <em><a href="#" style="color: {{ $category->color }};">Re: Saltuna</a> 2 hours ago</em>
                 @if ($category->newestThread)
                     <div>
-                        {{ trans('forum::threads.newest') }}:
-                        <a href="{{ Forum::route('thread.show', $category->newestThread) }}">
-                            {{ $category->newestThread->title }}
-                        </a>
-                        ({{ $category->newestThread->authorName }})
+                        <a href="{{ Forum::route('thread.show', $category->newestThread) }}">{{ $category->newestThread->title }}</a>
+                        {{ $category->newestThread->created_at->diffForHumans() }}
                     </div>
                 @endif
-                @if ($category->latestActiveThread)
+                @if ($category->mostRecentlyActiveThread)
                     <div>
-                        {{ trans('forum::posts.last') }}:
-                        <a href="{{ Forum::route('thread.show', $category->latestActiveThread->lastPost) }}">
-                            {{ $category->latestActiveThread->title }}
-                        </a>
-                        ({{ $category->latestActiveThread->lastPost->authorName }})
+                        <a href="{{ Forum::route('thread.show', $category->mostRecentlyActiveThread->lastPost) }}">Re: {{ $category->mostRecentlyActiveThread->title }}</a>
+                        {{ $category->mostRecentlyActiveThread->lastPost->created_at->diffForHumans() }}
                     </div>
                 @endif
             </div>
@@ -61,25 +52,16 @@
                             </span>
                         </div>
                         <div class="col-sm text-md-right text-muted">
-                            <em><a href="#" style="color: {{ $subcategory->color }};">Saltuna</a> 3 hours ago</em>
-                            <br>
-                            <em><a href="#" style="color: {{ $subcategory->color }};">Re: Saltuna</a> 2 hours ago</em>
                             @if ($subcategory->newestThread)
                                 <div>
-                                    {{ trans('forum::threads.newest') }}:
-                                    <a href="{{ Forum::route('thread.show', $subcategory->newestThread) }}">
-                                        {{ $subcategory->newestThread->title }}
-                                    </a>
-                                    ({{ $subcategory->newestThread->authorName }})
+                                    <a href="{{ Forum::route('thread.show', $subcategory->newestThread) }}">{{ $subcategory->newestThread->title }}</a>
+                                    {{ $subcategory->newestThread->created_at->diffForHumans() }}
                                 </div>
                             @endif
-                            @if ($subcategory->latestActiveThread)
+                            @if ($subcategory->mostRecentlyActiveThread)
                                 <div>
-                                    {{ trans('forum::posts.last') }}:
-                                    <a href="{{ Forum::route('thread.show', $subcategory->latestActiveThread->lastPost) }}">
-                                        {{ $subcategory->latestActiveThread->title }}
-                                    </a>
-                                    ({{ $subcategory->latestActiveThread->lastPost->authorName }})
+                                    <a href="{{ Forum::route('thread.show', $subcategory->mostRecentlyActiveThread->lastPost) }}">Re: {{ $subcategory->mostRecentlyActiveThread->title }}</a>
+                                    {{ $subcategory->mostRecentlyActiveThread->lastPost->created_at->diffForHumans() }}
                                 </div>
                             @endif
                         </div>

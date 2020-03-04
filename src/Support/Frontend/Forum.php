@@ -53,7 +53,7 @@ class Forum
      */
     public static function route($route, $model = null)
     {
-        if (!Str::startsWith($route, config('forum.frontend.router.as'))) {
+        if (! Str::startsWith($route, config('forum.frontend.router.as'))) {
             $route = config('forum.frontend.router.as') . $route;
         }
 
@@ -70,21 +70,19 @@ class Forum
                     break;
                 case $model instanceof Thread:
                     $params = [
-                        'category' => $model->category->id,
-                        'category_slug' => static::slugify($model->category->title),
                         'thread' => $model->id,
                         'thread_slug' => static::slugify($model->title),
                     ];
                     break;
                 case $model instanceof Post:
                     $params = [
-                        'category' => $model->thread->category->id,
-                        'category_slug' => static::slugify($model->thread->category->title),
                         'thread' => $model->thread->id,
                         'thread_slug' => static::slugify($model->thread->title),
                     ];
 
-                    if ($route == config('forum.routing.as') . 'thread.show') {
+                    $test = $model->getPerPage();
+
+                    if ($route == config('forum.frontend.router.as') . 'thread.show') {
                         // The requested route is for a thread; we need to specify the page number and append a hash for
                         // the post
                         $params['page'] = ceil($model->sequence / $model->getPerPage());

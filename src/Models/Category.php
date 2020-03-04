@@ -20,7 +20,7 @@ class Category extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->perPage = config('forum.preferences.pagination.categories');
+        $this->perPage = config('forum.general.pagination.categories');
     }
 
     public function threads(): HasMany
@@ -47,8 +47,7 @@ class Category extends BaseModel
 
     public function getThreadsPaginatedAttribute(): LengthAwarePaginator
     {
-        return $this->threads()->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc')
-            ->paginate(config('forum.general.pagination.threads'));
+        return $this->threads()->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc')->paginate();
     }
 
     public function getNewestThreadAttribute(): ?Thread
@@ -56,7 +55,7 @@ class Category extends BaseModel
         return $this->threads()->orderBy('created_at', 'desc')->first();
     }
 
-    public function getLatestActiveThreadAttribute(): ?Thread
+    public function getMostRecentlyActiveThreadAttribute(): ?Thread
     {
         return $this->threads()->orderBy('updated_at', 'desc')->first();
     }

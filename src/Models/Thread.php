@@ -46,7 +46,7 @@ class Thread extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->perPage = config('forum.preferences.pagination.threads');
+        $this->perPage = config('forum.general.pagination.threads');
     }
 
     /**
@@ -108,7 +108,7 @@ class Thread extends BaseModel
      */
     public function getPostsPaginatedAttribute()
     {
-        return $this->posts()->paginate(config('forum.preferences.pagination.posts'));
+        return $this->posts()->paginate();
     }
 
     /**
