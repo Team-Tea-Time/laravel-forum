@@ -4,8 +4,9 @@ namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Models\Category;
 
-class DeleteCategory extends FormRequest implements FulfillableRequest
+class DestroyCategory extends FormRequest implements FulfillableRequest
 {
     public function authorize(Category $category): bool
     {

@@ -7,7 +7,7 @@ use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 
-class CreateThread extends FormRequest implements FulfillableRequest
+class StoreThread extends FormRequest implements FulfillableRequest
 {
     public function authorize(Category $category): bool
     {

@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
 
-class CreateCategory extends FormRequest implements FulfillableRequest
+class StoreCategory extends FormRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {

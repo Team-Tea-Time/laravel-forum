@@ -2,11 +2,11 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-class UpdateCategory extends StoreCategory
+class UpdatePost extends StorePost
 {
     public function fulfill()
     {
-        $category = $this->route('category');
+        $category = $this->route('post');
         $category->fill($this->validated())->save();
 
         return $category;

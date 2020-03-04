@@ -55,7 +55,7 @@ return [
     |
     | Disable this if you want threads and posts to be permanently removed from
     | your database when they're deleted. Note that by default, the option
-    | to force delete threads and posts exists regardless of this setting.
+    | to hard delete threads and posts exists regardless of this setting.
     |
     */
 
@@ -66,11 +66,9 @@ return [
     | Display trashed (soft-deleted) posts
     |--------------------------------------------------------------------------
     |
-    | Enable this if you want to display messages in place of soft-deleted
-    | posts instead of hiding them altogether.
-    |
-    | Note: Enabling will override the viewTrashedPosts ability (and vice-versa
-    | for authenticated users).
+    | Enable this if you want to display placeholder messages for soft-deleted
+    | posts instead of hiding them altogether. Enabling this will override the
+    | viewTrashedPosts ability.
     |
     */
 
@@ -90,30 +88,6 @@ return [
         'categories' => 50,
         'threads' => 20,
         'posts' => 20
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Validation rules
-    |--------------------------------------------------------------------------
-    |
-    | Here we define validation rules for all of the fields in the package.
-    | Note that the 'required' rule is automatically enforced where applicable.
-    |
-    */
-
-    'validation_rules' => [
-        'author_id' => ['integer'],
-        'enable_threads' => ['boolean'],
-        'category_id' => ['integer'],
-        'content' => ['min:5'],
-        'locked' => ['boolean'],
-        'pinned' => ['boolean'],
-        'private' => ['boolean'],
-        'description' => ['string'],
-        'thread_id' => ['integer', 'exists:forum_threads,id'],
-        'title' => ['string', 'min:5'],
-        'weight' => ['integer'],
     ]
 
 ];

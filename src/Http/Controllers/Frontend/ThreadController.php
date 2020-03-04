@@ -10,7 +10,7 @@ use TeamTeaTime\Forum\Events\UserCreatingThread;
 use TeamTeaTime\Forum\Events\UserMarkingNew;
 use TeamTeaTime\Forum\Events\UserViewingNew;
 use TeamTeaTime\Forum\Events\UserViewingThread;
-use TeamTeaTime\Forum\Http\Requests\CreateThread;
+use TeamTeaTime\Forum\Http\Requests\StoreThread;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 
@@ -31,10 +31,12 @@ class ThreadController extends BaseController
 
         event(new UserMarkingNew);
 
-        if ($request->has('category_id')) {
+        if ($request->has('category_id'))
+        {
             $category = $this->api('category.fetch', $request->input('category_id'))->get();
 
-            if ($category) {
+            if ($category)
+            {
                 Forum::alert('success', 'categories.marked_read', 0, ['category' => $category->title]);
                 return redirect(Forum::route('category.show', $category));
             }
@@ -44,20 +46,15 @@ class ThreadController extends BaseController
         return redirect(config('forum.routing.prefix'));
     }
 
-    public function show(Request $request): View
+    public function show(Request $request, Thread $thread): View
     {
-        $thread = $this->api('thread.fetch', $request->route('thread'))
-                       ->parameters(['include_deleted' => auth()->check()])
-                       ->get();
-
         event(new UserViewingThread($thread));
 
         $category = $thread->category;
 
-        $categories = [];
-        if (Gate::allows('moveThreadsFrom', $category)) {
-            $categories = $this->api('category.index')->parameters(['where' => ['category_id' => 0]], ['where' => ['enable_threads' => 1]])->get();
-        }
+        $categories = $request->user()->can('moveThreadsFrom', $category)
+                    ? Category::acceptsThreads()->get()->toTree()
+                    : [];
 
         $posts = $thread->postsPaginated;
 

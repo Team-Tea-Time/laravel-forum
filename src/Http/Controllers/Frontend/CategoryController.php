@@ -1,4 +1,6 @@
-<?php namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
+<?php
+
+namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
 
 use Forum;
 use Illuminate\Http\RedirectResponse;
@@ -8,8 +10,8 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Gate;
 use TeamTeaTime\Forum\Events\UserViewingCategory;
 use TeamTeaTime\Forum\Events\UserViewingIndex;
-use TeamTeaTime\Forum\Http\Requests\CreateCategory;
 use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
+use TeamTeaTime\Forum\Http\Requests\StoreCategory;
 use TeamTeaTime\Forum\Models\Category;
 
 class CategoryController extends BaseController
@@ -33,7 +35,7 @@ class CategoryController extends BaseController
         return view('forum::category.show', compact('categories', 'category', 'threads'));
     }
 
-    public function store(CreateCategory $request): RedirectResponse
+    public function store(StoreCategory $request): RedirectResponse
     {
         $category = $request->fulfill();
 
@@ -51,7 +53,7 @@ class CategoryController extends BaseController
         return redirect(Forum::route('category.show', $category));
     }
 
-    public function destroy(DeleteCategory $request): RedirectResponse
+    public function destroy(DestroyCategory $request): RedirectResponse
     {
         $request->fulfill();
 
