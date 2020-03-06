@@ -10,7 +10,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content shadow-sm">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">{{ trans('forum::categories.create') }}</h5>
+                        <h5 class="modal-title">{{ trans('forum::categories.create') }}</h5>
                         <button type="button" class="close" aria-label="Close" @click="isModalOpen = false">
                             <span aria-hidden="true">&times;</span>
                         </button>

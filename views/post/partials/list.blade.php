@@ -25,7 +25,7 @@
 <tr class="post-footer">
     <td>
         @if (!$post->trashed())
-            @can ('edit', $post)
+            @can('edit', $post)
                 <a href="{{ Forum::route('post.edit', $post) }}">{{ trans('forum::general.edit') }}</a>
             @endcan
         @endif
@@ -38,7 +38,7 @@
         <span class="pull-right">
             <a href="{{ Forum::route('thread.show', $post) }}">#{{ $post->sequence }}</a>
             @if (!$post->trashed())
-                @can ('reply', $post->thread)
+                @can('reply', $post->thread)
                     - <a href="{{ Forum::route('post.create', $post) }}">{{ trans('forum::general.reply') }}</a>
                 @endcan
             @endif
@@ -46,7 +46,7 @@
                 - <a href="{{ Forum::route('post.show', $post) }}">{{ trans('forum::posts.view') }}</a>
             @endif
             @if (isset($thread))
-                @can ('deletePosts', $thread)
+                @can('deletePosts', $thread)
                     @if (!$post->isFirst)
                         <input type="checkbox" name="items[]" value="{{ $post->id }}">
                     @endif

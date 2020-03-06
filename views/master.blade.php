@@ -111,7 +111,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('forum.new.index') }}">{{ trans('forum::threads.new_updated') }}</a>
                     </li>
-                    @can ('moveCategories')
+                    @can('moveCategories')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('forum.category.manage') }}">{{ trans('forum::general.manage') }}</a>
                         </li>
@@ -146,8 +146,8 @@
     </nav>
 
     <div id="main" class="container">
-        @include ('forum::partials.breadcrumbs')
-        @include ('forum::partials.alerts')
+        @include('forum::partials.breadcrumbs')
+        @include('forum::partials.alerts')
 
         @yield('content')
     </div>

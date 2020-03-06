@@ -8,6 +8,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use TeamTeaTime\Forum\Http\ViewComposers\MasterComposer;
+use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
 use TeamTeaTime\Forum\Models\Observers\PostObserver;
@@ -39,17 +40,24 @@ class ForumServiceProvider extends ServiceProvider
             __DIR__.'/../translations/' => resource_path('lang/vendor/forum'),
         ], 'translations');
 
-        foreach (['api', 'frontend', 'general', 'integration'] as $name) {
+        foreach (['api', 'frontend', 'general', 'integration'] as $name)
+        {
             $this->mergeConfigFrom(__DIR__."/../config/{$name}.php", "forum.{$name}");
         }
 
-        if (config('forum.api.enabled')) {
+        $router->model('category', Category::class);
+        $router->model('post', Post::class);
+        $router->model('thread', Thread::class);
+
+        if (config('forum.api.enabled'))
+        {
             $router->group(config('forum.api.router'), function ($r) {
                 require __DIR__.'/../routes/api.php';
             });
         }
 
-        if (config('forum.frontend.enabled')) {
+        if (config('forum.frontend.enabled'))
+        {
             $this->publishes([
                 __DIR__.'/../views/' => resource_path('views/vendor/forum')
             ], 'views');
@@ -74,8 +82,10 @@ class ForumServiceProvider extends ServiceProvider
         $loader = AliasLoader::getInstance();
         $loader->alias('Forum', config('forum.frontend.utility_class'));
 
-        View::composer('forum::master', function ($view) {
-            if (auth()->check()) {
+        View::composer('forum::master', function ($view)
+        {
+            if (auth()->check())
+            {
                 $nameAttribute = config('forum.integration.user_name');
                 $view->username = auth()->user()->{$nameAttribute};
             }
@@ -91,11 +101,13 @@ class ForumServiceProvider extends ServiceProvider
     public function registerPolicies(GateContract $gate)
     {
         $forumPolicy = config('forum.integration.policies.forum');
-        foreach (get_class_methods(new $forumPolicy()) as $method) {
+        foreach (get_class_methods(new $forumPolicy()) as $method)
+        {
             $gate->define($method, "{$forumPolicy}@{$method}");
         }
 
-        foreach (config('forum.integration.policies.model') as $model => $policy) {
+        foreach (config('forum.integration.policies.model') as $model => $policy)
+        {
             $gate->policy($model, $policy);
         }
     }
