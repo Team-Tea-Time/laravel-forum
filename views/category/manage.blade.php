@@ -5,7 +5,7 @@
         <h2 class="flex-grow-1">{{ trans('forum::general.manage') }}</h2>
 
         @can ('createCategories')
-            @include ('forum::category.partials.form-create')
+            @include ('forum::category.partials.actions.create')
         @endcan
     </div>
 

@@ -62,37 +62,15 @@
         margin-bottom: 1em;
     }
 
-    .modal {
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-    }
-
     .list-group .list-group {
         min-height: 1em;
         margin-top: 1em;
     }
 
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity .3s ease;
-    }
-    .fade-enter, .fade-leave-to {
-        opacity: 0;
-    }
-
-    .slide-fade-enter-active, .slide-fade-leave-active {
-        transition: .3s ease;
-    }
-    .slide-fade-enter {
-        opacity: 0;
-        transform: translateY(-5%);
-    }
-    .slide-fade-leave-to {
-        opacity: 0;
-        transform: translateY(-5%);
+    .btn-group .btn:last-of-type:not(.dropdown-toggle)
+    {
+        border-top-right-radius: .25em;
+        border-bottom-right-radius: .25em;
     }
     </style>
 </head>
@@ -169,6 +147,34 @@
         created: function () {
             window.addEventListener('click', this.onWindowClick);
         }
+    });
+
+    document.querySelectorAll('[data-open-modal]').forEach(item =>
+    {
+        item.addEventListener('click', event =>
+        {
+            const selector = `[data-modal=${event.target.dataset.openModal}]`;
+            const modal = document.querySelector(selector);
+            modal.style.display = 'block';
+            setTimeout(function() { modal.classList.add('show') }, 150);
+        });
+    });
+
+    document.querySelectorAll('[data-modal]').forEach(modal =>
+    {
+        modal.addEventListener('click', event =>
+        {
+            if (event.target.hasAttribute('data-close-modal'))
+            {
+                modal.classList.remove('show');
+                setTimeout(function() { modal.style.display = 'none' }, 150);
+            }
+        });
+    });
+
+    document.querySelectorAll('[data-dismiss]').forEach(item =>
+    {
+        item.addEventListener('click' , event => event.target.parentElement.style.display = 'none');
     });
     </script>
     @yield('footer')

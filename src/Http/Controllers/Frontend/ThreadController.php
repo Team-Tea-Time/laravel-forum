@@ -75,7 +75,7 @@ class ThreadController extends BaseController
         return view('forum::thread.create', compact('category'));
     }
 
-    public function store(CreateThread $request, Category $category)
+    public function store(StoreThread $request, Category $category)
     {
         if (! $category->accepts_threads)
         {
