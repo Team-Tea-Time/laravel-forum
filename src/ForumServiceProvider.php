@@ -16,13 +16,6 @@ use TeamTeaTime\Forum\Models\Observers\ThreadObserver;
 
 class ForumServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap the application events.
-     *
-     * @param  Router  $router
-     * @param  GateContract  $gate
-     * @return void
-     */
     public function boot(Router $router, GateContract $gate)
     {
         $this->publishes([
@@ -92,12 +85,6 @@ class ForumServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Register the package policies.
-     *
-     * @param  GateContract  $gate
-     * @return void
-     */
     public function registerPolicies(GateContract $gate)
     {
         $forumPolicy = config('forum.integration.policies.forum');
