@@ -1,9 +1,11 @@
-<div id="post-{{ $post->sequence }}" class="card mb-2 {{ $post->trashed() ? 'deleted' : '' }}">
+<div id="post-{{ $post->sequence }}"
+    class="post card mb-2 {{ $post->trashed() ? 'deleted' : '' }}"
+    :class="{ 'border-primary': selectedPosts.includes({{ $post->id }}) }">
     <div class="card-header">
         <span class="float-right">
             <a href="{{ Forum::route('thread.show', $post) }}">#{{ $post->sequence }}</a>
             @can ('deletePosts', $post->thread)
-                <input type="checkbox" name="items[]" value="{{ $post->id }}">
+                <input type="checkbox" :value="{{ $post->id }}" v-model="selectedPosts">
             @endcan
         </span>
         {{ $post->authorName }}

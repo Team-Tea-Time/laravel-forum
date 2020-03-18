@@ -18,7 +18,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- Vue (https://github.com/vuejs/vue) -->
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    @if (config('app.debug'))
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    @else
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    @endif
 
     <!-- Axios (https://github.com/axios/axios) -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -71,6 +75,13 @@
     {
         border-top-right-radius: .25em;
         border-bottom-right-radius: .25em;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
     }
     </style>
 </head>
@@ -133,6 +144,7 @@
     <script>
     new Vue({
         el: '.v-navbar',
+        name: 'Navbar',
         data: {
             isExpanded: false,
             isUserDropdownOpen: false
@@ -174,7 +186,7 @@
 
     document.querySelectorAll('[data-dismiss]').forEach(item =>
     {
-        item.addEventListener('click' , event => event.target.parentElement.style.display = 'none');
+        item.addEventListener('click', event => event.target.parentElement.style.display = 'none');
     });
     </script>
     @yield('footer')

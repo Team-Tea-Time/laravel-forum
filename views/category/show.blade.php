@@ -127,9 +127,9 @@
     </div>
 
     <script>
-
     new Vue({
         el: '.v-category-show',
+        name: 'CategoryShow',
         data: {
             isEditModalOpen: false,
             isDeleteModalOpen: false
