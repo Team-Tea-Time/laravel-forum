@@ -22,7 +22,7 @@
         @endif
 
         @if ($post->trashed())
-            <span class="badge badge-danger">{{ trans('forum::general.deleted') }}</span>
+            <span class="badge badge-pill badge-danger">{{ trans('forum::general.deleted') }}</span>
         @else
             {!! Forum::render($post->content) !!}
         @endif

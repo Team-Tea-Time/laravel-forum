@@ -8,11 +8,11 @@
                 <p class="card-text text-muted">{{ $category->description }}</p>
             </div>
             <div class="col-sm text-md-right">
-                <span class="badge badge-primary" style="background: {{ $category->color }};">
+                <span class="badge badge-pill badge-primary" style="background: {{ $category->color }};">
                     {{ trans_choice('forum::threads.thread', 2) }}: {{ $category->thread_count }}
                 </span>
                 <br>
-                <span class="badge badge-primary" style="background: {{ $category->color }};">
+                <span class="badge badge-pill badge-primary" style="background: {{ $category->color }};">
                     {{ trans_choice('forum::posts.post', 2) }}: {{ $category->post_count }}
                 </span>
             </div>
@@ -43,11 +43,11 @@
                             <div class="text-muted">{{ $subcategory->description }}</div>
                         </div>
                         <div class="col-sm text-md-right">
-                            <span class="badge badge-primary" style="background: {{ $subcategory->color }};">
+                            <span class="badge badge-pill badge-primary" style="background: {{ $subcategory->color }};">
                                 {{ trans_choice('forum::threads.thread', 2) }}: {{ $subcategory->thread_count }}
                             </span>
                             <br>
-                            <span class="badge badge-primary" style="background: {{ $subcategory->color }};">
+                            <span class="badge badge-pill badge-primary" style="background: {{ $subcategory->color }};">
                                 {{ trans_choice('forum::posts.post', 2) }}: {{ $subcategory->post_count }}
                             </span>
                         </div>

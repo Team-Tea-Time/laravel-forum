@@ -4,13 +4,13 @@
     <div id="thread">
         <h2>
             @if ($thread->trashed())
-                <span class="badge badge-danger">{{ trans('forum::general.deleted') }}</span>
+                <span class="badge badge-pill badge-danger">{{ trans('forum::general.deleted') }}</span>
             @endif
             @if ($thread->locked)
-                <span class="badge badge-warning">{{ trans('forum::threads.locked') }}</span>
+                <span class="badge badge-pill badge-warning">{{ trans('forum::threads.locked') }}</span>
             @endif
             @if ($thread->pinned)
-                <span class="badge badge-info">{{ trans('forum::threads.pinned') }}</span>
+                <span class="badge badge-pill badge-info">{{ trans('forum::threads.pinned') }}</span>
             @endif
             {{ $thread->title }}
         </h2>
@@ -42,7 +42,7 @@
                 @endcan
             </div>
             <div class="col col-xs-8 text-right">
-                {!! $posts->links() !!}
+                {{ $posts->links() }}
             </div>
         </div>
 
@@ -62,13 +62,13 @@
         @endforeach
 
         @can ('deletePosts', $thread)
-                <transition name="fade">
-                    <div class="card text-white bg-secondary fixed-bottom rounded-0" v-if="selectedPosts.length">
-                        <div class="card-header text-center">
-                            {{ trans('forum::general.with_selection') }}
-                        </div>
-                        <div class="card-body">
-                            <div class="container">
+                <div class="fixed-bottom-right pb-xs-0 pr-xs-0 pb-sm-3 pr-sm-3">
+                    <transition name="fade">
+                        <div class="card text-white bg-secondary shadow-sm" v-if="selectedPosts.length">
+                            <div class="card-header text-center">
+                                {{ trans('forum::general.with_selection') }}
+                            </div>
+                            <div class="card-body">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" for="bulk-actions">{{ trans_choice('forum::general.actions', 1) }}</label>
@@ -84,12 +84,12 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </transition>
+                    </transition>
+                </div>
             </form>
         @endcan
 
-        {!! $posts->links() !!}
+        {{ $posts->links() }}
 
         @can ('reply', $thread)
             <h3>{{ trans('forum::general.quick_reply') }}</h3>

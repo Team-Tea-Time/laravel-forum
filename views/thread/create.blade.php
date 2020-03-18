@@ -5,8 +5,7 @@
         <h2>{{ trans('forum::threads.new_thread') }} ({{ $category->title }})</h2>
 
         <form method="POST" action="{{ Forum::route('thread.store', $category) }}">
-            {!! csrf_field() !!}
-            {!! method_field('post') !!}
+            @csrf
 
             <div class="form-group">
                 <label for="title">{{ trans('forum::general.title') }}</label>
@@ -17,8 +16,10 @@
                 <textarea name="content" class="form-control">{{ old('content') }}</textarea>
             </div>
 
-            <button type="submit" class="btn btn-success pull-right">{{ trans('forum::general.create') }}</button>
-            <a href="{{ URL::previous() }}" class="btn btn-default">{{ trans('forum::general.cancel') }}</a>
+            <div class="text-right">
+                <a href="{{ URL::previous() }}" class="btn btn-link">{{ trans('forum::general.cancel') }}</a>
+                <button type="submit" class="btn btn-primary px-5">{{ trans('forum::general.create') }}</button>
+            </div>
         </form>
     </div>
 @stop

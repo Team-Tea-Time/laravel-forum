@@ -18,6 +18,7 @@ return [
     'pinned' => "Pinned",
     'post_the_first' => "Post the first!",
     'restored' => "Thread restored|Threads restored",
+    'select_all' => "Select all threads",
     'thread' => "Thread|Threads",
     'updated' => "Thread updated|Threads updated",
     'unlock' => "Unlock",

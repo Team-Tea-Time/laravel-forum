@@ -19,13 +19,13 @@
                           <td>
                               <span class="pull-right">
                                   @if ($thread->locked)
-                                      <span class="badge badge-danger">{{ trans('forum::threads.locked') }}</span>
+                                      <span class="badge badge-pill badge-danger">{{ trans('forum::threads.locked') }}</span>
                                   @endif
                                   @if ($thread->pinned)
-                                      <span class="badge badge-info">{{ trans('forum::threads.pinned') }}</span>
+                                      <span class="badge badge-pill badge-info">{{ trans('forum::threads.pinned') }}</span>
                                   @endif
                                   @if ($thread->userReadStatus)
-                                      <span class="badge badge-primary">{{ trans($thread->userReadStatus) }}</span>
+                                      <span class="badge badge-pill badge-primary">{{ trans($thread->userReadStatus) }}</span>
                                   @endif
                               </span>
                               <p class="lead">
