@@ -7,7 +7,7 @@
         @if (!is_null($post) && !$post->trashed())
             <h3>{{ trans('forum::general.replying_to', ['item' => $post->authorName]) }}...</h3>
 
-            @include ('forum::post.partials.excerpt')
+            @include ('forum::post.partials.quote')
         @endif
 
         <form method="POST" action="{{ Forum::route('post.store', $thread) }}">
@@ -20,8 +20,10 @@
                 <textarea name="content" class="form-control">{{ old('content') }}</textarea>
             </div>
 
-            <button type="submit" class="btn btn-success pull-right">{{ trans('forum::general.reply') }}</button>
-            <a href="{{ URL::previous() }}" class="btn btn-default">{{ trans('forum::general.cancel') }}</a>
+            <div class="text-right">
+                <a href="{{ URL::previous() }}" class="btn btn-link">{{ trans('forum::general.cancel') }}</a>
+                <button type="submit" class="btn btn-primary px-5">{{ trans('forum::general.reply') }}</button>
+            </div>
         </form>
     </div>
 @stop

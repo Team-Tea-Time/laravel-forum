@@ -53,7 +53,7 @@
                         @foreach ($threads as $thread)
                             <tr class="{{ $thread->trashed() ? "deleted" : "" }}">
                                 <td>
-                                    <p class="lead">
+                                    <span class="lead">
                                         @if ($thread->locked)
                                             <span class="badge badge-warning">{{ trans('forum::threads.locked') }}</span>
                                         @endif
@@ -67,8 +67,9 @@
                                             <span class="badge badge-danger">{{ trans('forum::general.deleted') }}</span>
                                         @endif
                                         <a href="{{ Forum::route('thread.show', $thread) }}">{{ $thread->title }}</a>
-                                    </p>
-                                    <p>{{ $thread->authorName }} <span class="text-muted">({{ $thread->posted }})</span></p>
+                                    </span>
+                                    <br>
+                                    {{ $thread->authorName }} <span class="text-muted">({{ $thread->posted }})</span>
                                 </td>
                                 @if ($thread->trashed())
                                     <td colspan="2">&nbsp;</td>
@@ -77,9 +78,10 @@
                                         {{ $thread->reply_count }}
                                     </td>
                                     <td class="text-right">
+                                        <a href="{{ Forum::route('thread.show', $thread->lastPost) }}">{{ trans('forum::posts.view') }} &raquo;</a>
+                                        <br>
                                         {{ $thread->lastPost->authorName }}
-                                        <p class="text-muted">({{ $thread->lastPost->posted }})</p>
-                                        <a href="{{ Forum::route('thread.show', $thread->lastPost) }}" class="btn btn-secondary btn-sm">{{ trans('forum::posts.view') }} &raquo;</a>
+                                        <span class="text-muted">({{ $thread->lastPost->posted }})</span>
                                     </td>
                                 @endif
                                 @can('manageThreads', $category)

@@ -46,28 +46,20 @@
             </div>
         </div>
 
-        <table class="table {{ $thread->trashed() ? 'deleted' : '' }}">
-            <thead>
-                <tr>
-                    <th class="col col-md-2">
-                        {{ trans('forum::general.author') }}
-                    </th>
-                    <th>
-                        {{ trans_choice('forum::posts.post', 1) }}
-                        @can ('deletePosts', $thread)
-                            <span class="pull-right">
-                                <input type="checkbox" data-toggle-all>
-                            </span>
-                        @endcan
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($posts as $post)
-                    @include ('forum::post.partials.list', compact('post'))
-                @endforeach
-            </tbody>
-        </table>
+        @can ('deletePosts', $thread)
+        <div class="text-right p-2">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="selectAllPosts">
+                <label class="form-check-label" for="selectAllPosts">
+                    {{ trans('forum::posts.select_all') }}
+                </label>
+            </div>
+        </div>
+        @endcan
+        
+        @foreach ($posts as $post)
+            @include ('forum::post.partials.list', compact('post'))
+        @endforeach
 
         @can ('deletePosts', $thread)
                 @include ('forum::thread.partials.post-actions')
