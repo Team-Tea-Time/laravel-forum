@@ -16,7 +16,7 @@ class StoreCategory extends FormRequest implements FulfillableRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'min:5'],
+            'title' => ['required', 'string', 'min:' . config('forum.general.validation.title_min')],
             'description' => ['nullable', 'string'],
             'accepts_threads' => ['boolean'],
             'is_private' => ['boolean'],

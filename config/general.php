@@ -88,6 +88,20 @@ return [
         'categories' => 50,
         'threads' => 20,
         'posts' => 20
-    ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Validation
+    |--------------------------------------------------------------------------
+    |
+    | Values for some customisable validation rules. 
+    |
+    */
+
+    'validation' => [
+        'title_min' => 3,
+        'content_min' => 3
+    ],
 
 ];

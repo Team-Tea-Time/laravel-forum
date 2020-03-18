@@ -18,7 +18,7 @@ class StorePost extends FormRequest implements FulfillableRequest
     public function rules(): array
     {
         return [
-            'content' => ['required', 'string', 'min:5']
+            'content' => ['required', 'string', 'min:' . config('forum.general.validation.content_min')]
         ];
     }
 

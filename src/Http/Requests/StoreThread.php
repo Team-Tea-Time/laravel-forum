@@ -17,8 +17,8 @@ class StoreThread extends FormRequest implements FulfillableRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'min:5'],
-            'content' => ['required', 'string', 'min:5']
+            'title' => ['required', 'string', 'min:' . config('forum.general.validation.title_min')],
+            'content' => ['required', 'string', 'min:' . config('forum.general.validation.content_min')]
         ];
     }
 
