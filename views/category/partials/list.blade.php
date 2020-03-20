@@ -7,7 +7,7 @@
                 </h5>
                 <p class="card-text text-muted">{{ $category->description }}</p>
             </div>
-            <div class="col-sm text-md-right">
+            <div class="col-sm-2 text-md-right">
                 <span class="badge badge-pill badge-primary" style="background: {{ $category->color }};">
                     {{ trans_choice('forum::threads.thread', 2) }}: {{ $category->thread_count }}
                 </span>
@@ -42,7 +42,7 @@
                             <a href="{{ Forum::route('category.show', $subcategory) }}" style="color: {{ $subcategory->color }};">{{ $subcategory->title }}</a>
                             <div class="text-muted">{{ $subcategory->description }}</div>
                         </div>
-                        <div class="col-sm text-md-right">
+                        <div class="col-sm-2 text-md-right">
                             <span class="badge badge-pill badge-primary" style="background: {{ $subcategory->color }};">
                                 {{ trans_choice('forum::threads.thread', 2) }}: {{ $subcategory->thread_count }}
                             </span>
@@ -71,17 +71,3 @@
         </div>
     @endif
 </div>
-
-<style>
-.category .subcategories {
-    background: #fff;
-}
-
-.category > .list-group-item {
-    z-index: 1000;
-}
-
-.category .subcategories .list-group-item:first-child {
-    border-radius: 0;
-}
-</style>

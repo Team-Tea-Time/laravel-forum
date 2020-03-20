@@ -62,10 +62,10 @@ class CategoryController extends BaseController
         return redirect(config('forum.routing.prefix'));
     }
 
-    public function manage(Request $request, GetAllCategories $action): View
+    public function manage(Request $request): View
     {
         $categories = Category::all();
-        $categories->makeHidden(['thread_count', 'post_count']);
+        $categories->makeHidden(['_lft', '_rgt', 'thread_count', 'post_count']);
 
         return view('forum::category.manage', ['categories' => $categories->toTree()]);
     }

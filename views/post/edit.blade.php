@@ -1,4 +1,4 @@
-@extends ('forum::master', ['breadcrumb_other' => trans('forum::posts.edit')])
+@extends ('forum::master', ['breadcrumbs_append' => [trans('forum::posts.edit')]])
 
 @section ('content')
     <div id="edit-post">
@@ -6,11 +6,11 @@
 
         <hr>
 
-        @if (!$post->isFirst)
+        @if (! $post->isFirst)
             @can ('delete', $post)
                 <form action="{{ Forum::route('post.update', $post) }}" method="POST" data-actions-form>
-                    {!! csrf_field() !!}
-                    {!! method_field('delete') !!}
+                    @csrf
+                    @method('DELETE')
 
                     @include ('forum::post.partials.actions')
                 </form>
@@ -24,15 +24,17 @@
         @endif
 
         <form method="POST" action="{{ Forum::route('post.update', $post) }}">
-            {!! csrf_field() !!}
-            {!! method_field('patch') !!}
+            @csrf
+            @method('PATCH')
 
             <div class="form-group">
                 <textarea name="content" class="form-control">{{ !is_null(old('content')) ? old('content') : $post->content }}</textarea>
             </div>
 
-            <button type="submit" class="btn btn-success pull-right">{{ trans('forum::general.proceed') }}</button>
-            <a href="{{ URL::previous() }}" class="btn btn-default">{{ trans('forum::general.cancel') }}</a>
+            <div class="text-right">
+                <a href="{{ URL::previous() }}" class="btn btn-link">{{ trans('forum::general.cancel') }}</a>
+                <button type="submit" class="btn btn-primary">{{ trans('forum::general.save') }}</button>
+            </div>
         </form>
     </div>
 @stop

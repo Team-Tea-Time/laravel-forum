@@ -6,6 +6,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
+use TeamTeaTime\Forum\Models\Category;
+
 class CategoryController
 {
     public function index(Request $request)
@@ -206,6 +208,6 @@ class CategoryController
 
     public function bulkManage(Request $request)
     {
-        return $this->service->rebuildTree($request->categories);
+        return Category::rebuildTree($request->categories);
     }
 }

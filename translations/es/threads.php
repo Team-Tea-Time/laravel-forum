@@ -22,6 +22,7 @@ return [
     'updated' => "Discusion actualizada|Discusiones actualizada",
     'unlock' => "Abrir cerradura",
     'unpin' => "Desabrochar",
+    'unread_updated' => "Unread & updated threads",
     'view' => "Ver tema",
 
 ];

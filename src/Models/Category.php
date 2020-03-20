@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Gate;
 use Kalnoy\Nestedset\NodeTrait;
+
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 use TeamTeaTime\Forum\Support\Traits\CachesData;
 
 class Category extends BaseModel
@@ -16,6 +18,8 @@ class Category extends BaseModel
     public $timestamps = false;
 
     protected $fillable = ['title', 'description', 'accepts_threads', 'is_private', 'color', 'thread_count', 'post_count'];
+
+    protected $appends = ['route'];
 
     public function __construct(array $attributes = [])
     {
@@ -43,6 +47,11 @@ class Category extends BaseModel
     public function scopeIsPrivate(Builder $query): Builder
     {
         return $query->where('is_private', 1);
+    }
+
+    public function getRouteAttribute(): string
+    {
+        return Forum::route('category.show', $this);
     }
 
     public function getThreadsPaginatedAttribute(): LengthAwarePaginator

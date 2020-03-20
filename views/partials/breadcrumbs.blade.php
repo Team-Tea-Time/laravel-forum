@@ -7,8 +7,10 @@
         @if (isset($thread) && $thread)
             <li class="breadcrumb-item"><a href="{{ Forum::route('thread.show', $thread) }}">{{ $thread->title }}</a></li>
         @endif
-        @if (isset($breadcrumb_other) && $breadcrumb_other)
-            <li class="breadcrumb-item">{!! $breadcrumb_other !!}</li>
+        @if (isset($breadcrumbs_append) && count($breadcrumbs_append) > 0)
+            @foreach ($breadcrumbs_append as $breadcrumb)
+                <li class="breadcrumb-item">{{ $breadcrumb }}</li>
+            @endforeach
         @endif
     </ol>
 </nav>

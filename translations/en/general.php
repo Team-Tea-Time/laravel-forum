@@ -25,6 +25,7 @@ return [
     'new_reply' => "New reply",
     'none' => "None",
     'perma_delete' => "Permanently delete",
+    'permalink' => "Permalink",
     'posted' => "Posted",
     'private' => "Private",
     'proceed' => "Proceed",

@@ -1,25 +1,14 @@
-@extends ('forum::master', ['breadcrumb_other' => trans('forum::posts.view')])
+@extends ('forum::master', ['breadcrumbs_append' => [trans('forum::posts.view')]])
 
 @section ('content')
     <div id="post">
-        <h2>{{ trans('forum::posts.view') }} ({{ $thread->title }})</h2>
+        <div class="d-flex flex-row justify-content-between mb-3">
+            <h2 class="flex-grow-1">{{ trans('forum::posts.view') }} ({{ $thread->title }})</h2>
+            <a href="{{ Forum::route('thread.show', $thread) }}" class="btn btn-secondary btn-lg">{{ trans('forum::threads.view') }}</a>
+        </div>
 
-        <a href="{{ Forum::route('thread.show', $thread) }}" class="btn btn-default">&laquo; {{ trans('forum::threads.view') }}</a>
+        <hr>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="col col-md-2">
-                        {{ trans('forum::general.author') }}
-                    </th>
-                    <th>
-                        {{ trans_choice('forum::posts.post', 1) }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @include ('forum::post.partials.list', compact('post'))
-            </tbody>
-        </table>
+        @include ('forum::post.partials.list', ['post' => $post, 'single' => true])
     </div>
 @stop

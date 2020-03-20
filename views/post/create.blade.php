@@ -1,4 +1,4 @@
-@extends ('forum::master', ['breadcrumb_other' => trans('forum::general.new_reply')])
+@extends ('forum::master', ['breadcrumbs_append' => [trans('forum::general.new_reply')]])
 
 @section ('content')
     <div id="create-post">

@@ -2,8 +2,10 @@
 
 $r->get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
 
-$r->get('new', ['as' => 'new.index', 'uses' => 'ThreadController@indexNew']);
-$r->patch('new', ['as' => 'new.mark-read', 'uses' => 'ThreadController@markNewAsRead']);
+$r->get('recent', ['as' => 'recent', 'uses' => 'ThreadController@recent']);
+
+$r->get('unread', ['as' => 'unread', 'uses' => 'ThreadController@unread'])->middleware('auth');
+$r->patch('unread', ['as' => 'mark-read', 'uses' => 'ThreadController@markRead'])->middleware('auth');
 
 $r->get('manage', ['as' => 'category.manage', 'uses' => 'CategoryController@manage']);
 
@@ -22,6 +24,12 @@ $threadPrefix = config('forum.frontend.router.thread_prefix');
 $r->group(['prefix' => $threadPrefix . '/{thread}-{thread_slug}'], function ($r) {
     $r->get('/', ['as' => 'thread.show', 'uses' => 'ThreadController@show']);
     $r->patch('/', ['as' => 'thread.update', 'uses' => 'ThreadController@update']);
+    $r->post('lock', ['as' => 'thread.lock', 'uses' => 'ThreadController@lock']);
+    $r->post('unlock', ['as' => 'thread.unlock', 'uses' => 'ThreadController@unlock']);
+    $r->post('pin', ['as' => 'thread.pin', 'uses' => 'ThreadController@pin']);
+    $r->post('unpin', ['as' => 'thread.unpin', 'uses' => 'ThreadController@unpin']);
+    $r->post('move', ['as' => 'thread.move', 'uses' => 'ThreadController@move']);
+    $r->post('rename', ['as' => 'thread.rename', 'uses' => 'ThreadController@rename']);
     $r->delete('/', ['as' => 'thread.delete', 'uses' => 'ThreadController@destroy']);
     
     $r->get('post/{post}', ['as' => 'post.show', 'uses' => 'PostController@show']);

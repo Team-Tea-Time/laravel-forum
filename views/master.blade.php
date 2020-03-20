@@ -17,6 +17,9 @@
     <!-- Bootstrap (https://github.com/twbs/bootstrapS) -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <!-- Feather icons (https://github.com/feathericons/feather) -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
     <!-- Vue (https://github.com/vuejs/vue) -->
     @if (config('app.debug'))
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -37,44 +40,69 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.23.2/vuedraggable.umd.min.js"></script>
 
     <style>
-    body {
+    body
+    {
         padding: 0;
         background: #f8fafc;
     }
 
-    textarea {
+    textarea
+    {
         min-height: 200px;
     }
 
-    table tr td {
+    table tr td
+    {
         white-space: nowrap;
     }
 
-    .deleted {
+    .deleted
+    {
         opacity: 0.65;
     }
 
-    #main {
+    #main
+    {
         padding: 2em;
     }
 
-    .shadow-sm {
+    .shadow-sm
+    {
         box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     }
 
-    .card.category {
+    .card.category
+    {
         margin-bottom: 1em;
     }
 
-    .list-group .list-group {
+    .list-group .list-group
+    {
         min-height: 1em;
         margin-top: 1em;
     }
 
-    .btn-group .btn:last-of-type:not(.dropdown-toggle)
+    .btn svg.feather
     {
-        border-top-right-radius: .25em;
-        border-bottom-right-radius: .25em;
+        width: 16px;
+        height: 16px;
+        stroke-width: 3px;
+        vertical-align: -1px;
+    }
+
+    .category .subcategories
+    {
+        background: #fff;
+    }
+
+    .category > .list-group-item
+    {
+        z-index: 1000;
+    }
+
+    .category .subcategories .list-group-item:first-child
+    {
+        border-radius: 0;
     }
 
     .fixed-bottom-right
@@ -84,11 +112,49 @@
         bottom: 0;
     }
 
-    .fade-enter-active, .fade-leave-active {
+    .fade-enter-active, .fade-leave-active
+    {
         transition: opacity .3s;
     }
-    .fade-enter, .fade-leave-to {
+    .fade-enter, .fade-leave-to
+    {
         opacity: 0;
+    }
+
+    .mask
+    {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(50, 50, 50, .2);
+        opacity: 0;
+        transition: opacity .2s ease;
+        z-index: 1020;
+    }
+    .mask.show
+    {
+        opacity: 1;
+    }
+
+    .form-check
+    {
+        user-select: none;
+    }
+
+    .sortable-chosen
+    {
+        background: var(--light);
+    }
+
+    @media (max-width: 575.98px)
+    {
+        #main
+        {
+            padding: 1em;
+        }
     }
     </style>
 </head>
@@ -105,8 +171,13 @@
                         <a class="nav-link" href="{{ url(config('forum.frontend.router.prefix')) }}">{{ trans('forum::general.index') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('forum.new.index') }}">{{ trans('forum::threads.new_updated') }}</a>
+                        <a class="nav-link" href="{{ route('forum.recent') }}">{{ trans('forum::threads.recent') }}</a>
                     </li>
+                    @auth
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('forum.unread') }}">{{ trans('forum::threads.unread_updated') }}</a>
+                        </li>
+                    @endauth
                     @can('moveCategories')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('forum.category.manage') }}">{{ trans('forum::general.manage') }}</a>
@@ -124,7 +195,7 @@
                                     Log out
                                 </a>
                                 <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
+                                    @csrf
                                 </form>
                             </div>
                         </li>
@@ -148,6 +219,8 @@
         @yield('content')
     </div>
 
+    <div class="mask"></div>
+
     <script>
     new Vue({
         el: '.v-navbar',
@@ -168,14 +241,35 @@
         }
     });
 
+    const mask = document.querySelector('.mask');
+
+    function findModal (key)
+    {
+        const modal = document.querySelector(`[data-modal=${key}]`);
+
+        if (! modal) throw `Attempted to open modal '${key}' but no such modal found.`;
+
+        return modal;
+    }
+
+    function openModal (modal)
+    {
+        modal.style.display = 'block';
+        mask.style.display = 'block';
+        setTimeout(function()
+        {
+            modal.classList.add('show');
+            mask.classList.add('show');
+        }, 200);
+    }
+
     document.querySelectorAll('[data-open-modal]').forEach(item =>
     {
         item.addEventListener('click', event =>
         {
-            const selector = `[data-modal=${event.target.dataset.openModal}]`;
-            const modal = document.querySelector(selector);
-            modal.style.display = 'block';
-            setTimeout(function() { modal.classList.add('show') }, 150);
+            event.preventDefault();
+
+            openModal(findModal(event.target.dataset.openModal));
         });
     });
 
@@ -186,7 +280,12 @@
             if (event.target.hasAttribute('data-close-modal'))
             {
                 modal.classList.remove('show');
-                setTimeout(function() { modal.style.display = 'none' }, 150);
+                mask.classList.remove('show');
+                setTimeout(function()
+                {
+                    modal.style.display = 'none';
+                    mask.style.display = 'none';
+                }, 200);
             }
         });
     });
@@ -197,8 +296,18 @@
     });
 
     document.addEventListener('DOMContentLoaded', event =>
-    { 
-        var input = document.querySelector('input[name=color]');
+    {
+        const hash = window.location.hash.substr(1);
+        if (hash.startsWith('modal='))
+        {
+            openModal(findModal(hash.replace('modal=','')));
+        }
+
+        feather.replace();
+
+        const input = document.querySelector('input[name=color]');
+
+        if (! input) return;
 
         const pickr = Pickr.create({
             el: '.pickr',

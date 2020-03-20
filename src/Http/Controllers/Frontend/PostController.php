@@ -19,7 +19,7 @@ use TeamTeaTime\Forum\Models\Thread;
 
 class PostController extends BaseController
 {
-    public function show(Request $request, Post $post): View
+    public function show(Request $request, Thread $thread, string $postSlug, Post $post): View
     {
         event(new UserViewingPost($post));
 

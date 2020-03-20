@@ -81,7 +81,7 @@ class Thread extends BaseModel
      */
     public function posts()
     {
-        $withTrashed = config('forum.preferences.display_trashed_posts') || Gate::allows('viewTrashedPosts');
+        $withTrashed = config('forum.general.display_trashed_posts') || Gate::allows('viewTrashedPosts');
         $query = $this->hasMany(Post::class);
         return $withTrashed ? $query->withTrashed() : $query;
     }
@@ -95,7 +95,7 @@ class Thread extends BaseModel
     public function scopeRecent($query)
     {
         $time = time();
-        $age = strtotime(config('forum.preferences.old_thread_threshold'), 0);
+        $age = strtotime(config('forum.general.old_thread_threshold'), 0);
         $cutoff = $time - $age;
 
         return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
@@ -186,7 +186,7 @@ class Thread extends BaseModel
      */
     public function getUserReadStatusAttribute()
     {
-        if (!$this->old && auth()->check()) {
+        if (! $this->old && auth()->check()) {
             if (is_null($this->reader)) {
                 return self::STATUS_UNREAD;
             }

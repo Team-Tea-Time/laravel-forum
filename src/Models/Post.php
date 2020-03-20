@@ -17,7 +17,7 @@ class Post extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->setPerPage(config('forum.general.pagination.posts'));
+        $this->perPage = config('forum.general.pagination.posts');
     }
 
     public function thread()

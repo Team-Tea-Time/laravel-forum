@@ -6,7 +6,11 @@
         <h2 class="flex-grow-1">{{ trans('forum::general.index') }}</h2>
 
         @can ('createCategories')
-            @include ('forum::category.partials.actions.create')
+            <button type="button" class="btn btn-primary" data-open-modal="create-category">
+                {{ trans('forum::categories.create') }}
+            </button>
+
+            @include ('forum::category.modals.create')
         @endcan
     </div>
 

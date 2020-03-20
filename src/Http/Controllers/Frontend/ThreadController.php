@@ -11,21 +11,55 @@ use TeamTeaTime\Forum\Events\UserMarkingNew;
 use TeamTeaTime\Forum\Events\UserViewingNew;
 use TeamTeaTime\Forum\Events\UserViewingThread;
 use TeamTeaTime\Forum\Http\Requests\StoreThread;
+use TeamTeaTime\Forum\Http\Requests\UpdateThread;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 
 class ThreadController extends BaseController
 {
-    public function indexNew(): View
+    public function recent(Request $request): View
     {
-        $threads = $this->api('thread.index-new')->get();
+        $threads = Thread::recent();
+
+        if ($request->has('category_id'))
+        {
+            $threads = $threads->where('category_id', $request->input('category_id'));
+        }
+
+        $threads = $threads->get();
+
+        // Filter the threads according to the user's permissions
+        $threads = $threads->filter(function ($thread)
+        {
+            return (! $thread->category->private || $request->user() != null && $request->user()->can('view', $thread->category));
+        });
 
         event(new UserViewingNew($threads));
 
-        return view('forum::thread.index-new', compact('threads'));
+        return view('forum::thread.recent', compact('threads'));
     }
 
-    public function markNew(Request $request): RedirectResponse
+    public function unread(Request $request): View
+    {
+        $threads = Thread::recent();
+
+        if ($request->has('category_id'))
+        {
+            $threads = $threads->where('category_id', $request->input('category_id'));
+        }
+
+        $threads = $threads->get()->filter(function ($thread)
+        {
+            return $thread->userReadStatus != false
+                && (! $thread->category->private || $request->user()->can('view', $thread->category));
+        });
+
+        event(new UserViewingNew($threads));
+
+        return view('forum::thread.unread', compact('threads'));
+    }
+
+    public function markRead(Request $request): RedirectResponse
     {
         $threads = $this->api('thread.mark-new')->parameters($request->only('category_id'))->patch();
 
@@ -52,7 +86,7 @@ class ThreadController extends BaseController
 
         $category = $thread->category;
 
-        $categories = $request->user()->can('moveThreadsFrom', $category)
+        $categories = $request->user() && $request->user()->can('moveThreadsFrom', $category)
                     ? Category::acceptsThreads()->get()->toTree()
                     : [];
 
@@ -91,17 +125,9 @@ class ThreadController extends BaseController
         return redirect(Forum::route('thread.show', $thread));
     }
 
-    /**
-     * PATCH: Update a thread.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(Request $request)
+    public function update(UpdateThread $request): RedirectResponse
     {
-        $action = $request->input('action');
-
-        $thread = $this->api("thread.{$action}", $request->route('thread'))->parameters($request->all())->patch();
+        $request->fulfill();
 
         Forum::alert('success', 'threads.updated', 1);
 
