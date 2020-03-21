@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Events;
 
 use Illuminate\Database\Eloquent\Collection;
 
-class UserViewingNew
+class UserViewingRecent
 {
     /** @var Collection */
     public $threads;
