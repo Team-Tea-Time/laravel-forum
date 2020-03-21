@@ -7,7 +7,7 @@
                 <a href="{{ Forum::route('thread.show', $post) }}">#{{ $post->sequence }}</a>
                 @if (! $post->isFirst)
                     @can ('deletePosts', $post->thread)
-                        <input type="checkbox" :value="{{ $post->id }}" v-model="selectedPosts">
+                        <input type="checkbox" name="posts[]" :value="{{ $post->id }}" v-model="selectedPosts">
                     @endcan
                 @endif
             </span>
@@ -41,17 +41,17 @@
             <div class="text-right">
                 @if (! $post->trashed())
                     <a href="{{ Forum::route('post.show', $post) }}" class="card-link text-muted">{{ trans('forum::general.permalink') }}</a>
-                    @can ('edit', $post)
-                        <a href="{{ Forum::route('post.edit', $post) }}" class="card-link">{{ trans('forum::general.edit') }}</a>
-                    @endcan
                     @if (! $post->isFirst)
                         @can ('delete', $post)
                             <a href="{{ Forum::route('post.confirm-delete', $post) }}" class="card-link text-danger">{{ trans('forum::general.delete') }}</a>
                         @endcan
-                        @can('reply', $post->thread)
-                            <a href="{{ Forum::route('post.create', $post) }}" class="card-link">{{ trans('forum::general.reply') }}</a>
-                        @endcan
                     @endif
+                    @can ('edit', $post)
+                        <a href="{{ Forum::route('post.edit', $post) }}" class="card-link">{{ trans('forum::general.edit') }}</a>
+                    @endcan
+                    @can('reply', $post->thread)
+                        <a href="{{ Forum::route('post.create', $post) }}" class="card-link">{{ trans('forum::general.reply') }}</a>
+                    @endcan
                 @else
                     @can ('restore', $post)
                         <a href="{{ Forum::route('post.confirm-restore', $post) }}" class="card-link">{{ trans('forum::general.restore') }}</a>

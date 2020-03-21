@@ -1,9 +1,9 @@
-<?php namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
+<?php
 
-use Forum;
+namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\Events\UserCreatingThread;
@@ -21,6 +21,7 @@ use TeamTeaTime\Forum\Http\Requests\UnlockThread;
 use TeamTeaTime\Forum\Http\Requests\UnpinThread;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class ThreadController extends BaseController
 {
@@ -33,10 +34,8 @@ class ThreadController extends BaseController
             $threads = $threads->where('category_id', $request->input('category_id'));
         }
 
-        $threads = $threads->get();
-
         // Filter the threads according to the user's permissions
-        $threads = $threads->filter(function ($thread)
+        $threads = $threads->get()->filter(function ($thread)
         {
             return (! $thread->category->private || $request->user() != null && $request->user()->can('view', $thread->category));
         });
@@ -102,7 +101,7 @@ class ThreadController extends BaseController
         return view('forum::thread.show', compact('categories', 'category', 'thread', 'posts'));
     }
 
-    public function create(Request $request, Category $category)
+    public function create(Request $request, Category $category): View
     {
         if (! $category->accepts_threads)
         {
@@ -116,7 +115,7 @@ class ThreadController extends BaseController
         return view('forum::thread.create', compact('category'));
     }
 
-    public function store(StoreThread $request, Category $category)
+    public function store(StoreThread $request, Category $category): RedirectResponse
     {
         if (! $category->accepts_threads)
         {
@@ -136,7 +135,7 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        Forum::alert('success', 'threads.updated', 1);
+        Forum::alert('success', 'threads.updated');
 
         return redirect(Forum::route('thread.show', $thread));
     }
@@ -145,7 +144,7 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        Forum::alert('success', 'threads.updated', 1);
+        Forum::alert('success', 'threads.updated');
 
         return redirect(Forum::route('thread.show', $thread));
     }
@@ -154,7 +153,7 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        Forum::alert('success', 'threads.updated', 1);
+        Forum::alert('success', 'threads.updated');
 
         return redirect(Forum::route('thread.show', $thread));
     }
@@ -163,7 +162,7 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        Forum::alert('success', 'threads.updated', 1);
+        Forum::alert('success', 'threads.updated');
 
         return redirect(Forum::route('thread.show', $thread));
     }
@@ -172,7 +171,7 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        Forum::alert('success', 'threads.updated', 1);
+        Forum::alert('success', 'threads.updated');
 
         return redirect(Forum::route('thread.show', $thread));
     }
@@ -181,7 +180,7 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        Forum::alert('success', 'threads.updated', 1);
+        Forum::alert('success', 'threads.updated');
 
         return redirect(Forum::route('thread.show', $thread));
     }
@@ -190,7 +189,7 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        Forum::alert('success', 'threads.deleted', 1);
+        Forum::alert('success', 'threads.deleted');
 
         return redirect(Forum::route('category.show', $thread->category));
     }
@@ -199,47 +198,8 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        Forum::alert('success', 'threads.updated', 1);
+        Forum::alert('success', 'threads.updated');
 
         return redirect(Forum::route('thread.show', $thread));
-    }
-
-    /**
-     * DELETE: Delete threads in bulk.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function bulkDestroy(Request $request)
-    {
-        $this->validate($request, ['action' => 'in:delete,permadelete']);
-
-        $parameters = $request->all();
-
-        $parameters['force'] = 0;
-        if (!config('forum.preferences.soft_deletes') || ($request->input('action') == 'permadelete')) {
-            $parameters['force'] = 1;
-        }
-
-        $threads = $this->api('bulk.thread.delete')->parameters($parameters)->delete();
-
-        return $this->bulkActionResponse($threads, 'threads.deleted');
-    }
-
-    /**
-     * PATCH: Update threads in bulk.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function bulkUpdate(Request $request)
-    {
-        $this->validate($request, ['action' => 'in:restore,move,pin,unpin,lock,unlock']);
-
-        $action = $request->input('action');
-
-        $threads = $this->api("bulk.thread.{$action}")->parameters($request->all())->patch();
-
-        return $this->bulkActionResponse($threads, 'threads.updated');
     }
 }

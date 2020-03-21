@@ -46,12 +46,19 @@ $r->group(['prefix' => $prefix['thread'] . '/{thread}-{thread_slug}'], function 
     $r->post($prefix['post'] . '/{post}/restore', ['as' => 'post.restore', 'uses' => 'PostController@restore']);
 });
 
-$r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r)
+$r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function ($r)
 {
-    $r->patch('thread', ['as' => 'thread.update', 'uses' => 'ThreadController@bulkUpdate']);
-    $r->delete('thread', ['as' => 'thread.delete', 'uses' => 'ThreadController@bulkDestroy']);
-    $r->patch('post', ['as' => 'post.update', 'uses' => 'PostController@bulkUpdate']);
-    $r->delete('post', ['as' => 'post.delete', 'uses' => 'PostController@bulkDestroy']);
+    $r->post('thread/rename', ['as' => 'thread.rename', 'uses' => 'ThreadController@rename']);
+    $r->post('thread/move', ['as' => 'thread.move', 'uses' => 'ThreadController@move']);
+    $r->post('thread/lock', ['as' => 'thread.lock', 'uses' => 'ThreadController@lock']);
+    $r->post('thread/unlock', ['as' => 'thread.unlock', 'uses' => 'ThreadController@unlock']);
+    $r->post('thread/pin', ['as' => 'thread.pin', 'uses' => 'ThreadController@pin']);
+    $r->post('thread/unpin', ['as' => 'thread.unpin', 'uses' => 'ThreadController@unpin']);
+    $r->delete('thread', ['as' => 'thread.delete', 'uses' => 'ThreadController@destroy']);
+    $r->post('thread/restore', ['as' => 'thread.restore', 'uses' => 'ThreadController@restore']);
+
+    $r->delete('post', ['as' => 'post.delete', 'uses' => 'PostController@destroy']);
+    $r->post('post/restore', ['as' => 'post.restore', 'uses' => 'PostController@restore']);
 });
 
 $r->bind('thread', function ($value)

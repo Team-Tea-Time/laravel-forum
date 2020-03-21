@@ -75,13 +75,13 @@
 
         <hr>
 
-        @can ('deletePosts', $thread)
-            <form action="{{ Forum::route('bulk.post.update') }}" method="POST">
+        @if (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread))
+            <form :action="postActions[selectedPostAction]" method="POST">
                 @csrf
                 <input type="hidden" name="_method" :value="postActionMethods[selectedPostAction]" />
-        @endcan
+        @endif
 
-        <div class="row">
+        <div class="row mb-3">
             <div class="col col-xs-8">
                 {{ $posts->links() }}
             </div>
@@ -99,48 +99,61 @@
             </div>
         </div>
 
-        @can ('deletePosts', $thread)
-            <div class="text-right p-1">
-                <div class="form-check">
-                    <label for="selectAllPosts">
-                        {{ trans('forum::posts.select_all') }}
-                    </label>
-                    <input type="checkbox" value="" id="selectAllPosts" class="align-middle" @click="toggleAll" :checked="selectedPosts.length == posts.data.length">
+        @if (count($posts) > 1)
+            @can ('deletePosts', $thread)
+                <div class="text-right pb-1">
+                    <div class="form-check">
+                        <label for="selectAllPosts">
+                            {{ trans('forum::posts.select_all') }}
+                        </label>
+                        <input type="checkbox" value="" id="selectAllPosts" class="align-middle" @click="toggleAll" :checked="selectedPosts.length == posts.data.length">
+                    </div>
                 </div>
-            </div>
-        @endcan
+            @endcan
+        @endif
         
         @foreach ($posts as $post)
             @include ('forum::post.partials.list', compact('post'))
         @endforeach
 
-        @can ('deletePosts', $thread)
-                <div class="fixed-bottom-right pb-xs-0 pr-xs-0 pb-sm-3 pr-sm-3">
-                    <transition name="fade">
-                        <div class="card text-white bg-secondary shadow-sm" v-if="selectedPosts.length">
-                            <div class="card-header text-center">
-                                {{ trans('forum::general.with_selection') }}
-                            </div>
-                            <div class="card-body">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text" for="bulk-actions">{{ trans_choice('forum::general.actions', 1) }}</label>
+        @if (count($posts) > 1)
+            @can ('deletePosts', $thread)
+                    <div class="fixed-bottom-right pb-xs-0 pr-xs-0 pb-sm-3 pr-sm-3">
+                        <transition name="fade">
+                            <div class="card text-white bg-secondary shadow-sm" v-if="selectedPosts.length">
+                                <div class="card-header text-center">
+                                    {{ trans('forum::general.with_selection') }}
+                                </div>
+                                <div class="card-body">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="bulk-actions">{{ trans_choice('forum::general.actions', 1) }}</label>
+                                        </div>
+                                        <select class="custom-select" id="bulk-actions" v-model="selectedPostAction">
+                                            <option value="delete">{{ trans('forum::general.delete') }}</option>
+                                            <option value="restore">{{ trans('forum::general.restore') }}</option>
+                                        </select>
                                     </div>
-                                    <select class="custom-select" id="bulk-actions" v-model="selectedPostAction">
-                                        <option value="delete">{{ trans('forum::general.delete') }}</option>
-                                        <option value="restore">{{ trans('forum::general.restore') }}</option>
-                                        <option value="permadelete">{{ trans('forum::general.perma_delete') }}</option>
-                                    </select>
-                                    <div class="input-group-breadcrumbs_append">
+
+                                    @if (config('forum.general.soft_deletes'))
+                                        <div class="form-check mb-3" v-if="selectedPostAction == 'delete'">
+                                            <input class="form-check-input" type="checkbox" name="permadelete" value="1" id="permadelete">
+                                            <label class="form-check-label" for="permadelete">
+                                                {{ trans('forum::general.perma_delete') }}
+                                            </label>
+                                        </div>
+                                    @endif
+
+                                    <div class="text-right">
                                         <button type="submit" class="btn btn-primary" @click="submitPosts">{{ trans('forum::general.proceed') }}</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </transition>
-                </div>
-            </form>
-        @endcan
+                        </transition>
+                    </div>
+                </form>
+            @endcan
+        @endif
 
         {{ $posts->links() }}
 
@@ -318,10 +331,13 @@
         name: 'Thread',
         data: {
             posts: @json($posts),
+            postActions: {
+                'delete': "{{ Forum::route('bulk.post.delete') }}",
+                'restore': "{{ Forum::route('bulk.post.restore') }}"
+            },
             postActionMethods: {
                 'delete': 'DELETE',
-                'permadelete': 'DELETE',
-                'restore': 'PATCH'
+                'restore': 'POST'
             },
             selectedPostAction: 'delete',
             selectedPosts: [],

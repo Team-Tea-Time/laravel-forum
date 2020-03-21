@@ -2,7 +2,6 @@
 
 namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
 
-use Forum;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -13,6 +12,7 @@ use TeamTeaTime\Forum\Events\UserViewingIndex;
 use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
 use TeamTeaTime\Forum\Http\Requests\StoreCategory;
 use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class CategoryController extends BaseController
 {

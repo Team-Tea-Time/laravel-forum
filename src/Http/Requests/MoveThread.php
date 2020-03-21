@@ -12,7 +12,8 @@ class MoveThread extends FormRequest implements FulfillableRequest
     public function authorize(): bool
     {
         $thread = $this->route('thread');
-        return $this->user()->can('moveThreadsFrom', $thread->category);
+        $targetCategory = Category::find($this->input('category_id'));
+        return $this->user()->can('moveThreadsFrom', $thread->category) && $this->user()->can('moveThreadsTo', $targetCategory);
     }
 
     public function rules(): array

@@ -2,7 +2,6 @@
 
 namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
 
-use Forum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
@@ -10,14 +9,13 @@ use Illuminate\View\View;
 use TeamTeaTime\Forum\Events\UserCreatingPost;
 use TeamTeaTime\Forum\Events\UserEditingPost;
 use TeamTeaTime\Forum\Events\UserViewingPost;
-use TeamTeaTime\Forum\Http\Requests\BulkDestroyPosts;
-use TeamTeaTime\Forum\Http\Requests\BulkUpdatePosts;
 use TeamTeaTime\Forum\Http\Requests\DestroyPost;
 use TeamTeaTime\Forum\Http\Requests\RestorePost;
 use TeamTeaTime\Forum\Http\Requests\StorePost;
 use TeamTeaTime\Forum\Http\Requests\UpdatePost;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class PostController extends BaseController
 {
@@ -104,19 +102,5 @@ class PostController extends BaseController
         Forum::alert('success', 'posts.updated', 1);
 
         return redirect(Forum::route('thread.show', $post));
-    }
-
-    public function bulkDestroy(BulkDestroyPosts $request): RedirectResponse
-    {
-        $posts = $request->fulfill();
-
-        return $this->bulkActionResponse($posts, 'posts.deleted');
-    }
-
-    public function bulkUpdate(BulkUpdatePosts $request): RedirectResponse
-    {
-        $posts = $request->fulfill();
-
-        return $this->bulkActionResponse($posts, 'posts.updated');
     }
 }

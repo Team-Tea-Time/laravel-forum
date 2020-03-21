@@ -40,7 +40,7 @@
         @if (isset($category))
             @can ('manageThreads', $category)
                 <div class="col-sm" style="flex: 0;">
-                    <input type="checkbox" :value="{{ $thread->id }}" v-model="selectedThreads">
+                    <input type="checkbox" name="threads[]" :value="{{ $thread->id }}" v-model="selectedThreads">
                 </div>
             @endcan
         @endif

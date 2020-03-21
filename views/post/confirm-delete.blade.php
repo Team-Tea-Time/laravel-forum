@@ -14,7 +14,17 @@
             
             <div class="card mb-3">
                 <div class="card-body">
-                    {{ trans('forum::general.generic_confirm') }}
+
+                    @if (config('forum.general.soft_deletes'))
+                        <div class="form-check" v-if="selectedPostAction == 'delete'">
+                            <input class="form-check-input" type="checkbox" name="permadelete" value="1" id="permadelete">
+                            <label class="form-check-label" for="permadelete">
+                                {{ trans('forum::general.perma_delete') }}
+                            </label>
+                        </div>
+                    @else
+                        {{ trans('forum::general.generic_confirm') }}
+                    @endif
                 </div>
             </div>
 

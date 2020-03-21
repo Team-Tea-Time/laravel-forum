@@ -2,22 +2,26 @@
 
 namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
 
-use Forum;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 abstract class BaseController extends Controller
 {
-    use AuthorizesRequests, ValidatesRequests;
+    use AuthorizesRequests;
 
-    protected function bulkActionResponse(Collection $models, string $transKey): RedirectResponse
+    /**
+     * @param Collection|int $models
+     */
+    protected function bulkActionResponse($models, string $transKey): RedirectResponse
     {
-        if ($models->count())
+        $count = is_int($models) ? $models : $models->count();
+
+        if ($count)
         {
-            Forum::alert('success', $transKey, $models->count());
+            Forum::alert('success', $transKey, $count);
         }
         else
         {

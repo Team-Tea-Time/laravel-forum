@@ -37,7 +37,7 @@
                 {{ $threads->links() }}
 
                 @can('manageThreads', $category)
-                    <form action="{{ Forum::route('bulk.thread.update') }}" method="POST">
+                    <form :action="actions[selectedAction]" method="POST">
                         @csrf
                         <input type="hidden" name="_method" :value="actionMethods[selectedAction]" />
 
@@ -166,14 +166,21 @@
         name: 'CategoryShow',
         data: {
             threads: @json($threads),
+            actions: {
+                'delete': "{{ Forum::route('bulk.thread.delete') }}",
+                'restore': "{{ Forum::route('bulk.thread.restore') }}",
+                'lock': "{{ Forum::route('bulk.thread.lock') }}",
+                'unlock': "{{ Forum::route('bulk.thread.unlock') }}",
+                'pin': "{{ Forum::route('bulk.thread.pin') }}",
+                'unpin': "{{ Forum::route('bulk.thread.unpin') }}"
+            },
             actionMethods: {
                 'delete': 'DELETE',
-                'permadelete': 'DELETE',
-                'restore': 'PATCH',
-                'lock': 'PATCH',
-                'unlock': 'PATCH',
-                'pin': 'PATCH',
-                'unpin': 'PATCH'
+                'restore': 'POST',
+                'lock': 'POST',
+                'unlock': 'POST',
+                'pin': 'POST',
+                'unpin': 'POST'
             },
             selectedAction: 'delete',
             selectedThreads: [],

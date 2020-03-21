@@ -32,37 +32,37 @@ class Forum
 
     public static function route(string $route, $model = null): string
     {
-        if (! Str::startsWith($route, config('forum.frontend.router.as')))
-        {
-            $route = config('forum.frontend.router.as') . $route;
-        }
+        $as = config('forum.frontend.router.as');
+
+        if (! Str::startsWith($route, $as)) $route = "{$as}{$route}";
 
         if ($model == null) return route($route);
 
-        $params = [];
-        $append = '';
         if ($model instanceof Category)
         {
-            $params = [
+            return route($route, [
                 'category' => $model->id,
                 'category_slug' => static::slugify($model->title),
-            ];
+            ]);
         }
-        else if ($model instanceof Thread)
+        
+        if ($model instanceof Thread)
         {
-            $params = [
+            return route($route, [
                 'thread' => $model->id,
                 'thread_slug' => static::slugify($model->title),
-            ];
+            ]);
         }
-        else if ($model instanceof Post)
+        
+        if ($model instanceof Post)
         {
             $params = [
                 'thread' => $model->thread->id,
                 'thread_slug' => static::slugify($model->thread->title),
             ];
+            $append = null;
 
-            if ($route == config('forum.frontend.router.as') . 'thread.show')
+            if ($route == "{$as}thread.show")
             {
                 // The requested route is for a thread; we need to specify the page number and append a hash for
                 // the post
@@ -74,9 +74,11 @@ class Forum
                 // Other post routes require the post parameter
                 $params['post'] = $model->id;
             }
+
+            return route($route, $params) . $append;
         }
 
-        return route($route, $params) . $append;
+        throw \Exception("Invalid model type passed to Forum::route().");
     }
 
     public static function slugify(string $string): string
