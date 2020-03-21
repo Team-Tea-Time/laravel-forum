@@ -42,7 +42,7 @@ class ThreadController extends BaseController
             return (! $thread->category->private || $request->user() != null && $request->user()->can('view', $thread->category));
         });
 
-        event(new UserViewingRecent($threads));
+        event(new UserViewingRecent($request->user(), $threads));
 
         return view('forum::thread.recent', compact('threads'));
     }
@@ -62,7 +62,7 @@ class ThreadController extends BaseController
                 && (! $thread->category->private || $request->user()->can('view', $thread->category));
         });
 
-        event(new UserViewingUnread($threads));
+        event(new UserViewingUnread($request->user(), $threads));
 
         return view('forum::thread.unread', compact('threads'));
     }
@@ -78,7 +78,7 @@ class ThreadController extends BaseController
 
     public function show(Request $request, Thread $thread): View
     {
-        event(new UserViewingThread($thread));
+        event(new UserViewingThread($request->user(), $thread));
 
         $thread->markAsRead($request->user()->getKey());
 
@@ -102,7 +102,7 @@ class ThreadController extends BaseController
             return redirect(Forum::route('category.show', $category));
         }
 
-        event(new UserCreatingThread($category));
+        event(new UserCreatingThread($request->user(), $category));
 
         return view('forum::thread.create', compact('category'));
     }

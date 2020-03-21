@@ -20,14 +20,14 @@ class CategoryController extends BaseController
     {
         $categories = Category::all()->toTree();
 
-        event(new UserViewingIndex);
+        event(new UserViewingIndex($request->user()));
 
         return view('forum::category.index', compact('categories'));
     }
 
     public function show(Request $request, Category $category): View
     {
-        event(new UserViewingCategory($category));
+        event(new UserViewingCategory($request->user(), $category));
 
         $categories = Gate::allows('moveCategories') ? Category::topLevel()->get() : [];
         $threads = $category->threadsPaginated;

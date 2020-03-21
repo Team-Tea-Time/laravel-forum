@@ -21,7 +21,7 @@ class PostController extends BaseController
 {
     public function show(Request $request, Thread $thread, string $postSlug, Post $post): View
     {
-        event(new UserViewingPost($post));
+        event(new UserViewingPost($request->user(), $post));
 
         $thread = $post->thread;
         $category = $thread->category;
@@ -33,7 +33,7 @@ class PostController extends BaseController
     {
         $this->authorize('reply', $thread);
 
-        event(new UserCreatingPost($thread));
+        event(new UserCreatingPost($request->user(), $thread));
 
         $post = $request->has('post') ? $thread->posts->find($request->input('post')) : null;
 
@@ -57,7 +57,7 @@ class PostController extends BaseController
 
         $this->authorize('edit', $post);
 
-        event(new UserEditingPost($post));
+        event(new UserEditingPost($request->user(), $post));
 
         $thread = $post->thread;
         $category = $post->thread->category;
