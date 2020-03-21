@@ -5,24 +5,25 @@ namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Models\Thread;
 
-class RestorePosts extends FormRequest implements FulfillableRequest
+class RestoreThreads extends FormRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 
     public function rules(): array
     {
         return [
-            'posts' => ['required', 'array']
+            'threads' => ['required', 'array']
         ];
     }
 
     public function authorizeValidated(): bool
     {
-        $posts = $this->posts()->get();
-        foreach ($posts as $post)
+        $thread = $this->posts()->get();
+        foreach ($thread as $post)
         {
-            if (! $this->user()->can('restore', $post)) return false;
+            if (! $this->user()->can('restore', $thread)) return false;
         }
 
         return true;
@@ -30,10 +31,10 @@ class RestorePosts extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $posts = $this->posts();
-        $posts->restore();
+        $threads = $this->threads();
+        $threads->restore();
 
-        return $posts->get();
+        return $threads->get();
     }
 
     private function posts(): Builder

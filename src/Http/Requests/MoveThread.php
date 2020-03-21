@@ -27,7 +27,7 @@ class MoveThread extends FormRequest implements FulfillableRequest
     {
         $thread = $this->route('thread');
         $thread->category_id = $this->input('category_id');
-        $thread->save();
+        $thread->saveWithoutTouch();
 
         return $thread;
     }

@@ -21,7 +21,7 @@ class RestorePost extends FormRequest implements FulfillableRequest
     public function fulfill()
     {
         $post = $this->route('post');
-        $post->restore();
+        $post->restoreWithoutTouch();
 
         return $post;
     }

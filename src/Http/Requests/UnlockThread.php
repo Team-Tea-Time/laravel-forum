@@ -8,7 +8,7 @@ class UnlockThread extends LockThread
     {
         $thread = $this->route('thread');
         $thread->locked = false;
-        $thread->save();
+        $thread->saveWithoutTouch();
 
         return $thread;
     }

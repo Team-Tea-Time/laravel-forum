@@ -21,7 +21,7 @@ class RestoreThread extends FormRequest implements FulfillableRequest
     public function fulfill()
     {
         $thread = $this->route('thread');
-        $thread->restore();
+        $thread->restoreWithoutTouch();
 
         return $thread;
     }

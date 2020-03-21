@@ -8,7 +8,7 @@ class UnpinThread extends PinThread
     {
         $thread = $this->route('thread');
         $thread->pinned = false;
-        $thread->save();
+        $thread->saveWithoutTouch();
 
         return $thread;
     }

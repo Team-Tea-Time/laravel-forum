@@ -5,24 +5,26 @@ namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Models\Thread;
 
-class RestorePosts extends FormRequest implements FulfillableRequest
+class DestroyThreads extends FormRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 
     public function rules(): array
     {
         return [
-            'posts' => ['required', 'array']
+            'threads' => ['required', 'array'],
+            'permadelete' => ['boolean']
         ];
     }
 
     public function authorizeValidated(): bool
     {
-        $posts = $this->posts()->get();
-        foreach ($posts as $post)
+        $thread = $this->posts()->get();
+        foreach ($thread as $post)
         {
-            if (! $this->user()->can('restore', $post)) return false;
+            if (! $this->user()->can('delete', $thread)) return false;
         }
 
         return true;
@@ -30,10 +32,18 @@ class RestorePosts extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $posts = $this->posts();
-        $posts->restore();
+        $threads = $this->threads();
 
-        return $posts->get();
+        if (config('forum.general.soft_deletes') && $this->validated()['permadelete'] && method_exists(Thread::class, 'forceDelete'))
+        {
+            $threads->forceDelete();
+        }
+        else
+        {
+            $threads->delete();
+        }
+
+        return $threads->get();
     }
 
     private function posts(): Builder

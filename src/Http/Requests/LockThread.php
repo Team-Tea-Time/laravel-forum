@@ -22,7 +22,7 @@ class LockThread extends FormRequest implements FulfillableRequest
     {
         $thread = $this->route('thread');
         $thread->locked = true;
-        $thread->save();
+        $thread->saveWithoutTouch();
 
         return $thread;
     }

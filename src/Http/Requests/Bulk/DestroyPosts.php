@@ -4,12 +4,12 @@ namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
-use TeamTeaTime\Forum\Http\Requests\Traits\BulkQueriesPosts;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Models\Post;
 
 class DestroyPosts extends FormRequest implements FulfillableRequest
 {
-    use AuthorizesAfterValidation, BulkQueriesPosts;
+    use AuthorizesAfterValidation;
 
     public function rules(): array
     {
@@ -32,23 +32,23 @@ class DestroyPosts extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $posts = $this->posts()->get();
+        $posts = $this->posts();
 
         if (config('forum.general.soft_deletes') && $this->validated()['permadelete'] && method_exists(Post::class, 'forceDelete'))
         {
-            foreach ($posts as $post)
-            {
-                $post->forceDelete();
-            }
+            $post->forceDelete();
         }
         else
         {
-            foreach ($posts as $post)
-            {
-                $post->delete();
-            }
+            $post->delete();
         }
 
-        return $posts;
+        return $posts->get();
+    }
+
+    private function posts(): Builder
+    {
+        $query = $this->user()->can('viewTrashedPosts') ? Post::withTrashed() : Post::query();
+        return $query->whereIn('id', $this->validated()['posts']);
     }
 }

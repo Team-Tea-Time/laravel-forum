@@ -22,7 +22,7 @@ class PinThread extends FormRequest implements FulfillableRequest
     {
         $thread = $this->route('thread');
         $thread->pinned = true;
-        $thread->save();
+        $thread->saveWithoutTouch();
 
         return $thread;
     }
