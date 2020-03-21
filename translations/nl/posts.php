@@ -4,6 +4,7 @@ return [
 
     'actions' => "Reactie acties",
     'created' => "Reactie created",
+    'delete' => "Delete post|Delete posts",
     'deleted' => "Reactie verwijderd|Reacties verwijderd",
     'edit' => "Wijzig reactie",
     'last' => "Laatste reactie",

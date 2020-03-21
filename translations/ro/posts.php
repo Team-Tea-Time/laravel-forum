@@ -4,6 +4,7 @@ return [
 
     'actions' => "Acțiuni mesaj",
     'created' => "Mesajul creat",
+    'delete' => "Delete post|Delete posts",
     'deleted' => "Mesaj șters|Mesaje șterse",
     'edit' => "Editează mesaj",
     'last' => "Ultimul mesaj",

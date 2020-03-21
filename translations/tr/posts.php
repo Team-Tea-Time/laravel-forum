@@ -4,6 +4,7 @@ return [
 
     'actions' => "Mesaj ayarları",
     'created' => "Mesaj gönderildi",
+    'delete' => "Delete post|Delete posts",
     'deleted' => "Mesaj silindi|Mesajlar silindi",
     'edit' => "Mesaj düzenle",
     'last' => "Son mesaj",

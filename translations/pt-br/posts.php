@@ -4,6 +4,7 @@ return [
 
     'actions' => "Ações da postagem",
     'created' => "Postagem criada",
+    'delete' => "Delete post|Delete posts",
     'deleted' => "Postagem deletada|Postagens deletadas",
     'edit' => "Editar postagem",
     'last' => "Última postagem",

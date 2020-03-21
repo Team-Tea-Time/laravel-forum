@@ -4,6 +4,7 @@ return [
 
     'actions' => "Akcije nad objavom",
     'created' => "Objava kreirana",
+    'delete' => "Delete post|Delete posts",
     'deleted' => "Objava izbrisana|Objave izbrisane",
     'edit' => "Izmeni objavu",
     'last' => "Poslednja objava",

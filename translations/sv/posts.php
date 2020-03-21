@@ -4,6 +4,7 @@ return [
 
     'actions' => "Inlägg åtgärder",
     'created' => "Inlägg som skapas",
+    'delete' => "Delete post|Delete posts",
     'deleted' => "Inlägg raderad|Inlägg raderad",
     'edit' => "Redigera inlägg",
     'last' => "Senaste inlägg",
