@@ -32,45 +32,47 @@ class Forum
 
     public static function route(string $route, $model = null): string
     {
-        if (! Str::startsWith($route, config('forum.frontend.router.as'))) {
+        if (! Str::startsWith($route, config('forum.frontend.router.as')))
+        {
             $route = config('forum.frontend.router.as') . $route;
         }
 
+        if ($model == null) return route($route);
+
         $params = [];
         $append = '';
+        if ($model instanceof Category)
+        {
+            $params = [
+                'category' => $model->id,
+                'category_slug' => static::slugify($model->title),
+            ];
+        }
+        else if ($model instanceof Thread)
+        {
+            $params = [
+                'thread' => $model->id,
+                'thread_slug' => static::slugify($model->title),
+            ];
+        }
+        else if ($model instanceof Post)
+        {
+            $params = [
+                'thread' => $model->thread->id,
+                'thread_slug' => static::slugify($model->thread->title),
+            ];
 
-        if ($model) {
-            switch (true) {
-                case $model instanceof Category:
-                    $params = [
-                        'category' => $model->id,
-                        'category_slug' => static::slugify($model->title),
-                    ];
-                    break;
-                case $model instanceof Thread:
-                    $params = [
-                        'thread' => $model->id,
-                        'thread_slug' => static::slugify($model->title),
-                    ];
-                    break;
-                case $model instanceof Post:
-                    $params = [
-                        'thread' => $model->thread->id,
-                        'thread_slug' => static::slugify($model->thread->title),
-                    ];
-
-                    $test = $model->getPerPage();
-
-                    if ($route == config('forum.frontend.router.as') . 'thread.show') {
-                        // The requested route is for a thread; we need to specify the page number and append a hash for
-                        // the post
-                        $params['page'] = ceil($model->sequence / $model->getPerPage());
-                        $append = "#post-{$model->sequence}";
-                    } else {
-                        // Other post routes require the post parameter
-                        $params['post'] = $model->id;
-                    }
-                    break;
+            if ($route == config('forum.frontend.router.as') . 'thread.show')
+            {
+                // The requested route is for a thread; we need to specify the page number and append a hash for
+                // the post
+                $params['page'] = ceil($model->sequence / $model->getPerPage());
+                $append = "#post-{$model->sequence}";
+            }
+            else
+            {
+                // Other post routes require the post parameter
+                $params['post'] = $model->id;
             }
         }
 

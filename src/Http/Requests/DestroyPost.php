@@ -8,17 +8,31 @@ use TeamTeaTime\Forum\Models\Post;
 
 class DestroyPost extends FormRequest implements FulfillableRequest
 {
-    public function authorize(Post $post): bool
+    public function authorize(): bool
     {
-        return $this->user()->can('delete', $post);
+        $post = $this->route('post');
+        return ! $post->isFirst && $this->user()->can('delete', $post);
+    }
+
+    public function rules(): array
+    {
+        return [
+            'permadelete' => ['boolean']
+        ];
     }
 
     public function fulfill()
     {
-        $permanent = ! config('forum.general.soft_deletes');
-
         $post = $this->route('post');
-        $permanent && method_exists($post, 'forceDelete') ? $post->forceDelete() : $post->delete();
+
+        if (! config('forum.general.soft_deletes') || $this->input('permadelete') && method_exists($post, 'forceDelete'))
+        {
+            $post->forceDelete();
+        }
+        else
+        {
+            $post->delete();
+        }
 
         return $post;
     }

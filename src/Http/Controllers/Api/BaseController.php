@@ -252,8 +252,6 @@ abstract class BaseController extends Controller
      */
     public function validate(Request $request, array $rules = [], array $messages = [], array $customAttributes = [])
     {
-        $rules = array_merge_recursive(config('forum.general.validation_rules'), $rules);
-
         $validator = $this->getValidationFactory()->make($request->all(), $rules, $messages, $customAttributes);
 
         if ($validator->fails()) {

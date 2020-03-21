@@ -5,12 +5,12 @@ namespace TeamTeaTime\Forum\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
-class RestoreThread extends FormRequest implements FulfillableRequest
+class RestorePost extends FormRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {
-        $thread = $this->route('thread');
-        return $this->user()->can('restore', $thread);
+        $post = $this->route('post');
+        return $this->user()->can('restore', $post);
     }
 
     public function rules(): array
@@ -20,9 +20,9 @@ class RestoreThread extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $thread = $this->route('thread');
-        $thread->restore();
+        $post = $this->route('post');
+        $post->restore();
 
-        return $thread;
+        return $post;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+$prefix = config('forum.frontend.route_prefixes');
+
 $r->get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
 
 $r->get('recent', ['as' => 'recent', 'uses' => 'ThreadController@recent']);
@@ -9,20 +11,18 @@ $r->patch('unread', ['as' => 'mark-read', 'uses' => 'ThreadController@markRead']
 
 $r->get('manage', ['as' => 'category.manage', 'uses' => 'CategoryController@manage']);
 
-$categoryPrefix = config('forum.frontend.router.category_prefix');
-$r->post($categoryPrefix . '/create', ['as' => 'category.store', 'uses' => 'CategoryController@store']);
-$r->group(['prefix' => $categoryPrefix . '/{category}-{category_slug}'], function ($r)
+$r->post($prefix['category'] . '/create', ['as' => 'category.store', 'uses' => 'CategoryController@store']);
+$r->group(['prefix' => $prefix['category'] . '/{category}-{category_slug}'], function ($r) use ($prefix)
 {
     $r->get('/', ['as' => 'category.show', 'uses' => 'CategoryController@show']);
     $r->patch('/', ['as' => 'category.update', 'uses' => 'CategoryController@update']);
     $r->delete('/', ['as' => 'category.delete', 'uses' => 'CategoryController@destroy']);
 
-    $r->get('t/create', ['as' => 'thread.create', 'uses' => 'ThreadController@create']);
-    $r->post('t/create', ['as' => 'thread.store', 'uses' => 'ThreadController@store']);
+    $r->get($prefix['thread'] . '/create', ['as' => 'thread.create', 'uses' => 'ThreadController@create']);
+    $r->post($prefix['thread'] . '/create', ['as' => 'thread.store', 'uses' => 'ThreadController@store']);
 });
 
-$threadPrefix = config('forum.frontend.router.thread_prefix');
-$r->group(['prefix' => $threadPrefix . '/{thread}-{thread_slug}'], function ($r)
+$r->group(['prefix' => $prefix['thread'] . '/{thread}-{thread_slug}'], function ($r) use ($prefix)
 {
     $r->get('/', ['as' => 'thread.show', 'uses' => 'ThreadController@show']);
     $r->patch('/', ['as' => 'thread.update', 'uses' => 'ThreadController@update']);
@@ -35,12 +35,15 @@ $r->group(['prefix' => $threadPrefix . '/{thread}-{thread_slug}'], function ($r)
     $r->post('rename', ['as' => 'thread.rename', 'uses' => 'ThreadController@rename']);
     $r->delete('/', ['as' => 'thread.delete', 'uses' => 'ThreadController@destroy']);
     
-    $r->get('post/{post}', ['as' => 'post.show', 'uses' => 'PostController@show']);
+    $r->get($prefix['post'] . '/{post}', ['as' => 'post.show', 'uses' => 'PostController@show']);
     $r->get('reply', ['as' => 'post.create', 'uses' => 'PostController@create']);
     $r->post('reply', ['as' => 'post.store', 'uses' => 'PostController@store']);
-    $r->get('post/{post}/edit', ['as' => 'post.edit', 'uses' => 'PostController@edit']);
-    $r->patch('{post}', ['as' => 'post.update', 'uses' => 'PostController@update']);
-    $r->delete('{post}', ['as' => 'post.delete', 'uses' => 'PostController@destroy']);
+    $r->get($prefix['post'] . '/{post}/edit', ['as' => 'post.edit', 'uses' => 'PostController@edit']);
+    $r->patch($prefix['post'] . '/{post}', ['as' => 'post.update', 'uses' => 'PostController@update']);
+    $r->get($prefix['post'] . '/{post}/delete', ['as' => 'post.confirm-delete', 'uses' => 'PostController@confirmDelete']);
+    $r->get($prefix['post'] . '/{post}/restore', ['as' => 'post.confirm-restore', 'uses' => 'PostController@confirmRestore']);
+    $r->delete($prefix['post'] . '/{post}', ['as' => 'post.destroy', 'uses' => 'PostController@destroy']);
+    $r->post($prefix['post'] . '/{post}/restore', ['as' => 'post.restore', 'uses' => 'PostController@restore']);
 });
 
 $r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r)
@@ -58,4 +61,13 @@ $r->bind('thread', function ($value)
     if ($thread->trashed() && ! Gate::allows('viewTrashedThreads')) return null;
 
     return $thread;
+});
+
+$r->bind('post', function ($value)
+{
+    $post = \TeamTeaTime\Forum\Models\Post::withTrashed()->find($value);
+
+    if ($post->trashed() && ! Gate::allows('viewTrashedPosts')) return null;
+
+    return $post;
 });

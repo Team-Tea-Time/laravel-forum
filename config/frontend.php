@@ -25,10 +25,23 @@ return [
     'router' => [
         'prefix' => '/forum',
         'as' => 'forum.',
-        'thread_prefix' => 't',
-        'category_prefix' => 'c',
         'namespace' => '\TeamTeaTime\Forum\Http\Controllers\Frontend',
         'middleware' => ['web']
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Route Prefixes
+    |--------------------------------------------------------------------------
+    |
+    | Prefixes to use for each model.
+    |
+    */
+
+    'route_prefixes' => [
+        'category' => 'c',
+        'thread' => 't',
+        'post' => 'p',
     ],
 
     /*

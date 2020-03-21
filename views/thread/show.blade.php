@@ -5,22 +5,22 @@
         <div class="d-flex flex-column flex-md-row justify-content-between">
             <h2 class="flex-grow-1">{{ $thread->title }}</h2>
             
-            @can ('manageThreads', $category)
-                <div>
-                    @can ('deleteThreads', $category)
-                        <div class="btn-group" role="group">
-                            @if ($thread->trashed())
-                                <a href="#" class="btn btn-secondary" data-open-modal="restore-thread">
-                                    <i data-feather="refresh-cw"></i> {{ trans('forum::general.restore') }}
-                                </a>
-                            @else
-                                <a href="#" class="btn btn-danger mr-3" data-open-modal="delete-thread">
-                                    <i data-feather="trash"></i> {{ trans('forum::general.delete') }}
-                                </a>
-                            @endif
-                        </div>
-                    @endcan
+            <div>
+                @if (Gate::allows('delete', $thread) || Gate::allows('restore', $thread))
+                    <div class="btn-group" role="group">
+                        @if ($thread->trashed() && Gate::allows('restore', $thread))
+                            <a href="#" class="btn btn-secondary" data-open-modal="restore-thread">
+                                <i data-feather="refresh-cw"></i> {{ trans('forum::general.restore') }}
+                            </a>
+                        @elseif (Gate::allows('delete', $thread))
+                            <a href="#" class="btn btn-danger mr-3" data-open-modal="delete-thread">
+                                <i data-feather="trash"></i> {{ trans('forum::general.delete') }}
+                            </a>
+                        @endif
+                    </div>
+                @endif
 
+                @can ('manageThreads', $category)
                     <div class="btn-group" role="group">
                         @if (! $thread->trashed())
                             @can ('lockThreads', $category)
@@ -56,8 +56,8 @@
                             @endcan
                         @endif
                     </div>
-                </div>
-            @endcan
+                @endcan
+            </div>
         </div>
 
 
@@ -332,6 +332,10 @@
             {
                 return this.posts.data.map(post => post.id);
             }
+        },
+        created ()
+        {
+            this.posts.data = this.posts.data.filter(post => ! post.isFirst);
         },
         methods: {
             toggleAll ()

@@ -14,6 +14,8 @@ class Post extends BaseModel
 
     protected $fillable = ['thread_id', 'author_id', 'post_id', 'content'];
 
+    protected $appends = ['isFirst'];
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);

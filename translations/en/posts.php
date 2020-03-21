@@ -10,6 +10,7 @@ return [
     'last' => "Last post",
     'perma_deleted' => "Post permanently deleted|Posts permanently deleted",
     'post' => "Post|Posts",
+    'restore' => "Restore post|Restore posts",
     'restored' => "Post restored|Posts restored",
     'select_all' => "Select all posts",
     'updated' => "Post updated|Posts updated",

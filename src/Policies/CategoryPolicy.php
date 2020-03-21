@@ -4,26 +4,12 @@ use TeamTeaTime\Forum\Models\Category;
 
 class CategoryPolicy
 {
-    /**
-     * Permission: Create threads in category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function createThreads($user, Category $category)
+    public function createThreads($user, Category $category): bool
     {
         return true;
     }
 
-    /**
-     * Permission: Manage threads in category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function manageThreads($user, Category $category)
+    public function manageThreads($user, Category $category): bool
     {
         return $this->deleteThreads($user, $category) ||
                $this->enableThreads($user, $category) ||
@@ -32,98 +18,52 @@ class CategoryPolicy
                $this->pinThreads($user, $category);
     }
 
-    /**
-     * Permission: Delete threads in category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function deleteThreads($user, Category $category)
+    public function deleteThreads($user, Category $category): bool
     {
         return true;
     }
 
-    /**
-     * Permission: Enable threads in category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function enableThreads($user, Category $category)
+    public function restoreThreads($user, Category $category): bool
     {
         return true;
     }
 
-    /**
-     * Permission: Move threads from category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function moveThreadsFrom($user, Category $category)
+    public function enableThreads($user, Category $category): bool
     {
         return true;
     }
 
-    /**
-     * Permission: Move threads to category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function moveThreadsTo($user, Category $category)
+    public function moveThreadsFrom($user, Category $category): bool
     {
         return true;
     }
 
-    /**
-     * Permission: Lock threads in category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function lockThreads($user, Category $category)
+    public function moveThreadsTo($user, Category $category): bool
     {
         return true;
     }
 
-    /**
-     * Permission: Pin threads in category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function pinThreads($user, Category $category)
+    public function lockThreads($user, Category $category): bool
     {
         return true;
     }
 
-    /**
-     * Permission: View category. Only takes effect for 'private' categories.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function view($user, Category $category)
+    public function pinThreads($user, Category $category): bool
     {
         return true;
     }
 
-    /**
-     * Permission: Delete category.
-     *
-     * @param  object  $user
-     * @param  Category  $category
-     * @return bool
-     */
-    public function delete($user, Category $category)
+    public function view($user, Category $category): bool
+    {
+        return true;
+    }
+
+    public function delete($user, Category $category): bool
+    {
+        return true;
+    }
+
+    public function restore($user, Category $category): bool
     {
         return true;
     }

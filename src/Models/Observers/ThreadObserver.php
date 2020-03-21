@@ -9,13 +9,13 @@ class ThreadObserver
 {
     public function created($thread)
     {
-        // Increment thread count on the category
         $thread->category->increment('thread_count');
     }
 
     public function updating($thread)
     {
-        if ($thread->getOriginal('category_id') != $thread->category_id) {
+        if ($thread->getOriginal('category_id') != $thread->category_id)
+        {
             $oldCategory = Category::find($thread->getOriginal('category_id'));
             $newCategory = Category::find($thread->category_id);
             $postCount = $thread->posts->count();
@@ -32,20 +32,20 @@ class ThreadObserver
 
     public function deleted($thread)
     {
-        if (! $thread->deleted_at || $thread->deleted_at->toDateTimeString() !== Carbon::now()->toDateTimeString()) {
+        if (! $thread->deleted_at || $thread->deleted_at->toDateTimeString() !== Carbon::now()->toDateTimeString())
+        {
             // The thread was force-deleted, so the posts should be too
             $thread->posts()->withTrashed()->forceDelete();
 
-            // Also detach readers
             $thread->readers()->detach();
         }
 
-        Stats::updateCategory($thread->category);
+        Stats::syncForCategory($thread->category);
     }
 
     public function restored($thread)
     {
-        Stats::updateThread($thread);
-        Stats::updateCategory($thread->category);
+        Stats::syncForThread($thread);
+        Stats::syncForCategory($thread->category);
     }
 }

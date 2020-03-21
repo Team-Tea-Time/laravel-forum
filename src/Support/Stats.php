@@ -2,21 +2,19 @@
 
 namespace TeamTeaTime\Forum\Support;
 
+use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Models\Thread;
+
 class Stats
 {
-    /**
-     * Helper: update category thread and post counts.
-     *
-     * @return null
-     */
-    static function updateCategory($category)
+    static function syncForCategory(Category $category): void
     {
-        // Update the category thread and post counts
         $threads = $category->threads()->where('deleted_at', null)->get();
         $category->thread_count = $threads->count();
 
         $postCount = 0;
-        foreach ($threads as $thread) {
+        foreach ($threads as $thread)
+        {
             $postCount += $thread->posts->count();
         }
 
@@ -24,14 +22,8 @@ class Stats
         $category->saveWithoutTouch();
     }
 
-    /**
-     * Helper: update thread reply count.
-     *
-     * @return null
-     */
-    static function updateThread($thread)
+    static function syncForThread(Thread $thread): void
     {
-        // Update the category thread and post counts
         $postCount = $thread->posts->where('deleted_at', null)->count();
         $thread->reply_count = $postCount - 1;
         $thread->saveWithoutTouch();

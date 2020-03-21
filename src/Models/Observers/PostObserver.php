@@ -16,7 +16,8 @@ class PostObserver
         $post->saveWithoutTouch();
 
         // Update the thread reply count if this is not the first post in the thread
-        if ($post->thread->posts->count() > 1) {
+        if ($post->thread->posts->count() > 1)
+        {
             $post->thread->reply_count += 1;
             $post->thread->saveWithoutTouch();
         }
@@ -29,24 +30,30 @@ class PostObserver
 
     public function deleted($post)
     {
-        if (!is_null($post->children)) {
+        if (! is_null($post->children))
+        {
             // Other posts reference this one, so set their parent post IDs to 0
             $post->children()->update(['post_id' => 0]);
         }
 
-        if ($post->thread->posts->isEmpty()) {
+        if ($post->thread->posts->isEmpty())
+        {
             // The containing thread is now empty, so delete the thread accordingly
-            if (!$post->deleted_at || $post->deleted_at->toDateTimeString() !== Carbon::now()->toDateTimeString()) {
+            if (!$post->deleted_at || $post->deleted_at->toDateTimeString() !== Carbon::now()->toDateTimeString())
+            {
                 // The post was force-deleted, so the thread should be too
                 $post->thread()->withTrashed()->forceDelete();
-            } else {
+            }
+            else
+            {
                 // The post was soft-deleted, so just soft-delete the thread
                 $post->thread()->delete();
             }
         }
 
         // Update sequence numbers for all of the thread's posts
-        $post->thread->posts->each(function ($post) {
+        $post->thread->posts->each(function ($post)
+        {
             $post->sequence = $post->getSequenceNumber();
             $post->saveWithoutTouch();
         });
@@ -55,18 +62,19 @@ class PostObserver
         $post->thread->updated_at = $post->thread->lastPostTime;
         $post->thread->save();
 
-        Stats::updateThread($post->thread);
-        Stats::updateCategory($post->thread->category);
+        Stats::syncForThread($post->thread);
+        Stats::syncForCategory($post->thread->category);
     }
 
     public function restored($post)
     {
-        if (is_null($post->thread->posts)) {
+        if (is_null($post->thread->posts))
+        {
             // The containing thread was soft-deleted, so restore that too
             $post->thread()->withTrashed()->restore();
         }
 
-        Stats::updateThread($post->thread);
-        Stats::updateCategory($post->thread->category);
+        Stats::syncForThread($post->thread);
+        Stats::syncForCategory($post->thread->category);
     }
 }

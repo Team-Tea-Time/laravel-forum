@@ -12,6 +12,8 @@ use TeamTeaTime\Forum\Events\UserEditingPost;
 use TeamTeaTime\Forum\Events\UserViewingPost;
 use TeamTeaTime\Forum\Http\Requests\BulkDestroyPosts;
 use TeamTeaTime\Forum\Http\Requests\BulkUpdatePosts;
+use TeamTeaTime\Forum\Http\Requests\DestroyPost;
+use TeamTeaTime\Forum\Http\Requests\RestorePost;
 use TeamTeaTime\Forum\Http\Requests\StorePost;
 use TeamTeaTime\Forum\Http\Requests\UpdatePost;
 use TeamTeaTime\Forum\Models\Post;
@@ -76,6 +78,16 @@ class PostController extends BaseController
         return redirect(Forum::route('thread.show', $post));
     }
 
+    public function confirmDelete(Request $request, Thread $thread, $threadSlug, Post $post): View
+    {
+        return view('forum::post.confirm-delete', ['category' => $thread->category, 'thread' => $thread, 'post' => $post]);
+    }
+
+    public function confirmRestore(Request $request, Thread $thread, $threadSlug, Post $post): View
+    {
+        return view('forum::post.confirm-restore', ['category' => $thread->category, 'thread' => $thread, 'post' => $post]);
+    }
+
     public function destroy(DestroyPost $request): RedirectResponse
     {
         $post = $request->fulfill();
@@ -83,6 +95,15 @@ class PostController extends BaseController
         Forum::alert('success', 'posts.deleted', 1);
 
         return redirect(Forum::route('thread.show', $post->thread));
+    }
+
+    public function restore(RestorePost $request): RedirectResponse
+    {
+        $post = $request->fulfill();
+
+        Forum::alert('success', 'posts.updated', 1);
+
+        return redirect(Forum::route('thread.show', $post));
     }
 
     public function bulkDestroy(BulkDestroyPosts $request): RedirectResponse

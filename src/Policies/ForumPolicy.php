@@ -2,80 +2,38 @@
 
 class ForumPolicy
 {
-    /**
-     * Permission: Create categories.
-     *
-     * @param  object  $user
-     * @return bool
-     */
-    public function createCategories($user)
+    public function createCategories($user): bool
     {
         return true;
     }
 
-    /**
-     * Permission: Manage category.
-     *
-     * @param  object  $user
-     * @return bool
-     */
-    public function manageCategories($user)
+    public function manageCategories($user): bool
     {
         return $this->moveCategories($user) ||
                $this->renameCategories($user);
     }
 
-    /**
-     * Permission: Move categories.
-     *
-     * @param  object  $user
-     * @return bool
-     */
-    public function moveCategories($user)
+    public function moveCategories($user): bool
     {
         return true;
     }
 
-    /**
-     * Permission: Rename categories.
-     *
-     * @param  object  $user
-     * @return bool
-     */
-    public function renameCategories($user)
+    public function renameCategories($user): bool
     {
         return true;
     }
 
-    /**
-     * Permission: Mark new/updated threads as read.
-     *
-     * @param  object  $user
-     * @return bool
-     */
-    public function markNewThreadsAsRead($user)
+    public function markNewThreadsAsRead($user): bool
     {
         return true;
     }
 
-    /**
-     * Permission: View trashed threads.
-     *
-     * @param  object  $user
-     * @return bool
-     */
-    public function viewTrashedThreads($user)
+    public function viewTrashedThreads($user): bool
     {
         return true;
     }
 
-    /**
-     * Permission: View trashed posts.
-     *
-     * @param  object  $user
-     * @return bool
-     */
-    public function viewTrashedPosts($user)
+    public function viewTrashedPosts($user): bool
     {
         return true;
     }
