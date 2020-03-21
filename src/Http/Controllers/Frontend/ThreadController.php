@@ -10,8 +10,14 @@ use TeamTeaTime\Forum\Events\UserCreatingThread;
 use TeamTeaTime\Forum\Events\UserMarkingNew;
 use TeamTeaTime\Forum\Events\UserViewingNew;
 use TeamTeaTime\Forum\Events\UserViewingThread;
+use TeamTeaTime\Forum\Http\Requests\DestroyThread;
+use TeamTeaTime\Forum\Http\Requests\LockThread;
+use TeamTeaTime\Forum\Http\Requests\MoveThread;
+use TeamTeaTime\Forum\Http\Requests\PinThread;
+use TeamTeaTime\Forum\Http\Requests\RenameThread;
 use TeamTeaTime\Forum\Http\Requests\StoreThread;
-use TeamTeaTime\Forum\Http\Requests\UpdateThread;
+use TeamTeaTime\Forum\Http\Requests\UnlockThread;
+use TeamTeaTime\Forum\Http\Requests\UnpinThread;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 
@@ -125,35 +131,67 @@ class ThreadController extends BaseController
         return redirect(Forum::route('thread.show', $thread));
     }
 
-    public function update(UpdateThread $request): RedirectResponse
+    public function lock(LockThread $request): RedirectResponse
     {
-        $request->fulfill();
+        $thread = $request->fulfill();
 
         Forum::alert('success', 'threads.updated', 1);
 
         return redirect(Forum::route('thread.show', $thread));
     }
 
-    /**
-     * DELETE: Delete a thread.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy(Request $request)
+    public function unlock(UnlockThread $request): RedirectResponse
     {
-        $this->validate($request, ['action' => 'in:delete,permadelete']);
+        $thread = $request->fulfill();
 
-        $permanent = !config('forum.preferences.soft_deletes') || ($request->input('action') == 'permadelete');
+        Forum::alert('success', 'threads.updated', 1);
 
-        $parameters = $request->all();
-        $parameters['force'] = $permanent ? 1 : 0;
+        return redirect(Forum::route('thread.show', $thread));
+    }
 
-        $thread = $this->api('thread.delete', $request->route('thread'))->parameters($parameters)->delete();
+    public function pin(PinThread $request): RedirectResponse
+    {
+        $thread = $request->fulfill();
+
+        Forum::alert('success', 'threads.updated', 1);
+
+        return redirect(Forum::route('thread.show', $thread));
+    }
+
+    public function unpin(UnpinThread $request): RedirectResponse
+    {
+        $thread = $request->fulfill();
+
+        Forum::alert('success', 'threads.updated', 1);
+
+        return redirect(Forum::route('thread.show', $thread));
+    }
+    
+    public function rename(RenameThread $request): RedirectResponse
+    {
+        $thread = $request->fulfill();
+
+        Forum::alert('success', 'threads.updated', 1);
+
+        return redirect(Forum::route('thread.show', $thread));
+    }
+
+    public function move(MoveThread $request): RedirectResponse
+    {
+        $thread = $request->fulfill();
+
+        Forum::alert('success', 'threads.updated', 1);
+
+        return redirect(Forum::route('thread.show', $thread));
+    }
+
+    public function destroy(DestroyThread $request): RedirectResponse
+    {
+        $thread = $request->fulfill();
 
         Forum::alert('success', 'threads.deleted', 1);
 
-        return redirect($permanent ? Forum::route('category.show', $thread->category) : Forum::route('thread.show', $thread));
+        return redirect(Forum::route('category.show', $thread->category));
     }
 
     /**

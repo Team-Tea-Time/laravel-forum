@@ -29,6 +29,7 @@ $r->group(['prefix' => $threadPrefix . '/{thread}-{thread_slug}'], function ($r)
     $r->post('pin', ['as' => 'thread.pin', 'uses' => 'ThreadController@pin']);
     $r->post('unpin', ['as' => 'thread.unpin', 'uses' => 'ThreadController@unpin']);
     $r->post('move', ['as' => 'thread.move', 'uses' => 'ThreadController@move']);
+    $r->post('restore', ['as' => 'thread.restore', 'uses' => 'ThreadController@restore']);
     $r->post('rename', ['as' => 'thread.rename', 'uses' => 'ThreadController@rename']);
     $r->delete('/', ['as' => 'thread.delete', 'uses' => 'ThreadController@destroy']);
     
