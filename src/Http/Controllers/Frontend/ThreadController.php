@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\Events\UserCreatingThread;
 use TeamTeaTime\Forum\Events\UserMarkingNew;
-use TeamTeaTime\Forum\Events\UserViewingNew;
+use TeamTeaTime\Forum\Events\UserViewingRecent;
 use TeamTeaTime\Forum\Events\UserViewingThread;
 use TeamTeaTime\Forum\Events\UserViewingUnread;
 use TeamTeaTime\Forum\Http\Requests\DestroyThread;
@@ -42,7 +42,7 @@ class ThreadController extends BaseController
             return (! $thread->category->private || $request->user() != null && $request->user()->can('view', $thread->category));
         });
 
-        event(new UserViewingNew($threads));
+        event(new UserViewingRecent($threads));
 
         return view('forum::thread.recent', compact('threads'));
     }
@@ -73,7 +73,7 @@ class ThreadController extends BaseController
 
         Forum::alert('success', 'threads.marked_read');
 
-        return redirect(Forum::route('index'));
+        return redirect(Forum::route('unread'));
     }
 
     public function show(Request $request, Thread $thread): View
