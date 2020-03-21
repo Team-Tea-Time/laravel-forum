@@ -4,7 +4,7 @@
 
 ## Installation
 
-Requires Laravel 6.
+Requires Laravel 6+ and PHP 7.2+.
 
 ### Step 1: Install the package
 
@@ -46,7 +46,7 @@ Several configuration files are published to your application's config directory
 
 #### Translations
 
-Laravel Forum currently supports 11 languages: German, English, Spanish, French, Italian, Romanian, Russian, Turkish, Serbian, Portuguese (Brazil) and Swedish. The translation files are published to `resources/lang/vendor/forum/{locale}`. **Please be aware that much of the translation work in 3.0 has been done using Google Translate and probably isn't accurate. Pull requests are welcome to rectify this.**
+Laravel Forum currently supports 11 languages: German, English, Spanish, French, Italian, Romanian, Russian, Turkish, Serbian, Portuguese (Brazil) and Swedish. The translation files are published to `resources/lang/vendor/forum/{locale}`. **Some new language strings have been introduced in 5.0 but not yet translated; PRs to translate these would be greatly appreciated.**
 
 #### Policies (user permissions)
 
