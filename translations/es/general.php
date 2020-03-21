@@ -40,6 +40,8 @@ return [
     'save' => "Save",
     'subject' => "Asunto",
     'title' => "Titulo",
+    'unread' => "Unread",
+    'updated' => "Updated",
     'weight' => "Peso",
     'with_selection' => "Con la selección…",
 

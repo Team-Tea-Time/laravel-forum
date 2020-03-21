@@ -2,7 +2,7 @@
 
 namespace TeamTeaTime\Forum\Events;
 
-class UserMarkingNew
+class UserViewingUnread
 {
 
 }

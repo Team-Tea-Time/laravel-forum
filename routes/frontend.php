@@ -6,8 +6,8 @@ $r->get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
 
 $r->get('recent', ['as' => 'recent', 'uses' => 'ThreadController@recent']);
 
-$r->get('unread', ['as' => 'unread', 'uses' => 'ThreadController@unread'])->middleware('auth');
-$r->patch('unread', ['as' => 'mark-read', 'uses' => 'ThreadController@markRead'])->middleware('auth');
+$r->get('unread', ['as' => 'unread', 'uses' => 'ThreadController@unread']);
+$r->patch('unread/mark-read', ['as' => 'unread.mark-read', 'uses' => 'ThreadController@markRead'])->middleware('auth');
 
 $r->get('manage', ['as' => 'category.manage', 'uses' => 'CategoryController@manage']);
 
@@ -59,6 +59,7 @@ $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function
 
     $r->delete('post', ['as' => 'post.delete', 'uses' => 'PostController@destroy']);
     $r->post('post/restore', ['as' => 'post.restore', 'uses' => 'PostController@restore']);
+
 });
 
 $r->bind('thread', function ($value)

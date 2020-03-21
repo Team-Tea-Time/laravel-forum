@@ -10,8 +10,10 @@ use TeamTeaTime\Forum\Events\UserCreatingThread;
 use TeamTeaTime\Forum\Events\UserMarkingNew;
 use TeamTeaTime\Forum\Events\UserViewingNew;
 use TeamTeaTime\Forum\Events\UserViewingThread;
+use TeamTeaTime\Forum\Events\UserViewingUnread;
 use TeamTeaTime\Forum\Http\Requests\DestroyThread;
 use TeamTeaTime\Forum\Http\Requests\LockThread;
+use TeamTeaTime\Forum\Http\Requests\MarkThreadsRead;
 use TeamTeaTime\Forum\Http\Requests\MoveThread;
 use TeamTeaTime\Forum\Http\Requests\PinThread;
 use TeamTeaTime\Forum\Http\Requests\RenameThread;
@@ -56,39 +58,29 @@ class ThreadController extends BaseController
 
         $threads = $threads->get()->filter(function ($thread)
         {
-            return $thread->userReadStatus != false
+            return $thread->userReadStatus != null
                 && (! $thread->category->private || $request->user()->can('view', $thread->category));
         });
 
-        event(new UserViewingNew($threads));
+        event(new UserViewingUnread($threads));
 
         return view('forum::thread.unread', compact('threads'));
     }
 
-    public function markRead(Request $request): RedirectResponse
+    public function markRead(MarkThreadsRead $request): RedirectResponse
     {
-        $threads = $this->api('thread.mark-new')->parameters($request->only('category_id'))->patch();
-
-        event(new UserMarkingNew);
-
-        if ($request->has('category_id'))
-        {
-            $category = $this->api('category.fetch', $request->input('category_id'))->get();
-
-            if ($category)
-            {
-                Forum::alert('success', 'categories.marked_read', 0, ['category' => $category->title]);
-                return redirect(Forum::route('category.show', $category));
-            }
-        }
+        $request->fulfill();
 
         Forum::alert('success', 'threads.marked_read');
-        return redirect(config('forum.routing.prefix'));
+
+        return redirect(Forum::route('index'));
     }
 
     public function show(Request $request, Thread $thread): View
     {
         event(new UserViewingThread($thread));
+
+        $thread->markAsRead($request->user()->getKey());
 
         $category = $thread->category;
 

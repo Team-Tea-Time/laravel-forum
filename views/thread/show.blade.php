@@ -47,7 +47,8 @@
                             @endcan
                             @can ('rename', $thread)
                                 <a href="#" class="btn btn-secondary" data-open-modal="rename-thread">
-                                    <i data-feather="edit-2"></i> {{ trans('forum::general.rename') }}</option>
+                                    <i data-feather="edit-2"></i> {{ trans('forum::general.rename') }}
+                                </a>
                             @endcan
                             @can ('moveThreadsFrom', $category)
                                 <a href="#" class="btn btn-secondary" data-open-modal="move-thread">
@@ -75,7 +76,7 @@
 
         <hr>
 
-        @if (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread))
+        @if (count($posts) > 1 && Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread))
             <form :action="postActions[selectedPostAction]" method="POST">
                 @csrf
                 <input type="hidden" name="_method" :value="postActionMethods[selectedPostAction]" />
@@ -99,60 +100,56 @@
             </div>
         </div>
 
-        @if (count($posts) > 1)
-            @can ('deletePosts', $thread)
-                <div class="text-right pb-1">
-                    <div class="form-check">
-                        <label for="selectAllPosts">
-                            {{ trans('forum::posts.select_all') }}
-                        </label>
-                        <input type="checkbox" value="" id="selectAllPosts" class="align-middle" @click="toggleAll" :checked="selectedPosts.length == posts.data.length">
-                    </div>
+        @if (count($posts) > 1 && Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread))
+            <div class="text-right pb-1">
+                <div class="form-check">
+                    <label for="selectAllPosts">
+                        {{ trans('forum::posts.select_all') }}
+                    </label>
+                    <input type="checkbox" value="" id="selectAllPosts" class="align-middle" @click="toggleAll" :checked="selectedPosts.length == posts.data.length">
                 </div>
-            @endcan
+            </div>
         @endif
         
         @foreach ($posts as $post)
             @include ('forum::post.partials.list', compact('post'))
         @endforeach
 
-        @if (count($posts) > 1)
-            @can ('deletePosts', $thread)
-                    <div class="fixed-bottom-right pb-xs-0 pr-xs-0 pb-sm-3 pr-sm-3">
-                        <transition name="fade">
-                            <div class="card text-white bg-secondary shadow-sm" v-if="selectedPosts.length">
-                                <div class="card-header text-center">
-                                    {{ trans('forum::general.with_selection') }}
+        @if (count($posts) > 1 && Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread))
+                <div class="fixed-bottom-right pb-xs-0 pr-xs-0 pb-sm-3 pr-sm-3">
+                    <transition name="fade">
+                        <div class="card text-white bg-secondary shadow-sm" v-if="selectedPosts.length">
+                            <div class="card-header text-center">
+                                {{ trans('forum::general.with_selection') }}
+                            </div>
+                            <div class="card-body">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="bulk-actions">{{ trans_choice('forum::general.actions', 1) }}</label>
+                                    </div>
+                                    <select class="custom-select" id="bulk-actions" v-model="selectedPostAction">
+                                        <option value="delete">{{ trans('forum::general.delete') }}</option>
+                                        <option value="restore">{{ trans('forum::general.restore') }}</option>
+                                    </select>
                                 </div>
-                                <div class="card-body">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <label class="input-group-text" for="bulk-actions">{{ trans_choice('forum::general.actions', 1) }}</label>
-                                        </div>
-                                        <select class="custom-select" id="bulk-actions" v-model="selectedPostAction">
-                                            <option value="delete">{{ trans('forum::general.delete') }}</option>
-                                            <option value="restore">{{ trans('forum::general.restore') }}</option>
-                                        </select>
-                                    </div>
 
-                                    @if (config('forum.general.soft_deletes'))
-                                        <div class="form-check mb-3" v-if="selectedPostAction == 'delete'">
-                                            <input class="form-check-input" type="checkbox" name="permadelete" value="1" id="permadelete">
-                                            <label class="form-check-label" for="permadelete">
-                                                {{ trans('forum::general.perma_delete') }}
-                                            </label>
-                                        </div>
-                                    @endif
-
-                                    <div class="text-right">
-                                        <button type="submit" class="btn btn-primary" @click="submitPosts">{{ trans('forum::general.proceed') }}</button>
+                                @if (config('forum.general.soft_deletes'))
+                                    <div class="form-check mb-3" v-if="selectedPostAction == 'delete'">
+                                        <input class="form-check-input" type="checkbox" name="permadelete" value="1" id="permadelete">
+                                        <label class="form-check-label" for="permadelete">
+                                            {{ trans('forum::general.perma_delete') }}
+                                        </label>
                                     </div>
+                                @endif
+
+                                <div class="text-right">
+                                    <button type="submit" class="btn btn-primary" @click="submitPosts">{{ trans('forum::general.proceed') }}</button>
                                 </div>
                             </div>
-                        </transition>
-                    </div>
-                </form>
-            @endcan
+                        </div>
+                    </transition>
+                </div>
+            </form>
         @endif
 
         {{ $posts->links() }}

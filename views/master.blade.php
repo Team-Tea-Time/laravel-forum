@@ -87,7 +87,7 @@
         width: 16px;
         height: 16px;
         stroke-width: 3px;
-        vertical-align: -1px;
+        vertical-align: -2px;
     }
 
     .modal-title svg.feather

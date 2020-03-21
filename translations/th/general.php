@@ -40,6 +40,8 @@ return [
     'save' => "Save",
     'subject' => 'เรื่อง',
     'title' => 'หัวข้อ',
+    'unread' => "Unread",
+    'updated' => "Updated",
     'weight' => 'น้ำหนัก',
     'with_selection' => 'เลือกด้วย ...',
 

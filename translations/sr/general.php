@@ -40,6 +40,8 @@ return [
     'save' => "Save",
     'subject' => "Tema",
     'title' => "Naslov",
+    'unread' => "Unread",
+    'updated' => "Updated",
     'weight' => "Značaj",
     'with_selection' => "Sa izabranim…",
 

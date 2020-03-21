@@ -40,6 +40,8 @@ return [
     'save' => "Save",
     'subject' => "Konu",
     'title' => "Başlık",
+    'unread' => "Unread",
+    'updated' => "Updated",
     'weight' => "Adet",
     'with_selection' => "Seçim ile…",
 

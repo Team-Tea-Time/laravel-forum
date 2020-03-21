@@ -13,11 +13,13 @@
 
             @can ('markNewThreadsAsRead')
                 <div class="text-center">
-                    <form action="{{ Forum::route('mark-read') }}" method="POST" data-confirm>
+                    <form action="{{ Forum::route('unread.mark-read') }}" method="POST" onsubmit="return confirm('{{ trans('forum::general.generic_confirm') }}')">
                         @csrf
                         @method('patch')
 
-                        <button class="btn btn-primary px-5">{{ trans('forum::general.mark_read') }}</button>
+                        <button class="btn btn-primary px-5">
+                            <i data-feather="book"></i> {{ trans('forum::general.mark_read') }}
+                        </button>
                     </form>
                 </div>
             @endcan

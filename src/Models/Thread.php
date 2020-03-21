@@ -3,11 +3,11 @@
 namespace TeamTeaTime\Forum\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Gate;
 use TeamTeaTime\Forum\Models\Category;
@@ -89,8 +89,8 @@ class Thread extends BaseModel
 
     public function getOldAttribute(): bool
     {
-        $age = config('forum.preferences.old_thread_threshold');
-        return (!$age || $this->updated_at->timestamp < (time() - strtotime($age, 0)));
+        $age = config('forum.general.old_thread_threshold');
+        return (! $age || $this->updated_at->timestamp < (time() - strtotime($age, 0)));
     }
 
     public function getReaderAttribute()
@@ -104,20 +104,20 @@ class Thread extends BaseModel
 
     public function getUserReadStatusAttribute(): ?string
     {
-        if ($this->old || ! auth()->check()) return false;
+        if ($this->old || ! auth()->check()) return null;
 
-        if (is_null($this->reader)) return self::STATUS_UNREAD;
+        if (is_null($this->reader)) return trans('forum::general.' . self::STATUS_UNREAD);
 
-        return ($this->updatedSince($this->reader)) ? self::STATUS_UPDATED : false;
+        return ($this->updatedSince($this->reader)) ? trans('forum::general.' . self::STATUS_UPDATED) : null;
     }
 
-    public function markAsRead(int $userID): Thread
+    public function markAsRead(int $userId): void
     {
-        if ($this->old) return false;
+        if ($this->old) return;
 
         if (is_null($this->reader))
         {
-            $this->readers()->attach($userID);
+            $this->readers()->attach($userId);
         }
         elseif ($this->updatedSince($this->reader))
         {

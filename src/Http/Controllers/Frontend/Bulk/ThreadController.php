@@ -12,7 +12,6 @@ use TeamTeaTime\Forum\Http\Requests\Bulk\UnlockThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\UnpinThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\RenameThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\RestoreThreads;
-use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class ThreadController extends BaseController
 {
