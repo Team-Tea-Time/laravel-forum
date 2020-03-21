@@ -8,13 +8,13 @@
             @can ('manageThreads', $category)
                 <div>
                     @can ('deleteThreads', $category)
-                        <div class="btn-group mr-3" role="group">
+                        <div class="btn-group" role="group">
                             @if ($thread->trashed())
                                 <a href="#" class="btn btn-secondary" data-open-modal="restore-thread">
                                     <i data-feather="refresh-cw"></i> {{ trans('forum::general.restore') }}
                                 </a>
                             @else
-                                <a href="#" class="btn btn-danger" data-open-modal="delete-thread">
+                                <a href="#" class="btn btn-danger mr-3" data-open-modal="delete-thread">
                                     <i data-feather="trash"></i> {{ trans('forum::general.delete') }}
                                 </a>
                             @endif
@@ -160,150 +160,150 @@
                 </form>
             </div>
         @endcan
+    </div>
 
-        @can ('manageThreads', $category)
-            @can ('deleteThreads', $category)
-                @component('forum::modal-form')
-                    @slot('key', 'restore-thread')
-                    @slot('title', trans('forum::threads.restore'))
-                    @slot('route', Forum::route('thread.restore', $thread))
-                    @slot('method', 'POST')
+    @can ('manageThreads', $category)
+        @can ('deleteThreads', $category)
+            @component('forum::modal-form')
+                @slot('key', 'restore-thread')
+                @slot('title', '<i data-feather="refresh-cw" class="text-muted"></i>' . trans('forum::general.restore'))
+                @slot('route', Forum::route('thread.restore', $thread))
+                @slot('method', 'POST')
 
+                {{ trans('forum::general.generic_confirm') }}
+
+                @slot('actions')
+                    <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
+                @endslot
+            @endcomponent
+
+            @component('forum::modal-form')
+                @slot('key', 'delete-thread')
+                @slot('title', '<i data-feather="trash" class="text-muted"></i>' . trans('forum::threads.delete'))
+                @slot('route', Forum::route('thread.delete', $thread))
+                @slot('method', 'DELETE')
+
+                @if (config('forum.general.soft_deletes'))
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="permadelete" value="1" id="permadelete">
+                        <label class="form-check-label" for="permadelete">
+                            {{ trans('forum::general.perma_delete') }}
+                        </label>
+                    </div>
+                @else
                     {{ trans('forum::general.generic_confirm') }}
+                @endif
+
+                @slot('actions')
+                    <button type="submit" class="btn btn-danger">{{ trans('forum::general.proceed') }}</button>
+                @endslot
+            @endcomponent
+        @endcan
+
+        @if (! $thread->trashed())
+            @can ('lockThreads', $category)
+                @if ($thread->locked)
+                    @component('forum::modal-form')
+                        @slot('key', 'unlock-thread')
+                        @slot('title', '<i data-feather="unlock" class="text-muted"></i> ' . trans('forum::threads.unlock'))
+                        @slot('route', Forum::route('thread.unlock', $thread))
+                        @slot('method', 'POST')
+
+                        {{ trans('forum::general.generic_confirm') }}
+
+                        @slot('actions')
+                            <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
+                        @endslot
+                    @endcomponent
+                @else
+                    @component('forum::modal-form')
+                        @slot('key', 'lock-thread')
+                        @slot('title', '<i data-feather="lock" class="text-muted"></i> ' . trans('forum::threads.lock'))
+                        @slot('route', Forum::route('thread.lock', $thread))
+                        @slot('method', 'POST')
+
+                        {{ trans('forum::general.generic_confirm') }}
+
+                        @slot('actions')
+                            <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
+                        @endslot
+                    @endcomponent
+                @endif
+            @endcan
+
+            @can ('pinThreads', $category)
+                @if ($thread->pinned)
+                    @component('forum::modal-form')
+                        @slot('key', 'unpin-thread')
+                        @slot('title', '<i data-feather="arrow-down" class="text-muted"></i> ' . trans('forum::threads.unpin'))
+                        @slot('route', Forum::route('thread.unpin', $thread))
+                        @slot('method', 'POST')
+
+                        {{ trans('forum::general.generic_confirm') }}
+
+                        @slot('actions')
+                            <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
+                        @endslot
+                    @endcomponent
+                @else
+                    @component('forum::modal-form')
+                        @slot('key', 'pin-thread')
+                        @slot('title', '<i data-feather="arrow-up" class="text-muted"></i> ' . trans('forum::threads.pin'))
+                        @slot('route', Forum::route('thread.pin', $thread))
+                        @slot('method', 'POST')
+
+                        {{ trans('forum::general.generic_confirm') }}
+
+                        @slot('actions')
+                            <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
+                        @endslot
+                    @endcomponent
+                @endif
+            @endcan
+
+            @can ('rename', $thread)
+                @component('forum::modal-form')
+                    @slot('key', 'rename-thread')
+                    @slot('title', '<i data-feather="edit-2" class="text-muted"></i> ' . trans('forum::general.rename'))
+                    @slot('route', Forum::route('thread.rename', $thread))
+                    @slot('method', 'POST')
+                    
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="new-title">{{ trans('forum::general.title') }}</label>
+                        </div>
+                        <input type="text" name="title" value="{{ $thread->title }}" class="form-control">
+                    </div>
 
                     @slot('actions')
                         <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
                     @endslot
                 @endcomponent
+            @endcan
 
+            @can ('moveThreadsFrom', $category)
                 @component('forum::modal-form')
-                    @slot('key', 'delete-thread')
-                    @slot('title', '<i data-feather="trash" class="text-muted"></i>' . trans('forum::threads.delete'))
-                    @slot('route', Forum::route('thread.delete', $thread))
-                    @slot('method', 'DELETE')
+                    @slot('key', 'move-thread')
+                    @slot('title', '<i data-feather="corner-up-right" class="text-muted"></i> ' . trans('forum::general.move'))
+                    @slot('route', Forum::route('thread.move', $thread))
+                    @slot('method', 'POST')
 
-                    @if (config('forum.general.soft_deletes'))
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="permadelete" value="1" id="permadelete">
-                            <label class="form-check-label" for="permadelete">
-                                {{ trans('forum::general.perma_delete') }}
-                            </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="category-id">{{ trans_choice('forum::categories.category', 1) }}</label>
                         </div>
-                    @else
-                        {{ trans('forum::general.generic_confirm') }}
-                    @endif
+                        <select name="category_id" id="category-id" class="custom-select">
+                            @include ('forum::category.partials.options', ['hide' => $thread->category])
+                        </select>
+                    </div>
 
                     @slot('actions')
-                        <button type="submit" class="btn btn-danger">{{ trans('forum::general.proceed') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
                     @endslot
                 @endcomponent
             @endcan
-
-            @if (! $thread->trashed())
-                @can ('lockThreads', $category)
-                    @if ($thread->locked)
-                        @component('forum::modal-form')
-                            @slot('key', 'unlock-thread')
-                            @slot('title', '<i data-feather="unlock" class="text-muted"></i> ' . trans('forum::threads.unlock'))
-                            @slot('route', Forum::route('thread.unlock', $thread))
-                            @slot('method', 'POST')
-
-                            {{ trans('forum::general.generic_confirm') }}
-
-                            @slot('actions')
-                                <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
-                            @endslot
-                        @endcomponent
-                    @else
-                        @component('forum::modal-form')
-                            @slot('key', 'lock-thread')
-                            @slot('title', '<i data-feather="lock" class="text-muted"></i> ' . trans('forum::threads.lock'))
-                            @slot('route', Forum::route('thread.lock', $thread))
-                            @slot('method', 'POST')
-
-                            {{ trans('forum::general.generic_confirm') }}
-
-                            @slot('actions')
-                                <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
-                            @endslot
-                        @endcomponent
-                    @endif
-                @endcan
-
-                @can ('pinThreads', $category)
-                    @if ($thread->pinned)
-                        @component('forum::modal-form')
-                            @slot('key', 'unpin-thread')
-                            @slot('title', '<i data-feather="arrow-down" class="text-muted"></i> ' . trans('forum::threads.unpin'))
-                            @slot('route', Forum::route('thread.unpin', $thread))
-                            @slot('method', 'POST')
-
-                            {{ trans('forum::general.generic_confirm') }}
-
-                            @slot('actions')
-                                <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
-                            @endslot
-                        @endcomponent
-                    @else
-                        @component('forum::modal-form')
-                            @slot('key', 'pin-thread')
-                            @slot('title', '<i data-feather="arrow-up" class="text-muted"></i> ' . trans('forum::threads.pin'))
-                            @slot('route', Forum::route('thread.pin', $thread))
-                            @slot('method', 'POST')
-
-                            {{ trans('forum::general.generic_confirm') }}
-
-                            @slot('actions')
-                                <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
-                            @endslot
-                        @endcomponent
-                    @endif
-                @endcan
-
-                @can ('rename', $thread)
-                    @component('forum::modal-form')
-                        @slot('key', 'rename-thread')
-                        @slot('title', '<i data-feather="edit-2" class="text-muted"></i> ' . trans('forum::general.rename'))
-                        @slot('route', Forum::route('thread.rename', $thread))
-                        @slot('method', 'POST')
-                        
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="new-title">{{ trans('forum::general.title') }}</label>
-                            </div>
-                            <input type="text" name="title" value="{{ $thread->title }}" class="form-control">
-                        </div>
-
-                        @slot('actions')
-                            <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
-                        @endslot
-                    @endcomponent
-                @endcan
-
-                @can ('moveThreadsFrom', $category)
-                    @component('forum::modal-form')
-                        @slot('key', 'move-thread')
-                        @slot('title', '<i data-feather="corner-up-right" class="text-muted"></i> ' . trans('forum::general.move'))
-                        @slot('route', Forum::route('thread.move', $thread))
-                        @slot('method', 'POST')
-
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="category-id">{{ trans_choice('forum::categories.category', 1) }}</label>
-                            </div>
-                            <select name="category_id" id="category-id" class="custom-select">
-                                @include ('forum::category.partials.options', ['hide' => $thread->category])
-                            </select>
-                        </div>
-
-                        @slot('actions')
-                            <button type="submit" class="btn btn-primary">{{ trans('forum::general.proceed') }}</button>
-                        @endslot
-                    @endcomponent
-                @endcan
-            @endif
-        @endcan
-    </div>
+        @endif
+    @endcan
 
     <style>
     .thread-badges .badge

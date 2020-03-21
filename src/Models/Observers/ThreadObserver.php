@@ -17,30 +17,27 @@ class ThreadObserver
     {
         if ($thread->getOriginal('category_id') != $thread->category_id) {
             $oldCategory = Category::find($thread->getOriginal('category_id'));
+            $newCategory = Category::find($thread->category_id);
             $postCount = $thread->posts->count();
 
-            // Decrement the old category's thread and post counts
-            $oldCategory->decrement('thread_count');
-            $oldCategory->decrement('post_count', $postCount);
+            $oldCategory->thread_count -= 1;
+            $oldCategory->post_count -= $postCount;
+            $oldCategory->save();
 
-            // Increment the new category's thread and post counts
-            $thread->category->increment('thread_count');
-            $thread->category->increment('post_count', $postCount);
+            $newCategory->thread_count += 1;
+            $newCategory->post_count += $postCount;
+            $newCategory->save();
         }
     }
 
     public function deleted($thread)
     {
-        // Delete the thread's posts
-        if (!$thread->deleted_at || $thread->deleted_at->toDateTimeString() !== Carbon::now()->toDateTimeString()) {
+        if (! $thread->deleted_at || $thread->deleted_at->toDateTimeString() !== Carbon::now()->toDateTimeString()) {
             // The thread was force-deleted, so the posts should be too
             $thread->posts()->withTrashed()->forceDelete();
 
             // Also detach readers
             $thread->readers()->detach();
-        } else {
-            // The thread was soft-deleted, so just soft-delete its posts
-            $thread->posts()->delete();
         }
 
         Stats::updateCategory($thread->category);
@@ -48,9 +45,6 @@ class ThreadObserver
 
     public function restored($thread)
     {
-        // Restore the thread's posts
-        $thread->posts()->withTrashed()->restore();
-
         Stats::updateThread($thread);
         Stats::updateCategory($thread->category);
     }

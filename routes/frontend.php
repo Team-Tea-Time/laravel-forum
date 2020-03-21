@@ -11,7 +11,8 @@ $r->get('manage', ['as' => 'category.manage', 'uses' => 'CategoryController@mana
 
 $categoryPrefix = config('forum.frontend.router.category_prefix');
 $r->post($categoryPrefix . '/create', ['as' => 'category.store', 'uses' => 'CategoryController@store']);
-$r->group(['prefix' => $categoryPrefix . '/{category}-{category_slug}'], function ($r) {
+$r->group(['prefix' => $categoryPrefix . '/{category}-{category_slug}'], function ($r)
+{
     $r->get('/', ['as' => 'category.show', 'uses' => 'CategoryController@show']);
     $r->patch('/', ['as' => 'category.update', 'uses' => 'CategoryController@update']);
     $r->delete('/', ['as' => 'category.delete', 'uses' => 'CategoryController@destroy']);
@@ -21,7 +22,8 @@ $r->group(['prefix' => $categoryPrefix . '/{category}-{category_slug}'], functio
 });
 
 $threadPrefix = config('forum.frontend.router.thread_prefix');
-$r->group(['prefix' => $threadPrefix . '/{thread}-{thread_slug}'], function ($r) {
+$r->group(['prefix' => $threadPrefix . '/{thread}-{thread_slug}'], function ($r)
+{
     $r->get('/', ['as' => 'thread.show', 'uses' => 'ThreadController@show']);
     $r->patch('/', ['as' => 'thread.update', 'uses' => 'ThreadController@update']);
     $r->post('lock', ['as' => 'thread.lock', 'uses' => 'ThreadController@lock']);
@@ -41,9 +43,19 @@ $r->group(['prefix' => $threadPrefix . '/{thread}-{thread_slug}'], function ($r)
     $r->delete('{post}', ['as' => 'post.delete', 'uses' => 'PostController@destroy']);
 });
 
-$r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r) {
+$r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r)
+{
     $r->patch('thread', ['as' => 'thread.update', 'uses' => 'ThreadController@bulkUpdate']);
     $r->delete('thread', ['as' => 'thread.delete', 'uses' => 'ThreadController@bulkDestroy']);
     $r->patch('post', ['as' => 'post.update', 'uses' => 'PostController@bulkUpdate']);
     $r->delete('post', ['as' => 'post.delete', 'uses' => 'PostController@bulkDestroy']);
+});
+
+$r->bind('thread', function ($value)
+{
+    $thread = \TeamTeaTime\Forum\Models\Thread::withTrashed()->find($value);
+
+    if ($thread->trashed() && ! Gate::allows('viewTrashedThreads')) return null;
+
+    return $thread;
 });

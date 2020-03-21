@@ -152,6 +152,12 @@
     {
         border-left-color: var(--cyan);
     }
+
+    .list-group.threads .list-group-item.deleted
+    {
+        border-left-color: var(--red);
+        opacity: 0.5;
+    }
     </style>
 
     <script>

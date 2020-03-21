@@ -268,40 +268,41 @@
             mask.classList.add('show');
         }, 200);
     }
+
+    document.querySelectorAll('[data-open-modal]').forEach(item =>
+    {
+        item.addEventListener('click', event =>
+        {
+            event.preventDefault();
+
+            openModal(findModal(event.target.dataset.openModal));
+        });
+    });
+
+    document.querySelectorAll('[data-modal]').forEach(modal =>
+    {
+        modal.addEventListener('click', event =>
+        {
+            if (event.target.hasAttribute('data-close-modal'))
+            {
+                modal.classList.remove('show');
+                mask.classList.remove('show');
+                setTimeout(function()
+                {
+                    modal.style.display = 'none';
+                    mask.style.display = 'none';
+                }, 200);
+            }
+        });
+    });
+
+    document.querySelectorAll('[data-dismiss]').forEach(item =>
+    {
+        item.addEventListener('click', event => event.target.parentElement.style.display = 'none');
+    });
+
     document.addEventListener('DOMContentLoaded', event =>
     {
-        document.querySelectorAll('[data-open-modal]').forEach(item =>
-        {
-            item.addEventListener('click', event =>
-            {
-                event.preventDefault();
-
-                openModal(findModal(event.target.dataset.openModal));
-            });
-        });
-
-        document.querySelectorAll('[data-modal]').forEach(modal =>
-        {
-            modal.addEventListener('click', event =>
-            {
-                if (event.target.hasAttribute('data-close-modal'))
-                {
-                    modal.classList.remove('show');
-                    mask.classList.remove('show');
-                    setTimeout(function()
-                    {
-                        modal.style.display = 'none';
-                        mask.style.display = 'none';
-                    }, 200);
-                }
-            });
-        });
-
-        document.querySelectorAll('[data-dismiss]').forEach(item =>
-        {
-            item.addEventListener('click', event => event.target.parentElement.style.display = 'none');
-        });
-
         const hash = window.location.hash.substr(1);
         if (hash.startsWith('modal='))
         {

@@ -15,6 +15,7 @@ use TeamTeaTime\Forum\Http\Requests\LockThread;
 use TeamTeaTime\Forum\Http\Requests\MoveThread;
 use TeamTeaTime\Forum\Http\Requests\PinThread;
 use TeamTeaTime\Forum\Http\Requests\RenameThread;
+use TeamTeaTime\Forum\Http\Requests\RestoreThread;
 use TeamTeaTime\Forum\Http\Requests\StoreThread;
 use TeamTeaTime\Forum\Http\Requests\UnlockThread;
 use TeamTeaTime\Forum\Http\Requests\UnpinThread;
@@ -192,6 +193,15 @@ class ThreadController extends BaseController
         Forum::alert('success', 'threads.deleted', 1);
 
         return redirect(Forum::route('category.show', $thread->category));
+    }
+
+    public function restore(RestoreThread $request): RedirectResponse
+    {
+        $thread = $request->fulfill();
+
+        Forum::alert('success', 'threads.updated', 1);
+
+        return redirect(Forum::route('thread.show', $thread));
     }
 
     /**

@@ -21,12 +21,16 @@
         </span>
     </div>
     <div class="card-body">
-        @if (!is_null($post->parent))
+        @if (! is_null($post->parent))
             @include ('forum::post.partials.quote', ['post' => $post->parent])
         @endif
 
         @if ($post->trashed())
             <span class="badge badge-pill badge-danger">{{ trans('forum::general.deleted') }}</span>
+            @can ('viewTrashedPosts')
+                <br>
+                {!! Forum::render($post->content) !!}
+            @endcan
         @else
             {!! Forum::render($post->content) !!}
         @endif

@@ -1,4 +1,4 @@
-<div class="list-group-item {{ $thread->pinned ? 'pinned' : '' }} {{ $thread->locked ? 'locked' : '' }}" :class="{ 'border-primary': selectedThreads.includes({{ $thread->id }}) }">
+<div class="list-group-item {{ $thread->pinned ? 'pinned' : '' }} {{ $thread->locked ? 'locked' : '' }} {{ $thread->trashed() ? 'deleted' : '' }}" :class="{ 'border-primary': selectedThreads.includes({{ $thread->id }}) }">
     <div class="row align-items-center text-center">
         <div class="col-sm text-md-left">
             <span class="lead">
