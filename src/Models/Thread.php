@@ -1,6 +1,14 @@
-<?php namespace TeamTeaTime\Forum\Models;
+<?php
 
+namespace TeamTeaTime\Forum\Models;
+
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Gate;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
@@ -11,60 +19,25 @@ class Thread extends BaseModel
 {
     use SoftDeletes, HasAuthor, CachesData;
 
-    /**
-     * Eloquent attributes
-     */
     protected $table = 'forum_threads';
-
-    /**
-     * @var array
-     */
     protected $dates = ['deleted_at'];
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = ['category_id', 'author_id', 'title', 'locked', 'pinned', 'reply_count'];
 
-    /**
-     * @var string
-     */
     const STATUS_UNREAD = 'unread';
-
-    /**
-     * @var string
-     */
     const STATUS_UPDATED = 'updated';
 
-    /**
-     * Create a new thread model instance.
-     *
-     * @param  array  $attributes
-     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
         $this->perPage = config('forum.general.pagination.threads');
     }
 
-    /**
-     * Relationship: Category.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    /**
-     * Relationship: Readers.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function readers()
+    public function readers(): BelongsToMany
     {
         return $this->belongsToMany(
             config('forum.integration.user_model'),
@@ -74,145 +47,81 @@ class Thread extends BaseModel
         )->withTimestamps();
     }
 
-    /**
-     * Relationship: Posts.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function posts()
+    public function posts(): HasMany
     {
         $withTrashed = config('forum.general.display_trashed_posts') || Gate::allows('viewTrashedPosts');
         $query = $this->hasMany(Post::class);
         return $withTrashed ? $query->withTrashed() : $query;
     }
 
-    /**
-     * Scope: Recent threads.
-     *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @return \Illuminate\Database\Query\Builder
-     */
-    public function scopeRecent($query)
+    public function scopeRecent(Builder $query): Builder
     {
-        $time = time();
         $age = strtotime(config('forum.general.old_thread_threshold'), 0);
-        $cutoff = $time - $age;
+        $cutoff = time() - $age;
 
         return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
     }
 
-    /**
-     * Attribute: Paginated posts.
-     *
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    public function getPostsPaginatedAttribute()
+    public function getPostsPaginatedAttribute(): LengthAwarePaginator
     {
         return $this->posts()->paginate();
     }
 
-    /**
-     * Attribute: The last page number of the thread.
-     *
-     * @return int
-     */
-    public function getLastPageAttribute()
+    public function getLastPageAttribute(): int
     {
         return $this->postsPaginated->lastPage();
     }
 
-    /**
-     * Attribute: The first post in the thread.
-     *
-     * @return Post
-     */
-    public function getFirstPostAttribute()
+    public function getFirstPostAttribute(): Post
     {
         return $this->posts()->orderBy('created_at', 'asc')->first();
     }
 
-    /**
-     * Attribute: The last post in the thread.
-     *
-     * @return Post
-     */
-    public function getLastPostAttribute()
+    public function getLastPostAttribute(): Post
     {
         return $this->posts()->orderBy('created_at', 'desc')->first();
     }
 
-    /**
-     * Attribute: Creation time of the last post in the thread.
-     *
-     * @return \Carbon\Carbon
-     */
-    public function getLastPostTimeAttribute()
+    public function getLastPostTimeAttribute(): Carbon
     {
         return $this->lastPost->created_at;
     }
 
-
-    /**
-     * Attribute: 'Old' flag.
-     *
-     * @return boolean
-     */
-    public function getOldAttribute()
+    public function getOldAttribute(): bool
     {
         $age = config('forum.preferences.old_thread_threshold');
         return (!$age || $this->updated_at->timestamp < (time() - strtotime($age, 0)));
     }
 
-    /**
-     * Attribute: Currently authenticated reader.
-     *
-     * @return mixed
-     */
     public function getReaderAttribute()
     {
-        if (auth()->check()) {
-            $reader = $this->readers()->where('forum_threads_read.user_id', auth()->user()->getKey())->first();
+        if (! auth()->check()) return null;
 
-            return (!is_null($reader)) ? $reader->pivot : null;
-        }
+        $reader = $this->readers()->where('forum_threads_read.user_id', auth()->user()->getKey())->first();
 
-        return null;
+        return (! is_null($reader)) ? $reader->pivot : null;
     }
 
-    /**
-     * Attribute: Read/unread/updated status for current reader.
-     *
-     * @return mixed
-     */
-    public function getUserReadStatusAttribute()
+    public function getUserReadStatusAttribute(): ?string
     {
-        if (! $this->old && auth()->check()) {
-            if (is_null($this->reader)) {
-                return self::STATUS_UNREAD;
-            }
+        if ($this->old || ! auth()->check()) return false;
 
-            return ($this->updatedSince($this->reader)) ? self::STATUS_UPDATED : false;
-        }
+        if (is_null($this->reader)) return self::STATUS_UNREAD;
 
-        return false;
+        return ($this->updatedSince($this->reader)) ? self::STATUS_UPDATED : false;
     }
 
-    /**
-     * Helper: Mark this thread as read for the given user ID.
-     *
-     * @param  int  $userID
-     * @return void
-     */
-    public function markAsRead($userID)
+    public function markAsRead(int $userID): Thread
     {
-        if (!$this->old) {
-            if (is_null($this->reader)) {
-                $this->readers()->attach($userID);
-            } elseif ($this->updatedSince($this->reader)) {
-                $this->reader->touch();
-            }
-        }
+        if ($this->old) return false;
 
-        return $this;
+        if (is_null($this->reader))
+        {
+            $this->readers()->attach($userID);
+        }
+        elseif ($this->updatedSince($this->reader))
+        {
+            $this->reader->touch();
+        }
     }
 }

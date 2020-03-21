@@ -1,4 +1,6 @@
-<?php namespace TeamTeaTime\Forum\Models;
+<?php
+
+namespace TeamTeaTime\Forum\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,11 +16,8 @@ class Category extends BaseModel
     use CachesData, NodeTrait;
 
     protected $table = 'forum_categories';
-
     public $timestamps = false;
-
     protected $fillable = ['title', 'description', 'accepts_threads', 'is_private', 'color', 'thread_count', 'post_count'];
-
     protected $appends = ['route'];
 
     public function __construct(array $attributes = [])
@@ -73,8 +72,10 @@ class Category extends BaseModel
     {
         $category = $this;
 
-        return $this->remember('deepestChild', function () use ($category) {
-            while ($category->parent) {
+        return $this->remember('deepestChild', function () use ($category)
+        {
+            while ($category->parent)
+            {
                 $category = $category->parent;
             }
 
@@ -86,10 +87,12 @@ class Category extends BaseModel
     {
         $category = $this;
 
-        return $this->remember('depth', function () use ($category) {
+        return $this->remember('depth', function () use ($category)
+        {
             $depth = 0;
 
-            while ($category->parent) {
+            while ($category->parent)
+            {
                 $depth++;
                 $category = $category->parent;
             }
