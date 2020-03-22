@@ -1,7 +1,7 @@
 <?php
 
 // Categories
-$r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
+$r->group(['prefix' => 'categories', 'as' => 'category.'], function ($r)
 {
     $r->get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
     $r->post('/', ['as' => 'store', 'uses' => 'CategoryController@store']);
@@ -11,7 +11,7 @@ $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
 });
 
 // Threads
-$r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
+$r->group(['prefix' => 'threads', 'as' => 'thread.'], function ($r)
 {
     $r->get('/', ['as' => 'index', 'uses' => 'ThreadController@index']);
     $r->get('new', ['as' => 'new.index', 'uses' => 'ThreadController@indexNew']);
@@ -23,7 +23,7 @@ $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
 });
 
 // Posts
-$r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
+$r->group(['prefix' => 'posts', 'as' => 'post.'], function ($r)
 {
     $r->get('/', ['as' => 'index', 'uses' => 'PostController@index']);
     $r->post('/', ['as' => 'store', 'uses' => 'PostController@store']);
@@ -37,13 +37,13 @@ $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
 $r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r)
 {
     // Categories
-    $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
+    $r->group(['prefix' => 'categories', 'as' => 'category.'], function ($r)
     {
         $r->post('manage', ['as' => 'manage', 'uses' => 'CategoryController@bulkManage']);
     });
 
     // Threads
-    $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
+    $r->group(['prefix' => 'threads', 'as' => 'thread.'], function ($r)
     {
         $r->delete('/', ['as' => 'delete', 'uses' => 'ThreadController@bulkDestroy']);
         $r->patch('restore', ['as' => 'restore', 'uses' => 'ThreadController@bulkRestore']);
@@ -55,7 +55,7 @@ $r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r)
     });
 
     // Posts
-    $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
+    $r->group(['prefix' => 'posts', 'as' => 'post.'], function ($r)
     {
         $r->patch('/', ['as' => 'update', 'uses' => 'PostController@bulkUpdate']);
         $r->delete('/', ['as' => 'delete', 'uses' => 'PostController@bulkDestroy']);
