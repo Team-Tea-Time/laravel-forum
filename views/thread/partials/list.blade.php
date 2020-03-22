@@ -5,7 +5,7 @@
                 <a href="{{ Forum::route('thread.show', $thread) }}" @if (isset($category))style="color: {{ $category->color }};"@endif>{{ $thread->title }}</a>
             </span>
             <br>
-            {{ $thread->authorName }} <span class="text-muted">({{ $thread->posted }})</span>
+            {{ $thread->authorName }} <span class="text-muted">@include ('forum::partials.timestamp', ['carbon' => $thread->created_at])</span>
 
             @if (! isset($category))
                 <br>
@@ -34,7 +34,7 @@
             <a href="{{ Forum::route('thread.show', $thread->lastPost) }}">{{ trans('forum::posts.view') }} &raquo;</a>
             <br>
             {{ $thread->lastPost->authorName }}
-            <span class="text-muted">({{ $thread->lastPost->posted }})</span>
+            <span class="text-muted">@include ('forum::partials.timestamp', ['carbon' => $thread->lastPost->created_at])</span>
         </div>
 
         @if (isset($category))

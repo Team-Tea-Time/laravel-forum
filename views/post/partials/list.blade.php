@@ -16,9 +16,9 @@
         {{ $post->authorName }}
 
         <span class="text-muted">
-            {{ $post->posted }}
+            @include ('forum::partials.timestamp', ['carbon' => $post->created_at])
             @if ($post->hasBeenUpdated())
-                ({{ trans('forum::general.last_updated') }} {{ $post->updated }})
+                ({{ trans('forum::general.last_updated') }} @include ('forum::partials.timestamp', ['carbon' => $post->updated_at])
             @endif
         </span>
     </div>

@@ -20,13 +20,13 @@
                 @if ($category->newestThread)
                     <div>
                         <a href="{{ Forum::route('thread.show', $category->newestThread) }}">{{ $category->newestThread->title }}</a>
-                        {{ $category->newestThread->created_at->diffForHumans() }}
+                        @include ('forum::partials.timestamp', ['carbon' => $category->newestThread->lastPost->created_at])
                     </div>
                 @endif
                 @if ($category->latestActiveThread)
                     <div>
                         <a href="{{ Forum::route('thread.show', $category->latestActiveThread->lastPost) }}">Re: {{ $category->latestActiveThread->title }}</a>
-                        {{ $category->latestActiveThread->lastPost->created_at->diffForHumans() }}
+                        @include ('forum::partials.timestamp', ['carbon' => $category->latestActiveThread->lastPost->created_at])
                     </div>
                 @endif
             </div>
@@ -55,13 +55,13 @@
                             @if ($subcategory->newestThread)
                                 <div>
                                     <a href="{{ Forum::route('thread.show', $subcategory->newestThread) }}">{{ $subcategory->newestThread->title }}</a>
-                                    {{ $subcategory->newestThread->created_at->diffForHumans() }}
+                                    @include ('forum::partials.timestamp', ['carbon' => $subcategory->newestThread->lastPost->created_at])
                                 </div>
                             @endif
-                            @if ($subcategory->mostRecentlyActiveThread)
+                            @if ($subcategory->latestActiveThread)
                                 <div>
-                                    <a href="{{ Forum::route('thread.show', $subcategory->mostRecentlyActiveThread->lastPost) }}">Re: {{ $subcategory->mostRecentlyActiveThread->title }}</a>
-                                    {{ $subcategory->mostRecentlyActiveThread->lastPost->created_at->diffForHumans() }}
+                                    <a href="{{ Forum::route('thread.show', $subcategory->latestActiveThread->lastPost) }}">Re: {{ $subcategory->latestActiveThread->title }}</a>
+                                    @include ('forum::partials.timestamp', ['carbon' => $subcategory->latestActiveThread->lastPost->created_at])
                                 </div>
                             @endif
                         </div>

@@ -57,16 +57,6 @@ abstract class BaseModel extends Model
         return $query;
     }
 
-    public function getPostedAttribute(): string
-    {
-        return $this->created_at->diffForHumans();
-    }
-
-    public function getUpdatedAttribute(): string
-    {
-        return $this->updated_at->diffForHumans();
-    }
-
     public function withRequestScopes(Request $request): Builder
     {
         return $this->requestWhere($request)->requestWith($request)->requestAppend($request)->requestOrder($request);

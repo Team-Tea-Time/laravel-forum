@@ -111,6 +111,12 @@
         border-radius: 0;
     }
 
+    .timestamp
+    {
+        border-bottom: 1px dotted var(--gray);
+        cursor: help;
+    }
+
     .fixed-bottom-right
     {
         position: fixed;
