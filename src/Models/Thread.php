@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Gate;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
@@ -50,9 +49,7 @@ class Thread extends BaseModel
 
     public function posts(): HasMany
     {
-        $withTrashed = config('forum.general.display_trashed_posts') || Gate::allows('viewTrashedPosts');
-        $query = $this->hasMany(Post::class);
-        return $withTrashed ? $query->withTrashed() : $query;
+        return $this->hasMany(Post::class);
     }
 
     public function firstPost(): HasOne
@@ -71,16 +68,6 @@ class Thread extends BaseModel
         $cutoff = time() - $age;
 
         return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
-    }
-
-    public function getPostsPaginatedAttribute(): LengthAwarePaginator
-    {
-        return $this->posts()->paginate();
-    }
-
-    public function getLastPageAttribute(): int
-    {
-        return $this->postsPaginated->lastPage();
     }
 
     public function getIsOldAttribute(): bool

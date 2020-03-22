@@ -36,8 +36,10 @@ class CategoryController extends BaseController
 
         event(new UserViewingCategory($request->user(), $category));
 
-        $categories = Gate::allows('moveCategories') ? Category::topLevel()->withDepth()->get() : [];
-        $threads = $category->threadsPaginated;
+        $categories = $request->user()->can('moveCategories') ? Category::topLevel()->withDepth()->get() : [];
+
+        $threads = $request->user()->can('viewTrashedThreads') ? $category->threads()->withTrashed() : $category->threads();
+        $threads = $threads->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc')->paginate();
 
         return view('forum::category.show', compact('categories', 'category', 'threads'));
     }

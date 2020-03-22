@@ -88,7 +88,10 @@ class ThreadController extends BaseController
                     ? Category::acceptsThreads()->get()->toTree()
                     : [];
 
-        $posts = $thread->postsPaginated;
+        $posts = config('forum.general.display_trashed_posts') || $request->user()->can('viewTrashedPosts')
+               ? $thread->posts()->withTrashed()
+               : $thread->posts();
+        $posts = $posts->orderBy('created_at', 'desc')->paginate();
 
         return view('forum::thread.show', compact('categories', 'category', 'thread', 'posts'));
     }

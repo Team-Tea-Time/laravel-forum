@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Gate;
 use Kalnoy\Nestedset\NodeTrait;
 
 use TeamTeaTime\Forum\Support\Frontend\Forum;
@@ -38,9 +37,7 @@ class Category extends BaseModel
 
     public function threads(): HasMany
     {
-        $withTrashed = Gate::allows('viewTrashedThreads');
-        $query = $this->hasMany(Thread::class);
-        return $withTrashed ? $query->withTrashed() : $query;
+        return $this->hasMany(Thread::class);
     }
 
     public function newestThread(): HasOne
@@ -71,11 +68,6 @@ class Category extends BaseModel
     public function getRouteAttribute(): string
     {
         return Forum::route('category.show', $this);
-    }
-
-    public function getThreadsPaginatedAttribute(): LengthAwarePaginator
-    {
-        return $this->threads()->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc')->paginate();
     }
 
     public function getNewestThreadId(): ?int
