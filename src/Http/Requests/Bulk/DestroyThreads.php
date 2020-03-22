@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
@@ -21,8 +22,8 @@ class DestroyThreads extends FormRequest implements FulfillableRequest
 
     public function authorizeValidated(): bool
     {
-        $thread = $this->posts()->get();
-        foreach ($thread as $post)
+        $threads = $this->threads()->get();
+        foreach ($threads as $thread)
         {
             if (! $this->user()->can('delete', $thread)) return false;
         }
@@ -52,9 +53,9 @@ class DestroyThreads extends FormRequest implements FulfillableRequest
         return $threads->get();
     }
 
-    private function posts(): Builder
+    private function threads(): Builder
     {
-        $query = $this->user()->can('viewTrashedPosts') ? Post::withTrashed() : Post::query();
-        return $query->whereIn('id', $this->validated()['posts']);
+        $query = $this->user()->can('viewTrashedThreads') ? Thread::withTrashed() : Thread::query();
+        return $query->whereIn('id', $this->validated()['threads']);
     }
 }
