@@ -15,7 +15,6 @@ class Post extends BaseModel
     protected $table = 'forum_posts';
     protected $dates = ['deleted_at'];
     protected $fillable = ['thread_id', 'author_id', 'post_id', 'content'];
-    protected $appends = ['isFirst'];
 
     public function __construct(array $attributes = [])
     {
@@ -36,11 +35,6 @@ class Post extends BaseModel
     public function children(): HasMany
     {
         return $this->hasMany(Post::class, 'post_id')->withTrashed();
-    }
-
-    public function getIsFirstAttribute(): bool
-    {
-        return $this->id == $this->thread->firstPost->id;
     }
 
     public function getSequenceNumber(): int

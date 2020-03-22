@@ -76,7 +76,7 @@
 
         <hr>
 
-        @if (count($posts) > 1 && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)))
+        @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)))
             <form :action="postActions[selectedPostAction]" method="POST">
                 @csrf
                 <input type="hidden" name="_method" :value="postActionMethods[selectedPostAction]" />
@@ -100,7 +100,7 @@
             </div>
         </div>
 
-        @if (count($posts) > 1 && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)))
+        @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)))
             <div class="text-right pb-1">
                 <div class="form-check">
                     <label for="selectAllPosts">
@@ -115,7 +115,7 @@
             @include ('forum::post.partials.list', compact('post'))
         @endforeach
 
-        @if (count($posts) > 1 && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)))
+        @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)))
                 <div class="fixed-bottom-right pb-xs-0 pr-xs-0 pb-sm-3 pr-sm-3">
                     <transition name="fade">
                         <div class="card text-white bg-secondary shadow-sm" v-if="selectedPosts.length">
@@ -348,7 +348,7 @@
         },
         created ()
         {
-            this.posts.data = this.posts.data.filter(post => ! post.isFirst);
+            this.posts.data = this.posts.data.filter(post => post.sequence != 1);
         },
         methods: {
             toggleAll ()

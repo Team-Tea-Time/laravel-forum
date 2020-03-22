@@ -1,4 +1,6 @@
-<?php namespace TeamTeaTime\Forum\Http\Controllers\Api;
+<?php
+
+namespace TeamTeaTime\Forum\Http\Controllers\Api;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -11,7 +13,7 @@ use Illuminate\Validation\ValidationException;
 
 abstract class BaseController extends Controller
 {
-    use AuthorizesRequests, ValidatesRequests;
+    use AuthorizesRequests;
 
     /**
      * @var Request

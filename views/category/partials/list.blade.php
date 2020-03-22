@@ -23,10 +23,10 @@
                         {{ $category->newestThread->created_at->diffForHumans() }}
                     </div>
                 @endif
-                @if ($category->mostRecentlyActiveThread)
+                @if ($category->latestActiveThread)
                     <div>
-                        <a href="{{ Forum::route('thread.show', $category->mostRecentlyActiveThread->lastPost) }}">Re: {{ $category->mostRecentlyActiveThread->title }}</a>
-                        {{ $category->mostRecentlyActiveThread->lastPost->created_at->diffForHumans() }}
+                        <a href="{{ Forum::route('thread.show', $category->latestActiveThread->lastPost) }}">Re: {{ $category->latestActiveThread->title }}</a>
+                        {{ $category->latestActiveThread->lastPost->created_at->diffForHumans() }}
                     </div>
                 @endif
             </div>

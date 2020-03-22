@@ -5,7 +5,7 @@
         @if (! isset($single) || ! $single)
             <span class="float-right">
                 <a href="{{ Forum::route('thread.show', $post) }}">#{{ $post->sequence }}</a>
-                @if (! $post->isFirst)
+                @if ($post->sequence != 1)
                     @can ('deletePosts', $post->thread)
                         <input type="checkbox" name="posts[]" :value="{{ $post->id }}" v-model="selectedPosts">
                     @endcan
@@ -41,7 +41,7 @@
             <div class="text-right">
                 @if (! $post->trashed())
                     <a href="{{ Forum::route('post.show', $post) }}" class="card-link text-muted">{{ trans('forum::general.permalink') }}</a>
-                    @if (! $post->isFirst)
+                    @if ($post->sequence != 1)
                         @can ('delete', $post)
                             <a href="{{ Forum::route('post.confirm-delete', $post) }}" class="card-link text-danger">{{ trans('forum::general.delete') }}</a>
                         @endcan

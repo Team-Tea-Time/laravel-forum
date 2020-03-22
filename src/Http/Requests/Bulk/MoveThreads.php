@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
@@ -10,6 +11,12 @@ use TeamTeaTime\Forum\Models\Category;
 class MoveThreads extends FormRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
+
+    /** @var Category */
+    private $targetCategory;
+
+    /** @var Collection */
+    private $threadsByCategory;
 
     public function rules(): array
     {
@@ -21,13 +28,9 @@ class MoveThreads extends FormRequest implements FulfillableRequest
 
     public function authorizeValidated(): bool
     {
-        $targetCategory = Category::find($this->validated()['category_id']);
+        if (! $this->user()->can('moveThreadsTo', $this->getTargetCategory())) return false;
 
-        if (! $this->user()->can('moveThreadsTo', $targetCategory)) return false;
-
-        $threads = $this->threads()->select('category_id')->distinct()->get();
-
-        foreach ($threads as $thread)
+        foreach ($this->threadsByCategory as $thread)
         {
             if (! $this->user()->can('moveThreadsFrom', $thread->category)) return false;
         }
@@ -37,13 +40,35 @@ class MoveThreads extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        return $this->threads()->update(['category_id' => $this->validated()['category_id']]);
+        foreach ($this->threadsByCategory as $thread)
+        {
+            $thread->category->syncCurrentThreads();
+        }
+
+        $this->threads()->update(['category_id' => $this->validated()['category_id']]);
+        
+        $this->targetCategory->syncCurrentThreads();
     }
 
     private function threads(): Builder
     {
         $query = \DB::table(with(Thread::class)->getTable());
         $query = $this->user()->can('viewTrashedThreads') ? $query->withTrashed() : $query;
+
         return $query->whereIn('id', $this->validated()['threads']);
+    }
+
+    private function getThreadsByCategory()
+    {
+        if (isset($this->threadsByCategory)) return $this->threadsByCategory;
+
+        $this->threadsByCategory = $this->threads()->select('category_id')->distinct()->get();
+    }
+
+    private function getTargetCategory()
+    {
+        if (isset($this->targetCategory)) return $this->targetCategory;
+
+        $this->targetCategory = Category::find($this->validated()['category_id']);
     }
 }

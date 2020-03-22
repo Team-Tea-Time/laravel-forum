@@ -34,13 +34,19 @@ class DestroyThreads extends FormRequest implements FulfillableRequest
     {
         $threads = $this->threads();
 
-        if (config('forum.general.soft_deletes') && $this->validated()['permadelete'] && method_exists(Thread::class, 'forceDelete'))
+        if (config('forum.general.soft_deletes') && isset($this->validated()['permadelete']) && $this->validated()['permadelete'] && method_exists(Thread::class, 'forceDelete'))
         {
             $threads->forceDelete();
         }
         else
         {
             $threads->delete();
+        }
+
+        $threadsByCategory = $threads->select('category_id')->distinct()->get();
+        foreach ($threadsByCategory as $thread)
+        {
+            $thread->category->syncCurrentThreads();
         }
 
         return $threads->get();

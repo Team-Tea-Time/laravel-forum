@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Gate;
@@ -21,7 +22,7 @@ class Thread extends BaseModel
 
     protected $table = 'forum_threads';
     protected $dates = ['deleted_at'];
-    protected $fillable = ['category_id', 'author_id', 'title', 'locked', 'pinned', 'reply_count'];
+    protected $fillable = ['category_id', 'author_id', 'title', 'locked', 'pinned', 'reply_count', 'last_post_id', 'updated_at'];
 
     const STATUS_UNREAD = 'unread';
     const STATUS_UPDATED = 'updated';
@@ -54,6 +55,16 @@ class Thread extends BaseModel
         return $withTrashed ? $query->withTrashed() : $query;
     }
 
+    public function firstPost(): HasOne
+    {
+        return $this->hasOne(Post::class, 'id', 'first_post_id');
+    }
+
+    public function lastPost(): HasOne
+    {
+        return $this->hasOne(Post::class, 'id', 'last_post_id');
+    }
+
     public function scopeRecent(Builder $query): Builder
     {
         $age = strtotime(config('forum.general.old_thread_threshold'), 0);
@@ -72,22 +83,7 @@ class Thread extends BaseModel
         return $this->postsPaginated->lastPage();
     }
 
-    public function getFirstPostAttribute(): Post
-    {
-        return $this->posts()->orderBy('created_at', 'asc')->first();
-    }
-
-    public function getLastPostAttribute(): Post
-    {
-        return $this->posts()->orderBy('created_at', 'desc')->first();
-    }
-
-    public function getLastPostTimeAttribute(): Carbon
-    {
-        return $this->lastPost->created_at;
-    }
-
-    public function getOldAttribute(): bool
+    public function getIsOldAttribute(): bool
     {
         $age = config('forum.general.old_thread_threshold');
         return (! $age || $this->updated_at->timestamp < (time() - strtotime($age, 0)));
@@ -104,16 +100,21 @@ class Thread extends BaseModel
 
     public function getUserReadStatusAttribute(): ?string
     {
-        if ($this->old || ! auth()->check()) return null;
+        if ($this->isOld || ! auth()->check()) return null;
 
         if (is_null($this->reader)) return trans('forum::general.' . self::STATUS_UNREAD);
 
         return ($this->updatedSince($this->reader)) ? trans('forum::general.' . self::STATUS_UPDATED) : null;
     }
 
+    public function getLastPost(): Post
+    {
+        return $this->posts()->orderBy('created_at', 'desc')->first();
+    }
+
     public function markAsRead(int $userId): void
     {
-        if ($this->old) return;
+        if ($this->isOld) return;
 
         if (is_null($this->reader))
         {
@@ -123,5 +124,10 @@ class Thread extends BaseModel
         {
             $this->reader->touch();
         }
+    }
+
+    public function syncLastPost(): bool
+    {
+        return $this->update(['last_post_id' => $this->getLastPost()->id]);
     }
 }

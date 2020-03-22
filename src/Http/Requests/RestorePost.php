@@ -22,6 +22,8 @@ class RestorePost extends FormRequest implements FulfillableRequest
     {
         $post = $this->route('post');
         $post->restoreWithoutTouch();
+        $post->thread->update(['last_post_id' => $post->id]);
+        $post->thread->category->syncLatestActiveThread();
 
         return $post;
     }

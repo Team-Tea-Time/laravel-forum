@@ -34,7 +34,8 @@ class StorePost extends FormRequest implements FulfillableRequest
             'author_id' => $this->user()->getKey()
         ]);
 
-        $post->thread->touch();
+        $thread->update(['last_post_id' => $post->id]);
+        $thread->category->update(['latest_active_thread_id' => $thread->id]);
 
         return $post;
     }

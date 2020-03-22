@@ -32,6 +32,13 @@ class RestorePosts extends FormRequest implements FulfillableRequest
     {
         $posts = $this->posts();
         $posts->restore();
+        
+        $postsByThread = $posts->select('thread_id')->distinct()->get();
+        foreach ($postsByThread as $post)
+        {
+            $post->thread->syncLastPost();
+            $post->thread->category->syncLatestActiveThread();
+        }
 
         return $posts->get();
     }

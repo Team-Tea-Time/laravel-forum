@@ -33,6 +33,12 @@ class RestoreThreads extends FormRequest implements FulfillableRequest
     {
         $threads = $this->threads();
         $threads->restore();
+        
+        $threadsByCategory = $threads->select('category_id')->distinct()->get();
+        foreach ($threadsByCategory as $thread)
+        {
+            $thread->category->syncCurrentThreads();
+        }
 
         return $threads->get();
     }

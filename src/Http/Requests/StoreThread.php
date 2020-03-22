@@ -25,16 +25,27 @@ class StoreThread extends FormRequest implements FulfillableRequest
     public function fulfill()
     {
         $input = $this->validated();
+        $category = $this->route('category');
 
         $thread = Thread::create([
             'author_id' => $this->user()->getKey(),
-            'category_id' => $this->route('category')->id,
+            'category_id' => $category->id,
             'title' => $input['title']
         ]);
 
-        $thread->posts()->create([
+        $post = $thread->posts()->create([
             'author_id' => $this->user()->getKey(),
             'content' => $input['content']
+        ]);
+
+        $thread->update([
+            'first_post_id' => $post->id,
+            'last_post_id' => $post->id
+        ]);
+
+        $thread->category->update([
+            'newest_thread_id' => $thread->id,
+            'latest_active_thread_id' => $thread->id
         ]);
 
         return $thread;

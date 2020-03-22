@@ -36,21 +36,6 @@ class PostObserver
             $post->children()->update(['post_id' => 0]);
         }
 
-        if ($post->thread->posts->isEmpty())
-        {
-            // The containing thread is now empty, so delete the thread accordingly
-            if (!$post->deleted_at || $post->deleted_at->toDateTimeString() !== Carbon::now()->toDateTimeString())
-            {
-                // The post was force-deleted, so the thread should be too
-                $post->thread()->withTrashed()->forceDelete();
-            }
-            else
-            {
-                // The post was soft-deleted, so just soft-delete the thread
-                $post->thread()->delete();
-            }
-        }
-
         // Update sequence numbers for all of the thread's posts
         $post->thread->posts->each(function ($post)
         {
@@ -58,8 +43,8 @@ class PostObserver
             $post->saveWithoutTouch();
         });
 
-        // Update the thread's updated_at timestamp to match the created_at timestamp of its latest post
-        $post->thread->updated_at = $post->thread->lastPostTime;
+        // Update the thread's updated_at timestamp to match the created_at timestamp of its last post
+        $post->thread->updated_at = $post->thread->getLastPost()->created_at;
         $post->thread->save();
 
         Stats::syncForThread($post->thread);
@@ -68,12 +53,6 @@ class PostObserver
 
     public function restored($post)
     {
-        if (is_null($post->thread->posts))
-        {
-            // The containing thread was soft-deleted, so restore that too
-            $post->thread()->withTrashed()->restore();
-        }
-
         Stats::syncForThread($post->thread);
         Stats::syncForCategory($post->thread->category);
     }

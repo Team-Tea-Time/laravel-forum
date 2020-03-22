@@ -24,7 +24,7 @@ class DestroyThread extends FormRequest implements FulfillableRequest
     {
         $thread = $this->route('thread');
 
-        if (! config('forum.general.soft_deletes') || $this->input('permadelete') && method_exists($thread, 'forceDelete'))
+        if (config('forum.general.soft_deletes') && isset($this->validated()['permadelete']) && $this->validated()['permadelete'] && method_exists($thread, 'forceDelete'))
         {
             $thread->forceDelete();
         }
@@ -32,6 +32,8 @@ class DestroyThread extends FormRequest implements FulfillableRequest
         {
             $thread->delete();
         }
+
+        $thread->category->syncCurrentThreads();
 
         return $thread;
     }

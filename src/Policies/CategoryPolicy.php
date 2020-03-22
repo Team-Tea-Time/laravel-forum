@@ -55,7 +55,7 @@ class CategoryPolicy
 
     public function view($user, Category $category): bool
     {
-        return true;
+        return false;
     }
 
     public function delete($user, Category $category): bool

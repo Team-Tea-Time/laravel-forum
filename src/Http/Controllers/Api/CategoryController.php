@@ -12,21 +12,14 @@ class CategoryController
 {
     public function index(Request $request)
     {
-        $categories = $this->service->getAll();
+        $categories = Category::all()->filter(function ($category)
+        {
+            if ($category->is_private) return Gate::allows('view', $category);
 
-        return response($categories);
+            return true;
+        })->toTree();
 
-        // $categories = $this->model()->withRequestScopes($request);
-
-        // $categories = $categories->get()->filter(function ($category) {
-        //     if ($category->private) {
-        //         return Gate::allows('view', $category);
-        //     }
-
-        //     return true;
-        // });
-
-        // return $this->response($categories);
+        return response(['success' => true, 'categories' => $categories]);
     }
 
     /**

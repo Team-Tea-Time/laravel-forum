@@ -11,7 +11,7 @@ class DestroyPost extends FormRequest implements FulfillableRequest
     public function authorize(): bool
     {
         $post = $this->route('post');
-        return ! $post->isFirst && $this->user()->can('delete', $post);
+        return $post->sequence != 1 && $this->user()->can('delete', $post);
     }
 
     public function rules(): array
@@ -25,7 +25,7 @@ class DestroyPost extends FormRequest implements FulfillableRequest
     {
         $post = $this->route('post');
 
-        if (! config('forum.general.soft_deletes') || $this->input('permadelete') && method_exists($post, 'forceDelete'))
+        if (config('forum.general.soft_deletes') && isset($this->validated()['permadelete']) && $this->validated()['permadelete'] && method_exists($post, 'forceDelete'))
         {
             $post->forceDelete();
         }
@@ -33,6 +33,9 @@ class DestroyPost extends FormRequest implements FulfillableRequest
         {
             $post->delete();
         }
+
+        $post->thread->syncLastPost();
+        $post->thread->category->syncLatestActiveThread();
 
         return $post;
     }

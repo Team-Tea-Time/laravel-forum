@@ -28,8 +28,9 @@ $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
     $r->get('/', ['as' => 'index', 'uses' => 'PostController@index']);
     $r->post('/', ['as' => 'store', 'uses' => 'PostController@store']);
     $r->get('{id}', ['as' => 'fetch', 'uses' => 'PostController@fetch']);
-    $r->delete('{id}', ['as' => 'delete', 'uses' => 'PostController@destroy']);
     $r->patch('{id}', ['as' => 'update', 'uses' => 'PostController@update']);
+    $r->delete('{id}', ['as' => 'delete', 'uses' => 'PostController@destroy']);
+    $r->post('{id}/restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
 });
 
 // Bulk actions
