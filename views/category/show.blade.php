@@ -73,7 +73,6 @@
                                                 @can ('deleteThreads', $category)
                                                     <option value="delete">{{ trans('forum::general.delete') }}</option>
                                                     <option value="restore">{{ trans('forum::general.restore') }}</option>
-                                                    <option value="permadelete">{{ trans('forum::general.perma_delete') }}</option>
                                                 @endcan
                                                 @can ('moveThreadsFrom', $category)
                                                     <option value="move">{{ trans('forum::general.move') }}</option>
@@ -95,6 +94,15 @@
                                                 @include ('forum::category.partials.options', ['hide' => $category])
                                             </select>
                                         </div>
+
+                                        @if (config('forum.general.soft_deletes'))
+                                            <div class="form-check mb-3" v-if="selectedAction == 'delete'">
+                                                <input class="form-check-input" type="checkbox" name="permadelete" value="1" id="permadelete">
+                                                <label class="form-check-label" for="permadelete">
+                                                    {{ trans('forum::general.perma_delete') }}
+                                                </label>
+                                            </div>
+                                        @endif
 
                                         <div class="text-right">
                                             <button type="submit" class="btn btn-primary" @click="submit">{{ trans('forum::general.proceed') }}</button>

@@ -61,7 +61,7 @@ class ThreadController extends BaseController
     {
         $count = $request->fulfill();
 
-        return $this->bulkActionResponse($count, 'threads.updated');
+        return $this->bulkActionResponse($count, 'threads.deleted');
     }
 
     public function restore(RestoreThreads $request): RedirectResponse
