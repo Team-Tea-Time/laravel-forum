@@ -76,7 +76,7 @@ return [
     'pagination' => [
         'categories' => 50,
         'threads' => 20,
-        'posts' => 3
+        'posts' => 20
     ],
 
     /*
