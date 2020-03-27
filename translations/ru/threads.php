@@ -13,6 +13,7 @@ return [
     'new_updated' => "Новые и обновленные ветки",
     'newest' => "Новейшая ветка",
     'none_found' => "Нет веток",
+    'perma_delete' => "Permanently delete thread|Permanently delete threads",
     'perma_deleted' => "Тема удалена навсегда|Темы удалены навсегда",
     'pin' => "Закрепить",
     'pinned' => "Закреплено",

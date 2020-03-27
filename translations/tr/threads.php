@@ -13,6 +13,7 @@ return [
     'new_updated' => "Yeni & güncellenen konular",
     'newest' => "Son Konular",
     'none_found' => "Konu bulunamadı",
+    'perma_delete' => "Permanently delete thread|Permanently delete threads",
     'perma_deleted' => "Konu kalıcı olarak silindi|Konular kalıcı olarak silindi",
     'pin' => "Sabitle",
     'pinned' => "Sabitlendi",

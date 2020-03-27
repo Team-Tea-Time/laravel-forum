@@ -13,6 +13,7 @@ return [
     'new_updated' => "Tópico novo e atualizado",
     'newest' => "Novos tópicos",
     'none_found' => "Nenhum tópico encontrado",
+    'perma_delete' => "Permanently delete thread|Permanently delete threads",
     'perma_deleted' => "Tópico permanentemente deletado|Tópicos permanentementes deletados",
     'pin' => "Destaque",
     'pinned' => "Destacado",

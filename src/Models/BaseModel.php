@@ -79,6 +79,20 @@ abstract class BaseModel extends Model
         $this->timestamps = true;
     }
 
+    public function deleteWithoutTouch()
+    {
+        $this->timestamps = false;
+        $this->delete();
+        $this->timestamps = true;
+    }
+
+    public function forceDeleteWithoutTouch()
+    {
+        $this->timestamps = false;
+        $this->forceDelete();
+        $this->timestamps = true;
+    }
+
     public function restoreWithoutTouch()
     {
         $this->timestamps = false;

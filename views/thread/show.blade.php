@@ -7,17 +7,18 @@
             
             <div>
                 @if (Gate::allows('delete', $thread) || Gate::allows('restore', $thread))
-                    <div class="btn-group" role="group">
-                        @if ($thread->trashed() && Gate::allows('restore', $thread))
-                            <a href="#" class="btn btn-secondary" data-open-modal="restore-thread">
-                                <i data-feather="refresh-cw"></i> {{ trans('forum::general.restore') }}
-                            </a>
-                        @elseif (Gate::allows('delete', $thread))
-                            <a href="#" class="btn btn-danger mr-3" data-open-modal="delete-thread">
-                                <i data-feather="trash"></i> {{ trans('forum::general.delete') }}
-                            </a>
-                        @endif
-                    </div>
+                    @if ($thread->trashed() && Gate::allows('restore', $thread))
+                        <a href="#" class="btn btn-danger mr-3" data-open-modal="perma-delete-thread">
+                            <i data-feather="trash"></i> {{ trans('forum::general.perma_delete') }}
+                        </a>
+                        <a href="#" class="btn btn-secondary" data-open-modal="restore-thread">
+                            <i data-feather="refresh-cw"></i> {{ trans('forum::general.restore') }}
+                        </a>
+                    @elseif (Gate::allows('delete', $thread))
+                        <a href="#" class="btn btn-danger mr-3" data-open-modal="delete-thread">
+                            <i data-feather="trash"></i> {{ trans('forum::general.delete') }}
+                        </a>
+                    @endif
                 @endif
 
                 @can ('manageThreads', $category)
@@ -208,6 +209,23 @@
                     <button type="submit" class="btn btn-danger">{{ trans('forum::general.proceed') }}</button>
                 @endslot
             @endcomponent
+
+            @if (config('forum.general.soft_deletes'))
+                @component('forum::modal-form')
+                    @slot('key', 'perma-delete-thread')
+                    @slot('title', '<i data-feather="trash" class="text-muted"></i>' . trans_choice('forum::threads.perma_delete', 1))
+                    @slot('route', Forum::route('thread.delete', $thread))
+                    @slot('method', 'DELETE')
+
+                    <input type="hidden" name="permadelete" value="1" />
+
+                    {{ trans('forum::general.generic_confirm') }}
+
+                    @slot('actions')
+                        <button type="submit" class="btn btn-danger">{{ trans('forum::general.proceed') }}</button>
+                    @endslot
+                @endcomponent
+            @endif
         @endcan
 
         @if (! $thread->trashed())

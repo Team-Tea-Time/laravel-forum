@@ -13,6 +13,7 @@ return [
     'new_updated' => "Nieuwe & geüpdate onderwerpen",
     'newest' => "Nieuwste onderwerp",
     'none_found' => "Geen onderwerpen gevonden",
+    'perma_delete' => "Permanently delete thread|Permanently delete threads",
     'perma_deleted' => "Onderwerp permanent verwijderd|Onderwerpen permanent verwijderd",
     'pin' => "Vastpinnen",
     'pinned' => "Vastgepind",

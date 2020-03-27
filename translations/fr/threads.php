@@ -13,6 +13,7 @@ return [
     'new_updated' => "Nouvelles et mises à jour les discussions",
     'newest' => "Sujet récent",
     'none_found' => "Aucun sujet trouvé",
+    'perma_delete' => "Permanently delete thread|Permanently delete threads",
     'perma_deleted' => "Sujet définitivement supprimé|Sujets définitivement supprimés",
     'pin' => "Épingler",
     'pinned' => "Épinglé",
