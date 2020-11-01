@@ -34,12 +34,12 @@ $r->group(['prefix' => 'posts', 'as' => 'post.'], function ($r)
 });
 
 // Bulk actions
-$r->group(['prefix' => 'bulk', 'as' => 'bulk.'], function ($r)
+$r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function ($r)
 {
     // Categories
     $r->group(['prefix' => 'categories', 'as' => 'category.'], function ($r)
     {
-        $r->post('manage', ['as' => 'manage', 'uses' => 'CategoryController@bulkManage']);
+        $r->post('manage', ['as' => 'manage', 'uses' => 'CategoryController@manage']);
     });
 
     // Threads
