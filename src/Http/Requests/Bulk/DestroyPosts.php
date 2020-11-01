@@ -3,12 +3,12 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Foundation\Http\FormRequest;
+use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Post;
 
-class DestroyPosts extends FormRequest implements FulfillableRequest
+class DestroyPosts extends BaseRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 
@@ -35,7 +35,7 @@ class DestroyPosts extends FormRequest implements FulfillableRequest
     {
         $posts = $this->posts();
 
-        if (config('forum.general.soft_deletes') && isset($this->validated()['permadelete']) && $this->validated()['permadelete'] && method_exists(Post::class, 'forceDelete'))
+        if (config('forum.general.soft_deletes') && $this->isPermaDeleteRequested() && method_exists(Post::class, 'forceDelete'))
         {
             $post->forceDelete();
         }

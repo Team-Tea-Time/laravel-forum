@@ -2,12 +2,11 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Thread;
 
-class DestroyThread extends FormRequest implements FulfillableRequest
+class DestroyThread extends BaseRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {
@@ -61,10 +60,5 @@ class DestroyThread extends FormRequest implements FulfillableRequest
         }
 
         return $thread;
-    }
-
-    private function isPermaDeleting(): bool
-    {
-        return ! config('forum.general.soft_deletes') || isset($this->validated()['permadelete']) && $this->validated()['permadelete'];
     }
 }

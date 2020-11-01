@@ -2,12 +2,11 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Thread;
 
-class MarkThreadsRead extends FormRequest implements FulfillableRequest
+class MarkThreadsRead extends BaseRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {
