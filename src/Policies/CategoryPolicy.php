@@ -1,4 +1,6 @@
-<?php namespace TeamTeaTime\Forum\Policies;
+<?php
+
+namespace TeamTeaTime\Forum\Policies;
 
 use TeamTeaTime\Forum\Models\Category;
 
@@ -53,9 +55,14 @@ class CategoryPolicy
         return true;
     }
 
+    public function markThreadsAsRead($user, Category $category): bool
+    {
+        return true;
+    }
+
     public function view($user, Category $category): bool
     {
-        return false;
+        return true;
     }
 
     public function delete($user, Category $category): bool

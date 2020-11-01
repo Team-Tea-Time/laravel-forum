@@ -1,4 +1,6 @@
-<?php namespace TeamTeaTime\Forum\Policies;
+<?php
+
+namespace TeamTeaTime\Forum\Policies;
 
 class ForumPolicy
 {
@@ -23,7 +25,7 @@ class ForumPolicy
         return true;
     }
 
-    public function markNewThreadsAsRead($user): bool
+    public function markThreadsAsRead($user): bool
     {
         return true;
     }

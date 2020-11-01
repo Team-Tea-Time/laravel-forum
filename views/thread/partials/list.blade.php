@@ -19,7 +19,7 @@
             @if ($thread->locked)
                 <span class="badge badge-pill badge-warning">{{ trans('forum::threads.locked') }}</span>
             @endif
-            @if ($thread->userReadStatus != null && ! $thread->trashed())
+            @if ($thread->userReadStatus !== null && ! $thread->trashed())
                 <span class="badge badge-pill badge-success">{{ trans($thread->userReadStatus) }}</span>
             @endif
             @if ($thread->trashed())

@@ -140,6 +140,16 @@
         @endif
     </div>
 
+    @can ('markThreadsAsRead')
+        <div class="text-center">
+            <button class="btn btn-primary px-5" data-open-modal="mark-threads-as-read">
+                <i data-feather="book"></i> {{ trans('forum::general.mark_read') }}
+            </button>
+        </div>
+
+        @include ('forum::category.modals.mark-threads-as-read')
+    @endcan
+
     @can('manageCategories')
         @include ('forum::category.modals.edit')
         @include ('forum::category.modals.delete')

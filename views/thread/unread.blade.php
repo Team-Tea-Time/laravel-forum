@@ -10,19 +10,6 @@
                     @include ('forum::thread.partials.list')
                 @endforeach
             </div>
-
-            @can ('markNewThreadsAsRead')
-                <div class="text-center">
-                    <form action="{{ Forum::route('unread.mark-read') }}" method="POST" onsubmit="return confirm('{{ trans('forum::general.generic_confirm') }}')">
-                        @csrf
-                        @method('patch')
-
-                        <button class="btn btn-primary px-5">
-                            <i data-feather="book"></i> {{ trans('forum::general.mark_read') }}
-                        </button>
-                    </form>
-                </div>
-            @endcan
         @else
             <div class="card my-3">
                 <div class="card-body text-center text-muted">
@@ -31,4 +18,14 @@
             </div>
         @endif
     </div>
+
+    @can ('markThreadsAsRead')
+        <div class="text-center">
+            <button class="btn btn-primary px-5" data-open-modal="mark-as-read">
+                <i data-feather="book"></i> {{ trans('forum::general.mark_read') }}
+            </button>
+        </div>
+
+        @include ('forum::thread.modals.mark-as-read')
+    @endcan
 @stop

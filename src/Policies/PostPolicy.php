@@ -1,4 +1,6 @@
-<?php namespace TeamTeaTime\Forum\Policies;
+<?php
+
+namespace TeamTeaTime\Forum\Policies;
 
 use Illuminate\Support\Facades\Gate;
 use TeamTeaTime\Forum\Models\Post;

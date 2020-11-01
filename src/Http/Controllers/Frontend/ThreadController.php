@@ -13,7 +13,7 @@ use TeamTeaTime\Forum\Events\UserViewingThread;
 use TeamTeaTime\Forum\Events\UserViewingUnread;
 use TeamTeaTime\Forum\Http\Requests\DestroyThread;
 use TeamTeaTime\Forum\Http\Requests\LockThread;
-use TeamTeaTime\Forum\Http\Requests\MarkThreadsRead;
+use TeamTeaTime\Forum\Http\Requests\MarkThreadsAsRead;
 use TeamTeaTime\Forum\Http\Requests\MoveThread;
 use TeamTeaTime\Forum\Http\Requests\PinThread;
 use TeamTeaTime\Forum\Http\Requests\RenameThread;
@@ -51,14 +51,9 @@ class ThreadController extends BaseController
     {
         $threads = Thread::recent();
 
-        if ($request->has('category_id'))
-        {
-            $threads = $threads->where('category_id', $request->input('category_id'));
-        }
-
         $threads = $threads->get()->filter(function ($thread)
         {
-            return $thread->userReadStatus != null
+            return $thread->userReadStatus !== null
                 && (! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category));
         });
 
@@ -67,9 +62,16 @@ class ThreadController extends BaseController
         return view('forum::thread.unread', compact('threads'));
     }
 
-    public function markRead(MarkThreadsRead $request): RedirectResponse
+    public function markAsRead(MarkThreadsAsRead $request): RedirectResponse
     {
-        $request->fulfill();
+        $category = $request->fulfill();
+
+        if ($category !== null)
+        {
+            Forum::alert('success', 'categories.marked_read', 1, ['category' => $category->title]);
+
+            return redirect(Forum::route('category.show', $category));
+        }
 
         Forum::alert('success', 'threads.marked_read');
 
