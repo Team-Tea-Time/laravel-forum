@@ -32,11 +32,11 @@ class CategoryController extends BaseController
 
     public function show(Request $request, Category $category): View
     {
-        if ($category->is_private && ! $request->user() || ! $request->user()->can('view', $category)) abort(404);
+        if ($category->is_private && (! $request->user() || ! $request->user()->can('view', $category))) abort(404);
 
         event(new UserViewingCategory($request->user(), $category));
 
-        $categories = $request->user() && $request->user()->can('moveCategories') ? Category::topLevel()->withDepth()->get() : [];
+        $categories = $request->user() && $request->user()->can('moveCategories') ? Category::defaultOrder()->withDepth()->get() : [];
 
         $threads = $request->user() && $request->user()->can('viewTrashedThreads') ? $category->threads()->withTrashed() : $category->threads();
         $threads = $threads->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc')->paginate();
