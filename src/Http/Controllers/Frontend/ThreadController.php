@@ -39,7 +39,7 @@ class ThreadController extends BaseController
         // Filter the threads according to the user's permissions
         $threads = $threads->get()->filter(function ($thread)
         {
-            return (! $thread->category->private || $request->user() != null && $request->user()->can('view', $thread->category));
+            return (! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category));
         });
 
         event(new UserViewingRecent($request->user(), $threads));
@@ -59,7 +59,7 @@ class ThreadController extends BaseController
         $threads = $threads->get()->filter(function ($thread)
         {
             return $thread->userReadStatus != null
-                && (! $thread->category->private || $request->user()->can('view', $thread->category));
+                && (! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category));
         });
 
         event(new UserViewingUnread($request->user(), $threads));
@@ -88,7 +88,7 @@ class ThreadController extends BaseController
                     ? Category::acceptsThreads()->get()->toTree()
                     : [];
 
-        $posts = config('forum.general.display_trashed_posts') || $request->user()->can('viewTrashedPosts')
+        $posts = config('forum.general.display_trashed_posts') || $request->user() && $request->user()->can('viewTrashedPosts')
                ? $thread->posts()->withTrashed()
                : $thread->posts();
         $posts = $posts->orderBy('created_at', 'asc')->paginate();
