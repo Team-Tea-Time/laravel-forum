@@ -13,6 +13,7 @@ return [
     'new_updated' => "Nya & uppdaterade trådar",
     'newest' => "Senaste tråden",
     'none_found' => "Inga trådar hittades",
+    'perma_delete' => "Permanently delete thread|Permanently delete threads",
     'perma_deleted' => "Tråd bort permanent|Ämnen bort permanent",
     'pin' => "Pin",
     'pinned' => "Pinnad",

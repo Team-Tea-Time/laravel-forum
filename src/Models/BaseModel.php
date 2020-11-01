@@ -74,15 +74,30 @@ abstract class BaseModel extends Model
 
     public function saveWithoutTouch()
     {
-        $this->timestamps = false;
-        $this->save();
-        $this->timestamps = true;
+        $this->withoutTouch('save');
+    }
+
+    public function deleteWithoutTouch()
+    {
+        $this->withoutTouch('delete');
+    }
+
+    public function forceDeleteWithoutTouch()
+    {
+        $this->withoutTouch('forceDelete');
     }
 
     public function restoreWithoutTouch()
     {
+        $this->withoutTouch('restore');
+    }
+
+    protected function withoutTouch(string $method)
+    {
+        if (! is_callable([$this, $method])) throw new \Exception("Method '{$method}' is not callable.");
+
         $this->timestamps = false;
-        $this->restore();
+        $this->{$method}();
         $this->timestamps = true;
     }
 }

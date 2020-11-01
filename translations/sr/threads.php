@@ -13,6 +13,7 @@ return [
     'new_updated' => "Nove i izmenjene teme",
     'newest' => "Najnovija tema",
     'none_found' => "Teme nisu nadđene",
+    'perma_delete' => "Permanently delete thread|Permanently delete threads",
     'perma_deleted' => "Tema trajno izbrisana|Teme trajno izbrisane",
     'pin' => "Zakači",
     'pinned' => "Zakačeno",

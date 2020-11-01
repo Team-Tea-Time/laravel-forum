@@ -13,6 +13,7 @@ return [
     'new_updated' => "Discuții noi și actualizate",
     'newest' => "Cea mai nouă discuție",
     'none_found' => "Nicio discuție găsită",
+    'perma_delete' => "Permanently delete thread|Permanently delete threads",
     'perma_deleted' => "Discuție șters definitiv|Discuții șters definitiv",
     'pin' => "Fixa",
     'pinned' => "Fixate",

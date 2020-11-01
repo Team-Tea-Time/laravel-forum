@@ -13,6 +13,7 @@ return [
     'new_updated' => "Discusiones nuevas y actualizadas",
     'newest' => "Discusiones nuevas",
     'none_found' => "No se encontraron discusiones",
+    'perma_delete' => "Permanently delete thread|Permanently delete threads",
     'perma_deleted' => "Discusión eliminará de forma permanente|Discusiones eliminarán de forma permanente",
     'post_the_first' => "Crea la priméra!",
     'pin' => "Sujetar",

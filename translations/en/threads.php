@@ -12,6 +12,7 @@ return [
     'new_thread' => "New thread",
     'newest' => "Newest thread",
     'none_found' => "No threads found",
+    'perma_delete' => "Permanently delete thread|Permanently delete threads",
     'perma_deleted' => "Thread permanently deleted|Threads permanently deleted",
     'pin' => "Pin",
     'pinned' => "Pinned",

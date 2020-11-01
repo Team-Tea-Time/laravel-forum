@@ -2,12 +2,10 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
-class MoveThread extends FormRequest implements FulfillableRequest
+class MoveThread extends BaseRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {

@@ -29,23 +29,4 @@ class ThreadObserver
             $newCategory->save();
         }
     }
-
-    public function deleted($thread)
-    {
-        if (! $thread->deleted_at || $thread->deleted_at->toDateTimeString() !== Carbon::now()->toDateTimeString())
-        {
-            // The thread was force-deleted, so the posts should be too
-            $thread->posts()->withTrashed()->forceDelete();
-
-            $thread->readers()->detach();
-        }
-
-        Stats::syncForCategory($thread->category);
-    }
-
-    public function restored($thread)
-    {
-        Stats::syncForThread($thread);
-        Stats::syncForCategory($thread->category);
-    }
 }

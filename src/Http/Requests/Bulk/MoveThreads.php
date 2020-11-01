@@ -3,12 +3,12 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Http\FormRequest;
+use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
 
-class MoveThreads extends FormRequest implements FulfillableRequest
+class MoveThreads extends BaseRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 

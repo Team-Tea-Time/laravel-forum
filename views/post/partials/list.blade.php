@@ -1,5 +1,5 @@
 <div id="post-{{ $post->sequence }}"
-    class="post card mb-2 {{ $post->trashed() ? 'deleted' : '' }}"
+    class="post card mb-2 {{ $post->trashed() || $thread->trashed() ? 'deleted' : '' }}"
     :class="{ 'border-primary': selectedPosts.includes({{ $post->id }}) }">
     <div class="card-header">
         @if (! isset($single) || ! $single)
@@ -27,7 +27,7 @@
             @include ('forum::post.partials.quote', ['post' => $post->parent])
         @endif
 
-        @if ($post->trashed())
+        @if ($post->trashed() || $thread->trashed())
             @can ('viewTrashedPosts')
                 {!! Forum::render($post->content) !!}
                 <br>

@@ -94,6 +94,11 @@ class Thread extends BaseModel
         return ($this->updatedSince($this->reader)) ? trans('forum::general.' . self::STATUS_UPDATED) : null;
     }
 
+    public function getPostCountAttribute(): int
+    {
+        return $this->reply_count + 1;
+    }
+
     public function getLastPost(): Post
     {
         return $this->posts()->orderBy('created_at', 'desc')->first();

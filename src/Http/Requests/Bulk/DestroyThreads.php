@@ -3,13 +3,13 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
+use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Thread;
 
-class DestroyThreads extends FormRequest implements FulfillableRequest
+class DestroyThreads extends BaseRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 
@@ -68,11 +68,6 @@ class DestroyThreads extends FormRequest implements FulfillableRequest
         }
 
         return $rowsAffected;
-    }
-
-    private function isPermaDeleting(): bool
-    {
-        return ! config('forum.general.soft_deletes') || isset($this->validated()['permadelete']) && $this->validated()['permadelete'];
     }
 
     private function threads(): Builder

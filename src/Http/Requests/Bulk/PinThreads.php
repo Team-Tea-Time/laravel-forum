@@ -2,11 +2,11 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
-use Illuminate\Foundation\Http\FormRequest;
+use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
-class PinThreads extends FormRequest implements FulfillableRequest
+class PinThreads extends BaseRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 

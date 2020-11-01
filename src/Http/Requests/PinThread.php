@@ -2,10 +2,9 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
-class PinThread extends FormRequest implements FulfillableRequest
+class PinThread extends BaseRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {

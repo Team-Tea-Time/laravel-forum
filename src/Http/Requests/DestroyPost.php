@@ -2,11 +2,10 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Post;
 
-class DestroyPost extends FormRequest implements FulfillableRequest
+class DestroyPost extends BaseRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {
@@ -25,7 +24,7 @@ class DestroyPost extends FormRequest implements FulfillableRequest
     {
         $post = $this->route('post');
 
-        if (config('forum.general.soft_deletes') && isset($this->validated()['permadelete']) && $this->validated()['permadelete'] && method_exists($post, 'forceDelete'))
+        if (config('forum.general.soft_deletes') && $this->isPermaDeleteRequested && is_callable([$post, 'forceDelete']))
         {
             $post->forceDelete();
         }
