@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    container_name: laravel-forum-tests-mysql
+    tmpfs: /var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: laravel_forum_tests
+      MYSQL_USER: laravel_forum_tests
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+
+  composer:
+    image: composer:2.0.3
+    container_name: laravel-forum-tests-composer
+    environment:
+      COMPOSER_CACHE_DIR: /app/var/cache/composer
+    volumes:
+      - .:/app
+    restart: never
+
+  phpunit:
+    container_name: laravel-forum-tests-phpunit
+    build:
+      context: .
+      dockerfile: docker/phpunit/Dockerfile
+    restart: "no"
+    volumes:
+      - .:/app
+    networks:
+      - default
+    working_dir: /app
+    entrypoint: vendor/bin/phpunit

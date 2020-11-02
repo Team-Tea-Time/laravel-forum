@@ -2,20 +2,26 @@
 
 namespace TeamTeaTime\Forum\Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
 class TestCase extends \Orchestra\Testbench\TestCase
 {
-    protected function getPackageProviders($app)
+    use RefreshDatabase;
+
+    protected function setUp(): void
     {
-        return ['TeamTeaTime\Forum\ForumServiceProvider'];
+        parent::setUp();
+
+        $this->loadLaravelMigrations();
+
+        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
     }
 
-    protected function getEnvironmentSetUp($app)
+    protected function getPackageProviders($app)
     {
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => '',
-        ]);
+        return [
+            'Kalnoy\Nestedset\NestedSetServiceProvider',
+            'TeamTeaTime\Forum\ForumServiceProvider'
+        ];
     }
 }
