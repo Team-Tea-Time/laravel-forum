@@ -18,9 +18,9 @@
     <php>
         <env name="APP_ENV" value="testing" />
         <env name="DB_CONNECTION" value="mysql" />
-        <env name="DB_HOST" value="laravel-forum-tests-mysql" />
-        <env name="DB_DATABASE" value="laravel_forum_tests" />
-        <env name="DB_USERNAME" value="laravel_forum_tests" />
+        <env name="DB_HOST" value="lf-tests-mysql" />
+        <env name="DB_DATABASE" value="tests" />
+        <env name="DB_USERNAME" value="tests" />
         <env name="DB_PASSWORD" value="secret" />
         <env name="CACHE_DRIVER" value="array" />
         <env name="SESSION_DRIVER" value="array" />
