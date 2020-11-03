@@ -50,39 +50,26 @@ If you wish to contribute, an easy way to set up the package for local developme
 
 ### Tests
 
-A GitHub Actions workflow is set up to automatically run tests via Docker for new commits and PRs. For details on how to use the images locally, see below.
+A GitHub Actions workflow is set up to automatically run tests via Docker for new commits and PRs.
 
 ### Running tests locally
 
-#### Setup
+Docker Compose can be used to build and run the images for tests.
 
-Build the MySQL and PHPUnit images:
+First, bring up the MySQL service:
 
 ```bash
-docker build -t mysql:latest -f docker/mysql/Dockerfile .
-docker build -t phpunit:latest -f docker/phpunit/Dockerfile .
+docker-compose up -d mysql
 ```
 
-Create a network to share between the MySQL and PHPUnit containers:
+Then install Composer dependencies:
 
 ```bash
-docker network create -d bridge lf-tests
+docker-compose run composer install
 ```
 
-Start the MySQL service:
+Run the phpunit container to execute tests:
 
 ```bash
-docker run -d --name lf-tests-mysql --network lf-tests --mount type=tmpfs,destination=/var/lib/mysql mysql:latest
-```
-
-Install Composer dependencies:
-
-```bash
-docker run -v "$(pwd):/app" composer:2.0.3 install
-```
-
-#### Execution
-
-```bash
-docker run -v "$(pwd):/app" --network lf-tests phpunit:latest
+docker-compose run phpunit
 ```
