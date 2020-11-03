@@ -48,13 +48,9 @@ Laravel Forum currently supports 13 languages: German, English, Spanish, French,
 
 If you wish to contribute, an easy way to set up the package for local development is [Team-Tea-Time/laravel-studio](https://github.com/Team-Tea-Time/laravel-studio), which is set up to load a local working copy of this repository (see the [readme](https://github.com/Team-Tea-Time/laravel-studio/blob/6.x/readme.md#usage) for usage details).
 
-### Tests
+### Running tests
 
-A GitHub Actions workflow is set up to automatically run tests via Docker for new commits and PRs.
-
-### Running tests locally
-
-Docker Compose can be used to build and run the images for tests.
+Docker Compose can be used to build and run the images for tests locally.
 
 First, bring up the MySQL service:
 
