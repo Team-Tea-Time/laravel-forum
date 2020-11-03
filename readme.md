@@ -50,15 +50,13 @@ If you wish to contribute, an easy way to set up the package for local developme
 
 ### Running tests
 
-Docker Compose can be used to build and run the images for tests locally.
-
-First, bring up the MySQL service:
+Bring up the MySQL service:
 
 ```bash
 docker-compose up -d mysql
 ```
 
-Then install Composer dependencies:
+Install Composer dependencies:
 
 ```bash
 docker-compose run composer install

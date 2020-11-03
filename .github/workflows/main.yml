@@ -13,19 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build images
-        run: |
-          docker build -t mysql:latest -f docker/mysql/Dockerfile .
-          docker build -t phpunit:latest -f docker/phpunit/Dockerfile .
-
-      - name: Create network
-        run: docker network create -d bridge lf-tests
-
       - name: Bring up MySQL service
-        run: docker run -d --name lf-tests-mysql --network lf-tests --mount type=tmpfs,destination=/var/lib/mysql mysql:latest
+        run: docker-compose up -d mysql
 
       - name: Run Composer install
-        run: docker run -v "$(pwd):/app" composer:2.0.3 install
+        run: docker-compose run composer install
 
       - name: Run PHPUnit
-        run: docker run -v "$(pwd):/app" --network lf-tests phpunit:latest
+        run: docker-compose run phpunit
