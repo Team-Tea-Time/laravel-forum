@@ -34,10 +34,6 @@ Run your migrations:
 
 ### Additional steps
 
-#### Server configuration
-
-If you installed Xdebug before version 2.3, you may need to modify `xdebug.max_nesting_level`. The suggested and new default value from version 2.3 onwards is `256`.
-
 #### Configuration
 
 Several configuration files are published to your application's config directory, each prefixed with `forum.`. Refer to these for a variety of options for changing the behaviour of the forum and how it integrates with key parts of your application code.
@@ -46,21 +42,19 @@ Several configuration files are published to your application's config directory
 
 #### Translations
 
-Laravel Forum currently supports 11 languages: German, English, Spanish, French, Italian, Romanian, Russian, Turkish, Serbian, Portuguese (Brazil) and Swedish. The translation files are published to `resources/lang/vendor/forum/{locale}`. **Some new language strings have been introduced in 5.0 but not yet translated; PRs to translate these would be greatly appreciated.**
-
-#### Policies (user permissions)
-
-Permissions in 3.0 are handled via the [Authorization features](http://laravel.com/docs/5.1/authorization) introduced in Laravel 5.1.11. Refer to [src/Policies](https://github.com/Riari/laravel-forum/tree/3.0/src/Policies) for a full list of policies. To override methods in a policy, just create a class extension for it somewhere in your application and change the corresponding namespace specified in the `forum.integration.policies` config array. **You'll likely want to do this for the ForumPolicy and CategoryPolicy as a minimum to prevent your regular users from managing categories and threads!**
+Laravel Forum currently supports 13 languages: German, English, Spanish, French, Italian, Dutch, Romanian, Russian, Thai, Turkish, Serbian, Portuguese (Brazil) and Swedish. The translation files are published to `resources/lang/vendor/forum/{locale}`. **Some new language strings have been introduced in 5.0 but not yet translated; PRs to translate these would be greatly appreciated.**
 
 ## Development
+
+If you wish to contribute, an easy way to set up the package for local development is [Team-Tea-Time/laravel-studio](https://github.com/Team-Tea-Time/laravel-studio), which is set up to load a local working copy of this repository (see the [readme](https://github.com/Team-Tea-Time/laravel-studio/blob/6.x/readme.md#usage) for usage details).
 
 ### Tests
 
 A GitHub Actions workflow is set up to automatically run tests via Docker for new commits and PRs. For details on how to use the images locally, see below.
 
-#### Local execution
+### Running tests locally
 
-**Setup**
+#### Setup
 
 Build the MySQL and PHPUnit images:
 
@@ -87,7 +81,7 @@ Install Composer dependencies:
 docker run -v "$(pwd):/app" composer:2.0.3 install
 ```
 
-**Execution**
+#### Execution
 
 ```bash
 docker run -v "$(pwd):/app" --network lf-tests phpunit:latest
