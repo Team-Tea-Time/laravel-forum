@@ -59,11 +59,11 @@ docker-compose up -d mysql
 Install Composer dependencies:
 
 ```bash
-docker-compose run composer install
+docker-compose run --rm composer install
 ```
 
 Run the phpunit container to execute tests:
 
 ```bash
-docker-compose run phpunit
+docker-compose run --rm phpunit
 ```

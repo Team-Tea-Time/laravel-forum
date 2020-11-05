@@ -8,9 +8,10 @@ use TeamTeaTime\Forum\Models\Thread;
 
 class StoreThread extends BaseRequest implements FulfillableRequest
 {
-    public function authorize(Category $category): bool
+    public function authorize(): bool
     {
-        return $this->user()->can('createThreads', $category);
+        $category = $this->route('category');
+        return $category->accepts_threads && $this->user() != null && $this->user()->can('createThreads', $category);
     }
 
     public function rules(): array
