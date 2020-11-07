@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\Factories\UserFactory;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Models\Category;
@@ -33,6 +34,40 @@ class ThreadStoreTest extends TestCase
     }
 
     /** @test */
+    public function should_302_when_not_logged_in()
+    {
+        // Create dummy route for the default redirection
+        Route::get('login', ['as' => 'login'], function () {
+            return '';
+        });
+
+        $response = $this->post(Forum::route($this->route, $this->category), []);
+        $response->assertStatus(302);
+    }
+
+    /** @test */
+    public function should_403_when_category_doesnt_accept_threads()
+    {
+        $category = $this->categoryFactory->createOne(['accepts_threads' => 0]);
+        $response = $this->actingAs($this->user)
+            ->post(Forum::route($this->route, $category), []);
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function should_fail_validation_without_a_title()
+    {
+        $response = $this->actingAs($this->user)
+            ->post(Forum::route($this->route, $this->category), [
+                'title' => "",
+                'content' => "Thread content"
+            ]);
+
+        $response->assertSessionHasErrors();
+    }
+
+    /** @test */
     public function should_fail_validation_without_content()
     {
         $response = $this->actingAs($this->user)
@@ -45,25 +80,7 @@ class ThreadStoreTest extends TestCase
     }
 
     /** @test */
-    public function should_403_when_not_logged_in()
-    {
-        $response = $this->post(Forum::route($this->route, $this->category), []);
-        
-        $response->assertStatus(403);
-    }
-
-    /** @test */
-    public function should_403_when_category_doesnt_accept_threads()
-    {
-        $category = $this->categoryFactory->createOne(['accepts_threads' => 0]);
-        $response = $this->actingAs($this->user)
-            ->post(Forum::route($this->route, $category), []);
-        
-        $response->assertStatus(403);
-    }
-
-    /** @test */
-    public function should_create_a_thread_and_post()
+    public function should_create_a_post_with_the_thread()
     {
         $this->actingAs($this->user)
             ->post(Forum::route($this->route, $this->category), [

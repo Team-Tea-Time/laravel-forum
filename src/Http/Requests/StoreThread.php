@@ -11,7 +11,7 @@ class StoreThread extends BaseRequest implements FulfillableRequest
     public function authorize(): bool
     {
         $category = $this->route('category');
-        return $category->accepts_threads && $this->user() != null && $this->user()->can('createThreads', $category);
+        return $category->accepts_threads && $this->user()->can('createThreads', $category);
     }
 
     public function rules(): array
