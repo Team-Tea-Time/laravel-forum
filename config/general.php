@@ -68,8 +68,8 @@ return [
     | Pagination
     |--------------------------------------------------------------------------
     |
-    | "Per page" values for each model. These are applied in both the frontend
-    | and API.
+    | "Per page" values for each model. These are applied for both the web and
+    | API routes.
     |
     */
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamTeaTime\Forum\Support\Frontend;
+namespace TeamTeaTime\Forum\Support\Web;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Str;
@@ -32,7 +32,7 @@ class Forum
 
     public static function route(string $route, $model = null): string
     {
-        $as = config('forum.frontend.router.as');
+        $as = config('forum.web.router.as');
 
         if (! Str::startsWith($route, $as)) $route = "{$as}{$route}";
 

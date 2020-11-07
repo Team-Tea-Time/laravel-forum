@@ -20,7 +20,7 @@ class ForumServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../config/api.php' => config_path('forum.api.php'),
-            __DIR__.'/../config/frontend.php' => config_path('forum.frontend.php'),
+            __DIR__.'/../config/web.php' => config_path('forum.web.php'),
             __DIR__.'/../config/general.php' => config_path('forum.general.php'),
             __DIR__.'/../config/integration.php' => config_path('forum.integration.php')
         ], 'config');
@@ -33,7 +33,7 @@ class ForumServiceProvider extends ServiceProvider
             __DIR__.'/../translations/' => resource_path('lang/vendor/forum'),
         ], 'translations');
 
-        foreach (['api', 'frontend', 'general', 'integration'] as $name)
+        foreach (['api', 'web', 'general', 'integration'] as $name)
         {
             $this->mergeConfigFrom(__DIR__."/../config/{$name}.php", "forum.{$name}");
         }
@@ -49,14 +49,14 @@ class ForumServiceProvider extends ServiceProvider
             });
         }
 
-        if (config('forum.frontend.enabled'))
+        if (config('forum.web.enabled'))
         {
             $this->publishes([
                 __DIR__.'/../views/' => resource_path('views/vendor/forum')
             ], 'views');
 
-            $router->group(config('forum.frontend.router'), function ($r) {
-                require __DIR__.'/../routes/frontend.php';
+            $router->group(config('forum.web.router'), function ($r) {
+                require __DIR__.'/../routes/web.php';
             });
 
             $this->loadViewsFrom(__DIR__.'/../views', 'forum');
@@ -73,7 +73,7 @@ class ForumServiceProvider extends ServiceProvider
         Post::observe(new PostObserver);
 
         $loader = AliasLoader::getInstance();
-        $loader->alias('Forum', config('forum.frontend.utility_class'));
+        $loader->alias('Forum', config('forum.web.utility_class'));
 
         View::composer('forum::master', function ($view)
         {

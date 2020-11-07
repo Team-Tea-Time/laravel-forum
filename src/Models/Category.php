@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Kalnoy\Nestedset\NodeTrait;
 
-use TeamTeaTime\Forum\Support\Frontend\Forum;
+use TeamTeaTime\Forum\Support\Web\Forum;
 use TeamTeaTime\Forum\Support\Traits\CachesData;
 
 class Category extends BaseModel

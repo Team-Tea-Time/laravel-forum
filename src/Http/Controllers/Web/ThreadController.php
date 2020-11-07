@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
+namespace TeamTeaTime\Forum\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -23,7 +23,7 @@ use TeamTeaTime\Forum\Http\Requests\UnlockThread;
 use TeamTeaTime\Forum\Http\Requests\UnpinThread;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\Frontend\Forum;
+use TeamTeaTime\Forum\Support\Web\Forum;
 
 class ThreadController extends BaseController
 {
@@ -114,13 +114,6 @@ class ThreadController extends BaseController
 
     public function store(StoreThread $request, Category $category): RedirectResponse
     {
-        if (! $category->accepts_threads)
-        {
-            Forum::alert('warning', 'categories.threads_disabled');
-
-            return redirect(Forum::route('category.show', $category));
-        }
-        
         $thread = $request->fulfill();
 
         Forum::alert('success', 'threads.created');

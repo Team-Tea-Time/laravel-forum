@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
+namespace TeamTeaTime\Forum\Http\Controllers\Web;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use TeamTeaTime\Forum\Events\UserViewingIndex;
 use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
 use TeamTeaTime\Forum\Http\Requests\StoreCategory;
 use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Support\Frontend\Forum;
+use TeamTeaTime\Forum\Support\Web\Forum;
 
 class CategoryController extends BaseController
 {

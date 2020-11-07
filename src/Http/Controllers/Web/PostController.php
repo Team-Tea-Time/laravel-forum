@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamTeaTime\Forum\Http\Controllers\Frontend;
+namespace TeamTeaTime\Forum\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,7 +15,7 @@ use TeamTeaTime\Forum\Http\Requests\StorePost;
 use TeamTeaTime\Forum\Http\Requests\UpdatePost;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\Frontend\Forum;
+use TeamTeaTime\Forum\Support\Web\Forum;
 
 class PostController extends BaseController
 {

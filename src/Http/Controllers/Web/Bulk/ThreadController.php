@@ -1,9 +1,9 @@
 <?php
 
-namespace TeamTeaTime\Forum\Http\Controllers\Frontend\Bulk;
+namespace TeamTeaTime\Forum\Http\Controllers\Web\Bulk;
 
 use Illuminate\Http\RedirectResponse;
-use TeamTeaTime\Forum\Http\Controllers\Frontend\BaseController;
+use TeamTeaTime\Forum\Http\Controllers\Web\BaseController;
 use TeamTeaTime\Forum\Http\Requests\Bulk\DestroyThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\MoveThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\LockThreads;
