@@ -7,9 +7,9 @@ use TeamTeaTime\Forum\Models\Category;
 
 class DestroyCategory extends BaseRequest implements FulfillableRequest
 {
-    public function authorize(Category $category): bool
+    public function authorize(): bool
     {
-        return $this->user()->can('delete', $category);
+        return $this->user()->can('delete', $this->route('category'));
     }
 
     public function fulfill()

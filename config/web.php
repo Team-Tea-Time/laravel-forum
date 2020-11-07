@@ -26,7 +26,8 @@ return [
         'prefix' => '/forum',
         'as' => 'forum.',
         'namespace' => '\TeamTeaTime\Forum\Http\Controllers\Web',
-        'middleware' => ['web']
+        'middleware' => ['web'],
+        'auth_middleware' => ['auth']
     ],
 
     /*

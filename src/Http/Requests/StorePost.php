@@ -9,9 +9,9 @@ use TeamTeaTime\Forum\Models\Thread;
 
 class StorePost extends BaseRequest implements FulfillableRequest
 {
-    public function authorize(Thread $thread): bool
+    public function authorize(): bool
     {
-        return $this->user()->can('reply', $thread);
+        return $this->user()->can('reply', $this->route('thread'));
     }
 
     public function rules(): array
