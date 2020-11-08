@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Support\Facades\DB;
+use TeamTeaTime\Forum\Events\UserRestoredThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
 class RestoreThread extends BaseRequest implements FulfillableRequest
@@ -30,6 +31,8 @@ class RestoreThread extends BaseRequest implements FulfillableRequest
             'thread_count' => DB::raw("thread_count + 1"),
             'post_count' => DB::raw("post_count + {$thread->postCount}")
         ]);
+
+        event(new UserRestoredThread($this->user(), $thread));
 
         return $thread;
     }

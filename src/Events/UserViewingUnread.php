@@ -9,8 +9,7 @@ class UserViewingUnread
     /** @var mixed */
     public $user;
 
-    /** @var Collection */
-    public $threads;
+    public Collection $threads;
 
     public function __construct($user, Collection $threads)
     {

@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use TeamTeaTime\Forum\Events\UserMovedThread;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
@@ -26,6 +27,8 @@ class MoveThread extends BaseRequest implements FulfillableRequest
         $thread = $this->route('thread');
         $thread->category_id = $this->input('category_id');
         $thread->saveWithoutTouch();
+
+        event(new UserMovedThread($this->user(), $thread));
 
         return $thread;
     }

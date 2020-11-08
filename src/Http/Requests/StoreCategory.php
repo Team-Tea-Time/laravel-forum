@@ -25,6 +25,10 @@ class StoreCategory extends BaseRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        return Category::create($this->validated());
+        $category = Category::create($this->validated());
+
+        event(new UserStoredCategory($this->user(), $category));
+
+        return $category;
     }
 }

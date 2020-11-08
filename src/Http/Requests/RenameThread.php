@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use TeamTeaTime\Forum\Events\UserRenamedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
 class RenameThread extends BaseRequest implements FulfillableRequest
@@ -24,6 +25,8 @@ class RenameThread extends BaseRequest implements FulfillableRequest
         $thread = $this->route('thread');
         $thread->title = $this->input('title');
         $thread->save();
+
+        event(new UserRenamedThread($this->user(), $thread));
 
         return $thread;
     }

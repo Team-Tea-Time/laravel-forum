@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use TeamTeaTime\Forum\Events\UserPinnedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
 class PinThread extends BaseRequest implements FulfillableRequest
@@ -22,6 +23,8 @@ class PinThread extends BaseRequest implements FulfillableRequest
         $thread = $this->route('thread');
         $thread->pinned = true;
         $thread->saveWithoutTouch();
+
+        event(new UserPinnedThread($this->user(), $thread));
 
         return $thread;
     }
