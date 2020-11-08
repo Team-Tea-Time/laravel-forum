@@ -9,8 +9,7 @@ class PostEvent
     /** @var mixed */
     public $user;
 
-    /** @var Post */
-    public $post;
+    public Post $post;
 
     public function __construct($user, Post $post)
     {

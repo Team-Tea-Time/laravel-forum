@@ -6,5 +6,5 @@ use TeamTeaTime\Forum\Events\Types\PostEvent;
 
 class UserRestoredPost extends PostEvent
 {
-    
+
 }

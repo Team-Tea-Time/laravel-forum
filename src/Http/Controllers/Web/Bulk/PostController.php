@@ -11,15 +11,15 @@ class PostController extends BaseController
 {
     public function destroy(DestroyPosts $request): RedirectResponse
     {
-        $posts = $request->fulfill();
+        $count = $request->fulfill()->count();
 
-        return $this->bulkActionResponse($posts, 'posts.deleted');
+        return $this->bulkActionResponse($count, 'posts.deleted');
     }
 
     public function restore(RestorePosts $request): RedirectResponse
     {
-        $posts = $request->fulfill();
+        $count = $request->fulfill()->count();
 
-        return $this->bulkActionResponse($posts, 'posts.updated');
+        return $this->bulkActionResponse($count, 'posts.updated');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-use TeamTeaTime\Forum\Events\UserDestroyedPost;
+use TeamTeaTime\Forum\Events\UserDeletedPost;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Post;
 
@@ -37,7 +37,7 @@ class DestroyPost extends BaseRequest implements FulfillableRequest
         $post->thread->syncLastPost();
         $post->thread->category->syncLatestActiveThread();
 
-        event(new UserDestroyedPost($this->user(), $post));
+        event(new UserDeletedPost($this->user(), $post));
 
         return $post;
     }

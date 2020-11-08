@@ -2,7 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-use TeamTeaTime\Forum\Events\UserStoredThread;
+use TeamTeaTime\Forum\Events\UserCreatedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
@@ -39,7 +39,7 @@ class StoreThread extends BaseRequest implements FulfillableRequest
             'content' => $input['content']
         ]);
 
-        event(new UserStoredThread($this->user(), $thread));
+        event(new UserCreatedThread($this->user(), $thread));
 
         $thread->update([
             'first_post_id' => $post->id,

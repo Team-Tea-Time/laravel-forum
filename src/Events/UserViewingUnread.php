@@ -2,18 +2,9 @@
 
 namespace TeamTeaTime\Forum\Events;
 
-use Illuminate\Database\Eloquent\Collection;
+use TeamTeaTime\Forum\Events\Types\CollectionEvent;
 
-class UserViewingUnread
+class UserViewingUnread extends CollectionEvent
 {
-    /** @var mixed */
-    public $user;
 
-    public Collection $threads;
-
-    public function __construct($user, Collection $threads)
-    {
-        $this->user = $user;
-        $this->threads = $threads;
-    }
 }

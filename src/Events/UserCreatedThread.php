@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Events;
 
 use TeamTeaTime\Forum\Events\Types\ThreadEvent;
 
-class UserDestroyedPost extends ThreadEvent
+class UserCreatedThread extends ThreadEvent
 {
-    
+
 }

@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Events;
 
 use TeamTeaTime\Forum\Events\Types\CategoryEvent;
 
-class UserStoredCategory extends CategoryEvent
+class UserDeletedCategory extends CategoryEvent
 {
-    
+
 }

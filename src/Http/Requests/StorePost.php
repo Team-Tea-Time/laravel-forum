@@ -2,7 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-use TeamTeaTime\Forum\Events\UserStoredPost;
+use TeamTeaTime\Forum\Events\UserCreatedPost;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
@@ -34,7 +34,7 @@ class StorePost extends BaseRequest implements FulfillableRequest
             'author_id' => $this->user()->getKey()
         ]);
 
-        event(new UserStoredPost($this->user(), $post));
+        event(new UserCreatedPost($this->user(), $post));
 
         $thread->update(['last_post_id' => $post->id]);
         $thread->category->update(['latest_active_thread_id' => $thread->id]);

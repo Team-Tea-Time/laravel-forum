@@ -6,5 +6,5 @@ use TeamTeaTime\Forum\Events\Types\ThreadEvent;
 
 class UserRestoredThread extends ThreadEvent
 {
-    
+
 }

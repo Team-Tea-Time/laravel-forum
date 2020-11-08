@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use TeamTeaTime\Forum\Events\UserCreatedCategory;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
 
@@ -27,7 +28,7 @@ class StoreCategory extends BaseRequest implements FulfillableRequest
     {
         $category = Category::create($this->validated());
 
-        event(new UserStoredCategory($this->user(), $category));
+        event(new UserCreatedCategory($this->user(), $category));
 
         return $category;
     }

@@ -2,9 +2,12 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
+use Illuminate\Database\Query\Builder;
 use TeamTeaTime\Forum\Http\Requests\BaseRequest;
+use TeamTeaTime\Forum\Events\UserBulkRestoredPosts;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Models\Post;
 
 class RestorePosts extends BaseRequest implements FulfillableRequest
 {
@@ -40,12 +43,22 @@ class RestorePosts extends BaseRequest implements FulfillableRequest
             $post->thread->category->syncLatestActiveThread();
         }
 
-        return $posts->get();
+        $posts = $posts->get();
+
+        event(new UserBulkRestoredPosts($this->user(), $posts));
+
+        return $posts;
     }
 
     private function posts(): Builder
     {
-        $query = $this->user()->can('viewTrashedPosts') ? Post::withTrashed() : Post::query();
+        $query = \DB::table(Post::getTableName());
+
+        if (! $this->user()->can('viewTrashedPosts'))
+        {
+            $query = $query->whereNull(Post::DELETED_AT);
+        }
+
         return $query->whereIn('id', $this->validated()['posts']);
     }
 }

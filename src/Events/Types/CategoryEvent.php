@@ -9,8 +9,7 @@ class CategoryEvent
     /** @var mixed */
     public $user;
 
-    /** @var Category */
-    public $category;
+    public Category $category;
 
     public function __construct($user, Category $category)
     {

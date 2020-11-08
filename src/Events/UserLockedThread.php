@@ -6,5 +6,5 @@ use TeamTeaTime\Forum\Events\Types\ThreadEvent;
 
 class UserLockedThread extends ThreadEvent
 {
-    
+
 }

@@ -6,5 +6,5 @@ use TeamTeaTime\Forum\Events\Types\PostEvent;
 
 class UserUpdatedPost extends PostEvent
 {
-    
+
 }

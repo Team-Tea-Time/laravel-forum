@@ -6,5 +6,5 @@ use TeamTeaTime\Forum\Events\Types\CategoryEvent;
 
 class UserUpdatedCategory extends CategoryEvent
 {
-    
+
 }
