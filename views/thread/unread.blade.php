@@ -19,13 +19,15 @@
         @endif
     </div>
 
-    @can ('markThreadsAsRead')
-        <div class="text-center">
-            <button class="btn btn-primary px-5" data-open-modal="mark-as-read">
-                <i data-feather="book"></i> {{ trans('forum::general.mark_read') }}
-            </button>
-        </div>
+    @if (! $threads->isEmpty())
+        @can ('markThreadsAsRead')
+            <div class="text-center">
+                <button class="btn btn-primary px-5" data-open-modal="mark-as-read">
+                    <i data-feather="book"></i> {{ trans('forum::general.mark_read') }}
+                </button>
+            </div>
 
-        @include ('forum::thread.modals.mark-as-read')
-    @endcan
+            @include ('forum::thread.modals.mark-as-read')
+        @endcan
+    @endif
 @stop
