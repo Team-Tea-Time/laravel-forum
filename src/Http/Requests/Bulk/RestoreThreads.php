@@ -2,8 +2,9 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
+use TeamTeaTime\Forum\Events\UserBulkRestoredThreads;
 use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
@@ -36,15 +37,9 @@ class RestoreThreads extends BaseRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $threads = $this->threads()->get();
+        $threads = $this->threads(true)->get();
 
         if ($threads->count() === 0) return 0;
-        
-        // Avoid using Eloquent to prevent automatic touching of updated_at
-        $rowsAffected = DB::table((new Thread)->getTable())
-            ->whereNotNull('deleted_at')
-            ->whereIn('id', array_unique($this->validated()['threads']))
-            ->update(['deleted_at' => null]);
 
         $threadsByCategory = $threads->groupBy('category_id');
         foreach ($threadsByCategory as $categoryId => $threads)
@@ -61,11 +56,20 @@ class RestoreThreads extends BaseRequest implements FulfillableRequest
             ]);
         }
 
-        return $rowsAffected;
+        event(new UserBulkRestoredThreads($this->user(), $threads));
+
+        return $threads;
     }
 
-    private function threads(): Builder
+    private function threads(bool $withTrashedAbilityCheck = false): Builder
     {
-        return Thread::onlyTrashed()->whereIn('id', array_unique($this->validated()['threads']));
+        $query = \DB::table(Thread::getTableName());
+
+        if ($withTrashedAbilityCheck && ! $this->user()->can('viewTrashedThreads'))
+        {
+            $query = $query->whereNull(Thread::DELETED_AT);
+        }
+
+        return $query->whereIn('id', $this->validated()['threads']);
     }
 }

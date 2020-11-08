@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use TeamTeaTime\Forum\Events\UserMarkedThreadsAsRead;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
@@ -50,6 +51,8 @@ class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
         {
             $thread->markAsRead($this->user()->getKey());
         }
+
+        event(new UserMarkedThreadsAsRead($this->user(), $category, $threads));
 
         return $category;
     }

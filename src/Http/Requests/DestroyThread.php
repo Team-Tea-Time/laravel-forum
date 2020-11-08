@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Support\Facades\DB;
+use TeamTeaTime\Forum\Events\UserDeletedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Thread;
 
@@ -36,6 +37,8 @@ class DestroyThread extends BaseRequest implements FulfillableRequest
         {
             $thread->delete();
         }
+
+        event(new UserDeletedThread($this->user(), $thread));
 
         $category = $thread->category;
 

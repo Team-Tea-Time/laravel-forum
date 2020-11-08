@@ -2,7 +2,8 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder;
+use TeamTeaTime\Forum\Events\UserBulkDestroyedPosts;
 use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
@@ -37,12 +38,20 @@ class DestroyPosts extends BaseRequest implements FulfillableRequest
 
         if (config('forum.general.soft_deletes') && $this->isPermaDeleteRequested() && method_exists(Post::class, 'forceDelete'))
         {
-            $post->forceDelete();
+            foreach ($posts as $post)
+            {
+                $post->forceDelete();
+            }
         }
         else
         {
-            $post->delete();
+            foreach ($posts as $post)
+            {
+                $post->delete();
+            }
         }
+
+        event(new UserBulkDeletedPosts($this->user(), $posts));
         
         $postsByThread = $posts->select('thread_id')->distinct()->get();
         foreach ($postsByThread as $post)
@@ -56,7 +65,13 @@ class DestroyPosts extends BaseRequest implements FulfillableRequest
 
     private function posts(): Builder
     {
-        $query = $this->user()->can('viewTrashedPosts') ? Post::withTrashed() : Post::query();
+        $query = \DB::table(Post::getTableName());
+
+        if (! $this->user()->can('viewTrashedPosts'))
+        {
+            $query = $query->whereNull('deleted_at');
+        }
+
         return $query->whereIn('id', $this->validated()['posts']);
     }
 }

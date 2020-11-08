@@ -2,6 +2,8 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use TeamTeaTime\Forum\Events\UserUnlockedThread;
+
 class UnlockThread extends LockThread
 {
     public function fulfill()
@@ -9,6 +11,8 @@ class UnlockThread extends LockThread
         $thread = $this->route('thread');
         $thread->locked = false;
         $thread->saveWithoutTouch();
+
+        event(new UserUnlockedThread($this->user(), $thread));
 
         return $thread;
     }

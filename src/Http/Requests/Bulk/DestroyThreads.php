@@ -2,8 +2,9 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
+use TeamTeaTime\Forum\Events\UserBulkDeletedThreads;
 use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
@@ -34,25 +35,25 @@ class DestroyThreads extends BaseRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $threads = $this->isPermaDeleting() ? $this->threads()->withTrashed()->get() : $this->threads()->get();
+        $threads = $this->isPermaDeleting() ? $this->threads()->get() : $this->threads()->whereNull(Thread::DELETED_AT)->get();
 
         if ($threads->count() === 0) return 0;
         
         // Avoid using Eloquent to prevent automatic touching of updated_at
-        $query = DB::table((new Thread)->getTable())->whereIn('id', array_unique($this->validated()['threads']));
+        $query = $this->threads();
         $rowsAffected = $this->isPermaDeleting()
             ? $query->delete()
-            : $query->whereNull('deleted_at')->update(['deleted_at' => DB::raw('NOW()')]);
+            : $query->whereNull(Thread::DELETED_AT)->update([Thread::DELETED_AT => DB::raw('NOW()')]);
 
         $threadsByCategory = $threads->groupBy('category_id');
         foreach ($threadsByCategory as $threads)
         {
             // Count only non-deleted threads for changes to category stats since soft-deleted threads
             // are already represented
-            $threadCount = $threads->where('deleted_at', null)->count();
+            $threadCount = $threads->whereNull(Thread::DELETED_AT)->count();
 
             // Sum of reply counts + thread count = total posts
-            $postCount = $threads->where('deleted_at', null)->sum('reply_count') + $threadCount;
+            $postCount = $threads->whereNull(Thread::DELETED_AT)->sum('reply_count') + $threadCount;
 
             $category = $threads->first()->category;
 
@@ -67,11 +68,13 @@ class DestroyThreads extends BaseRequest implements FulfillableRequest
             $category->update($updates);
         }
 
+        event(new UserBulkDeletedThreads($this->user(), $threads));
+
         return $rowsAffected;
     }
 
     private function threads(): Builder
     {
-        return Thread::whereIn('id', array_unique($this->validated()['threads']));
+        return \DB::table(Thread::getTableName())->whereIn('id', $this->validated()['threads']);
     }
 }

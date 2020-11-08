@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use TeamTeaTime\Forum\Events\UserLockedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
 class LockThread extends BaseRequest implements FulfillableRequest
@@ -22,6 +23,8 @@ class LockThread extends BaseRequest implements FulfillableRequest
         $thread = $this->route('thread');
         $thread->locked = true;
         $thread->saveWithoutTouch();
+
+        event(new UserLockedThread($this->user(), $thread));
 
         return $thread;
     }

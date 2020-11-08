@@ -2,9 +2,13 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
+use Illuminate\Database\Query\Builder;
 use TeamTeaTime\Forum\Http\Requests\BaseRequest;
+use TeamTeaTime\Forum\Events\UserBulkPinnedThreads;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Models\Thread;
 
 class PinThreads extends BaseRequest implements FulfillableRequest
 {
@@ -19,10 +23,12 @@ class PinThreads extends BaseRequest implements FulfillableRequest
 
     public function authorizeValidated(): bool
     {
-        $threads = $this->threads()->select('category_id')->distinct()->get();
-        foreach ($threads as $thread)
+        $categoryIds = $this->threads()->select('category_id')->distinct()->pluck('category_id');
+        $categories = Category::where('id', $categoryIds)->get();
+
+        foreach ($categories as $category)
         {
-            if (! $this->user()->can('pinThreads', $thread->category)) return false;
+            if (! $this->user()->can('pinThreads', $category)) return false;
         }
 
         return true;
@@ -30,13 +36,24 @@ class PinThreads extends BaseRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        return $this->threads()->update(['pinned' => true]);
+        $this->threads()->update(['pinned' => true]);
+
+        $threads = $this->threads()->get();
+
+        event(new UserBulkPinnedThreads($this->user(), $threads));
+
+        return $threads;
     }
 
-    private function threads(): Builder
+    protected function threads(): Builder
     {
-        $query = \DB::table(with(Thread::class)->getTable());
-        $query = $this->user()->can('viewTrashedThreads') ? $query->withTrashed() : $query;
+        $query = \DB::table(Thread::getTableName());
+
+        if (! $this->user()->can('viewTrashedThreads'))
+        {
+            $query = $query->whereNull(Thread::DELETED_AT);
+        }
+
         return $query->whereIn('id', $this->validated()['threads']);
     }
 }

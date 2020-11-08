@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 abstract class BaseModel extends Model
 {
+    const DELETED_AT = 'deleted_at';
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -14,6 +16,11 @@ abstract class BaseModel extends Model
         {
             $this->forceDeleting = ! config('forum.preferences.soft_deletes');
         }
+    }
+
+    public static function getTableName()
+    {
+        return with(new static)->getTable();
     }
 
     public function scopeRequestWhere(Builder $query, Request $request): Builder

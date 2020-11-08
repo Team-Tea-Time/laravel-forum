@@ -9,8 +9,7 @@ class ThreadEvent
     /** @var mixed */
     public $user;
 
-    /** @var Thread */
-    public $thread;
+    public Thread $thread;
 
     public function __construct($user, Thread $thread)
     {
