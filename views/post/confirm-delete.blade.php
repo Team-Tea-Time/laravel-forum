@@ -8,7 +8,7 @@
 
         @include ('forum::post.partials.list', ['post' => $post, 'single' => true])
 
-        <form method="POST" action="{{ Forum::route('post.destroy', $post) }}">
+        <form method="POST" action="{{ Forum::route('post.delete', $post) }}">
             @csrf
             @method('DELETE')
             

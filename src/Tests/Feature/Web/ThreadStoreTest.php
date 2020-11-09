@@ -10,9 +10,9 @@ use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Support\Web\Forum;
-use TeamTeaTime\Forum\Tests\TestCase;
+use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
-class ThreadStoreTest extends TestCase
+class ThreadStoreTest extends FeatureTestCase
 {
     private string $route = 'thread.store';
 
@@ -36,11 +36,6 @@ class ThreadStoreTest extends TestCase
     /** @test */
     public function should_302_when_not_logged_in()
     {
-        // Create dummy route for the default redirection
-        Route::get('login', ['as' => 'login'], function () {
-            return '';
-        });
-
         $response = $this->post(Forum::route($this->route, $this->category), []);
         $response->assertStatus(302);
     }
