@@ -35,6 +35,7 @@ class DestroyThread extends BaseRequest implements FulfillableRequest
         }
         else
         {
+            $thread->posts()->delete();
             $thread->delete();
         }
 

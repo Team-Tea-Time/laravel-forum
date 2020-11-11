@@ -13,7 +13,6 @@ class ThreadFactory extends Factory
     public function definition()
     {
         return [
-            'id' => $this->faker->unique()->randomDigit,
             'title' => $this->faker->name,
             'category_id' => CategoryFactory::new(),
             'locked' => 0,

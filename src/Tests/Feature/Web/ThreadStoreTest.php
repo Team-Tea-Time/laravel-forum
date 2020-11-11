@@ -83,7 +83,7 @@ class ThreadStoreTest extends FeatureTestCase
                 'content' => "Thread content"
             ]);
 
-        $this->assertEquals(Thread::count(), 1);
-        $this->assertEquals(Post::count(), 1);
+        $this->assertEquals(1, Thread::count());
+        $this->assertEquals(1, Post::count());
     }
 }

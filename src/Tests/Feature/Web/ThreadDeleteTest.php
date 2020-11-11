@@ -4,6 +4,7 @@ namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
 use Illuminate\Foundation\Auth\User;
 use Orchestra\Testbench\Factories\UserFactory;
+use TeamTeaTime\Forum\Database\Factories\PostFactory;
 use TeamTeaTime\Forum\Database\Factories\ThreadFactory;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
@@ -16,6 +17,7 @@ class ThreadDeleteTest extends FeatureTestCase
     private string $route = 'thread.delete';
 
     private UserFactory $userFactory;
+    private PostFactory $postFactory;
     private ThreadFactory $threadFactory;
 
     private User $user;
@@ -26,6 +28,7 @@ class ThreadDeleteTest extends FeatureTestCase
         parent::setUp();
         
         $this->threadFactory = ThreadFactory::new();
+        $this->postFactory = PostFactory::new();
         $this->userFactory = UserFactory::new();
 
         $this->user = $this->userFactory->createOne();
@@ -47,5 +50,35 @@ class ThreadDeleteTest extends FeatureTestCase
         $response = $this->actingAs($this->user)
             ->delete(Forum::route($this->route, $thread), []);
         $response->assertStatus(404);
+    }
+
+    /** @test */
+    public function should_soft_delete_by_default()
+    {
+        $thread = $this->threadFactory->createOne(['author_id' => $this->user->getKey()]);
+        $this->postFactory->createOne(['thread_id' => $thread->getKey(), 'author_id' => $this->user->getKey()]);
+
+        $this->actingAs($this->user)->delete(Forum::route($this->route, $thread), []);
+
+        // Accounting for $this->thread
+        $this->assertEquals(1, Thread::count());
+        $this->assertEquals(0, Post::count());
+        $this->assertEquals(2, Thread::withTrashed()->count());
+        $this->assertEquals(1, Post::withTrashed()->count());
+    }
+
+    /** @test */
+    public function should_delete_all_posts_inside_the_thread()
+    {
+        $numPosts = 2;
+
+        $thread = $this->threadFactory->createOne(['author_id' => $this->user->getKey()]);
+        $this->postFactory->count($numPosts)->create(['thread_id' => $thread->getKey(), 'author_id' => $this->user->getKey()]);
+
+        $this->assertEquals($numPosts, Post::count());
+
+        $this->actingAs($this->user)->delete(Forum::route($this->route, $thread), []);
+
+        $this->assertEquals(0, Post::count());
     }
 }

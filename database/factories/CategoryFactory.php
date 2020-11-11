@@ -12,7 +12,6 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'id' => $this->faker->unique()->randomDigit,
             'title' => $this->faker->name,
             'description' => $this->faker->text,
             'accepts_threads' => 1,
