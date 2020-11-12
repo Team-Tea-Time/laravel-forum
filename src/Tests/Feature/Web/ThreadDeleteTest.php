@@ -16,7 +16,6 @@ class ThreadDeleteTest extends FeatureTestCase
 {
     private string $route = 'thread.delete';
 
-    private UserFactory $userFactory;
     private PostFactory $postFactory;
     private ThreadFactory $threadFactory;
 
@@ -29,9 +28,8 @@ class ThreadDeleteTest extends FeatureTestCase
         
         $this->threadFactory = ThreadFactory::new();
         $this->postFactory = PostFactory::new();
-        $this->userFactory = UserFactory::new();
 
-        $this->user = $this->userFactory->createOne();
+        $this->user = UserFactory::new()->createOne();
         $this->thread = $this->threadFactory->createOne(['author_id' => $this->user->getKey()]);
     }
 
