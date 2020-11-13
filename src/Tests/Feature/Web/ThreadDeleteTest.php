@@ -16,8 +16,8 @@ class ThreadDeleteTest extends FeatureTestCase
 {
     private string $route = 'thread.delete';
 
-    private PostFactory $postFactory;
     private ThreadFactory $threadFactory;
+    private PostFactory $postFactory;
 
     private User $user;
     private Thread $thread;
@@ -59,21 +59,14 @@ class ThreadDeleteTest extends FeatureTestCase
         $this->actingAs($this->user)->delete(Forum::route($this->route, $thread), []);
 
         // Accounting for $this->thread
-        $this->assertEquals(1, Thread::count());
-        $this->assertEquals(0, Post::count());
         $this->assertEquals(2, Thread::withTrashed()->count());
-        $this->assertEquals(1, Post::withTrashed()->count());
     }
 
     /** @test */
     public function should_delete_all_posts_inside_the_thread()
     {
-        $numPosts = 2;
-
         $thread = $this->threadFactory->createOne(['author_id' => $this->user->getKey()]);
-        $this->postFactory->count($numPosts)->create(['thread_id' => $thread->getKey(), 'author_id' => $this->user->getKey()]);
-
-        $this->assertEquals($numPosts, Post::count());
+        $this->postFactory->count(2)->create(['thread_id' => $thread->getKey(), 'author_id' => $this->user->getKey()]);
 
         $this->actingAs($this->user)->delete(Forum::route($this->route, $thread), []);
 
