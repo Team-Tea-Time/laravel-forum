@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserCreatedPost;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
@@ -31,13 +32,21 @@ class StorePost extends BaseRequest implements FulfillableRequest
         $post = Post::create($this->validated() + [
             'thread_id' => $thread->id,
             'post_id' => $parent,
-            'author_id' => $this->user()->getKey()
+            'author_id' => $this->user()->getKey(),
+            'sequence' => $thread->posts->count() + 1
         ]);
 
         event(new UserCreatedPost($this->user(), $post));
 
-        $thread->update(['last_post_id' => $post->id]);
-        $thread->category->update(['latest_active_thread_id' => $thread->id]);
+        $thread->update([
+            'last_post_id' => $post->id,
+            'reply_count' => DB::raw('reply_count + 1')
+        ]);
+
+        $thread->category->updateWithoutTouch([
+            'latest_active_thread_id' => $thread->id,
+            'post_count' => DB::raw('post_count + 1')
+        ]);
 
         return $post;
     }

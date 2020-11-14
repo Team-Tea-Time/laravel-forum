@@ -18,7 +18,7 @@
         <span class="text-muted">
             @include ('forum::partials.timestamp', ['carbon' => $post->created_at])
             @if ($post->hasBeenUpdated())
-                ({{ trans('forum::general.last_updated') }} @include ('forum::partials.timestamp', ['carbon' => $post->updated_at])
+                ({{ trans('forum::general.last_updated') }} @include ('forum::partials.timestamp', ['carbon' => $post->updated_at]))
             @endif
         </span>
     </div>

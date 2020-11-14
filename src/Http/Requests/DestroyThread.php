@@ -26,30 +26,35 @@ class DestroyThread extends BaseRequest implements FulfillableRequest
     {
         $thread = $this->route('thread');
 
-        $thread->readers()->detach();
+        $threadAlreadyTrashed = $thread->trashed();
+        $postsRemoved = $thread->postCount;
 
-        if ($this->isPermaDeleting() && method_exists($thread, 'forceDelete'))
+        if ($this->isPermaDeleting())
         {
+            $thread->readers()->detach();
             $thread->posts()->withTrashed()->forceDelete();
             $thread->forceDelete();
         }
         else
         {
+            // Return early if the thread was already trashed because there's nothing to do
+            if ($threadAlreadyTrashed) return $thread;
+
+            $thread->readers()->detach();
             $thread->posts()->delete();
-            $thread->delete();
+            $thread->deleteWithoutTouch();
         }
 
-        event(new UserDeletedThread($this->user(), $thread));
-
-        $category = $thread->category;
-
-        // Only change category stats and FKs if the thread wasn't already soft-deleted
-        if (! $thread->trashed())
+        // Only update category stats and FKs if the thread wasn't already soft-deleted,
+        // otherwise they'll needlessly be updated a second time
+        if (! $threadAlreadyTrashed)
         {
             $values = [
                 'thread_count' => DB::raw('thread_count - 1'),
-                'post_count' => DB::raw("post_count - {$thread->postCount}")
+                'post_count' => DB::raw("post_count - {$postsRemoved}")
             ];
+
+            $category = $thread->category;
 
             if ($category->newest_thread_id === $thread->id)
             {
@@ -62,6 +67,8 @@ class DestroyThread extends BaseRequest implements FulfillableRequest
 
             $category->update($values);
         }
+
+        event(new UserDeletedThread($this->user(), $thread));
 
         return $thread;
     }

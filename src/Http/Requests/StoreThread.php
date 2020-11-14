@@ -36,7 +36,8 @@ class StoreThread extends BaseRequest implements FulfillableRequest
 
         $post = $thread->posts()->create([
             'author_id' => $this->user()->getKey(),
-            'content' => $input['content']
+            'content' => $input['content'],
+            'sequence' => 1
         ]);
 
         event(new UserCreatedThread($this->user(), $thread));

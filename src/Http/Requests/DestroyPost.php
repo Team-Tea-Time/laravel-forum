@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserDeletedPost;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Post;
@@ -25,17 +26,40 @@ class DestroyPost extends BaseRequest implements FulfillableRequest
     {
         $post = $this->route('post');
 
-        if (config('forum.general.soft_deletes') && $this->isPermaDeleteRequested && is_callable([$post, 'forceDelete']))
+        if ($this->isPermaDeleting())
         {
             $post->forceDelete();
         }
         else
         {
-            $post->delete();
+            $post->deleteWithoutTouch();
         }
 
-        $post->thread->syncLastPost();
-        $post->thread->category->syncLatestActiveThread();
+        $lastPostInThread = $post->thread->getLastPost();
+
+        $post->thread->updateWithoutTouch([
+            'last_post_id' => $lastPostInThread->id,
+            'updated_at' => $lastPostInThread->updated_at,
+            'reply_count' => DB::raw('reply_count - 1')
+        ]);
+
+        $post->thread->category->updateWithoutTouch([
+            'latest_active_thread_id' => $post->thread->category->getLatestActiveThreadId(),
+            'post_count' => DB::raw('post_count - 1')
+        ]);
+
+        if (! is_null($post->children))
+        {
+            // Other posts reference this one; set their parent post IDs to 0
+            $post->children()->update(['post_id' => 0]);
+        }
+
+        // Update sequence numbers for all of the thread's posts
+        $post->thread->posts->each(function ($p)
+        {
+            $p->sequence = $p->getSequenceNumber();
+            $p->saveWithoutTouch();
+        });
 
         event(new UserDeletedPost($this->user(), $post));
 
