@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Events\UserBulkRestoredPosts;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
@@ -52,7 +53,7 @@ class RestorePosts extends BaseRequest implements FulfillableRequest
 
     private function posts(): Builder
     {
-        $query = \DB::table(Post::getTableName());
+        $query = DB::table(Post::getTableName());
 
         if (! $this->user()->can('viewTrashedPosts'))
         {

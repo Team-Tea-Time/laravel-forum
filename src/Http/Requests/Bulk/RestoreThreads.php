@@ -63,7 +63,7 @@ class RestoreThreads extends BaseRequest implements FulfillableRequest
 
     private function threads(bool $withTrashedAbilityCheck = false): Builder
     {
-        $query = \DB::table(Thread::getTableName());
+        $query = DB::table(Thread::getTableName());
 
         if ($withTrashedAbilityCheck && ! $this->user()->can('viewTrashedThreads'))
         {

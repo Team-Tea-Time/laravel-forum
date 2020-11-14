@@ -75,6 +75,6 @@ class DestroyThreads extends BaseRequest implements FulfillableRequest
 
     private function threads(): Builder
     {
-        return \DB::table(Thread::getTableName())->whereIn('id', $this->validated()['threads']);
+        return DB::table(Thread::getTableName())->whereIn('id', $this->validated()['threads']);
     }
 }

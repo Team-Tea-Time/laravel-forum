@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
@@ -44,7 +45,7 @@ class LockThreads extends BaseRequest implements FulfillableRequest
 
     protected function threads(): Builder
     {
-        $query = \DB::table((new Thread)->getTable());
+        $query = DB::table(Thread::getTableName());
 
         if (! $this->user()->can('viewTrashedThreads'))
         {

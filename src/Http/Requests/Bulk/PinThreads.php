@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Events\UserBulkPinnedThreads;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
@@ -47,7 +48,7 @@ class PinThreads extends BaseRequest implements FulfillableRequest
 
     protected function threads(): Builder
     {
-        $query = \DB::table(Thread::getTableName());
+        $query = DB::table(Thread::getTableName());
 
         if (! $this->user()->can('viewTrashedThreads'))
         {
