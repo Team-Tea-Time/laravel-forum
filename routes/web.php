@@ -45,7 +45,7 @@ $r->group(['prefix' => $prefix['thread'] . '/{thread}-{thread_slug}'], function 
         $r->patch($prefix['post'] . '/{post}', ['as' => 'post.update', 'uses' => 'PostController@update']);
         $r->get($prefix['post'] . '/{post}/delete', ['as' => 'post.confirm-delete', 'uses' => 'PostController@confirmDelete']);
         $r->get($prefix['post'] . '/{post}/restore', ['as' => 'post.confirm-restore', 'uses' => 'PostController@confirmRestore']);
-        $r->delete($prefix['post'] . '/{post}', ['as' => 'post.destroy', 'uses' => 'PostController@destroy']);
+        $r->delete($prefix['post'] . '/{post}', ['as' => 'post.delete', 'uses' => 'PostController@destroy']);
         $r->post($prefix['post'] . '/{post}/restore', ['as' => 'post.restore', 'uses' => 'PostController@restore']);
     });
 });
@@ -68,12 +68,14 @@ $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk', 'middlewa
 
 $r->bind('category', function ($value)
 {
-    return \TeamTeaTime\Forum\Models\Category::find($value);
+    return \TeamTeaTime\Forum\Models\Category::findOrFail($value);
 });
 
 $r->bind('thread', function ($value)
 {
     $thread = \TeamTeaTime\Forum\Models\Thread::withTrashed()->find($value);
+
+    if (is_null($thread)) abort(404);
 
     if ($thread->trashed() && ! Gate::allows('viewTrashedThreads')) return null;
 
@@ -83,6 +85,8 @@ $r->bind('thread', function ($value)
 $r->bind('post', function ($value)
 {
     $post = \TeamTeaTime\Forum\Models\Post::withTrashed()->find($value);
+
+    if (is_null($post)) abort(404);
 
     if ($post->trashed() && ! Gate::allows('viewTrashedPosts')) return null;
 
