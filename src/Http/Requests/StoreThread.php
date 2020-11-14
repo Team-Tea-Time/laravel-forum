@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserCreatedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
@@ -49,7 +50,9 @@ class StoreThread extends BaseRequest implements FulfillableRequest
 
         $thread->category->update([
             'newest_thread_id' => $thread->id,
-            'latest_active_thread_id' => $thread->id
+            'latest_active_thread_id' => $thread->id,
+            'thread_count' => DB::raw('thread_count + 1'),
+            'post_count' => DB::raw('post_count + 1')
         ]);
 
         return $thread;
