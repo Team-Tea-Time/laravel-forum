@@ -39,15 +39,9 @@ class DestroyPosts extends BaseRequest implements FulfillableRequest
     {
         $posts = $this->postsAsModels()->get();
 
-        $rowsAffected = 0;
-        if ($this->isPermaDeleting())
-        {
-            $rowsAffected = $this->posts()->delete();
-        }
-        else
-        {
-            $rowsAffected = $this->posts()->whereNull('deleted_at')->update(['deleted_at' => DB::raw('now()')]);
-        }
+        $rowsAffected = $this->isPermaDeleting()
+            ? $this->posts()->delete()
+            : $this->posts()->whereNull('deleted_at')->update(['deleted_at' => DB::raw('now()')]);
 
         if ($rowsAffected == 0) return collect();
 
