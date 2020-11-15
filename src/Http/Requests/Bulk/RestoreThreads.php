@@ -3,15 +3,15 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Database\Query\Builder;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserBulkRestoredThreads;
-use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Thread;
 use TeamTeaTime\Forum\Support\Stats;
 
-class RestoreThreads extends BaseRequest implements FulfillableRequest
+class RestoreThreads extends FormRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 

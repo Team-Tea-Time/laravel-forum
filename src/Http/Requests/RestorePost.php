@@ -2,11 +2,12 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserRestoredPost;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
-class RestorePost extends BaseRequest implements FulfillableRequest
+class RestorePost extends FormRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {

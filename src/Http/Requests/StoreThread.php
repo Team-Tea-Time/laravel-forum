@@ -2,13 +2,14 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserCreatedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 
-class StoreThread extends BaseRequest implements FulfillableRequest
+class StoreThread extends FormRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {

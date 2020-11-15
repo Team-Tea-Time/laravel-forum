@@ -1,10 +1,8 @@
 <?php
 
-namespace TeamTeaTime\Forum\Http\Requests;
+namespace TeamTeaTime\Forum\Http\Requests\Traits;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class BaseRequest extends FormRequest
+trait HandlesDeletion
 {
     protected function isPermaDeleteRequested(): bool
     {

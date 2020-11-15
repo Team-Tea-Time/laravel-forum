@@ -2,14 +2,14 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
-use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Thread;
 
-class LockThreads extends BaseRequest implements FulfillableRequest
+class LockThreads extends FormRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 

@@ -2,13 +2,17 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserDeletedThread;
+use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Thread;
 
-class DestroyThread extends BaseRequest implements FulfillableRequest
+class DestroyThread extends FormRequest implements FulfillableRequest
 {
+    use HandlesDeletion;
+
     public function authorize(): bool
     {
         $thread = $this->route('thread');
