@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use TeamTeaTime\Forum\Actions\LockThread as Action;
 use TeamTeaTime\Forum\Events\UserLockedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
@@ -21,9 +22,8 @@ class LockThread extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $thread = $this->route('thread');
-        $thread->locked = true;
-        $thread->saveWithoutTouch();
+        $action = new Action($this->route('thread'));
+        $thread = $action->execute();
 
         event(new UserLockedThread($this->user(), $thread));
 

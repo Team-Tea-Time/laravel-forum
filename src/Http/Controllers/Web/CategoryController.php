@@ -58,6 +58,8 @@ class CategoryController extends BaseController
     {
         $category = $request->fulfill();
 
+        if (is_null($category)) return $this->invalidSelectionResponse();
+
         Forum::alert('success', 'categories.updated', 1);
 
         return redirect(Forum::route('category.show', $category));

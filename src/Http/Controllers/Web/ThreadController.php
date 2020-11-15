@@ -170,6 +170,8 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
+        if (is_null($thread)) return $this->invalidSelectionResponse();
+
         Forum::alert('success', 'threads.updated');
 
         return redirect(Forum::route('thread.show', $thread));
@@ -179,6 +181,8 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
+        if (is_null($thread)) return $this->invalidSelectionResponse();
+
         Forum::alert('success', 'threads.deleted');
 
         return redirect(Forum::route('category.show', $thread->category));
@@ -187,6 +191,8 @@ class ThreadController extends BaseController
     public function restore(RestoreThread $request): RedirectResponse
     {
         $thread = $request->fulfill();
+
+        if (is_null($thread)) return $this->invalidSelectionResponse();
 
         Forum::alert('success', 'threads.updated');
 

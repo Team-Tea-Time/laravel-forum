@@ -3,7 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\DB;
+use TeamTeaTime\Forum\Actions\MoveThread as Action;
 use TeamTeaTime\Forum\Events\UserMovedThread;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
@@ -32,32 +32,13 @@ class MoveThread extends FormRequest implements FulfillableRequest
         $sourceCategory = $thread->category;
         $destinationCategory = $this->getDestinationCategory();
 
-        $thread->updateWithoutTouch(['category_id' => $destinationCategory->id]);
+        $action = new Action($thread, $destinationCategory);
+        $thread = $action->execute();
 
-        $sourceCategoryValues = [];
-
-        if ($sourceCategory->newest_thread_id === $thread->id)
+        if (! is_null($thread))
         {
-            $sourceCategoryValues['newest_thread_id'] = $sourceCategory->getNewestThreadId();
+            event(new UserMovedThread($this->user(), $thread, $sourceCategory, $destinationCategory));
         }
-        if ($sourceCategory->latest_active_thread_id === $thread->id)
-        {
-            $sourceCategoryValues['latest_active_thread_id'] = $sourceCategory->getLatestActiveThreadId();
-        }
-
-        $sourceCategoryValues['thread_count'] = DB::raw('thread_count - 1');
-        $sourceCategoryValues['post_count'] = DB::raw("post_count - {$thread->postCount}");
-
-        $sourceCategory->updateWithoutTouch($sourceCategoryValues);
-
-        $destinationCategory->updateWithoutTouch([
-            'thread_count' => DB::raw('thread_count + 1'),
-            'post_count' => DB::raw("post_count + {$thread->postCount}"),
-            'newest_thread_id' => $destinationCategory->getNewestThreadId(),
-            'latest_active_thread_id' => $destinationCategory->getLatestActiveThreadId()
-        ]);
-
-        event(new UserMovedThread($this->user(), $thread, $sourceCategory, $destinationCategory));
 
         return $thread;
     }

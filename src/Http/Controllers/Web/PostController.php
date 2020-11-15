@@ -90,6 +90,8 @@ class PostController extends BaseController
     {
         $post = $request->fulfill();
 
+        if (is_null($post)) return $this->invalidSelectionResponse();
+
         Forum::alert('success', 'posts.deleted', 1);
 
         return redirect(Forum::route('thread.show', $post->thread));
@@ -98,6 +100,8 @@ class PostController extends BaseController
     public function restore(RestorePost $request): RedirectResponse
     {
         $post = $request->fulfill();
+
+        if (is_null($post)) return $this->invalidSelectionResponse();
 
         Forum::alert('success', 'posts.updated', 1);
 
