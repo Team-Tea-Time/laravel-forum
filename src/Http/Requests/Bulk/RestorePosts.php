@@ -2,10 +2,11 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\DB;
-use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Events\UserBulkRestoredPosts;
+use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Post;
@@ -23,7 +24,7 @@ class RestorePosts extends BaseRequest implements FulfillableRequest
 
     public function authorizeValidated(): bool
     {
-        $posts = $this->posts()->get();
+        $posts = $this->postsAsModels()->get();
         foreach ($posts as $post)
         {
             if (! $this->user()->can('restore', $post)) return false;
@@ -34,32 +35,49 @@ class RestorePosts extends BaseRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $posts = $this->posts();
-        $posts->restore();
+        $posts = $this->postsAsModels()->get();
+
+        $this->posts()->update(['deleted_at' => null]);
+
+        $threads = $posts->pluck('thread')->unique();
+        $postsByThread = $posts->groupBy('thread_id');
         
-        $postsByThread = $posts->select('thread_id')->distinct()->get();
-        foreach ($postsByThread as $post)
+        foreach ($threads as $thread)
         {
-            $post->thread->syncLastPost();
-            $post->thread->category->syncLatestActiveThread();
+            $threadPosts = $postsByThread->get($thread->id);
+            $thread->updateWithoutTouch([
+                'last_post_id' => $thread->getLastPost()->id,
+                'reply_count' => DB::raw("reply_count + {$threadPosts->count()}")
+            ]);
         }
 
-        $posts = $posts->get();
+        $categories = $threads->pluck('category')->unique();
+        $threadsByCategory = $threads->groupBy('category_id');
+
+        foreach ($categories as $category)
+        {
+            $categoryThreads = $threadsByCategory->get($category->id);
+            $postCount = $posts->whereIn('thread_id', $categoryThreads->pluck('id'))->count();
+            $category->updateWithoutTouch([
+                'latest_active_thread_id' => $category->getLatestActiveThreadId(),
+                'post_count' => DB::raw("post_count + {$postCount}")
+            ]);
+        }
 
         event(new UserBulkRestoredPosts($this->user(), $posts));
 
         return $posts;
     }
 
-    private function posts(): Builder
+    private function posts(): QueryBuilder
     {
-        $query = DB::table(Post::getTableName());
+        $query = DB::table(Post::getTableName())->whereNotNull(Post::DELETED_AT);
+        return $query->whereIn('id', $this->validated()['posts']);
+    }
 
-        if (! $this->user()->can('viewTrashedPosts'))
-        {
-            $query = $query->whereNull(Post::DELETED_AT);
-        }
-
+    private function postsAsModels(): EloquentBuilder
+    {
+        $query = Post::query()->onlyTrashed();
         return $query->whereIn('id', $this->validated()['posts']);
     }
 }

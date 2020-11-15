@@ -2,7 +2,6 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserBulkDeletedThreads;
 use TeamTeaTime\Forum\Http\Requests\BaseRequest;
@@ -24,7 +23,9 @@ class DestroyThreads extends BaseRequest implements FulfillableRequest
 
     public function authorizeValidated(): bool
     {
-        $threads = $this->threads()->get();
+        // Eloquent is used here so that we get a collection of Thread instead of
+        // stdClass in order for the gate to infer the policy to use.
+        $threads = Thread::whereIn('id', $this->validated()['threads'])->get();
         foreach ($threads as $thread)
         {
             if (! $this->user()->can('delete', $thread)) return false;
@@ -35,12 +36,12 @@ class DestroyThreads extends BaseRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $threads = $this->isPermaDeleting() ? $this->threads()->get() : $this->threads()->whereNull(Thread::DELETED_AT)->get();
+        $query = DB::table(Thread::getTableName())->whereIn('id', $this->validated()['threads']);
+
+        $threads = $this->isPermaDeleting() ? $query->get() : $query->whereNull(Thread::DELETED_AT)->get();
 
         if ($threads->count() === 0) return 0;
-        
-        // Avoid using Eloquent to prevent automatic touching of updated_at
-        $query = $this->threads();
+
         $rowsAffected = $this->isPermaDeleting()
             ? $query->delete()
             : $query->whereNull(Thread::DELETED_AT)->update([Thread::DELETED_AT => DB::raw('NOW()')]);
@@ -71,10 +72,5 @@ class DestroyThreads extends BaseRequest implements FulfillableRequest
         event(new UserBulkDeletedThreads($this->user(), $threads));
 
         return $rowsAffected;
-    }
-
-    private function threads(): Builder
-    {
-        return DB::table(Thread::getTableName())->whereIn('id', $this->validated()['threads']);
     }
 }
