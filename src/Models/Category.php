@@ -81,22 +81,4 @@ class Category extends BaseModel
         $thread = $this->threads()->orderBy('updated_at', 'desc')->first();
         return $thread ? $thread->id : null;
     }
-
-    public function syncNewestThread(): bool
-    {
-        return $this->update(['newest_thread_id' => $this->getNewestThreadId()]);
-    }
-
-    public function syncLatestActiveThread(): bool
-    {
-        return $this->update(['latest_active_thread_id' => $this->getLatestActiveThreadId()]);
-    }
-
-    public function syncCurrentThreads(): bool
-    {
-        return $this->update([
-            'newest_thread_id' => $this->getNewestThreadId(),
-            'latest_active_thread_id' => $this->getLatestActiveThreadId()
-        ]);
-    }
 }
