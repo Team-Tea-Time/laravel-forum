@@ -9,8 +9,9 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Gate;
 use TeamTeaTime\Forum\Events\UserViewingCategory;
 use TeamTeaTime\Forum\Events\UserViewingIndex;
+use TeamTeaTime\Forum\Http\Requests\CreateCategory;
+use TeamTeaTime\Forum\Http\Requests\DeleteCategory;
 use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
-use TeamTeaTime\Forum\Http\Requests\StoreCategory;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Support\Web\Forum;
 
@@ -44,7 +45,7 @@ class CategoryController extends BaseController
         return view('forum::category.show', compact('categories', 'category', 'threads'));
     }
 
-    public function store(StoreCategory $request): RedirectResponse
+    public function store(CreateCategory $request): RedirectResponse
     {
         $category = $request->fulfill();
 
@@ -62,7 +63,7 @@ class CategoryController extends BaseController
         return redirect(Forum::route('category.show', $category));
     }
 
-    public function destroy(DestroyCategory $request): RedirectResponse
+    public function destroy(DeleteCategory $request): RedirectResponse
     {
         $request->fulfill();
 

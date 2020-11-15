@@ -8,7 +8,7 @@ use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Models\Category;
 
-class DestroyCategory extends FormRequest implements FulfillableRequest
+class DeleteCategory extends FormRequest implements FulfillableRequest
 {
     use HandlesDeletion;
 

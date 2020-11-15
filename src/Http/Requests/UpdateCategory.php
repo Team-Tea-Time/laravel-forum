@@ -6,7 +6,7 @@ use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Events\UserUpdatedCategory;
 use TeamTeaTime\Forum\Models\Category;
 
-class UpdateCategory extends StoreCategory
+class UpdateCategory extends CreateCategory
 {
     public function fulfill()
     {

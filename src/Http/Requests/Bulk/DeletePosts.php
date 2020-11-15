@@ -12,7 +12,7 @@ use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Post;
 
-class DestroyPosts extends FormRequest implements FulfillableRequest
+class DeletePosts extends FormRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation, HandlesDeletion;
 

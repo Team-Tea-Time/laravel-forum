@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Http\Requests;
 
 use TeamTeaTime\Forum\Events\UserUpdatedPost;
 
-class UpdatePost extends StorePost
+class UpdatePost extends CreatePost
 {
     public function authorize(): bool
     {

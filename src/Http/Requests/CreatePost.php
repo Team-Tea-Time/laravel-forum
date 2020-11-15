@@ -10,7 +10,7 @@ use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
 
-class StorePost extends FormRequest implements FulfillableRequest
+class CreatePost extends FormRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {

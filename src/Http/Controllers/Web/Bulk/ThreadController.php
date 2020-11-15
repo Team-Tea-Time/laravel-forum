@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Http\Controllers\Web\Bulk;
 
 use Illuminate\Http\RedirectResponse;
 use TeamTeaTime\Forum\Http\Controllers\Web\BaseController;
-use TeamTeaTime\Forum\Http\Requests\Bulk\DestroyThreads;
+use TeamTeaTime\Forum\Http\Requests\Bulk\DeleteThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\MoveThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\LockThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\PinThreads;
@@ -57,7 +57,7 @@ class ThreadController extends BaseController
         return $this->bulkActionResponse($count, 'threads.updated');
     }
 
-    public function destroy(DestroyThreads $request): RedirectResponse
+    public function destroy(DeleteThreads $request): RedirectResponse
     {
         $count = $request->fulfill()->count();
 

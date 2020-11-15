@@ -9,7 +9,7 @@ use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Thread;
 
-class DestroyThread extends FormRequest implements FulfillableRequest
+class DeleteThread extends FormRequest implements FulfillableRequest
 {
     use HandlesDeletion;
 
