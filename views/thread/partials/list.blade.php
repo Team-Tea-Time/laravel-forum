@@ -30,12 +30,15 @@
                 {{ $thread->reply_count }}
             </span>
         </div>
-        <div class="col-sm text-md-right text-muted">
-            <a href="{{ Forum::route('thread.show', $thread->lastPost) }}">{{ trans('forum::posts.view') }} &raquo;</a>
-            <br>
-            {{ $thread->lastPost->authorName }}
-            <span class="text-muted">@include ('forum::partials.timestamp', ['carbon' => $thread->lastPost->created_at])</span>
-        </div>
+
+        @if ($thread->lastPost)
+            <div class="col-sm text-md-right text-muted">
+                <a href="{{ Forum::route('thread.show', $thread->lastPost) }}">{{ trans('forum::posts.view') }} &raquo;</a>
+                <br>
+                {{ $thread->lastPost->authorName }}
+                <span class="text-muted">@include ('forum::partials.timestamp', ['carbon' => $thread->lastPost->created_at])</span>
+            </div>
+        @endif
 
         @if (isset($category))
             @can ('manageThreads', $category)

@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserMovedThread;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
@@ -28,17 +29,41 @@ class MoveThread extends BaseRequest implements FulfillableRequest
     {
         $thread = $this->route('thread');
         $sourceCategory = $thread->category;
-        $thread->category_id = $this->input('category_id');
-        $thread->saveWithoutTouch();
+        $destinationCategory = $this->getDestinationCategory();
 
-        event(new UserMovedThread($this->user(), $thread, $sourceCategory, $this->getDestinationCategory()));
+        $thread->updateWithoutTouch(['category_id' => $destinationCategory->id]);
+
+        $sourceCategoryValues = [];
+
+        if ($sourceCategory->newest_thread_id === $thread->id)
+        {
+            $sourceCategoryValues['newest_thread_id'] = $sourceCategory->getNewestThreadId();
+        }
+        if ($sourceCategory->latest_active_thread_id === $thread->id)
+        {
+            $sourceCategoryValues['latest_active_thread_id'] = $sourceCategory->getLatestActiveThreadId();
+        }
+
+        $sourceCategoryValues['thread_count'] = DB::raw('thread_count - 1');
+        $sourceCategoryValues['post_count'] = DB::raw("post_count - {$thread->postCount}");
+
+        $sourceCategory->updateWithoutTouch($sourceCategoryValues);
+
+        $destinationCategory->updateWithoutTouch([
+            'thread_count' => DB::raw('thread_count + 1'),
+            'post_count' => DB::raw("post_count + {$thread->postCount}"),
+            'newest_thread_id' => $destinationCategory->getNewestThreadId(),
+            'latest_active_thread_id' => $destinationCategory->getLatestActiveThreadId()
+        ]);
+
+        event(new UserMovedThread($this->user(), $thread, $sourceCategory, $destinationCategory));
 
         return $thread;
     }
 
     private function getDestinationCategory(): Category
     {
-        if (! $this->destinationCategory)
+        if (! isset($this->destinationCategory))
         {
             $this->destinationCategory = Category::find($this->input('category_id'));
         }

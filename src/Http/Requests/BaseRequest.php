@@ -13,6 +13,7 @@ class BaseRequest extends FormRequest
 
     protected function isPermaDeleting(): bool
     {
-        return ! config('forum.general.soft_deletes') || $this->isPermaDeleteRequested();
+        $softDeletesEnabled = config('forum.general.soft_deletes');
+        return ! $softDeletesEnabled || ($softDeletesEnabled && $this->isPermaDeleteRequested());
     }
 }

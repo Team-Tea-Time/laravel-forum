@@ -20,7 +20,7 @@
                 @if ($category->newestThread)
                     <div>
                         <a href="{{ Forum::route('thread.show', $category->newestThread) }}">{{ $category->newestThread->title }}</a>
-                        @include ('forum::partials.timestamp', ['carbon' => $category->newestThread->lastPost->created_at])
+                        @include ('forum::partials.timestamp', ['carbon' => $category->newestThread->created_at])
                     </div>
                 @endif
                 @if ($category->latestActiveThread)

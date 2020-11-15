@@ -23,6 +23,7 @@ class RestoreThread extends BaseRequest implements FulfillableRequest
     {
         $thread = $this->route('thread');
         $thread->restoreWithoutTouch();
+        $thread->posts()->restore();
 
         $category = $thread->category;
         $category->update([

@@ -11,8 +11,6 @@ use TeamTeaTime\Forum\Http\ViewComposers\MasterComposer;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Models\Observers\PostObserver;
-use TeamTeaTime\Forum\Models\Observers\ThreadObserver;
 
 class ForumServiceProvider extends ServiceProvider
 {
@@ -68,9 +66,6 @@ class ForumServiceProvider extends ServiceProvider
 
         // Make sure Carbon's locale is set to the application locale
         Carbon::setLocale(config('app.locale'));
-
-        Thread::observe(new ThreadObserver);
-        Post::observe(new PostObserver);
 
         $loader = AliasLoader::getInstance();
         $loader->alias('Forum', config('forum.web.utility_class'));

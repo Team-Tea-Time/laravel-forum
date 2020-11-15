@@ -84,6 +84,13 @@ abstract class BaseModel extends Model
         $this->withoutTouch('save');
     }
 
+    public function updateWithoutTouch(array $attributes)
+    {
+        $this->timestamps = false;
+        $this->update($attributes);
+        $this->timestamps = true;
+    }
+
     public function deleteWithoutTouch()
     {
         $this->withoutTouch('delete');

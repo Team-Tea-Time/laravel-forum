@@ -14,7 +14,7 @@ class Post extends BaseModel
 
     protected $table = 'forum_posts';
     protected $dates = ['deleted_at'];
-    protected $fillable = ['thread_id', 'author_id', 'post_id', 'content'];
+    protected $fillable = ['thread_id', 'author_id', 'post_id', 'sequence', 'content'];
 
     public function __construct(array $attributes = [])
     {
