@@ -57,8 +57,7 @@ class DestroyPost extends BaseRequest implements FulfillableRequest
         // Update sequence numbers for all of the thread's posts
         $post->thread->posts->each(function ($p)
         {
-            $p->sequence = $p->getSequenceNumber();
-            $p->saveWithoutTouch();
+            $p->updateWithoutTouch(['sequence' => $p->getSequenceNumber()]);
         });
 
         event(new UserDeletedPost($this->user(), $post));

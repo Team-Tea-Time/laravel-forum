@@ -117,9 +117,4 @@ class Thread extends BaseModel
             $this->reader->touch();
         }
     }
-
-    public function syncLastPost(): bool
-    {
-        return $this->update(['last_post_id' => $this->getLastPost()->id]);
-    }
 }

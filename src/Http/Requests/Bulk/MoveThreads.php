@@ -17,8 +17,8 @@ class MoveThreads extends BaseRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 
+    private Collection $sourceCategories;
     private Category $destinationCategory;
-    private Collection $threadsByCategory;
 
     public function rules(): array
     {
@@ -32,9 +32,9 @@ class MoveThreads extends BaseRequest implements FulfillableRequest
     {
         if (! $this->user()->can('moveThreadsTo', $this->getDestinationCategory())) return false;
 
-        foreach ($this->threadsByCategory as $thread)
+        foreach ($this->getSourceCategories() as $category)
         {
-            if (! $this->user()->can('moveThreadsFrom', $thread->category)) return false;
+            if (! $this->user()->can('moveThreadsFrom', $category)) return false;
         }
 
         return true;
@@ -42,42 +42,68 @@ class MoveThreads extends BaseRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        foreach ($this->getThreadsByCategory() as $thread)
-        {
-            $thread->category->syncCurrentThreads();
-        }
+        $threads = $this->threads()->get();
+        $threadsByCategory = $threads->groupBy('category_id');
+        $sourceCategories = $this->getSourceCategories();
+        $destinationCategory = $this->getDestinationCategory();
 
         $this->threads()->update(['category_id' => $this->validated()['category_id']]);
 
-        $threads = $this->threads()->get();
+        foreach ($sourceCategories as $category)
+        {
+            $categoryThreads = $threadsByCategory->get($category->id);
+            $threadCount = $categoryThreads->count();
+            $postCount = $threadCount + $categoryThreads->sum('reply_count');
+            $category->updateWithoutTouch([
+                'newest_thread_id' => $category->getNewestThreadId(),
+                'latest_active_thread_id' => $category->getLatestActiveThreadId(),
+                'thread_count' => DB::raw("thread_count - {$threadCount}"),
+                'post_count' => DB::raw("post_count - {$postCount}")
+            ]);
+        }
 
-        event(new UserMovedThreads($this->user(), $threads, $this->getDestinationCategory));
-        
-        $this->getDestinationCategory()->syncCurrentThreads();
+        $threadCount = $threads->count();
+        $postCount = $threads->count() + $threads->sum('reply_count');
+        $destinationCategory->updateWithoutTouch([
+            'newest_thread_id' => $destinationCategory->getNewestThreadId(),
+            'latest_active_thread_id' => $destinationCategory->getLatestActiveThreadId(),
+            'thread_count' => DB::raw("thread_count + {$threadCount}"),
+            'post_count' => DB::raw("post_count + {$postCount}")
+        ]);
+
+        event(new UserBulkMovedThreads($this->user(), $threads, $sourceCategories, $destinationCategory));
 
         return $threads;
     }
 
     private function threads(): Builder
     {
-        $query = DB::table(Thread::getTableName());
+        // Don't include threads that are already in the destination category
+        $query = Thread::where('category_id', '!=', $this->validated()['category_id']);
 
         if (! $this->user()->can('viewTrashedThreads'))
         {
-            $query = $query->whereNull(Category::DELETED_AT);
+            $query = $query->whereNull(Thread::DELETED_AT);
         }
 
         return $query->whereIn('id', $this->validated()['threads']);
     }
 
-    private function getThreadsByCategory()
+    private function getSourceCategories()
     {
-        if (! $this->threadsByCategory)
+        if (! $this->sourceCategories)
         {
-            $this->threadsByCategory = $this->threads()->select('category_id')->distinct()->get();
+            $query = Thread::select('category_id')->distinct()->where('category_id', '!=', $this->validated()['category_id']);
+
+            if (! $this->user()->can('viewTrashedThreads'))
+            {
+                $query = $query->whereNull(Thread::DELETED_AT);
+            }
+
+            $this->sourceCategories = Category::whereIn('id', $query->get()->pluck('category_id'));
         }
         
-        return $this->threadsByCategory;
+        return $this->sourceCategories;
     }
 
     private function getDestinationCategory()
