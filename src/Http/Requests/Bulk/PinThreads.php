@@ -3,15 +3,15 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Database\Query\Builder;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
-use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Events\UserBulkPinnedThreads;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 
-class PinThreads extends BaseRequest implements FulfillableRequest
+class PinThreads extends FormRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 

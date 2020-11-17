@@ -2,10 +2,11 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Events\UserLockedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
-class LockThread extends BaseRequest implements FulfillableRequest
+class LockThread extends FormRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {

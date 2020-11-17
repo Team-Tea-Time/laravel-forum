@@ -2,13 +2,17 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserDeletedPost;
+use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Post;
 
-class DestroyPost extends BaseRequest implements FulfillableRequest
+class DestroyPost extends FormRequest implements FulfillableRequest
 {
+    use HandlesDeletion;
+
     public function authorize(): bool
     {
         $post = $this->route('post');

@@ -2,10 +2,11 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Events\UserRenamedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
-class RenameThread extends BaseRequest implements FulfillableRequest
+class RenameThread extends FormRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {

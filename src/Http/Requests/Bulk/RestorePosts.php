@@ -4,14 +4,14 @@ namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserBulkRestoredPosts;
-use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Post;
 
-class RestorePosts extends BaseRequest implements FulfillableRequest
+class RestorePosts extends FormRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 

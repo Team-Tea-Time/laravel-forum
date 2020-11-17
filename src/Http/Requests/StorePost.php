@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserCreatedPost;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
@@ -9,7 +10,7 @@ use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
 
-class StorePost extends BaseRequest implements FulfillableRequest
+class StorePost extends FormRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {

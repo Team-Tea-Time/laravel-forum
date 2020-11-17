@@ -2,16 +2,17 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserBulkDeletedThreads;
-use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
+use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Thread;
 
-class DestroyThreads extends BaseRequest implements FulfillableRequest
+class DestroyThreads extends FormRequest implements FulfillableRequest
 {
-    use AuthorizesAfterValidation;
+    use AuthorizesAfterValidation, HandlesDeletion;
 
     public function rules(): array
     {

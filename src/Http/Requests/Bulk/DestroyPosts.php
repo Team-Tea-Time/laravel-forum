@@ -4,16 +4,17 @@ namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Events\UserBulkDeletedPosts;
-use TeamTeaTime\Forum\Http\Requests\BaseRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
+use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Post;
 
-class DestroyPosts extends BaseRequest implements FulfillableRequest
+class DestroyPosts extends FormRequest implements FulfillableRequest
 {
-    use AuthorizesAfterValidation;
+    use AuthorizesAfterValidation, HandlesDeletion;
 
     public function rules(): array
     {
