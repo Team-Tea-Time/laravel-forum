@@ -5,6 +5,7 @@ namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
+use TeamTeaTime\Forum\Actions\Bulk\RestoreThreads as Action;
 use TeamTeaTime\Forum\Events\UserBulkRestoredThreads;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
@@ -26,7 +27,7 @@ class RestoreThreads extends FormRequest implements FulfillableRequest
     {
         if (! $this->user()->can('viewTrashedThreads')) return false;
 
-        $threads = $this->threads()->get();
+        $threads = Thread::whereIn('id', $this->validated()['threads'])->get();
         foreach ($threads as $thread)
         {
             if (! $this->user()->can('restore', $thread)) return false;
@@ -37,39 +38,14 @@ class RestoreThreads extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $threads = $this->threads(true)->get();
+        $action = new Action($this->validated()['threads']);
+        $threads = $action->execute();
 
-        if ($threads->count() === 0) return 0;
-
-        $threadsByCategory = $threads->groupBy('category_id');
-        foreach ($threadsByCategory as $threads)
+        if (! is_null($threads))
         {
-            $threadCount = $threads->count();
-            $postCount = $threads->sum('reply_count') + $threadCount; // count the first post of each thread
-            $category = $threads->first()->category;
-
-            $category->updateWithoutTouch([
-                'newest_thread_id' => max($threads->max('id'), $category->newest_thread_id),
-                'latest_active_thread_id' => $category->getLatestActiveThreadId(),
-                'thread_count' => DB::raw("thread_count + {$threadCount}"),
-                'post_count' => DB::raw("post_count + {$postCount}")
-            ]);
+            event(new UserBulkRestoredThreads($this->user(), $threads));
         }
-
-        event(new UserBulkRestoredThreads($this->user(), $threads));
 
         return $threads;
-    }
-
-    private function threads(bool $withTrashedAbilityCheck = false): Builder
-    {
-        $query = DB::table(Thread::getTableName());
-
-        if ($withTrashedAbilityCheck && ! $this->user()->can('viewTrashedThreads'))
-        {
-            $query = $query->whereNull(Thread::DELETED_AT);
-        }
-
-        return $query->whereIn('id', $this->validated()['threads']);
     }
 }

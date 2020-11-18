@@ -52,7 +52,6 @@ $r->group(['prefix' => $prefix['thread'] . '/{thread}-{thread_slug}'], function 
 
 $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk', 'middleware' => $authMiddleware], function ($r)
 {
-    $r->post('thread/rename', ['as' => 'thread.rename', 'uses' => 'ThreadController@rename']);
     $r->post('thread/move', ['as' => 'thread.move', 'uses' => 'ThreadController@move']);
     $r->post('thread/lock', ['as' => 'thread.lock', 'uses' => 'ThreadController@lock']);
     $r->post('thread/unlock', ['as' => 'thread.unlock', 'uses' => 'ThreadController@unlock']);

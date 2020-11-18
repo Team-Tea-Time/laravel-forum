@@ -9,7 +9,7 @@ class RestoreThread extends BaseAction
 {
     private Thread $thread;
 
-    public function __construct(Post $thread)
+    public function __construct(Thread $thread)
     {
         $this->thread = $thread;
     }
@@ -18,8 +18,7 @@ class RestoreThread extends BaseAction
     {
         if (! $this->thread->trashed()) return null;
 
-        $this->thread->restoreWithoutTouch();
-        $this->thread->posts()->restore();
+        $this->thread->setTouchedRelations([])->restoreWithoutTouch();
 
         $category = $this->thread->category;
         $category->update([
@@ -28,5 +27,7 @@ class RestoreThread extends BaseAction
             'thread_count' => DB::raw("thread_count + 1"),
             'post_count' => DB::raw("post_count + {$this->thread->postCount}")
         ]);
+
+        return $this->thread;
     }
 }

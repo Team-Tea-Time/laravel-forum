@@ -12,7 +12,7 @@ use TeamTeaTime\Forum\Events\UserViewingRecent;
 use TeamTeaTime\Forum\Events\UserViewingThread;
 use TeamTeaTime\Forum\Events\UserViewingUnread;
 use TeamTeaTime\Forum\Http\Requests\CreateThread;
-use TeamTeaTime\Forum\Http\Requests\DestroyThread;
+use TeamTeaTime\Forum\Http\Requests\DeleteThread;
 use TeamTeaTime\Forum\Http\Requests\LockThread;
 use TeamTeaTime\Forum\Http\Requests\MarkThreadsAsRead;
 use TeamTeaTime\Forum\Http\Requests\MoveThread;
@@ -177,7 +177,7 @@ class ThreadController extends BaseController
         return redirect(Forum::route('thread.show', $thread));
     }
 
-    public function destroy(DestroyThread $request): RedirectResponse
+    public function destroy(DeleteThread $request): RedirectResponse
     {
         $thread = $request->fulfill();
 

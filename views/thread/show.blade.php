@@ -88,16 +88,18 @@
                 {{ $posts->links() }}
             </div>
             <div class="col col-xs-4 text-right">
-                @can ('reply', $thread)
-                    <div class="btn-group" role="group">
-                        <a href="{{ Forum::route('post.create', $thread) }}" class="btn btn-primary">
-                            {{ trans('forum::general.new_reply') }}
-                        </a>
-                        <a href="#quick-reply" class="btn btn-primary">
-                            {{ trans('forum::general.quick_reply') }}
-                        </a>
-                    </div>
-                @endcan
+                @if (! $thread->trashed())
+                    @can ('reply', $thread)
+                        <div class="btn-group" role="group">
+                            <a href="{{ Forum::route('post.create', $thread) }}" class="btn btn-primary">
+                                {{ trans('forum::general.new_reply') }}
+                            </a>
+                            <a href="#quick-reply" class="btn btn-primary">
+                                {{ trans('forum::general.quick_reply') }}
+                            </a>
+                        </div>
+                    @endcan
+                @endif
             </div>
         </div>
 
@@ -155,22 +157,24 @@
 
         {{ $posts->links() }}
 
-        @can ('reply', $thread)
-            <h3>{{ trans('forum::general.quick_reply') }}</h3>
-            <div id="quick-reply">
-                <form method="POST" action="{{ Forum::route('post.store', $thread) }}">
-                    @csrf
+        @if (! $thread->trashed())
+            @can ('reply', $thread)
+                <h3>{{ trans('forum::general.quick_reply') }}</h3>
+                <div id="quick-reply">
+                    <form method="POST" action="{{ Forum::route('post.store', $thread) }}">
+                        @csrf
 
-                    <div class="form-group">
-                        <textarea name="content" class="form-control">{{ old('content') }}</textarea>
-                    </div>
+                        <div class="form-group">
+                            <textarea name="content" class="form-control">{{ old('content') }}</textarea>
+                        </div>
 
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-primary px-5">{{ trans('forum::general.reply') }}</button>
-                    </div>
-                </form>
-            </div>
-        @endcan
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary px-5">{{ trans('forum::general.reply') }}</button>
+                        </div>
+                    </form>
+                </div>
+            @endcan
+        @endif
     </div>
 
     @can ('manageThreads', $category)

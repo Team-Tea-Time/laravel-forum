@@ -2,9 +2,9 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Facades\DB;
+use TeamTeaTime\Forum\Actions\Bulk\LockThreads as Action;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Thread;
@@ -22,9 +22,7 @@ class LockThreads extends FormRequest implements FulfillableRequest
 
     public function authorizeValidated(): bool
     {
-        $categoryIds = $this->threads()->select('category_id')->distinct()->pluck('category_id');
-        $categories = Category::where('id', $categoryIds)->get();
-
+        $categories = $this->categories();
         foreach ($categories as $category)
         {
             if (! $this->user()->can('lockThreads', $category)) return false;
@@ -35,23 +33,28 @@ class LockThreads extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $threads = $this->threads();
-        $threads->update(['locked' => true]);
+        $action = new Action($this->validated()['threads'], $this->user()->can('viewTrashedThreads'));
+        $threads = $action->execute();
 
-        event(new UserBulkLockedThreads($this->user(), $threads));
+        if (! is_null($threads))
+        {
+            event(new UserBulkLockedThreads($this->user(), $threads));
+        }
 
         return $threads;
     }
 
-    protected function threads(): Builder
+    protected function categories(): Collection
     {
-        $query = DB::table(Thread::getTableName());
+        $query = Thread::whereIn('id', $this->validated()['threads']);
 
-        if (! $this->user()->can('viewTrashedThreads'))
+        if ($this->user()->can('viewTrashedThreads'))
         {
-            $query = $query->whereNull(Thread::DELETED_AT);
+            $query = $query->withTrashed();
         }
 
-        return $query->whereIn('id', $this->validated()['threads']);
+        $categoryIds = $query->select('category_id')->distinct()->pluck('category_id');
+
+        return Category::whereIn('id', $categoryIds)->get();
     }
 }
