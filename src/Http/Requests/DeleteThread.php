@@ -16,8 +16,7 @@ class DeleteThread extends FormRequest implements FulfillableRequest
 
     public function authorize(): bool
     {
-        $thread = $this->route('thread');
-        return $this->user()->can('delete', $thread);
+        return $this->user()->can('delete', $this->route('thread'));
     }
 
     public function rules(): array
@@ -29,9 +28,7 @@ class DeleteThread extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $thread = $this->route('thread');
-
-        $action = new Action($thread, $this->isPermaDeleting());
+        $action = new Action($this->route('thread'), $this->isPermaDeleting());
         $thread = $action->execute();
 
         if (! is_null($thread))
