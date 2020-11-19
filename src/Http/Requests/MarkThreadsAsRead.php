@@ -35,7 +35,7 @@ class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
     {
         $category = $this->category();
 
-        $action = new Action($category);
+        $action = new Action($this->user(), $category);
         $threads = $action->execute();
 
         event(new UserMarkedThreadsAsRead($this->user(), $category, $threads));
