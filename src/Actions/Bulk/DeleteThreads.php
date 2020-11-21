@@ -47,16 +47,16 @@ class DeleteThreads extends BaseAction
             : $query->whereNull(Thread::DELETED_AT)->update([Thread::DELETED_AT => DB::raw('now()')]);
 
         $threadsByCategory = $threads->groupBy('category_id');
-        foreach ($threadsByCategory as $threads)
+        foreach ($threadsByCategory as $categoryThreads)
         {
             // Count only non-deleted threads for changes to category stats since soft-deleted threads
             // are already represented
-            $threadCount = $threads->whereNull(Thread::DELETED_AT)->count();
+            $threadCount = $categoryThreads->whereNull(Thread::DELETED_AT)->count();
 
             // Sum of reply counts + thread count = total posts
-            $postCount = $threads->whereNull(Thread::DELETED_AT)->sum('reply_count') + $threadCount;
+            $postCount = $categoryThreads->whereNull(Thread::DELETED_AT)->sum('reply_count') + $threadCount;
 
-            $category = $threads->first()->category;
+            $category = $categoryThreads->first()->category;
 
             $updates = [
                 'newest_thread_id' => $category->getNewestThreadId(),
