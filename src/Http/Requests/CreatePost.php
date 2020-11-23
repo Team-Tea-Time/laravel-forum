@@ -3,14 +3,14 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\DB;
+use TeamTeaTime\Forum\Actions\CreatePost as Action;
 use TeamTeaTime\Forum\Events\UserCreatedPost;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
 
-class StorePost extends FormRequest implements FulfillableRequest
+class CreatePost extends FormRequest implements FulfillableRequest
 {
     public function authorize(): bool
     {
@@ -27,27 +27,12 @@ class StorePost extends FormRequest implements FulfillableRequest
     public function fulfill()
     {
         $thread = $this->route('thread');
+        $parent = $this->has('post') ? $thread->posts->find($this->input('post')) : null;
 
-        $parent = $this->has('post') ? $thread->posts->find($this->input('post'))->id : 0;
-
-        $post = Post::create($this->validated() + [
-            'thread_id' => $thread->id,
-            'post_id' => $parent,
-            'author_id' => $this->user()->getKey(),
-            'sequence' => $thread->posts->count() + 1
-        ]);
+        $action = new Action($thread, $parent, $this->user(), $this->validated()['content']);
+        $post = $action->execute();
 
         event(new UserCreatedPost($this->user(), $post));
-
-        $thread->update([
-            'last_post_id' => $post->id,
-            'reply_count' => DB::raw('reply_count + 1')
-        ]);
-
-        $thread->category->updateWithoutTouch([
-            'latest_active_thread_id' => $thread->id,
-            'post_count' => DB::raw('post_count + 1')
-        ]);
 
         return $post;
     }

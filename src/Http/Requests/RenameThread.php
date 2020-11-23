@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use TeamTeaTime\Forum\Actions\RenameThread as Action;
 use TeamTeaTime\Forum\Events\UserRenamedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
@@ -23,9 +24,8 @@ class RenameThread extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $thread = $this->route('thread');
-        $thread->title = $this->input('title');
-        $thread->save();
+        $action = new Action($this->route('thread'), $this->validated()['title']);
+        $thread = $action->execute();
 
         event(new UserRenamedThread($this->user(), $thread));
 

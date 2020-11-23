@@ -4,22 +4,26 @@ namespace TeamTeaTime\Forum\Http\Controllers\Web\Bulk;
 
 use Illuminate\Http\RedirectResponse;
 use TeamTeaTime\Forum\Http\Controllers\Web\BaseController;
-use TeamTeaTime\Forum\Http\Requests\Bulk\DestroyPosts;
+use TeamTeaTime\Forum\Http\Requests\Bulk\DeletePosts;
 use TeamTeaTime\Forum\Http\Requests\Bulk\RestorePosts;
 
 class PostController extends BaseController
 {
-    public function destroy(DestroyPosts $request): RedirectResponse
+    public function destroy(DeletePosts $request): RedirectResponse
     {
-        $count = $request->fulfill()->count();
+        $result = $request->fulfill();
 
-        return $this->bulkActionResponse($count, 'posts.deleted');
+        if (is_null($result)) return $this->invalidSelectionResponse();
+
+        return $this->bulkActionResponse($result->count(), 'posts.deleted');
     }
 
     public function restore(RestorePosts $request): RedirectResponse
     {
-        $count = $request->fulfill()->count();
+        $result = $request->fulfill();
 
-        return $this->bulkActionResponse($count, 'posts.updated');
+        if (is_null($result)) return $this->invalidSelectionResponse();
+
+        return $this->bulkActionResponse($result->count(), 'posts.updated');
     }
 }

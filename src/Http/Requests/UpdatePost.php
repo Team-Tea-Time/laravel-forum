@@ -2,23 +2,24 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use TeamTeaTime\Forum\Actions\UpdatePost as Action;
 use TeamTeaTime\Forum\Events\UserUpdatedPost;
 
-class UpdatePost extends StorePost
+class UpdatePost extends CreatePost
 {
     public function authorize(): bool
     {
-        $post = $this->route('post');
-        return $this->user()->can('edit', $post);
+        return $this->user()->can('edit', $this->route('post'));
     }
 
     public function fulfill()
     {
-        $category = $this->route('post');
-        $category->fill($this->validated())->save();
+        $input = $this->validated();
+        $action = new Action($this->route('post'), $input['content']);
+        $post = $action->execute();
 
-        event(new UserUpdatedPost($this->user(), $category));
+        event(new UserUpdatedPost($this->user(), $post));
 
-        return $category;
+        return $post;
     }
 }

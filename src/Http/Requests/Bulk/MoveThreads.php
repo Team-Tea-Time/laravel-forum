@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
+use TeamTeaTime\Forum\Actions\MoveThreads as Action;
 use TeamTeaTime\Forum\Events\UserBulkMovedThreads;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
@@ -42,51 +43,19 @@ class MoveThreads extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $threads = $this->threads()->get();
-        $threadsByCategory = $threads->groupBy('category_id');
-        $sourceCategories = $this->getSourceCategories();
-        $destinationCategory = $this->getDestinationCategory();
+        $action = new Action(
+            $this->validated()['threads'],
+            $this->getDestinationCategory(),
+            $this->user()->can('viewTrashedThreads')
+        );
+        $threads = $action->execute();
 
-        $this->threads()->update(['category_id' => $this->validated()['category_id']]);
-
-        foreach ($sourceCategories as $category)
+        if (! is_null($threads))
         {
-            $categoryThreads = $threadsByCategory->get($category->id);
-            $threadCount = $categoryThreads->count();
-            $postCount = $threadCount + $categoryThreads->sum('reply_count');
-            $category->updateWithoutTouch([
-                'newest_thread_id' => $category->getNewestThreadId(),
-                'latest_active_thread_id' => $category->getLatestActiveThreadId(),
-                'thread_count' => DB::raw("thread_count - {$threadCount}"),
-                'post_count' => DB::raw("post_count - {$postCount}")
-            ]);
+            event(new UserBulkMovedThreads($this->user(), $threads, $this->getSourceCategories(), $this->getDestinationCategory()));
         }
-
-        $threadCount = $threads->count();
-        $postCount = $threads->count() + $threads->sum('reply_count');
-        $destinationCategory->updateWithoutTouch([
-            'newest_thread_id' => $destinationCategory->getNewestThreadId(),
-            'latest_active_thread_id' => $destinationCategory->getLatestActiveThreadId(),
-            'thread_count' => DB::raw("thread_count + {$threadCount}"),
-            'post_count' => DB::raw("post_count + {$postCount}")
-        ]);
-
-        event(new UserBulkMovedThreads($this->user(), $threads, $sourceCategories, $destinationCategory));
 
         return $threads;
-    }
-
-    private function threads(): Builder
-    {
-        // Don't include threads that are already in the destination category
-        $query = Thread::where('category_id', '!=', $this->validated()['category_id']);
-
-        if (! $this->user()->can('viewTrashedThreads'))
-        {
-            $query = $query->whereNull(Thread::DELETED_AT);
-        }
-
-        return $query->whereIn('id', $this->validated()['threads']);
     }
 
     private function getSourceCategories()

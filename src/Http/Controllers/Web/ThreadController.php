@@ -11,14 +11,14 @@ use TeamTeaTime\Forum\Events\UserMarkingNew;
 use TeamTeaTime\Forum\Events\UserViewingRecent;
 use TeamTeaTime\Forum\Events\UserViewingThread;
 use TeamTeaTime\Forum\Events\UserViewingUnread;
-use TeamTeaTime\Forum\Http\Requests\DestroyThread;
+use TeamTeaTime\Forum\Http\Requests\CreateThread;
+use TeamTeaTime\Forum\Http\Requests\DeleteThread;
 use TeamTeaTime\Forum\Http\Requests\LockThread;
 use TeamTeaTime\Forum\Http\Requests\MarkThreadsAsRead;
 use TeamTeaTime\Forum\Http\Requests\MoveThread;
 use TeamTeaTime\Forum\Http\Requests\PinThread;
 use TeamTeaTime\Forum\Http\Requests\RenameThread;
 use TeamTeaTime\Forum\Http\Requests\RestoreThread;
-use TeamTeaTime\Forum\Http\Requests\StoreThread;
 use TeamTeaTime\Forum\Http\Requests\UnlockThread;
 use TeamTeaTime\Forum\Http\Requests\UnpinThread;
 use TeamTeaTime\Forum\Models\Category;
@@ -112,7 +112,7 @@ class ThreadController extends BaseController
         return view('forum::thread.create', compact('category'));
     }
 
-    public function store(StoreThread $request, Category $category): RedirectResponse
+    public function store(CreateThread $request, Category $category): RedirectResponse
     {
         $thread = $request->fulfill();
 
@@ -170,14 +170,18 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
+        if (is_null($thread)) return $this->invalidSelectionResponse();
+
         Forum::alert('success', 'threads.updated');
 
         return redirect(Forum::route('thread.show', $thread));
     }
 
-    public function destroy(DestroyThread $request): RedirectResponse
+    public function destroy(DeleteThread $request): RedirectResponse
     {
         $thread = $request->fulfill();
+
+        if (is_null($thread)) return $this->invalidSelectionResponse();
 
         Forum::alert('success', 'threads.deleted');
 
@@ -187,6 +191,8 @@ class ThreadController extends BaseController
     public function restore(RestoreThread $request): RedirectResponse
     {
         $thread = $request->fulfill();
+
+        if (is_null($thread)) return $this->invalidSelectionResponse();
 
         Forum::alert('success', 'threads.updated');
 

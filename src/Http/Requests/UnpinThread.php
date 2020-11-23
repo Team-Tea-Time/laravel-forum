@@ -2,15 +2,15 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use TeamTeaTime\Forum\Actions\UnpinThread as Action;
 use TeamTeaTime\Forum\Events\UserUnpinnedThread;
 
 class UnpinThread extends PinThread
 {
     public function fulfill()
     {
-        $thread = $this->route('thread');
-        $thread->pinned = false;
-        $thread->saveWithoutTouch();
+        $action = new Action($this->route('thread'));
+        $thread = $action->execute();
 
         event(new UserUnpinnedThread($this->user(), $thread));
 

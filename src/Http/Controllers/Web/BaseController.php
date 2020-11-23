@@ -30,4 +30,11 @@ abstract class BaseController extends Controller
 
         return redirect()->back();
     }
+
+    protected function invalidSelectionResponse(): RedirectResponse
+    {
+        Forum::alert('warning', 'general.invalid_selection');
+
+        return redirect()->back();
+    }
 }

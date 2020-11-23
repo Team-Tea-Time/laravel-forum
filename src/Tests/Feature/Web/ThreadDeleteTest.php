@@ -63,12 +63,12 @@ class ThreadDeleteTest extends FeatureTestCase
     }
 
     /** @test */
-    public function should_delete_all_posts_inside_the_thread()
+    public function should_delete_all_posts_inside_the_thread_when_perma_deleting()
     {
         $thread = $this->threadFactory->createOne(['author_id' => $this->user->getKey()]);
         $this->postFactory->count(2)->create(['thread_id' => $thread->getKey(), 'author_id' => $this->user->getKey()]);
 
-        $this->actingAs($this->user)->delete(Forum::route($this->route, $thread), []);
+        $this->actingAs($this->user)->delete(Forum::route($this->route, $thread), ['permadelete' => true]);
 
         $this->assertEquals(0, Post::count());
     }

@@ -3,7 +3,8 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Events\UserManagedCategories;
+use TeamTeaTime\Forum\Actions\Bulk\ManageCategories as Action;
+use TeamTeaTime\Forum\Events\UserBulkManagedCategories;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
 
@@ -23,10 +24,10 @@ class ManageCategories extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $categories = $this->validated()['categories'];
-        $numCategoriesAffected = Category::rebuildTree($categories);
+        $action = new Action($this->validated()['categories']);
+        $categories = $action->execute();
 
-        event(new UserManagedCategories($this->user(), $categories, $numCategoriesAffected));
+        event(new UserBulkManagedCategories($this->user(), $categories));
 
         return $categories;
     }

@@ -2,19 +2,29 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
+use TeamTeaTime\Forum\Actions\UpdateCategory as Action;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Events\UserUpdatedCategory;
-use TeamTeaTime\Forum\Models\Category;
 
-class UpdateCategory extends StoreCategory
+class UpdateCategory extends CreateCategory
 {
     public function fulfill()
     {
-        $category = $this->route('category');
-        $input = $this->validated() + ['accepts_threads' => 0, 'is_private' => 0]; // Defaults for checkbox inputs
-        $category->fill($input)->save();
+        $input = $this->validated();
+        $action = new Action(
+            $this->route('category'),
+            $input['title'] ?? null,
+            $input['description'] ?? null,
+            $input['color'] ?? null,
+            $input['accepts_threads'] ?? null,
+            $input['is_private'] ?? null
+        );
+        $category = $action->execute();
 
-        event(new UserUpdatedCategory($this->user(), $category));
+        if (! is_null($category))
+        {
+            event(new UserUpdatedCategory($this->user(), $category));
+        }
 
         return $category;
     }

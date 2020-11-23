@@ -2,17 +2,20 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
+use TeamTeaTime\Forum\Actions\Bulk\UnlockThreads as Action;
 use TeamTeaTime\Forum\Events\UserBulkUnlockedThreads;
 
 class UnlockThreads extends LockThreads
 {
     public function fulfill()
     {
-        $this->threads()->update(['locked' => false]);
+        $action = new Action($this->validated()['threads'], $this->user()->can('viewTrashedThreads'));
+        $threads = $action->execute();
 
-        $threads = $this->threads()->get();
-
-        event(new UserBulkUnlockedThreads($this->user(), $threads));
+        if (! is_null($threads))
+        {
+            event(new UserBulkUnlockedThreads($this->user(), $threads));
+        }
 
         return $threads;
     }

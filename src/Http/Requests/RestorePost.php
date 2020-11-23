@@ -3,7 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\DB;
+use TeamTeaTime\Forum\Actions\RestorePost as Action;
 use TeamTeaTime\Forum\Events\UserRestoredPost;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
@@ -22,20 +22,13 @@ class RestorePost extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $post = $this->route('post');
-        $post->restoreWithoutTouch();
+        $action = new Action($this->route('post'));
+        $post = $action->execute();
 
-        $post->thread->updateWithoutTouch([
-            'last_post_id' => $post->id,
-            'reply_count' => DB::raw('reply_count + 1')
-        ]);
-
-        $post->thread->category->updateWithoutTouch([
-            'latest_active_thread_id' => $post->thread->category->getLatestActiveThreadId(),
-            'post_count' => DB::raw('post_count + 1')
-        ]);
-
-        event(new UserRestoredPost($this->user(), $post));
+        if (! is_null($post))
+        {
+            event(new UserRestoredPost($this->user(), $post));
+        }
 
         return $post;
     }

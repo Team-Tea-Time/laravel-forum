@@ -27,7 +27,7 @@
             @include ('forum::post.partials.quote', ['post' => $post->parent])
         @endif
 
-        @if ($post->trashed() || $thread->trashed())
+        @if ($post->trashed())
             @can ('viewTrashedPosts')
                 {!! Forum::render($post->content) !!}
                 <br>

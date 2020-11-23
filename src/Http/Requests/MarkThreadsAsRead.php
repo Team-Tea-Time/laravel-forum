@@ -3,11 +3,11 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use TeamTeaTime\Forum\Actions\MarkThreadsAsRead as Action;
 use TeamTeaTime\Forum\Events\UserMarkedThreadsAsRead;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Models\Thread;
 
 class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
 {
@@ -33,24 +33,10 @@ class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
-        $threads = Thread::recent();
         $category = $this->category();
 
-        if ($category !== null)
-        {
-            $threads = $threads->where('category_id', $category->id);
-        }
-
-        $threads = $threads->get()->filter(function ($thread)
-        {
-            return $thread->userReadStatus != null
-                && (! $thread->category->private || $this->user()->can('view', $thread->category));
-        });
-
-        foreach ($threads as $thread)
-        {
-            $thread->markAsRead($this->user()->getKey());
-        }
+        $action = new Action($this->user(), $category);
+        $threads = $action->execute();
 
         event(new UserMarkedThreadsAsRead($this->user(), $category, $threads));
 

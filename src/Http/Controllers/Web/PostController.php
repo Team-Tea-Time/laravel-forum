@@ -9,9 +9,9 @@ use Illuminate\View\View;
 use TeamTeaTime\Forum\Events\UserCreatingPost;
 use TeamTeaTime\Forum\Events\UserEditingPost;
 use TeamTeaTime\Forum\Events\UserViewingPost;
-use TeamTeaTime\Forum\Http\Requests\DestroyPost;
+use TeamTeaTime\Forum\Http\Requests\CreatePost;
+use TeamTeaTime\Forum\Http\Requests\DeletePost;
 use TeamTeaTime\Forum\Http\Requests\RestorePost;
-use TeamTeaTime\Forum\Http\Requests\StorePost;
 use TeamTeaTime\Forum\Http\Requests\UpdatePost;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
@@ -40,7 +40,7 @@ class PostController extends BaseController
         return view('forum::post.create', compact('thread', 'post'));
     }
 
-    public function store(StorePost $request, Thread $thread): RedirectResponse
+    public function store(CreatePost $request, Thread $thread): RedirectResponse
     {
         $this->authorize('reply', $thread);
 
@@ -86,9 +86,11 @@ class PostController extends BaseController
         return view('forum::post.confirm-restore', ['category' => $thread->category, 'thread' => $thread, 'post' => $post]);
     }
 
-    public function destroy(DestroyPost $request): RedirectResponse
+    public function destroy(DeletePost $request): RedirectResponse
     {
         $post = $request->fulfill();
+
+        if (is_null($post)) return $this->invalidSelectionResponse();
 
         Forum::alert('success', 'posts.deleted', 1);
 
@@ -98,6 +100,8 @@ class PostController extends BaseController
     public function restore(RestorePost $request): RedirectResponse
     {
         $post = $request->fulfill();
+
+        if (is_null($post)) return $this->invalidSelectionResponse();
 
         Forum::alert('success', 'posts.updated', 1);
 

@@ -3,12 +3,13 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use TeamTeaTime\Forum\Actions\DeleteCategory as Action;
 use TeamTeaTime\Forum\Events\UserDeletedCategory;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Models\Category;
 
-class DestroyCategory extends FormRequest implements FulfillableRequest
+class DeleteCategory extends FormRequest implements FulfillableRequest
 {
     use HandlesDeletion;
 
@@ -20,7 +21,9 @@ class DestroyCategory extends FormRequest implements FulfillableRequest
     public function fulfill()
     {
         $category = $this->route('category');
-        $category->delete();
+
+        $action = new Action($category);
+        $action->execute();
 
         event(new UserDeletedCategory($this->user(), $category));
 
