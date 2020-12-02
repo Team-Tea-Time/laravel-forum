@@ -21,7 +21,7 @@ class Thread extends BaseModel
 
     protected $table = 'forum_threads';
     protected $dates = ['deleted_at'];
-    protected $fillable = ['category_id', 'author_id', 'title', 'locked', 'pinned', 'reply_count', 'last_post_id', 'updated_at'];
+    protected $fillable = ['category_id', 'author_id', 'title', 'locked', 'pinned', 'reply_count', 'first_post_id', 'last_post_id', 'updated_at'];
 
     const STATUS_UNREAD = 'unread';
     const STATUS_UPDATED = 'updated';
