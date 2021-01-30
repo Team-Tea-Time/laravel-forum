@@ -2,16 +2,17 @@
 
 namespace TeamTeaTime\Forum\Actions;
 
+use Illuminate\Foundation\Auth\User;
 use TeamTeaTime\Database\Eloquent\Model;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 
 class MarkThreadsAsRead extends BaseAction
 {
-    private Model $user;
+    private User $user;
     private ?Category $category;
 
-    public function __construct(Model $user, ?Category $category)
+    public function __construct(User $user, ?Category $category)
     {
         $this->user = $user;
         $this->category = $category;
