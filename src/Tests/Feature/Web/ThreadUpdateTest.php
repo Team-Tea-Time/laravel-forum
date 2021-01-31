@@ -55,6 +55,7 @@ class ThreadUpdateTest extends FeatureTestCase
     /** @test */
     public function should_unlock_when_receive_unlock_action()
     {
+        $this->actingAs($this->user)->post(Forum::route(self::ROUTE_LOCK, $this->thread), []);
         $this->actingAs($this->user)->post(Forum::route(self::ROUTE_UNLOCK, $this->thread), []);
 
         $thread = Thread::find($this->thread->getKey());
@@ -75,6 +76,7 @@ class ThreadUpdateTest extends FeatureTestCase
     /** @test */
     public function should_unpin_when_receive_unpin_action()
     {
+        $this->actingAs($this->user)->post(Forum::route(self::ROUTE_PIN, $this->thread), []);
         $this->actingAs($this->user)->post(Forum::route(self::ROUTE_UNPIN, $this->thread), []);
 
         $thread = Thread::find($this->thread->getKey());
@@ -83,7 +85,7 @@ class ThreadUpdateTest extends FeatureTestCase
     }
 
     /** @test */
-    public function should_have_new_category_after_move()
+    public function should_have_destination_category_after_move()
     {
         $destinationCategory = $this->categoryFactory->createOne();
 
