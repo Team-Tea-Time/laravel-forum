@@ -17,7 +17,8 @@ class ThreadFactory extends Factory
             'category_id' => CategoryFactory::new(),
             'locked' => 0,
             'pinned' => 0,
-            'reply_count' => 0
+            'reply_count' => 0,
+            'deleted_at' => null
         ];
     }
 }
