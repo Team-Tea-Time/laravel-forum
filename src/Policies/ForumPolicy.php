@@ -6,7 +6,7 @@ class ForumPolicy
 {
     public function createCategories($user): bool
     {
-        return true;
+        return $user->abilities()->contains('administrate');
     }
 
     public function manageCategories($user): bool
@@ -17,12 +17,12 @@ class ForumPolicy
 
     public function moveCategories($user): bool
     {
-        return true;
+        return $user->abilities()->contains('administrate');
     }
 
     public function renameCategories($user): bool
     {
-        return true;
+        return $user->abilities()->contains('administrate');
     }
 
     public function markThreadsAsRead($user): bool
@@ -32,11 +32,11 @@ class ForumPolicy
 
     public function viewTrashedThreads($user): bool
     {
-        return true;
+        return $user->abilities()->contains('edit_forum');
     }
 
     public function viewTrashedPosts($user): bool
     {
-        return true;
+        return $user->abilities()->contains('edit_forum');
     }
 }

@@ -9,16 +9,17 @@ class ThreadPolicy
 {
     public function deletePosts($user, Thread $thread): bool
     {
-        return true;
+        return $user->abilities()->contains('edit_forum');
     }
 
     public function restorePosts($user, Thread $thread): bool
     {
-        return true;
+        return $user->abilities()->contains('edit_forum');
     }
 
     public function rename($user, Thread $thread): bool
     {
+      if ($user->abilities()->contains('edit_forum')) { return true;}
         return $user->getKey() === $thread->author_id;
     }
 
@@ -29,11 +30,11 @@ class ThreadPolicy
 
     public function delete($user, Thread $thread): bool
     {
-        return Gate::allows('deleteThreads', $thread->category) || $user->getKey() === $thread->author_id;
+        return $user->abilities()->contains('edit_forum');
     }
 
     public function restore($user, Thread $thread): bool
     {
-        return Gate::allows('restoreThreads', $thread->category) || $user->getKey() === $thread->author_id;
+        return $user->abilities()->contains('edit_forum');
     }
 }
