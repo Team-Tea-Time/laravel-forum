@@ -22,42 +22,42 @@ class CategoryPolicy
 
     public function deleteThreads($user, Category $category): bool
     {
-        return true;
+        return $user->abilities()->contains('edit_forum');
     }
 
     public function restoreThreads($user, Category $category): bool
     {
-        return true;
+        return $user->abilities()->contains('edit_forum');
     }
 
     public function enableThreads($user, Category $category): bool
     {
-        return true;
+        return $user->abilities()->contains('administrate');
     }
 
     public function moveThreadsFrom($user, Category $category): bool
     {
-        return true;
+        return $user->abilities()->contains('edit_forum');
     }
 
     public function moveThreadsTo($user, Category $category): bool
     {
-        return true;
+        return $user->abilities()->contains('edit_forum');
     }
 
     public function lockThreads($user, Category $category): bool
     {
-        return true;
+        return $user->abilities()->contains('edit_forum');
     }
 
     public function pinThreads($user, Category $category): bool
     {
-        return true;
+        return $user->abilities()->contains('edit_forum');
     }
 
     public function markThreadsAsRead($user, Category $category): bool
     {
-        return true;
+        return $user->abilities()->contains('edit_forum');
     }
 
     public function view($user, Category $category): bool
@@ -67,11 +67,11 @@ class CategoryPolicy
 
     public function delete($user, Category $category): bool
     {
-        return true;
+        return $user->abilities()->contains('administrate');
     }
 
     public function restore($user, Category $category): bool
     {
-        return true;
+        return $user->abilities()->contains('administrate');
     }
 }

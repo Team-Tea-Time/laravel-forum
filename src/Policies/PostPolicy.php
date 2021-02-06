@@ -9,16 +9,18 @@ class PostPolicy
 {
     public function edit($user, Post $post): bool
     {
+      if ($user->abilities()->contains('edit_forum')) { return true;}
         return $user->getKey() === $post->author_id;
     }
 
     public function delete($user, Post $post): bool
     {
-        return Gate::forUser($user)->allows('deletePosts', $post->thread) || $user->getKey() === $post->author_id;
+
+        return $user->abilities()->contains('edit_forum');
     }
 
     public function restore($user, Post $post): bool
     {
-        return Gate::forUser($user)->allows('restorePosts', $post->thread) || $user->getKey() === $post->author_id;
+        return $user->abilities()->contains('edit_forum');
     }
 }
