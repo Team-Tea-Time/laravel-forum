@@ -8,6 +8,8 @@ use TeamTeaTime\Forum\Actions\Bulk\LockThreads as Action;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Thread;
+use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Events\UserBulkLockedThreads;
 
 class LockThreads extends FormRequest implements FulfillableRequest
 {

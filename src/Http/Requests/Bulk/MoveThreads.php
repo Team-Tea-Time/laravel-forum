@@ -43,45 +43,44 @@ class MoveThreads extends FormRequest implements FulfillableRequest
 
     public function fulfill()
     {
+
+      $threads=new Collection;
+
+      foreach($this->validated()['threads'] as $thread_id)
+      {
+        $thread=Thread::where('id',$thread_id)->first();
         $action = new Action(
-            $this->validated()['threads'],
-            $this->getDestinationCategory(),
-            $this->user()->can('viewTrashedThreads')
+          $thread,
+          $this->getDestinationCategory(),
+          $this->user()->can('viewTrashedThreads')
         );
-        $threads = $action->execute();
+        $threads->add($action->execute());
+      }
 
-        if (! is_null($threads))
-        {
-            event(new UserBulkMovedThreads($this->user(), $threads, $this->getSourceCategories(), $this->getDestinationCategory()));
-        }
+      if (! is_null($threads))
+      {
+        event(new UserBulkMovedThreads($this->user(), $threads, $this->getSourceCategories(), $this->getDestinationCategory()));
+      }
 
-        return $threads;
+      return $threads;
     }
 
     private function getSourceCategories()
     {
-        if (! $this->sourceCategories)
-        {
-            $query = Thread::select('category_id')->distinct()->where('category_id', '!=', $this->validated()['category_id']);
 
-            if (! $this->user()->can('viewTrashedThreads'))
-            {
-                $query = $query->whereNull(Thread::DELETED_AT);
-            }
-
-            $this->sourceCategories = Category::whereIn('id', $query->get()->pluck('category_id'));
-        }
-        
-        return $this->sourceCategories;
+      $categories=new Collection;
+      foreach($this->validated()['threads'] as $thread_id)
+      {
+        $thread=Thread::where('id',$thread_id)->first();
+        $categories->add($thread->category);
+      }
+      $this->sourceCategories = $categories;
+      return $this->sourceCategories;
     }
 
     private function getDestinationCategory()
     {
-        if (! $this->destinationCategory)
-        {
-            $this->destinationCategory = Category::find($this->validated()['category_id']);
-        }
-        
+        $this->destinationCategory = Category::find($this->validated()['category_id']);
         return $this->destinationCategory;
     }
 }

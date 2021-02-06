@@ -82,7 +82,10 @@ class ThreadController extends BaseController
     {
         event(new UserViewingThread($request->user(), $thread));
 
-        $thread->markAsRead($request->user()->getKey());
+        if(null!==$request->user())
+        {
+            $thread->markAsRead($request->user()->getKey());
+        }
 
         $category = $thread->category;
 
@@ -156,7 +159,7 @@ class ThreadController extends BaseController
 
         return redirect(Forum::route('thread.show', $thread));
     }
-    
+
     public function rename(RenameThread $request): RedirectResponse
     {
         $thread = $request->fulfill();

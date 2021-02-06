@@ -189,6 +189,7 @@
             actions: {
                 'delete': "{{ Forum::route('bulk.thread.delete') }}",
                 'restore': "{{ Forum::route('bulk.thread.restore') }}",
+                'move': "{{ Forum::route('bulk.thread.move') }}",
                 'lock': "{{ Forum::route('bulk.thread.lock') }}",
                 'unlock': "{{ Forum::route('bulk.thread.unlock') }}",
                 'pin': "{{ Forum::route('bulk.thread.pin') }}",
@@ -197,6 +198,7 @@
             actionMethods: {
                 'delete': 'DELETE',
                 'restore': 'POST',
+                'move': 'POST',
                 'lock': 'POST',
                 'unlock': 'POST',
                 'pin': 'POST',
