@@ -31,5 +31,10 @@
         "psr-4": {
             "TeamTeaTime\\Forum\\Database\\Factories\\": "database/factories"
         }
+    },
+    "extra": {
+    "branch-alias": {
+        "dev-master": "5.0.x-dev"
+      }
     }
 }
