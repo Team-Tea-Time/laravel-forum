@@ -8,6 +8,10 @@ class CategoryPolicy
 {
     public function createThreads($user, Category $category): bool
     {
+      if (str_contains($category->title,'News') || str_contains($category->title,'Neuigkeiten'))
+      {
+        return $user->abilities()->contains('administrate');
+      }
         return true;
     }
 
