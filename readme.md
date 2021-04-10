@@ -67,3 +67,11 @@ Run the phpunit container to execute tests:
 ```bash
 docker-compose run --rm phpunit
 ```
+
+### Seeding
+
+The DB can be seeded with sample categories, threads, posts, and a user via `ForumSeeder`:
+
+```bash
+docker-compose exec php-fpm php artisan db:seed --class=TeamTeaTime\Forum\Database\Seeds\ForumSeeder
+```
