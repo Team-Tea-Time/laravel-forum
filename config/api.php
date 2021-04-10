@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 return [
 
     /*
@@ -16,6 +18,6 @@ return [
     |
     */
 
-    'token' => env('FORUM_API_TOKEN', str_random(32))
+    'token' => env('FORUM_API_TOKEN', Str::random(32))
 
 ];
