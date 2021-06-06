@@ -22,7 +22,11 @@ class PostController extends BaseController
     public function show(Request $request, Thread $thread, string $postSlug, Post $post): View
     {
         $category = $thread->category;
-        if ($category->is_private && (! $request->user() || ! $request->user()->can('view', $category))) abort(404);
+        
+        if (! $category->isAccessibleTo($request->user()))
+        {
+            abort(404);
+        }
 
         event(new UserViewingPost($request->user(), $post));
 
