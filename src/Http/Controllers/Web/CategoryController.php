@@ -33,7 +33,10 @@ class CategoryController extends BaseController
 
     public function show(Request $request, Category $category): View
     {
-        if ($category->is_private && (! $request->user() || ! $request->user()->can('view', $category))) abort(404);
+        if (! $category->isAccessibleTo($request->user()))
+        {
+            abort(404);
+        }
 
         event(new UserViewingCategory($request->user(), $category));
 

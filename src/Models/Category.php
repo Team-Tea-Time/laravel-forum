@@ -5,6 +5,7 @@ namespace TeamTeaTime\Forum\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Kalnoy\Nestedset\NodeTrait;
 
@@ -85,5 +86,10 @@ class Category extends BaseModel
     public function isEmpty(): bool
     {
         return $this->descendants->count() == 0 && $this->threads()->withTrashed()->count() == 0;
+    }
+
+    public function isAccessibleTo(User $user = null): bool
+    {
+        return ! $this->is_private || (! is_null($user) && $user->can('view', $this));
     }
 }

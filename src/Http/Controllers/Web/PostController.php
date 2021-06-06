@@ -21,10 +21,14 @@ class PostController extends BaseController
 {
     public function show(Request $request, Thread $thread, string $postSlug, Post $post): View
     {
-        event(new UserViewingPost($request->user(), $post));
-
-        $thread = $post->thread;
         $category = $thread->category;
+        
+        if (! $category->isAccessibleTo($request->user()))
+        {
+            abort(404);
+        }
+
+        event(new UserViewingPost($request->user(), $post));
 
         return view('forum::post.show', compact('category', 'thread', 'post'));
     }

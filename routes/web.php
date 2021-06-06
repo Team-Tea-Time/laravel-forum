@@ -38,7 +38,7 @@ $r->group(['prefix' => $prefix['thread'] . '/{thread}-{thread_slug}'], function 
         $r->post('restore', ['as' => 'thread.restore', 'uses' => 'ThreadController@restore']);
         $r->post('rename', ['as' => 'thread.rename', 'uses' => 'ThreadController@rename']);
         $r->delete('/', ['as' => 'thread.delete', 'uses' => 'ThreadController@destroy']);
-    
+
         $r->get('reply', ['as' => 'post.create', 'uses' => 'PostController@create']);
         $r->post('reply', ['as' => 'post.store', 'uses' => 'PostController@store']);
         $r->get($prefix['post'] . '/{post}/edit', ['as' => 'post.edit', 'uses' => 'PostController@edit']);
