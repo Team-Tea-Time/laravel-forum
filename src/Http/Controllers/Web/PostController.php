@@ -21,10 +21,10 @@ class PostController extends BaseController
 {
     public function show(Request $request, Thread $thread, string $postSlug, Post $post): View
     {
-        event(new UserViewingPost($request->user(), $post));
-
-        $thread = $post->thread;
         $category = $thread->category;
+        if ($category->is_private && (! $request->user() || ! $request->user()->can('view', $category))) abort(404);
+
+        event(new UserViewingPost($request->user(), $post));
 
         return view('forum::post.show', compact('category', 'thread', 'post'));
     }
