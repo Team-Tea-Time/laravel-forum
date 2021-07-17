@@ -33,6 +33,8 @@ class CategoryController extends BaseController
 
     public function show(Request $request, Category $category): View
     {
+        if ($category->is_private) $this->authorize('view', $category);
+
         event(new UserViewingCategory($request->user(), $category));
 
         $categories = $request->user() && $request->user()->can('moveCategories') ? Category::defaultOrder()->withDepth()->get() : [];
