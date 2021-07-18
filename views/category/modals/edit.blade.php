@@ -14,12 +14,14 @@
     </div>
     <div class="form-group">
         <div class="form-check">
+            <input type="hidden" name="accepts_threads" value="0" />
             <input class="form-check-input" type="checkbox" name="accepts_threads" id="accepts-threads" value="1" {{ $category->accepts_threads ? 'checked' : '' }}>
             <label class="form-check-label" for="accepts-threads">{{ trans('forum::categories.enable_threads') }}</label>
         </div>
     </div>
     <div class="form-group">
         <div class="form-check">
+            <input type="hidden" name="is_private" value="0" />
             <input class="form-check-input" type="checkbox" name="is_private" id="is-private" value="1" {{ $category->is_private ? 'checked' : '' }}>
             <label class="form-check-label" for="is-private">{{ trans('forum::categories.make_private') }}</label>
         </div>
