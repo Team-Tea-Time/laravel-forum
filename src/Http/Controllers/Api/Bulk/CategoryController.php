@@ -3,14 +3,15 @@
 namespace TeamTeaTime\Forum\Http\Controllers\Api\Bulk;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use TeamTeaTime\Forum\Http\Requests\Bulk\ManageCategories;
 
 class CategoryController
 {
-    public function manage(ManageCategories $request)
+    public function manage(ManageCategories $request): Response
     {
         $request->fulfill();
 
-        return response(['success' => true]);
+        return new Response(['success' => true], 200);
     }
 }
