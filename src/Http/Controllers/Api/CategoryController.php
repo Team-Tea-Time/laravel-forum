@@ -2,10 +2,11 @@
 
 namespace TeamTeaTime\Forum\Http\Controllers\Api;
 
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Gate;
+use TeamTeaTime\Forum\Http\Requests\CreateCategory;
 use TeamTeaTime\Forum\Http\Resources\CategoryResource;
 use TeamTeaTime\Forum\Models\Category;
 
@@ -38,6 +39,13 @@ class CategoryController
     public function fetch(Category $category): CategoryResource
     {
         if ($category->is_private) $this->authorize('view', $category);
+
+        return new CategoryResource($category);
+    }
+
+    public function store(CreateCategory $request): CategoryResource
+    {
+        $category = $request->fulfill();
 
         return new CategoryResource($category);
     }

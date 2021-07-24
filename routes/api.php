@@ -5,6 +5,7 @@ $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
 {
     $r->get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
     $r->get('{category}', ['as' => 'fetch', 'uses' => 'CategoryController@fetch']);
+    $r->post('/', ['as' => 'store', 'uses' => 'CategoryController@store']);
 });
 
 // Bulk actions
