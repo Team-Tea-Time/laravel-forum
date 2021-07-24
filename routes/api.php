@@ -6,6 +6,8 @@ $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
     $r->get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
     $r->get('{category}', ['as' => 'fetch', 'uses' => 'CategoryController@fetch']);
     $r->post('/', ['as' => 'store', 'uses' => 'CategoryController@store']);
+    $r->patch('{category}', ['as' => 'update', 'uses' => 'CategoryController@update']);
+    $r->delete('{category}', ['as' => 'delete', 'uses' => 'CategoryController@destroy']);
 });
 
 // Bulk actions
