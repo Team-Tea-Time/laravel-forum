@@ -37,6 +37,7 @@ class ForumSeeder extends Seeder
         $category = CategoryFactory::new()
             ->state(function (array $attributes) {
                 return [
+                    'is_private' => 0,
                     'thread_count' => self::THREAD_COUNT,
                     'post_count' => self::THREAD_COUNT * self::POSTS_PER_THREAD
                 ];
