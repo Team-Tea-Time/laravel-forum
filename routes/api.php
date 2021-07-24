@@ -10,6 +10,14 @@ $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
     $r->delete('{category}', ['as' => 'delete', 'uses' => 'CategoryController@destroy']);
 });
 
+// Threads
+$r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
+{
+    $r->get('recent', ['as' => 'recent', 'uses' => 'ThreadController@recent']);
+    $r->get('unread', ['as' => 'unread', 'uses' => 'ThreadController@unread']);
+    $r->get('/', ['as' => 'index', 'uses' => 'ThreadController@index']);
+});
+
 // Bulk actions
 $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function ($r)
 {

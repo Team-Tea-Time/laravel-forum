@@ -36,10 +36,9 @@ class ThreadController extends BaseController
             $threads = $threads->where('category_id', $request->input('category_id'));
         }
 
-        // Filter the threads according to the user's permissions
-        $threads = $threads->get()->filter(function ($thread)
+        $threads = $threads->get()->filter(function ($thread) use ($request)
         {
-            return (! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category));
+            return (! $thread->category->private || $request->user() && $request->user()->can('view', $thread));
         });
 
         event(new UserViewingRecent($request->user(), $threads));
@@ -51,10 +50,10 @@ class ThreadController extends BaseController
     {
         $threads = Thread::recent();
 
-        $threads = $threads->get()->filter(function ($thread)
+        $threads = $threads->get()->filter(function ($thread) use ($request)
         {
             return $thread->userReadStatus !== null
-                && (! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category));
+                && (! $thread->category->private || $request->user() && $request->user()->can('view', $thread));
         });
 
         event(new UserViewingUnread($request->user(), $threads));

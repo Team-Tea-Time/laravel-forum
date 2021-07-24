@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Facades\Gate;
 use TeamTeaTime\Forum\Http\Requests\CreateCategory;
 use TeamTeaTime\Forum\Http\Requests\DeleteCategory;
 use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
@@ -29,12 +28,7 @@ class CategoryController
                 : $query->where('parent_id', $request->query('parent_id'));
         }
 
-        $categories = $query->get()->filter(function ($category)
-        {
-            if ($category->is_private) return Gate::allows('view', $category);
-
-            return true;
-        });
+        $categories = $query->get()->filter(fn($category) => ! $category->is_private || $request->user() && $request->user()->can('view', $category));
 
         return CategoryResource::collection($categories);
     }
