@@ -37,7 +37,7 @@ class CategoryController
 
     public function fetch(Category $category): CategoryResource
     {
-        $this->authorize('view', $category);
+        if ($category->is_private) $this->authorize('view', $category);
 
         return new CategoryResource($category);
     }
