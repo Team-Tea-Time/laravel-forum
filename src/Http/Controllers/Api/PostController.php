@@ -4,11 +4,19 @@ namespace TeamTeaTime\Forum\Http\Controllers\Api;
 
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use TeamTeaTime\Forum\Http\Requests\SearchPosts;
 use TeamTeaTime\Forum\Http\Resources\PostResource;
 use TeamTeaTime\Forum\Models\Thread;
 
 class PostController extends BaseController
 {
+    public function search(SearchPosts $request): AnonymousResourceCollection
+    {
+        $posts = $request->fulfill();
+
+        return PostResource::collection($posts);
+    }
+
     public function indexByThread(Thread $thread): AnonymousResourceCollection
     {
         if ($thread->category->is_private)

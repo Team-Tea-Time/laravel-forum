@@ -34,6 +34,12 @@ $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
     $r->get('{thread}/posts', ['as' => 'posts', 'uses' => 'PostController@indexByThread']);
 });
 
+// Posts
+$r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
+{
+    $r->post('search', ['as' => 'search', 'uses' => 'PostCOntroller@search']);
+});
+
 // Bulk actions
 $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function ($r)
 {
