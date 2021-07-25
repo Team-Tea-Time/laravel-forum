@@ -42,6 +42,18 @@ $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function
     {
         $r->post('manage', ['as' => 'manage', 'uses' => 'CategoryController@manage']);
     });
+
+    // Threads
+    $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
+    {
+        $r->post('move', ['as' => 'move', 'uses' => 'ThreadController@move']);
+        $r->post('lock', ['as' => 'lock', 'uses' => 'ThreadController@lock']);
+        $r->post('unlock', ['as' => 'unlock', 'uses' => 'ThreadController@unlock']);
+        $r->post('pin', ['as' => 'pin', 'uses' => 'ThreadController@pin']);
+        $r->post('unpin', ['as' => 'unpin', 'uses' => 'ThreadController@unpin']);
+        $r->delete('/', ['as' => 'delete', 'uses' => 'ThreadController@destroy']);
+        $r->post('restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
+    });
 });
 
 $r->bind('category', function ($value)

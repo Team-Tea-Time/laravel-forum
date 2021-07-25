@@ -5,8 +5,10 @@ namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Actions\Bulk\LockThreads as Action;
+use TeamTeaTime\Forum\Events\UserBulkLockedThreads;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 
 class LockThreads extends FormRequest implements FulfillableRequest

@@ -16,4 +16,13 @@ abstract class BaseController
             'message' => trans('forum::general.invalid_selection')
         ], 403);
     }
+
+    protected function bulkActionResponse(int $rowsAffected, string $transKey): Response
+    {
+        return new Response([
+            'success' => true,
+            'rows_affected' => $rowsAffected,
+            'message' => trans_choice("forum::{$transKey}", $rowsAffected)
+        ], 200);
+    }
 }

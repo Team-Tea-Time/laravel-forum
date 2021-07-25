@@ -62,7 +62,6 @@ $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk', 'middlewa
 
     $r->delete('post', ['as' => 'post.delete', 'uses' => 'PostController@destroy']);
     $r->post('post/restore', ['as' => 'post.restore', 'uses' => 'PostController@restore']);
-
 });
 
 $r->bind('category', function ($value)

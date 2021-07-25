@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
-use TeamTeaTime\Forum\Actions\MoveThreads as Action;
+use TeamTeaTime\Forum\Actions\Bulk\MoveThreads as Action;
 use TeamTeaTime\Forum\Events\UserBulkMovedThreads;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
@@ -18,8 +18,8 @@ class MoveThreads extends FormRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 
-    private Collection $sourceCategories;
-    private Category $destinationCategory;
+    private ?Collection $sourceCategories = null;
+    private ?Category $destinationCategory = null;
 
     public function rules(): array
     {
@@ -70,14 +70,17 @@ class MoveThreads extends FormRequest implements FulfillableRequest
     {
         if (! $this->sourceCategories)
         {
-            $query = Thread::select('category_id')->distinct()->where('category_id', '!=', $this->validated()['category_id']);
+            $query = Thread::select('category_id')
+                ->distinct()
+                ->where('category_id', '!=', $this->validated()['category_id'])
+                ->whereIn('id', $this->validated()['threads']);
 
             if (! $this->user()->can('viewTrashedThreads'))
             {
                 $query = $query->whereNull(Thread::DELETED_AT);
             }
 
-            $this->sourceCategories = Category::whereIn('id', $query->get()->pluck('category_id'));
+            $this->sourceCategories = Category::whereIn('id', $query->get()->pluck('category_id'))->get();
         }
         
         return $this->sourceCategories;
@@ -85,7 +88,7 @@ class MoveThreads extends FormRequest implements FulfillableRequest
 
     private function getDestinationCategory()
     {
-        if (! $this->destinationCategory)
+        if ($this->destinationCategory == null)
         {
             $this->destinationCategory = Category::find($this->validated()['category_id']);
         }
