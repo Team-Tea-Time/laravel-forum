@@ -33,10 +33,10 @@ class MoveThreads extends BaseAction
         if ($threads->count() == 0) return null;
 
         $threadsByCategory = $threads->groupBy('category_id');
-        $sourceCategories = $this->getSourceCategories();
-        $destinationCategory = $this->getDestinationCategory();
+        $sourceCategories = $threads->pluck('category');
+        $destinationCategory = $this->destinationCategory;
 
-        $query->update(['category_id' => $this->validated()['category_id']]);
+        $query->update(['category_id' => $destinationCategory->id]);
 
         foreach ($sourceCategories as $category)
         {
@@ -54,7 +54,7 @@ class MoveThreads extends BaseAction
         $threadCount = $threads->count();
         $postCount = $threads->count() + $threads->sum('reply_count');
         $destinationCategory->updateWithoutTouch([
-            'newest_thread_id' => $destinationCategory->getNewestThreadId(),
+            'newest_thread_id' => max($threads->max('id'), $destinationCategory->newest_thread_id),
             'latest_active_thread_id' => $destinationCategory->getLatestActiveThreadId(),
             'thread_count' => DB::raw("thread_count + {$threadCount}"),
             'post_count' => DB::raw("post_count + {$postCount}")

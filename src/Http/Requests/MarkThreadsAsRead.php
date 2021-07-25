@@ -13,7 +13,7 @@ class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
 {
     use AuthorizesAfterValidation;
 
-    private Category $category;
+    private ?Category $category;
 
     public function rules(): array
     {

@@ -30,7 +30,7 @@ class DeleteThreads extends FormRequest implements FulfillableRequest
         $threads = Thread::whereIn('id', $this->validated()['threads'])->with('category')->get();
         foreach ($threads as $thread)
         {
-            if (! ($this->user()->can('view', $category) || $this->user()->can('delete', $thread)))
+            if (! ($this->user()->can('view', $thread->category) || $this->user()->can('delete', $thread)))
             {
                 return false;
             }

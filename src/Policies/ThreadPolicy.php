@@ -12,7 +12,7 @@ class ThreadPolicy
 
     public function view($user, Thread $thread): bool
     {
-        return $this->canUserViewCategory($user, $thread->category);
+        return true;
     }
 
     public function deletePosts($user, Thread $thread): bool

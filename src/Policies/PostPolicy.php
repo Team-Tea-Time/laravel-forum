@@ -10,11 +10,6 @@ class PostPolicy
 {
     use ChecksCategoryVisibility;
 
-    public function view($user, Post $post): bool
-    {
-        return $this->canUserViewCategory($user, $post->thread->category);
-    }
-
     public function edit($user, Post $post): bool
     {
         return $this->canUserViewCategory($user, $post->thread->category) && $user->getKey() === $post->author_id;
