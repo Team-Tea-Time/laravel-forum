@@ -15,7 +15,10 @@ $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
 {
     $r->get('recent', ['as' => 'recent', 'uses' => 'ThreadController@recent']);
     $r->get('unread', ['as' => 'unread', 'uses' => 'ThreadController@unread']);
+    $r->patch('unread/mark-as-read', ['as' => 'unread.mark-as-read', 'uses' => 'ThreadController@markAsRead']);
     $r->get('/', ['as' => 'index', 'uses' => 'ThreadController@index']);
+    $r->get('{thread}', ['as' => 'fetch', 'uses' => 'ThreadController@fetch']);
+    $r->get('{thread}/posts', ['as' => 'posts', 'uses' => 'ThreadController@posts']);
 });
 
 // Bulk actions

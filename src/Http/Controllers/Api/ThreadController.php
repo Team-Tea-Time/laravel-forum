@@ -4,13 +4,19 @@ namespace TeamTeaTime\Forum\Http\Controllers\Api;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use TeamTeaTime\Forum\Http\Requests\MarkThreadsAsRead;
+use TeamTeaTime\Forum\Http\Resources\PostResource;
 use TeamTeaTime\Forum\Http\Resources\ThreadResource;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 
 class ThreadController
 {
+    use AuthorizesRequests;
+
     public function recent(Request $request, bool $unreadOnly = false): AnonymousResourceCollection
     {
         $threads = Thread::recent()
@@ -27,6 +33,13 @@ class ThreadController
     public function unread(Request $request): AnonymousResourceCollection
     {
         return $this->recent($request, true);
+    }
+
+    public function markAsRead(MarkThreadsAsRead $request): Response
+    {
+        $category = $request->fulfill();
+        
+        return new Response(['success' => true]);
     }
 
     public function index(Request $request): AnonymousResourceCollection
@@ -68,5 +81,32 @@ class ThreadController
         }));
 
         return ThreadResource::collection($threads);
+    }
+
+    public function fetch(Thread $thread): ThreadResource
+    {
+        if ($thread->category->is_private)
+        {
+            $this->authorize('view', $thread->category);
+            $this->authorize('view', $thread);
+        }
+
+        return new ThreadResource($thread);
+    }
+
+    public function posts(Thread $thread, Request $request): AnonymousResourceCollection
+    {
+        if ($thread->category->is_private)
+        {
+            $this->authorize('view', $thread->category);
+            $this->authorize('view', $thread);
+        }
+
+        return PostResource::collection($thread->posts()->paginate())
+            ->additional([
+                'links' => [
+                    'thread' => route(config('forum.api.router.as') . 'thread.fetch', $thread->id)
+                ]
+            ]);
     }
 }
