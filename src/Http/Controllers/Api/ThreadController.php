@@ -7,16 +7,23 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use TeamTeaTime\Forum\Http\Requests\CreateThread;
+use TeamTeaTime\Forum\Http\Requests\DeleteThread;
+use TeamTeaTime\Forum\Http\Requests\LockThread;
 use TeamTeaTime\Forum\Http\Requests\MarkThreadsAsRead;
+use TeamTeaTime\Forum\Http\Requests\MoveThread;
+use TeamTeaTime\Forum\Http\Requests\PinThread;
+use TeamTeaTime\Forum\Http\Requests\RenameThread;
+use TeamTeaTime\Forum\Http\Requests\RestoreThread;
+use TeamTeaTime\Forum\Http\Requests\UnlockThread;
+use TeamTeaTime\Forum\Http\Requests\UnpinThread;
 use TeamTeaTime\Forum\Http\Resources\PostResource;
 use TeamTeaTime\Forum\Http\Resources\ThreadResource;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 
-class ThreadController
+class ThreadController extends BaseController
 {
-    use AuthorizesRequests;
-
     public function recent(Request $request, bool $unreadOnly = false): AnonymousResourceCollection
     {
         $threads = Thread::recent()
@@ -42,30 +49,16 @@ class ThreadController
         return new Response(['success' => true]);
     }
 
-    public function index(Request $request): AnonymousResourceCollection
+    public function indexByCategory(Category $category, Request $request): AnonymousResourceCollection
     {
-        $categories = Category::all()
-            ->filter(fn($category) => ! $category->is_private || $request->user() && $request->user()->can('view', $category))
-            ->keyBy('id');
-        
-        $categoryIds = $categories->pluck('id');
+        if ($category->is_private) $this->authorize('view', $category);
 
-        $query = Thread::orderBy('created_at');
+        $query = Thread::orderBy('created_at')->where('category_id', $category->id);
 
-        $categoryId = $request->query('category_id');
         $createdAfter = $request->query('created_after');
         $createdBefore = $request->query('created_before');
         $updatedAfter = $request->query('updated_after');
         $updatedBefore = $request->query('updated_before');
-
-        if ($categoryId !== null && $categoryIds->contains((int)$categoryId))
-        {
-            $query = $query->where('category_id', $categoryId);
-        }
-        else
-        {
-            $query = $query->whereIn('category_id', $categoryIds);
-        }
 
         if ($createdAfter !== null) $query = $query->where('created_at', '>', Carbon::parse($createdAfter)->toDateString());
         if ($createdBefore !== null) $query = $query->where('created_at', '<', Carbon::parse($createdBefore)->toDateString());
@@ -74,13 +67,22 @@ class ThreadController
 
         $threads = $query->paginate();
 
-        $threads->setCollection($threads->getCollection()->filter(function ($thread) use ($request, $categories)
+        if ($category->is_private)
         {
-            $category = $categories->get($thread->category_id);
-            return ! $category->is_private || $request->user() && $request->user()->can('view', $thread);
-        }));
+            $threads->setCollection($threads->getCollection()->filter(function ($thread) use ($request)
+            {
+                return $request->user() && $request->user()->can('view', $thread);
+            }));
+        }
 
         return ThreadResource::collection($threads);
+    }
+
+    public function store(CreateThread $request, Category $category): ThreadResource
+    {
+        $thread = $request->fulfill();
+
+        return new ThreadResource($thread);
     }
 
     public function fetch(Thread $thread): ThreadResource
@@ -94,19 +96,65 @@ class ThreadController
         return new ThreadResource($thread);
     }
 
-    public function posts(Thread $thread, Request $request): AnonymousResourceCollection
+    public function lock(LockThread $request): ThreadResource
     {
-        if ($thread->category->is_private)
-        {
-            $this->authorize('view', $thread->category);
-            $this->authorize('view', $thread);
-        }
+        $thread = $request->fulfill();
 
-        return PostResource::collection($thread->posts()->paginate())
-            ->additional([
-                'links' => [
-                    'thread' => route(config('forum.api.router.as') . 'thread.fetch', $thread->id)
-                ]
-            ]);
+        return new ThreadResource($thread);
+    }
+
+    public function unlock(UnlockThread $request): ThreadResource
+    {
+        $thread = $request->fulfill();
+
+        return new ThreadResource($thread);
+    }
+
+    public function pin(PinThread $request): ThreadResource
+    {
+        $thread = $request->fulfill();
+
+        return new ThreadResource($thread);
+    }
+
+    public function unpin(UnpinThread $request): ThreadResource
+    {
+        $thread = $request->fulfill();
+
+        return new ThreadResource($thread);
+    }
+    
+    public function rename(RenameThread $request): ThreadResource
+    {
+        $thread = $request->fulfill();
+
+        return new ThreadResource($thread);
+    }
+
+    public function move(MoveThread $request): Response
+    {
+        $thread = $request->fulfill();
+
+        if (is_null($thread)) return $this->invalidSelectionResponse();
+
+        return new Response(new ThreadResource($thread));
+    }
+
+    public function destroy(DeleteThread $request): Response
+    {
+        $thread = $request->fulfill();
+
+        if (is_null($thread)) return $this->invalidSelectionResponse();
+
+        return new Response(new ThreadResource($thread));
+    }
+
+    public function restore(RestoreThread $request): Response
+    {
+        $thread = $request->fulfill();
+
+        if (is_null($thread)) return $this->invalidSelectionResponse();
+
+        return new Response(new ThreadResource($thread));
     }
 }

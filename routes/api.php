@@ -8,6 +8,10 @@ $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
     $r->post('/', ['as' => 'store', 'uses' => 'CategoryController@store']);
     $r->patch('{category}', ['as' => 'update', 'uses' => 'CategoryController@update']);
     $r->delete('{category}', ['as' => 'delete', 'uses' => 'CategoryController@destroy']);
+
+    // Threads by category
+    $r->get('{category}/thread', ['as' => 'threads', 'uses' => 'ThreadController@indexByCategory']);
+    $r->post('{category}/thread', ['as' => 'threads.store', 'uses' => 'ThreadController@store']);
 });
 
 // Threads
@@ -16,9 +20,18 @@ $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
     $r->get('recent', ['as' => 'recent', 'uses' => 'ThreadController@recent']);
     $r->get('unread', ['as' => 'unread', 'uses' => 'ThreadController@unread']);
     $r->patch('unread/mark-as-read', ['as' => 'unread.mark-as-read', 'uses' => 'ThreadController@markAsRead']);
-    $r->get('/', ['as' => 'index', 'uses' => 'ThreadController@index']);
     $r->get('{thread}', ['as' => 'fetch', 'uses' => 'ThreadController@fetch']);
-    $r->get('{thread}/posts', ['as' => 'posts', 'uses' => 'ThreadController@posts']);
+    $r->post('{thread}/lock', ['as' => 'lock', 'uses' => 'ThreadController@lock']);
+    $r->post('{thread}/unlock', ['as' => 'unlock', 'uses' => 'ThreadController@unlock']);
+    $r->post('{thread}/pin', ['as' => 'pin', 'uses' => 'ThreadController@pin']);
+    $r->post('{thread}/unpin', ['as' => 'unpin', 'uses' => 'ThreadController@unpin']);
+    $r->post('{thread}/rename', ['as' => 'rename', 'uses' => 'ThreadController@rename']);
+    $r->post('{thread}/move', ['as' => 'move', 'uses' => 'ThreadController@move']);
+    $r->delete('{thread}', ['as' => 'delete', 'uses' => 'ThreadController@delete']);
+    $r->post('{thread}/restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
+
+    // Posts by thread
+    $r->get('{thread}/posts', ['as' => 'posts', 'uses' => 'PostController@indexByThread']);
 });
 
 // Bulk actions

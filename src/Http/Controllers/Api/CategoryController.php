@@ -12,10 +12,8 @@ use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
 use TeamTeaTime\Forum\Http\Resources\CategoryResource;
 use TeamTeaTime\Forum\Models\Category;
 
-class CategoryController
+class CategoryController extends BaseController
 {
-    use AuthorizesRequests;
-
     public function index(Request $request): AnonymousResourceCollection
     {
         $query = Category::defaultOrder();

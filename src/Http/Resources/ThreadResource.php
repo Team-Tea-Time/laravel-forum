@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use TeamTeaTime\Forum\Support\Api\ForumApi;
 
 class ThreadResource extends JsonResource
 {
@@ -25,10 +26,21 @@ class ThreadResource extends JsonResource
                 'reply_count' => $this->reply_count,
                 'created_at' => $this->created_at,
                 'updated_at' => $this->updated_at,
-                'deleted_at' => $this->deleted_at
+                'deleted_at' => $this->deleted_at,
+                'actions' => [
+                    'post:lock' => ForumApi::route('thread.lock', ['thread' => $this->id]),
+                    'post:unlock' => ForumApi::route('thread.unlock', ['thread' => $this->id]),
+                    'post:pin' => ForumApi::route('thread.pin', ['thread' => $this->id]),
+                    'post:unpin' => ForumApi::route('thread.unpin', ['thread' => $this->id]),
+                    'post:rename' => ForumApi::route('thread.rename', ['thread' => $this->id]),
+                    'post:move' => ForumApi::route('thread.move', ['thread' => $this->id]),
+                    'delete:delete' => ForumApi::route('thread.delete', ['thread' => $this->id]),
+                    'post:restore' => ForumApi::route('thread.restore', ['thread' => $this->id])
+                ]
             ],
             'links' => [
-                'posts' => route(config('forum.api.router.as') . 'thread.posts', ['thread' => $this->id])
+                'self' => ForumApi::route('thread.fetch', ['thread' => $this->id]),
+                'posts' => ForumApi::route('thread.posts', ['thread' => $this->id])
             ]
         ];
     }
