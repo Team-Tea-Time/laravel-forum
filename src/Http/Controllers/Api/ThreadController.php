@@ -31,7 +31,12 @@ class ThreadController extends BaseController
             ->filter(function ($thread) use ($request, $unreadOnly)
             {
                 return (! $unreadOnly || $thread->userReadStatus !== null)
-                    && (! $thread->category->is_private || $request->user() && $request->user()->can('view', $thread));
+                    && (
+                        ! $thread->category->is_private
+                        || $request->user()
+                        && $request->user()->can('view', $thread->category)
+                        && $request->user()->can('view', $thread)
+                    );
             });
 
         return ThreadResource::collection($threads);
@@ -45,7 +50,7 @@ class ThreadController extends BaseController
     public function markAsRead(MarkThreadsAsRead $request): Response
     {
         $category = $request->fulfill();
-        
+
         return new Response(['success' => true]);
     }
 
@@ -123,7 +128,7 @@ class ThreadController extends BaseController
 
         return new ThreadResource($thread);
     }
-    
+
     public function rename(RenameThread $request): ThreadResource
     {
         $thread = $request->fulfill();
