@@ -32,6 +32,7 @@ $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
 
     // Posts by thread
     $r->get('{thread}/posts', ['as' => 'posts', 'uses' => 'PostController@indexByThread']);
+    $r->post('{thread}/posts', ['as' => 'posts.store', 'uses' => 'PostController@store']);
 });
 
 // Posts

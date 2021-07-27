@@ -5,6 +5,7 @@ namespace TeamTeaTime\Forum\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use TeamTeaTime\Forum\Http\Requests\CreatePost;
 use TeamTeaTime\Forum\Http\Requests\SearchPosts;
 use TeamTeaTime\Forum\Http\Resources\PostResource;
 use TeamTeaTime\Forum\Models\Post;
@@ -65,6 +66,13 @@ class PostController extends BaseController
             $this->authorize('view', $post->thread->category);
             $this->authorize('view', $post->thread);
         }
+
+        return new PostResource($post);
+    }
+
+    public function store(CreatePost $request, Thread $thread): PostResource
+    {
+        $post = $request->fulfill();
 
         return new PostResource($post);
     }
