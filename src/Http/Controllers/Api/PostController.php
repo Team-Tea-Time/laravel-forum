@@ -57,4 +57,15 @@ class PostController extends BaseController
     {
         return $this->recent($request, true);
     }
+
+    public function fetch(Post $post): PostResource
+    {
+        if ($post->thread->category->is_private)
+        {
+            $this->authorize('view', $post->thread->category);
+            $this->authorize('view', $post->thread);
+        }
+
+        return new PostResource($post);
+    }
 }
