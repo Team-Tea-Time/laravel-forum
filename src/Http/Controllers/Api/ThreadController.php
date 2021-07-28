@@ -83,7 +83,7 @@ class ThreadController extends BaseController
         return ThreadResource::collection($threads);
     }
 
-    public function store(CreateThread $request, Category $category): ThreadResource
+    public function store(CreateThread $request): ThreadResource
     {
         $thread = $request->fulfill();
 

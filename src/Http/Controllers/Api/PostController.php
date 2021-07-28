@@ -3,10 +3,14 @@
 namespace TeamTeaTime\Forum\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use TeamTeaTime\Forum\Http\Requests\CreatePost;
+use TeamTeaTime\Forum\Http\Requests\DeletePost;
+use TeamTeaTime\Forum\Http\Requests\RestorePost;
 use TeamTeaTime\Forum\Http\Requests\SearchPosts;
+use TeamTeaTime\Forum\Http\Requests\UpdatePost;
 use TeamTeaTime\Forum\Http\Resources\PostResource;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
@@ -70,10 +74,35 @@ class PostController extends BaseController
         return new PostResource($post);
     }
 
-    public function store(CreatePost $request, Thread $thread): PostResource
+    public function store(CreatePost $request): PostResource
     {
         $post = $request->fulfill();
 
         return new PostResource($post);
+    }
+
+    public function update(UpdatePost $request): PostResource
+    {
+        $post = $request->fulfill();
+
+        return new PostResource($post);
+    }
+
+    public function delete(DeletePost $request): Response
+    {
+        $post = $request->fulfill();
+
+        if (is_null($post)) return $this->invalidSelectionResponse();
+
+        return new Response(new PostResource($post));
+    }
+
+    public function restore(RestorePost $request): Response
+    {
+        $post = $request->fulfill();
+
+        if (is_null($post)) return $this->invalidSelectionResponse();
+
+        return new Response(new PostResource($post));
     }
 }

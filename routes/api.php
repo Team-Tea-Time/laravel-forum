@@ -42,6 +42,9 @@ $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
     $r->get('recent', ['as' => 'recent', 'uses' => 'PostController@recent']);
     $r->get('unread', ['as' => 'unread', 'uses' => 'PostController@unread']);
     $r->get('{post}', ['as' => 'fetch', 'uses' => 'PostController@fetch']);
+    $r->patch('{post}', ['as' => 'update', 'uses' => 'PostController@update']);
+    $r->delete('{post}', ['as' => 'delete', 'uses' => 'PostController@delete']);
+    $r->post('{post}/restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
 });
 
 // Bulk actions
