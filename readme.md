@@ -1,5 +1,3 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=4.0)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=4.0)
-
 **Complete documentation is available on [teamteatime.net](https://www.teamteatime.net/docs/laravel-forum/4.x/).**
 
 **NOTE: Version 3.0 is no longer supported. If you're using a version of Laravel below 5.3, consider upgrading it!**
