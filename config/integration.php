@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'user_model' => App\User::class,
+    'user_model' => App\Models\User::class,
 
     /*
     |--------------------------------------------------------------------------
