@@ -30,11 +30,11 @@ class AddFkIndices extends Migration
     public function down()
     {
         Schema::table('forum_threads', function (Blueprint $table) {
-            $table->dropIndex('category_id');
+            $table->dropIndex('forum_threads_category_id_index');
         });
 
         Schema::table('forum_posts', function (Blueprint $table) {
-            $table->dropIndex('thread_id');
+            $table->dropIndex('forum_posts_thread_id_index');
         });
     }
 }
