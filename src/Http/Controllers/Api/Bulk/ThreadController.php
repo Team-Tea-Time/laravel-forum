@@ -70,7 +70,7 @@ class ThreadController extends BaseController
         return $this->bulkActionResponse($result->count(), 'threads.updated');
     }
 
-    public function destroy(DeleteThreads $request): Response
+    public function delete(DeleteThreads $request): Response
     {
         $result = $request->fulfill();
 

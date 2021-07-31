@@ -13,15 +13,24 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
-use TeamTeaTime\Forum\Support\Traits\CachesData;
 
 class Thread extends BaseModel
 {
-    use SoftDeletes, HasAuthor, CachesData;
+    use SoftDeletes, HasAuthor;
 
     protected $table = 'forum_threads';
     protected $dates = ['deleted_at'];
-    protected $fillable = ['category_id', 'author_id', 'title', 'locked', 'pinned', 'reply_count', 'first_post_id', 'last_post_id', 'updated_at'];
+    protected $fillable = [
+        'category_id',
+        'author_id',
+        'title',
+        'locked',
+        'pinned',
+        'reply_count',
+        'first_post_id',
+        'last_post_id',
+        'updated_at'
+    ];
 
     const READERS_TABLE = 'forum_threads_read';
 

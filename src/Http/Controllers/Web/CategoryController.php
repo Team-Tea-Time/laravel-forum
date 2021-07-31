@@ -70,7 +70,7 @@ class CategoryController extends BaseController
         return redirect(Forum::route('category.show', $category));
     }
 
-    public function destroy(DeleteCategory $request): RedirectResponse
+    public function delete(DeleteCategory $request): RedirectResponse
     {
         $request->fulfill();
 

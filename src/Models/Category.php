@@ -8,13 +8,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Kalnoy\Nestedset\NodeTrait;
-
 use TeamTeaTime\Forum\Support\Web\Forum;
-use TeamTeaTime\Forum\Support\Traits\CachesData;
 
 class Category extends BaseModel
 {
-    use CachesData, NodeTrait;
+    use NodeTrait;
 
     protected $table = 'forum_categories';
     protected $fillable = [

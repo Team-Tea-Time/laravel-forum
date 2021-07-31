@@ -9,7 +9,7 @@ use TeamTeaTime\Forum\Http\Requests\Bulk\RestorePosts;
 
 class PostController extends BaseController
 {
-    public function destroy(DeletePosts $request): RedirectResponse
+    public function delete(DeletePosts $request): RedirectResponse
     {
         $result = $request->fulfill();
 

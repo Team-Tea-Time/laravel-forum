@@ -36,7 +36,7 @@ class ThreadController extends BaseController
         }
 
         $threads = $threads->get()->filter(function ($thread) use ($request) {
-            return (! $thread->category->private || $request->user() && $request->user()->can('view', $thread));
+            return (! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category) && $request->user()->can('view', $thread));
         });
 
         event(new UserViewingRecent($request->user(), $threads));
@@ -50,7 +50,7 @@ class ThreadController extends BaseController
 
         $threads = $threads->get()->filter(function ($thread) use ($request) {
             return $thread->userReadStatus !== null
-                && (! $thread->category->private || $request->user() && $request->user()->can('view', $thread));
+                && (! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category) && $request->user()->can('view', $thread));
         });
 
         event(new UserViewingUnread($request->user(), $threads));
@@ -174,7 +174,7 @@ class ThreadController extends BaseController
         return redirect(Forum::route('thread.show', $thread));
     }
 
-    public function destroy(DeleteThread $request): RedirectResponse
+    public function delete(DeleteThread $request): RedirectResponse
     {
         $thread = $request->fulfill();
 

@@ -12,18 +12,9 @@ abstract class BaseController extends Controller
 {
     use AuthorizesRequests;
 
-    /**
-     * @param Collection|int $models
-     */
-    protected function bulkActionResponse($models, string $transKey): RedirectResponse
+    protected function bulkActionResponse(int $rowsAffected, string $transKey): RedirectResponse
     {
-        $count = is_int($models) ? $models : $models->count();
-
-        if ($count) {
-            Forum::alert('success', $transKey, $count);
-        } else {
-            Forum::alert('warning', 'general.invalid_selection');
-        }
+        Forum::alert('success', $transKey, $rowsAffected);
 
         return redirect()->back();
     }
