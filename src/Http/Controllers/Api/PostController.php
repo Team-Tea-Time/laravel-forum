@@ -24,12 +24,7 @@ class PostController extends BaseController
             $this->authorize('view', $thread);
         }
 
-        return PostResource::collection($thread->posts()->paginate())
-            ->additional([
-                'links' => [
-                    'thread' => route(config('forum.api.router.as') . 'thread.fetch', $thread->id)
-                ]
-            ]);
+        return PostResource::collection($thread->posts()->paginate());
     }
 
     public function search(SearchPosts $request): AnonymousResourceCollection
