@@ -1,10 +1,12 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Riari/laravel-forum/badges/quality-score.png?b=5.0)](https://scrutinizer-ci.com/g/Riari/laravel-forum/?branch=5.0)
 
+![Laravel Forum Logo](./logo.png)
+
 **Complete documentation is available on [teamteatime.net](https://teamteatime.net/docs/laravel-forum/5.x/).**
 
 ## Installation
 
-Requires Laravel 6+ and PHP 7.2+.
+Requires Laravel 6+ and PHP 7.4+.
 
 ### Step 1: Install the package
 
