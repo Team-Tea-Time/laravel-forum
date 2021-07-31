@@ -42,12 +42,6 @@ class DeletePost extends BaseAction
             'post_count' => DB::raw('post_count - 1')
         ]);
 
-        if (! is_null($this->post->children))
-        {
-            // Other posts reference this one; null their post IDs
-            $this->post->children()->update(['post_id' => null]);
-        }
-
         // Update sequence numbers for all of the thread's posts
         $this->post->thread->posts->each(function ($p)
         {
