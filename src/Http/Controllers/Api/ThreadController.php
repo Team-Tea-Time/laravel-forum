@@ -153,7 +153,7 @@ class ThreadController extends BaseController
         return new Response(new ThreadResource($thread));
     }
 
-    public function destroy(DeleteThread $request): Response
+    public function delete(DeleteThread $request): Response
     {
         $thread = $request->fulfill();
 

@@ -6,7 +6,7 @@ $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r) {
     $r->get('{category}', ['as' => 'fetch', 'uses' => 'CategoryController@fetch']);
     $r->post('/', ['as' => 'store', 'uses' => 'CategoryController@store']);
     $r->patch('{category}', ['as' => 'update', 'uses' => 'CategoryController@update']);
-    $r->delete('{category}', ['as' => 'delete', 'uses' => 'CategoryController@destroy']);
+    $r->delete('{category}', ['as' => 'delete', 'uses' => 'CategoryController@delete']);
 
     // Threads by category
     $r->get('{category}/thread', ['as' => 'threads', 'uses' => 'ThreadController@indexByCategory']);
@@ -58,7 +58,7 @@ $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function
         $r->post('unlock', ['as' => 'unlock', 'uses' => 'ThreadController@unlock']);
         $r->post('pin', ['as' => 'pin', 'uses' => 'ThreadController@pin']);
         $r->post('unpin', ['as' => 'unpin', 'uses' => 'ThreadController@unpin']);
-        $r->delete('/', ['as' => 'delete', 'uses' => 'ThreadController@destroy']);
+        $r->delete('/', ['as' => 'delete', 'uses' => 'ThreadController@delete']);
         $r->post('restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
     });
 

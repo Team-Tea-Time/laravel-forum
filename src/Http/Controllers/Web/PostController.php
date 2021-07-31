@@ -87,7 +87,7 @@ class PostController extends BaseController
         return view('forum::post.confirm-restore', ['category' => $thread->category, 'thread' => $thread, 'post' => $post]);
     }
 
-    public function destroy(DeletePost $request): RedirectResponse
+    public function delete(DeletePost $request): RedirectResponse
     {
         $post = $request->fulfill();
 

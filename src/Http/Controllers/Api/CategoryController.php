@@ -25,7 +25,9 @@ class CategoryController extends BaseController
                 : $query->where('parent_id', $request->query('parent_id'));
         }
 
-        $categories = $query->get()->filter(fn ($category) => ! $category->is_private || $request->user() && $request->user()->can('view', $category));
+        $categories = $query->get()->filter(function ($category) {
+            return ! $category->is_private || $request->user() && $request->user()->can('view', $category);
+        });
 
         return CategoryResource::collection($categories);
     }
@@ -53,7 +55,7 @@ class CategoryController extends BaseController
         return new CategoryResource($category);
     }
 
-    public function destroy(DeleteCategory $request): Response
+    public function delete(DeleteCategory $request): Response
     {
         $request->fulfill();
         

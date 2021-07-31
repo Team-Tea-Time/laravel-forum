@@ -1,13 +1,12 @@
-<?php namespace TeamTeaTime\Forum\Models\Traits;
+<?php
+
+namespace TeamTeaTime\Forum\Models\Traits;
+
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait HasAuthor
 {
-    /**
-     * Relationship: Author.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function author()
+    public function author(): BelongsTo
     {
         $model = config('forum.integration.user_model');
         if (method_exists($model, 'withTrashed')) {
@@ -17,16 +16,11 @@ trait HasAuthor
         return $this->belongsTo($model, 'author_id');
     }
 
-    /**
-     * Attribute: Author name.
-     *
-     * @return mixed
-     */
-    public function getAuthorNameAttribute()
+    public function getAuthorNameAttribute(): ?string
     {
         $attribute = config('forum.integration.user_name');
 
-        if (!is_null($this->author)) {
+        if (! is_null($this->author)) {
             return $this->author->$attribute;
         }
 
