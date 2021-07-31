@@ -7,6 +7,7 @@ use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use TeamTeaTime\Forum\Console\Commands\SyncStats;
 use TeamTeaTime\Forum\Http\ViewComposers\MasterComposer;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
@@ -73,6 +74,12 @@ class ForumServiceProvider extends ServiceProvider
                 $view->username = auth()->user()->{$nameAttribute};
             }
         });
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                SyncStats::class,
+            ]);
+        }
     }
 
     public function registerPolicies(GateContract $gate)

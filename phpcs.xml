@@ -34,7 +34,6 @@
     <rule ref="PEAR.NamingConventions.ValidClassName"/>
     <rule ref="PEAR.WhiteSpace.ObjectOperatorIndent"/>
     <rule ref="PEAR.WhiteSpace.ScopeClosingBrace"/>
-    <rule ref="PEAR.WhiteSpace.ScopeIndent"/>
     <rule ref="PSR1.Files.SideEffects"/>
     <rule ref="PSR2.Classes.ClassDeclaration"/>
     <rule ref="PSR2.Classes.PropertyDeclaration"/>
