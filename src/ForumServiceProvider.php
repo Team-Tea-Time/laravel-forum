@@ -36,13 +36,13 @@ class ForumServiceProvider extends ServiceProvider
             $this->mergeConfigFrom(__DIR__."/../config/{$name}.php", "forum.{$name}");
         }
 
-        if (config('forum.api.enabled')) {
+        if (config('forum.api.enable')) {
             $router->group(config('forum.api.router'), function ($r) {
                 require __DIR__.'/../routes/api.php';
             });
         }
 
-        if (config('forum.web.enabled')) {
+        if (config('forum.web.enable')) {
             $this->publishes([
                 __DIR__.'/../views/' => resource_path('views/vendor/forum')
             ], 'views');

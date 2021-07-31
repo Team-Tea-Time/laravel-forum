@@ -20,25 +20,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Cache lifetimes
-    |--------------------------------------------------------------------------
-    |
-    | Here we specify cache lifetimes (in minutes) for various model data. Any
-    | falsey values set here will cause the cache to use the default lifetime
-    | for corresponding models/attributes.
-    |
-    */
-
-    'cache_lifetimes' => [
-        'default' => 5,
-        'Category' => [
-            'deepestChild' => 720,
-            'depth' => 720
-        ]
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Soft deletes
     |--------------------------------------------------------------------------
     |
