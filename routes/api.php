@@ -32,6 +32,19 @@ $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
 
     // Posts by thread
     $r->get('{thread}/posts', ['as' => 'posts', 'uses' => 'PostController@indexByThread']);
+    $r->post('{thread}/posts', ['as' => 'posts.store', 'uses' => 'PostController@store']);
+});
+
+// Posts
+$r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
+{
+    $r->post('search', ['as' => 'search', 'uses' => 'PostController@search']);
+    $r->get('recent', ['as' => 'recent', 'uses' => 'PostController@recent']);
+    $r->get('unread', ['as' => 'unread', 'uses' => 'PostController@unread']);
+    $r->get('{post}', ['as' => 'fetch', 'uses' => 'PostController@fetch']);
+    $r->patch('{post}', ['as' => 'update', 'uses' => 'PostController@update']);
+    $r->delete('{post}', ['as' => 'delete', 'uses' => 'PostController@delete']);
+    $r->post('{post}/restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
 });
 
 // Bulk actions
@@ -54,6 +67,13 @@ $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function
         $r->delete('/', ['as' => 'delete', 'uses' => 'ThreadController@destroy']);
         $r->post('restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
     });
+
+    // Posts
+    $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
+    {
+        $r->delete('/', ['as' => 'delete', 'uses' => 'PostController@delete']);
+        $r->post('restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
+    });
 });
 
 $r->bind('category', function ($value)
@@ -63,18 +83,24 @@ $r->bind('category', function ($value)
 
 $r->bind('thread', function ($value)
 {
-    $thread = \TeamTeaTime\Forum\Models\Thread::withTrashed()->with('category')->find($value);
+    $query = \TeamTeaTime\Forum\Models\Thread::with('category');
 
-    if ($thread->trashed() && ! Gate::allows('viewTrashedThreads')) return null;
-
-    return $thread;
+    if (Gate::allows('viewTrashedThreads'))
+    {
+        $query->withTrashed();
+    }
+    
+    return $query->find($value);
 });
 
 $r->bind('post', function ($value)
 {
-    $post = \TeamTeaTime\Forum\Models\Post::withTrashed()->with(['thread', 'thread.category'])->find($value);
+    $query = \TeamTeaTime\Forum\Models\Post::with(['thread', 'thread.category']);
 
-    if ($post->trashed() && ! Gate::allows('viewTrashedPosts')) return null;
-
-    return $post;
+    if (Gate::allows('viewTrashedPosts'))
+    {
+        $query->withTrashed();
+    }
+    
+    return $query->find($value);
 });

@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,6 +36,14 @@ class Post extends BaseModel
     public function children(): HasMany
     {
         return $this->hasMany(Post::class, 'post_id')->withTrashed();
+    }
+
+    public function scopeRecent(Builder $query): Builder
+    {
+        $age = strtotime(config('forum.general.old_thread_threshold'), 0);
+        $cutoff = time() - $age;
+
+        return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
     }
 
     public function getSequenceNumber(): int
