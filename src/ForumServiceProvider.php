@@ -36,10 +36,6 @@ class ForumServiceProvider extends ServiceProvider
             $this->mergeConfigFrom(__DIR__."/../config/{$name}.php", "forum.{$name}");
         }
 
-        $router->model('category', Category::class);
-        $router->model('post', Post::class);
-        $router->model('thread', Thread::class);
-
         if (config('forum.api.enabled')) {
             $router->group(config('forum.api.router'), function ($r) {
                 require __DIR__.'/../routes/api.php';
@@ -82,7 +78,7 @@ class ForumServiceProvider extends ServiceProvider
         }
     }
 
-    public function registerPolicies(GateContract $gate)
+    private function registerPolicies(GateContract $gate)
     {
         $forumPolicy = config('forum.integration.policies.forum');
         foreach (get_class_methods(new $forumPolicy()) as $method) {
