@@ -1,4 +1,4 @@
-![Tests](https://github.com/Team-Tea-Time/laravel-forum/actions/workflows/test.yml/badge.svg) ![phpcs](https://github.com/Team-Tea-Time/laravel-forum/actions/workflows/phpcs.yml/badge.svg) [![StyleCI](https://github.styleci.io/repos/28139801/shield?style=flat&branch=5.0)](https://github.styleci.io/repos/28139801?branch=5.0)
+![Tests](https://github.com/Team-Tea-Time/laravel-forum/actions/workflows/tests.yml/badge.svg) ![phpcs](https://github.com/Team-Tea-Time/laravel-forum/actions/workflows/phpcs.yml/badge.svg) [![StyleCI](https://github.styleci.io/repos/28139801/shield?style=flat&branch=5.0)](https://github.styleci.io/repos/28139801?branch=5.0)
 
 ![Laravel Forum Logo](./logo.png)
 
