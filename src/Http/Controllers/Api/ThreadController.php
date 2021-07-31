@@ -4,9 +4,8 @@ namespace TeamTeaTime\Forum\Http\Controllers\Api;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Response;
 use TeamTeaTime\Forum\Http\Requests\CreateThread;
 use TeamTeaTime\Forum\Http\Requests\DeleteThread;
 use TeamTeaTime\Forum\Http\Requests\LockThread;
@@ -17,7 +16,6 @@ use TeamTeaTime\Forum\Http\Requests\RenameThread;
 use TeamTeaTime\Forum\Http\Requests\RestoreThread;
 use TeamTeaTime\Forum\Http\Requests\UnlockThread;
 use TeamTeaTime\Forum\Http\Requests\UnpinThread;
-use TeamTeaTime\Forum\Http\Resources\PostResource;
 use TeamTeaTime\Forum\Http\Resources\ThreadResource;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;

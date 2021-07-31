@@ -12,6 +12,7 @@ class LockThread extends FormRequest implements FulfillableRequest
     public function authorize(): bool
     {
         $thread = $this->route('thread');
+
         return $this->user()->can('lockThreads', $thread->category);
     }
 

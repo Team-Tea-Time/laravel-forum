@@ -33,12 +33,12 @@ class DeletePost extends BaseAction
         $this->post->thread->updateWithoutTouch([
             'last_post_id' => $lastPostInThread->id,
             'updated_at' => $lastPostInThread->updated_at,
-            'reply_count' => DB::raw('reply_count - 1')
+            'reply_count' => DB::raw('reply_count - 1'),
         ]);
 
         $this->post->thread->category->updateWithoutTouch([
             'latest_active_thread_id' => $this->post->thread->category->getLatestActiveThreadId(),
-            'post_count' => DB::raw('post_count - 1')
+            'post_count' => DB::raw('post_count - 1'),
         ]);
 
         if ($this->permaDelete && ! is_null($this->post->children)) {

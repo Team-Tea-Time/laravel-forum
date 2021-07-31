@@ -2,7 +2,6 @@
 
 namespace TeamTeaTime\Forum\Actions\Bulk;
 
-use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Actions\BaseAction;
 use TeamTeaTime\Forum\Models\Category;
 

@@ -3,9 +3,8 @@
 namespace TeamTeaTime\Forum\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Response;
 use TeamTeaTime\Forum\Http\Requests\CreateCategory;
 use TeamTeaTime\Forum\Http\Requests\DeleteCategory;
 use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
@@ -58,7 +57,7 @@ class CategoryController extends BaseController
     public function delete(DeleteCategory $request): Response
     {
         $request->fulfill();
-        
+
         return new Response(['success' => true], 200);
     }
 }

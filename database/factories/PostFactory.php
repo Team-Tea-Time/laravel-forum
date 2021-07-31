@@ -2,8 +2,8 @@
 
 namespace TeamTeaTime\Forum\Database\Factories;
 
-use TeamTeaTime\Forum\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use TeamTeaTime\Forum\Models\Post;
 
 class PostFactory extends Factory
 {
@@ -15,7 +15,7 @@ class PostFactory extends Factory
             'thread_id' => ThreadFactory::new(),
             'author_id' => 0,
             'post_id' => null,
-            'content' => $this->faker->text
+            'content' => $this->faker->text,
         ];
     }
 }

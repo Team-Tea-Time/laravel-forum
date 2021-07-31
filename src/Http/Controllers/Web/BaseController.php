@@ -2,7 +2,6 @@
 
 namespace TeamTeaTime\Forum\Http\Controllers\Web;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;

@@ -2,9 +2,7 @@
 
 namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
-use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\Factories\UserFactory;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Database\Factories\PostFactory;
@@ -101,7 +99,7 @@ class ThreadUpdateTest extends FeatureTestCase
     public function should_fail_validation_with_empty_title_when_renaming()
     {
         $response = $this->actingAs($this->user)
-            ->post(Forum::route(self::ROUTE_RENAME, $this->thread), ['title' => ""]);
+            ->post(Forum::route(self::ROUTE_RENAME, $this->thread), ['title' => '']);
 
         $response->assertSessionHasErrors();
     }

@@ -2,9 +2,8 @@
 
 namespace TeamTeaTime\Forum\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\Events\UserCreatingPost;
 use TeamTeaTime\Forum\Events\UserEditingPost;

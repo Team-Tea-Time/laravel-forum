@@ -31,7 +31,7 @@ class CategoryResource extends JsonResource
             'actions' => [
                 'patch:update' => ForumApi::route('category.update', ['category' => $this->id]),
                 'delete:delete' => ForumApi::route('category.delete', ['category' => $this->id]),
-            ]
+            ],
         ];
     }
 
@@ -52,7 +52,7 @@ class CategoryResource extends JsonResource
         if ($this->latest_active_thread_id != null) {
             $links['latest_active_thread'] = ForumApi::route('thread.fetch', ['thread' => $this->latest_active_thread_id]);
         }
-        
+
         return compact('links');
     }
 }

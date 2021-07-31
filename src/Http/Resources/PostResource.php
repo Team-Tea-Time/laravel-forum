@@ -27,7 +27,7 @@ class PostResource extends JsonResource
                 'patch:update' => ForumApi::route('post.update', ['post' => $this->id]),
                 'delete:delete' => ForumApi::route('post.delete', ['post' => $this->id]),
                 'post:restore' => ForumApi::route('post.restore', ['post' => $this->id]),
-            ]
+            ],
         ];
     }
 

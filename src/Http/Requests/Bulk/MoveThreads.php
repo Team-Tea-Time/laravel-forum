@@ -3,14 +3,11 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Actions\Bulk\MoveThreads as Action;
 use TeamTeaTime\Forum\Events\UserBulkMovedThreads;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Models\BaseModel;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 
@@ -25,7 +22,7 @@ class MoveThreads extends FormRequest implements FulfillableRequest
     {
         return [
             'threads' => ['required', 'array'],
-            'category_id' => ['required', 'int', 'exists:forum_categories,id']
+            'category_id' => ['required', 'int', 'exists:forum_categories,id'],
         ];
     }
 
@@ -76,7 +73,7 @@ class MoveThreads extends FormRequest implements FulfillableRequest
 
             $this->sourceCategories = Category::whereIn('id', $query->get()->pluck('category_id'))->get();
         }
-        
+
         return $this->sourceCategories;
     }
 
@@ -85,7 +82,7 @@ class MoveThreads extends FormRequest implements FulfillableRequest
         if ($this->destinationCategory == null) {
             $this->destinationCategory = Category::find($this->validated()['category_id']);
         }
-        
+
         return $this->destinationCategory;
     }
 }

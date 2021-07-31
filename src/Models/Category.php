@@ -5,8 +5,6 @@ namespace TeamTeaTime\Forum\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Foundation\Auth\User;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Kalnoy\Nestedset\NodeTrait;
 use TeamTeaTime\Forum\Support\Web\Forum;
 
@@ -24,7 +22,7 @@ class Category extends BaseModel
         'thread_count',
         'post_count',
         'is_private',
-        'color'
+        'color',
     ];
     protected $appends = ['route'];
 
@@ -72,12 +70,14 @@ class Category extends BaseModel
     public function getNewestThreadId(): ?int
     {
         $thread = $this->threads()->orderBy('created_at', 'desc')->first();
+
         return $thread ? $thread->id : null;
     }
 
     public function getLatestActiveThreadId(): ?int
     {
         $thread = $this->threads()->orderBy('updated_at', 'desc')->first();
+
         return $thread ? $thread->id : null;
     }
 

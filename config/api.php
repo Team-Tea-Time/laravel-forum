@@ -26,7 +26,7 @@ return [
         'prefix' => '/forum/api',
         'as' => 'forum.api.',
         'namespace' => '\TeamTeaTime\Forum\Http\Controllers\Api',
-        'middleware' => ['api', 'auth:api']
+        'middleware' => ['api', 'auth:api'],
     ],
 
 ];

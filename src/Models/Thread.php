@@ -2,16 +2,12 @@
 
 namespace TeamTeaTime\Forum\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Pagination\LengthAwarePaginator;
-use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
 
 class Thread extends BaseModel
@@ -29,7 +25,7 @@ class Thread extends BaseModel
         'reply_count',
         'first_post_id',
         'last_post_id',
-        'updated_at'
+        'updated_at',
     ];
 
     const READERS_TABLE = 'forum_threads_read';
@@ -84,7 +80,8 @@ class Thread extends BaseModel
     public function getIsOldAttribute(): bool
     {
         $age = config('forum.general.old_thread_threshold');
-        return (! $age || $this->updated_at->timestamp < (time() - strtotime($age, 0)));
+
+        return ! $age || $this->updated_at->timestamp < (time() - strtotime($age, 0));
     }
 
     public function getReaderAttribute()
@@ -105,10 +102,10 @@ class Thread extends BaseModel
         }
 
         if (is_null($this->reader)) {
-            return trans('forum::general.' . self::STATUS_UNREAD);
+            return trans('forum::general.'.self::STATUS_UNREAD);
         }
 
-        return ($this->updatedSince($this->reader)) ? trans('forum::general.' . self::STATUS_UPDATED) : null;
+        return ($this->updatedSince($this->reader)) ? trans('forum::general.'.self::STATUS_UPDATED) : null;
     }
 
     public function getPostCountAttribute(): int

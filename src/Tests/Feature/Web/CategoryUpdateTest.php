@@ -3,7 +3,6 @@
 namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\Factories\UserFactory;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Models\Category;
@@ -32,7 +31,7 @@ class CategoryUpdateTest extends FeatureTestCase
     public function should_fail_validation_without_a_title()
     {
         $response = $this->actingAs($this->user)
-            ->patch(Forum::route($this->route, $this->category), ['title' => ""]);
+            ->patch(Forum::route($this->route, $this->category), ['title' => '']);
 
         $response->assertSessionHasErrors();
     }

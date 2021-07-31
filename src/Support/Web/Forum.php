@@ -2,12 +2,11 @@
 
 namespace TeamTeaTime\Forum\Support\Web;
 
-use Illuminate\Routing\Router;
 use Illuminate\Support\Str;
+use Session;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
-use Session;
 
 class Forum
 {
@@ -48,14 +47,14 @@ class Forum
                 'category_slug' => static::slugify($model->title),
             ]);
         }
-        
+
         if ($model instanceof Thread) {
             return route($route, [
                 'thread' => $model->id,
                 'thread_slug' => static::slugify($model->title),
             ]);
         }
-        
+
         if ($model instanceof Post) {
             $params = [
                 'thread' => $model->thread->id,
@@ -73,10 +72,10 @@ class Forum
                 $params['post'] = $model->id;
             }
 
-            return route($route, $params) . $append;
+            return route($route, $params).$append;
         }
 
-        throw \Exception("Invalid model type passed to Forum::route().");
+        throw \Exception('Invalid model type passed to Forum::route().');
     }
 
     public static function slugify(string $string): string

@@ -22,7 +22,6 @@ class DeleteThreads extends BaseAction
     protected function transact()
     {
         $query = Thread::whereIn('id', $this->threadIds);
-        $threads;
 
         if ($this->includeTrashed) {
             $threads = $query->withTrashed()->get();
@@ -46,7 +45,7 @@ class DeleteThreads extends BaseAction
 
         if ($this->permaDelete) {
             $rowsAffected = $query->delete();
-            
+
             // Drop readers for the removed threads
             DB::table(Thread::READERS_TABLE)->whereIn('thread_id', $threadIdsToDelete)->delete();
         } else {
@@ -66,7 +65,7 @@ class DeleteThreads extends BaseAction
 
             $updates = [
                 'newest_thread_id' => $category->getNewestThreadId(),
-                'latest_active_thread_id' => $category->getLatestActiveThreadId()
+                'latest_active_thread_id' => $category->getLatestActiveThreadId(),
             ];
 
             if ($threadCount > 0) {

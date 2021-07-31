@@ -3,11 +3,9 @@
 namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\Factories\UserFactory;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Models\Thread;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Support\Web\Forum;
 use TeamTeaTime\Forum\Tests\FeatureTestCase;
@@ -25,7 +23,7 @@ class ThreadStoreTest extends FeatureTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->categoryFactory = CategoryFactory::new();
         $this->userFactory = UserFactory::new();
 
@@ -55,8 +53,8 @@ class ThreadStoreTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user)
             ->post(Forum::route($this->route, $this->category), [
-                'title' => "",
-                'content' => "Thread content"
+                'title' => '',
+                'content' => 'Thread content',
             ]);
 
         $response->assertSessionHasErrors();
@@ -67,8 +65,8 @@ class ThreadStoreTest extends FeatureTestCase
     {
         $response = $this->actingAs($this->user)
             ->post(Forum::route($this->route, $this->category), [
-                'title' => "Thread title",
-                'content' => ""
+                'title' => 'Thread title',
+                'content' => '',
             ]);
 
         $response->assertSessionHasErrors();
@@ -79,8 +77,8 @@ class ThreadStoreTest extends FeatureTestCase
     {
         $this->actingAs($this->user)
             ->post(Forum::route($this->route, $this->category), [
-                'title' => "Thread title",
-                'content' => "Thread content"
+                'title' => 'Thread title',
+                'content' => 'Thread content',
             ]);
 
         $this->assertEquals(1, Post::count());

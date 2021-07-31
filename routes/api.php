@@ -79,7 +79,7 @@ $r->bind('thread', function ($value) {
     if (Gate::allows('viewTrashedThreads')) {
         $query->withTrashed();
     }
-    
+
     return $query->find($value);
 });
 
@@ -89,6 +89,6 @@ $r->bind('post', function ($value) {
     if (Gate::allows('viewTrashedPosts')) {
         $query->withTrashed();
     }
-    
+
     return $query->find($value);
 });

@@ -3,12 +3,10 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Actions\DeleteThread as Action;
 use TeamTeaTime\Forum\Events\UserDeletedThread;
 use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Models\Thread;
 
 class DeleteThread extends FormRequest implements FulfillableRequest
 {
@@ -22,7 +20,7 @@ class DeleteThread extends FormRequest implements FulfillableRequest
     public function rules(): array
     {
         return [
-            'permadelete' => ['boolean']
+            'permadelete' => ['boolean'],
         ];
     }
 

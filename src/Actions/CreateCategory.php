@@ -28,7 +28,7 @@ class CreateCategory extends BaseAction
             'description' => $this->description,
             'color' => $this->color,
             'accepts_threads' => $this->acceptsThreads,
-            'is_private' => $this->isPrivate
+            'is_private' => $this->isPrivate,
         ]);
     }
 }

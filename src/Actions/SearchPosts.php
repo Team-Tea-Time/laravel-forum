@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Gate;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
-use TeamTeaTime\Forum\Models\Thread;
 
 class SearchPosts extends BaseAction
 {

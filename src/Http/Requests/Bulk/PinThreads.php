@@ -18,7 +18,7 @@ class PinThreads extends FormRequest implements FulfillableRequest
     public function rules(): array
     {
         return [
-            'threads' => ['required', 'array']
+            'threads' => ['required', 'array'],
         ];
     }
 

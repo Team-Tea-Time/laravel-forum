@@ -18,7 +18,7 @@ class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
     public function rules(): array
     {
         return [
-            'category_id' => ['int', 'exists:forum_categories,id']
+            'category_id' => ['int', 'exists:forum_categories,id'],
         ];
     }
 

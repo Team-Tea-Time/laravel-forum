@@ -17,8 +17,8 @@ return [
         'model' => [
             TeamTeaTime\Forum\Models\Category::class => TeamTeaTime\Forum\Policies\CategoryPolicy::class,
             TeamTeaTime\Forum\Models\Thread::class => TeamTeaTime\Forum\Policies\ThreadPolicy::class,
-            TeamTeaTime\Forum\Models\Post::class => TeamTeaTime\Forum\Policies\PostPolicy::class
-        ]
+            TeamTeaTime\Forum\Models\Post::class => TeamTeaTime\Forum\Policies\PostPolicy::class,
+        ],
     ],
 
     /*

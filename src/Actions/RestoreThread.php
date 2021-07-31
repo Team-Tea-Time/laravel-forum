@@ -26,8 +26,8 @@ class RestoreThread extends BaseAction
         $category->update([
             'newest_thread_id' => max($this->thread->id, $category->newest_thread_id),
             'latest_active_thread_id' => $category->getLatestActiveThreadId(),
-            'thread_count' => DB::raw("thread_count + 1"),
-            'post_count' => DB::raw("post_count + {$this->thread->postCount}")
+            'thread_count' => DB::raw('thread_count + 1'),
+            'post_count' => DB::raw("post_count + {$this->thread->postCount}"),
         ]);
 
         return $this->thread;

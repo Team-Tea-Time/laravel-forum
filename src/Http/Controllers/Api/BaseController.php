@@ -13,7 +13,7 @@ abstract class BaseController
     {
         return new Response([
             'success' => false,
-            'message' => trans('forum::general.invalid_selection')
+            'message' => trans('forum::general.invalid_selection'),
         ], 403);
     }
 
@@ -22,7 +22,7 @@ abstract class BaseController
         return new Response([
             'success' => true,
             'rows_affected' => $rowsAffected,
-            'message' => trans_choice("forum::{$transKey}", $rowsAffected)
+            'message' => trans_choice("forum::{$transKey}", $rowsAffected),
         ], 200);
     }
 }

@@ -6,14 +6,13 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Actions\Bulk\ManageCategories as Action;
 use TeamTeaTime\Forum\Events\UserBulkManagedCategories;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Models\Category;
 
 class ManageCategories extends FormRequest implements FulfillableRequest
 {
     public function rules(): array
     {
         return [
-            'categories' => ['required', 'array']
+            'categories' => ['required', 'array'],
         ];
     }
 

@@ -41,7 +41,7 @@ class RestorePosts extends BaseAction
             $threadPosts = $postsByThread->get($thread->id);
             $thread->updateWithoutTouch([
                 'last_post_id' => $thread->getLastPost()->id,
-                'reply_count' => DB::raw("reply_count + {$threadPosts->count()}")
+                'reply_count' => DB::raw("reply_count + {$threadPosts->count()}"),
             ]);
         }
 
@@ -53,7 +53,7 @@ class RestorePosts extends BaseAction
             $postCount = $posts->whereIn('thread_id', $categoryThreads->pluck('id'))->count();
             $category->updateWithoutTouch([
                 'latest_active_thread_id' => $category->getLatestActiveThreadId(),
-                'post_count' => DB::raw("post_count + {$postCount}")
+                'post_count' => DB::raw("post_count + {$postCount}"),
             ]);
         }
 

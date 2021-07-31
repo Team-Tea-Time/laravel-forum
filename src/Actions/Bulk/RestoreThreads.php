@@ -39,12 +39,12 @@ class RestoreThreads extends BaseAction
             $threadCount = $threads->count();
             $postCount = $threads->sum('reply_count') + $threadCount; // count the first post of each thread
             $category = $threads->first()->category;
-        
+
             $category->updateWithoutTouch([
                 'newest_thread_id' => max($threads->max('id'), $category->newest_thread_id),
                 'latest_active_thread_id' => $category->getLatestActiveThreadId(),
                 'thread_count' => DB::raw("thread_count + {$threadCount}"),
-                'post_count' => DB::raw("post_count + {$postCount}")
+                'post_count' => DB::raw("post_count + {$postCount}"),
             ]);
         }
 

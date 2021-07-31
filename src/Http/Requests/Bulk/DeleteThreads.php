@@ -3,7 +3,6 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Actions\Bulk\DeleteThreads as Action;
 use TeamTeaTime\Forum\Events\UserBulkDeletedThreads;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
@@ -19,7 +18,7 @@ class DeleteThreads extends FormRequest implements FulfillableRequest
     {
         return [
             'threads' => ['required', 'array'],
-            'permadelete' => ['boolean']
+            'permadelete' => ['boolean'],
         ];
     }
 

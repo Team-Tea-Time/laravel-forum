@@ -16,7 +16,7 @@ class UnpinThread extends BaseAction
     protected function transact()
     {
         $this->thread->updateWithoutTouch([
-            'pinned' => false
+            'pinned' => false,
         ]);
 
         return $this->thread;

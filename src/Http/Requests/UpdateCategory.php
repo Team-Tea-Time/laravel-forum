@@ -3,7 +3,6 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use TeamTeaTime\Forum\Actions\UpdateCategory as Action;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Events\UserUpdatedCategory;
 
 class UpdateCategory extends CreateCategory
