@@ -13,7 +13,7 @@ class UserMarkedThreadsAsRead extends CollectionEvent
     public function __construct($user, ?Category $category, Collection $threads)
     {
         parent::__construct($user, $threads);
-        
+
         $this->category = $category;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace TeamTeaTime\Forum\Database\Factories;
 
-use TeamTeaTime\Forum\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use TeamTeaTime\Forum\Models\Category;
 
 class CategoryFactory extends Factory
 {
@@ -18,7 +18,7 @@ class CategoryFactory extends Factory
             'thread_count' => 0,
             'post_count' => 0,
             'is_private' => 1,
-            'color' => '#007BFF'
+            'color' => '#007BFF',
         ];
     }
 }

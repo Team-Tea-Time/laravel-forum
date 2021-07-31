@@ -19,7 +19,7 @@ class Post extends BaseModel
         'author_id',
         'post_id',
         'sequence',
-        'content'
+        'content',
     ];
 
     public function __construct(array $attributes = [])

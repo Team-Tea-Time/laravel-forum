@@ -2,12 +2,10 @@
 
 namespace TeamTeaTime\Forum\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\Events\UserCreatingThread;
-use TeamTeaTime\Forum\Events\UserMarkingNew;
 use TeamTeaTime\Forum\Events\UserViewingRecent;
 use TeamTeaTime\Forum\Events\UserViewingThread;
 use TeamTeaTime\Forum\Events\UserViewingUnread;
@@ -36,7 +34,7 @@ class ThreadController extends BaseController
         }
 
         $threads = $threads->get()->filter(function ($thread) use ($request) {
-            return (! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category) && $request->user()->can('view', $thread));
+            return ! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category) && $request->user()->can('view', $thread);
         });
 
         event(new UserViewingRecent($request->user(), $threads));
@@ -151,7 +149,7 @@ class ThreadController extends BaseController
 
         return redirect(Forum::route('thread.show', $thread));
     }
-    
+
     public function rename(RenameThread $request): RedirectResponse
     {
         $thread = $request->fulfill();

@@ -13,7 +13,7 @@ return [
     'new_updated' => 'เพิ่ม และบันทึกหัวข้อใหม่แล้ว',
     'newest' => 'หัวข้อใหม่สุด',
     'none_found' => 'ไม่มีหัวข้อที่กำลังค้นหา',
-    'perma_delete' => "Permanently delete thread|Permanently delete threads",
+    'perma_delete' => 'Permanently delete thread|Permanently delete threads',
     'perma_deleted' => 'หัวข้อจะถูกลบถาวร|หัวข้อจะถูกลบถาวร',
     'pin' => 'ปักหมุด',
     'pinned' => 'ปักหมุด',

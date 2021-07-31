@@ -4,9 +4,8 @@ namespace TeamTeaTime\Forum\Http\Controllers\Web;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\View\View;
 use TeamTeaTime\Forum\Events\UserViewingCategory;
 use TeamTeaTime\Forum\Events\UserViewingIndex;
 use TeamTeaTime\Forum\Http\Requests\CreateCategory;

@@ -5,13 +5,12 @@ namespace TeamTeaTime\Forum\Http\Controllers\Api\Bulk;
 use Illuminate\Http\Response;
 use TeamTeaTime\Forum\Http\Controllers\Api\BaseController;
 use TeamTeaTime\Forum\Http\Requests\Bulk\DeleteThreads;
-use TeamTeaTime\Forum\Http\Requests\Bulk\MoveThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\LockThreads;
+use TeamTeaTime\Forum\Http\Requests\Bulk\MoveThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\PinThreads;
+use TeamTeaTime\Forum\Http\Requests\Bulk\RestoreThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\UnlockThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\UnpinThreads;
-use TeamTeaTime\Forum\Http\Requests\Bulk\RenameThreads;
-use TeamTeaTime\Forum\Http\Requests\Bulk\RestoreThreads;
 
 class ThreadController extends BaseController
 {

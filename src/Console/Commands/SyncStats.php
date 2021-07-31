@@ -21,8 +21,8 @@ class SyncStats extends Command
         $range = $this->option('range');
         if ($range != null) {
             [$skip, $take] = explode(':', $range);
-            $skip = (int)$skip;
-            $take = (int)$take;
+            $skip = (int) $skip;
+            $take = (int) $take;
         }
 
         switch ($this->option('model')) {
@@ -37,12 +37,12 @@ class SyncStats extends Command
                 $this->processCategories();
         }
 
-        $this->info("Done!");
+        $this->info('Done!');
     }
 
     private function processCategories(?int $skip = null, ?int $take = null)
     {
-        $this->info("Processing categories...");
+        $this->info('Processing categories...');
 
         $query = Category::with('threads', 'threads.posts');
 
@@ -73,7 +73,7 @@ class SyncStats extends Command
                 'newest_thread_id' => $newestThreadId,
                 'latest_active_thread_id' => $latestActiveThreadId,
                 'thread_count' => $category->threads->count(),
-                'post_count' => $postCount
+                'post_count' => $postCount,
             ]);
 
             $bar->advance();
@@ -85,7 +85,7 @@ class SyncStats extends Command
 
     private function processThreads(?int $skip = null, ?int $take = null)
     {
-        $this->info("Processing threads...");
+        $this->info('Processing threads...');
 
         $query = Thread::with('posts');
 
@@ -108,7 +108,7 @@ class SyncStats extends Command
             $thread->update([
                 'reply_count' => $thread->posts->count() - 1,
                 'first_post_id' => $thread->posts()->orderBy('created_at', 'ASC')->first()->id,
-                'last_post_id' => $thread->posts()->orderBy('created_at', 'DESC')->first()->id
+                'last_post_id' => $thread->posts()->orderBy('created_at', 'DESC')->first()->id,
             ]);
 
             $bar->advance();

@@ -2,10 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Actions\Bulk\DeletePosts as Action;
 use TeamTeaTime\Forum\Events\UserBulkDeletedPosts;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
@@ -21,7 +18,7 @@ class DeletePosts extends FormRequest implements FulfillableRequest
     {
         return [
             'posts' => ['required', 'array'],
-            'permadelete' => ['boolean']
+            'permadelete' => ['boolean'],
         ];
     }
 

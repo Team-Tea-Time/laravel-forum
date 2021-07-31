@@ -2,7 +2,6 @@
 
 namespace TeamTeaTime\Forum\Http\Controllers\Api\Bulk;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use TeamTeaTime\Forum\Http\Requests\Bulk\ManageCategories;
 

@@ -2,7 +2,6 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Actions\Bulk\LockThreads as Action;
 use TeamTeaTime\Forum\Events\UserBulkLockedThreads;
@@ -18,7 +17,7 @@ class LockThreads extends FormRequest implements FulfillableRequest
     public function rules(): array
     {
         return [
-            'threads' => ['required', 'array']
+            'threads' => ['required', 'array'],
         ];
     }
 

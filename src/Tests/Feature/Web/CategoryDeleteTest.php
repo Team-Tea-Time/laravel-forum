@@ -3,7 +3,6 @@
 namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\Factories\UserFactory;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Database\Factories\PostFactory;
@@ -66,23 +65,23 @@ class CategoryDeleteTest extends FeatureTestCase
         $topLevelCategory = $this->categoryFactory->createOne();
         $secondLevelCategory = $this->categoryFactory->createOne();
         $topLevelCategory->appendNode($secondLevelCategory);
-        
+
         $topLevelThread = $this->threadFactory->createOne([
             'author_id' => $this->user->getKey(),
-            'category_id' => $topLevelCategory->id
+            'category_id' => $topLevelCategory->id,
         ]);
         $this->postFactory->createOne([
             'author_id' => $this->user->getKey(),
-            'thread_id' => $topLevelThread->id
+            'thread_id' => $topLevelThread->id,
         ]);
 
         $secondLevelThread = $this->threadFactory->createOne([
             'author_id' => $this->user->getKey(),
-            'category_id' => $secondLevelCategory->id
+            'category_id' => $secondLevelCategory->id,
         ]);
         $this->postFactory->createOne([
             'author_id' => $this->user->getKey(),
-            'thread_id' => $secondLevelThread->id
+            'thread_id' => $secondLevelThread->id,
         ]);
 
         return $topLevelCategory;

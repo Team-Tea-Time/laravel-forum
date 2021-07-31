@@ -5,10 +5,9 @@ namespace TeamTeaTime\Forum\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Actions\DeleteCategory as Action;
 use TeamTeaTime\Forum\Events\UserDeletedCategory;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
-use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 
 class DeleteCategory extends FormRequest implements FulfillableRequest
 {
@@ -17,7 +16,7 @@ class DeleteCategory extends FormRequest implements FulfillableRequest
     public function rules(): array
     {
         return [
-            'force' => ['boolean']
+            'force' => ['boolean'],
         ];
     }
 

@@ -12,6 +12,7 @@ trait HandlesDeletion
     protected function isPermaDeleting(): bool
     {
         $softDeletesEnabled = config('forum.general.soft_deletes');
+
         return ! $softDeletesEnabled || ($softDeletesEnabled && $this->isPermaDeleteRequested());
     }
 }

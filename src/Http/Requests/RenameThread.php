@@ -12,13 +12,14 @@ class RenameThread extends FormRequest implements FulfillableRequest
     public function authorize(): bool
     {
         $thread = $this->route('thread');
+
         return $this->user()->can('rename', $thread);
     }
 
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'min:' . config('forum.general.validation.title_min')]
+            'title' => ['required', 'string', 'min:'.config('forum.general.validation.title_min')],
         ];
     }
 

@@ -6,9 +6,8 @@ use Illuminate\Foundation\Auth\User;
 use Orchestra\Testbench\Factories\UserFactory;
 use TeamTeaTime\Forum\Database\Factories\PostFactory;
 use TeamTeaTime\Forum\Database\Factories\ThreadFactory;
-use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Models\Thread;
 use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\Models\Thread;
 use TeamTeaTime\Forum\Support\Web\Forum;
 use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
@@ -25,7 +24,7 @@ class ThreadDeleteTest extends FeatureTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->threadFactory = ThreadFactory::new();
         $this->postFactory = PostFactory::new();
 

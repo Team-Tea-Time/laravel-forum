@@ -57,7 +57,7 @@ return [
     'pagination' => [
         'categories' => 50,
         'threads' => 20,
-        'posts' => 20
+        'posts' => 20,
     ],
 
     /*
@@ -71,7 +71,7 @@ return [
 
     'validation' => [
         'title_min' => 3,
-        'content_min' => 3
+        'content_min' => 3,
     ],
 
 ];

@@ -2,9 +2,8 @@
 
 namespace TeamTeaTime\Forum\Database\Factories;
 
-use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Models\Thread;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use TeamTeaTime\Forum\Models\Thread;
 
 class ThreadFactory extends Factory
 {
@@ -18,7 +17,7 @@ class ThreadFactory extends Factory
             'locked' => 0,
             'pinned' => 0,
             'reply_count' => 0,
-            'deleted_at' => null
+            'deleted_at' => null,
         ];
     }
 }

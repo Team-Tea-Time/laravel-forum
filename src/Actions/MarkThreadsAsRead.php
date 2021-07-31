@@ -3,7 +3,6 @@
 namespace TeamTeaTime\Forum\Actions;
 
 use Illuminate\Foundation\Auth\User;
-use TeamTeaTime\Database\Eloquent\Model;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 

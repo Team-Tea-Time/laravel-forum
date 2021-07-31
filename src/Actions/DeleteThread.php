@@ -41,7 +41,7 @@ class DeleteThread extends BaseAction
         // otherwise they'll needlessly be updated a second time
         if (! $threadAlreadyTrashed) {
             $attributes = [
-                'thread_count' => DB::raw('thread_count - 1')
+                'thread_count' => DB::raw('thread_count - 1'),
             ];
 
             if ($postsRemoved) {

@@ -3,8 +3,8 @@
 namespace TeamTeaTime\Forum\Models\Traits;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use TeamTeaTime\Forum\Models\Thread;
 use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\Models\Thread;
 
 trait HasForumContent
 {

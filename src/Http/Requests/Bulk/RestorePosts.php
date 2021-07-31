@@ -2,10 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Actions\Bulk\RestorePosts as Action;
 use TeamTeaTime\Forum\Events\UserBulkRestoredPosts;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
@@ -19,7 +16,7 @@ class RestorePosts extends FormRequest implements FulfillableRequest
     public function rules(): array
     {
         return [
-            'posts' => ['required', 'array']
+            'posts' => ['required', 'array'],
         ];
     }
 

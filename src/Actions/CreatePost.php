@@ -28,17 +28,17 @@ class CreatePost extends BaseAction
             'post_id' => is_null($this->parent) ? null : $this->parent->id,
             'author_id' => $this->author->getKey(),
             'sequence' => $this->thread->posts->count() + 1,
-            'content' => $this->content
+            'content' => $this->content,
         ]);
 
         $this->thread->update([
             'last_post_id' => $post->id,
-            'reply_count' => DB::raw('reply_count + 1')
+            'reply_count' => DB::raw('reply_count + 1'),
         ]);
 
         $this->thread->category->updateWithoutTouch([
             'latest_active_thread_id' => $this->thread->id,
-            'post_count' => DB::raw('post_count + 1')
+            'post_count' => DB::raw('post_count + 1'),
         ]);
 
         return $post;

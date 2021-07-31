@@ -45,7 +45,7 @@ class MoveThread extends BaseAction
             'thread_count' => DB::raw('thread_count + 1'),
             'post_count' => DB::raw("post_count + {$this->thread->postCount}"),
             'newest_thread_id' => $this->destinationCategory->getNewestThreadId(),
-            'latest_active_thread_id' => $this->destinationCategory->getLatestActiveThreadId()
+            'latest_active_thread_id' => $this->destinationCategory->getLatestActiveThreadId(),
         ]);
 
         return $this->thread;

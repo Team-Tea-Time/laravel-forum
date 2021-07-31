@@ -1,8 +1,8 @@
-<?php namespace TeamTeaTime\Forum\Models;
+<?php
+
+namespace TeamTeaTime\Forum\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Http\Request;
 
 abstract class BaseModel extends Model
 {
@@ -24,12 +24,12 @@ abstract class BaseModel extends Model
 
     public function updatedSince(Model &$model): bool
     {
-        return ($this->updated_at > $model->updated_at);
+        return $this->updated_at > $model->updated_at;
     }
 
     public function hasBeenUpdated(): bool
     {
-        return ($this->updated_at > $this->created_at);
+        return $this->updated_at > $this->created_at;
     }
 
     public function saveWithoutTouch()

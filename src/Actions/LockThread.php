@@ -16,7 +16,7 @@ class LockThread extends BaseAction
     protected function transact()
     {
         $this->thread->updateWithoutTouch([
-            'locked' => true
+            'locked' => true,
         ]);
 
         return $this->thread;

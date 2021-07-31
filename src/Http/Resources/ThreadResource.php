@@ -35,7 +35,7 @@ class ThreadResource extends JsonResource
                 'post:move' => ForumApi::route('thread.move', ['thread' => $this->id]),
                 'delete:delete' => ForumApi::route('thread.delete', ['thread' => $this->id]),
                 'post:restore' => ForumApi::route('thread.restore', ['thread' => $this->id]),
-            ]
+            ],
         ];
     }
 
@@ -52,7 +52,7 @@ class ThreadResource extends JsonResource
                 'posts' => ForumApi::route('thread.posts', ['thread' => $this->id]),
                 'first_post_id' => ForumApi::route('post.fetch', ['post' => $this->first_post_id]),
                 'last_post_id' => ForumApi::route('post.fetch', ['post' => $this->last_post_id]),
-            ]
+            ],
         ];
     }
 }

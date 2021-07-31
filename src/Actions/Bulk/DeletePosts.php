@@ -22,7 +22,6 @@ class DeletePosts extends BaseAction
     protected function transact()
     {
         $query = Post::whereIn('id', $this->postIds);
-        $posts;
 
         if ($this->includeTrashed) {
             $posts = $query->withTrashed()->get();
@@ -65,14 +64,14 @@ class DeletePosts extends BaseAction
                 if ($threadPostsRemoved == 0) {
                     continue;
                 }
-            
+
                 if ($thread->posts()->count() == 0) {
                     if (! $thread->trashed()) {
                         // Thread has not been soft-deleted already;
                         // it should count towards threads removed for this category
                         $categoryThreadsRemoved++;
                     }
-    
+
                     if ($thread->posts()->withTrashed()->count() == 0) {
                         $thread->forceDelete();
                     } else {
@@ -81,9 +80,9 @@ class DeletePosts extends BaseAction
                 } else {
                     $thread->updateWithoutTouch([
                         'last_post_id' => $thread->getLastPost()->id,
-                        'reply_count' => DB::raw("reply_count - {$threadPostsRemoved}")
+                        'reply_count' => DB::raw("reply_count - {$threadPostsRemoved}"),
                     ]);
-        
+
                     $thread->posts->each(function ($p) {
                         $p->updateWithoutTouch(['sequence' => $p->getSequenceNumber()]);
                     });
@@ -91,7 +90,7 @@ class DeletePosts extends BaseAction
             }
 
             $attributes = [
-                'latest_active_thread' => $category->getLatestActiveThreadId()
+                'latest_active_thread' => $category->getLatestActiveThreadId(),
             ];
 
             if ($categoryThreadsRemoved > 0) {
