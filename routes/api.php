@@ -67,6 +67,13 @@ $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function
         $r->delete('/', ['as' => 'delete', 'uses' => 'ThreadController@destroy']);
         $r->post('restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
     });
+
+    // Posts
+    $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
+    {
+        $r->delete('/', ['as' => 'delete', 'uses' => 'PostController@delete']);
+        $r->post('restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
+    });
 });
 
 $r->bind('category', function ($value)
