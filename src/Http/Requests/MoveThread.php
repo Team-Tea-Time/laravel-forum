@@ -38,8 +38,7 @@ class MoveThread extends FormRequest implements FulfillableRequest
         $action = new Action($thread, $destinationCategory);
         $thread = $action->execute();
 
-        if (! is_null($thread))
-        {
+        if (! is_null($thread)) {
             event(new UserMovedThread($this->user(), $thread, $sourceCategory, $destinationCategory));
         }
 
@@ -48,8 +47,7 @@ class MoveThread extends FormRequest implements FulfillableRequest
 
     private function getDestinationCategory(): Category
     {
-        if (! isset($this->destinationCategory))
-        {
+        if (! isset($this->destinationCategory)) {
             $this->destinationCategory = Category::find($this->input('category_id'));
         }
         

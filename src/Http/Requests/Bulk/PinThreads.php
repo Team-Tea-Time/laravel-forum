@@ -25,9 +25,10 @@ class PinThreads extends FormRequest implements FulfillableRequest
     public function authorizeValidated(): bool
     {
         $categories = $this->categories();
-        foreach ($categories as $category)
-        {
-            if (! $this->user()->can('pinThreads', $category)) return false;
+        foreach ($categories as $category) {
+            if (! $this->user()->can('pinThreads', $category)) {
+                return false;
+            }
         }
 
         return true;
@@ -38,8 +39,7 @@ class PinThreads extends FormRequest implements FulfillableRequest
         $action = new Action($this->validated()['threads'], $this->user()->can('viewTrashedThreads'));
         $threads = $action->execute();
 
-        if (! is_null($threads))
-        {
+        if (! is_null($threads)) {
             event(new UserBulkPinnedThreads($this->user(), $threads));
         }
 
@@ -50,8 +50,7 @@ class PinThreads extends FormRequest implements FulfillableRequest
     {
         $query = Thread::whereIn('id', $this->validated()['threads']);
 
-        if ($this->user()->can('viewTrashedThreads'))
-        {
+        if ($this->user()->can('viewTrashedThreads')) {
             $query = $query->withTrashed();
         }
 

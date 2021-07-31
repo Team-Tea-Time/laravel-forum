@@ -84,7 +84,7 @@ return [
     | Validation
     |--------------------------------------------------------------------------
     |
-    | Values for some customisable validation rules. 
+    | Values for some customisable validation rules.
     |
     */
 

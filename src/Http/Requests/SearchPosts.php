@@ -35,8 +35,7 @@ class SearchPosts extends FormRequest implements FulfillableRequest
         $action = new Action($category, $this->validated()['term']);
         $posts = $action->execute();
 
-        if (! is_null($posts))
-        {
+        if (! is_null($posts)) {
             event(new UserSearchedPosts($this->user(), $category, $term, $posts));
         }
 
@@ -47,8 +46,7 @@ class SearchPosts extends FormRequest implements FulfillableRequest
     {
         $categoryId = $this->query('category_id');
 
-        if (! isset($this->category) && $categoryId != null && is_numeric($categoryId))
-        {
+        if (! isset($this->category) && $categoryId != null && is_numeric($categoryId)) {
             $this->category = Category::find($categoryId);
         }
 

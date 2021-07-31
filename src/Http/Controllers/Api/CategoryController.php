@@ -19,21 +19,22 @@ class CategoryController extends BaseController
         $query = Category::defaultOrder();
         $parentId = $request->query('parent_id');
 
-        if ($parentId !== null)
-        {
+        if ($parentId !== null) {
             $query = $parentId == 0
                 ? $query->whereNull('parent_id')
                 : $query->where('parent_id', $request->query('parent_id'));
         }
 
-        $categories = $query->get()->filter(fn($category) => ! $category->is_private || $request->user() && $request->user()->can('view', $category));
+        $categories = $query->get()->filter(fn ($category) => ! $category->is_private || $request->user() && $request->user()->can('view', $category));
 
         return CategoryResource::collection($categories);
     }
 
     public function fetch(Category $category): CategoryResource
     {
-        if ($category->is_private) $this->authorize('view', $category);
+        if ($category->is_private) {
+            $this->authorize('view', $category);
+        }
 
         return new CategoryResource($category);
     }

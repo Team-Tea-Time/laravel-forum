@@ -20,7 +20,9 @@ class RestoreThreads extends BaseAction
         $threads = Thread::whereIn('id', $this->threadIds)->onlyTrashed()->get();
 
         // Return early if there are no eligible threads in the selection
-        if ($threads->count() == 0) return null;
+        if ($threads->count() == 0) {
+            return null;
+        }
 
         // Use the raw query builder to prevent touching updated_at
         $rowsAffected = DB::table(Thread::getTableName())
@@ -28,11 +30,12 @@ class RestoreThreads extends BaseAction
             ->whereNotNull(Thread::DELETED_AT)
             ->update([Thread::DELETED_AT => null]);
 
-        if ($rowsAffected == 0) return null;
+        if ($rowsAffected == 0) {
+            return null;
+        }
 
         $threadsByCategory = $threads->groupBy('category_id');
-        foreach ($threadsByCategory as $threads)
-        {
+        foreach ($threadsByCategory as $threads) {
             $threadCount = $threads->count();
             $postCount = $threads->sum('reply_count') + $threadCount; // count the first post of each thread
             $category = $threads->first()->category;

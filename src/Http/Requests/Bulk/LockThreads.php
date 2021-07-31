@@ -26,18 +26,15 @@ class LockThreads extends FormRequest implements FulfillableRequest
     {
         $query = Thread::whereIn('id', $this->validated()['threads']);
 
-        if ($this->user()->can('viewTrashedThreads'))
-        {
+        if ($this->user()->can('viewTrashedThreads')) {
             $query = $query->withTrashed();
         }
 
         $categoryIds = $query->select('category_id')->distinct()->pluck('category_id');
         $categories = Category::whereIn('id', $categoryIds)->get();
 
-        foreach ($categories as $category)
-        {
-            if (! $this->user()->can('view', $category) && ! $this->user()->can('lockThreads', $category))
-            {
+        foreach ($categories as $category) {
+            if (! $this->user()->can('view', $category) && ! $this->user()->can('lockThreads', $category)) {
                 return false;
             }
         }
@@ -50,8 +47,7 @@ class LockThreads extends FormRequest implements FulfillableRequest
         $action = new Action($this->validated()['threads'], $this->user()->can('viewTrashedThreads'));
         $threads = $action->execute();
 
-        if (! is_null($threads))
-        {
+        if (! is_null($threads)) {
             event(new UserBulkLockedThreads($this->user(), $threads));
         }
 

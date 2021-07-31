@@ -21,18 +21,18 @@ class MoveThread extends BaseAction
     {
         $sourceCategory = $this->thread->category;
 
-        if ($sourceCategory->id === $this->destinationCategory->id) return null;
+        if ($sourceCategory->id === $this->destinationCategory->id) {
+            return null;
+        }
 
         $this->thread->updateWithoutTouch(['category_id' => $this->destinationCategory->id]);
 
         $sourceCategoryValues = [];
 
-        if ($sourceCategory->newest_thread_id === $this->thread->id)
-        {
+        if ($sourceCategory->newest_thread_id === $this->thread->id) {
             $sourceCategoryValues['newest_thread_id'] = $sourceCategory->getNewestThreadId();
         }
-        if ($sourceCategory->latest_active_thread_id === $this->thread->id)
-        {
+        if ($sourceCategory->latest_active_thread_id === $this->thread->id) {
             $sourceCategoryValues['latest_active_thread_id'] = $sourceCategory->getLatestActiveThreadId();
         }
 

@@ -20,7 +20,9 @@ class RestorePosts extends BaseAction
         $posts = Post::whereIn('id', $this->postIds)->onlyTrashed()->get();
 
         // Return early if there are no eligible threads in the selection
-        if ($posts->count() == 0) return null;
+        if ($posts->count() == 0) {
+            return null;
+        }
 
         // Use the raw query builder to prevent touching updated_at
         $rowsAffected = DB::table(Post::getTableName())
@@ -28,13 +30,14 @@ class RestorePosts extends BaseAction
             ->whereNotNull(Post::DELETED_AT)
             ->update([Post::DELETED_AT => null]);
 
-        if ($rowsAffected == 0) return null;
+        if ($rowsAffected == 0) {
+            return null;
+        }
 
         $threads = $posts->pluck('thread')->unique();
         $postsByThread = $posts->groupBy('thread_id');
 
-        foreach ($threads as $thread)
-        {
+        foreach ($threads as $thread) {
             $threadPosts = $postsByThread->get($thread->id);
             $thread->updateWithoutTouch([
                 'last_post_id' => $thread->getLastPost()->id,
@@ -45,8 +48,7 @@ class RestorePosts extends BaseAction
         $categories = $threads->pluck('category')->unique();
         $threadsByCategory = $threads->groupBy('category_id');
 
-        foreach ($categories as $category)
-        {
+        foreach ($categories as $category) {
             $categoryThreads = $threadsByCategory->get($category->id);
             $postCount = $posts->whereIn('thread_id', $categoryThreads->pluck('id'))->count();
             $category->updateWithoutTouch([

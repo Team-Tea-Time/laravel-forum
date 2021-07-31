@@ -28,8 +28,7 @@ class ThreadController extends BaseController
     {
         $threads = Thread::recent()
             ->get()
-            ->filter(function ($thread) use ($request, $unreadOnly)
-            {
+            ->filter(function ($thread) use ($request, $unreadOnly) {
                 return (! $unreadOnly || $thread->userReadStatus !== null)
                     && (
                         ! $thread->category->is_private
@@ -56,7 +55,9 @@ class ThreadController extends BaseController
 
     public function indexByCategory(Category $category, Request $request): AnonymousResourceCollection
     {
-        if ($category->is_private) $this->authorize('view', $category);
+        if ($category->is_private) {
+            $this->authorize('view', $category);
+        }
 
         $query = Thread::orderBy('created_at')->where('category_id', $category->id);
 
@@ -65,17 +66,23 @@ class ThreadController extends BaseController
         $updatedAfter = $request->query('updated_after');
         $updatedBefore = $request->query('updated_before');
 
-        if ($createdAfter !== null) $query = $query->where('created_at', '>', Carbon::parse($createdAfter)->toDateString());
-        if ($createdBefore !== null) $query = $query->where('created_at', '<', Carbon::parse($createdBefore)->toDateString());
-        if ($updatedAfter !== null) $query = $query->where('updated_at', '>', Carbon::parse($updatedAfter)->toDateString());
-        if ($updatedBefore !== null) $query = $query->where('updated_at', '<', Carbon::parse($updatedBefore)->toDateString());
+        if ($createdAfter !== null) {
+            $query = $query->where('created_at', '>', Carbon::parse($createdAfter)->toDateString());
+        }
+        if ($createdBefore !== null) {
+            $query = $query->where('created_at', '<', Carbon::parse($createdBefore)->toDateString());
+        }
+        if ($updatedAfter !== null) {
+            $query = $query->where('updated_at', '>', Carbon::parse($updatedAfter)->toDateString());
+        }
+        if ($updatedBefore !== null) {
+            $query = $query->where('updated_at', '<', Carbon::parse($updatedBefore)->toDateString());
+        }
 
         $threads = $query->paginate();
 
-        if ($category->is_private)
-        {
-            $threads->setCollection($threads->getCollection()->filter(function ($thread) use ($request)
-            {
+        if ($category->is_private) {
+            $threads->setCollection($threads->getCollection()->filter(function ($thread) use ($request) {
                 return $request->user() && $request->user()->can('view', $thread);
             }));
         }
@@ -92,8 +99,7 @@ class ThreadController extends BaseController
 
     public function fetch(Thread $thread): ThreadResource
     {
-        if ($thread->category->is_private)
-        {
+        if ($thread->category->is_private) {
             $this->authorize('view', $thread->category);
             $this->authorize('view', $thread);
         }
@@ -140,7 +146,9 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        if (is_null($thread)) return $this->invalidSelectionResponse();
+        if (is_null($thread)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return new Response(new ThreadResource($thread));
     }
@@ -149,7 +157,9 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        if (is_null($thread)) return $this->invalidSelectionResponse();
+        if (is_null($thread)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return new Response(new ThreadResource($thread));
     }
@@ -158,7 +168,9 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        if (is_null($thread)) return $this->invalidSelectionResponse();
+        if (is_null($thread)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return new Response(new ThreadResource($thread));
     }

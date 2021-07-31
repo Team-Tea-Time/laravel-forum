@@ -29,20 +29,17 @@ class DeletePosts extends FormRequest implements FulfillableRequest
     {
         $query = Post::query();
 
-        if ($this->user()->can('viewTrashedPosts'))
-        {
+        if ($this->user()->can('viewTrashedPosts')) {
             $query = $query->withTrashed();
         }
 
         $posts = $query->with(['thread', 'thread.category'])->whereIn('id', $this->validated()['posts']);
 
-        foreach ($posts as $post)
-        {
+        foreach ($posts as $post) {
             $canView = $this->user()->can('view', $post->thread->category) && $this->user()->can('view', $post->thread);
             $canDelete = $this->user()->can('delete', $post);
 
-            if (! ($canView && $canDelete))
-            {
+            if (! ($canView && $canDelete)) {
                 return false;
             }
         }
@@ -59,8 +56,7 @@ class DeletePosts extends FormRequest implements FulfillableRequest
         );
         $posts = $action->execute();
 
-        if (! is_null($posts))
-        {
+        if (! is_null($posts)) {
             event(new UserBulkDeletedPosts($this->user(), $posts));
         }
 

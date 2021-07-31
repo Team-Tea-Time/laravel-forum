@@ -16,7 +16,9 @@ class RestorePost extends BaseAction
 
     protected function transact()
     {
-        if (! $this->post->trashed()) return null;
+        if (! $this->post->trashed()) {
+            return null;
+        }
 
         $this->post->restoreWithoutTouch();
 

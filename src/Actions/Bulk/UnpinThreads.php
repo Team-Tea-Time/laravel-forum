@@ -23,15 +23,16 @@ class UnpinThreads extends BaseAction
             ->whereIn('id', $this->threadIds)
             ->where(['pinned' => true]);
 
-        if (! $this->includeTrashed)
-        {
+        if (! $this->includeTrashed) {
             $query = $query->whereNull(Thread::DELETED_AT);
         }
 
         $threads = $query->get();
 
         // Return early if there are no eligible threads in the selection
-        if ($threads->count() == 0) return null;
+        if ($threads->count() == 0) {
+            return null;
+        }
 
         $query->update(['pinned' => false]);
 

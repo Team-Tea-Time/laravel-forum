@@ -19,7 +19,9 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) return $this->invalidSelectionResponse();
+        if (is_null($result)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return $this->bulkActionResponse($result->count(), 'threads.updated');
     }
@@ -28,7 +30,9 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) return $this->invalidSelectionResponse();
+        if (is_null($result)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return $this->bulkActionResponse($result->count(), 'threads.updated');
     }
@@ -37,7 +41,9 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) return $this->invalidSelectionResponse();
+        if (is_null($result)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return $this->bulkActionResponse($result->count(), 'threads.updated');
     }
@@ -46,7 +52,9 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) return $this->invalidSelectionResponse();
+        if (is_null($result)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return $this->bulkActionResponse($result->count(), 'threads.updated');
     }
@@ -55,7 +63,9 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) return $this->invalidSelectionResponse();
+        if (is_null($result)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return $this->bulkActionResponse($result->count(), 'threads.updated');
     }
@@ -64,7 +74,9 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) return $this->invalidSelectionResponse();
+        if (is_null($result)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return $this->bulkActionResponse($result->count(), 'threads.deleted');
     }
@@ -73,7 +85,9 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) return $this->invalidSelectionResponse();
+        if (is_null($result)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return $this->bulkActionResponse($result->count(), 'threads.updated');
     }

@@ -20,8 +20,7 @@ class DeleteCategory extends BaseAction
     {
         $categoryIdsToDelete = [];
         $threadIdsToDelete = [];
-        if (! $this->category->isEmpty())
-        {
+        if (! $this->category->isEmpty()) {
             $descendantIds = $this->category->descendants->pluck('id')->toArray();
             $categoryIdsToDelete = $descendantIds;
             $threadIdsToDelete = Thread::whereIn('category_id', $descendantIds)->withTrashed()->pluck('id')->toArray();

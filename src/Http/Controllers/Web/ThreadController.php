@@ -31,13 +31,11 @@ class ThreadController extends BaseController
     {
         $threads = Thread::recent();
 
-        if ($request->has('category_id'))
-        {
+        if ($request->has('category_id')) {
             $threads = $threads->where('category_id', $request->input('category_id'));
         }
 
-        $threads = $threads->get()->filter(function ($thread) use ($request)
-        {
+        $threads = $threads->get()->filter(function ($thread) use ($request) {
             return (! $thread->category->private || $request->user() && $request->user()->can('view', $thread));
         });
 
@@ -50,8 +48,7 @@ class ThreadController extends BaseController
     {
         $threads = Thread::recent();
 
-        $threads = $threads->get()->filter(function ($thread) use ($request)
-        {
+        $threads = $threads->get()->filter(function ($thread) use ($request) {
             return $thread->userReadStatus !== null
                 && (! $thread->category->private || $request->user() && $request->user()->can('view', $thread));
         });
@@ -65,8 +62,7 @@ class ThreadController extends BaseController
     {
         $category = $request->fulfill();
 
-        if ($category !== null)
-        {
+        if ($category !== null) {
             Forum::alert('success', 'categories.marked_read', 1, ['category' => $category->title]);
 
             return redirect(Forum::route('category.show', $category));
@@ -100,8 +96,7 @@ class ThreadController extends BaseController
 
     public function create(Request $request, Category $category): View
     {
-        if (! $category->accepts_threads)
-        {
+        if (! $category->accepts_threads) {
             Forum::alert('warning', 'categories.threads_disabled');
 
             return redirect(Forum::route('category.show', $category));
@@ -170,7 +165,9 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        if (is_null($thread)) return $this->invalidSelectionResponse();
+        if (is_null($thread)) {
+            return $this->invalidSelectionResponse();
+        }
 
         Forum::alert('success', 'threads.updated');
 
@@ -181,7 +178,9 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        if (is_null($thread)) return $this->invalidSelectionResponse();
+        if (is_null($thread)) {
+            return $this->invalidSelectionResponse();
+        }
 
         Forum::alert('success', 'threads.deleted');
 
@@ -192,7 +191,9 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        if (is_null($thread)) return $this->invalidSelectionResponse();
+        if (is_null($thread)) {
+            return $this->invalidSelectionResponse();
+        }
 
         Forum::alert('success', 'threads.updated');
 

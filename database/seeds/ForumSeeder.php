@@ -62,13 +62,10 @@ class ForumSeeder extends Seeder
             })
             ->create();
         
-        foreach ($threads as $thread)
-        {
+        foreach ($threads as $thread) {
             $postFactory = PostFactory::new();
-            for ($i = 1; $i <= self::POSTS_PER_THREAD; $i++)
-            {
-                $postFactory->state(function (array $attributes) use ($thread, $userId, $i)
-                {
+            for ($i = 1; $i <= self::POSTS_PER_THREAD; $i++) {
+                $postFactory->state(function (array $attributes) use ($thread, $userId, $i) {
                     return [
                         'thread_id' => $thread->id,
                         'author_id' => $userId,

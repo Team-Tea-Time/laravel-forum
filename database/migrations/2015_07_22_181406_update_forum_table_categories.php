@@ -12,14 +12,12 @@ class UpdateForumTableCategories extends Migration
      */
     public function up()
     {
-        Schema::table('forum_categories', function (Blueprint $table)
-        {
+        Schema::table('forum_categories', function (Blueprint $table) {
             $table->renameColumn('parent_category', 'category_id');
             $table->renameColumn('subtitle', 'description');
         });
 
-        Schema::table('forum_categories', function (Blueprint $table)
-        {
+        Schema::table('forum_categories', function (Blueprint $table) {
             $table->integer('category_id')->default(0)->change();
             $table->string('description')->nullable()->change();
             $table->integer('weight')->default(0)->change();
@@ -38,8 +36,7 @@ class UpdateForumTableCategories extends Migration
      */
     public function down()
     {
-        Schema::table('forum_categories', function (Blueprint $table)
-        {
+        Schema::table('forum_categories', function (Blueprint $table) {
             $table->renameColumn('category_id', 'parent_category');
             $table->dropColumn(['created_at', 'updated_at', 'enable_threads', 'private']);
             $table->renameColumn('description', 'subtitle');

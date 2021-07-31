@@ -25,12 +25,15 @@ class RestoreThreads extends FormRequest implements FulfillableRequest
 
     public function authorizeValidated(): bool
     {
-        if (! $this->user()->can('viewTrashedThreads')) return false;
+        if (! $this->user()->can('viewTrashedThreads')) {
+            return false;
+        }
 
         $threads = Thread::whereIn('id', $this->validated()['threads'])->get();
-        foreach ($threads as $thread)
-        {
-            if (! $this->user()->can('restore', $thread)) return false;
+        foreach ($threads as $thread) {
+            if (! $this->user()->can('restore', $thread)) {
+                return false;
+            }
         }
 
         return true;
@@ -41,8 +44,7 @@ class RestoreThreads extends FormRequest implements FulfillableRequest
         $action = new Action($this->validated()['threads']);
         $threads = $action->execute();
 
-        if (! is_null($threads))
-        {
+        if (! is_null($threads)) {
             event(new UserBulkRestoredThreads($this->user(), $threads));
         }
 

@@ -48,9 +48,10 @@ class Post extends BaseModel
 
     public function getSequenceNumber(): int
     {
-        foreach ($this->thread->posts as $index => $post)
-        {
-            if ($post->id == $this->id) return $index + 1;
+        foreach ($this->thread->posts as $index => $post) {
+            if ($post->id == $this->id) {
+                return $index + 1;
+            }
         }
     }
 }

@@ -21,18 +21,17 @@ class DeleteThread extends BaseAction
         $threadAlreadyTrashed = $this->thread->trashed();
         $postsRemoved = 0;
 
-        if ($this->permaDelete)
-        {
+        if ($this->permaDelete) {
             $this->thread->readers()->detach();
             $this->thread->posts()->withTrashed()->forceDelete();
             $this->thread->forceDelete();
 
             $postsRemoved = $this->thread->postCount;
-        }
-        else
-        {
+        } else {
             // Return early if the thread was already trashed because there's nothing to do
-            if ($threadAlreadyTrashed) return null;
+            if ($threadAlreadyTrashed) {
+                return null;
+            }
 
             $this->thread->readers()->detach();
             $this->thread->deleteWithoutTouch();
@@ -40,22 +39,21 @@ class DeleteThread extends BaseAction
 
         // Only update category stats and FKs if the thread wasn't already soft-deleted,
         // otherwise they'll needlessly be updated a second time
-        if (! $threadAlreadyTrashed)
-        {
+        if (! $threadAlreadyTrashed) {
             $attributes = [
                 'thread_count' => DB::raw('thread_count - 1')
             ];
 
-            if ($postsRemoved) $attributes['post_count'] = DB::raw("post_count - {$postsRemoved}");
+            if ($postsRemoved) {
+                $attributes['post_count'] = DB::raw("post_count - {$postsRemoved}");
+            }
 
             $category = $this->thread->category;
 
-            if ($category->newest_thread_id === $this->thread->id)
-            {
+            if ($category->newest_thread_id === $this->thread->id) {
                 $attributes['newest_thread_id'] = $category->getNewestThreadId();
             }
-            if ($category->latest_active_thread_id === $this->thread->id)
-            {
+            if ($category->latest_active_thread_id === $this->thread->id) {
                 $attributes['latest_active_thread_id'] = $category->getLatestActiveThreadId();
             }
 

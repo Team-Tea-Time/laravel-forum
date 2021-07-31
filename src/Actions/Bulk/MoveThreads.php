@@ -30,7 +30,9 @@ class MoveThreads extends BaseAction
             : $query->get();
 
         // Return early if there are no eligible threads in the selection
-        if ($threads->count() == 0) return null;
+        if ($threads->count() == 0) {
+            return null;
+        }
 
         $threadsByCategory = $threads->groupBy('category_id');
         $sourceCategories = $threads->pluck('category');
@@ -38,8 +40,7 @@ class MoveThreads extends BaseAction
 
         $query->update(['category_id' => $destinationCategory->id]);
 
-        foreach ($sourceCategories as $category)
-        {
+        foreach ($sourceCategories as $category) {
             $categoryThreads = $threadsByCategory->get($category->id);
             $threadCount = $categoryThreads->count();
             $postCount = $threadCount + $categoryThreads->sum('reply_count');

@@ -19,12 +19,9 @@ abstract class BaseController extends Controller
     {
         $count = is_int($models) ? $models : $models->count();
 
-        if ($count)
-        {
+        if ($count) {
             Forum::alert('success', $transKey, $count);
-        }
-        else
-        {
+        } else {
             Forum::alert('warning', 'general.invalid_selection');
         }
 

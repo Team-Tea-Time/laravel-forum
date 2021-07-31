@@ -33,15 +33,12 @@ class MoveThreads extends FormRequest implements FulfillableRequest
     {
         $destinationCategory = $this->getDestinationCategory();
 
-        if (! ($this->user()->can('view', $destinationCategory) || $this->user()->can('moveThreadsTo', $destinationCategory)))
-        {
+        if (! ($this->user()->can('view', $destinationCategory) || $this->user()->can('moveThreadsTo', $destinationCategory))) {
             return false;
         }
 
-        foreach ($this->getSourceCategories() as $category)
-        {
-            if (! ($this->user()->can('view', $category) || $this->user()->can('moveThreadsFrom', $category)))
-            {
+        foreach ($this->getSourceCategories() as $category) {
+            if (! ($this->user()->can('view', $category) || $this->user()->can('moveThreadsFrom', $category))) {
                 return false;
             }
         }
@@ -58,8 +55,7 @@ class MoveThreads extends FormRequest implements FulfillableRequest
         );
         $threads = $action->execute();
 
-        if (! is_null($threads))
-        {
+        if (! is_null($threads)) {
             event(new UserBulkMovedThreads($this->user(), $threads, $this->getSourceCategories(), $this->getDestinationCategory()));
         }
 
@@ -68,15 +64,13 @@ class MoveThreads extends FormRequest implements FulfillableRequest
 
     private function getSourceCategories()
     {
-        if (! $this->sourceCategories)
-        {
+        if (! $this->sourceCategories) {
             $query = Thread::select('category_id')
                 ->distinct()
                 ->where('category_id', '!=', $this->validated()['category_id'])
                 ->whereIn('id', $this->validated()['threads']);
 
-            if (! $this->user()->can('viewTrashedThreads'))
-            {
+            if (! $this->user()->can('viewTrashedThreads')) {
                 $query = $query->whereNull(Thread::DELETED_AT);
             }
 
@@ -88,8 +82,7 @@ class MoveThreads extends FormRequest implements FulfillableRequest
 
     private function getDestinationCategory()
     {
-        if ($this->destinationCategory == null)
-        {
+        if ($this->destinationCategory == null) {
             $this->destinationCategory = Category::find($this->validated()['category_id']);
         }
         
