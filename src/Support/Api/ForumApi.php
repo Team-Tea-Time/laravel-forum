@@ -10,7 +10,9 @@ class ForumApi
     {
         $as = config('forum.api.router.as');
 
-        if (! Str::startsWith($route, $as)) $route = "{$as}{$route}";
+        if (! Str::startsWith($route, $as)) {
+            $route = "{$as}{$route}";
+        }
 
         return route($route, $params, $absolute);
     }

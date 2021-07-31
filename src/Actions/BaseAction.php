@@ -13,14 +13,11 @@ abstract class BaseAction
     {
         DB::beginTransaction();
 
-        try
-        {
+        try {
             $result = $this->transact();
             DB::commit();
             return $result;
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             DB::rollBack();
             throw new Exception("An exception occurred during an Action transaction.", 0, $e);
         }

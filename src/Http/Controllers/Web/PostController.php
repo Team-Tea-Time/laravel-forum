@@ -52,7 +52,9 @@ class PostController extends BaseController
 
     public function edit(Request $request, Thread $thread, $threadSlug, Post $post): View
     {
-        if ($post->trashed()) return abort(404);
+        if ($post->trashed()) {
+            return abort(404);
+        }
 
         $this->authorize('edit', $post);
 
@@ -89,7 +91,9 @@ class PostController extends BaseController
     {
         $post = $request->fulfill();
 
-        if (is_null($post)) return $this->invalidSelectionResponse();
+        if (is_null($post)) {
+            return $this->invalidSelectionResponse();
+        }
 
         Forum::alert('success', 'posts.deleted', 1);
 
@@ -100,7 +104,9 @@ class PostController extends BaseController
     {
         $post = $request->fulfill();
 
-        if (is_null($post)) return $this->invalidSelectionResponse();
+        if (is_null($post)) {
+            return $this->invalidSelectionResponse();
+        }
 
         Forum::alert('success', 'posts.updated', 1);
 

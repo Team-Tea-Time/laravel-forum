@@ -27,11 +27,21 @@ class UpdateCategory extends BaseAction
     {
         $attributes = [];
 
-        if (! is_null($this->title)) $attributes['title'] = $this->title;
-        if (! is_null($this->description)) $attributes['description'] = $this->description;
-        if (! is_null($this->color)) $attributes['color'] = $this->color;
-        if (! is_null($this->acceptsThreads)) $attributes['accepts_threads'] = $this->acceptsThreads;
-        if (! is_null($this->isPrivate)) $attributes['is_private'] = $this->isPrivate;
+        if (! is_null($this->title)) {
+            $attributes['title'] = $this->title;
+        }
+        if (! is_null($this->description)) {
+            $attributes['description'] = $this->description;
+        }
+        if (! is_null($this->color)) {
+            $attributes['color'] = $this->color;
+        }
+        if (! is_null($this->acceptsThreads)) {
+            $attributes['accepts_threads'] = $this->acceptsThreads;
+        }
+        if (! is_null($this->isPrivate)) {
+            $attributes['is_private'] = $this->isPrivate;
+        }
 
         $this->category->update($attributes);
 

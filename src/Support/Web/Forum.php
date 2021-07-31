@@ -34,43 +34,41 @@ class Forum
     {
         $as = config('forum.web.router.as');
 
-        if (! Str::startsWith($route, $as)) $route = "{$as}{$route}";
+        if (! Str::startsWith($route, $as)) {
+            $route = "{$as}{$route}";
+        }
 
-        if ($model == null) return route($route);
+        if ($model == null) {
+            return route($route);
+        }
 
-        if ($model instanceof Category)
-        {
+        if ($model instanceof Category) {
             return route($route, [
                 'category' => $model->id,
                 'category_slug' => static::slugify($model->title),
             ]);
         }
         
-        if ($model instanceof Thread)
-        {
+        if ($model instanceof Thread) {
             return route($route, [
                 'thread' => $model->id,
                 'thread_slug' => static::slugify($model->title),
             ]);
         }
         
-        if ($model instanceof Post)
-        {
+        if ($model instanceof Post) {
             $params = [
                 'thread' => $model->thread->id,
                 'thread_slug' => static::slugify($model->thread->title),
             ];
             $append = null;
 
-            if ($route == "{$as}thread.show")
-            {
+            if ($route == "{$as}thread.show") {
                 // The requested route is for a thread; we need to specify the page number and append a hash for
                 // the post
                 $params['page'] = ceil($model->sequence / $model->getPerPage());
                 $append = "#post-{$model->sequence}";
-            }
-            else
-            {
+            } else {
                 // Other post routes require the post parameter
                 $params['post'] = $model->id;
             }

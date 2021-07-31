@@ -12,8 +12,7 @@ class CreateForumTableCategories extends Migration
      */
     public function up()
     {
-        Schema::create('forum_categories', function (Blueprint $table)
-        {
+        Schema::create('forum_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent_category')->unsigned();
             $table->string('title');

@@ -18,13 +18,12 @@ class DeletePost extends BaseAction
 
     protected function transact()
     {
-        if ($this->permaDelete)
-        {
+        if ($this->permaDelete) {
             $this->post->forceDelete();
-        }
-        else
-        {
-            if ($this->post->trashed()) return null;
+        } else {
+            if ($this->post->trashed()) {
+                return null;
+            }
 
             $this->post->deleteWithoutTouch();
         }
@@ -42,15 +41,13 @@ class DeletePost extends BaseAction
             'post_count' => DB::raw('post_count - 1')
         ]);
 
-        if ($this->permaDelete && ! is_null($this->post->children))
-        {
+        if ($this->permaDelete && ! is_null($this->post->children)) {
             // Other posts reference this one; null their post IDs
             $this->post->children()->update(['post_id' => null]);
         }
 
         // Update sequence numbers for all of the thread's posts
-        $this->post->thread->posts->each(function ($p)
-        {
+        $this->post->thread->posts->each(function ($p) {
             $p->updateWithoutTouch(['sequence' => $p->getSequenceNumber()]);
         });
 

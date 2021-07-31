@@ -80,7 +80,9 @@ class Thread extends BaseModel
 
     public function getReaderAttribute()
     {
-        if (! auth()->check()) return null;
+        if (! auth()->check()) {
+            return null;
+        }
 
         $reader = $this->readers()->where('forum_threads_read.user_id', auth()->user()->getKey())->first();
 
@@ -89,9 +91,13 @@ class Thread extends BaseModel
 
     public function getUserReadStatusAttribute(): ?string
     {
-        if ($this->isOld || ! auth()->check()) return null;
+        if ($this->isOld || ! auth()->check()) {
+            return null;
+        }
 
-        if (is_null($this->reader)) return trans('forum::general.' . self::STATUS_UNREAD);
+        if (is_null($this->reader)) {
+            return trans('forum::general.' . self::STATUS_UNREAD);
+        }
 
         return ($this->updatedSince($this->reader)) ? trans('forum::general.' . self::STATUS_UPDATED) : null;
     }
@@ -108,14 +114,13 @@ class Thread extends BaseModel
 
     public function markAsRead(int $userId): void
     {
-        if ($this->isOld) return;
-
-        if (is_null($this->reader))
-        {
-            $this->readers()->attach($userId);
+        if ($this->isOld) {
+            return;
         }
-        elseif ($this->updatedSince($this->reader))
-        {
+
+        if (is_null($this->reader)) {
+            $this->readers()->attach($userId);
+        } elseif ($this->updatedSince($this->reader)) {
             $this->reader->touch();
         }
     }

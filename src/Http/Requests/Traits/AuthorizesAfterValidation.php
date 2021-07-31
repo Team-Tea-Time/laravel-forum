@@ -11,10 +11,8 @@ trait AuthorizesAfterValidation
 
     public function withValidator($validator)
     {
-        $validator->after(function ($validator)
-        {
-            if (! $validator->failed() && ! $this->authorizeValidated())
-            {
+        $validator->after(function ($validator) {
+            if (! $validator->failed() && ! $this->authorizeValidated()) {
                 $this->failedAuthorization();
             }
         });

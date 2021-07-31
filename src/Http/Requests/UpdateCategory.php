@@ -21,8 +21,7 @@ class UpdateCategory extends CreateCategory
         );
         $category = $action->execute();
 
-        if (! is_null($category))
-        {
+        if (! is_null($category)) {
             event(new UserUpdatedCategory($this->user(), $category));
         }
 

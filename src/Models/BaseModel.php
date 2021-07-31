@@ -12,8 +12,7 @@ abstract class BaseModel extends Model
     {
         parent::__construct($attributes);
 
-        if ($this->forceDeleting)
-        {
+        if ($this->forceDeleting) {
             $this->forceDeleting = ! config('forum.preferences.soft_deletes');
         }
     }
@@ -25,8 +24,7 @@ abstract class BaseModel extends Model
 
     public function scopeRequestWhere(Builder $query, Request $request): Builder
     {
-        if ($request->has('where'))
-        {
+        if ($request->has('where')) {
             $query->where($request->input('where'));
         }
 
@@ -35,8 +33,7 @@ abstract class BaseModel extends Model
 
     public function scopeRequestWith(Builder $query, Request $request): Builder
     {
-        if ($request->has('with'))
-        {
+        if ($request->has('with')) {
             $query->with($request->input('with'));
         }
 
@@ -45,8 +42,7 @@ abstract class BaseModel extends Model
 
     public function scopeRequestAppend(Builder $query, Request $request): Builder
     {
-        if ($request->has('append'))
-        {
+        if ($request->has('append')) {
             $query->append($request->input('append'));
         }
 
@@ -55,8 +51,7 @@ abstract class BaseModel extends Model
 
     public function scopeRequestOrder(Builder $query, Request $request): Builder
     {
-        if ($request->has('orderBy'))
-        {
+        if ($request->has('orderBy')) {
             $direction = ($request->has('orderDir')) ? $request->input('orderDir') : 'desc';
             $query->orderBy($request->input('orderBy'), $direction);
         }
@@ -108,7 +103,9 @@ abstract class BaseModel extends Model
 
     protected function withoutTouch(string $method)
     {
-        if (! is_callable([$this, $method])) throw new \Exception("Method '{$method}' is not callable.");
+        if (! is_callable([$this, $method])) {
+            throw new \Exception("Method '{$method}' is not callable.");
+        }
 
         $this->timestamps = false;
         $this->{$method}();

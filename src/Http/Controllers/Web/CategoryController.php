@@ -19,9 +19,10 @@ class CategoryController extends BaseController
 {
     public function index(Request $request): View
     {
-        $categories = Category::defaultOrder()->get()->filter(function ($category)
-        {
-            if ($category->is_private) return Gate::allows('view', $category);
+        $categories = Category::defaultOrder()->get()->filter(function ($category) {
+            if ($category->is_private) {
+                return Gate::allows('view', $category);
+            }
 
             return true;
         })->toTree();
@@ -33,7 +34,9 @@ class CategoryController extends BaseController
 
     public function show(Request $request, Category $category): View
     {
-        if ($category->is_private) $this->authorize('view', $category);
+        if ($category->is_private) {
+            $this->authorize('view', $category);
+        }
 
         event(new UserViewingCategory($request->user(), $category));
 
@@ -58,7 +61,9 @@ class CategoryController extends BaseController
     {
         $category = $request->fulfill();
 
-        if (is_null($category)) return $this->invalidSelectionResponse();
+        if (is_null($category)) {
+            return $this->invalidSelectionResponse();
+        }
 
         Forum::alert('success', 'categories.updated', 1);
 

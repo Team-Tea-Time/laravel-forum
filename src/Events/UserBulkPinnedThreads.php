@@ -6,5 +6,4 @@ use TeamTeaTime\Forum\Events\Types\CollectionEvent;
 
 class UserBulkPinnedThreads extends CollectionEvent
 {
-
 }

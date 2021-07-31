@@ -16,7 +16,9 @@ class RestoreThread extends BaseAction
 
     protected function transact()
     {
-        if (! $this->thread->trashed()) return null;
+        if (! $this->thread->trashed()) {
+            return null;
+        }
 
         $this->thread->setTouchedRelations([])->restoreWithoutTouch();
 

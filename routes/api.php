@@ -1,8 +1,7 @@
 <?php
 
 // Categories
-$r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
-{
+$r->group(['prefix' => 'category', 'as' => 'category.'], function ($r) {
     $r->get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
     $r->get('{category}', ['as' => 'fetch', 'uses' => 'CategoryController@fetch']);
     $r->post('/', ['as' => 'store', 'uses' => 'CategoryController@store']);
@@ -15,8 +14,7 @@ $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
 });
 
 // Threads
-$r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
-{
+$r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r) {
     $r->get('recent', ['as' => 'recent', 'uses' => 'ThreadController@recent']);
     $r->get('unread', ['as' => 'unread', 'uses' => 'ThreadController@unread']);
     $r->patch('unread/mark-as-read', ['as' => 'unread.mark-as-read', 'uses' => 'ThreadController@markAsRead']);
@@ -36,8 +34,7 @@ $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
 });
 
 // Posts
-$r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
-{
+$r->group(['prefix' => 'post', 'as' => 'post.'], function ($r) {
     $r->post('search', ['as' => 'search', 'uses' => 'PostController@search']);
     $r->get('recent', ['as' => 'recent', 'uses' => 'PostController@recent']);
     $r->get('unread', ['as' => 'unread', 'uses' => 'PostController@unread']);
@@ -48,17 +45,14 @@ $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
 });
 
 // Bulk actions
-$r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function ($r)
-{
+$r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function ($r) {
     // Categories
-    $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r)
-    {
+    $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r) {
         $r->post('manage', ['as' => 'manage', 'uses' => 'CategoryController@manage']);
     });
 
     // Threads
-    $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r)
-    {
+    $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r) {
         $r->post('move', ['as' => 'move', 'uses' => 'ThreadController@move']);
         $r->post('lock', ['as' => 'lock', 'uses' => 'ThreadController@lock']);
         $r->post('unlock', ['as' => 'unlock', 'uses' => 'ThreadController@unlock']);
@@ -69,36 +63,30 @@ $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function
     });
 
     // Posts
-    $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r)
-    {
+    $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r) {
         $r->delete('/', ['as' => 'delete', 'uses' => 'PostController@delete']);
         $r->post('restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
     });
 });
 
-$r->bind('category', function ($value)
-{
+$r->bind('category', function ($value) {
     return \TeamTeaTime\Forum\Models\Category::find($value);
 });
 
-$r->bind('thread', function ($value)
-{
+$r->bind('thread', function ($value) {
     $query = \TeamTeaTime\Forum\Models\Thread::with('category');
 
-    if (Gate::allows('viewTrashedThreads'))
-    {
+    if (Gate::allows('viewTrashedThreads')) {
         $query->withTrashed();
     }
     
     return $query->find($value);
 });
 
-$r->bind('post', function ($value)
-{
+$r->bind('post', function ($value) {
     $query = \TeamTeaTime\Forum\Models\Post::with(['thread', 'thread.category']);
 
-    if (Gate::allows('viewTrashedPosts'))
-    {
+    if (Gate::allows('viewTrashedPosts')) {
         $query->withTrashed();
     }
     

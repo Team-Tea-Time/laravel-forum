@@ -31,8 +31,7 @@ class ForumServiceProvider extends ServiceProvider
             __DIR__.'/../translations/' => resource_path('lang/vendor/forum'),
         ], 'translations');
 
-        foreach (['api', 'web', 'general', 'integration'] as $name)
-        {
+        foreach (['api', 'web', 'general', 'integration'] as $name) {
             $this->mergeConfigFrom(__DIR__."/../config/{$name}.php", "forum.{$name}");
         }
 
@@ -40,15 +39,13 @@ class ForumServiceProvider extends ServiceProvider
         $router->model('post', Post::class);
         $router->model('thread', Thread::class);
 
-        if (config('forum.api.enabled'))
-        {
+        if (config('forum.api.enabled')) {
             $router->group(config('forum.api.router'), function ($r) {
                 require __DIR__.'/../routes/api.php';
             });
         }
 
-        if (config('forum.web.enabled'))
-        {
+        if (config('forum.web.enabled')) {
             $this->publishes([
                 __DIR__.'/../views/' => resource_path('views/vendor/forum')
             ], 'views');
@@ -70,10 +67,8 @@ class ForumServiceProvider extends ServiceProvider
         $loader = AliasLoader::getInstance();
         $loader->alias('Forum', config('forum.web.utility_class'));
 
-        View::composer('forum::master', function ($view)
-        {
-            if (auth()->check())
-            {
+        View::composer('forum::master', function ($view) {
+            if (auth()->check()) {
                 $nameAttribute = config('forum.integration.user_name');
                 $view->username = auth()->user()->{$nameAttribute};
             }
@@ -83,13 +78,11 @@ class ForumServiceProvider extends ServiceProvider
     public function registerPolicies(GateContract $gate)
     {
         $forumPolicy = config('forum.integration.policies.forum');
-        foreach (get_class_methods(new $forumPolicy()) as $method)
-        {
+        foreach (get_class_methods(new $forumPolicy()) as $method) {
             $gate->define($method, "{$forumPolicy}@{$method}");
         }
 
-        foreach (config('forum.integration.policies.model') as $model => $policy)
-        {
+        foreach (config('forum.integration.policies.model') as $model => $policy) {
             $gate->policy($model, $policy);
         }
     }

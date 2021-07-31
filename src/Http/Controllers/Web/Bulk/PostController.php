@@ -13,7 +13,9 @@ class PostController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) return $this->invalidSelectionResponse();
+        if (is_null($result)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return $this->bulkActionResponse($result->count(), 'posts.deleted');
     }
@@ -22,7 +24,9 @@ class PostController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) return $this->invalidSelectionResponse();
+        if (is_null($result)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return $this->bulkActionResponse($result->count(), 'posts.updated');
     }

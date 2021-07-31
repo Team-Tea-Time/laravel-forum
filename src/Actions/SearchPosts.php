@@ -24,21 +24,18 @@ class SearchPosts extends BaseAction
         $posts = Post::orderBy('created_at', 'DESC')
             ->with('thread', 'thread.category')
             ->when($this->category, function (Builder $query) {
-                $query->whereHas('thread.category', function (Builder $query)
-                {
+                $query->whereHas('thread.category', function (Builder $query) {
                     $query->where('id', $this->category->id);
                 });
             })
             ->where('content', 'like', "%{$this->term}%")
             ->paginate();
 
-        $threadIds = $posts->getCollection()->pluck('thread')->filter(function ($thread)
-        {
+        $threadIds = $posts->getCollection()->pluck('thread')->filter(function ($thread) {
             return ! $thread->category->is_private || Gate::allows('view', $thread->category) && Gate::allows('view', $thread);
         })->pluck('id')->unique();
 
-        $posts->setCollection($posts->getCollection()->filter(function ($post) use ($threadIds)
-        {
+        $posts->setCollection($posts->getCollection()->filter(function ($post) use ($threadIds) {
             return $threadIds->contains($post->thread->id);
         }));
 

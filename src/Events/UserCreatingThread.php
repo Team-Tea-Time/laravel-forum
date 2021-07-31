@@ -6,5 +6,4 @@ use TeamTeaTime\Forum\Events\Types\CategoryEvent;
 
 class UserCreatingThread extends CategoryEvent
 {
-
 }

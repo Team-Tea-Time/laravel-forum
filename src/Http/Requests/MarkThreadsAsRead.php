@@ -26,7 +26,9 @@ class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
     {
         $category = $this->category();
 
-        if ($category !== null && ! $this->user()->can('view', $category)) return false;
+        if ($category !== null && ! $this->user()->can('view', $category)) {
+            return false;
+        }
 
         return $this->user()->can('markThreadsAsRead', $category);
     }
@@ -45,8 +47,7 @@ class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
 
     private function category()
     {
-        if (! isset($this->category))
-        {
+        if (! isset($this->category)) {
             $this->category = isset($this->validated()['category_id']) ? Category::find($this->validated()['category_id']) : null;
         }
 

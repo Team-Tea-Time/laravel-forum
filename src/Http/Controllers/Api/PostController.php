@@ -19,8 +19,7 @@ class PostController extends BaseController
 {
     public function indexByThread(Thread $thread): AnonymousResourceCollection
     {
-        if ($thread->category->is_private)
-        {
+        if ($thread->category->is_private) {
             $this->authorize('view', $thread->category);
             $this->authorize('view', $thread);
         }
@@ -44,8 +43,7 @@ class PostController extends BaseController
     {
         $posts = Post::recent()
             ->get()
-            ->filter(function (Post $post) use ($request, $unreadOnly)
-            {
+            ->filter(function (Post $post) use ($request, $unreadOnly) {
                 return (! $unreadOnly || is_null($post->thread->reader) || $post->updatedSince($post->thread->reader))
                     && (
                         ! $post->thread->category->is_private
@@ -65,8 +63,7 @@ class PostController extends BaseController
 
     public function fetch(Post $post): PostResource
     {
-        if ($post->thread->category->is_private)
-        {
+        if ($post->thread->category->is_private) {
             $this->authorize('view', $post->thread->category);
             $this->authorize('view', $post->thread);
         }
@@ -92,7 +89,9 @@ class PostController extends BaseController
     {
         $post = $request->fulfill();
 
-        if (is_null($post)) return $this->invalidSelectionResponse();
+        if (is_null($post)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return new Response(new PostResource($post));
     }
@@ -101,7 +100,9 @@ class PostController extends BaseController
     {
         $post = $request->fulfill();
 
-        if (is_null($post)) return $this->invalidSelectionResponse();
+        if (is_null($post)) {
+            return $this->invalidSelectionResponse();
+        }
 
         return new Response(new PostResource($post));
     }

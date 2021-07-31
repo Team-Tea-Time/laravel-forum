@@ -25,8 +25,7 @@ class RestorePost extends FormRequest implements FulfillableRequest
         $action = new Action($this->route('post'));
         $post = $action->execute();
 
-        if (! is_null($post))
-        {
+        if (! is_null($post)) {
             event(new UserRestoredPost($this->user(), $post));
         }
 

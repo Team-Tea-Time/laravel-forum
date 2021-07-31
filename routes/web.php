@@ -13,8 +13,7 @@ $r->patch('unread/mark-as-read', ['as' => 'unread.mark-as-read', 'uses' => 'Thre
 $r->get('manage', ['as' => 'category.manage', 'uses' => 'CategoryController@manage'])->middleware($authMiddleware);
 
 $r->post($prefix['category'] . '/create', ['as' => 'category.store', 'uses' => 'CategoryController@store']);
-$r->group(['prefix' => $prefix['category'] . '/{category}-{category_slug}'], function ($r) use ($prefix, $authMiddleware)
-{
+$r->group(['prefix' => $prefix['category'] . '/{category}-{category_slug}'], function ($r) use ($prefix, $authMiddleware) {
     $r->get('/', ['as' => 'category.show', 'uses' => 'CategoryController@show']);
     $r->patch('/', ['as' => 'category.update', 'uses' => 'CategoryController@update'])->middleware($authMiddleware);
     $r->delete('/', ['as' => 'category.delete', 'uses' => 'CategoryController@destroy'])->middleware($authMiddleware);
@@ -23,8 +22,7 @@ $r->group(['prefix' => $prefix['category'] . '/{category}-{category_slug}'], fun
     $r->post($prefix['thread'] . '/create', ['as' => 'thread.store', 'uses' => 'ThreadController@store'])->middleware($authMiddleware);
 });
 
-$r->group(['prefix' => $prefix['thread'] . '/{thread}-{thread_slug}'], function ($r) use ($prefix, $authMiddleware)
-{
+$r->group(['prefix' => $prefix['thread'] . '/{thread}-{thread_slug}'], function ($r) use ($prefix, $authMiddleware) {
     $r->get('/', ['as' => 'thread.show', 'uses' => 'ThreadController@show']);
     $r->get($prefix['post'] . '/{post}', ['as' => 'post.show', 'uses' => 'PostController@show']);
 
@@ -50,8 +48,7 @@ $r->group(['prefix' => $prefix['thread'] . '/{thread}-{thread_slug}'], function 
     });
 });
 
-$r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk', 'middleware' => $authMiddleware], function ($r)
-{
+$r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk', 'middleware' => $authMiddleware], function ($r) {
     $r->post('thread/move', ['as' => 'thread.move', 'uses' => 'ThreadController@move']);
     $r->post('thread/lock', ['as' => 'thread.lock', 'uses' => 'ThreadController@lock']);
     $r->post('thread/unlock', ['as' => 'thread.unlock', 'uses' => 'ThreadController@unlock']);
@@ -64,29 +61,34 @@ $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk', 'middlewa
     $r->post('post/restore', ['as' => 'post.restore', 'uses' => 'PostController@restore']);
 });
 
-$r->bind('category', function ($value)
-{
+$r->bind('category', function ($value) {
     return \TeamTeaTime\Forum\Models\Category::findOrFail($value);
 });
 
-$r->bind('thread', function ($value)
-{
+$r->bind('thread', function ($value) {
     $thread = \TeamTeaTime\Forum\Models\Thread::withTrashed()->with('category')->find($value);
 
-    if (is_null($thread)) abort(404);
+    if (is_null($thread)) {
+        abort(404);
+    }
 
-    if ($thread->trashed() && ! Gate::allows('viewTrashedThreads')) return null;
+    if ($thread->trashed() && ! Gate::allows('viewTrashedThreads')) {
+        return null;
+    }
 
     return $thread;
 });
 
-$r->bind('post', function ($value)
-{
+$r->bind('post', function ($value) {
     $post = \TeamTeaTime\Forum\Models\Post::withTrashed()->with(['thread', 'thread.category'])->find($value);
 
-    if (is_null($post)) abort(404);
+    if (is_null($post)) {
+        abort(404);
+    }
 
-    if ($post->trashed() && ! Gate::allows('viewTrashedPosts')) return null;
+    if ($post->trashed() && ! Gate::allows('viewTrashedPosts')) {
+        return null;
+    }
 
     return $post;
 });
