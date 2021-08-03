@@ -20,7 +20,7 @@ trait HasAuthor
     {
         $attribute = config('forum.integration.user_name');
 
-        if ($this->author === null) {
+        if ($this->author !== null) {
             return $this->author->$attribute;
         }
 
