@@ -33,6 +33,8 @@ class Thread extends BaseModel
     const STATUS_UNREAD = 'unread';
     const STATUS_UPDATED = 'updated';
 
+    private $currentReader = null;
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -90,9 +92,11 @@ class Thread extends BaseModel
             return null;
         }
 
-        $reader = $this->readers()->where('forum_threads_read.user_id', auth()->user()->getKey())->first();
+        if ($this->currentReader === null) {
+            $this->currentReader = $this->readers()->where('forum_threads_read.user_id', auth()->user()->getKey())->first();
+        }
 
-        return (! is_null($reader)) ? $reader->pivot : null;
+        return $this->currentReader !== null ? $this->currentReader->pivot : null;
     }
 
     public function getUserReadStatusAttribute(): ?string
@@ -101,7 +105,7 @@ class Thread extends BaseModel
             return null;
         }
 
-        if (is_null($this->reader)) {
+        if ($this->reader === null) {
             return trans('forum::general.'.self::STATUS_UNREAD);
         }
 
@@ -124,7 +128,7 @@ class Thread extends BaseModel
             return;
         }
 
-        if (is_null($this->reader)) {
+        if ($this->reader === null) {
             $this->readers()->attach($userId);
         } elseif ($this->updatedSince($this->reader)) {
             $this->reader->touch();

@@ -18,6 +18,7 @@ class CategoryController extends BaseController
     public function index(Request $request): View
     {
         $categories = Category::defaultOrder()
+            ->with('newestThread', 'latestActiveThread', 'newestThread.lastPost', 'latestActiveThread.lastPost')
             ->get()
             ->filter(function ($category) use ($request) {
                 return ! $category->is_private || $request->user() && $request->user()->can('view', $category);
@@ -37,10 +38,22 @@ class CategoryController extends BaseController
 
         event(new UserViewingCategory($request->user(), $category));
 
-        $categories = $request->user() && $request->user()->can('moveCategories') ? Category::defaultOrder()->withDepth()->get() : [];
+        $categories = $request->user() && $request->user()->can('moveCategories')
+            ? Category::defaultOrder()
+                ->with('children')
+                ->withDepth()
+                ->get()
+            : [];
 
-        $threads = $request->user() && $request->user()->can('viewTrashedThreads') ? $category->threads()->withTrashed() : $category->threads();
-        $threads = $threads->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc')->paginate();
+        $threads = $request->user() && $request->user()->can('viewTrashedThreads')
+            ? $category->threads()->withTrashed()
+            : $category->threads();
+
+        $threads = $threads
+            ->with('firstPost', 'lastPost', 'firstPost.author', 'lastPost.author', 'author')
+            ->orderBy('pinned', 'desc')
+            ->orderBy('updated_at', 'desc')
+            ->paginate();
 
         return view('forum::category.show', compact('categories', 'category', 'threads'));
     }
