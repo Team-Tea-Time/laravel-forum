@@ -9,7 +9,7 @@ use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class CategoryStoreTest extends FeatureTestCase
 {
-    private string $route = 'category.store';
+    private const ROUTE = 'category.store';
 
     private UserFactory $userFactory;
     private User $user;
@@ -26,7 +26,7 @@ class CategoryStoreTest extends FeatureTestCase
     public function should_fail_validation_without_a_title()
     {
         $response = $this->actingAs($this->user)
-            ->post(Forum::route($this->route), ['title' => '']);
+            ->post(Forum::route(self::ROUTE), ['title' => '']);
 
         $response->assertSessionHasErrors();
     }

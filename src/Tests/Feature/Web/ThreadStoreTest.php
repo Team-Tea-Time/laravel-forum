@@ -12,7 +12,7 @@ use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class ThreadStoreTest extends FeatureTestCase
 {
-    private string $route = 'thread.store';
+    private const ROUTE = 'thread.store';
 
     private CategoryFactory $categoryFactory;
     private UserFactory $userFactory;
@@ -34,7 +34,7 @@ class ThreadStoreTest extends FeatureTestCase
     /** @test */
     public function should_302_when_not_logged_in()
     {
-        $response = $this->post(Forum::route($this->route, $this->category), []);
+        $response = $this->post(Forum::route(self::ROUTE, $this->category), []);
         $response->assertStatus(302);
     }
 
@@ -43,7 +43,7 @@ class ThreadStoreTest extends FeatureTestCase
     {
         $category = $this->categoryFactory->createOne(['accepts_threads' => 0]);
         $response = $this->actingAs($this->user)
-            ->post(Forum::route($this->route, $category), []);
+            ->post(Forum::route(self::ROUTE, $category), []);
 
         $response->assertStatus(403);
     }
@@ -52,7 +52,7 @@ class ThreadStoreTest extends FeatureTestCase
     public function should_fail_validation_without_a_title()
     {
         $response = $this->actingAs($this->user)
-            ->post(Forum::route($this->route, $this->category), [
+            ->post(Forum::route(self::ROUTE, $this->category), [
                 'title' => '',
                 'content' => 'Thread content',
             ]);
@@ -64,7 +64,7 @@ class ThreadStoreTest extends FeatureTestCase
     public function should_fail_validation_without_content()
     {
         $response = $this->actingAs($this->user)
-            ->post(Forum::route($this->route, $this->category), [
+            ->post(Forum::route(self::ROUTE, $this->category), [
                 'title' => 'Thread title',
                 'content' => '',
             ]);
@@ -76,7 +76,7 @@ class ThreadStoreTest extends FeatureTestCase
     public function should_create_a_post_with_the_thread()
     {
         $this->actingAs($this->user)
-            ->post(Forum::route($this->route, $this->category), [
+            ->post(Forum::route(self::ROUTE, $this->category), [
                 'title' => 'Thread title',
                 'content' => 'Thread content',
             ]);

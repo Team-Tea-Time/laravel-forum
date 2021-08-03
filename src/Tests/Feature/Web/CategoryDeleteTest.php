@@ -15,7 +15,7 @@ use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class CategoryDeleteTest extends FeatureTestCase
 {
-    private string $route = 'category.delete';
+    private const ROUTE = 'category.delete';
 
     private UserFactory $userFactory;
     private User $user;
@@ -42,7 +42,7 @@ class CategoryDeleteTest extends FeatureTestCase
         $topLevelCategory = $this->seedCategories();
 
         $response = $this->actingAs($this->user)
-            ->delete(Forum::route($this->route, $topLevelCategory));
+            ->delete(Forum::route(self::ROUTE, $topLevelCategory));
 
         $response->assertSessionHasErrors();
     }
@@ -53,7 +53,7 @@ class CategoryDeleteTest extends FeatureTestCase
         $topLevelCategory = $this->seedCategories();
 
         $this->actingAs($this->user)
-            ->delete(Forum::route($this->route, $topLevelCategory), ['force' => true]);
+            ->delete(Forum::route(self::ROUTE, $topLevelCategory), ['force' => true]);
 
         $this->assertEquals(0, Category::count());
         $this->assertEquals(0, Thread::count());

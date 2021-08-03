@@ -15,7 +15,7 @@ use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class ThreadRestoreTest extends FeatureTestCase
 {
-    private string $route = 'thread.restore';
+    private const ROUTE = 'thread.restore';
 
     private Category $category;
     private Thread $thread;
@@ -44,7 +44,7 @@ class ThreadRestoreTest extends FeatureTestCase
     /** @test */
     public function should_bump_category_stats()
     {
-        $this->actingAs($this->user)->post(Forum::route($this->route, $this->thread), []);
+        $this->actingAs($this->user)->post(Forum::route(self::ROUTE, $this->thread), []);
 
         $category = Category::find($this->category->getKey());
 

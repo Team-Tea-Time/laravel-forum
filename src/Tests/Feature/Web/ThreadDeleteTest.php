@@ -13,7 +13,7 @@ use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class ThreadDeleteTest extends FeatureTestCase
 {
-    private string $route = 'thread.delete';
+    private const ROUTE = 'thread.delete';
 
     private ThreadFactory $threadFactory;
     private PostFactory $postFactory;
@@ -35,7 +35,7 @@ class ThreadDeleteTest extends FeatureTestCase
     /** @test */
     public function should_302_when_not_logged_in()
     {
-        $response = $this->delete(Forum::route($this->route, $this->thread), []);
+        $response = $this->delete(Forum::route(self::ROUTE, $this->thread), []);
         $response->assertStatus(302);
     }
 
@@ -45,7 +45,7 @@ class ThreadDeleteTest extends FeatureTestCase
         $thread = $this->thread;
         $thread->id++;
         $response = $this->actingAs($this->user)
-            ->delete(Forum::route($this->route, $thread), []);
+            ->delete(Forum::route(self::ROUTE, $thread), []);
         $response->assertStatus(404);
     }
 
@@ -55,7 +55,7 @@ class ThreadDeleteTest extends FeatureTestCase
         $thread = $this->threadFactory->createOne(['author_id' => $this->user->getKey()]);
         $this->postFactory->createOne(['thread_id' => $thread->getKey(), 'author_id' => $this->user->getKey()]);
 
-        $this->actingAs($this->user)->delete(Forum::route($this->route, $thread), []);
+        $this->actingAs($this->user)->delete(Forum::route(self::ROUTE, $thread), []);
 
         // Accounting for $this->thread
         $this->assertEquals(2, Thread::withTrashed()->count());
@@ -67,7 +67,7 @@ class ThreadDeleteTest extends FeatureTestCase
         $thread = $this->threadFactory->createOne(['author_id' => $this->user->getKey()]);
         $this->postFactory->count(2)->create(['thread_id' => $thread->getKey(), 'author_id' => $this->user->getKey()]);
 
-        $this->actingAs($this->user)->delete(Forum::route($this->route, $thread), ['permadelete' => true]);
+        $this->actingAs($this->user)->delete(Forum::route(self::ROUTE, $thread), ['permadelete' => true]);
 
         $this->assertEquals(0, Post::count());
     }

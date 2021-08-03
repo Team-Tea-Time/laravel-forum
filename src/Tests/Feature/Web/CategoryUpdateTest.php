@@ -11,7 +11,7 @@ use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class CategoryUpdateTest extends FeatureTestCase
 {
-    private string $route = 'category.update';
+    private const ROUTE = 'category.update';
 
     private Category $category;
     private User $user;
@@ -31,7 +31,7 @@ class CategoryUpdateTest extends FeatureTestCase
     public function should_fail_validation_without_a_title()
     {
         $response = $this->actingAs($this->user)
-            ->patch(Forum::route($this->route, $this->category), ['title' => '']);
+            ->patch(Forum::route(self::ROUTE, $this->category), ['title' => '']);
 
         $response->assertSessionHasErrors();
     }
