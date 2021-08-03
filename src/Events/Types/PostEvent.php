@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Events\Types;
 
 use TeamTeaTime\Forum\Models\Post;
 
-class PostEvent
+class PostEvent extends BaseEvent
 {
     /** @var mixed */
     public $user;

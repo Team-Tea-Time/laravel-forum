@@ -37,7 +37,7 @@ class SearchPosts extends FormRequest implements FulfillableRequest
         $posts = $action->execute();
 
         if (! is_null($posts)) {
-            event(new UserSearchedPosts($this->user(), $category, $term, $posts));
+            UserSearchedPosts::dispatch($this->user(), $category, $term, $posts);
         }
 
         return $posts;

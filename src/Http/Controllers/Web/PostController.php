@@ -22,7 +22,7 @@ class PostController extends BaseController
     {
         $this->authorize('view', $post);
 
-        event(new UserViewingPost($request->user(), $post));
+        UserViewingPost::dispatch($request->user(), $post);
 
         return view('forum::post.show', compact('category', 'thread', 'post'));
     }
@@ -31,7 +31,7 @@ class PostController extends BaseController
     {
         $this->authorize('reply', $thread);
 
-        event(new UserCreatingPost($request->user(), $thread));
+        UserCreatingPost::dispatch($request->user(), $thread);
 
         $post = $request->has('post') ? $thread->posts->find($request->input('post')) : null;
 
@@ -57,7 +57,7 @@ class PostController extends BaseController
 
         $this->authorize('edit', $post);
 
-        event(new UserEditingPost($request->user(), $post));
+        UserEditingPost::dispatch($request->user(), $post);
 
         $thread = $post->thread;
         $category = $post->thread->category;

@@ -34,7 +34,7 @@ class DeletePost extends FormRequest implements FulfillableRequest
         $post = $action->execute();
 
         if (! is_null($post)) {
-            event(new UserDeletedPost($this->user(), $post));
+            UserDeletedPost::dispatch($this->user(), $post);
         }
 
         return $post;

@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Events\Types;
 
 use TeamTeaTime\Forum\Models\Thread;
 
-class ThreadEvent
+class ThreadEvent extends BaseEvent
 {
     /** @var mixed */
     public $user;

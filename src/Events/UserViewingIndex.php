@@ -2,7 +2,9 @@
 
 namespace TeamTeaTime\Forum\Events;
 
-class UserViewingIndex
+use TeamTeaTime\Forum\Events\Types\BaseEvent;
+
+class UserViewingIndex extends BaseEvent
 {
     /** @var mixed */
     public $user;

@@ -27,7 +27,7 @@ class ManageCategories extends FormRequest implements FulfillableRequest
         $action = new Action($categoryData);
         $categoriesAffected = $action->execute();
 
-        event(new UserBulkManagedCategories($this->user(), $categoriesAffected, $categoryData));
+        UserBulkManagedCategories::dispatch($this->user(), $categoriesAffected, $categoryData);
 
         return $categoriesAffected;
     }

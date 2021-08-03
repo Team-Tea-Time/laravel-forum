@@ -18,7 +18,7 @@ class UpdatePost extends CreatePost
         $action = new Action($this->route('post'), $input['content']);
         $post = $action->execute();
 
-        event(new UserUpdatedPost($this->user(), $post));
+        UserUpdatedPost::dispatch($this->user(), $post);
 
         return $post;
     }

@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Events\Types;
 
 use Illuminate\Support\Collection;
 
-class CollectionEvent
+class CollectionEvent extends BaseEvent
 {
     /** @var mixed */
     public $user;

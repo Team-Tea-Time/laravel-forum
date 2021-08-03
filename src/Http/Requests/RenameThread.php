@@ -28,7 +28,7 @@ class RenameThread extends FormRequest implements FulfillableRequest
         $action = new Action($this->route('thread'), $this->validated()['title']);
         $thread = $action->execute();
 
-        event(new UserRenamedThread($this->user(), $thread));
+        UserRenamedThread::dispatch($this->user(), $thread);
 
         return $thread;
     }

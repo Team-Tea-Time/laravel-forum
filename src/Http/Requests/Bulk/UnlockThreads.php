@@ -13,7 +13,7 @@ class UnlockThreads extends LockThreads
         $threads = $action->execute();
 
         if (! is_null($threads)) {
-            event(new UserBulkUnlockedThreads($this->user(), $threads));
+            UserBulkUnlockedThreads::dispatch($this->user(), $threads);
         }
 
         return $threads;

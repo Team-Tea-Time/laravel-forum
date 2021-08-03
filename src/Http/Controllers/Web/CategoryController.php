@@ -25,7 +25,7 @@ class CategoryController extends BaseController
             })
             ->toTree();
 
-        event(new UserViewingIndex($request->user()));
+        UserViewingIndex::dispatch($request->user());
 
         return view('forum::category.index', compact('categories'));
     }
@@ -36,7 +36,7 @@ class CategoryController extends BaseController
             $this->authorize('view', $category);
         }
 
-        event(new UserViewingCategory($request->user(), $category));
+        UserViewingCategory::dispatch($request->user(), $category);
 
         $categories = $request->user() && $request->user()->can('moveCategories')
             ? Category::defaultOrder()

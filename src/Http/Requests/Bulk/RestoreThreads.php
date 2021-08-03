@@ -42,7 +42,7 @@ class RestoreThreads extends FormRequest implements FulfillableRequest
         $threads = $action->execute();
 
         if (! is_null($threads)) {
-            event(new UserBulkRestoredThreads($this->user(), $threads));
+            UserBulkRestoredThreads::dispatch($this->user(), $threads);
         }
 
         return $threads;

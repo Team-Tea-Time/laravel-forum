@@ -40,7 +40,7 @@ class PinThreads extends FormRequest implements FulfillableRequest
         $threads = $action->execute();
 
         if (! is_null($threads)) {
-            event(new UserBulkPinnedThreads($this->user(), $threads));
+            UserBulkPinnedThreads::dispatch($this->user(), $threads);
         }
 
         return $threads;

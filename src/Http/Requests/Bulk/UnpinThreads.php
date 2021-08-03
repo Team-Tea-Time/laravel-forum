@@ -13,7 +13,7 @@ class UnpinThreads extends PinThreads
         $threads = $action->execute();
 
         if (! is_null($threads)) {
-            event(new UserBulkUnpinnedThreads($this->user(), $threads));
+            UserBulkUnpinnedThreads::dispatch($this->user(), $threads);
         }
 
         return $threads;

@@ -12,7 +12,7 @@ class UnpinThread extends PinThread
         $action = new Action($this->route('thread'));
         $thread = $action->execute();
 
-        event(new UserUnpinnedThread($this->user(), $thread));
+        UserUnpinnedThread::dispatch($this->user(), $thread);
 
         return $thread;
     }

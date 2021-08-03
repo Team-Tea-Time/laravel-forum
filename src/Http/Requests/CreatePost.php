@@ -29,7 +29,7 @@ class CreatePost extends FormRequest implements FulfillableRequest
         $action = new Action($thread, $parent, $this->user(), $this->validated()['content']);
         $post = $action->execute();
 
-        event(new UserCreatedPost($this->user(), $post));
+        UserCreatedPost::dispatch($this->user(), $post);
 
         return $post;
     }

@@ -38,7 +38,7 @@ class RestorePosts extends FormRequest implements FulfillableRequest
         $posts = $action->execute();
 
         if (! is_null($posts)) {
-            event(new UserBulkRestoredPosts($this->user(), $posts));
+            UserBulkRestoredPosts::dispatch($this->user(), $posts);
         }
 
         return $posts;
