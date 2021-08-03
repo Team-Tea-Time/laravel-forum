@@ -27,7 +27,7 @@ class ThreadController extends BaseController
 {
     public function recent(Request $request): View
     {
-        $threads = Thread::recent();
+        $threads = Thread::recent()->with('category', 'author', 'lastPost', 'lastPost.author');
 
         if ($request->has('category_id')) {
             $threads = $threads->where('category_id', $request->input('category_id'));
@@ -87,7 +87,11 @@ class ThreadController extends BaseController
         $posts = config('forum.general.display_trashed_posts') || $request->user() && $request->user()->can('viewTrashedPosts')
                ? $thread->posts()->withTrashed()
                : $thread->posts();
-        $posts = $posts->orderBy('created_at', 'asc')->paginate();
+
+        $posts = $posts
+            ->with('author', 'thread')
+            ->orderBy('created_at', 'asc')
+            ->paginate();
 
         return view('forum::thread.show', compact('categories', 'category', 'thread', 'posts'));
     }
