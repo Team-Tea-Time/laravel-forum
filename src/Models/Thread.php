@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
 
 class Thread extends BaseModel
@@ -88,12 +89,12 @@ class Thread extends BaseModel
 
     public function getReaderAttribute()
     {
-        if (! auth()->check()) {
+        if (! Auth::check()) {
             return null;
         }
 
         if ($this->currentReader === null) {
-            $this->currentReader = $this->readers()->where('forum_threads_read.user_id', auth()->user()->getKey())->first();
+            $this->currentReader = $this->readers()->where('forum_threads_read.user_id', Auth::user()->getKey())->first();
         }
 
         return $this->currentReader !== null ? $this->currentReader->pivot : null;
@@ -101,7 +102,7 @@ class Thread extends BaseModel
 
     public function getUserReadStatusAttribute(): ?string
     {
-        if ($this->isOld || ! auth()->check()) {
+        if ($this->isOld || ! Auth::check()) {
             return null;
         }
 
@@ -109,7 +110,7 @@ class Thread extends BaseModel
             return trans('forum::general.'.self::STATUS_UNREAD);
         }
 
-        return ($this->updatedSince($this->reader)) ? trans('forum::general.'.self::STATUS_UPDATED) : null;
+        return $this->updatedSince($this->reader) ? trans('forum::general.'.self::STATUS_UPDATED) : null;
     }
 
     public function getPostCountAttribute(): int
