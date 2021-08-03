@@ -39,7 +39,7 @@ class CreateCategory extends FormRequest implements FulfillableRequest
 
         $category = $action->execute();
 
-        event(new UserCreatedCategory($this->user(), $category));
+        UserCreatedCategory::dispatch($this->user(), $category);
 
         return $category;
     }

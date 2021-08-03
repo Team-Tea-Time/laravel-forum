@@ -38,7 +38,7 @@ class PostController extends BaseController
         $posts = Post::recent()
             ->get()
             ->filter(function (Post $post) use ($request, $unreadOnly) {
-                return (! $unreadOnly || is_null($post->thread->reader) || $post->updatedSince($post->thread->reader))
+                return (! $unreadOnly || $post->thread->reader === null || $post->updatedSince($post->thread->reader))
                     && (
                         ! $post->thread->category->is_private
                         || $request->user()
@@ -83,7 +83,7 @@ class PostController extends BaseController
     {
         $post = $request->fulfill();
 
-        if (is_null($post)) {
+        if ($post === null) {
             return $this->invalidSelectionResponse();
         }
 
@@ -94,7 +94,7 @@ class PostController extends BaseController
     {
         $post = $request->fulfill();
 
-        if (is_null($post)) {
+        if ($post === null) {
             return $this->invalidSelectionResponse();
         }
 

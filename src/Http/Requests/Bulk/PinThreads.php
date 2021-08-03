@@ -39,8 +39,8 @@ class PinThreads extends FormRequest implements FulfillableRequest
         $action = new Action($this->validated()['threads'], $this->user()->can('viewTrashedThreads'));
         $threads = $action->execute();
 
-        if (! is_null($threads)) {
-            event(new UserBulkPinnedThreads($this->user(), $threads));
+        if ($threads !== null) {
+            UserBulkPinnedThreads::dispatch($this->user(), $threads);
         }
 
         return $threads;

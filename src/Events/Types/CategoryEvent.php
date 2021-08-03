@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Events\Types;
 
 use TeamTeaTime\Forum\Models\Category;
 
-class CategoryEvent
+class CategoryEvent extends BaseEvent
 {
     /** @var mixed */
     public $user;

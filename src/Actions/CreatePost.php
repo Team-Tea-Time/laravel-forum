@@ -25,7 +25,7 @@ class CreatePost extends BaseAction
     protected function transact()
     {
         $post = $this->thread->posts()->create([
-            'post_id' => is_null($this->parent) ? null : $this->parent->id,
+            'post_id' => $this->parent === null ? null : $this->parent->id,
             'author_id' => $this->author->getKey(),
             'sequence' => $this->thread->posts->count() + 1,
             'content' => $this->content,

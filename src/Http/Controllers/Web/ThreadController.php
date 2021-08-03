@@ -4,6 +4,7 @@ namespace TeamTeaTime\Forum\Http\Controllers\Web;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\Events\UserCreatingThread;
 use TeamTeaTime\Forum\Events\UserViewingRecent;
@@ -37,9 +38,9 @@ class ThreadController extends BaseController
             return ! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category) && $request->user()->can('view', $thread);
         });
 
-        event(new UserViewingRecent($request->user(), $threads));
+        UserViewingRecent::dispatch($request->user(), $threads);
 
-        return view('forum::thread.recent', compact('threads'));
+        return ViewFactory::make('forum::thread.recent', compact('threads'));
     }
 
     public function unread(Request $request): View
@@ -51,9 +52,9 @@ class ThreadController extends BaseController
                 && (! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category) && $request->user()->can('view', $thread));
         });
 
-        event(new UserViewingUnread($request->user(), $threads));
+        UserViewingUnread::dispatch($request->user(), $threads);
 
-        return view('forum::thread.unread', compact('threads'));
+        return ViewFactory::make('forum::thread.unread', compact('threads'));
     }
 
     public function markAsRead(MarkThreadsAsRead $request): RedirectResponse
@@ -63,19 +64,19 @@ class ThreadController extends BaseController
         if ($category !== null) {
             Forum::alert('success', 'categories.marked_read', 1, ['category' => $category->title]);
 
-            return redirect(Forum::route('category.show', $category));
+            return new RedirectResponse(Forum::route('category.show', $category));
         }
 
         Forum::alert('success', 'threads.marked_read');
 
-        return redirect(Forum::route('unread'));
+        return new RedirectResponse(Forum::route('unread'));
     }
 
     public function show(Request $request, Thread $thread): View
     {
         $this->authorize('view', $thread);
 
-        event(new UserViewingThread($request->user(), $thread));
+        UserViewingThread::dispatch($request->user(), $thread);
 
         $thread->markAsRead($request->user()->getKey());
 
@@ -93,7 +94,7 @@ class ThreadController extends BaseController
             ->orderBy('created_at', 'asc')
             ->paginate();
 
-        return view('forum::thread.show', compact('categories', 'category', 'thread', 'posts'));
+        return ViewFactory::make('forum::thread.show', compact('categories', 'category', 'thread', 'posts'));
     }
 
     public function create(Request $request, Category $category): View
@@ -101,12 +102,12 @@ class ThreadController extends BaseController
         if (! $category->accepts_threads) {
             Forum::alert('warning', 'categories.threads_disabled');
 
-            return redirect(Forum::route('category.show', $category));
+            return new RedirectResponse(Forum::route('category.show', $category));
         }
 
-        event(new UserCreatingThread($request->user(), $category));
+        UserCreatingThread::dispatch($request->user(), $category);
 
-        return view('forum::thread.create', compact('category'));
+        return ViewFactory::make('forum::thread.create', compact('category'));
     }
 
     public function store(CreateThread $request, Category $category): RedirectResponse
@@ -115,7 +116,7 @@ class ThreadController extends BaseController
 
         Forum::alert('success', 'threads.created');
 
-        return redirect(Forum::route('thread.show', $thread));
+        return new RedirectResponse(Forum::route('thread.show', $thread));
     }
 
     public function lock(LockThread $request): RedirectResponse
@@ -124,7 +125,7 @@ class ThreadController extends BaseController
 
         Forum::alert('success', 'threads.updated');
 
-        return redirect(Forum::route('thread.show', $thread));
+        return new RedirectResponse(Forum::route('thread.show', $thread));
     }
 
     public function unlock(UnlockThread $request): RedirectResponse
@@ -133,7 +134,7 @@ class ThreadController extends BaseController
 
         Forum::alert('success', 'threads.updated');
 
-        return redirect(Forum::route('thread.show', $thread));
+        return new RedirectResponse(Forum::route('thread.show', $thread));
     }
 
     public function pin(PinThread $request): RedirectResponse
@@ -142,7 +143,7 @@ class ThreadController extends BaseController
 
         Forum::alert('success', 'threads.updated');
 
-        return redirect(Forum::route('thread.show', $thread));
+        return new RedirectResponse(Forum::route('thread.show', $thread));
     }
 
     public function unpin(UnpinThread $request): RedirectResponse
@@ -151,7 +152,7 @@ class ThreadController extends BaseController
 
         Forum::alert('success', 'threads.updated');
 
-        return redirect(Forum::route('thread.show', $thread));
+        return new RedirectResponse(Forum::route('thread.show', $thread));
     }
 
     public function rename(RenameThread $request): RedirectResponse
@@ -160,45 +161,45 @@ class ThreadController extends BaseController
 
         Forum::alert('success', 'threads.updated');
 
-        return redirect(Forum::route('thread.show', $thread));
+        return new RedirectResponse(Forum::route('thread.show', $thread));
     }
 
     public function move(MoveThread $request): RedirectResponse
     {
         $thread = $request->fulfill();
 
-        if (is_null($thread)) {
+        if ($thread === null) {
             return $this->invalidSelectionResponse();
         }
 
         Forum::alert('success', 'threads.updated');
 
-        return redirect(Forum::route('thread.show', $thread));
+        return new RedirectResponse(Forum::route('thread.show', $thread));
     }
 
     public function delete(DeleteThread $request): RedirectResponse
     {
         $thread = $request->fulfill();
 
-        if (is_null($thread)) {
+        if ($thread === null) {
             return $this->invalidSelectionResponse();
         }
 
         Forum::alert('success', 'threads.deleted');
 
-        return redirect(Forum::route('category.show', $thread->category));
+        return new RedirectResponse(Forum::route('category.show', $thread->category));
     }
 
     public function restore(RestoreThread $request): RedirectResponse
     {
         $thread = $request->fulfill();
 
-        if (is_null($thread)) {
+        if ($thread === null) {
             return $this->invalidSelectionResponse();
         }
 
         Forum::alert('success', 'threads.updated');
 
-        return redirect(Forum::route('thread.show', $thread));
+        return new RedirectResponse(Forum::route('thread.show', $thread));
     }
 }

@@ -46,8 +46,8 @@ class LockThreads extends FormRequest implements FulfillableRequest
         $action = new Action($this->validated()['threads'], $this->user()->can('viewTrashedThreads'));
         $threads = $action->execute();
 
-        if (! is_null($threads)) {
-            event(new UserBulkLockedThreads($this->user(), $threads));
+        if ($threads !== null) {
+            UserBulkLockedThreads::dispatch($this->user(), $threads);
         }
 
         return $threads;

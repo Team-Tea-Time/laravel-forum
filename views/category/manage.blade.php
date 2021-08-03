@@ -76,7 +76,7 @@
 
                 var payload = { categories: this.categories };
                 var options = {
-                    headers: { Authorization: 'Bearer {{ auth()->user()->api_token }}' }
+                    headers: { Authorization: 'Bearer {{ Auth::user()->api_token }}' }
                 };
 
                 axios.post('{{ route('forum.api.bulk.category.manage') }}', payload, options)

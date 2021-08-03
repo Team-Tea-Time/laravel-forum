@@ -18,7 +18,7 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) {
+        if ($result === null) {
             return $this->invalidSelectionResponse();
         }
 
@@ -29,7 +29,7 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) {
+        if ($result === null) {
             return $this->invalidSelectionResponse();
         }
 
@@ -40,7 +40,7 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) {
+        if ($result === null) {
             return $this->invalidSelectionResponse();
         }
 
@@ -51,7 +51,7 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) {
+        if ($result === null) {
             return $this->invalidSelectionResponse();
         }
 
@@ -62,7 +62,7 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) {
+        if ($result === null) {
             return $this->invalidSelectionResponse();
         }
 
@@ -73,7 +73,7 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) {
+        if ($result === null) {
             return $this->invalidSelectionResponse();
         }
 
@@ -84,7 +84,7 @@ class ThreadController extends BaseController
     {
         $result = $request->fulfill();
 
-        if (is_null($result)) {
+        if ($result === null) {
             return $this->invalidSelectionResponse();
         }
 

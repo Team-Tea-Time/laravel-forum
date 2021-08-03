@@ -41,7 +41,7 @@ class DeletePost extends BaseAction
             'post_count' => DB::raw('post_count - 1'),
         ]);
 
-        if ($this->permaDelete && ! is_null($this->post->children)) {
+        if ($this->permaDelete && $this->post->children !== null) {
             // Other posts reference this one; null their post IDs
             $this->post->children()->update(['post_id' => null]);
         }

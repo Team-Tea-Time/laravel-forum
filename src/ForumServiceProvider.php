@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use TeamTeaTime\Forum\Console\Commands\SyncStats;
@@ -62,9 +63,9 @@ class ForumServiceProvider extends ServiceProvider
         $loader->alias('Forum', config('forum.web.utility_class'));
 
         View::composer('forum::master', function ($view) {
-            if (auth()->check()) {
+            if (Auth::check()) {
                 $nameAttribute = config('forum.integration.user_name');
-                $view->username = auth()->user()->{$nameAttribute};
+                $view->username = Auth::user()->{$nameAttribute};
             }
         });
 

@@ -32,7 +32,7 @@ class CreateThread extends FormRequest implements FulfillableRequest
         $action = new Action($category, $this->user(), $input['title'], $input['content']);
         $thread = $action->execute();
 
-        event(new UserCreatedThread($this->user(), $thread));
+        UserCreatedThread::dispatch($this->user(), $thread);
 
         return $thread;
     }

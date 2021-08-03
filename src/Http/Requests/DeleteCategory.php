@@ -39,7 +39,7 @@ class DeleteCategory extends FormRequest implements FulfillableRequest
         $action = new Action($category);
         $action->execute();
 
-        event(new UserDeletedCategory($this->user(), $category));
+        UserDeletedCategory::dispatch($this->user(), $category);
 
         return $category;
     }
