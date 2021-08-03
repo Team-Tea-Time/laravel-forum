@@ -14,7 +14,7 @@
     <div class="v-category-show">
         @if ($category->accepts_threads)
             @can('createThreads', $category)
-                <a href="{{ Forum::route('thread.create', $category) }}" class="btn btn-primary float-right">{{ trans('forum::threads.new_thread') }}</a>
+                <a href="{{ Forum::route('thread.create', $category) }}" class="btn btn-primary float-end">{{ trans('forum::threads.new_thread') }}</a>
             @endcan
         @endif
 
@@ -41,7 +41,7 @@
                         @csrf
                         <input type="hidden" name="_method" :value="actionMethods[selectedAction]" />
 
-                        <div class="text-right mt-2">
+                        <div class="text-end mt-2">
                             <div class="form-check">
                                 <label for="selectAllThreads">
                                     {{ trans('forum::threads.select_all') }}
@@ -88,7 +88,7 @@
                                             </select>
                                         </div>
 
-                                        <div class="form-group" v-if="selectedAction == 'move'">
+                                        <div class="mb-3" v-if="selectedAction == 'move'">
                                             <label for="category-id">{{ trans_choice('forum::categories.category', 1) }}</label>
                                             <select name="category_id" id="category-id" class="form-control">
                                                 @include ('forum::category.partials.options', ['hide' => $category])
@@ -104,7 +104,7 @@
                                             </div>
                                         @endif
 
-                                        <div class="text-right">
+                                        <div class="text-end">
                                             <button type="submit" class="btn btn-primary" @click="submit">{{ trans('forum::general.proceed') }}</button>
                                         </div>
                                     </div>
@@ -129,7 +129,7 @@
                 <div class="col col-xs-8">
                     {{ $threads->links() }}
                 </div>
-                <div class="col col-xs-4 text-right">
+                <div class="col col-xs-4 text-end">
                     @if ($category->accepts_threads)
                         @can('createThreads', $category)
                             <a href="{{ Forum::route('thread.create', $category) }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>

@@ -5,7 +5,7 @@
     </div>
     <div class="collapse post-actions">
         <div class="panel-body">
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="action">{{ trans_choice('forum::general.actions', 1) }}</label>
                 <select name="action" id="action" class="form-control">
                     @can ('delete', $post)

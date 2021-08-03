@@ -22,7 +22,7 @@
             </div>
         </transition>
 
-        <div class="text-right py-3">
+        <div class="text-end py-3">
             <button type="button" class="btn btn-primary px-5" :disabled="isSavingDisabled" @click="onSave">
                 {{ trans('forum::general.save') }}
             </button>
@@ -32,8 +32,8 @@
     <script type="text/x-template" id="draggable-category-list-template">
         <draggable tag="ul" class="list-group" :list="categories" group="categories" :invertSwap="true" :emptyInsertThreshold="14">
             <li class="list-group-item" v-for="category in categories" :data-id="category.id" :key="category.id">
-                <a class="float-right btn btn-sm btn-danger ml-2" :href="`${category.route}#modal=delete-category`">{{ trans('forum::general.delete') }}</a>
-                <a class="float-right btn btn-sm btn-link ml-2" :href="`${category.route}#modal=edit-category`">{{ trans('forum::general.edit') }}</a>
+                <a class="float-end btn btn-sm btn-danger ml-2" :href="`${category.route}#modal=delete-category`">{{ trans('forum::general.delete') }}</a>
+                <a class="float-end btn btn-sm btn-link ml-2" :href="`${category.route}#modal=edit-category`">{{ trans('forum::general.edit') }}</a>
                 <strong :style="{ color: category.color }">@{{ category.title }}</strong>
                 <div class="text-muted">@{{ category.description }}</div>
 

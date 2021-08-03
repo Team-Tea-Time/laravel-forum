@@ -87,7 +87,7 @@
             <div class="col col-xs-8">
                 {{ $posts->links() }}
             </div>
-            <div class="col col-xs-4 text-right">
+            <div class="col col-xs-4 text-end">
                 @if (! $thread->trashed())
                     @can ('reply', $thread)
                         <div class="btn-group" role="group">
@@ -104,7 +104,7 @@
         </div>
 
         @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)))
-            <div class="text-right pb-1">
+            <div class="text-end pb-1">
                 <div class="form-check">
                     <label for="selectAllPosts">
                         {{ trans('forum::posts.select_all') }}
@@ -145,7 +145,7 @@
                                     </div>
                                 @endif
 
-                                <div class="text-right">
+                                <div class="text-end">
                                     <button type="submit" class="btn btn-primary" @click="submitPosts">{{ trans('forum::general.proceed') }}</button>
                                 </div>
                             </div>
@@ -164,11 +164,11 @@
                     <form method="POST" action="{{ Forum::route('post.store', $thread) }}">
                         @csrf
 
-                        <div class="form-group">
+                        <div class="mb-3">
                             <textarea name="content" class="form-control">{{ old('content') }}</textarea>
                         </div>
 
-                        <div class="text-right">
+                        <div class="text-end">
                             <button type="submit" class="btn btn-primary px-5">{{ trans('forum::general.reply') }}</button>
                         </div>
                     </form>

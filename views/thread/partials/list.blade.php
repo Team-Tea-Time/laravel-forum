@@ -1,6 +1,6 @@
 <div class="list-group-item {{ $thread->pinned ? 'pinned' : '' }} {{ $thread->locked ? 'locked' : '' }} {{ $thread->trashed() ? 'deleted' : '' }}" :class="{ 'border-primary': selectedThreads.includes({{ $thread->id }}) }">
     <div class="row align-items-center text-center">
-        <div class="col-sm text-md-left">
+        <div class="col-sm text-md-start">
             <span class="lead">
                 <a href="{{ Forum::route('thread.show', $thread) }}" @if (isset($category))style="color: {{ $category->color }};"@endif>{{ $thread->title }}</a>
             </span>
@@ -12,7 +12,7 @@
                 <a href="{{ Forum::route('category.show', $thread->category) }}" style="color: {{ $thread->category->color }};">{{ $thread->category->title }}</a>
             @endif
         </div>
-        <div class="col-sm text-md-right">
+        <div class="col-sm text-md-end">
             @if ($thread->pinned)
                 <span class="badge badge-pill badge-info">{{ trans('forum::threads.pinned') }}</span>
             @endif
@@ -32,7 +32,7 @@
         </div>
 
         @if ($thread->lastPost)
-            <div class="col-sm text-md-right text-muted">
+            <div class="col-sm text-md-end text-muted">
                 <a href="{{ Forum::route('thread.show', $thread->lastPost) }}">{{ trans('forum::posts.view') }} &raquo;</a>
                 <br>
                 {{ $thread->lastPost->authorName }}

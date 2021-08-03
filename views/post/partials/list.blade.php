@@ -3,7 +3,7 @@
     :class="{ 'border-primary': selectedPosts.includes({{ $post->id }}) }">
     <div class="card-header">
         @if (! isset($single) || ! $single)
-            <span class="float-right">
+            <span class="float-end">
                 <a href="{{ Forum::route('thread.show', $post) }}">#{{ $post->sequence }}</a>
                 @if ($post->sequence != 1)
                     @can ('deletePosts', $post->thread)
@@ -38,7 +38,7 @@
         @endif
 
         @if (! isset($single) || ! $single)
-            <div class="text-right">
+            <div class="text-end">
                 @if (! $post->trashed())
                     <a href="{{ Forum::route('post.show', $post) }}" class="card-link text-muted">{{ trans('forum::general.permalink') }}</a>
                     @if ($post->sequence != 1)
