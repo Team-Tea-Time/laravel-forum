@@ -45,7 +45,7 @@ class DeleteThreads extends FormRequest implements FulfillableRequest
         );
         $threads = $action->execute();
 
-        if (! is_null($threads)) {
+        if ($threads !== null) {
             UserBulkDeletedThreads::dispatch($this->user(), $threads);
         }
 

@@ -71,7 +71,7 @@ class CategoryController extends BaseController
     {
         $category = $request->fulfill();
 
-        if (is_null($category)) {
+        if ($category === null) {
             return $this->invalidSelectionResponse();
         }
 

@@ -20,7 +20,7 @@ class UpdateCategory extends CreateCategory
         );
         $category = $action->execute();
 
-        if (! is_null($category)) {
+        if (! $category === null) {
             UserUpdatedCategory::dispatch($this->user(), $category);
         }
 

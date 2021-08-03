@@ -29,7 +29,7 @@ class DeleteThread extends FormRequest implements FulfillableRequest
         $action = new Action($this->route('thread'), $this->isPermaDeleting());
         $thread = $action->execute();
 
-        if (! is_null($thread)) {
+        if (! $thread === null) {
             UserDeletedThread::dispatch($this->user(), $thread);
         }
 

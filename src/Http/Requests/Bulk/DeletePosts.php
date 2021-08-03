@@ -53,7 +53,7 @@ class DeletePosts extends FormRequest implements FulfillableRequest
         );
         $posts = $action->execute();
 
-        if (! is_null($posts)) {
+        if ($posts !== null) {
             UserBulkDeletedPosts::dispatch($this->user(), $posts);
         }
 

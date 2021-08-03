@@ -90,7 +90,7 @@ class PostController extends BaseController
     {
         $post = $request->fulfill();
 
-        if (is_null($post)) {
+        if ($post === null) {
             return $this->invalidSelectionResponse();
         }
 
@@ -103,7 +103,7 @@ class PostController extends BaseController
     {
         $post = $request->fulfill();
 
-        if (is_null($post)) {
+        if ($post === null) {
             return $this->invalidSelectionResponse();
         }
 

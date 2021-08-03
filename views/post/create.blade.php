@@ -4,7 +4,7 @@
     <div id="create-post">
         <h2>{{ trans('forum::general.new_reply') }} ({{ $thread->title }})</h2>
 
-        @if (!is_null($post) && !$post->trashed())
+        @if (!$post === null && !$post->trashed())
             <p>{{ trans('forum::general.replying_to', ['item' => $post->authorName]) }}:</p>
 
             @include ('forum::post.partials.quote')
@@ -12,7 +12,7 @@
 
         <form method="POST" action="{{ Forum::route('post.store', $thread) }}">
             {!! csrf_field() !!}
-            @if (!is_null($post))
+            @if (!$post === null)
                 <input type="hidden" name="post" value="{{ $post->id }}">
             @endif
 

@@ -167,7 +167,7 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        if (is_null($thread)) {
+        if ($thread === null) {
             return $this->invalidSelectionResponse();
         }
 
@@ -180,7 +180,7 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        if (is_null($thread)) {
+        if ($thread === null) {
             return $this->invalidSelectionResponse();
         }
 
@@ -193,7 +193,7 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
-        if (is_null($thread)) {
+        if ($thread === null) {
             return $this->invalidSelectionResponse();
         }
 

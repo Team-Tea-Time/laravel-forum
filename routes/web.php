@@ -84,7 +84,7 @@ $r->bind('thread', function ($value) {
 
     $thread = $query->find($value);
 
-    if (is_null($thread)) {
+    if ($thread === null) {
         abort(404);
     }
 
@@ -100,7 +100,7 @@ $r->bind('post', function ($value) {
 
     $post = $query->find($value);
 
-    if (is_null($post)) {
+    if ($post === null) {
         abort(404);
     }
 

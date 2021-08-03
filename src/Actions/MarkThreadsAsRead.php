@@ -21,7 +21,7 @@ class MarkThreadsAsRead extends BaseAction
     {
         $threads = Thread::recent();
 
-        if (! is_null($this->category)) {
+        if ($this->category !== null) {
             $threads = $threads->where('category_id', $this->category->id);
         }
 
