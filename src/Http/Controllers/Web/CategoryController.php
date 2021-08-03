@@ -4,6 +4,7 @@ namespace TeamTeaTime\Forum\Http\Controllers\Web;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\Events\UserViewingCategory;
 use TeamTeaTime\Forum\Events\UserViewingIndex;
@@ -27,7 +28,7 @@ class CategoryController extends BaseController
 
         UserViewingIndex::dispatch($request->user());
 
-        return view('forum::category.index', compact('categories'));
+        return ViewFactory::make('forum::category.index', compact('categories'));
     }
 
     public function show(Request $request, Category $category): View
@@ -55,7 +56,7 @@ class CategoryController extends BaseController
             ->orderBy('updated_at', 'desc')
             ->paginate();
 
-        return view('forum::category.show', compact('categories', 'category', 'threads'));
+        return ViewFactory::make('forum::category.show', compact('categories', 'category', 'threads'));
     }
 
     public function store(CreateCategory $request): RedirectResponse
@@ -64,7 +65,7 @@ class CategoryController extends BaseController
 
         Forum::alert('success', 'categories.created');
 
-        return redirect(Forum::route('category.show', $category));
+        return new RedirectResponse(Forum::route('category.show', $category));
     }
 
     public function update(UpdateCategory $request): RedirectResponse
@@ -77,7 +78,7 @@ class CategoryController extends BaseController
 
         Forum::alert('success', 'categories.updated', 1);
 
-        return redirect(Forum::route('category.show', $category));
+        return new RedirectResponse(Forum::route('category.show', $category));
     }
 
     public function delete(DeleteCategory $request): RedirectResponse
@@ -86,7 +87,7 @@ class CategoryController extends BaseController
 
         Forum::alert('success', 'categories.deleted', 1);
 
-        return redirect(Forum::route('index'));
+        return new RedirectResponse(Forum::route('index'));
     }
 
     public function manage(Request $request): View
@@ -94,6 +95,6 @@ class CategoryController extends BaseController
         $categories = Category::defaultOrder()->get();
         $categories->makeHidden(['_lft', '_rgt', 'thread_count', 'post_count']);
 
-        return view('forum::category.manage', ['categories' => $categories->toTree()]);
+        return ViewFactory::make('forum::category.manage', ['categories' => $categories->toTree()]);
     }
 }
