@@ -4,7 +4,6 @@ namespace TeamTeaTime\Forum\Http\Controllers\Web;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\Events\UserViewingCategory;
 use TeamTeaTime\Forum\Events\UserViewingIndex;
@@ -18,13 +17,12 @@ class CategoryController extends BaseController
 {
     public function index(Request $request): View
     {
-        $categories = Category::defaultOrder()->get()->filter(function ($category) {
-            if ($category->is_private) {
-                return Gate::allows('view', $category);
-            }
-
-            return true;
-        })->toTree();
+        $categories = Category::defaultOrder()
+            ->get()
+            ->filter(function ($category) use ($request) {
+                return ! $category->is_private || $request->user() && $request->user()->can('view', $category);
+            })
+            ->toTree();
 
         event(new UserViewingIndex($request->user()));
 

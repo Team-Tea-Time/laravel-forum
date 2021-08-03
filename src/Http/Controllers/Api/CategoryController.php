@@ -24,7 +24,7 @@ class CategoryController extends BaseController
                 : $query->where('parent_id', $request->query('parent_id'));
         }
 
-        $categories = $query->get()->filter(function ($category) {
+        $categories = $query->get()->filter(function ($category) use ($request) {
             return ! $category->is_private || $request->user() && $request->user()->can('view', $category);
         });
 
