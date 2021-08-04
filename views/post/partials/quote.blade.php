@@ -6,6 +6,6 @@
             </span>
             {{ $post->authorName }} <span class="text-muted">{{ $post->posted }}</span>
         </div>
-        {!! Str::limit(Forum::render($post->content)) !!}
+        {!! \Illuminate\Support\Str::limit(Forum::render($post->content)) !!}
     </div>
 </div>

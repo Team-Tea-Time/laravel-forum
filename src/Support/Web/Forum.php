@@ -2,8 +2,8 @@
 
 namespace TeamTeaTime\Forum\Support\Web;
 
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use Session;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
