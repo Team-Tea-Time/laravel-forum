@@ -1,8 +1,8 @@
-![Tests](https://github.com/Team-Tea-Time/laravel-forum/actions/workflows/tests.yml/badge.svg) ![phpcs](https://github.com/Team-Tea-Time/laravel-forum/actions/workflows/phpcs.yml/badge.svg) [![StyleCI](https://github.styleci.io/repos/28139801/shield?style=flat&branch=5.0)](https://github.styleci.io/repos/28139801?branch=5.0)
+![Tests](https://github.com/Team-Tea-Time/laravel-forum/actions/workflows/tests.yml/badge.svg) ![phpcs](https://github.com/Team-Tea-Time/laravel-forum/actions/workflows/phpcs.yml/badge.svg) [![StyleCI](https://github.styleci.io/repos/28139801/shield?style=flat&branch=5.0)](https://github.styleci.io/repos/28139801?branch=5.0) ![Packagist Downloads](https://img.shields.io/packagist/dm/riari/laravel-forum) ![Packagist License](https://img.shields.io/packagist/l/riari/laravel-forum)
 
 ![Laravel Forum Logo](./logo.png)
 
-**Complete documentation is available on [teamteatime.net](https://teamteatime.net/docs/laravel-forum/5.x/).**
+**Complete documentation is available on [teamteatime.net](https://teamteatime.net/docs/laravel-forum/5/).**
 
 ## Installation
 
