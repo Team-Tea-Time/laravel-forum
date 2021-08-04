@@ -1,6 +1,4 @@
-**Complete documentation is available on [teamteatime.net](https://www.teamteatime.net/docs/laravel-forum/4.x/).**
-
-**NOTE: Version 3.0 is no longer supported. If you're using a version of Laravel below 5.3, consider upgrading it!**
+**This version is no longer supported. Please see the [latest release branch](https://github.com/Team-Tea-Time/laravel-forum).**
 
 ## Requirements
 
