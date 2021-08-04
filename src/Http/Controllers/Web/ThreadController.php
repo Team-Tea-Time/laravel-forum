@@ -74,7 +74,10 @@ class ThreadController extends BaseController
 
     public function show(Request $request, Thread $thread): View
     {
-        $this->authorize('view', $thread);
+        if ($thread->category->is_private) {
+            $this->authorize('view', $thread->category);
+            $this->authorize('view', $thread);
+        }
 
         UserViewingThread::dispatch($request->user(), $thread);
 
