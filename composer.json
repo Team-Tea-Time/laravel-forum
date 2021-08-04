@@ -1,7 +1,7 @@
 {
     "name": "riari/laravel-forum",
-    "description": "A Laravel 6 package providing a solid foundation for building discussion forums",
-    "keywords": ["laravel", "laravel-6", "forum", "discuss"],
+    "description": "A Laravel 6/7/8 package providing a solid foundation for building discussion forums",
+    "keywords": ["laravel", "laravel-6", "laravel-7", "laravel-8", "forum", "discuss"],
     "license": "MIT",
     "authors": [
         {
