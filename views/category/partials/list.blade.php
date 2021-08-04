@@ -8,26 +8,30 @@
                 <p class="card-text text-muted">{{ $category->description }}</p>
             </div>
             <div class="col-sm-2 text-md-end">
-                <span class="badge badge-pill badge-primary" style="background: {{ $category->color }};">
-                    {{ trans_choice('forum::threads.thread', 2) }}: {{ $category->thread_count }}
-                </span>
-                <br>
-                <span class="badge badge-pill badge-primary" style="background: {{ $category->color }};">
-                    {{ trans_choice('forum::posts.post', 2) }}: {{ $category->post_count }}
-                </span>
+                @if ($category->accepts_threads)
+                    <span class="badge badge-pill badge-primary" style="background: {{ $category->color }};">
+                        {{ trans_choice('forum::threads.thread', 2) }}: {{ $category->thread_count }}
+                    </span>
+                    <br>
+                    <span class="badge badge-pill badge-primary" style="background: {{ $category->color }};">
+                        {{ trans_choice('forum::posts.post', 2) }}: {{ $category->post_count }}
+                    </span>
+                @endif
             </div>
             <div class="col-sm text-md-end text-muted">
-                @if ($category->newestThread)
-                    <div>
-                        <a href="{{ Forum::route('thread.show', $category->newestThread) }}">{{ $category->newestThread->title }}</a>
-                        @include ('forum::partials.timestamp', ['carbon' => $category->newestThread->created_at])
-                    </div>
-                @endif
-                @if ($category->latestActiveThread)
-                    <div>
-                        <a href="{{ Forum::route('thread.show', $category->latestActiveThread->lastPost) }}">Re: {{ $category->latestActiveThread->title }}</a>
-                        @include ('forum::partials.timestamp', ['carbon' => $category->latestActiveThread->lastPost->created_at])
-                    </div>
+                @if ($category->accepts_threads)
+                    @if ($category->newestThread)
+                        <div>
+                            <a href="{{ Forum::route('thread.show', $category->newestThread) }}">{{ $category->newestThread->title }}</a>
+                            @include ('forum::partials.timestamp', ['carbon' => $category->newestThread->created_at])
+                        </div>
+                    @endif
+                    @if ($category->latestActiveThread)
+                        <div>
+                            <a href="{{ Forum::route('thread.show', $category->latestActiveThread->lastPost) }}">Re: {{ $category->latestActiveThread->title }}</a>
+                            @include ('forum::partials.timestamp', ['carbon' => $category->latestActiveThread->lastPost->created_at])
+                        </div>
+                    @endif
                 @endif
             </div>
         </div>
