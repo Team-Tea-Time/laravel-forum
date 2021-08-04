@@ -27,7 +27,9 @@ class PostController extends BaseController
             $this->authorize('view', $post);
         }
 
-        UserViewingPost::dispatch($request->user(), $post);
+        if ($request->user() !== null) {
+            UserViewingPost::dispatch($request->user(), $post);
+        }
 
         return ViewFactory::make('forum::post.show', compact('category', 'thread', 'post'));
     }

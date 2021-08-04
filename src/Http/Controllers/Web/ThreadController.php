@@ -38,7 +38,9 @@ class ThreadController extends BaseController
             return ! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category) && $request->user()->can('view', $thread);
         });
 
-        UserViewingRecent::dispatch($request->user(), $threads);
+        if ($request->user() !== null) {
+            UserViewingRecent::dispatch($request->user(), $threads);
+        }
 
         return ViewFactory::make('forum::thread.recent', compact('threads'));
     }
@@ -52,7 +54,9 @@ class ThreadController extends BaseController
                 && (! $thread->category->private || $request->user() && $request->user()->can('view', $thread->category) && $request->user()->can('view', $thread));
         });
 
-        UserViewingUnread::dispatch($request->user(), $threads);
+        if ($request->user() !== null) {
+            UserViewingUnread::dispatch($request->user(), $threads);
+        }
 
         return ViewFactory::make('forum::thread.unread', compact('threads'));
     }
@@ -79,9 +83,10 @@ class ThreadController extends BaseController
             $this->authorize('view', $thread);
         }
 
-        UserViewingThread::dispatch($request->user(), $thread);
-
-        $thread->markAsRead($request->user()->getKey());
+        if ($request->user() !== null) {
+            UserViewingThread::dispatch($request->user(), $thread);
+            $thread->markAsRead($request->user()->getKey());
+        }
 
         $category = $thread->category;
         $categories = $request->user() && $request->user()->can('moveThreadsFrom', $category)
@@ -108,7 +113,9 @@ class ThreadController extends BaseController
             return new RedirectResponse(Forum::route('category.show', $category));
         }
 
-        UserCreatingThread::dispatch($request->user(), $category);
+        if ($request->user() !== null) {
+            UserCreatingThread::dispatch($request->user(), $category);
+        }
 
         return ViewFactory::make('forum::thread.create', compact('category'));
     }

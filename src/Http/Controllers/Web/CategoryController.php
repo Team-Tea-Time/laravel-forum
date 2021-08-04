@@ -26,7 +26,9 @@ class CategoryController extends BaseController
             })
             ->toTree();
 
-        UserViewingIndex::dispatch($request->user());
+        if ($request->user() !== null) {
+            UserViewingIndex::dispatch($request->user());
+        }
 
         return ViewFactory::make('forum::category.index', compact('categories'));
     }
@@ -37,7 +39,9 @@ class CategoryController extends BaseController
             $this->authorize('view', $category);
         }
 
-        UserViewingCategory::dispatch($request->user(), $category);
+        if ($request->user() !== null) {
+            UserViewingCategory::dispatch($request->user(), $category);
+        }
 
         $categories = $request->user() && $request->user()->can('moveCategories')
             ? Category::defaultOrder()
