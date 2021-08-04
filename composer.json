@@ -1,5 +1,5 @@
 {
-    "name": "team-tea-time/laravel-forum",
+    "name": "teamteatime/laravel-forum",
     "description": "A Laravel 6 package providing a solid foundation for building discussion forums",
     "keywords": ["laravel", "laravel-6", "forum", "discuss"],
     "license": "MIT",
