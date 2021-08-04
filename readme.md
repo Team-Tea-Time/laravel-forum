@@ -1,4 +1,4 @@
-**Complete documentation is available on [teamteatime.net](https://teamteatime.net/docs/laravel-forum/3.x/introduction.md).**
+**This version is no longer supported. Please see the [latest release branch](https://github.com/Team-Tea-Time/laravel-forum).**
 
 ## Requirements
 
