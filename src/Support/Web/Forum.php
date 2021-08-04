@@ -12,10 +12,7 @@ class Forum
 {
     public static function alert(string $type, string $transKey, int $transCount = 1, array $transParameters = []): void
     {
-        $alerts = [];
-        if (Session::has('alerts')) {
-            $alerts = Session::get('alerts');
-        }
+        $alerts = Session::get('alerts', []);
 
         $message = trans_choice("forum::{$transKey}", $transCount, $transParameters);
 
