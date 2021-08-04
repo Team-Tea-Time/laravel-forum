@@ -25,7 +25,7 @@ class SyncStats extends Command
             $take = (int) $take;
         }
 
-        switch ($this->option('model')) {
+        switch (strtolower($this->option('model'))) {
             case 'Category':
                 $this->processCategories($skip, $take);
                 break;
@@ -55,10 +55,8 @@ class SyncStats extends Command
         }
 
         $categories = $query->get();
-        $count = $categories->count();
 
-        $bar = $this->output->createProgressBar($count);
-
+        $bar = $this->output->createProgressBar($categories->count());
         $bar->start();
 
         foreach ($categories as $category) {
@@ -98,10 +96,8 @@ class SyncStats extends Command
         }
 
         $threads = $query->get();
-        $count = $threads->count();
 
-        $bar = $this->output->createProgressBar($count);
-
+        $bar = $this->output->createProgressBar($threads->count());
         $bar->start();
 
         foreach ($threads as $thread) {
