@@ -26,7 +26,9 @@ class PinThread extends FormRequest implements FulfillableRequest
         $action = new Action($this->route('thread'));
         $thread = $action->execute();
 
-        UserPinnedThread::dispatch($this->user(), $thread);
+        if ($thread !== null) {
+            UserPinnedThread::dispatch($this->user(), $thread);
+        }
 
         return $thread;
     }

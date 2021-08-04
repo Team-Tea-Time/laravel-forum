@@ -26,7 +26,9 @@ class LockThread extends FormRequest implements FulfillableRequest
         $action = new Action($this->route('thread'));
         $thread = $action->execute();
 
-        UserLockedThread::dispatch($this->user(), $thread);
+        if ($thread !== null) {
+            UserLockedThread::dispatch($this->user(), $thread);
+        }
 
         return $thread;
     }

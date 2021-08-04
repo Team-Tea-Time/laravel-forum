@@ -123,6 +123,10 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
+
         Forum::alert('success', 'threads.updated');
 
         return new RedirectResponse(Forum::route('thread.show', $thread));
@@ -131,6 +135,10 @@ class ThreadController extends BaseController
     public function unlock(UnlockThread $request): RedirectResponse
     {
         $thread = $request->fulfill();
+
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
 
         Forum::alert('success', 'threads.updated');
 
@@ -141,6 +149,10 @@ class ThreadController extends BaseController
     {
         $thread = $request->fulfill();
 
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
+
         Forum::alert('success', 'threads.updated');
 
         return new RedirectResponse(Forum::route('thread.show', $thread));
@@ -149,6 +161,10 @@ class ThreadController extends BaseController
     public function unpin(UnpinThread $request): RedirectResponse
     {
         $thread = $request->fulfill();
+
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
 
         Forum::alert('success', 'threads.updated');
 

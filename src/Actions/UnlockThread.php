@@ -15,6 +15,10 @@ class UnlockThread extends BaseAction
 
     protected function transact()
     {
+        if (! $this->thread->locked) {
+            return null;
+        }
+
         $this->thread->updateWithoutTouch([
             'locked' => false,
         ]);

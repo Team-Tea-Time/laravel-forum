@@ -15,6 +15,10 @@ class PinThread extends BaseAction
 
     protected function transact()
     {
+        if ($this->thread->pinned) {
+            return null;
+        }
+
         $this->thread->updateWithoutTouch([
             'pinned' => true,
         ]);

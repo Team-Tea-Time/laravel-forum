@@ -12,7 +12,9 @@ class UnlockThread extends LockThread
         $action = new Action($this->route('thread'));
         $thread = $action->execute();
 
-        UserUnlockedThread::dispatch($this->user(), $thread);
+        if ($thread !== null) {
+            UserUnlockedThread::dispatch($this->user(), $thread);
+        }
 
         return $thread;
     }

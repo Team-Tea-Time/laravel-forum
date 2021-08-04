@@ -105,39 +105,55 @@ class ThreadController extends BaseController
         return new ThreadResource($thread);
     }
 
-    public function lock(LockThread $request): ThreadResource
+    public function lock(LockThread $request): Response
     {
         $thread = $request->fulfill();
 
-        return new ThreadResource($thread);
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
+
+        return new Response(new ThreadResource($thread));
     }
 
-    public function unlock(UnlockThread $request): ThreadResource
+    public function unlock(UnlockThread $request): Response
     {
         $thread = $request->fulfill();
 
-        return new ThreadResource($thread);
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
+
+        return new Response(new ThreadResource($thread));
     }
 
-    public function pin(PinThread $request): ThreadResource
+    public function pin(PinThread $request): Response
     {
         $thread = $request->fulfill();
 
-        return new ThreadResource($thread);
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
+
+        return new Response(new ThreadResource($thread));
     }
 
-    public function unpin(UnpinThread $request): ThreadResource
+    public function unpin(UnpinThread $request): Response
     {
         $thread = $request->fulfill();
 
-        return new ThreadResource($thread);
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
+
+        return new Response(new ThreadResource($thread));
     }
 
     public function rename(RenameThread $request): ThreadResource
     {
         $thread = $request->fulfill();
 
-        return new ThreadResource($thread);
+        return new Response(new ThreadResource($thread));
     }
 
     public function move(MoveThread $request): Response

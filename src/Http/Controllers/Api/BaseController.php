@@ -14,7 +14,7 @@ abstract class BaseController
         return new Response([
             'success' => false,
             'message' => trans('forum::general.invalid_selection'),
-        ], 403);
+        ], 400);
     }
 
     protected function bulkActionResponse(int $rowsAffected, string $transKey): Response
