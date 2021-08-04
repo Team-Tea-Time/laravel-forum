@@ -31,5 +31,12 @@
         "psr-4": {
             "TeamTeaTime\\Forum\\Database\\Factories\\": "database/factories"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TeamTeaTime\\Forum\\ForumServiceProvider"
+            ]
+        }
     }
 }
