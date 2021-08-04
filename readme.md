@@ -13,7 +13,7 @@ Requires Laravel 6+ and PHP 7.4+.
 Install the package via composer:
 
 ```
-composer require teamteatime/laravel-forum:~5.0
+composer require riari/laravel-forum:~5.0
 ```
 
 [Package Discovery](https://laravel.com/docs/8.x/packages#package-discovery) should take care of registering the service provider automatically, but if you need to do so manually, add the service provider to your `config/app.php`:

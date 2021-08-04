@@ -1,5 +1,5 @@
 {
-    "name": "teamteatime/laravel-forum",
+    "name": "riari/laravel-forum",
     "description": "A Laravel 6 package providing a solid foundation for building discussion forums",
     "keywords": ["laravel", "laravel-6", "forum", "discuss"],
     "license": "MIT",
@@ -16,7 +16,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "laravel/framework": "6 - 8",
-        "kalnoy/nestedset": "^5.0",
+        "kalnoy/nestedset": "^6.0",
         "doctrine/dbal": "^2.12"
     },
     "require-dev": {
