@@ -35,7 +35,10 @@ $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r) {
 
 // Posts
 $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r) {
-    $r->post('search', ['as' => 'search', 'uses' => 'PostController@search']);
+    if (config('forum.api.enable_search')) {
+        $r->post('search', ['as' => 'search', 'uses' => 'PostController@search']);
+    }
+
     $r->get('recent', ['as' => 'recent', 'uses' => 'PostController@recent']);
     $r->get('unread', ['as' => 'unread', 'uses' => 'PostController@unread']);
     $r->get('{post}', ['as' => 'fetch', 'uses' => 'PostController@fetch']);

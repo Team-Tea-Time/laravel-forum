@@ -3,9 +3,10 @@
 namespace TeamTeaTime\Forum\Events;
 
 use Illuminate\Pagination\LengthAwarePaginator;
+use TeamTeaTime\Forum\Events\Types\BaseEvent;
 use TeamTeaTime\Forum\Models\Category;
 
-class UserSearchedPosts
+class UserSearchedPosts extends BaseEvent
 {
     /** @var mixed */
     public $user;
