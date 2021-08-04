@@ -22,7 +22,7 @@ return [
     |
     */
 
-    'enable_search' => false,
+    'enable_search' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -37,7 +37,7 @@ return [
         'prefix' => '/forum/api',
         'as' => 'forum.api.',
         'namespace' => '\TeamTeaTime\Forum\Http\Controllers\Api',
-        'middleware' => ['api', 'auth:sanctum'],
+        'middleware' => ['api', 'auth:api'],
     ],
 
 ];
