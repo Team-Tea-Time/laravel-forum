@@ -53,6 +53,9 @@ $r->group(['prefix' => $prefix['thread'].'/{thread}-{thread_slug}'], function ($
 
 // Bulk actions
 $r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk', 'middleware' => $authMiddleware], function ($r) {
+    // Categories
+    $r->post('category/manage', ['as' => 'category.manage', 'uses' => 'CategoryController@manage']);
+
     // Threads
     $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r) {
         $r->post('move', ['as' => 'move', 'uses' => 'ThreadController@move']);

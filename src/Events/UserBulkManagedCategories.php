@@ -2,7 +2,9 @@
 
 namespace TeamTeaTime\Forum\Events;
 
-class UserBulkManagedCategories
+use TeamTeaTime\Forum\Events\Types\BaseEvent;
+
+class UserBulkManagedCategories extends BaseEvent
 {
     /** @var mixed */
     public $user;

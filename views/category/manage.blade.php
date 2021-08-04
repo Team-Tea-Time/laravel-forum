@@ -75,11 +75,7 @@
                 this.changesApplied = false;
 
                 var payload = { categories: this.categories };
-                var options = {
-                    headers: { Authorization: 'Bearer {{ Auth::user()->api_token }}' }
-                };
-
-                axios.post('{{ route('forum.api.bulk.category.manage') }}', payload, options)
+                axios.post('{{ route('forum.bulk.category.manage') }}', payload)
                     .then(response => {
                         this.changesApplied = true;
                         setTimeout(() => this.changesApplied = false, 3000);
