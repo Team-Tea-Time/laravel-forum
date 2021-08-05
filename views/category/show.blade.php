@@ -165,17 +165,17 @@
 
     .list-group.threads .list-group-item.locked
     {
-        border-left-color: var(--yellow);
+        border-left-color: var(--bs-yellow);
     }
 
     .list-group.threads .list-group-item.pinned
     {
-        border-left-color: var(--cyan);
+        border-left-color: var(--bs-cyan);
     }
 
     .list-group.threads .list-group-item.deleted
     {
-        border-left-color: var(--red);
+        border-left-color: var(--bs-red);
         opacity: 0.5;
     }
     </style>

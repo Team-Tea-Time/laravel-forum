@@ -14,18 +14,18 @@
         </div>
         <div class="col-sm text-md-end">
             @if ($thread->pinned)
-                <span class="badge badge-pill badge-info">{{ trans('forum::threads.pinned') }}</span>
+                <span class="badge rounded-pill bg-info">{{ trans('forum::threads.pinned') }}</span>
             @endif
             @if ($thread->locked)
-                <span class="badge badge-pill badge-warning">{{ trans('forum::threads.locked') }}</span>
+                <span class="badge rounded-pill bg-warning">{{ trans('forum::threads.locked') }}</span>
             @endif
             @if ($thread->userReadStatus !== null && ! $thread->trashed())
-                <span class="badge badge-pill badge-success">{{ trans($thread->userReadStatus) }}</span>
+                <span class="badge rounded-pill bg-success">{{ trans($thread->userReadStatus) }}</span>
             @endif
             @if ($thread->trashed())
-                <span class="badge badge-pill badge-danger">{{ trans('forum::general.deleted') }}</span>
+                <span class="badge rounded-pill bg-danger">{{ trans('forum::general.deleted') }}</span>
             @endif
-            <span class="badge badge-pill badge-primary" @if (isset($category))style="background: {{ $category->color }};"@endif>
+            <span class="badge rounded-pill bg-primary" @if (isset($category))style="background: {{ $category->color }};"@endif>
                 {{ trans('forum::general.replies') }}: 
                 {{ $thread->reply_count }}
             </span>

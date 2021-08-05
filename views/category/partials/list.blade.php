@@ -9,11 +9,11 @@
             </div>
             <div class="col-sm-2 text-md-end">
                 @if ($category->accepts_threads)
-                    <span class="badge badge-pill badge-primary" style="background: {{ $category->color }};">
+                    <span class="badge rounded-pill bg-primary" style="background: {{ $category->color }};">
                         {{ trans_choice('forum::threads.thread', 2) }}: {{ $category->thread_count }}
                     </span>
                     <br>
-                    <span class="badge badge-pill badge-primary" style="background: {{ $category->color }};">
+                    <span class="badge rounded-pill bg-primary" style="background: {{ $category->color }};">
                         {{ trans_choice('forum::posts.post', 2) }}: {{ $category->post_count }}
                     </span>
                 @endif
@@ -47,11 +47,11 @@
                             <div class="text-muted">{{ $subcategory->description }}</div>
                         </div>
                         <div class="col-sm-2 text-md-end">
-                            <span class="badge badge-pill badge-primary" style="background: {{ $subcategory->color }};">
+                            <span class="badge rounded-pill bg-primary" style="background: {{ $subcategory->color }};">
                                 {{ trans_choice('forum::threads.thread', 2) }}: {{ $subcategory->thread_count }}
                             </span>
                             <br>
-                            <span class="badge badge-pill badge-primary" style="background: {{ $subcategory->color }};">
+                            <span class="badge rounded-pill bg-primary" style="background: {{ $subcategory->color }};">
                                 {{ trans_choice('forum::posts.post', 2) }}: {{ $subcategory->post_count }}
                             </span>
                         </div>

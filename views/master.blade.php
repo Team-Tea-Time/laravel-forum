@@ -117,7 +117,7 @@
 
     .timestamp
     {
-        border-bottom: 1px dotted var(--gray);
+        border-bottom: 1px dotted var(--bs-gray);
         cursor: help;
     }
 
@@ -162,7 +162,7 @@
 
     .sortable-chosen
     {
-        background: var(--light);
+        background: var(--bs-light);
     }
 
     @media (max-width: 575.98px)

@@ -32,7 +32,7 @@
                 {!! Forum::render($post->content) !!}
                 <br>
             @endcan
-            <span class="badge badge-pill badge-danger">{{ trans('forum::general.deleted') }}</span>
+            <span class="badge rounded-pill bg-danger">{{ trans('forum::general.deleted') }}</span>
         @else
             {!! Forum::render($post->content) !!}
         @endif
