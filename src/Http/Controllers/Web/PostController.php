@@ -31,7 +31,7 @@ class PostController extends BaseController
             UserViewingPost::dispatch($request->user(), $post);
         }
 
-        return ViewFactory::make('forum::post.show', compact('category', 'thread', 'post'));
+        return ViewFactory::make('forum::post.show', compact('thread', 'post'));
     }
 
     public function create(Request $request, Thread $thread): View
