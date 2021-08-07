@@ -22,9 +22,9 @@
 
     <!-- Vue (https://github.com/vuejs/vue) -->
     @if (config('app.debug'))
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     @else
-        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     @endif
 
     <!-- Axios (https://github.com/axios/axios) -->
@@ -56,7 +56,8 @@
         white-space: nowrap;
     }
 
-    a {
+    a
+    {
         text-decoration: none;
     }
 
@@ -178,10 +179,10 @@
     <nav class="v-navbar navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ url(config('forum.web.router.prefix')) }}">Laravel Forum</a>
-            <button class="navbar-toggler" type="button" @click="isExpanded = !isExpanded">
+            <button class="navbar-toggler" type="button" :class="{ collapsed: isCollapsed }" @click="isCollapsed = ! isCollapsed">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" :class="{ show: isExpanded }">
+            <div class="collapse navbar-collapse" :class="{ show: !isCollapsed }">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url(config('forum.web.router.prefix')) }}">{{ trans('forum::general.index') }}</a>
@@ -203,10 +204,10 @@
                 <ul class="navbar-nav">
                     @if (Auth::check())
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" @click="isUserDropdownOpen = !isUserDropdownOpen">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" @click="isUserDropdownCollapsed = ! isUserDropdownCollapsed">
                                 {{ $username }}
                             </a>
-                            <div class="dropdown-menu" :class="{ show: isUserDropdownOpen }" aria-labelledby="navbarDropdownMenuLink">
+                            <div class="dropdown-menu" :class="{ show: ! isUserDropdownCollapsed }" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Log out
                                 </a>
@@ -242,14 +243,15 @@
         el: '.v-navbar',
         name: 'Navbar',
         data: {
-            isExpanded: false,
-            isUserDropdownOpen: false
+            isCollapsed: true,
+            isUserDropdownCollapsed: true
         },
         methods: {
             onWindowClick (event) {
-                if (event.target.classList.contains('dropdown-toggle')) return;
-                if (this.isExpanded) this.isExpanded = false;
-                if (this.isUserDropdownOpen) this.isUserDropdownOpen = false;
+                const ignore = ['navbar-toggler', 'navbar-toggler-icon', 'dropdown-toggle'];
+                if (ignore.some(className => event.target.classList.contains(className))) return;
+                if (! this.isCollapsed) this.isCollapsed = true;
+                if (! this.isUserDropdownCollapsed) this.isUserDropdownCollapsed = true;
             }
         },
         created: function () {
