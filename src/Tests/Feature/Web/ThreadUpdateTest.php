@@ -3,7 +3,6 @@
 namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Orchestra\Testbench\Factories\UserFactory;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Database\Factories\PostFactory;
@@ -14,8 +13,6 @@ use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class ThreadUpdateTest extends FeatureTestCase
 {
-    use WithoutMiddleware;
-
     private const ROUTE_LOCK = 'thread.lock';
     private const ROUTE_UNLOCK = 'thread.unlock';
     private const ROUTE_PIN = 'thread.pin';
