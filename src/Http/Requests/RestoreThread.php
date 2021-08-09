@@ -12,6 +12,7 @@ class RestoreThread extends FormRequest implements FulfillableRequest
     public function authorize(): bool
     {
         $thread = $this->route('thread');
+
         return $this->user()->can('restoreThreads', $thread->category) && $this->user()->can('restore', $thread);
     }
 

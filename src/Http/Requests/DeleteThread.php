@@ -15,6 +15,7 @@ class DeleteThread extends FormRequest implements FulfillableRequest
     public function authorize(): bool
     {
         $thread = $this->route('thread');
+
         return $this->user()->can('deleteThreads', $thread->category) && $this->user()->can('delete', $thread);
     }
 
