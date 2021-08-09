@@ -12,8 +12,7 @@ class RestorePost extends FormRequest implements FulfillableRequest
     public function authorize(): bool
     {
         $post = $this->route('post');
-
-        return $this->user()->can('restore', $post);
+        return $this->user()->can('restorePosts', $post->thread) && $this->user()->can('restore', $post);
     }
 
     public function rules(): array

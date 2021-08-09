@@ -15,8 +15,7 @@ class DeletePost extends FormRequest implements FulfillableRequest
     public function authorize(): bool
     {
         $post = $this->route('post');
-
-        return $post->sequence != 1 && $this->user()->can('delete', $post);
+        return $post->sequence != 1 && $this->user()->can('deletePosts', $post->thread) && $this->user()->can('delete', $post);
     }
 
     public function rules(): array

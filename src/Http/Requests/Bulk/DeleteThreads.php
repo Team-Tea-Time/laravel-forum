@@ -28,7 +28,10 @@ class DeleteThreads extends FormRequest implements FulfillableRequest
         // stdClass in order for the gate to infer the policy to use.
         $threads = Thread::whereIn('id', $this->validated()['threads'])->with('category')->get();
         foreach ($threads as $thread) {
-            if (! ($this->user()->can('view', $thread->category) || $this->user()->can('view', $thread) || $this->user()->can('delete', $thread))) {
+            $canView = $this->user()->can('view', $thread->category) && $this->user()->can('view', $thread);
+            $canDelete = $this->user()->can('deleteThreads', $thread->category) && $this->user()->can('delete', $thread);
+
+            if (! ($canView && $canDelete)) {
                 return false;
             }
         }

@@ -13,13 +13,13 @@
 
     <div class="v-category-show">
         @if ($category->accepts_threads)
-            @can('createThreads', $category)
+            @can ('createThreads', $category)
                 <a href="{{ Forum::route('thread.create', $category) }}" class="btn btn-primary float-end">{{ trans('forum::threads.new_thread') }}</a>
             @endcan
         @endif
 
         <div class="btn-group" role="group">
-            @can('manageCategories')
+            @can ('manageCategories')
                 <button type="button" class="btn btn-secondary" data-open-modal="edit-category">
                     {{ trans('forum::general.edit') }}
                 </button>
@@ -36,7 +36,7 @@
             @if (! $threads->isEmpty())
                 {{ $threads->links() }}
 
-                @can('manageThreads', $category)
+                @can ('manageThreads', $category)
                     <form :action="actions[selectedAction]" method="POST">
                         @csrf
                         <input type="hidden" name="_method" :value="actionMethods[selectedAction]" />
@@ -57,7 +57,7 @@
                     @endforeach
                 </div>
 
-                @can('manageThreads', $category)
+                @can ('manageThreads', $category)
                         <div class="fixed-bottom-right pb-xs-0 pr-xs-0 pb-sm-3 pr-sm-3" style="z-index: 1000;">
                             <transition name="fade">
                                 <div class="card text-white bg-secondary shadow-sm" v-if="selectedThreads.length">
@@ -117,7 +117,7 @@
                 <div class="card my-3">
                     <div class="card-body">
                         {{ trans('forum::threads.none_found') }}
-                        @can('createThreads', $category)
+                        @can ('createThreads', $category)
                             <br>
                             <a href="{{ Forum::route('thread.create', $category) }}">{{ trans('forum::threads.post_the_first') }}</a>
                         @endcan
@@ -131,7 +131,7 @@
                 </div>
                 <div class="col col-xs-4 text-end">
                     @if ($category->accepts_threads)
-                        @can('createThreads', $category)
+                        @can ('createThreads', $category)
                             <a href="{{ Forum::route('thread.create', $category) }}" class="btn btn-primary">{{ trans('forum::threads.new_thread') }}</a>
                         @endcan
                     @endif
@@ -152,7 +152,7 @@
         @endcan
     @endif
 
-    @can('manageCategories')
+    @can ('manageCategories')
         @include ('forum::category.modals.edit')
         @include ('forum::category.modals.delete')
     @endcan

@@ -22,12 +22,12 @@ class CategoryPolicy
 
     public function deleteThreads($user, Category $category): bool
     {
-        return false;
+        return true;
     }
 
     public function restoreThreads($user, Category $category): bool
     {
-        return false;
+        return true;
     }
 
     public function enableThreads($user, Category $category): bool
@@ -66,11 +66,6 @@ class CategoryPolicy
     }
 
     public function delete($user, Category $category): bool
-    {
-        return false;
-    }
-
-    public function restore($user, Category $category): bool
     {
         return false;
     }

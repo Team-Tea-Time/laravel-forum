@@ -34,7 +34,7 @@ class DeletePosts extends FormRequest implements FulfillableRequest
 
         foreach ($posts as $post) {
             $canView = $this->user()->can('view', $post->thread->category) && $this->user()->can('view', $post->thread);
-            $canDelete = $this->user()->can('delete', $post);
+            $canDelete = $this->user()->can('deletePosts', $post->thread) && $this->user()->can('delete', $post);
 
             if (! ($canView && $canDelete)) {
                 return false;
