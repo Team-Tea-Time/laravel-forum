@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Gate;
 use Orchestra\Testbench\Factories\UserFactory;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Database\Factories\PostFactory;
@@ -38,6 +39,9 @@ class ThreadUpdateTest extends FeatureTestCase
         $this->user = $userFactory->createOne();
         $this->thread = $threadFactory->createOne(['author_id' => $this->user->getKey()]);
         $postFactory->createOne(['thread_id' => $this->thread->getKey()]);
+
+        // Make Gate fully permissive
+        Gate::before(fn () => true);
     }
 
     /** @test */
