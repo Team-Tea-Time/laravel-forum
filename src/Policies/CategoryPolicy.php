@@ -8,7 +8,7 @@ class CategoryPolicy
 {
     public function createThreads($user, Category $category): bool
     {
-        return $this->view($user, $category);
+        return true;
     }
 
     public function manageThreads($user, Category $category): bool
@@ -22,42 +22,42 @@ class CategoryPolicy
 
     public function deleteThreads($user, Category $category): bool
     {
-        return $this->view($user, $category);
+        return false;
     }
 
     public function restoreThreads($user, Category $category): bool
     {
-        return $this->view($user, $category);
+        return false;
     }
 
     public function enableThreads($user, Category $category): bool
     {
-        return $this->view($user, $category);
+        return false;
     }
 
     public function moveThreadsFrom($user, Category $category): bool
     {
-        return $this->view($user, $category);
+        return false;
     }
 
     public function moveThreadsTo($user, Category $category): bool
     {
-        return $this->view($user, $category);
+        return false;
     }
 
     public function lockThreads($user, Category $category): bool
     {
-        return $this->view($user, $category);
+        return false;
     }
 
     public function pinThreads($user, Category $category): bool
     {
-        return $this->view($user, $category);
+        return false;
     }
 
     public function markThreadsAsRead($user, Category $category): bool
     {
-        return $this->view($user, $category);
+        return true;
     }
 
     public function view($user, Category $category): bool
@@ -67,11 +67,11 @@ class CategoryPolicy
 
     public function delete($user, Category $category): bool
     {
-        return $this->view($user, $category);
+        return false;
     }
 
     public function restore($user, Category $category): bool
     {
-        return $this->view($user, $category);
+        return false;
     }
 }
