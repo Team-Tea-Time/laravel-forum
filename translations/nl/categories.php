@@ -4,7 +4,7 @@ return [
 
     'actions' => 'Categorie acties',
     'category' => 'Categorie|Categorieën',
-    'confirm_nonempty_delete' => 'Yes, I want to permanently delete this category and everything inside it',
+    'confirm_nonempty_delete' => 'Ik bevestig dat ik hiermee permanent de categorie en alle gegevens die hier onder hangen verwijder',
     'create' => 'Categorie maken',
     'created' => 'Categorie aangemaakt',
     'deleted' => 'Categorie verwijderd|Categorieën verwijderd',
@@ -13,10 +13,10 @@ return [
     'make_private' => 'Maak privé',
     'make_public' => 'Maak publiekelijk',
     'mark_read' => 'Markeer de onderwerpen in deze categorie als gelezen',
-    'marked_read' => 'Nieuw/geüpdate onderwerpen in :category zijn als gelezen gemarkeerd',
+    'marked_read' => 'Nieuwe/bijgewerkte onderwerpen in :category zijn als gelezen gemarkeerd',
     'restored' => 'Categorie hersteld|Categorieën hersteld',
     'subcategories' => 'Subcategorieën',
     'threads_disabled' => 'Aanmaken van onderwerpen in deze categorie is uitgeschakeld',
-    'updated' => 'Categorie geüpdate|Categorieën geüpdate',
+    'updated' => 'Categorie bijgewerkt|Categorieën bijgewerkt',
 
 ];

@@ -3,17 +3,17 @@
 return [
 
     'actions' => 'Reactie acties',
-    'created' => 'Reactie created',
-    'delete' => 'Delete post|Delete posts',
+    'created' => 'Reactie aangemaakt',
+    'delete' => 'Verwijder reactie|Verwijder reacties',
     'deleted' => 'Reactie verwijderd|Reacties verwijderd',
     'edit' => 'Wijzig reactie',
     'last' => 'Laatste reactie',
     'perma_deleted' => 'Reactie permanent verwijderd|Reacties permanent verwijderd',
     'post' => 'Reactie|Reacties',
-    'restore' => 'Restore post|Restore posts',
+    'restore' => 'Reactie herstellen|Reacties herstellen',
     'restored' => 'Reactie hersteld|Reacties hersteld',
-    'select_all' => 'Select all posts',
-    'updated' => 'Reactie geüpdate|Reacties geüpdate',
+    'select_all' => 'Selecteer alle reacties',
+    'updated' => 'Reactie bijgewerkt|Reacties bijgewerkt',
     'view' => 'Bekijk reactie',
     'your_post' => 'Jouw reactie',
 
