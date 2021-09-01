@@ -22,7 +22,7 @@
                 @endif
 
                 @can ('manageThreads', $category)
-                    <div class="btn-group" role="group">
+                    <div class="btn-group mb-2" role="group">
                         @if (! $thread->trashed())
                             @can ('lockThreads', $category)
                                 @if ($thread->locked)
