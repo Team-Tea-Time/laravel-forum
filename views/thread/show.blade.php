@@ -8,14 +8,14 @@
             <div>
                 @if (Gate::allows('delete', $thread) || Gate::allows('restore', $thread))
                     @if ($thread->trashed() && Gate::allows('restore', $thread))
-                        <a href="#" class="btn btn-danger mr-3" data-open-modal="perma-delete-thread">
+                        <a href="#" class="btn btn-danger mr-3 mb-2" data-open-modal="perma-delete-thread">
                             <i data-feather="trash"></i> {{ trans('forum::general.perma_delete') }}
                         </a>
-                        <a href="#" class="btn btn-secondary" data-open-modal="restore-thread">
+                        <a href="#" class="btn btn-secondary mb-2" data-open-modal="restore-thread">
                             <i data-feather="refresh-cw"></i> {{ trans('forum::general.restore') }}
                         </a>
                     @elseif (Gate::allows('delete', $thread))
-                        <a href="#" class="btn btn-danger mr-3" data-open-modal="delete-thread">
+                        <a href="#" class="btn btn-danger mr-3 mb-2" data-open-modal="delete-thread">
                             <i data-feather="trash"></i> {{ trans('forum::general.delete') }}
                         </a>
                     @endif
@@ -87,7 +87,7 @@
             <div class="col col-xs-8">
                 {{ $posts->links() }}
             </div>
-            <div class="col col-xs-4 text-end">
+            <div class="col-md-auto text-end">
                 @if (! $thread->trashed())
                     @can ('reply', $thread)
                         <div class="btn-group" role="group">
@@ -326,7 +326,7 @@
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="category-id">{{ trans_choice('forum::categories.category', 1) }}</label>
                         </div>
-                        <select name="category_id" id="category-id" class="custom-select">
+                        <select name="category_id" id="category-id" class="form-select">
                             @include ('forum::category.partials.options', ['hide' => $thread->category])
                         </select>
                     </div>
