@@ -29,7 +29,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "TeamTeaTime\\Forum\\Database\\Factories\\": "database/factories"
+            "TeamTeaTime\\Forum\\Database\\Factories\\": "database/factories",
+            "TeamTeaTime\\Forum\\Database\\Seeds\\": "database/seeds"
         }
     },
     "extra": {

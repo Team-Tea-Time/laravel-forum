@@ -75,5 +75,5 @@ docker-compose run --rm phpunit
 The DB can be seeded with sample categories, threads, posts, and a user via `ForumSeeder`:
 
 ```bash
-docker-compose exec php-fpm php artisan db:seed --class=TeamTeaTime\Forum\Database\Seeds\ForumSeeder
+docker-compose exec php-fpm php artisan db:seed --class=TeamTeaTime\\Forum\\Database\\Seeds\\ForumSeeder
 ```
