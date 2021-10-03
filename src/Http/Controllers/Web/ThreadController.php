@@ -102,7 +102,14 @@ class ThreadController extends BaseController
             ->orderBy('created_at', 'asc')
             ->paginate();
 
-        return ViewFactory::make('forum::thread.show', compact('categories', 'category', 'thread', 'posts'));
+        $selectablePosts = [];
+        foreach ($posts as $post) {
+            if ($request->user()->can('delete', $post) || $request->user()->can('restore', $post)) {
+                $selectablePosts[] = $post->id;
+            }
+        }
+
+        return ViewFactory::make('forum::thread.show', compact('categories', 'category', 'thread', 'posts', 'selectablePosts'));
     }
 
     public function create(Request $request, Category $category): View

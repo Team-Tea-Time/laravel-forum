@@ -77,7 +77,7 @@
 
         <hr>
 
-        @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)))
+        @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)) && count($selectablePosts) > 0)
             <form :action="postActions[selectedPostAction]" method="POST">
                 @csrf
                 <input type="hidden" name="_method" :value="postActionMethods[selectedPostAction]" />
@@ -103,7 +103,7 @@
             </div>
         </div>
 
-        @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)))
+        @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)) && count($selectablePosts) > 0)
             <div class="text-end pb-1">
                 <div class="form-check">
                     <label for="selectAllPosts">
@@ -118,7 +118,7 @@
             @include ('forum::post.partials.list', compact('post'))
         @endforeach
 
-        @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)))
+        @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)) && count($selectablePosts) > 0)
                 <div class="fixed-bottom-right pb-xs-0 pr-xs-0 pb-sm-3 pr-sm-3">
                     <transition name="fade">
                         <div class="card text-white bg-secondary shadow-sm" v-if="selectedPosts.length">
@@ -352,6 +352,7 @@
         name: 'Thread',
         data: {
             posts: @json($posts),
+            selectablePosts: @json($selectablePosts),
             postActions: {
                 'delete': "{{ Forum::route('bulk.post.delete') }}",
                 'restore': "{{ Forum::route('bulk.post.restore') }}"
@@ -364,12 +365,6 @@
             selectedPosts: [],
             selectedThreadAction: null
         },
-        computed: {
-            postIds ()
-            {
-                return this.posts.data.map(post => post.id);
-            }
-        },
         created ()
         {
             this.posts.data = this.posts.data.filter(post => post.sequence != 1);
@@ -377,7 +372,7 @@
         methods: {
             toggleAll ()
             {
-                this.selectedPosts = (this.selectedPosts.length < this.posts.data.length) ? this.postIds : [];
+                this.selectedPosts = (this.selectedPosts.length < this.selectablePosts.length) ? this.selectablePosts : [];
             },
             submitThread (event)
             {
