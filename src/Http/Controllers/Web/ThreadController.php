@@ -103,9 +103,12 @@ class ThreadController extends BaseController
             ->paginate();
 
         $selectablePosts = [];
-        foreach ($posts as $post) {
-            if ($request->user()->can('delete', $post) || $request->user()->can('restore', $post)) {
-                $selectablePosts[] = $post->id;
+
+        if ($request->user()) {
+            foreach ($posts as $post) {
+                if ($request->user()->can('delete', $post) || $request->user()->can('restore', $post)) {
+                    $selectablePosts[] = $post->id;
+                }
             }
         }
 
