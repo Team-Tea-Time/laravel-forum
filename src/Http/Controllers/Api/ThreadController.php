@@ -19,6 +19,7 @@ use TeamTeaTime\Forum\Http\Requests\UnpinThread;
 use TeamTeaTime\Forum\Http\Resources\ThreadResource;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
+use TeamTeaTime\Forum\Support\CategoryPrivacy;
 
 class ThreadController extends BaseController
 {
@@ -26,12 +27,12 @@ class ThreadController extends BaseController
     {
         $threads = Thread::recent()
             ->get()
-            ->filter(function ($thread) use ($request, $unreadOnly) {
-                return (! $unreadOnly || $thread->userReadStatus !== null)
+            ->filter(function ($thread) use ($request, $unreadOnly, $accessibleCategoryIds) {
+                return $thread->category->isAccessibleTo($request->user())
+                    && (! $unreadOnly || $thread->userReadStatus !== null)
                     && (
                         ! $thread->category->is_private
                         || $request->user()
-                        && $request->user()->can('view', $thread->category)
                         && $request->user()->can('view', $thread)
                     );
             });
@@ -51,10 +52,10 @@ class ThreadController extends BaseController
         return new Response(['success' => true]);
     }
 
-    public function indexByCategory(Category $category, Request $request): AnonymousResourceCollection
+    public function indexByCategory(Request $request, Category $category): AnonymousResourceCollection
     {
-        if ($category->is_private) {
-            $this->authorize('view', $category);
+        if (! $category->isAccessibleTo($request->user())) {
+            return $this->notFoundResponse();
         }
 
         $query = Thread::orderBy('created_at')->where('category_id', $category->id);
@@ -95,10 +96,13 @@ class ThreadController extends BaseController
         return new ThreadResource($thread);
     }
 
-    public function fetch(Thread $thread): ThreadResource
+    public function fetch(Request $request, Thread $thread): ThreadResource
     {
+        if (! $thread->category->isAccessibleTo($request->user())) {
+            return $this->notFoundResponse();
+        }
+
         if ($thread->category->is_private) {
-            $this->authorize('view', $thread->category);
             $this->authorize('view', $thread);
         }
 

@@ -10,31 +10,21 @@ use TeamTeaTime\Forum\Http\Requests\DeleteCategory;
 use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
 use TeamTeaTime\Forum\Http\Resources\CategoryResource;
 use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Support\CategoryPrivacy;
 
 class CategoryController extends BaseController
 {
     public function index(Request $request): AnonymousResourceCollection
     {
-        $query = Category::defaultOrder();
-        $parentId = $request->query('parent_id');
-
-        if ($parentId !== null) {
-            $query = $parentId == 0
-                ? $query->whereNull('parent_id')
-                : $query->where('parent_id', $request->query('parent_id'));
-        }
-
-        $categories = $query->get()->filter(function ($category) use ($request) {
-            return ! $category->is_private || $request->user() && $request->user()->can('view', $category);
-        });
+        $categories = CategoryPrivacy::getFilteredFor($request->user, $request->query('parent_id'))->keys();
 
         return CategoryResource::collection($categories);
     }
 
-    public function fetch(Category $category): CategoryResource
+    public function fetch(Request $request, Category $category): CategoryResource
     {
-        if ($category->is_private) {
-            $this->authorize('view', $category);
+        if (! $category->isAccessibleTo($request->user())) {
+            return $this->notFoundResponse();
         }
 
         return new CategoryResource($category);

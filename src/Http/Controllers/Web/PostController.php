@@ -21,10 +21,12 @@ class PostController extends BaseController
 {
     public function show(Request $request, Thread $thread, string $postSlug, Post $post): View
     {
+        if (! $thread->category->isAccessibleTo($request->user())) {
+            abort(404);
+        }
+
         if ($thread->category->is_private) {
-            $this->authorize('view', $thread->category);
             $this->authorize('view', $thread);
-            $this->authorize('view', $post);
         }
 
         if ($request->user() !== null) {

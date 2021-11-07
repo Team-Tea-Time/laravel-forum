@@ -8,6 +8,7 @@ use TeamTeaTime\Forum\Events\UserSearchedPosts;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Support\CategoryPrivacy;
 
 class SearchPosts extends FormRequest implements FulfillableRequest
 {
@@ -26,7 +27,7 @@ class SearchPosts extends FormRequest implements FulfillableRequest
     {
         $category = $this->getCategory();
 
-        return $category == null || ! $category->is_private || $this->user()->can('view', $category);
+        return $category == null || ! $category->is_private || $category->isAccessibleTo($this->user());
     }
 
     public function fulfill()

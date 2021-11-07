@@ -8,6 +8,7 @@ use TeamTeaTime\Forum\Events\UserMarkedThreadsAsRead;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Support\CategoryPrivacy;
 
 class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
 {
@@ -26,7 +27,7 @@ class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
     {
         $category = $this->category();
 
-        if ($category !== null && ! $this->user()->can('view', $category)) {
+        if ($category !== null && ! $category->isAccessibleTo($this->user())) {
             return false;
         }
 

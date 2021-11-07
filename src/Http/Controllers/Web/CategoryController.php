@@ -12,19 +12,14 @@ use TeamTeaTime\Forum\Http\Requests\CreateCategory;
 use TeamTeaTime\Forum\Http\Requests\DeleteCategory;
 use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
 use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Support\CategoryPrivacy;
 use TeamTeaTime\Forum\Support\Web\Forum;
 
 class CategoryController extends BaseController
 {
     public function index(Request $request): View
     {
-        $categories = Category::defaultOrder()
-            ->with('newestThread', 'latestActiveThread', 'newestThread.lastPost', 'latestActiveThread.lastPost')
-            ->get()
-            ->filter(function ($category) use ($request) {
-                return ! $category->is_private || $request->user() && $request->user()->can('view', $category);
-            })
-            ->toTree();
+        $categories = CategoryPrivacy::getFilteredTreeFor($request->user());
 
         if ($request->user() !== null) {
             UserViewingIndex::dispatch($request->user());
@@ -35,8 +30,8 @@ class CategoryController extends BaseController
 
     public function show(Request $request, Category $category): View
     {
-        if ($category->is_private) {
-            $this->authorize('view', $category);
+        if (! $category->isAccessibleTo($request->user())) {
+            abort(404);
         }
 
         if ($request->user() !== null) {
