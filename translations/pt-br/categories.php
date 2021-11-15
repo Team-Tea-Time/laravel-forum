@@ -2,6 +2,7 @@
 
 return [
 
+    'access_controlled_by_private_ancestor' => 'The ancestor category :category is set as private and controls access to this category.',
     'actions' => 'Ações de categoria',
     'category' => 'Categoria|Categorias',
     'confirm_nonempty_delete' => 'Yes, I want to permanently delete this category and everything inside it',

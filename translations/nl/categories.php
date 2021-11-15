@@ -2,6 +2,7 @@
 
 return [
 
+    'access_controlled_by_private_ancestor' => 'The ancestor category :category is set as private and controls access to this category.',
     'actions' => 'Categorie acties',
     'category' => 'Categorie|Categorieën',
     'confirm_nonempty_delete' => 'Ik bevestig dat ik hiermee permanent de categorie en alle gegevens die hier onder hangen verwijder',

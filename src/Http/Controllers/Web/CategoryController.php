@@ -38,6 +38,13 @@ class CategoryController extends BaseController
             UserViewingCategory::dispatch($request->user(), $category);
         }
 
+        $privateAncestor = $request->user() && $request->user()->can('manageCategories')
+            ? Category::defaultOrder()
+                ->where('is_private', true)
+                ->ancestorsOf($category->id)
+                ->first()
+            : [];
+
         $categories = $request->user() && $request->user()->can('moveCategories')
             ? Category::defaultOrder()
                 ->with('children')
@@ -55,7 +62,7 @@ class CategoryController extends BaseController
             ->orderBy('updated_at', 'desc')
             ->paginate();
 
-        return ViewFactory::make('forum::category.show', compact('categories', 'category', 'threads'));
+        return ViewFactory::make('forum::category.show', compact('privateAncestor', 'categories', 'category', 'threads'));
     }
 
     public function store(CreateCategory $request): RedirectResponse
