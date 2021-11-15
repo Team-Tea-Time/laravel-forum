@@ -19,7 +19,6 @@ use TeamTeaTime\Forum\Http\Requests\UnpinThread;
 use TeamTeaTime\Forum\Http\Resources\ThreadResource;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\CategoryPrivacy;
 
 class ThreadController extends BaseController
 {
@@ -27,7 +26,7 @@ class ThreadController extends BaseController
     {
         $threads = Thread::recent()
             ->get()
-            ->filter(function ($thread) use ($request, $unreadOnly, $accessibleCategoryIds) {
+            ->filter(function ($thread) use ($request, $unreadOnly) {
                 return $thread->category->isAccessibleTo($request->user())
                     && (! $unreadOnly || $thread->userReadStatus !== null)
                     && (

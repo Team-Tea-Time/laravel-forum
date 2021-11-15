@@ -8,7 +8,6 @@ use TeamTeaTime\Forum\Events\UserMarkedThreadsAsRead;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Support\CategoryPrivacy;
 
 class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
 {

@@ -3,7 +3,6 @@
 namespace TeamTeaTime\Forum\Support;
 
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Http\Request;
 use Kalnoy\Nestedset\Collection as NestedCollection;
 use TeamTeaTime\Forum\Models\Category;
 
@@ -26,7 +25,7 @@ class CategoryPrivacy
     {
         return static::getFilteredFor($user)->toTree();
     }
-    
+
     public static function getFilteredAncestorsFor(?User $user, int $categoryId, array $select = self::DEFAULT_SELECT, array $with = self::DEFAULT_WITH)
     {
         $categories = static::getQuery($select, $with)
