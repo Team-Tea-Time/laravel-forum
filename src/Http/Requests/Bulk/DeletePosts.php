@@ -9,6 +9,7 @@ use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\Support\CategoryPrivacy;
 
 class DeletePosts extends FormRequest implements FulfillableRequest
 {
@@ -32,8 +33,10 @@ class DeletePosts extends FormRequest implements FulfillableRequest
 
         $posts = $query->with(['thread', 'thread.category'])->whereIn('id', $this->validated()['posts']);
 
+        $accessibleCategoryIds = CategoryPrivacy::getFilteredFor($this->user())->keys();
+
         foreach ($posts as $post) {
-            $canView = $this->user()->can('view', $post->thread->category) && $this->user()->can('view', $post->thread);
+            $canView = $accessibleCategoryIds->contains($post->thread->category_id) && $this->user()->can('view', $post->thread);
             $canDelete = $this->user()->can('deletePosts', $post->thread) && $this->user()->can('delete', $post);
 
             if (! ($canView && $canDelete)) {

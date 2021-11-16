@@ -26,7 +26,7 @@ class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
     {
         $category = $this->category();
 
-        if ($category !== null && ! $this->user()->can('view', $category)) {
+        if ($category !== null && ! $category->isAccessibleTo($this->user())) {
             return false;
         }
 

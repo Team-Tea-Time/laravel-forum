@@ -17,6 +17,11 @@ abstract class BaseController
         ], 400);
     }
 
+    protected function notFoundResponse(): Response
+    {
+        return new Response(null, 404);
+    }
+
     protected function bulkActionResponse(int $rowsAffected, string $transKey): Response
     {
         return new Response([

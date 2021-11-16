@@ -22,6 +22,7 @@ use TeamTeaTime\Forum\Http\Requests\UnlockThread;
 use TeamTeaTime\Forum\Http\Requests\UnpinThread;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
+use TeamTeaTime\Forum\Support\CategoryPrivacy;
 use TeamTeaTime\Forum\Support\Web\Forum;
 
 class ThreadController extends BaseController
@@ -34,8 +35,10 @@ class ThreadController extends BaseController
             $threads = $threads->where('category_id', $request->input('category_id'));
         }
 
-        $threads = $threads->get()->filter(function ($thread) use ($request) {
-            return ! $thread->category->is_private || $request->user() && $request->user()->can('view', $thread->category) && $request->user()->can('view', $thread);
+        $accessibleCategoryIds = CategoryPrivacy::getFilteredFor($request->user())->keys();
+
+        $threads = $threads->get()->filter(function ($thread) use ($request, $accessibleCategoryIds) {
+            return $accessibleCategoryIds->contains($thread->category_id) && (! $thread->category->is_private || $request->user() && $request->user()->can('view', $thread));
         });
 
         if ($request->user() !== null) {
@@ -49,9 +52,11 @@ class ThreadController extends BaseController
     {
         $threads = Thread::recent();
 
-        $threads = $threads->get()->filter(function ($thread) use ($request) {
+        $accessibleCategoryIds = CategoryPrivacy::getFilteredFor($request->user())->keys();
+
+        $threads = $threads->get()->filter(function ($thread) use ($request, $accessibleCategoryIds) {
             return $thread->userReadStatus !== null
-                && (! $thread->category->is_private || $request->user() && $request->user()->can('view', $thread->category) && $request->user()->can('view', $thread));
+                && (! $thread->category->is_private || $request->user() && $accessibleCategoryIds->contains($thread->category_id) && $request->user()->can('view', $thread));
         });
 
         if ($request->user() !== null) {
@@ -78,8 +83,11 @@ class ThreadController extends BaseController
 
     public function show(Request $request, Thread $thread): View
     {
+        if (! $thread->category->isAccessibleTo($request->user())) {
+            abort(404);
+        }
+
         if ($thread->category->is_private) {
-            $this->authorize('view', $thread->category);
             $this->authorize('view', $thread);
         }
 

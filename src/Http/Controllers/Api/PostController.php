@@ -16,10 +16,13 @@ use TeamTeaTime\Forum\Models\Thread;
 
 class PostController extends BaseController
 {
-    public function indexByThread(Thread $thread): AnonymousResourceCollection
+    public function indexByThread(Thread $thread, Request $request): AnonymousResourceCollection
     {
+        if (! $thread->category->isAccessibleTo($request->user())) {
+            return $this->notFoundResponse();
+        }
+
         if ($thread->category->is_private) {
-            $this->authorize('view', $thread->category);
             $this->authorize('view', $thread);
         }
 
@@ -38,11 +41,11 @@ class PostController extends BaseController
         $posts = Post::recent()
             ->get()
             ->filter(function (Post $post) use ($request, $unreadOnly) {
-                return (! $unreadOnly || $post->thread->reader === null || $post->updatedSince($post->thread->reader))
+                return $post->thread->category->isAccessibleTo($request->user())
+                    && (! $unreadOnly || $post->thread->reader === null || $post->updatedSince($post->thread->reader))
                     && (
                         ! $post->thread->category->is_private
                         || $request->user()
-                        && $request->user()->can('view', $post->thread->category)
                         && $request->user()->can('view', $post->thread)
                     );
             });
@@ -55,10 +58,13 @@ class PostController extends BaseController
         return $this->recent($request, true);
     }
 
-    public function fetch(Post $post): PostResource
+    public function fetch(Post $post, Request $request): PostResource
     {
+        if (! $post->thread->category->isAccessibleTo($request->user())) {
+            return $this->notFoundResponse();
+        }
+
         if ($post->thread->category->is_private) {
-            $this->authorize('view', $post->thread->category);
             $this->authorize('view', $post->thread);
         }
 

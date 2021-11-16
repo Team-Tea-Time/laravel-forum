@@ -26,7 +26,7 @@ class SearchPosts extends FormRequest implements FulfillableRequest
     {
         $category = $this->getCategory();
 
-        return $category == null || ! $category->is_private || $this->user()->can('view', $category);
+        return $category == null || ! $category->is_private || $category->isAccessibleTo($this->user());
     }
 
     public function fulfill()
