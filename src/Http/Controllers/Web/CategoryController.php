@@ -4,6 +4,7 @@ namespace TeamTeaTime\Forum\Http\Controllers\Web;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\Events\UserViewingCategory;
@@ -62,7 +63,29 @@ class CategoryController extends BaseController
             ->orderBy('updated_at', 'desc')
             ->paginate();
 
-        return ViewFactory::make('forum::category.show', compact('privateAncestor', 'categories', 'category', 'threads'));
+        $selectableThreadIds = [];
+        if ($request->user()) {
+            if (Gate::any(['moveThreadsFrom', 'lockThreads', 'pinThreads'], $category)) {
+                // There are no thread-specific abilities corresponding to these,
+                // so we can include all of the threads for this page
+                $selectableThreadIds = $threads->pluck('id')->toArray();
+            } else {
+                $canDeleteThreads = $request->user()->can('deleteThreads', $category);
+                $canRestoreThreads = $request->user()->can('restoreThreads', $category);
+
+                if ($canDeleteThreads || $canRestoreThreads) {
+                    foreach ($threads as $thread) {
+                        if (($canDeleteThreads && $request->user()->can('delete', $thread))
+                            || $canRestoreThreads && $request->user()->can('restore', $thread)
+                        ) {
+                            $selectableThreadIds[] = $thread->id;
+                        }
+                    }
+                }
+            }
+        }
+
+        return ViewFactory::make('forum::category.show', compact('privateAncestor', 'categories', 'category', 'threads', 'selectableThreadIds'));
     }
 
     public function store(CreateCategory $request): RedirectResponse

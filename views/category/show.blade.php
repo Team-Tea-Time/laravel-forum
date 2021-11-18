@@ -46,7 +46,7 @@
                                 <label for="selectAllThreads">
                                     {{ trans('forum::threads.select_all') }}
                                 </label>
-                                <input type="checkbox" value="" id="selectAllThreads" class="align-middle" @click="toggleAll" :checked="selectedThreads.length == threads.data.length">
+                                <input type="checkbox" value="" id="selectAllThreads" class="align-middle" @click="toggleAll" :checked="selectedThreads.length == selectableThreadIds.length">
                             </div>
                         </div>
                 @endcan
@@ -58,7 +58,7 @@
                 </div>
 
                 @can ('manageThreads', $category)
-                        <div class="fixed-bottom-right pb-xs-0 pr-xs-0 pb-sm-3 pr-sm-3" style="z-index: 1000;">
+                        <div class="fixed-bottom-right pb-xs-0 pr-xs-0 pb-sm-3 pr-sm-3 m-2" style="z-index: 1000;">
                             <transition name="fade">
                                 <div class="card text-white bg-secondary shadow-sm" v-if="selectedThreads.length">
                                     <div class="card-header text-center">
@@ -69,9 +69,11 @@
                                             <div class="input-group-prepend">
                                                 <label class="input-group-text" for="bulk-actions">{{ trans_choice('forum::general.actions', 1) }}</label>
                                             </div>
-                                            <select class="custom-select" id="bulk-actions" v-model="selectedAction">
+                                            <select class="form-select" id="bulk-actions" v-model="selectedAction">
                                                 @can ('deleteThreads', $category)
                                                     <option value="delete">{{ trans('forum::general.delete') }}</option>
+                                                @endcan
+                                                @can ('restoreThreads', $category)
                                                     <option value="restore">{{ trans('forum::general.restore') }}</option>
                                                 @endcan
                                                 @can ('moveThreadsFrom', $category)
@@ -90,7 +92,7 @@
 
                                         <div class="mb-3" v-if="selectedAction == 'move'">
                                             <label for="category-id">{{ trans_choice('forum::categories.category', 1) }}</label>
-                                            <select name="category_id" id="category-id" class="form-control">
+                                            <select name="category_id" id="category-id" class="form-select">
                                                 @include ('forum::category.partials.options', ['hide' => $category])
                                             </select>
                                         </div>
@@ -105,7 +107,7 @@
                                         @endif
 
                                         <div class="text-end">
-                                            <button type="submit" class="btn btn-primary" @click="submit">{{ trans('forum::general.proceed') }}</button>
+                                            <button type="submit" class="btn btn-primary" @click="submit" :disabled="selectedAction == null">{{ trans('forum::general.proceed') }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -142,7 +144,7 @@
 
     @if (! $threads->isEmpty())
         @can ('markThreadsAsRead')
-            <div class="text-center">
+            <div class="text-center mt-3">
                 <button class="btn btn-primary px-5" data-open-modal="mark-threads-as-read">
                     <i data-feather="book"></i> {{ trans('forum::general.mark_read') }}
                 </button>
@@ -185,7 +187,7 @@
         el: '.v-category-show',
         name: 'CategoryShow',
         data: {
-            threads: @json($threads),
+            selectableThreadIds: @json($selectableThreadIds),
             actions: {
                 'delete': "{{ Forum::route('bulk.thread.delete') }}",
                 'restore': "{{ Forum::route('bulk.thread.restore') }}",
@@ -202,21 +204,15 @@
                 'pin': 'POST',
                 'unpin': 'POST'
             },
-            selectedAction: 'delete',
+            selectedAction: null,
             selectedThreads: [],
             isEditModalOpen: false,
             isDeleteModalOpen: false
         },
-        computed: {
-            threadIds ()
-            {
-                return this.threads.data.map(thread => thread.id);
-            }
-        },
         methods: {
             toggleAll ()
             {
-                this.selectedThreads = (this.selectedThreads.length < this.threads.data.length) ? this.threadIds : [];
+                this.selectedThreads = (this.selectedThreads.length < this.selectableThreadIds.length) ? this.selectableThreadIds : [];
             },
             submit (event)
             {

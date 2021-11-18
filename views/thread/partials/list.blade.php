@@ -40,12 +40,10 @@
             </div>
         @endif
 
-        @if (isset($category))
-            @can ('manageThreads', $category)
-                <div class="col-sm" style="flex: 0;">
-                    <input type="checkbox" name="threads[]" :value="{{ $thread->id }}" v-model="selectedThreads">
-                </div>
-            @endcan
+        @if (isset($category) && isset($selectableThreadIds) && in_array($thread->id, $selectableThreadIds))
+            <div class="col-sm" style="flex: 0;">
+                <input type="checkbox" name="threads[]" :value="{{ $thread->id }}" v-model="selectedThreads">
+            </div>
         @endif
     </div>
 </div>
