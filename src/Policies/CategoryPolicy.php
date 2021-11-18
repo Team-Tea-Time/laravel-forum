@@ -15,9 +15,7 @@ class CategoryPolicy
     {
         return $this->deleteThreads($user, $category) ||
                $this->restoreThreads($user, $category) ||
-               $this->enableThreads($user, $category) ||
                $this->moveThreadsFrom($user, $category) ||
-               $this->moveThreadsTo($user, $category) ||
                $this->lockThreads($user, $category) ||
                $this->pinThreads($user, $category);
     }
