@@ -46,7 +46,7 @@
                                 <label for="selectAllThreads">
                                     {{ trans('forum::threads.select_all') }}
                                 </label>
-                                <input type="checkbox" value="" id="selectAllThreads" class="align-middle" @click="toggleAll" :checked="selectedThreads.length == threads.data.length">
+                                <input type="checkbox" value="" id="selectAllThreads" class="align-middle" @click="toggleAll" :checked="selectedThreads.length == selectableThreadIds.length">
                             </div>
                         </div>
                 @endcan
@@ -187,7 +187,6 @@
         el: '.v-category-show',
         name: 'CategoryShow',
         data: {
-            threads: @json($threads),
             selectableThreadIds: @json($selectableThreadIds),
             actions: {
                 'delete': "{{ Forum::route('bulk.thread.delete') }}",
