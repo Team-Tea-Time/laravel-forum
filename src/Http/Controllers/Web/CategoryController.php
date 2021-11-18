@@ -62,7 +62,7 @@ class CategoryController extends BaseController
             ->orderBy('pinned', 'desc')
             ->orderBy('updated_at', 'desc')
             ->paginate();
-        
+
         $selectableThreadIds = [];
         if ($request->user()) {
             if (Gate::any(['moveThreadsFrom', 'lockThreads', 'pinThreads'], $category)) {
@@ -73,7 +73,8 @@ class CategoryController extends BaseController
 
                 foreach ($threads as $thread) {
                     if (($canDeleteThreads && $request->user()->can('delete', $thread))
-                        || $canRestoreThreads && $request->user()->can('restore', $thread)) {
+                        || $canRestoreThreads && $request->user()->can('restore', $thread)
+                    ) {
                         $selectableThreadIds[] = $thread->id;
                     }
                 }
