@@ -73,11 +73,13 @@ class CategoryController extends BaseController
                 $canDeleteThreads = $request->user()->can('deleteThreads', $category);
                 $canRestoreThreads = $request->user()->can('restoreThreads', $category);
 
-                foreach ($threads as $thread) {
-                    if (($canDeleteThreads && $request->user()->can('delete', $thread))
-                        || $canRestoreThreads && $request->user()->can('restore', $thread)
-                    ) {
-                        $selectableThreadIds[] = $thread->id;
+                if ($canDeleteThreads || $canRestoreThreads) {
+                    foreach ($threads as $thread) {
+                        if (($canDeleteThreads && $request->user()->can('delete', $thread))
+                            || $canRestoreThreads && $request->user()->can('restore', $thread)
+                        ) {
+                            $selectableThreadIds[] = $thread->id;
+                        }
                     }
                 }
             }
