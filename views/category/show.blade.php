@@ -12,18 +12,20 @@
     </div>
 
     <div class="v-category-show">
-        @if ($category->accepts_threads)
-            @can ('createThreads', $category)
-                <a href="{{ Forum::route('thread.create', $category) }}" class="btn btn-primary float-end">{{ trans('forum::threads.new_thread') }}</a>
-            @endcan
-        @endif
+        <div class="clearfix">
+            @if ($category->accepts_threads)
+                @can ('createThreads', $category)
+                    <a href="{{ Forum::route('thread.create', $category) }}" class="btn btn-primary float-end">{{ trans('forum::threads.new_thread') }}</a>
+                @endcan
+            @endif
 
-        <div class="btn-group" role="group">
-            @can ('manageCategories')
-                <button type="button" class="btn btn-secondary" data-open-modal="edit-category">
-                    {{ trans('forum::general.edit') }}
-                </button>
-            @endcan
+            <div class="btn-group" role="group">
+                @can ('manageCategories')
+                    <button type="button" class="btn btn-secondary" data-open-modal="edit-category">
+                        {{ trans('forum::general.edit') }}
+                    </button>
+                @endcan
+            </div>
         </div>
 
         @if (! $category->children->isEmpty())
