@@ -66,6 +66,8 @@ class CategoryController extends BaseController
         $selectableThreadIds = [];
         if ($request->user()) {
             if (Gate::any(['moveThreadsFrom', 'lockThreads', 'pinThreads'], $category)) {
+                // There are no thread-specific abilities corresponding to these,
+                // so we can include all of the threads for this page
                 $selectableThreadIds = $threads->pluck('id')->toArray();
             } else {
                 $canDeleteThreads = $request->user()->can('deleteThreads', $category);
