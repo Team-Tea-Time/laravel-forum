@@ -34,7 +34,7 @@ return [
     'replies' => '回复',
     'reply' => '回复',
     'reply_added' => '已添加回复',
-    'replying_to' => "您正在回复 :item",
+    'replying_to' => '您正在回复 :item',
     'response_to' => '回应 :item',
     'restore' => '恢复',
     'save' => '保存',
