@@ -12,7 +12,7 @@ return [
     'deleted' => '已删除',
     'description' => '描述',
     'edit' => '编辑',
-    'editing' => "你正在编辑 :item",
+    'editing' => '你正在编辑 :item',
     'generic_confirm' => '是否确定?',
     'home_title' => '论坛',
     'index' => '首页',
