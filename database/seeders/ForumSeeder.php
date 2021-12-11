@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamTeaTime\Forum\Database\Seeds;
+namespace TeamTeaTime\Forum\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
