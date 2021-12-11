@@ -47,7 +47,7 @@ class DeleteThreads extends BaseAction
             $rowsAffected = $query->delete();
 
             // Drop readers for the removed threads
-            DB::table(Thread::READERS_TABLE)->whereIn('thread_id', $threadIdsToDelete)->delete();
+            DB::table(Thread::READERS_TABLE)->whereIn('thread_id', $this->threadIds)->delete();
         } else {
             $rowsAffected = $query->whereNull(Thread::DELETED_AT)->update([Thread::DELETED_AT => DB::raw('now()')]);
         }
