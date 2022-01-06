@@ -45,7 +45,22 @@
         padding: 0;
         background: #f8fafc;
     }
+    
+    svg.w-5.h-5 
+    {
+        height: 1.5rem;
+    }
 
+    .flex.justify-between.flex-1.sm\:hidden 
+    {
+    padding-bottom: 1rem;
+    }
+
+    .hidden.sm\:flex-1.sm\:flex.sm\:items-center.sm\:justify-between 
+    {
+    padding-bottom: 1rem;
+    }
+    
     textarea
     {
         min-height: 200px;
