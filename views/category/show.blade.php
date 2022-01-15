@@ -160,12 +160,10 @@
         @endcan
     @endif
 
-    @if (count($selectableThreadIds) > 0)
-        @can ('manageCategories')
-            @include ('forum::category.modals.edit')
-            @include ('forum::category.modals.delete')
-        @endcan
-    @endif
+    @can ('manageCategories')
+        @include ('forum::category.modals.edit')
+        @include ('forum::category.modals.delete')
+    @endcan
 
     <style>
     .list-group.threads .list-group-item
@@ -202,7 +200,8 @@
                 'lock': "{{ Forum::route('bulk.thread.lock') }}",
                 'unlock': "{{ Forum::route('bulk.thread.unlock') }}",
                 'pin': "{{ Forum::route('bulk.thread.pin') }}",
-                'unpin': "{{ Forum::route('bulk.thread.unpin') }}"
+                'unpin': "{{ Forum::route('bulk.thread.unpin') }}",
+                'move': "{{ Forum::route('bulk.thread.move') }}"
             },
             actionMethods: {
                 'delete': 'DELETE',
@@ -210,7 +209,8 @@
                 'lock': 'POST',
                 'unlock': 'POST',
                 'pin': 'POST',
-                'unpin': 'POST'
+                'unpin': 'POST',
+                'move': 'POST'
             },
             selectedAction: null,
             selectedThreads: [],
