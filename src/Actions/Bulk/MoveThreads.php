@@ -23,11 +23,11 @@ class MoveThreads extends BaseAction
     protected function transact()
     {
         // Don't include threads that are already in the destination category
-        $query = Thread::where('category_id', '!=', $this->destinationCategory->id)->whereIn('id', $this->threadIds);
+        $query = DB::table(Thread::getTableName())->where('category_id', '!=', $this->destinationCategory->id)->whereIn('id', $this->threadIds);
 
         $threads = $this->includeTrashed
-            ? $query->withTrashed()->get()
-            : $query->get();
+            ? $query->get()
+            : $query->whereNull('deleted_at')->get();
 
         // Return early if there are no eligible threads in the selection
         if ($threads->count() == 0) {
@@ -35,12 +35,17 @@ class MoveThreads extends BaseAction
         }
 
         $threadsByCategory = $threads->groupBy('category_id');
-        $sourceCategories = $threads->pluck('category');
+        $sourceCategories = Category::whereIn('id', $threads->pluck('category_id'))->get();
         $destinationCategory = $this->destinationCategory;
 
         $query->update(['category_id' => $destinationCategory->id]);
 
+        $seen = [];
         foreach ($sourceCategories as $category) {
+            if (in_array($category->id, $seen)) {
+                continue;
+            }
+
             $categoryThreads = $threadsByCategory->get($category->id);
             $threadCount = $categoryThreads->count();
             $postCount = $threadCount + $categoryThreads->sum('reply_count');
@@ -50,6 +55,8 @@ class MoveThreads extends BaseAction
                 'thread_count' => DB::raw("thread_count - {$threadCount}"),
                 'post_count' => DB::raw("post_count - {$postCount}"),
             ]);
+
+            $seen[] = $category->id;
         }
 
         $threadCount = $threads->count();
