@@ -36,7 +36,7 @@
 
         @if ($category->accepts_threads)
             @if (! $threads->isEmpty())
-                {{ $threads->links() }}
+                {{ $threads->links('forum::pagination') }}
 
                 @if (count($selectableThreadIds) > 0)
                     @can ('manageThreads', $category)
@@ -135,7 +135,7 @@
 
             <div class="row">
                 <div class="col col-xs-8">
-                    {{ $threads->links() }}
+                    {{ $threads->links('forum::pagination') }}
                 </div>
                 <div class="col col-xs-4 text-end">
                     @if ($category->accepts_threads)

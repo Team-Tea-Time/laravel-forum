@@ -90,7 +90,7 @@
 
         <div class="row mb-3">
             <div class="col col-xs-8">
-                {{ $posts->links() }}
+                {{ $posts->links('forum::pagination') }}
             </div>
             <div class="col-md-auto text-end">
                 @if (! $thread->trashed())
@@ -160,7 +160,7 @@
             </form>
         @endif
 
-        {{ $posts->links() }}
+        {{ $posts->links('forum::pagination') }}
 
         @if (! $thread->trashed())
             @can ('reply', $thread)
