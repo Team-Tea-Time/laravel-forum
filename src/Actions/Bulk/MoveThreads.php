@@ -42,7 +42,9 @@ class MoveThreads extends BaseAction
 
         $seen = [];
         foreach ($sourceCategories as $category) {
-            if (in_array($category->id, $seen)) continue;
+            if (in_array($category->id, $seen)) {
+                continue;
+            }
 
             $categoryThreads = $threadsByCategory->get($category->id);
             $threadCount = $categoryThreads->count();
