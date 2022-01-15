@@ -197,48 +197,48 @@
         @endcomponent
     @endif
 
-    @if (! $thread->trashed())
-        @if (Gate::allows('deleteThreads', $thread->category) && Gate::allows('delete', $thread))
+    @if (Gate::allows('deleteThreads', $thread->category) && Gate::allows('delete', $thread))
+        @component('forum::modal-form')
+            @slot('key', 'delete-thread')
+            @slot('title', '<i data-feather="trash" class="text-muted"></i>' . trans('forum::threads.delete'))
+            @slot('route', Forum::route('thread.delete', $thread))
+            @slot('method', 'DELETE')
+
+            @if (config('forum.general.soft_deletes'))
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="permadelete" value="1" id="permadelete">
+                    <label class="form-check-label" for="permadelete">
+                        {{ trans('forum::general.perma_delete') }}
+                    </label>
+                </div>
+            @else
+                {{ trans('forum::general.generic_confirm') }}
+            @endif
+
+            @slot('actions')
+                <button type="submit" class="btn btn-danger">{{ trans('forum::general.proceed') }}</button>
+            @endslot
+        @endcomponent
+
+        @if (config('forum.general.soft_deletes'))
             @component('forum::modal-form')
-                @slot('key', 'delete-thread')
-                @slot('title', '<i data-feather="trash" class="text-muted"></i>' . trans('forum::threads.delete'))
+                @slot('key', 'perma-delete-thread')
+                @slot('title', '<i data-feather="trash" class="text-muted"></i>' . trans_choice('forum::threads.perma_delete', 1))
                 @slot('route', Forum::route('thread.delete', $thread))
                 @slot('method', 'DELETE')
 
-                @if (config('forum.general.soft_deletes'))
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="permadelete" value="1" id="permadelete">
-                        <label class="form-check-label" for="permadelete">
-                            {{ trans('forum::general.perma_delete') }}
-                        </label>
-                    </div>
-                @else
-                    {{ trans('forum::general.generic_confirm') }}
-                @endif
+                <input type="hidden" name="permadelete" value="1" />
+
+                {{ trans('forum::general.generic_confirm') }}
 
                 @slot('actions')
                     <button type="submit" class="btn btn-danger">{{ trans('forum::general.proceed') }}</button>
                 @endslot
             @endcomponent
-
-            @if (config('forum.general.soft_deletes'))
-                @component('forum::modal-form')
-                    @slot('key', 'perma-delete-thread')
-                    @slot('title', '<i data-feather="trash" class="text-muted"></i>' . trans_choice('forum::threads.perma_delete', 1))
-                    @slot('route', Forum::route('thread.delete', $thread))
-                    @slot('method', 'DELETE')
-
-                    <input type="hidden" name="permadelete" value="1" />
-
-                    {{ trans('forum::general.generic_confirm') }}
-
-                    @slot('actions')
-                        <button type="submit" class="btn btn-danger">{{ trans('forum::general.proceed') }}</button>
-                    @endslot
-                @endcomponent
-            @endif
         @endif
+    @endif
 
+    @if (! $thread->trashed())
         @can ('lockThreads', $category)
             @if ($thread->locked)
                 @component('forum::modal-form')
