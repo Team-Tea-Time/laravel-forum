@@ -40,7 +40,10 @@ class MoveThreads extends BaseAction
 
         $query->update(['category_id' => $destinationCategory->id]);
 
+        $seen = [];
         foreach ($sourceCategories as $category) {
+            if (in_array($category->id, $seen)) continue;
+
             $categoryThreads = $threadsByCategory->get($category->id);
             $threadCount = $categoryThreads->count();
             $postCount = $threadCount + $categoryThreads->sum('reply_count');
@@ -50,6 +53,8 @@ class MoveThreads extends BaseAction
                 'thread_count' => DB::raw("thread_count - {$threadCount}"),
                 'post_count' => DB::raw("post_count - {$postCount}"),
             ]);
+
+            $seen[] = $category->id;
         }
 
         $threadCount = $threads->count();
