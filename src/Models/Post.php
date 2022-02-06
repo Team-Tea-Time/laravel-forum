@@ -22,6 +22,8 @@ class Post extends BaseModel
         'content',
     ];
 
+    protected $with = ['thread'];
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
