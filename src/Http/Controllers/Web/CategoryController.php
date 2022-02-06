@@ -49,6 +49,7 @@ class CategoryController extends BaseController
         $categories = $request->user() && $request->user()->can('moveCategories')
             ? Category::defaultOrder()
                 ->with('children')
+                ->where('accepts_threads', true)
                 ->withDepth()
                 ->get()
             : [];
