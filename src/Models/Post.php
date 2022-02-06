@@ -22,7 +22,7 @@ class Post extends BaseModel
         'content',
     ];
 
-    protected $with = ['thread'];
+    protected $with = ['thread', 'parent'];
 
     public function __construct(array $attributes = [])
     {
