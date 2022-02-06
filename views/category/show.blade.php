@@ -36,7 +36,9 @@
 
         @if ($category->accepts_threads)
             @if (! $threads->isEmpty())
-                {{ $threads->links('forum::pagination') }}
+                <div class="mt-4">
+                    {{ $threads->links('forum::pagination') }}
+                </div>
 
                 @if (count($selectableThreadIds) > 0)
                     @can ('manageThreads', $category)
