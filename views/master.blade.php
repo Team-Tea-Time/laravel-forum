@@ -295,7 +295,7 @@
     {
         modal.addEventListener('click', event =>
         {
-            if (! event.currentTarget.hasAttribute('data-close-modal')) return;
+            if (! event.target.hasAttribute('data-close-modal')) return;
 
             modal.classList.remove('show');
             mask.classList.remove('show');
