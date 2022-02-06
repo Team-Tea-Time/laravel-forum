@@ -58,7 +58,7 @@ class CategoryController extends BaseController
             : $category->threads();
 
         $threads = $threads
-            ->with('firstPost', 'lastPost', 'firstPost.author', 'lastPost.author', 'author')
+            ->with('firstPost', 'lastPost', 'firstPost.author', 'lastPost.author', 'lastPost.thread', 'author')
             ->orderBy('pinned', 'desc')
             ->orderBy('updated_at', 'desc')
             ->paginate();
