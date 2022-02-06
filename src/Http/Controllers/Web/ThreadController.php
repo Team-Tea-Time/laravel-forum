@@ -29,7 +29,7 @@ class ThreadController extends BaseController
 {
     public function recent(Request $request): View
     {
-        $threads = Thread::recent()->with('category', 'author', 'lastPost', 'lastPost.author');
+        $threads = Thread::recent()->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
 
         if ($request->has('category_id')) {
             $threads = $threads->where('category_id', $request->input('category_id'));
@@ -50,7 +50,7 @@ class ThreadController extends BaseController
 
     public function unread(Request $request): View
     {
-        $threads = Thread::recent();
+        $threads = Thread::recent()->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
 
         $accessibleCategoryIds = CategoryPrivacy::getFilteredFor($request->user())->keys();
 
