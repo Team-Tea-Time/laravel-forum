@@ -8,9 +8,9 @@
 
 | **Laravel version** | **Package version** | **PHP version** |
 |---------------------|---------------------|-----------------|
-| 5                   | ^4.0                | ^7.4            |
-| 6 - 9               | >=5.0 <=5.2.5       | ^7.4            |
 | 9                   | ^5.3                | ^8.0            |
+| 6 - 9               | >=5.0 <=5.2.5       | ^7.4            |
+| 5                   | ^4.0                | ^7.4            |
 
 See the [support policy in the Laravel docs](https://laravel.com/docs/9.x/releases#support-policy) for more information about Laravel release versions, their supported PHP versions, and how long they receive bug & security fixes.
 
