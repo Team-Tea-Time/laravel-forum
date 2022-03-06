@@ -15,7 +15,7 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "laravel/framework": "6 - 8",
+        "laravel/framework": "6 - 9",
         "kalnoy/nestedset": "^6.0",
         "doctrine/dbal": "^2.13|^3.1.4"
     },
