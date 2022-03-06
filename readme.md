@@ -4,9 +4,17 @@
 
 **Complete documentation is available on [teamteatime.net](https://teamteatime.net/docs/laravel-forum/5/).**
 
-## Installation
+## Versions
 
-Requires Laravel 6+ and PHP 7.4+.
+| **Laravel version** | **Package version** | **PHP version** |
+|---------------------|---------------------|-----------------|
+| 5                   | ^4.0                | ^7.4            |
+| 6 - 9               | >=5.0 <=5.2.5       | ^7.4            |
+| 9                   | ^5.3                | ^8.0            |
+
+See the [support policy in the Laravel docs](https://laravel.com/docs/9.x/releases#support-policy) for more information about Laravel release versions, their supported PHP versions, and how long they receive bug & security fixes.
+
+## Installation
 
 ### Step 1: Install the package
 
