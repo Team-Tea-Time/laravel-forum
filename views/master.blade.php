@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>
-        @if (isset($thread))
-            {{ $thread->title }} -
+        @if (isset($thread_title))
+            {{ $thread_title }} —
         @endif
         @if (isset($category))
-            {{ $category->title }} -
+            {{ $category->title }} —
         @endif
         {{ trans('forum::general.home_title') }}
     </title>

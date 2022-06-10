@@ -1,4 +1,4 @@
-@extends ('forum::master', ['thread' => null, 'breadcrumbs_append' => [$thread->title]])
+@extends ('forum::master', ['thread' => null, 'breadcrumbs_append' => [$thread->title], 'thread_title' => $thread->title])
 
 @section ('content')
     <div id="thread" class="v-thread">
