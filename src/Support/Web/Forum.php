@@ -77,6 +77,15 @@ class Forum
 
     public static function slugify(string $string): string
     {
-        return Str::slug($string, '-');
+        $slug = Str::slug($string, '-');
+
+        if (empty($slug)) {
+            // Fall back to a basic string - this is likely to happen with unicode titles.
+            // See https://www.teamteatime.net/docs/laravel-forum/5/web/helpers/ for information
+            // about replacing this method if you need something more advanced.
+            return 'thread';
+        }
+
+        return $slug;
     }
 }
