@@ -66,7 +66,7 @@ Route::group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], funct
     });
 
     // Posts
-    Route::group(['prefix' => 'post', 'as' => 'post.'], function ($r) {
+    Route::group(['prefix' => 'post', 'as' => 'post.'], function () {
         Route::delete('/', ['as' => 'delete', 'uses' => 'PostController@delete']);
         Route::post('restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
     });

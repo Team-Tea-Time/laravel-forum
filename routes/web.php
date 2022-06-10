@@ -29,7 +29,7 @@ Route::group(['prefix' => $prefix['thread'].'/{thread}-{thread_slug}'], function
     Route::get('/', ['as' => 'thread.show', 'uses' => 'ThreadController@show']);
     Route::get($prefix['post'].'/{post}', ['as' => 'post.show', 'uses' => 'PostController@show']);
 
-    Route::group(['middleware' => $authMiddleware], function ($r) use ($prefix) {
+    Route::group(['middleware' => $authMiddleware], function () use ($prefix) {
         Route::patch('/', ['as' => 'thread.update', 'uses' => 'ThreadController@update']);
         Route::post('lock', ['as' => 'thread.lock', 'uses' => 'ThreadController@lock']);
         Route::post('unlock', ['as' => 'thread.unlock', 'uses' => 'ThreadController@unlock']);
@@ -68,7 +68,7 @@ Route::group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk', 'middl
     });
 
     // Posts
-    Route::group(['prefix' => 'post', 'as' => 'post.'], function ($r) {
+    Route::group(['prefix' => 'post', 'as' => 'post.'], function () {
         Route::delete('/', ['as' => 'delete', 'uses' => 'PostController@delete']);
         Route::post('restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
     });
