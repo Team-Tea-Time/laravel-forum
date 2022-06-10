@@ -1,82 +1,82 @@
 <?php
 
 // Categories
-$r->group(['prefix' => 'category', 'as' => 'category.'], function ($r) {
-    $r->get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
-    $r->get('{category}', ['as' => 'fetch', 'uses' => 'CategoryController@fetch']);
-    $r->post('/', ['as' => 'store', 'uses' => 'CategoryController@store']);
-    $r->patch('{category}', ['as' => 'update', 'uses' => 'CategoryController@update']);
-    $r->delete('{category}', ['as' => 'delete', 'uses' => 'CategoryController@delete']);
+Route::group(['prefix' => 'category', 'as' => 'category.'], function () {
+    Route::get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
+    Route::get('{category}', ['as' => 'fetch', 'uses' => 'CategoryController@fetch']);
+    Route::post('/', ['as' => 'store', 'uses' => 'CategoryController@store']);
+    Route::patch('{category}', ['as' => 'update', 'uses' => 'CategoryController@update']);
+    Route::delete('{category}', ['as' => 'delete', 'uses' => 'CategoryController@delete']);
 
     // Threads by category
-    $r->get('{category}/thread', ['as' => 'threads', 'uses' => 'ThreadController@indexByCategory']);
-    $r->post('{category}/thread', ['as' => 'threads.store', 'uses' => 'ThreadController@store']);
+    Route::get('{category}/thread', ['as' => 'threads', 'uses' => 'ThreadController@indexByCategory']);
+    Route::post('{category}/thread', ['as' => 'threads.store', 'uses' => 'ThreadController@store']);
 });
 
 // Threads
-$r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r) {
-    $r->get('recent', ['as' => 'recent', 'uses' => 'ThreadController@recent']);
-    $r->get('unread', ['as' => 'unread', 'uses' => 'ThreadController@unread']);
-    $r->patch('unread/mark-as-read', ['as' => 'unread.mark-as-read', 'uses' => 'ThreadController@markAsRead']);
-    $r->get('{thread}', ['as' => 'fetch', 'uses' => 'ThreadController@fetch']);
-    $r->post('{thread}/lock', ['as' => 'lock', 'uses' => 'ThreadController@lock']);
-    $r->post('{thread}/unlock', ['as' => 'unlock', 'uses' => 'ThreadController@unlock']);
-    $r->post('{thread}/pin', ['as' => 'pin', 'uses' => 'ThreadController@pin']);
-    $r->post('{thread}/unpin', ['as' => 'unpin', 'uses' => 'ThreadController@unpin']);
-    $r->post('{thread}/rename', ['as' => 'rename', 'uses' => 'ThreadController@rename']);
-    $r->post('{thread}/move', ['as' => 'move', 'uses' => 'ThreadController@move']);
-    $r->delete('{thread}', ['as' => 'delete', 'uses' => 'ThreadController@delete']);
-    $r->post('{thread}/restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
+Route::group(['prefix' => 'thread', 'as' => 'thread.'], function () {
+    Route::get('recent', ['as' => 'recent', 'uses' => 'ThreadController@recent']);
+    Route::get('unread', ['as' => 'unread', 'uses' => 'ThreadController@unread']);
+    Route::patch('unread/mark-as-read', ['as' => 'unread.mark-as-read', 'uses' => 'ThreadController@markAsRead']);
+    Route::get('{thread}', ['as' => 'fetch', 'uses' => 'ThreadController@fetch']);
+    Route::post('{thread}/lock', ['as' => 'lock', 'uses' => 'ThreadController@lock']);
+    Route::post('{thread}/unlock', ['as' => 'unlock', 'uses' => 'ThreadController@unlock']);
+    Route::post('{thread}/pin', ['as' => 'pin', 'uses' => 'ThreadController@pin']);
+    Route::post('{thread}/unpin', ['as' => 'unpin', 'uses' => 'ThreadController@unpin']);
+    Route::post('{thread}/rename', ['as' => 'rename', 'uses' => 'ThreadController@rename']);
+    Route::post('{thread}/move', ['as' => 'move', 'uses' => 'ThreadController@move']);
+    Route::delete('{thread}', ['as' => 'delete', 'uses' => 'ThreadController@delete']);
+    Route::post('{thread}/restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
 
     // Posts by thread
-    $r->get('{thread}/posts', ['as' => 'posts', 'uses' => 'PostController@indexByThread']);
-    $r->post('{thread}/posts', ['as' => 'posts.store', 'uses' => 'PostController@store']);
+    Route::get('{thread}/posts', ['as' => 'posts', 'uses' => 'PostController@indexByThread']);
+    Route::post('{thread}/posts', ['as' => 'posts.store', 'uses' => 'PostController@store']);
 });
 
 // Posts
-$r->group(['prefix' => 'post', 'as' => 'post.'], function ($r) {
+Route::group(['prefix' => 'post', 'as' => 'post.'], function () {
     if (config('forum.api.enable_search')) {
-        $r->post('search', ['as' => 'search', 'uses' => 'PostController@search']);
+        Route::post('search', ['as' => 'search', 'uses' => 'PostController@search']);
     }
 
-    $r->get('recent', ['as' => 'recent', 'uses' => 'PostController@recent']);
-    $r->get('unread', ['as' => 'unread', 'uses' => 'PostController@unread']);
-    $r->get('{post}', ['as' => 'fetch', 'uses' => 'PostController@fetch']);
-    $r->patch('{post}', ['as' => 'update', 'uses' => 'PostController@update']);
-    $r->delete('{post}', ['as' => 'delete', 'uses' => 'PostController@delete']);
-    $r->post('{post}/restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
+    Route::get('recent', ['as' => 'recent', 'uses' => 'PostController@recent']);
+    Route::get('unread', ['as' => 'unread', 'uses' => 'PostController@unread']);
+    Route::get('{post}', ['as' => 'fetch', 'uses' => 'PostController@fetch']);
+    Route::patch('{post}', ['as' => 'update', 'uses' => 'PostController@update']);
+    Route::delete('{post}', ['as' => 'delete', 'uses' => 'PostController@delete']);
+    Route::post('{post}/restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
 });
 
 // Bulk actions
-$r->group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function ($r) {
+Route::group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], function () {
     // Categories
-    $r->group(['prefix' => 'category', 'as' => 'category.'], function ($r) {
-        $r->post('manage', ['as' => 'manage', 'uses' => 'CategoryController@manage']);
+    Route::group(['prefix' => 'category', 'as' => 'category.'], function () {
+        Route::post('manage', ['as' => 'manage', 'uses' => 'CategoryController@manage']);
     });
 
     // Threads
-    $r->group(['prefix' => 'thread', 'as' => 'thread.'], function ($r) {
-        $r->post('move', ['as' => 'move', 'uses' => 'ThreadController@move']);
-        $r->post('lock', ['as' => 'lock', 'uses' => 'ThreadController@lock']);
-        $r->post('unlock', ['as' => 'unlock', 'uses' => 'ThreadController@unlock']);
-        $r->post('pin', ['as' => 'pin', 'uses' => 'ThreadController@pin']);
-        $r->post('unpin', ['as' => 'unpin', 'uses' => 'ThreadController@unpin']);
-        $r->delete('/', ['as' => 'delete', 'uses' => 'ThreadController@delete']);
-        $r->post('restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
+    Route::group(['prefix' => 'thread', 'as' => 'thread.'], function () {
+        Route::post('move', ['as' => 'move', 'uses' => 'ThreadController@move']);
+        Route::post('lock', ['as' => 'lock', 'uses' => 'ThreadController@lock']);
+        Route::post('unlock', ['as' => 'unlock', 'uses' => 'ThreadController@unlock']);
+        Route::post('pin', ['as' => 'pin', 'uses' => 'ThreadController@pin']);
+        Route::post('unpin', ['as' => 'unpin', 'uses' => 'ThreadController@unpin']);
+        Route::delete('/', ['as' => 'delete', 'uses' => 'ThreadController@delete']);
+        Route::post('restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
     });
 
     // Posts
-    $r->group(['prefix' => 'post', 'as' => 'post.'], function ($r) {
-        $r->delete('/', ['as' => 'delete', 'uses' => 'PostController@delete']);
-        $r->post('restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
+    Route::group(['prefix' => 'post', 'as' => 'post.'], function ($r) {
+        Route::delete('/', ['as' => 'delete', 'uses' => 'PostController@delete']);
+        Route::post('restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
     });
 });
 
-$r->bind('category', function ($value) {
+Route::bind('category', function ($value) {
     return \TeamTeaTime\Forum\Models\Category::find($value);
 });
 
-$r->bind('thread', function ($value) {
+Route::bind('thread', function ($value) {
     $query = \TeamTeaTime\Forum\Models\Thread::with('category');
 
     if (Gate::allows('viewTrashedThreads')) {
@@ -86,7 +86,7 @@ $r->bind('thread', function ($value) {
     return $query->find($value);
 });
 
-$r->bind('post', function ($value) {
+Route::bind('post', function ($value) {
     $query = \TeamTeaTime\Forum\Models\Post::with(['thread', 'thread.category']);
 
     if (Gate::allows('viewTrashedPosts')) {
