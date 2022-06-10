@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use TeamTeaTime\Forum\Console\Commands\Seed;
@@ -36,8 +37,8 @@ class ForumServiceProvider extends ServiceProvider
         }
 
         if (config('forum.api.enable')) {
-            $router->group(config('forum.api.router'), function ($r) {
-                require __DIR__.'/../routes/api.php';
+            $router->group(config('forum.api.router'), function () {
+                $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
             });
         }
 
@@ -46,8 +47,8 @@ class ForumServiceProvider extends ServiceProvider
                 __DIR__.'/../views/' => resource_path('views/vendor/forum'),
             ], 'views');
 
-            $router->group(config('forum.web.router'), function ($r) {
-                require __DIR__.'/../routes/web.php';
+            Route::group(config('forum.web.router'), function () {
+                $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
 
             $this->loadViewsFrom(__DIR__.'/../views', 'forum');
