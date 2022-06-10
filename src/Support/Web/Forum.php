@@ -41,7 +41,7 @@ class Forum
         if ($model instanceof Category) {
             return route($route, [
                 'category' => $model->id,
-                'category_slug' => static::slugify($model->title),
+                'category_slug' => static::slugify($model->title, 'category'),
             ]);
         }
 
@@ -75,15 +75,15 @@ class Forum
         throw \Exception('Invalid model type passed to Forum::route().');
     }
 
-    public static function slugify(string $string): string
+    public static function slugify(string $string, string $fallback = 'thread'): string
     {
         $slug = Str::slug($string, '-');
 
         if (empty($slug)) {
-            // Fall back to a basic string - this is likely to happen with unicode titles.
+            // Fall back to the supplied string - this is likely to happen with unicode titles.
             // See https://www.teamteatime.net/docs/laravel-forum/5/web/helpers/ for information
             // about replacing this method if you need something more advanced.
-            return 'thread';
+            return $fallback;
         }
 
         return $slug;
