@@ -16,7 +16,7 @@ class CategoryController extends BaseController
 {
     public function index(Request $request): AnonymousResourceCollection
     {
-        $categories = CategoryPrivacy::getFilteredFor($request->user, $request->query('parent_id'))->keys();
+        $categories = CategoryPrivacy::getFilteredFor($request->user(), $request->query('parent_id', ['*']));
 
         return CategoryResource::collection($categories);
     }
