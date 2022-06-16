@@ -47,7 +47,8 @@ class CategoryPrivacy
     public static function getFilteredFor(?User $user, array $select = self::DEFAULT_SELECT, array $with = self::DEFAULT_WITH)
     {
         $categories = static::getQuery($select, $with)
-            ->get();
+            ->get()
+            ->keyBy('id');
 
         return static::filter($categories, $user);
     }
