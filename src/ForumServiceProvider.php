@@ -57,6 +57,8 @@ class ForumServiceProvider extends ServiceProvider
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
 
+            // TODO: Make sure these don't clash with the API route bindings if both web and API are enabled.
+            // Maybe use different param names?
             $this->registerWebRouteBindings();
 
             $this->loadViewsFrom(__DIR__.'/../views', 'forum');
