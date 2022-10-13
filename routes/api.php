@@ -71,27 +71,3 @@ Route::group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk'], funct
         Route::post('restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
     });
 });
-
-Route::bind('category', function ($value) {
-    return \TeamTeaTime\Forum\Models\Category::find($value);
-});
-
-Route::bind('thread', function ($value) {
-    $query = \TeamTeaTime\Forum\Models\Thread::with('category');
-
-    if (Gate::allows('viewTrashedThreads')) {
-        $query->withTrashed();
-    }
-
-    return $query->find($value);
-});
-
-Route::bind('post', function ($value) {
-    $query = \TeamTeaTime\Forum\Models\Post::with(['thread', 'thread.category']);
-
-    if (Gate::allows('viewTrashedPosts')) {
-        $query->withTrashed();
-    }
-
-    return $query->find($value);
-});

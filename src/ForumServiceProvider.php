@@ -7,11 +7,15 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use TeamTeaTime\Forum\Console\Commands\Seed;
 use TeamTeaTime\Forum\Console\Commands\SyncStats;
+use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Models\Thread;
+use TeamTeaTime\Forum\Models\Post;
 
 class ForumServiceProvider extends ServiceProvider
 {
@@ -40,6 +44,8 @@ class ForumServiceProvider extends ServiceProvider
             $router->group(config('forum.api.router'), function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
             });
+
+            $this->registerApiRouteBindings();
         }
 
         if (config('forum.web.enable')) {
@@ -47,9 +53,11 @@ class ForumServiceProvider extends ServiceProvider
                 __DIR__.'/../views/' => resource_path('views/vendor/forum'),
             ], 'views');
 
-            Route::group(config('forum.web.router'), function () {
+            $router->group(config('forum.web.router'), function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
+
+            $this->registerWebRouteBindings();
 
             $this->loadViewsFrom(__DIR__.'/../views', 'forum');
         }
@@ -89,5 +97,71 @@ class ForumServiceProvider extends ServiceProvider
         foreach (config('forum.integration.policies.model') as $model => $policy) {
             $gate->policy($model, $policy);
         }
+    }
+
+    private function registerApiRouteBindings()
+    {
+        Route::bind('category', function ($value) {
+            return Category::find($value);
+        });
+
+        Route::bind('thread', function ($value) {
+            $query = Thread::with('category');
+
+            if (Gate::allows('viewTrashedThreads')) {
+                $query->withTrashed();
+            }
+
+            return $query->find($value);
+        });
+
+        Route::bind('post', function ($value) {
+            $query = Post::with(['thread', 'thread.category']);
+
+            if (Gate::allows('viewTrashedPosts')) {
+                $query->withTrashed();
+            }
+
+            return $query->find($value);
+        });
+    }
+
+    private function registerWebRouteBindings()
+    {
+        Route::bind('category', function ($value) {
+            return Category::findOrFail($value);
+        });
+
+        Route::bind('thread', function ($value) {
+            $query = Thread::with('category');
+
+            if (Gate::allows('viewTrashedThreads')) {
+                $query->withTrashed();
+            }
+
+            $thread = $query->find($value);
+
+            if ($thread === null) {
+                abort(404);
+            }
+
+            return $thread;
+        });
+
+        Route::bind('post', function ($value) {
+            $query = Post::with(['thread', 'thread.category']);
+
+            if (Gate::allows('viewTrashedPosts')) {
+                $query->withTrashed();
+            }
+
+            $post = $query->find($value);
+
+            if ($post === null) {
+                abort(404);
+            }
+
+            return $post;
+        });
     }
 }
