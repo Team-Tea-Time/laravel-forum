@@ -14,8 +14,8 @@ use Illuminate\Support\ServiceProvider;
 use TeamTeaTime\Forum\Console\Commands\Seed;
 use TeamTeaTime\Forum\Console\Commands\SyncStats;
 use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Models\Thread;
 use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\Models\Thread;
 
 class ForumServiceProvider extends ServiceProvider
 {
