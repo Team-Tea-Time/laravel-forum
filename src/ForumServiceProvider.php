@@ -7,15 +7,12 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use TeamTeaTime\Forum\Console\Commands\Seed;
 use TeamTeaTime\Forum\Console\Commands\SyncStats;
-use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Models\Post;
-use TeamTeaTime\Forum\Models\Thread;
+use TeamTeaTime\Forum\Http\Middleware\ResolveApiParameters;
+use TeamTeaTime\Forum\Http\Middleware\ResolveWebParameters;
 
 class ForumServiceProvider extends ServiceProvider
 {
@@ -41,27 +38,11 @@ class ForumServiceProvider extends ServiceProvider
         }
 
         if (config('forum.api.enable')) {
-            $router->group(config('forum.api.router'), function () {
-                $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-            });
-
-            $this->registerApiRouteBindings();
+            $this->enableApi($router);
         }
 
         if (config('forum.web.enable')) {
-            $this->publishes([
-                __DIR__.'/../views/' => resource_path('views/vendor/forum'),
-            ], 'views');
-
-            $router->group(config('forum.web.router'), function () {
-                $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-            });
-
-            // TODO: Make sure these don't clash with the API route bindings if both web and API are enabled.
-            // Maybe use different param names?
-            $this->registerWebRouteBindings();
-
-            $this->loadViewsFrom(__DIR__.'/../views', 'forum');
+            $this->enableWeb($router);
         }
 
         $this->loadTranslationsFrom(__DIR__.'/../translations', 'forum');
@@ -89,6 +70,42 @@ class ForumServiceProvider extends ServiceProvider
         }
     }
 
+    private function enableApi(Router $router)
+    {
+        $config = config('forum.api.router');
+        $config['middleware'][] = ResolveApiParameters::class;
+
+        $router
+            ->prefix($config['prefix'])
+            ->name($config['as'])
+            ->namespace($config['namespace'])
+            ->middleware($config['middleware'])
+            ->group(function () {
+                $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+            });
+    }
+
+    private function enableWeb(Router $router)
+    {
+        $this->publishes([
+            __DIR__.'/../views/' => resource_path('views/vendor/forum'),
+        ], 'views');
+
+        $config = config('forum.web.router');
+        $config['middleware'][] = ResolveWebParameters::class;
+
+        $router
+            ->prefix($config['prefix'])
+            ->name($config['as'])
+            ->namespace($config['namespace'])
+            ->middleware($config['middleware'])
+            ->group(function () {
+                $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+            });
+
+        $this->loadViewsFrom(__DIR__.'/../views', 'forum');
+    }
+
     private function registerPolicies(GateContract $gate)
     {
         $forumPolicy = config('forum.integration.policies.forum');
@@ -99,71 +116,5 @@ class ForumServiceProvider extends ServiceProvider
         foreach (config('forum.integration.policies.model') as $model => $policy) {
             $gate->policy($model, $policy);
         }
-    }
-
-    private function registerApiRouteBindings()
-    {
-        Route::bind('category', function ($value) {
-            return Category::find($value);
-        });
-
-        Route::bind('thread', function ($value) {
-            $query = Thread::with('category');
-
-            if (Gate::allows('viewTrashedThreads')) {
-                $query->withTrashed();
-            }
-
-            return $query->find($value);
-        });
-
-        Route::bind('post', function ($value) {
-            $query = Post::with(['thread', 'thread.category']);
-
-            if (Gate::allows('viewTrashedPosts')) {
-                $query->withTrashed();
-            }
-
-            return $query->find($value);
-        });
-    }
-
-    private function registerWebRouteBindings()
-    {
-        Route::bind('category', function ($value) {
-            return Category::findOrFail($value);
-        });
-
-        Route::bind('thread', function ($value) {
-            $query = Thread::with('category');
-
-            if (Gate::allows('viewTrashedThreads')) {
-                $query->withTrashed();
-            }
-
-            $thread = $query->find($value);
-
-            if ($thread === null) {
-                abort(404);
-            }
-
-            return $thread;
-        });
-
-        Route::bind('post', function ($value) {
-            $query = Post::with(['thread', 'thread.category']);
-
-            if (Gate::allows('viewTrashedPosts')) {
-                $query->withTrashed();
-            }
-
-            $post = $query->find($value);
-
-            if ($post === null) {
-                abort(404);
-            }
-
-            return $post;
-        });
     }
 }
