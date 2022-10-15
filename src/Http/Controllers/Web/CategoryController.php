@@ -29,8 +29,10 @@ class CategoryController extends BaseController
         return ViewFactory::make('forum::category.index', compact('categories'));
     }
 
-    public function show(Request $request, Category $category): View
+    public function show(Request $request): View
     {
+        $category = $request->route('category');
+
         if (! $category->isAccessibleTo($request->user())) {
             abort(404);
         }

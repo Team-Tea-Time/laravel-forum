@@ -19,8 +19,10 @@ use TeamTeaTime\Forum\Support\Web\Forum;
 
 class PostController extends BaseController
 {
-    public function show(Request $request, Thread $thread, string $postSlug, Post $post): View
+    public function show(Request $request): View
     {
+        $thread = $request->route('thread');
+
         if (! $thread->category->isAccessibleTo($request->user())) {
             abort(404);
         }
@@ -30,14 +32,17 @@ class PostController extends BaseController
         }
 
         if ($request->user() !== null) {
+            $post = $request->route('post');
             UserViewingPost::dispatch($request->user(), $post);
         }
 
         return ViewFactory::make('forum::post.show', compact('thread', 'post'));
     }
 
-    public function create(Request $request, Thread $thread): View
+    public function create(Request $request): View
     {
+        $thread = $request->route('thread');
+
         $this->authorize('reply', $thread);
 
         UserCreatingPost::dispatch($request->user(), $thread);
@@ -47,8 +52,10 @@ class PostController extends BaseController
         return ViewFactory::make('forum::post.create', compact('thread', 'post'));
     }
 
-    public function store(CreatePost $request, Thread $thread): RedirectResponse
+    public function store(CreatePost $request): RedirectResponse
     {
+        $thread = $request->route('thread');
+
         $this->authorize('reply', $thread);
 
         $post = $request->fulfill();
@@ -58,8 +65,10 @@ class PostController extends BaseController
         return new RedirectResponse(Forum::route('thread.show', $post));
     }
 
-    public function edit(Request $request, Thread $thread, $threadSlug, Post $post): View
+    public function edit(Request $request): View
     {
+        $post = $request->route('post');
+
         if ($post->trashed()) {
             return abort(404);
         }
@@ -74,8 +83,10 @@ class PostController extends BaseController
         return ViewFactory::make('forum::post.edit', compact('category', 'thread', 'post'));
     }
 
-    public function update(UpdatePost $request, Thread $thread, $threadSlug, Post $post): RedirectResponse
+    public function update(UpdatePost $request): RedirectResponse
     {
+        $post = $request->route('post');
+
         $this->authorize('edit', $post);
 
         $post = $request->fulfill();
@@ -85,13 +96,19 @@ class PostController extends BaseController
         return new RedirectResponse(Forum::route('thread.show', $post));
     }
 
-    public function confirmDelete(Request $request, Thread $thread, $threadSlug, Post $post): View
+    public function confirmDelete(Request $request): View
     {
+        $thread = $request->route('thread');
+        $post = $request->route('post');
+
         return ViewFactory::make('forum::post.confirm-delete', ['category' => $thread->category, 'thread' => $thread, 'post' => $post]);
     }
 
-    public function confirmRestore(Request $request, Thread $thread, $threadSlug, Post $post): View
+    public function confirmRestore(Request $request): View
     {
+        $thread = $request->route('thread');
+        $post = $request->route('post');
+
         return ViewFactory::make('forum::post.confirm-restore', ['category' => $thread->category, 'thread' => $thread, 'post' => $post]);
     }
 

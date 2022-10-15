@@ -81,8 +81,10 @@ class ThreadController extends BaseController
         return new RedirectResponse(Forum::route('unread'));
     }
 
-    public function show(Request $request, Thread $thread): View
+    public function show(Request $request): View
     {
+        $thread = $request->route('thread');
+
         if (! $thread->category->isAccessibleTo($request->user())) {
             abort(404);
         }
@@ -123,8 +125,10 @@ class ThreadController extends BaseController
         return ViewFactory::make('forum::thread.show', compact('categories', 'category', 'thread', 'posts', 'selectablePosts'));
     }
 
-    public function create(Request $request, Category $category): View
+    public function create(Request $request): View
     {
+        $category = $request->route('category');
+
         if (! $category->accepts_threads) {
             Forum::alert('warning', 'categories.threads_disabled');
 
@@ -138,7 +142,7 @@ class ThreadController extends BaseController
         return ViewFactory::make('forum::thread.create', compact('category'));
     }
 
-    public function store(CreateThread $request, Category $category): RedirectResponse
+    public function store(CreateThread $request): RedirectResponse
     {
         $thread = $request->fulfill();
 
