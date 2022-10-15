@@ -72,10 +72,8 @@ class ForumServiceProvider extends ServiceProvider
 
     private function enableApi(Router $router)
     {
-        $router->middlewareGroup('forum:api:resolve', [ResolveApiParameters::class]);
-
         $config = config('forum.api.router');
-        $config['middleware'][] = 'forum:api:resolve';
+        $config['middleware'][] = ResolveApiParameters::class;
 
         $router
             ->prefix($config['prefix'])
@@ -89,14 +87,12 @@ class ForumServiceProvider extends ServiceProvider
 
     private function enableWeb(Router $router)
     {
-        $router->middlewareGroup('forum:web:resolve', [ResolveWebParameters::class]);
-
         $this->publishes([
             __DIR__.'/../views/' => resource_path('views/vendor/forum'),
         ], 'views');
 
         $config = config('forum.web.router');
-        $config['middleware'][] = 'forum:web:resolve';
+        $config['middleware'][] = ResolveWebParameters::class;
 
         $router
             ->prefix($config['prefix'])
