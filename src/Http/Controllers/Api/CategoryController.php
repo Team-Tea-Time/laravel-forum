@@ -9,7 +9,6 @@ use TeamTeaTime\Forum\Http\Requests\CreateCategory;
 use TeamTeaTime\Forum\Http\Requests\DeleteCategory;
 use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
 use TeamTeaTime\Forum\Http\Resources\CategoryResource;
-use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Support\CategoryPrivacy;
 
 class CategoryController extends BaseController
@@ -28,7 +27,7 @@ class CategoryController extends BaseController
     public function fetch(Request $request): mixed
     {
         $category = $request->route('category');
-        if (!$category->isAccessibleTo($request->user())) {
+        if (! $category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 

@@ -12,14 +12,13 @@ use TeamTeaTime\Forum\Http\Requests\SearchPosts;
 use TeamTeaTime\Forum\Http\Requests\UpdatePost;
 use TeamTeaTime\Forum\Http\Resources\PostResource;
 use TeamTeaTime\Forum\Models\Post;
-use TeamTeaTime\Forum\Models\Thread;
 
 class PostController extends BaseController
 {
     public function indexByThread(Request $request): mixed
     {
         $thread = $request->route('thread');
-        if (!$thread->category->isAccessibleTo($request->user())) {
+        if (! $thread->category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 
@@ -43,8 +42,8 @@ class PostController extends BaseController
             ->get()
             ->filter(function (Post $post) use ($request, $unreadOnly) {
                 return $post->thread->category->isAccessibleTo($request->user())
-                    && (!$unreadOnly || $post->thread->reader === null || $post->updatedSince($post->thread->reader))
-                    && (!$post->thread->category->is_private
+                    && (! $unreadOnly || $post->thread->reader === null || $post->updatedSince($post->thread->reader))
+                    && (! $post->thread->category->is_private
                         || $request->user()
                         && $request->user()->can('view', $post->thread)
                     );
@@ -61,7 +60,7 @@ class PostController extends BaseController
     public function fetch(Request $request): mixed
     {
         $post = $request->route('post');
-        if (!$post->thread->category->isAccessibleTo($request->user())) {
+        if (! $post->thread->category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 

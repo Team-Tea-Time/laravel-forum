@@ -17,7 +17,6 @@ use TeamTeaTime\Forum\Http\Requests\RestoreThread;
 use TeamTeaTime\Forum\Http\Requests\UnlockThread;
 use TeamTeaTime\Forum\Http\Requests\UnpinThread;
 use TeamTeaTime\Forum\Http\Resources\ThreadResource;
-use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
 
 class ThreadController extends BaseController
@@ -28,8 +27,8 @@ class ThreadController extends BaseController
             ->get()
             ->filter(function ($thread) use ($request, $unreadOnly) {
                 return $thread->category->isAccessibleTo($request->user())
-                    && (!$unreadOnly || $thread->userReadStatus !== null)
-                    && (!$thread->category->is_private
+                    && (! $unreadOnly || $thread->userReadStatus !== null)
+                    && (! $thread->category->is_private
                         || $request->user()
                         && $request->user()->can('view', $thread)
                     );
@@ -53,7 +52,7 @@ class ThreadController extends BaseController
     public function indexByCategory(Request $request): mixed
     {
         $category = $request->route('category');
-        if (!$category->isAccessibleTo($request->user())) {
+        if (! $category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 
@@ -98,7 +97,7 @@ class ThreadController extends BaseController
     public function fetch(Request $request): mixed
     {
         $thread = $request->route('thread');
-        if (!$thread->category->isAccessibleTo($request->user())) {
+        if (! $thread->category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 
