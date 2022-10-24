@@ -109,7 +109,7 @@ class ThreadController extends BaseController
         return new ThreadResource($thread);
     }
 
-    public function lock(LockThread $request): Response
+    public function lock(LockThread $request): ThreadResource|Response
     {
         $thread = $request->fulfill();
 
@@ -117,10 +117,10 @@ class ThreadController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new Response(new ThreadResource($thread));
+        return new ThreadResource($thread);
     }
 
-    public function unlock(UnlockThread $request): Response
+    public function unlock(UnlockThread $request): ThreadResource|Response
     {
         $thread = $request->fulfill();
 
@@ -128,10 +128,10 @@ class ThreadController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new Response(new ThreadResource($thread));
+        return new ThreadResource($thread);
     }
 
-    public function pin(PinThread $request): Response
+    public function pin(PinThread $request): ThreadResource|Response
     {
         $thread = $request->fulfill();
 
@@ -139,10 +139,10 @@ class ThreadController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new Response(new ThreadResource($thread));
+        return new ThreadResource($thread);
     }
 
-    public function unpin(UnpinThread $request): Response
+    public function unpin(UnpinThread $request): ThreadResource|Response
     {
         $thread = $request->fulfill();
 
@@ -150,28 +150,17 @@ class ThreadController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new Response(new ThreadResource($thread));
+        return new ThreadResource($thread);
     }
 
-    public function rename(RenameThread $request): Response
+    public function rename(RenameThread $request): ThreadResource
     {
         $thread = $request->fulfill();
 
-        return new Response(new ThreadResource($thread));
+        return new ThreadResource($thread);
     }
 
-    public function move(MoveThread $request): Response
-    {
-        $thread = $request->fulfill();
-
-        if ($thread === null) {
-            return $this->invalidSelectionResponse();
-        }
-
-        return new Response(new ThreadResource($thread));
-    }
-
-    public function delete(DeleteThread $request): Response
+    public function move(MoveThread $request): ThreadResource|Response
     {
         $thread = $request->fulfill();
 
@@ -179,10 +168,10 @@ class ThreadController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new Response(new ThreadResource($thread));
+        return new ThreadResource($thread);
     }
 
-    public function restore(RestoreThread $request): Response
+    public function delete(DeleteThread $request): ThreadResource|Response
     {
         $thread = $request->fulfill();
 
@@ -190,6 +179,17 @@ class ThreadController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new Response(new ThreadResource($thread));
+        return new ThreadResource($thread);
+    }
+
+    public function restore(RestoreThread $request): ThreadResource|Response
+    {
+        $thread = $request->fulfill();
+
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
+
+        return new ThreadResource($thread);
     }
 }
