@@ -13,7 +13,8 @@ use TeamTeaTime\Forum\Models\Traits\HasAuthor;
 
 class Thread extends BaseModel
 {
-    use SoftDeletes, HasAuthor;
+    use SoftDeletes;
+    use HasAuthor;
 
     protected $table = 'forum_threads';
     protected $dates = ['deleted_at'];
@@ -29,10 +30,10 @@ class Thread extends BaseModel
         'updated_at',
     ];
 
-    const READERS_TABLE = 'forum_threads_read';
+    public const READERS_TABLE = 'forum_threads_read';
 
-    const STATUS_UNREAD = 'unread';
-    const STATUS_UPDATED = 'updated';
+    public const STATUS_UNREAD = 'unread';
+    public const STATUS_UPDATED = 'updated';
 
     private $currentReader = null;
 

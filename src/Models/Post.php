@@ -10,7 +10,8 @@ use TeamTeaTime\Forum\Models\Traits\HasAuthor;
 
 class Post extends BaseModel
 {
-    use SoftDeletes, HasAuthor;
+    use SoftDeletes;
+    use HasAuthor;
 
     protected $table = 'forum_posts';
     protected $dates = ['deleted_at'];

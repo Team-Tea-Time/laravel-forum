@@ -2,11 +2,11 @@
 
 namespace TeamTeaTime\Forum\Tests;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     protected function setUp(): void
     {

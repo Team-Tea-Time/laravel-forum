@@ -6,4 +6,6 @@ RUN apt-get update && apt-get install -y libzip-dev
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # PHP extensions
-RUN docker-php-ext-install pdo_mysql zip exif pcntl
+RUN docker-php-ext-install zip
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
