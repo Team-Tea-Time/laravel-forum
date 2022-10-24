@@ -5,9 +5,9 @@ namespace TeamTeaTime\Forum\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use TeamTeaTime\Models\Category;
-use TeamTeaTime\Models\Post;
-use TeamTeaTime\Models\Thread;
+use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\Models\Thread;
 
 class ResolveApiParameters
 {
