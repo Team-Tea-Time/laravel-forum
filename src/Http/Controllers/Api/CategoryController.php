@@ -24,7 +24,7 @@ class CategoryController extends BaseController
         return CategoryResource::collection($categories);
     }
 
-    public function fetch(Request $request): mixed
+    public function fetch(Request $request): CategoryResource|Response
     {
         $category = $request->route('category');
         if (! $category->isAccessibleTo($request->user())) {
