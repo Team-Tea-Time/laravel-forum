@@ -28,7 +28,7 @@ class ThreadController extends BaseController
             ->get()
             ->filter(function ($thread) use ($request, $unreadOnly) {
                 return $thread->category->isAccessibleTo($request->user())
-                    && (! $unreadOnly || $thread->userReadStatus !== null)
+                    && (!$unreadOnly || $thread->userReadStatus !== null)
                     && (
                         ! $thread->category->is_private
                         || $request->user()
@@ -51,9 +51,10 @@ class ThreadController extends BaseController
         return new Response(['success' => true]);
     }
 
-    public function indexByCategory(Request $request, Category $category): AnonymousResourceCollection
+    public function indexByCategory(Request $request): AnonymousResourceCollection|Response
     {
-        if (! $category->isAccessibleTo($request->user())) {
+        $category = $request->route('category');
+        if (!$category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 
@@ -95,9 +96,10 @@ class ThreadController extends BaseController
         return new ThreadResource($thread);
     }
 
-    public function fetch(Request $request, Thread $thread): ThreadResource
+    public function fetch(Request $request): ThreadResource|Response
     {
-        if (! $thread->category->isAccessibleTo($request->user())) {
+        $thread = $request->route('thread');
+        if (!$thread->category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 
@@ -152,7 +154,7 @@ class ThreadController extends BaseController
         return new Response(new ThreadResource($thread));
     }
 
-    public function rename(RenameThread $request): ThreadResource
+    public function rename(RenameThread $request): Response
     {
         $thread = $request->fulfill();
 

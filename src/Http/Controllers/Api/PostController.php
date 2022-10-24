@@ -16,9 +16,10 @@ use TeamTeaTime\Forum\Models\Thread;
 
 class PostController extends BaseController
 {
-    public function indexByThread(Thread $thread, Request $request): AnonymousResourceCollection
+    public function indexByThread(Request $request): AnonymousResourceCollection|Response
     {
-        if (! $thread->category->isAccessibleTo($request->user())) {
+        $thread = $request->route('thread');
+        if (!$thread->category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 
@@ -42,7 +43,7 @@ class PostController extends BaseController
             ->get()
             ->filter(function (Post $post) use ($request, $unreadOnly) {
                 return $post->thread->category->isAccessibleTo($request->user())
-                    && (! $unreadOnly || $post->thread->reader === null || $post->updatedSince($post->thread->reader))
+                    && (!$unreadOnly || $post->thread->reader === null || $post->updatedSince($post->thread->reader))
                     && (
                         ! $post->thread->category->is_private
                         || $request->user()
@@ -58,9 +59,10 @@ class PostController extends BaseController
         return $this->recent($request, true);
     }
 
-    public function fetch(Post $post, Request $request): PostResource
+    public function fetch(Request $request): PostResource|Response
     {
-        if (! $post->thread->category->isAccessibleTo($request->user())) {
+        $post = $request->route('post');
+        if (!$post->thread->category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 
