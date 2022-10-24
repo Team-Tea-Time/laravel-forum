@@ -28,12 +28,6 @@ class Category extends BaseModel
     ];
     protected $appends = ['route'];
 
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        $this->perPage = config('forum.general.pagination.categories');
-    }
-
     public function threads(): HasMany
     {
         return $this->hasMany(Thread::class);
