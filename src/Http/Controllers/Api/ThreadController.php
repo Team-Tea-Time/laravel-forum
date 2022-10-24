@@ -29,8 +29,7 @@ class ThreadController extends BaseController
             ->filter(function ($thread) use ($request, $unreadOnly) {
                 return $thread->category->isAccessibleTo($request->user())
                     && (!$unreadOnly || $thread->userReadStatus !== null)
-                    && (
-                        ! $thread->category->is_private
+                    && (!$thread->category->is_private
                         || $request->user()
                         && $request->user()->can('view', $thread)
                     );
@@ -51,7 +50,7 @@ class ThreadController extends BaseController
         return new Response(['success' => true]);
     }
 
-    public function indexByCategory(Request $request): AnonymousResourceCollection|Response
+    public function indexByCategory(Request $request): mixed
     {
         $category = $request->route('category');
         if (!$category->isAccessibleTo($request->user())) {
@@ -96,7 +95,7 @@ class ThreadController extends BaseController
         return new ThreadResource($thread);
     }
 
-    public function fetch(Request $request): ThreadResource|Response
+    public function fetch(Request $request): mixed
     {
         $thread = $request->route('thread');
         if (!$thread->category->isAccessibleTo($request->user())) {
