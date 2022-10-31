@@ -38,6 +38,7 @@ return [
         'as' => 'forum.api.',
         'namespace' => '\TeamTeaTime\Forum\Http\Controllers\Api',
         'middleware' => ['api', 'auth:api'],
+        'auth_middleware' => ['auth:api'],
     ],
 
 ];
