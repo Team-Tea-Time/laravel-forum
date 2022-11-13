@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use TeamTeaTime\Forum\Http\Requests\CreateCategory;
@@ -13,6 +14,13 @@ use TeamTeaTime\Forum\Support\CategoryPrivacy;
 
 class CategoryController extends BaseController
 {
+    protected $resourceClass = null;
+
+    public function __construct()
+    {
+        $this->resourceClass = config('forum.api.resources.category', CategoryResource::class);
+    }
+
     public function index(Request $request): AnonymousResourceCollection
     {
         if ($request->has('parent_id')) {
@@ -21,31 +29,31 @@ class CategoryController extends BaseController
             $categories = CategoryPrivacy::getFilteredFor($request->user());
         }
 
-        return CategoryResource::collection($categories);
+        return $this->resourceClass::collection($categories);
     }
 
-    public function fetch(Request $request): CategoryResource|Response
+    public function fetch(Request $request): JsonResource|Response
     {
         $category = $request->route('category');
         if (! $category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 
-        return new CategoryResource($category);
+        return new $this->resourceClass($category);
     }
 
-    public function store(CreateCategory $request): CategoryResource
+    public function store(CreateCategory $request): JsonResource
     {
         $category = $request->fulfill();
 
-        return new CategoryResource($category);
+        return new $this->resourceClass($category);
     }
 
-    public function update(UpdateCategory $request): CategoryResource
+    public function update(UpdateCategory $request): JsonResource
     {
         $category = $request->fulfill();
 
-        return new CategoryResource($category);
+        return new $this->resourceClass($category);
     }
 
     public function delete(DeleteCategory $request): Response
