@@ -26,6 +26,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Resources
+    |--------------------------------------------------------------------------
+    |
+    | Override to return your own resources for API responses
+    |
+    */
+
+    'resources' => [
+        'category' => TeamTeaTime\Forum\Http\Resources\CategoryResource::class,
+        'thread' => TeamTeaTime\Forum\Http\Resources\ThreadResource::class,
+        'post' => TeamTeaTime\Forum\Http\Resources\PostResource::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Router
     |--------------------------------------------------------------------------
     |

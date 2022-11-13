@@ -17,6 +17,7 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'thread_id' => $this->thread_id,
             'author_id' => $this->author_id,
+            'author_name' => $this->author_name,
             'content' => $this->content,
             'post_id' => $this->post_id,
             'sequence' => $this->sequence,

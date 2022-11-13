@@ -4,6 +4,7 @@ namespace TeamTeaTime\Forum\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use TeamTeaTime\Forum\Http\Requests\CreatePost;
 use TeamTeaTime\Forum\Http\Requests\DeletePost;
@@ -15,6 +16,13 @@ use TeamTeaTime\Forum\Models\Post;
 
 class PostController extends BaseController
 {
+    protected $resourceClass = null;
+
+    public function __construct()
+    {
+        $this->resourceClass = config('forum.api.resources.post', PostResource::class);
+    }
+
     public function indexByThread(Request $request): AnonymousResourceCollection|Response
     {
         $thread = $request->route('thread');
@@ -26,14 +34,14 @@ class PostController extends BaseController
             $this->authorize('view', $thread);
         }
 
-        return PostResource::collection($thread->posts()->paginate());
+        return $this->resourceClass::collection($thread->posts()->paginate());
     }
 
     public function search(SearchPosts $request): AnonymousResourceCollection
     {
         $posts = $request->fulfill();
 
-        return PostResource::collection($posts);
+        return $this->resourceClass::collection($posts);
     }
 
     public function recent(Request $request, bool $unreadOnly = false): AnonymousResourceCollection
@@ -50,7 +58,7 @@ class PostController extends BaseController
                     );
             });
 
-        return PostResource::collection($posts);
+        return $this->resourceClass::collection($posts);
     }
 
     public function unread(Request $request): AnonymousResourceCollection
@@ -58,7 +66,7 @@ class PostController extends BaseController
         return $this->recent($request, true);
     }
 
-    public function fetch(Request $request): PostResource|Response
+    public function fetch(Request $request): JsonResource|Response
     {
         $post = $request->route('post');
         if (! $post->thread->category->isAccessibleTo($request->user())) {
@@ -69,21 +77,21 @@ class PostController extends BaseController
             $this->authorize('view', $post->thread);
         }
 
-        return new PostResource($post);
+        return new $this->resourceClass($post);
     }
 
-    public function store(CreatePost $request): PostResource
+    public function store(CreatePost $request): JsonResource
     {
         $post = $request->fulfill();
 
-        return new PostResource($post);
+        return new $this->resourceClass($post);
     }
 
-    public function update(UpdatePost $request): PostResource
+    public function update(UpdatePost $request): JsonResource
     {
         $post = $request->fulfill();
 
-        return new PostResource($post);
+        return new $this->resourceClass($post);
     }
 
     public function delete(DeletePost $request): Response
@@ -94,7 +102,7 @@ class PostController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new Response(new PostResource($post));
+        return new Response(new $this->resourceClass($post));
     }
 
     public function restore(RestorePost $request): Response
@@ -105,6 +113,6 @@ class PostController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new Response(new PostResource($post));
+        return new Response(new $this->resourceClass($post));
     }
 }

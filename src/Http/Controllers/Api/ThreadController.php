@@ -5,6 +5,7 @@ namespace TeamTeaTime\Forum\Http\Controllers\Api;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use TeamTeaTime\Forum\Http\Requests\CreateThread;
 use TeamTeaTime\Forum\Http\Requests\DeleteThread;
@@ -21,6 +22,13 @@ use TeamTeaTime\Forum\Models\Thread;
 
 class ThreadController extends BaseController
 {
+    protected $resourceClass = null;
+
+    public function __construct()
+    {
+        $this->resourceClass = config('forum.api.resources.thread', ThreadResource::class);
+    }
+
     public function recent(Request $request, bool $unreadOnly = false): AnonymousResourceCollection
     {
         $threads = Thread::recent()
@@ -35,7 +43,7 @@ class ThreadController extends BaseController
                     );
             });
 
-        return ThreadResource::collection($threads);
+        return $this->resourceClass::collection($threads);
     }
 
     public function unread(Request $request): AnonymousResourceCollection
@@ -85,17 +93,17 @@ class ThreadController extends BaseController
             }));
         }
 
-        return ThreadResource::collection($threads);
+        return $this->resourceClass::collection($threads);
     }
 
-    public function store(CreateThread $request): ThreadResource
+    public function store(CreateThread $request): JsonResource
     {
         $thread = $request->fulfill();
 
-        return new ThreadResource($thread);
+        return new $this->resourceClass($thread);
     }
 
-    public function fetch(Request $request): ThreadResource|Response
+    public function fetch(Request $request): JsonResource|Response
     {
         $thread = $request->route('thread');
         if (! $thread->category->isAccessibleTo($request->user())) {
@@ -106,10 +114,10 @@ class ThreadController extends BaseController
             $this->authorize('view', $thread);
         }
 
-        return new ThreadResource($thread);
+        return new $this->resourceClass($thread);
     }
 
-    public function lock(LockThread $request): ThreadResource|Response
+    public function lock(LockThread $request): JsonResource|Response
     {
         $thread = $request->fulfill();
 
@@ -117,10 +125,10 @@ class ThreadController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new ThreadResource($thread);
+        return new $this->resourceClass($thread);
     }
 
-    public function unlock(UnlockThread $request): ThreadResource|Response
+    public function unlock(UnlockThread $request): JsonResource|Response
     {
         $thread = $request->fulfill();
 
@@ -128,10 +136,10 @@ class ThreadController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new ThreadResource($thread);
+        return new $this->resourceClass($thread);
     }
 
-    public function pin(PinThread $request): ThreadResource|Response
+    public function pin(PinThread $request): JsonResource|Response
     {
         $thread = $request->fulfill();
 
@@ -139,10 +147,10 @@ class ThreadController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new ThreadResource($thread);
+        return new $this->resourceClass($thread);
     }
 
-    public function unpin(UnpinThread $request): ThreadResource|Response
+    public function unpin(UnpinThread $request): JsonResource|Response
     {
         $thread = $request->fulfill();
 
@@ -150,28 +158,17 @@ class ThreadController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new ThreadResource($thread);
+        return new $this->resourceClass($thread);
     }
 
-    public function rename(RenameThread $request): ThreadResource
+    public function rename(RenameThread $request): JsonResource
     {
         $thread = $request->fulfill();
 
-        return new ThreadResource($thread);
+        return new $this->resourceClass($thread);
     }
 
-    public function move(MoveThread $request): ThreadResource|Response
-    {
-        $thread = $request->fulfill();
-
-        if ($thread === null) {
-            return $this->invalidSelectionResponse();
-        }
-
-        return new ThreadResource($thread);
-    }
-
-    public function delete(DeleteThread $request): ThreadResource|Response
+    public function move(MoveThread $request): JsonResource|Response
     {
         $thread = $request->fulfill();
 
@@ -179,10 +176,10 @@ class ThreadController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new ThreadResource($thread);
+        return new $this->resourceClass($thread);
     }
 
-    public function restore(RestoreThread $request): ThreadResource|Response
+    public function delete(DeleteThread $request): JsonResource|Response
     {
         $thread = $request->fulfill();
 
@@ -190,6 +187,17 @@ class ThreadController extends BaseController
             return $this->invalidSelectionResponse();
         }
 
-        return new ThreadResource($thread);
+        return new $this->resourceClass($thread);
+    }
+
+    public function restore(RestoreThread $request): JsonResource|Response
+    {
+        $thread = $request->fulfill();
+
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
+
+        return new $this->resourceClass($thread);
     }
 }
