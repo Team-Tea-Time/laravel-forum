@@ -3,8 +3,8 @@
 namespace TeamTeaTime\Forum\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use TeamTeaTime\Forum\Http\Requests\CreateCategory;
 use TeamTeaTime\Forum\Http\Requests\DeleteCategory;
