@@ -4,7 +4,7 @@
             <span class="float-end">
                 <a href="{{ Forum::route('thread.show', $post) }}" class="text-muted">#{{ $post->sequence }}</a>
             </span>
-            {{ $post->authorName }} <span class="text-muted">{{ $post->posted }}</span>
+            <strong>{{ $post->authorName }}</strong> <span class="text-muted">{{ $post->posted }}</span>
         </div>
         {!! \Illuminate\Support\Str::limit(Forum::render($post->content)) !!}
     </div>
