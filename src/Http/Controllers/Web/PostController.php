@@ -29,9 +29,8 @@ class PostController extends BaseController
             $this->authorize('view', $thread);
         }
 
-        $post = null;
+        $post = $request->route('post');
         if ($request->user() !== null) {
-            $post = $request->route('post');
             UserViewingPost::dispatch($request->user(), $post);
         }
 
