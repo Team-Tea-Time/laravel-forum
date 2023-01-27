@@ -30,7 +30,7 @@ class ForumServiceProvider extends ServiceProvider
         ], 'migrations');
 
         $this->publishes([
-            __DIR__.'/../translations/' => resource_path('lang/vendor/forum'),
+            __DIR__.'/../translations/' => function_exists('lang_path') ? lang_path('vendor/forum') : resource_path('lang/vendor/forum'),
         ], 'translations');
 
         foreach (['api', 'web', 'general', 'integration'] as $name) {
