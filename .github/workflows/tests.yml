@@ -12,6 +12,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          php-version: '8.1'
 
       - name: Bring up MySQL service
         run: docker-compose up -d mysql
