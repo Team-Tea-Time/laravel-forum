@@ -1,7 +1,14 @@
 {
     "name": "riari/laravel-forum",
     "description": "A Laravel 6/7/8/9 package providing a solid foundation for building discussion forums",
-    "keywords": ["laravel", "laravel-6", "laravel-7", "laravel-8", "forum", "discuss"],
+    "keywords": [
+        "laravel",
+        "laravel-6",
+        "laravel-7",
+        "laravel-8",
+        "forum",
+        "discuss"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -14,13 +21,13 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "laravel/framework": "^9",
+        "php": "^8.1",
+        "laravel/framework": "^10.0",
         "kalnoy/nestedset": "^6.0",
         "doctrine/dbal": "^3.5"
     },
     "require-dev": {
-        "orchestra/testbench": "^7.11"
+        "orchestra/testbench": "^8.0"
     },
     "autoload": {
         "psr-4": {
