@@ -14,7 +14,7 @@ class Forum
     {
         $alerts = Session::get('alerts', []);
 
-        $message = trans_choice("forum::{$transKey}", $transCount, $transParameters);
+        $message = trans_choice("forum.{$transKey}", $transCount, $transParameters);
 
         array_push($alerts, compact('type', 'message'));
 

@@ -34,7 +34,7 @@ class PostController extends BaseController
             UserViewingPost::dispatch($request->user(), $post);
         }
 
-        return ViewFactory::make('forum::post.show', compact('thread', 'post'));
+        return ViewFactory::make('forum.post.show', compact('thread', 'post'));
     }
 
     public function create(Request $request): View
@@ -47,7 +47,7 @@ class PostController extends BaseController
 
         $post = $request->has('post') ? $thread->posts->find($request->input('post')) : null;
 
-        return ViewFactory::make('forum::post.create', compact('thread', 'post'));
+        return ViewFactory::make('forum.post.create', compact('thread', 'post'));
     }
 
     public function store(CreatePost $request): RedirectResponse
@@ -78,7 +78,7 @@ class PostController extends BaseController
         $thread = $post->thread;
         $category = $post->thread->category;
 
-        return ViewFactory::make('forum::post.edit', compact('category', 'thread', 'post'));
+        return ViewFactory::make('forum.post.edit', compact('category', 'thread', 'post'));
     }
 
     public function update(UpdatePost $request): RedirectResponse
@@ -99,7 +99,7 @@ class PostController extends BaseController
         $thread = $request->route('thread');
         $post = $request->route('post');
 
-        return ViewFactory::make('forum::post.confirm-delete', ['category' => $thread->category, 'thread' => $thread, 'post' => $post]);
+        return ViewFactory::make('forum.post.confirm-delete', ['category' => $thread->category, 'thread' => $thread, 'post' => $post]);
     }
 
     public function confirmRestore(Request $request): View
@@ -107,7 +107,7 @@ class PostController extends BaseController
         $thread = $request->route('thread');
         $post = $request->route('post');
 
-        return ViewFactory::make('forum::post.confirm-restore', ['category' => $thread->category, 'thread' => $thread, 'post' => $post]);
+        return ViewFactory::make('forum.post.confirm-restore', ['category' => $thread->category, 'thread' => $thread, 'post' => $post]);
     }
 
     public function delete(DeletePost $request): RedirectResponse
