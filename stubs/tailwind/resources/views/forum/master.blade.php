@@ -159,16 +159,16 @@
         });
     });
 
-    document.querySelectorAll('[data-modal]').forEach(modal =>
+    document.querySelectorAll('[data-close-modal]').forEach(modalClose =>
     {
-        modal.addEventListener('click', event =>
+        modalClose.addEventListener('click', event =>
         {
-            if (!event.target.hasAttribute('data-close-modal')) return;
+            event.preventDefault
 
             setTimeout(function()
             {
-                modal.classList.remove('flex');
-                modal.classList.add('hidden');
+                modalClose.closest('[data-modal]').classList.remove('flex');
+                modalClose.closest('[data-modal]').classList.add('hidden');
             }, 200);
         });
     });

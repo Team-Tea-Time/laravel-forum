@@ -2,9 +2,9 @@
 
 @section ('content')
     <div id="edit-post">
-        <h2 class="flex-grow-1">{{ trans('forum::posts.edit') }} ({{ $thread->title }})</h2>
+        <h2 class="text-3xl font-medium my-3">{{ trans('forum::posts.edit') }} ({{ $thread->title }})</h2>
 
-        <hr>
+        <hr class="mb-4">
 
         @if ($post->parent)
             <h3>{{ trans('forum::general.response_to', ['item' => $post->parent->authorName]) }}...</h3>
@@ -17,12 +17,12 @@
             @method('PATCH')
 
             <div class="mb-3">
-                <textarea name="content" class="form-control">{{ old('content') !== null ? old('content') : $post->content }}</textarea>
+                <x-forum.textarea name="content" class="w-full">{{ old('content') !== null ? old('content') : $post->content }}</x-forum.textarea>
             </div>
 
-            <div class="text-end">
-                <a href="{{ URL::previous() }}" class="btn btn-link">{{ trans('forum::general.cancel') }}</a>
-                <button type="submit" class="btn btn-primary px-5">{{ trans('forum::general.save') }}</button>
+            <div class="flex items-center gap-4 justify-end">
+                <a href="{{ URL::previous() }}" class="underline text-blue-500">{{ trans('forum::general.cancel') }}</a>
+                <x-forum.button type="submit">{{ trans('forum::general.save') }}</x-forum.button>
             </div>
         </form>
     </div>

@@ -2,7 +2,7 @@
 
 @section ('content')
     <div id="create-post">
-        <h2>{{ trans('forum::general.new_reply') }} ({{ $thread->title }})</h2>
+        <h2 class="text-3xl font-medium my-3">{{ trans('forum::general.new_reply') }} ({{ $thread->title }})</h2>
 
         @if ($post !== null && !$post->trashed())
             <p>{{ trans('forum::general.replying_to', ['item' => $post->authorName]) }}:</p>
@@ -10,7 +10,7 @@
             @include ('forum.post.partials.quote')
         @endif
 
-        <hr />
+        <hr class="my-4" />
 
         <form method="POST" action="{{ Forum::route('post.store', $thread) }}">
             {!! csrf_field() !!}
@@ -19,12 +19,12 @@
             @endif
 
             <div class="mb-3">
-                <textarea name="content" class="form-control">{{ old('content') }}</textarea>
+                <x-forum.textarea name="content" class="w-full">{{ old('content') }}</x-forum.textarea>
             </div>
 
-            <div class="text-end">
-                <a href="{{ URL::previous() }}" class="btn btn-link">{{ trans('forum::general.cancel') }}</a>
-                <button type="submit" class="btn btn-primary px-5">{{ trans('forum::general.reply') }}</button>
+            <div class="flex justify-end items-center gap-4">
+                <a href="{{ URL::previous() }}" class="text-blue-500 underline">{{ trans('forum::general.cancel') }}</a>
+                <x-forum.button type="submit" class="">{{ trans('forum::general.reply') }}</x-forum.button>
             </div>
         </form>
     </div>

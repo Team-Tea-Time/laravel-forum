@@ -17,7 +17,7 @@
                     </x-forum.badge>
                 @endif
             </div>
-            <div class="md:w-2/6 text-gray-500 flex justify-center md:justify-end">
+            <div class="md:w-2/6 text-gray-500 flex flex-col items-center md:items-end">
                 @if ($category->accepts_threads)
                     @if ($category->newestThread)
                         <div>
@@ -53,7 +53,7 @@
                                 {{ trans_choice('forum::posts.post', 2) }}: {{ $subcategory->post_count }}
                             </x-forum.badge>
                         </div>
-                        <div class="md:w-2/6 text-gray-500 flex justify-center md:justify-end">
+                        <div class="md:w-2/6 text-gray-500 flex justify-center md:flex-col md:items-end">
                             @if ($subcategory->newestThread)
                                 <div>
                                     <a href="{{ Forum::route('thread.show', $subcategory->newestThread) }}">{{ $subcategory->newestThread->title }}</a>
