@@ -12,15 +12,15 @@ class InstallPreset extends Command
 
     protected $description = 'Install the forum preset.';
 
-    public function handle()
+    public function handle(Filesystem $filesystem)
     {
         $preset = $this->argument('preset', 'bootstrap');
 
-        (new Filesystem)->ensureDirectoryExists(resource_path('views/forum'));
-        (new Filesystem)->copyDirectory(__DIR__."/../../../stubs/{$preset}/resources/views", resource_path('views'));
+        $filesystem->ensureDirectoryExists(resource_path('views/forum'));
+        $filesystem->copyDirectory(__DIR__."/../../../stubs/{$preset}/resources/views", resource_path('views'));
 
-        (new Filesystem)->ensureDirectoryExists(resource_path('views/components/forum'));
-        (new Filesystem)->copyDirectory(__DIR__."/../../../stubs/{$preset}/resources/views/components/forum", resource_path('views/components'));
+        $filesystem->ensureDirectoryExists(resource_path('views/components/forum'));
+        $filesystem->copyDirectory(__DIR__."/../../../stubs/{$preset}/resources/views/components/forum", resource_path('views/components'));
 
         $this->info('The command was successful!');
     }
