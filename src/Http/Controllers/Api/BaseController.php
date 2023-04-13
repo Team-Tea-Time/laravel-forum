@@ -27,7 +27,7 @@ abstract class BaseController
         return new Response([
             'success' => true,
             'rows_affected' => $rowsAffected,
-            'message' => trans_choice("forum.{$transKey}", $rowsAffected),
+            'message' => trans_choice("forum::{$transKey}", $rowsAffected),
         ], 200);
     }
 }
