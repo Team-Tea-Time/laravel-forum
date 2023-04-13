@@ -45,7 +45,7 @@
             <div class="flex justify-between items-center">
                 <a class="text-lg" href="{{ url(config('forum.web.router.prefix')) }}">Laravel Forum</a>
                 <button class="navbar-toggler block md:hidden border rounded-md px-2 py-1" type="button" :class="{ collapsed: isCollapsed }" @click="isCollapsed = ! isCollapsed">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="navbar-toggler-icon w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>
                 </button>
@@ -69,7 +69,7 @@
                         </li>
                     @endcan
                 </ul>
-                <ul class="navbar-nav">
+                <ul class="navbar-nav flex gap-4 flex-col md:flex-row">
                     @if (Auth::check())
                         <li class="nav-item dropdown relative">
                             <a class="dropdown-toggle text-gray-500 flex items-center gap-1" href="#" id="navbarDropdownMenuLink" @click="isUserDropdownCollapsed = ! isUserDropdownCollapsed">
@@ -118,10 +118,10 @@
         },
         methods: {
             onWindowClick (event) {
-                // const ignore = ['navbar-toggler', 'navbar-toggler-icon', 'dropdown-toggle'];
-                // if (ignore.some(className => event.target.classList.contains(className))) return;
-                // if (! this.isCollapsed) this.isCollapsed = true;
-                // if (! this.isUserDropdownCollapsed) this.isUserDropdownCollapsed = true;
+                const ignore = ['navbar-toggler', 'navbar-toggler-icon', 'dropdown-toggle'];
+                if (ignore.some(className => event.target.classList.contains(className))) return;
+                if (! this.isCollapsed) this.isCollapsed = true;
+                if (! this.isUserDropdownCollapsed) this.isUserDropdownCollapsed = true;
             }
         },
         created: function () {
