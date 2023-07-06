@@ -229,7 +229,7 @@
         </div>
     </nav>
 
-    <div id="main" class="container">test
+    <div id="main" class="container">
         @include('forum.partials.breadcrumbs')
         @include('forum.partials.alerts')
 
