@@ -9,6 +9,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use TeamTeaTime\Forum\Console\Commands\InstallPreset;
 use TeamTeaTime\Forum\Console\Commands\Seed;
 use TeamTeaTime\Forum\Console\Commands\SyncStats;
 use TeamTeaTime\Forum\Http\Middleware\ResolveApiParameters;
@@ -55,7 +56,7 @@ class ForumServiceProvider extends ServiceProvider
         $loader = AliasLoader::getInstance();
         $loader->alias('Forum', config('forum.web.utility_class'));
 
-        View::composer('forum::master', function ($view) {
+        View::composer('forum.master', function ($view) {
             if (Auth::check()) {
                 $nameAttribute = config('forum.integration.user_name');
                 $view->username = Auth::user()->{$nameAttribute};
@@ -64,6 +65,7 @@ class ForumServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
+                InstallPreset::class,
                 Seed::class,
                 SyncStats::class,
             ]);
@@ -87,10 +89,6 @@ class ForumServiceProvider extends ServiceProvider
 
     private function enableWeb(Router $router)
     {
-        $this->publishes([
-            __DIR__.'/../views/' => resource_path('views/vendor/forum'),
-        ], 'views');
-
         $config = config('forum.web.router');
         $config['middleware'][] = ResolveWebParameters::class;
 
@@ -102,8 +100,6 @@ class ForumServiceProvider extends ServiceProvider
             ->group(function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
-
-        $this->loadViewsFrom(__DIR__.'/../views', 'forum');
     }
 
     private function registerPolicies(GateContract $gate)

@@ -26,7 +26,7 @@ class CategoryController extends BaseController
             UserViewingIndex::dispatch($request->user());
         }
 
-        return ViewFactory::make('forum::category.index', compact('categories'));
+        return ViewFactory::make('forum.category.index', compact('categories'));
     }
 
     public function show(Request $request): View
@@ -88,7 +88,7 @@ class CategoryController extends BaseController
             }
         }
 
-        return ViewFactory::make('forum::category.show', compact('privateAncestor', 'categories', 'category', 'threads', 'selectableThreadIds'));
+        return ViewFactory::make('forum.category.show', compact('privateAncestor', 'categories', 'category', 'threads', 'selectableThreadIds'));
     }
 
     public function store(CreateCategory $request): RedirectResponse
@@ -127,6 +127,6 @@ class CategoryController extends BaseController
         $categories = Category::defaultOrder()->get();
         $categories->makeHidden(['_lft', '_rgt', 'thread_count', 'post_count']);
 
-        return ViewFactory::make('forum::category.manage', ['categories' => $categories->toTree()]);
+        return ViewFactory::make('forum.category.manage', ['categories' => $categories->toTree()]);
     }
 }
