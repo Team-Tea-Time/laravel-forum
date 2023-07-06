@@ -3,15 +3,15 @@
 namespace TeamTeaTime\Forum;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
-use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
+use TeamTeaTime\Forum\Console\Commands\InstallPreset;
 use TeamTeaTime\Forum\Console\Commands\Seed;
 use TeamTeaTime\Forum\Console\Commands\SyncStats;
-use TeamTeaTime\Forum\Console\Commands\InstallPreset;
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use TeamTeaTime\Forum\Http\Middleware\ResolveApiParameters;
 use TeamTeaTime\Forum\Http\Middleware\ResolveWebParameters;
 

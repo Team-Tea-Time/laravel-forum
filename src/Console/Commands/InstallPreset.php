@@ -4,7 +4,6 @@ namespace TeamTeaTime\Forum\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 
 class InstallPreset extends Command
 {
