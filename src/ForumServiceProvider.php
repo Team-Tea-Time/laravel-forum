@@ -89,10 +89,6 @@ class ForumServiceProvider extends ServiceProvider
 
     private function enableWeb(Router $router)
     {
-        // $this->publishes([
-        //     __DIR__.'/../views/' => resource_path('views/vendor/forum'),
-        // ], 'views');
-
         $config = config('forum.web.router');
         $config['middleware'][] = ResolveWebParameters::class;
 
@@ -104,8 +100,6 @@ class ForumServiceProvider extends ServiceProvider
             ->group(function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
-
-        // $this->loadViewsFrom(__DIR__.'/../views', 'forum');
     }
 
     private function registerPolicies(GateContract $gate)
