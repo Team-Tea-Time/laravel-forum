@@ -72,7 +72,7 @@ class Forum
             return route($route, $params).$append;
         }
 
-        throw \Exception('Invalid model type passed to Forum::route().');
+        throw new \Exception('Invalid model type passed to Forum::route().');
     }
 
     public static function slugify(string $string, string $fallback = 'thread'): string
