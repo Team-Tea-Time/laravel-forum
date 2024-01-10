@@ -15,7 +15,7 @@ class CreateForumTablePosts extends Migration
         Schema::create('forum_posts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent_thread')->unsigned();
-            $table->foreignIdFor(config('forum.integration.user_model'), 'user_id');
+            $table->foreignIdFor(config('forum.integration.user_model'), 'author_id');
             $table->text('content');
 
             $table->timestamps();
