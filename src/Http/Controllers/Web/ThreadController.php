@@ -95,7 +95,7 @@ class ThreadController extends BaseController
 
         if ($request->user() !== null) {
             UserViewingThread::dispatch($request->user(), $thread);
-            $thread->markAsRead($request->user()->getKey());
+            $thread->markAsRead($request->user());
         }
 
         $category = $thread->category;

@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -124,14 +125,14 @@ class Thread extends BaseModel
         return $this->posts()->orderBy('created_at', 'desc')->first();
     }
 
-    public function markAsRead(int $userId): void
+    public function markAsRead(Model $user): void
     {
         if ($this->isOld) {
             return;
         }
 
         if ($this->reader === null) {
-            $this->readers()->attach($userId);
+            $this->readers()->attach($user->getKey());
         } elseif ($this->updatedSince($this->reader)) {
             $this->reader->touch();
         }
