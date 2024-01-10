@@ -35,7 +35,7 @@ class MarkThreadsAsRead extends BaseAction
         });
 
         foreach ($threads as $thread) {
-            $thread->markAsRead($this->user->getKey());
+            $thread->markAsRead($this->user);
         }
 
         return $threads;
