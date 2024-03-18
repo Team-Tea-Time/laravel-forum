@@ -46,6 +46,9 @@ class ForumServiceProvider extends ServiceProvider
             $this->enableWeb($router);
         }
 
+        // TODO: Put this behind a feature flag
+        $this->enableBroadcasting();
+
         $this->loadTranslationsFrom(__DIR__.'/../translations', 'forum');
 
         $this->registerPolicies($gate);
@@ -100,6 +103,11 @@ class ForumServiceProvider extends ServiceProvider
             ->group(function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
+    }
+
+    private function enableBroadcasting()
+    {
+        require(__DIR__.'/../routes/channels.php');
     }
 
     private function registerPolicies(GateContract $gate)

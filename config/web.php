@@ -7,7 +7,7 @@ return [
     | Enable/disable
     |--------------------------------------------------------------------------
     |
-    | Set to false if you want to effectively disable the frontend.
+    | Set to false if you want to disable the web interface.
     |
     */
 
