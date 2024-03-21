@@ -1,13 +1,13 @@
 <?php
 
-namespace TeamTeaTime\Forum\Frontend;
+namespace TeamTeaTime\Forum\Frontends;
 
 use Illuminate\Routing\Router;
 use Illuminate\Routing\RouteRegistrar;
 use TeamTeaTime\Forum\ForumServiceProvider;
 use TeamTeaTime\Forum\Http\Middleware\ResolveFrontendParameters;
 
-class Blade implements IFrontend
+class Blade implements FrontendInterface
 {
     public function register(): void
     {
@@ -16,13 +16,13 @@ class Blade implements IFrontend
 
     public function configureRouter(Router $router): RouteRegistrar
     {
-        $config = config('forum.blade.router');
+        $config = config('forum.frontend.router');
         $config['middleware'][] = ResolveFrontendParameters::class;
 
         return $router
             ->prefix($config['prefix'])
             ->name($config['as'])
-            ->namespace($config['namespace'])
+            ->namespace('\\TeamTeaTime\\Forum\\Http\\Controllers\\Blade')
             ->middleware($config['middleware']);
     }
 

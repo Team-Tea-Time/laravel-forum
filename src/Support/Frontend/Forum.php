@@ -28,7 +28,7 @@ class Forum
 
     public static function route(string $route, $model = null): string
     {
-        $as = config('forum.frontend.blade.router.as');
+        $as = config('forum.frontend.router.as');
 
         if (! Str::startsWith($route, $as)) {
             $route = "{$as}{$route}";

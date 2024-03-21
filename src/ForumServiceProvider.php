@@ -15,24 +15,22 @@ use TeamTeaTime\Forum\Config\FrontendStack;
 use TeamTeaTime\Forum\Console\Commands\InstallPreset;
 use TeamTeaTime\Forum\Console\Commands\Seed;
 use TeamTeaTime\Forum\Console\Commands\SyncStats;
-use TeamTeaTime\Forum\Frontend\Blade;
-use TeamTeaTime\Forum\Frontend\IFrontend;
-use TeamTeaTime\Forum\Frontend\Livewire;
+use TeamTeaTime\Forum\Frontends\Blade;
+use TeamTeaTime\Forum\Frontends\FrontendInterface;
+use TeamTeaTime\Forum\Frontends\Livewire;
 use TeamTeaTime\Forum\Http\Middleware\ResolveApiParameters;
 
 class ForumServiceProvider extends ServiceProvider
 {
     private const CONFIG_FILES = [
         'api',
-        'blade',
         'features',
         'frontend',
         'general',
         'integration',
-        'livewire'
     ];
 
-    private ?IFrontend $frontend = null;
+    private ?FrontendInterface $frontend = null;
 
     public function __construct($app)
     {

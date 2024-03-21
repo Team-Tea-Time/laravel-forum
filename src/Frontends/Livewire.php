@@ -1,23 +1,30 @@
 <?php
 
-namespace TeamTeaTime\Forum\Frontend;
+namespace TeamTeaTime\Forum\Frontends;
 
 use Illuminate\Routing\Router;
 use Illuminate\Routing\RouteRegistrar;
 use TeamTeaTime\Forum\ForumServiceProvider;
-use TeamTeaTime\Forum\Http\Livewire\Counter;
+use TeamTeaTime\Forum\Http\Livewire\Components\Category\Card;
+use TeamTeaTime\Forum\Http\Livewire\Pages\CategoryIndex;
+use TeamTeaTime\Forum\Http\Livewire\Pages\CategoryShow;
 use TeamTeaTime\Forum\Http\Middleware\ResolveFrontendParameters;
 
-class Livewire implements IFrontend
+class Livewire implements FrontendInterface
 {
     public function register(): void
     {
-        \Livewire\Livewire::component('counter', Counter::class);
+        // Components
+        \Livewire\Livewire::component('components.category.card', Card::class);
+
+        // Pages
+        \Livewire\Livewire::component('pages.category.index', CategoryIndex::class);
+        \Livewire\Livewire::component('pages.category.show', CategoryShow::class);
     }
 
     public function configureRouter(Router $router): RouteRegistrar
     {
-        $config = config('forum.livewire.router');
+        $config = config('forum.frontend.router');
         $config['middleware'][] = ResolveFrontendParameters::class;
 
         return $router
@@ -33,6 +40,6 @@ class Livewire implements IFrontend
 
     public function getViewsPath(): ?string
     {
-        return resource_path('forum/views/livewire');
+        return resource_path('forum/livewire/views');
     }
 }

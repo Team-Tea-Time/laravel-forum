@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User;
 use Kalnoy\Nestedset\NodeTrait;
 use TeamTeaTime\Forum\Support\CategoryPrivacy;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class Category extends BaseModel
 {
