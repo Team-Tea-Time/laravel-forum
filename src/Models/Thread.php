@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class Thread extends BaseModel
 {
@@ -30,6 +31,7 @@ class Thread extends BaseModel
         'last_post_id',
         'updated_at',
     ];
+    protected $appends = ['route'];
 
     public const READERS_TABLE = 'forum_threads_read';
 
@@ -80,6 +82,11 @@ class Thread extends BaseModel
         $cutoff = time() - $age;
 
         return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
+    }
+
+    public function getRouteAttribute(): string
+    {
+        return Forum::route('thread.show', $this);
     }
 
     public function getIsOldAttribute(): bool

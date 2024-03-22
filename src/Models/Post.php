@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class Post extends BaseModel
 {
@@ -22,6 +23,7 @@ class Post extends BaseModel
         'sequence',
         'content',
     ];
+    protected $appends = ['route'];
 
     public function __construct(array $attributes = [])
     {
@@ -50,6 +52,11 @@ class Post extends BaseModel
         $cutoff = time() - $age;
 
         return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
+    }
+
+    public function getRouteAttribute(): string
+    {
+        return Forum::route('thread.show', $this);
     }
 
     public function getSequenceNumber(): int

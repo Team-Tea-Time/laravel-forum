@@ -17,7 +17,7 @@ class CategoryIndex extends Component
 
     public function mount(Request $request)
     {
-        $this->categories = CategoryPrivacy::getFilteredTreeFor($request->user());
+        $this->categories = CategoryPrivacy::getFilteredTreeFor($request->user())->toArray();
 
         if ($request->user() !== null) {
             UserViewingIndex::dispatch($request->user());
