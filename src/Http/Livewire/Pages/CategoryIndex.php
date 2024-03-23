@@ -8,7 +8,7 @@ use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use TeamTeaTime\Forum\Events\UserViewingIndex;
-use TeamTeaTime\Forum\Support\CategoryPrivacy;
+use TeamTeaTime\Forum\Support\CategoryAccess;
 
 #[Layout('forum::layouts.main')]
 class CategoryIndex extends Component
@@ -17,7 +17,7 @@ class CategoryIndex extends Component
 
     public function mount(Request $request)
     {
-        $this->categories = CategoryPrivacy::getFilteredTreeFor($request->user())->toArray();
+        $this->categories = CategoryAccess::getFilteredTreeFor($request->user());
 
         if ($request->user() !== null) {
             UserViewingIndex::dispatch($request->user());

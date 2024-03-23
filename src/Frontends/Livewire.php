@@ -4,9 +4,9 @@ namespace TeamTeaTime\Forum\Frontends;
 
 use Illuminate\Routing\Router;
 use Illuminate\Routing\RouteRegistrar;
-use TeamTeaTime\Forum\ForumServiceProvider;
 use TeamTeaTime\Forum\Http\Livewire\Components\Button;
-use TeamTeaTime\Forum\Http\Livewire\Components\Category\Card;
+use TeamTeaTime\Forum\Http\Livewire\Components\Category\Card as CategoryCard;
+use TeamTeaTime\Forum\Http\Livewire\Components\Thread\Card as ThreadCard;
 use TeamTeaTime\Forum\Http\Livewire\Pages\CategoryIndex;
 use TeamTeaTime\Forum\Http\Livewire\Pages\CategoryShow;
 use TeamTeaTime\Forum\Http\Livewire\Pages\ThreadCreate;
@@ -18,7 +18,8 @@ class Livewire implements FrontendInterface
     {
         // Components
         \Livewire\Livewire::component('components.button', Button::class);
-        \Livewire\Livewire::component('components.category.card', Card::class);
+        \Livewire\Livewire::component('components.category.card', CategoryCard::class);
+        \Livewire\Livewire::component('components.thread.card', ThreadCard::class);
 
         // Pages
         \Livewire\Livewire::component('pages.category.index', CategoryIndex::class);
@@ -29,7 +30,7 @@ class Livewire implements FrontendInterface
     public function configureRouter(Router $router): RouteRegistrar
     {
         $config = config('forum.frontend.router');
-        $config['middleware'][] = ResolveFrontendParameters::class;
+        // $config['middleware'][] = ResolveFrontendParameters::class;
 
         return $router
             ->prefix($config['prefix'])

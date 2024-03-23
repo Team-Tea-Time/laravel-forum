@@ -5,10 +5,11 @@ namespace TeamTeaTime\Forum\Http\Livewire\Components\Category;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use Livewire\Component;
+use TeamTeaTime\Forum\Models\Category;
 
 class Card extends Component
 {
-    public $category = null;
+    public Category $category;
 
     public function render(): View
     {

@@ -9,7 +9,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use TeamTeaTime\Forum\Actions\CreateThread as Action;
 use TeamTeaTime\Forum\Events\UserViewingIndex;
-use TeamTeaTime\Forum\Support\CategoryPrivacy;
+use TeamTeaTime\Forum\Support\CategoryAccess;
 
 #[Layout('forum::layouts.main')]
 class ThreadCreate extends Component
