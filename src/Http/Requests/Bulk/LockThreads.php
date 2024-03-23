@@ -9,7 +9,7 @@ use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\CategoryPrivacy;
+use TeamTeaTime\Forum\Support\CategoryAccess;
 
 class LockThreads extends FormRequest implements FulfillableRequest
 {
@@ -33,7 +33,7 @@ class LockThreads extends FormRequest implements FulfillableRequest
         $categoryIds = $query->select('category_id')->distinct()->pluck('category_id');
         $categories = Category::whereIn('id', $categoryIds)->get();
 
-        $accessibleCategoryIds = CategoryPrivacy::getFilteredFor($this->user())->keys();
+        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($this->user());
 
         foreach ($categories as $category) {
             if (! ($accessibleCategoryIds->contains($category->id) || $this->user()->can('lockThreads', $category))) {

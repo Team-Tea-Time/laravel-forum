@@ -10,7 +10,7 @@ use TeamTeaTime\Forum\Http\Requests\CreateCategory;
 use TeamTeaTime\Forum\Http\Requests\DeleteCategory;
 use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
 use TeamTeaTime\Forum\Http\Resources\CategoryResource;
-use TeamTeaTime\Forum\Support\CategoryPrivacy;
+use TeamTeaTime\Forum\Support\CategoryAccess;
 
 class CategoryController extends BaseController
 {
@@ -24,9 +24,9 @@ class CategoryController extends BaseController
     public function index(Request $request): AnonymousResourceCollection
     {
         if ($request->has('parent_id')) {
-            $categories = CategoryPrivacy::getFilteredDescendantsFor($request->user(), $request->query('parent_id'));
+            $categories = CategoryAccess::getFilteredDescendantsFor($request->user(), $request->query('parent_id'));
         } else {
-            $categories = CategoryPrivacy::getFilteredFor($request->user());
+            $categories = CategoryAccess::getFilteredTreeFor($request->user());
         }
 
         return $this->resourceClass::collection($categories);

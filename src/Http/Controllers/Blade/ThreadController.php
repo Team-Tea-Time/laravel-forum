@@ -22,8 +22,8 @@ use TeamTeaTime\Forum\Http\Requests\UnlockThread;
 use TeamTeaTime\Forum\Http\Requests\UnpinThread;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\CategoryPrivacy;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\CategoryAccess;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class ThreadController extends BaseController
 {
@@ -35,7 +35,7 @@ class ThreadController extends BaseController
             $threads = $threads->where('category_id', $request->input('category_id'));
         }
 
-        $accessibleCategoryIds = CategoryPrivacy::getFilteredFor($request->user())->keys();
+        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user);
 
         $threads = $threads->get()->filter(function ($thread) use ($request, $accessibleCategoryIds) {
             return $accessibleCategoryIds->contains($thread->category_id) && (! $thread->category->is_private || $request->user() && $request->user()->can('view', $thread));
@@ -52,7 +52,7 @@ class ThreadController extends BaseController
     {
         $threads = Thread::recent()->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
 
-        $accessibleCategoryIds = CategoryPrivacy::getFilteredFor($request->user())->keys();
+        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
 
         $threads = $threads->get()->filter(function ($thread) use ($request, $accessibleCategoryIds) {
             return $thread->userReadStatus !== null
@@ -125,7 +125,7 @@ class ThreadController extends BaseController
         return ViewFactory::make('forum.thread.show', compact('categories', 'category', 'thread', 'posts', 'selectablePosts'));
     }
 
-    public function create(Request $request): View
+    public function create(Request $request): View|RedirectResponse
     {
         $category = $request->route('category');
 

@@ -5,7 +5,7 @@ namespace TeamTeaTime\Forum\Actions;
 use Illuminate\Foundation\Auth\User;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\CategoryPrivacy;
+use TeamTeaTime\Forum\Support\CategoryAccess;
 
 class MarkThreadsAsRead extends BaseAction
 {
@@ -26,9 +26,9 @@ class MarkThreadsAsRead extends BaseAction
             $threads = $threads->where('category_id', $this->category->id);
         }
 
-        $accessibleCategoryIds = CategoryPrivacy::getFilteredFor($this->user)->keys();
+        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($this->user);
 
-        $threads = $threads->get()->filter(function ($thread) {
+        $threads = $threads->get()->filter(function ($thread) use ($accessibleCategoryIds) {
             // @TODO: handle authorization check outside of action?
             return $thread->userReadStatus != null
                 && (! $thread->category->is_private || ($accessibleCategoryIds->contains($thread->category_id) && $this->user->can('view', $thread)));

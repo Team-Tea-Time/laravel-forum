@@ -10,7 +10,7 @@ use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\CategoryPrivacy;
+use TeamTeaTime\Forum\Support\CategoryAccess;
 
 class MoveThreads extends FormRequest implements FulfillableRequest
 {
@@ -31,7 +31,7 @@ class MoveThreads extends FormRequest implements FulfillableRequest
     {
         $destinationCategory = $this->getDestinationCategory();
 
-        $accessibleCategoryIds = CategoryPrivacy::getFilteredFor($this->user())->keys();
+        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($this->user());
 
         if (! ($accessibleCategoryIds->contains($destinationCategory->id) || $this->user()->can('moveThreadsTo', $destinationCategory))) {
             return false;

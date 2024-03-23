@@ -9,7 +9,7 @@ use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\CategoryPrivacy;
+use TeamTeaTime\Forum\Support\CategoryAccess;
 
 class DeleteThreads extends FormRequest implements FulfillableRequest
 {
@@ -28,7 +28,7 @@ class DeleteThreads extends FormRequest implements FulfillableRequest
         // Eloquent is used here so that we get a collection of Thread instead of
         // stdClass in order for the gate to infer the policy to use.
         $threads = Thread::whereIn('id', $this->validated()['threads'])->with('category')->get();
-        $accessibleCategoryIds = CategoryPrivacy::getFilteredFor($this->user())->keys();
+        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($this->user());
 
         foreach ($threads as $thread) {
             $canView = $accessibleCategoryIds->contains($thread->category_id) && $this->user()->can('view', $thread);

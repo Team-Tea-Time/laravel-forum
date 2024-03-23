@@ -4,7 +4,6 @@ namespace TeamTeaTime\Forum\Http\Controllers\Blade;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\Events\UserViewingCategory;
@@ -13,14 +12,15 @@ use TeamTeaTime\Forum\Http\Requests\CreateCategory;
 use TeamTeaTime\Forum\Http\Requests\DeleteCategory;
 use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
 use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Support\CategoryPrivacy;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\CategoryAccess;
+use TeamTeaTime\Forum\Support\ThreadAccess;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class CategoryController extends BaseController
 {
     public function index(Request $request): View
     {
-        $categories = CategoryPrivacy::getFilteredTreeFor($request->user());
+        $categories = CategoryAccess::getFilteredTreeFor($request->user());
 
         if ($request->user() !== null) {
             UserViewingIndex::dispatch($request->user());
@@ -41,54 +41,21 @@ class CategoryController extends BaseController
             UserViewingCategory::dispatch($request->user(), $category);
         }
 
-        $privateAncestor = $request->user() && $request->user()->can('manageCategories')
-            ? Category::defaultOrder()
-                ->where('is_private', true)
-                ->ancestorsOf($category->id)
-                ->first()
-            : [];
+        $privateAncestor = CategoryAccess::getPrivateAncestor($request->user(), $category);
 
-        $categories = $request->user() && $request->user()->can('moveCategories')
-            ? Category::defaultOrder()
-                ->with('children')
-                ->where('accepts_threads', true)
-                ->withDepth()
-                ->get()
+        $threadDestinationCategories = $request->user() && $request->user()->can('moveCategories')
+            ? Category::query()->threadDestinations()->get()
             : [];
 
         $threads = $request->user() && $request->user()->can('viewTrashedThreads')
             ? $category->threads()->withTrashed()
             : $category->threads();
 
-        $threads = $threads
-            ->with('firstPost', 'lastPost', 'firstPost.author', 'lastPost.author', 'lastPost.thread', 'author')
-            ->orderBy('pinned', 'desc')
-            ->orderBy('updated_at', 'desc')
-            ->paginate();
+        $threads = $threads->withPostAndAuthorRelationships()->ordered()->paginate();
 
-        $selectableThreadIds = [];
-        if ($request->user()) {
-            if (Gate::any(['moveThreadsFrom', 'lockThreads', 'pinThreads'], $category)) {
-                // There are no thread-specific abilities corresponding to these,
-                // so we can include all of the threads for this page
-                $selectableThreadIds = $threads->pluck('id')->toArray();
-            } else {
-                $canDeleteThreads = $request->user()->can('deleteThreads', $category);
-                $canRestoreThreads = $request->user()->can('restoreThreads', $category);
+        $selectableThreadIds = ThreadAccess::getSelectableThreadIdsFor($request->user(), $threads, $category);
 
-                if ($canDeleteThreads || $canRestoreThreads) {
-                    foreach ($threads as $thread) {
-                        if (($canDeleteThreads && $request->user()->can('delete', $thread))
-                            || $canRestoreThreads && $request->user()->can('restore', $thread)
-                        ) {
-                            $selectableThreadIds[] = $thread->id;
-                        }
-                    }
-                }
-            }
-        }
-
-        return ViewFactory::make('forum.category.show', compact('privateAncestor', 'categories', 'category', 'threads', 'selectableThreadIds'));
+        return ViewFactory::make('forum.category.show', compact('privateAncestor', 'threadDestinationCategories', 'category', 'threads', 'selectableThreadIds'));
     }
 
     public function store(CreateCategory $request): RedirectResponse
