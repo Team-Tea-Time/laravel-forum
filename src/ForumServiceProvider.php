@@ -77,8 +77,8 @@ class ForumServiceProvider extends ServiceProvider
         }
 
         if (isset($this->frontend)) {
-            $this->frontend->configureRouter($router)
-                ->group(fn () => $this->loadRoutesFrom($this->frontend->getRoutesPath()));
+            $routerConfig = $this->frontend->getRouterConfig();
+            $router->group($routerConfig, fn () => $this->loadRoutesFrom($this->frontend->getRoutesPath()));
 
             $viewsPath = $this->frontend->getViewsPath();
             if ($viewsPath !== null) {
@@ -141,14 +141,10 @@ class ForumServiceProvider extends ServiceProvider
         $config = config('forum.api.router');
         $config['middleware'][] = ResolveApiParameters::class;
 
-        $router
-            ->prefix($config['prefix'])
-            ->name($config['as'])
-            ->namespace($config['namespace'])
-            ->middleware($config['middleware'])
-            ->group(function () {
-                $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-            });
+        $router->group($config, function ($router)
+        {
+            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        });
     }
 
     private function registerPolicies(GateContract $gate): void

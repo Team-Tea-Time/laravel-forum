@@ -2,8 +2,6 @@
 
 namespace TeamTeaTime\Forum\Frontends;
 
-use Illuminate\Routing\Router;
-use Illuminate\Routing\RouteRegistrar;
 use TeamTeaTime\Forum\Http\Livewire\Components\Button;
 use TeamTeaTime\Forum\Http\Livewire\Components\Category\Card as CategoryCard;
 use TeamTeaTime\Forum\Http\Livewire\Components\Thread\Card as ThreadCard;
@@ -27,15 +25,12 @@ class Livewire implements FrontendInterface
         \Livewire\Livewire::component('pages.thread.create', ThreadCreate::class);
     }
 
-    public function configureRouter(Router $router): RouteRegistrar
+    public function getRouterConfig(): array
     {
         $config = config('forum.frontend.router');
-        // $config['middleware'][] = ResolveFrontendParameters::class;
+        $config['middleware'][] = ResolveFrontendParameters::class;
 
-        return $router
-            ->prefix($config['prefix'])
-            ->name($config['as'])
-            ->middleware($config['middleware']);
+        return $config;
     }
 
     public function getRoutesPath(): string

@@ -24,8 +24,8 @@ class ResolveFrontendParameters
     {
         $parameters = $request->route()->parameters();
 
-        if (array_key_exists('category', $parameters)) {
-            $category = Category::find($parameters['category']);
+        if (array_key_exists('category_id', $parameters)) {
+            $category = Category::find($parameters['category_id']);
 
             if ($category === null) {
                 throw new NotFoundHttpException("Failed to resolve 'category' route parameter.");
@@ -34,14 +34,14 @@ class ResolveFrontendParameters
             $request->route()->setParameter('category', $category);
         }
 
-        if (array_key_exists('thread', $parameters)) {
+        if (array_key_exists('thread_id', $parameters)) {
             $query = Thread::with('category');
 
             if (Gate::allows('viewTrashedThreads')) {
                 $query->withTrashed();
             }
 
-            $thread = $query->find($parameters['thread']);
+            $thread = $query->find($parameters['thread_id']);
 
             if ($thread === null) {
                 throw new NotFoundHttpException("Failed to resolve 'thread' route parameter.");
@@ -50,14 +50,14 @@ class ResolveFrontendParameters
             $request->route()->setParameter('thread', $thread);
         }
 
-        if (array_key_exists('post', $parameters)) {
+        if (array_key_exists('post_id', $parameters)) {
             $query = Post::with(['thread', 'thread.category']);
 
             if (Gate::allows('viewTrashedPosts')) {
                 $query->withTrashed();
             }
 
-            $post = $query->find($parameters['post']);
+            $post = $query->find($parameters['post_id']);
 
             if ($post === null) {
                 throw new NotFoundHttpException("Failed to resolve 'post' route parameter.");

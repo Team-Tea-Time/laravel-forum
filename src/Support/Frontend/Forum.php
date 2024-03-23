@@ -40,21 +40,21 @@ class Forum
 
         if ($model instanceof Category) {
             return route($route, [
-                'category' => $model->id,
+                'category_id' => $model->id,
                 'category_slug' => static::slugify($model->title, 'category'),
             ]);
         }
 
         if ($model instanceof Thread) {
             return route($route, [
-                'thread' => $model->id,
+                'thread_id' => $model->id,
                 'thread_slug' => static::slugify($model->title),
             ]);
         }
 
         if ($model instanceof Post) {
             $params = [
-                'thread' => $model->thread->id,
+                'thread_id' => $model->thread->id,
                 'thread_slug' => static::slugify($model->thread->title),
             ];
             $append = null;

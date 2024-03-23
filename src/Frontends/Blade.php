@@ -2,9 +2,6 @@
 
 namespace TeamTeaTime\Forum\Frontends;
 
-use Illuminate\Routing\Router;
-use Illuminate\Routing\RouteRegistrar;
-use TeamTeaTime\Forum\ForumServiceProvider;
 use TeamTeaTime\Forum\Http\Middleware\ResolveFrontendParameters;
 
 class Blade implements FrontendInterface
@@ -14,16 +11,13 @@ class Blade implements FrontendInterface
         // no-op
     }
 
-    public function configureRouter(Router $router): RouteRegistrar
+    public function getRouterConfig(): array
     {
         $config = config('forum.frontend.router');
         $config['middleware'][] = ResolveFrontendParameters::class;
+        $config['namespace'] = 'TeamTeaTime\Forum\Http\Controllers\Blade';
 
-        return $router
-            ->prefix($config['prefix'])
-            ->name($config['as'])
-            ->namespace('\\TeamTeaTime\\Forum\\Http\\Controllers\\Blade')
-            ->middleware($config['middleware']);
+        return $config;
     }
 
     public function getRoutesPath(): string
