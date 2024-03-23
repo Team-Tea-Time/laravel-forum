@@ -2,12 +2,13 @@
 
 namespace TeamTeaTime\Forum\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User;
 use Kalnoy\Nestedset\NodeTrait;
-use TeamTeaTime\Forum\Support\CategoryPrivacy;
+use TeamTeaTime\Forum\Support\CategoryAccess;
 use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class Category extends BaseModel
@@ -58,23 +59,12 @@ class Category extends BaseModel
         return $query->where('is_private', 1);
     }
 
-    public function getRouteAttribute(): string
+    public function scopeThreadDestinations(Builder $query): Builder
     {
-        return Forum::route('category.show', $this);
-    }
-
-    public function getNewestThreadId(): ?int
-    {
-        $thread = $this->threads()->orderBy('created_at', 'desc')->first();
-
-        return $thread ? $thread->id : null;
-    }
-
-    public function getLatestActiveThreadId(): ?int
-    {
-        $thread = $this->threads()->orderBy('updated_at', 'desc')->first();
-
-        return $thread ? $thread->id : null;
+        return $query->defaultOrder()
+            ->with('children')
+            ->where('accepts_threads', true)
+            ->withDepth();
     }
 
     public function isEmpty(): bool
@@ -84,6 +74,13 @@ class Category extends BaseModel
 
     public function isAccessibleTo(?User $user): bool
     {
-        return CategoryPrivacy::isAccessibleTo($user, $this->id);
+        return CategoryAccess::isAccessibleTo($user, $this->id);
+    }
+
+    protected function route(): Attribute
+    {
+        return new Attribute(
+            get: fn () => Forum::route('category.show', $this),
+        );
     }
 }

@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -54,11 +55,6 @@ class Post extends BaseModel
         return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
     }
 
-    public function getRouteAttribute(): string
-    {
-        return Forum::route('thread.show', $this);
-    }
-
     public function getSequenceNumber(): int
     {
         foreach ($this->thread->posts as $index => $post) {
@@ -66,5 +62,12 @@ class Post extends BaseModel
                 return $index + 1;
             }
         }
+    }
+
+    protected function route(): Attribute
+    {
+        return new Attribute(
+            get: fn () => Forum::route('thread.show', $this),
+        );
     }
 }

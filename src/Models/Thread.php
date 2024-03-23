@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -84,47 +85,14 @@ class Thread extends BaseModel
         return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
     }
 
-    public function getRouteAttribute(): string
+    public function scopeWithPostAndAuthorRelationships(Builder $query): Builder
     {
-        return Forum::route('thread.show', $this);
+        return $query->with('firstPost', 'lastPost', 'firstPost.author', 'lastPost.author', 'lastPost.thread', 'author');
     }
 
-    public function getIsOldAttribute(): bool
+    public function scopeOrdered(Builder $query): Builder
     {
-        $age = config('forum.general.old_thread_threshold');
-
-        return ! $age || $this->updated_at->timestamp < (time() - strtotime($age, 0));
-    }
-
-    public function getReaderAttribute()
-    {
-        if (! Auth::check()) {
-            return null;
-        }
-
-        if ($this->currentReader === null) {
-            $this->currentReader = $this->readers()->where('forum_threads_read.user_id', Auth::user()->getKey())->first();
-        }
-
-        return $this->currentReader !== null ? $this->currentReader->pivot : null;
-    }
-
-    public function getUserReadStatusAttribute(): ?string
-    {
-        if ($this->isOld || ! Auth::check()) {
-            return null;
-        }
-
-        if ($this->reader === null) {
-            return trans('forum::general.'.self::STATUS_UNREAD);
-        }
-
-        return $this->updatedSince($this->reader) ? trans('forum::general.'.self::STATUS_UPDATED) : null;
-    }
-
-    public function getPostCountAttribute(): int
-    {
-        return $this->reply_count + 1;
+        return $query->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc');
     }
 
     public function getLastPost(): Post
@@ -143,5 +111,69 @@ class Thread extends BaseModel
         } elseif ($this->updatedSince($this->reader)) {
             $this->reader->touch();
         }
+    }
+
+    protected function route(): Attribute
+    {
+        return new Attribute(
+            get: fn () => Forum::route('thread.show', $this),
+        );
+    }
+
+    protected function isOld(): Attribute
+    {
+        return new Attribute(
+            get: function ()
+            {
+                $age = config('forum.general.old_thread_threshold');
+                return ! $age || $this->updated_at->timestamp < (time() - strtotime($age, 0));
+            }
+        );
+    }
+
+    protected function reader(): Attribute
+    {
+        return new Attribute(
+            get: function ()
+            {
+                if (! Auth::check()) {
+                    return null;
+                }
+
+                if ($this->currentReader === null) {
+                    $this->currentReader = $this->readers()->where('forum_threads_read.user_id', Auth::user()->getKey())->first();
+                }
+
+                return $this->currentReader !== null ? $this->currentReader->pivot : null;
+            }
+        );
+    }
+
+    protected function userReadStatus(): Attribute
+    {
+        return new Attribute(
+            get: function ()
+            {
+                if ($this->isOld || ! Auth::check()) {
+                    return null;
+                }
+
+                if ($this->reader === null) {
+                    return trans('forum::general.'.self::STATUS_UNREAD);
+                }
+
+                return $this->updatedSince($this->reader) ? trans('forum::general.'.self::STATUS_UPDATED) : null;
+            }
+        );
+    }
+
+    protected function postCount(): Attribute
+    {
+        return new Attribute(
+            get: function ()
+            {
+                return $this->reply_count + 1;
+            }
+        );
     }
 }
