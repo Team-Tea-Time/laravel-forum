@@ -8,7 +8,7 @@ use TeamTeaTime\Forum\Frontend\Presets\PresetRegistry;
 
 class PresetList extends Command
 {
-    protected $signature = 'forum:preset:list';
+    protected $signature = 'forum:preset-list';
 
     protected $description = 'List available forum frontend presets.';
 

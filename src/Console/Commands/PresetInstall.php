@@ -9,7 +9,7 @@ use TeamTeaTime\Forum\Frontend\Presets\PresetRegistry;
 
 class PresetInstall extends Command
 {
-    protected $signature = 'forum:preset:install {name}';
+    protected $signature = 'forum:preset-install {name}';
 
     protected $description = 'Install a frontend preset for the forum.';
 
