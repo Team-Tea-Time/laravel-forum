@@ -4,8 +4,8 @@ namespace TeamTeaTime\Forum\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use TeamTeaTime\Forum\Presets\AbstractPreset;
-use TeamTeaTime\Forum\Presets\PresetRegistry;
+use TeamTeaTime\Forum\Frontend\Presets\AbstractPreset;
+use TeamTeaTime\Forum\Frontend\Presets\PresetRegistry;
 
 class PresetInstall extends Command
 {
