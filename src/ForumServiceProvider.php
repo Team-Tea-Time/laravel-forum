@@ -11,14 +11,21 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;
-use TeamTeaTime\Forum\Config\FrontendStack;
-use TeamTeaTime\Forum\Console\Commands\InstallPreset;
-use TeamTeaTime\Forum\Console\Commands\Seed;
-use TeamTeaTime\Forum\Console\Commands\SyncStats;
-use TeamTeaTime\Forum\Frontends\Blade;
-use TeamTeaTime\Forum\Frontends\FrontendInterface;
-use TeamTeaTime\Forum\Frontends\Livewire;
-use TeamTeaTime\Forum\Http\Middleware\ResolveApiParameters;
+use TeamTeaTime\Forum\{
+    Config\FrontendStack,
+    Console\Commands\PresetInstall,
+    Console\Commands\PresetList,
+    Console\Commands\Seed,
+    Console\Commands\SyncStats,
+    Frontends\Blade,
+    Frontends\FrontendInterface,
+    Frontends\Livewire,
+    Http\Middleware\ResolveApiParameters,
+    Presets\BladePreset,
+    Presets\PresetRegistry,
+    Presets\LivewirePreset,
+    Presets\TailwindPreset,
+};
 
 class ForumServiceProvider extends ServiceProvider
 {
@@ -64,6 +71,13 @@ class ForumServiceProvider extends ServiceProvider
         if (isset($this->frontend)) {
             $this->callAfterResolving(BladeCompiler::class, fn () => $this->frontend->register());
         }
+
+        $presetRegistry = new PresetRegistry;
+        $presetRegistry->register(new BladePreset);
+        $presetRegistry->register(new LivewirePreset);
+        $presetRegistry->register(new TailwindPreset);
+
+        $this->app->instance(PresetRegistry::class, $presetRegistry);
     }
 
     public function boot(Router $router, GateContract $gate)
@@ -105,7 +119,8 @@ class ForumServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                InstallPreset::class,
+                PresetInstall::class,
+                PresetList::class,
                 Seed::class,
                 SyncStats::class,
             ]);
