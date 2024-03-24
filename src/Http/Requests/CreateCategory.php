@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Actions\CreateCategory as Action;
 use TeamTeaTime\Forum\Events\UserCreatedCategory;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Support\Validation\CategoryRules;
 
 class CreateCategory extends FormRequest implements FulfillableRequest
 {
@@ -16,13 +17,7 @@ class CreateCategory extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'title' => ['required', 'string', 'min:'.config('forum.general.validation.title_min')],
-            'description' => ['nullable', 'string'],
-            'color' => ['string'],
-            'accepts_threads' => ['boolean'],
-            'is_private' => ['boolean'],
-        ];
+        return CategoryRules::create();
     }
 
     public function fulfill()

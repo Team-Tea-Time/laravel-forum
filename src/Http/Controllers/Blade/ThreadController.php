@@ -89,10 +89,6 @@ class ThreadController extends BaseController
             abort(404);
         }
 
-        if ($thread->category->is_private) {
-            $this->authorize('view', $thread);
-        }
-
         if ($request->user() !== null) {
             UserViewingThread::dispatch($request->user(), $thread);
             $thread->markAsRead($request->user());

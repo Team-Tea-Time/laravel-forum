@@ -8,6 +8,7 @@ use TeamTeaTime\Forum\Events\UserMarkedThreadsAsRead;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Support\Validation\CategoryRules;
 
 class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
 {
@@ -17,9 +18,7 @@ class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'category_id' => ['int', 'exists:forum_categories,id'],
-        ];
+        return CategoryRules::markThreadsAsRead();
     }
 
     public function authorizeValidated(): bool

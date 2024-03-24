@@ -7,6 +7,7 @@ use TeamTeaTime\Forum\Actions\DeleteThread as Action;
 use TeamTeaTime\Forum\Events\UserDeletedThread;
 use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Support\Validation\ThreadRules;
 
 class DeleteThread extends FormRequest implements FulfillableRequest
 {
@@ -21,9 +22,7 @@ class DeleteThread extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'permadelete' => ['boolean'],
-        ];
+        return ThreadRules::delete();
     }
 
     public function fulfill()

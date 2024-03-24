@@ -8,6 +8,7 @@ use TeamTeaTime\Forum\Events\UserSearchedPosts;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Support\Validation\PostRules;
 
 class SearchPosts extends FormRequest implements FulfillableRequest
 {
@@ -17,9 +18,7 @@ class SearchPosts extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'term' => ['required', 'string'],
-        ];
+        return PostRules::search();
     }
 
     public function authorizeValidated(): bool

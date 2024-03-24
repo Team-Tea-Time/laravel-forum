@@ -3,12 +3,10 @@
 namespace TeamTeaTime\Forum\Frontend\Stacks;
 
 use TeamTeaTime\Forum\{
-    Http\Livewire\Components\Button,
-    Http\Livewire\Components\Category\Card as CategoryCard,
-    Http\Livewire\Components\Thread\Card as ThreadCard,
     Http\Livewire\Pages\CategoryIndex,
     Http\Livewire\Pages\CategoryShow,
     Http\Livewire\Pages\ThreadCreate,
+    Http\Livewire\Pages\ThreadShow,
     Http\Middleware\ResolveFrontendParameters,
     Frontend\Traits\LivewireTrait,
 };
@@ -23,6 +21,7 @@ class Livewire implements StackInterface
         $this->registerComponent('pages.category.index', CategoryIndex::class);
         $this->registerComponent('pages.category.show', CategoryShow::class);
         $this->registerComponent('pages.thread.create', ThreadCreate::class);
+        $this->registerComponent('pages.thread.show', ThreadShow::class);
     }
 
     public function getRouterConfig(): array

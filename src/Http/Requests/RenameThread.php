@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Actions\RenameThread as Action;
 use TeamTeaTime\Forum\Events\UserRenamedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Support\Validation\ThreadRules;
 
 class RenameThread extends FormRequest implements FulfillableRequest
 {
@@ -18,9 +19,7 @@ class RenameThread extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'title' => ['required', 'string', 'min:'.config('forum.general.validation.title_min')],
-        ];
+        return ThreadRules::rename();
     }
 
     public function fulfill()

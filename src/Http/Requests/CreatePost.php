@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Actions\CreatePost as Action;
 use TeamTeaTime\Forum\Events\UserCreatedPost;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Support\Validation\PostRules;
 
 class CreatePost extends FormRequest implements FulfillableRequest
 {
@@ -16,9 +17,7 @@ class CreatePost extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'content' => ['required', 'string', 'min:'.config('forum.general.validation.content_min')],
-        ];
+        return PostRules::create();
     }
 
     public function fulfill()

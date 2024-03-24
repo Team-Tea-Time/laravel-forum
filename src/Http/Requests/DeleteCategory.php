@@ -8,6 +8,7 @@ use TeamTeaTime\Forum\Events\UserDeletedCategory;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Support\Validation\CategoryRules;
 
 class DeleteCategory extends FormRequest implements FulfillableRequest
 {
@@ -15,9 +16,7 @@ class DeleteCategory extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'force' => ['boolean'],
-        ];
+        return CategoryRules::delete();
     }
 
     public function withValidator($validator)

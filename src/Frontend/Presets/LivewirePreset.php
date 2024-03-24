@@ -5,6 +5,7 @@ namespace TeamTeaTime\Forum\Frontend\Presets;
 use TeamTeaTime\Forum\{
     Config\FrontendStack,
     Frontend\Presets\Livewire\Components\Category\Card as CategoryCard,
+    Frontend\Presets\Livewire\Components\Post\Card as PostCard,
     Frontend\Presets\Livewire\Components\Thread\Card as ThreadCard,
     Frontend\Presets\Livewire\Components\Button,
     Frontend\Presets\Livewire\Components\Pill,
@@ -33,6 +34,7 @@ class LivewirePreset extends AbstractPreset
     public function register(): void
     {
         $this->registerComponent('components.category.card', CategoryCard::class);
+        $this->registerComponent('components.post.card', PostCard::class);
         $this->registerComponent('components.thread.card', ThreadCard::class);
         $this->registerComponent('components.button', Button::class);
         $this->registerComponent('components.pill', Pill::class);

@@ -8,6 +8,7 @@ use Livewire\Component;
 
 class Button extends Component
 {
+    public $type = null;
     public $href = null;
     public $icon = null;
     public $label = null;

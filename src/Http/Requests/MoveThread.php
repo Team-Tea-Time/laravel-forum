@@ -8,6 +8,7 @@ use TeamTeaTime\Forum\Events\UserMovedThread;
 use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
 use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Support\Validation\ThreadRules;
 
 class MoveThread extends FormRequest implements FulfillableRequest
 {
@@ -17,9 +18,7 @@ class MoveThread extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'category_id' => ['required', 'int', 'exists:forum_categories,id'],
-        ];
+        return ThreadRules::move();
     }
 
     public function authorizeValidated(): bool

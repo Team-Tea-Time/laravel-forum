@@ -40,7 +40,7 @@ class CategoryShow extends Component
         $this->privateAncestor = CategoryAccess::getPrivateAncestor($request->user(), $this->category);
 
         $this->threadDestinationCategories = $request->user() && $request->user()->can('moveCategories')
-            ? Category::query()->threadDestinations()->get()
+            ? Category::threadDestinations()->get()
             : [];
 
         $threads = $request->user() && $request->user()->can('viewTrashedThreads')

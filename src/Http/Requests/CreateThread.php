@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\Actions\CreateThread as Action;
 use TeamTeaTime\Forum\Events\UserCreatedThread;
 use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\Support\Validation\ThreadRules;
 
 class CreateThread extends FormRequest implements FulfillableRequest
 {
@@ -18,10 +19,7 @@ class CreateThread extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'title' => ['required', 'string', 'min:'.config('forum.general.validation.title_min')],
-            'content' => ['required', 'string', 'min:'.config('forum.general.validation.content_min')],
-        ];
+        return ThreadRules::create();
     }
 
     public function fulfill()
