@@ -13,7 +13,7 @@ class TailwindPreset extends AbstractPreset
 
     public static function getDescription(): string
     {
-        return "Similar to the Blade preset, but uses Tailwind CSS for the styling.";
+        return "Uses Blade with Tailwind CSS for styling.";
     }
 
     public static function getRequiredStack(): FrontendStack

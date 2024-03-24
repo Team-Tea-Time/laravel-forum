@@ -22,7 +22,7 @@ class LivewirePreset extends AbstractPreset
 
     public static function getDescription(): string
     {
-        return "A preset that uses the Livewire stack with real-time updates via broadcasted events.";
+        return "Uses Blade with Livewire and Tailwind CSS for styling.";
     }
 
     public static function getRequiredStack(): FrontendStack

@@ -22,7 +22,7 @@ use TeamTeaTime\Forum\{
     Console\Commands\Seed,
     Console\Commands\SyncStats,
     Frontend\Presets\AbstractPreset,
-    Frontend\Presets\BladePreset,
+    Frontend\Presets\BootstrapPreset,
     Frontend\Presets\PresetRegistry,
     Frontend\Presets\LivewirePreset,
     Frontend\Presets\TailwindPreset,
@@ -60,8 +60,8 @@ class ForumServiceProvider extends ServiceProvider
         }
 
         $presetRegistry = new PresetRegistry;
-        $presetRegistry->register(new BladePreset);
         $presetRegistry->register(new LivewirePreset);
+        $presetRegistry->register(new BootstrapPreset);
         $presetRegistry->register(new TailwindPreset);
 
         $app->instance(PresetRegistry::class, $presetRegistry);
