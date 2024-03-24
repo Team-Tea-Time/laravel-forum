@@ -60,8 +60,8 @@ class SyncStats extends Command
         $bar->start();
 
         foreach ($categories as $category) {
-            $newestThreadId = $category->getNewestThreadId();
-            $latestActiveThreadId = $category->getLatestActiveThreadId();
+            $newestThreadId = $category->newestThread?->id;
+            $latestActiveThreadId = $category->latestActiveThread?->id;
 
             $postCount = Post::whereHas('thread', function (Builder $query) use ($category) {
                 $query->where('category_id', $category->id);

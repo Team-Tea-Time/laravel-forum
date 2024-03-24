@@ -85,6 +85,6 @@ class ThreadShow extends Component
     public function render(): View
     {
         return ViewFactory::make('forum::pages.thread.show', ['posts' => $this->posts])
-            ->layout('forum::layouts.main', ['category' => $this->thread->category]);
+            ->layout('forum::layouts.main', ['category' => $this->thread->category, 'thread' => $this->thread]);
     }
 }
