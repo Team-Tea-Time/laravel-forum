@@ -9,7 +9,7 @@ class Seed extends Command
 {
     protected $signature = 'forum:seed';
 
-    protected $description = 'Seed the forum tables with example content.';
+    protected $description = 'Seed the forum tables with example content';
 
     public function handle()
     {

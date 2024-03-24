@@ -10,7 +10,7 @@ class PresetList extends Command
 {
     protected $signature = 'forum:preset-list';
 
-    protected $description = 'List available forum frontend presets.';
+    protected $description = 'List available frontend presets';
 
     public function handle()
     {
