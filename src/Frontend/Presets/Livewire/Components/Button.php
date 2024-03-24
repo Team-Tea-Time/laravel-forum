@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamTeaTime\Forum\Http\Livewire\Components;
+namespace TeamTeaTime\Forum\Frontend\Presets\Livewire\Components;
 
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
@@ -9,6 +9,7 @@ use Livewire\Component;
 class Button extends Component
 {
     public $href = null;
+    public $icon = null;
     public $label = null;
 
     public function render(): View

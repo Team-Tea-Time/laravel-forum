@@ -60,18 +60,19 @@ class CategoryAccess
             ->get()
             ->keyBy('id');
 
-        // TODO: This is a workaround for a serialisation issue. See: https://github.com/lazychaser/laravel-nestedset/issues/487
-        //       Doing this yields the same result as toTree(), avoiding the infinite loop.
-        //       Once the issue is fixed, this can be removed.
-        foreach ($categories as $id => $category) {
-            if ($category->parent_id != null) {
-                $categories->forget($id);
+        return static::filter($categories, $user)->makeHidden('parent');
+    }
+
+    public static function removeParentRelationships(Collection $categories): Collection
+    {
+        $categories->each(function ($category) {
+            $category->setRelation('parent', null);
+            if ($category->children) {
+                $category->children = static::removeParentRelationships($category->children);
             }
-        }
+        });
 
-        $categories = $categories->filter(fn($category) => $category->parent == null);
-
-        return static::filter($categories, $user);
+        return $categories;
     }
 
     private static function getQuery(array $select = self::DEFAULT_SELECT, array $with = self::DEFAULT_WITH): Builder

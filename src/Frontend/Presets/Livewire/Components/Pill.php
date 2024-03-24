@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamTeaTime\Forum\Http\Livewire\Components;
+namespace TeamTeaTime\Forum\Frontend\Presets\Livewire\Components;
 
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
