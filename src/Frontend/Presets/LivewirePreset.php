@@ -1,22 +1,22 @@
 <?php
 
-namespace TeamTeaTime\Forum\Presets;
+namespace TeamTeaTime\Forum\Frontend\Presets;
 
 use TeamTeaTime\Forum\Config\FrontendStack;
 
 class LivewirePreset extends AbstractPreset
 {
-    public function name(): string
+    public static function getName(): string
     {
         return 'livewire';
     }
 
-    public function description(): string
+    public static function getDescription(): string
     {
         return "A preset that uses the Livewire stack with real-time updates via broadcasted events.";
     }
 
-    public function requiredStack(): FrontendStack
+    public static function getRequiredStack(): FrontendStack
     {
         return FrontendStack::LIVEWIRE;
     }

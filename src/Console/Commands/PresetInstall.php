@@ -11,7 +11,7 @@ class PresetInstall extends Command
 {
     protected $signature = 'forum:preset:install {name}';
 
-    protected $description = 'Install a UI preset for the forum.';
+    protected $description = 'Install a frontend preset for the forum.';
 
     public function handle(Filesystem $filesystem)
     {

@@ -7,7 +7,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 use TeamTeaTime\Forum\Events\UserViewingCategory;
@@ -15,7 +14,6 @@ use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Support\CategoryAccess;
 use TeamTeaTime\Forum\Support\ThreadAccess;
 
-#[Layout('forum::layouts.main')]
 class CategoryShow extends Component
 {
     use WithPagination;
@@ -56,6 +54,7 @@ class CategoryShow extends Component
 
     public function render(): View
     {
-        return ViewFactory::make('forum::pages.category.show', ['threads' => $this->threads]);
+        return ViewFactory::make('forum::pages.category.show', ['threads' => $this->threads])
+            ->layout('forum::layouts.main', ['category' => $this->category]);
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace TeamTeaTime\Forum\Frontends;
+namespace TeamTeaTime\Forum\Frontend\Stacks;
 
 use TeamTeaTime\Forum\Http\Middleware\ResolveFrontendParameters;
 
-class Blade implements FrontendInterface
+class Blade implements StackInterface
 {
     public function register(): void
     {
@@ -22,11 +22,6 @@ class Blade implements FrontendInterface
 
     public function getRoutesPath(): string
     {
-        return __DIR__.'/../../routes/blade.php';
-    }
-
-    public function getViewsPath(): ?string
-    {
-        return resource_path('forum/views/blade');
+        return __DIR__.'/../../../routes/blade.php';
     }
 }

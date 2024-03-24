@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamTeaTime\Forum\Presets;
+namespace TeamTeaTime\Forum\Frontend\Presets;
 
 class PresetRegistry
 {
@@ -8,7 +8,7 @@ class PresetRegistry
 
     public function register(AbstractPreset $preset)
     {
-        $this->presets[$preset->name()] = $preset;
+        $this->presets[$preset->getName()] = $preset;
     }
 
     public function get(string $name): AbstractPreset

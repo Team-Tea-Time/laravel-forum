@@ -1,22 +1,22 @@
 <?php
 
-namespace TeamTeaTime\Forum\Presets;
+namespace TeamTeaTime\Forum\Frontend\Presets;
 
 use TeamTeaTime\Forum\Config\FrontendStack;
 
 class TailwindPreset extends AbstractPreset
 {
-    public function name(): string
+    public static function getName(): string
     {
         return 'tailwind';
     }
 
-    public function description(): string
+    public static function getDescription(): string
     {
         return "Similar to the Blade preset, but uses Tailwind CSS for the styling.";
     }
 
-    public function requiredStack(): FrontendStack
+    public static function getRequiredStack(): FrontendStack
     {
         return FrontendStack::BLADE;
     }

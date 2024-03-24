@@ -1,17 +1,19 @@
 <?php
 
-namespace TeamTeaTime\Forum\Frontends;
+namespace TeamTeaTime\Forum\Frontend\Stacks;
 
-use TeamTeaTime\Forum\Http\Livewire\Components\Button;
-use TeamTeaTime\Forum\Http\Livewire\Components\Category\Card as CategoryCard;
-use TeamTeaTime\Forum\Http\Livewire\Components\Thread\Card as ThreadCard;
-use TeamTeaTime\Forum\Http\Livewire\Pages\CategoryIndex;
-use TeamTeaTime\Forum\Http\Livewire\Pages\CategoryShow;
-use TeamTeaTime\Forum\Http\Livewire\Pages\ThreadCreate;
-use TeamTeaTime\Forum\Http\Middleware\ResolveFrontendParameters;
-use TeamTeaTime\Forum\Frontends\Traits\LivewireTrait;
+use TeamTeaTime\Forum\{
+    Http\Livewire\Components\Button,
+    Http\Livewire\Components\Category\Card as CategoryCard,
+    Http\Livewire\Components\Thread\Card as ThreadCard,
+    Http\Livewire\Pages\CategoryIndex,
+    Http\Livewire\Pages\CategoryShow,
+    Http\Livewire\Pages\ThreadCreate,
+    Http\Middleware\ResolveFrontendParameters,
+    Frontend\Traits\LivewireTrait,
+};
 
-class Livewire implements FrontendInterface
+class Livewire implements StackInterface
 {
     use LivewireTrait;
 
@@ -22,7 +24,7 @@ class Livewire implements FrontendInterface
         $this->registerComponent('components.category.card', CategoryCard::class);
         $this->registerComponent('components.thread.card', ThreadCard::class);
 
-        // Pages
+        // Register full-page components required by the Livewire routes
         $this->registerComponent('pages.category.index', CategoryIndex::class);
         $this->registerComponent('pages.category.show', CategoryShow::class);
         $this->registerComponent('pages.thread.create', ThreadCreate::class);
@@ -38,11 +40,6 @@ class Livewire implements FrontendInterface
 
     public function getRoutesPath(): string
     {
-        return __DIR__.'/../../routes/livewire.php';
-    }
-
-    public function getViewsPath(): ?string
-    {
-        return resource_path('forum/livewire/views');
+        return __DIR__.'/../../../routes/livewire.php';
     }
 }

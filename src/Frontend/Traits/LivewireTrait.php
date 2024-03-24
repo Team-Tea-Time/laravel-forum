@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamTeaTime\Forum\Frontends\Traits;
+namespace TeamTeaTime\Forum\Frontend\Traits;
 
 trait LivewireTrait
 {

@@ -5,12 +5,10 @@ namespace TeamTeaTime\Forum\Http\Livewire\Pages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use TeamTeaTime\Forum\Events\UserViewingIndex;
 use TeamTeaTime\Forum\Support\CategoryAccess;
 
-#[Layout('forum::layouts.main')]
 class CategoryIndex extends Component
 {
     public $categories = [];
@@ -26,6 +24,7 @@ class CategoryIndex extends Component
 
     public function render(): View
     {
-        return ViewFactory::make('forum::pages.category.index');
+        return ViewFactory::make('forum::pages.category.index')
+            ->layout('forum::layouts.main');
     }
 }

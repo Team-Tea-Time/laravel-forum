@@ -3,28 +3,33 @@
 namespace TeamTeaTime\Forum;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
-use Illuminate\Foundation\AliasLoader;
-use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\View\Compilers\BladeCompiler;
+
+use Illuminate\{
+    Contracts\Auth\Access\Gate as GateContract,
+    Foundation\AliasLoader,
+    Routing\Router,
+    Support\Facades\Auth,
+    Support\Facades\Log,
+    Support\Facades\View,
+    Support\ServiceProvider,
+    View\Compilers\BladeCompiler,
+};
+
 use TeamTeaTime\Forum\{
     Config\FrontendStack,
     Console\Commands\PresetInstall,
     Console\Commands\PresetList,
     Console\Commands\Seed,
     Console\Commands\SyncStats,
-    Frontends\Blade,
-    Frontends\FrontendInterface,
-    Frontends\Livewire,
+    Frontend\Presets\AbstractPreset,
+    Frontend\Presets\BladePreset,
+    Frontend\Presets\PresetRegistry,
+    Frontend\Presets\LivewirePreset,
+    Frontend\Presets\TailwindPreset,
+    Frontend\Stacks\Blade,
+    Frontend\Stacks\StackInterface,
+    Frontend\Stacks\Livewire,
     Http\Middleware\ResolveApiParameters,
-    Presets\BladePreset,
-    Presets\PresetRegistry,
-    Presets\LivewirePreset,
-    Presets\TailwindPreset,
 };
 
 class ForumServiceProvider extends ServiceProvider
@@ -37,7 +42,9 @@ class ForumServiceProvider extends ServiceProvider
         'integration',
     ];
 
-    private ?FrontendInterface $frontend = null;
+    private bool $isFrontendEnabled = false;
+    private ?StackInterface $frontendStack = null;
+    private ?AbstractPreset $frontendPreset = null;
 
     public function __construct($app)
     {
@@ -47,29 +54,9 @@ class ForumServiceProvider extends ServiceProvider
             $this->mergeConfigFrom(__DIR__."/../config/{$key}.php", "forum.{$key}");
         }
 
-        $config = config('forum.features.frontend');
-
-        switch ($config) {
-            case FrontendStack::NONE:
-                break;
-            case FrontendStack::BLADE:
-                $this->frontend = new Blade;
-                break;
-            case FrontendStack::LIVEWIRE:
-                if (!class_exists(\Livewire\Livewire::class)) {
-                    Log::error('The forum frontend stack is set to Livewire, but Livewire is not installed. Please install it: composer require livewire/livewire');
-                    break;
-                }
-
-                $this->frontend = new Livewire;
-                break;
-        }
-    }
-
-    public function register()
-    {
-        if (isset($this->frontend)) {
-            $this->callAfterResolving(BladeCompiler::class, fn () => $this->frontend->register());
+        $this->isFrontendEnabled = config('forum.features.frontend.enabled');
+        if (!$this->isFrontendEnabled) {
+            return;
         }
 
         $presetRegistry = new PresetRegistry;
@@ -77,7 +64,33 @@ class ForumServiceProvider extends ServiceProvider
         $presetRegistry->register(new LivewirePreset);
         $presetRegistry->register(new TailwindPreset);
 
-        $this->app->instance(PresetRegistry::class, $presetRegistry);
+        $app->instance(PresetRegistry::class, $presetRegistry);
+
+        $this->frontendPreset = $presetRegistry->get(config('forum.features.frontend.preset'));
+
+        switch ($this->frontendPreset->getRequiredStack()) {
+            case FrontendStack::BLADE:
+                $this->frontendStack = new Blade;
+                break;
+            case FrontendStack::LIVEWIRE:
+                if (!class_exists(\Livewire\Livewire::class)) {
+                    Log::error('The active forum preset requires Livewire, but Livewire is not installed. Please install it: composer require livewire/livewire');
+                    break;
+                }
+
+                $this->frontendStack = new Livewire;
+                break;
+        }
+    }
+
+    public function register()
+    {
+        if ($this->isFrontendEnabled) {
+            $this->callAfterResolving(BladeCompiler::class, function () {
+                $this->frontendStack->register();
+                $this->frontendPreset->register();
+            });
+        }
     }
 
     public function boot(Router $router, GateContract $gate)
@@ -90,24 +103,22 @@ class ForumServiceProvider extends ServiceProvider
             $this->enableApi($router);
         }
 
-        if (isset($this->frontend)) {
-            $routerConfig = $this->frontend->getRouterConfig();
-            $router->group($routerConfig, fn () => $this->loadRoutesFrom($this->frontend->getRoutesPath()));
+        if ($this->isFrontendEnabled) {
+            $routerConfig = $this->frontendStack->getRouterConfig();
+            $router->group($routerConfig, fn () => $this->loadRoutesFrom($this->frontendStack->getRoutesPath()));
 
-            $viewsPath = $this->frontend->getViewsPath();
-            if ($viewsPath !== null) {
-                $this->loadViewsFrom($viewsPath, 'forum');
+            $viewsPath = $this->frontendPreset->getViewsPath();
+            $this->loadViewsFrom($viewsPath, 'forum');
 
-                View::composer('forum.master', function ($view) {
-                    if (Auth::check()) {
-                        $nameAttribute = config('forum.integration.user_name');
-                        $view->username = Auth::user()->{$nameAttribute};
-                    }
-                });
+            View::composer('forum.master', function ($view) {
+                if (Auth::check()) {
+                    $nameAttribute = config('forum.integration.user_name');
+                    $view->username = Auth::user()->{$nameAttribute};
+                }
+            });
 
-                $loader = AliasLoader::getInstance();
-                $loader->alias('Forum', config('forum.frontend.utility_class'));
-            }
+            $loader = AliasLoader::getInstance();
+            $loader->alias('Forum', config('forum.frontend.utility_class'));
         }
 
         $this->loadTranslationsFrom(__DIR__.'/../translations', 'forum');

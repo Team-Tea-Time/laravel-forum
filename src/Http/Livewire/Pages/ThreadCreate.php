@@ -5,13 +5,9 @@ namespace TeamTeaTime\Forum\Http\Livewire\Pages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use TeamTeaTime\Forum\Actions\CreateThread as Action;
-use TeamTeaTime\Forum\Events\UserViewingIndex;
-use TeamTeaTime\Forum\Support\CategoryAccess;
 
-#[Layout('forum::layouts.main')]
 class ThreadCreate extends Component
 {
     // View data
@@ -38,6 +34,7 @@ class ThreadCreate extends Component
 
     public function render(): View
     {
-        return ViewFactory::make('forum::pages.thread.create');
+        return ViewFactory::make('forum::pages.thread.create')
+            ->layout('forum::layouts.main');
     }
 }

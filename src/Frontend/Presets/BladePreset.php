@@ -1,22 +1,22 @@
 <?php
 
-namespace TeamTeaTime\Forum\Presets;
+namespace TeamTeaTime\Forum\Frontend\Presets;
 
 use TeamTeaTime\Forum\Config\FrontendStack;
 
 class BladePreset extends AbstractPreset
 {
-    public function name(): string
+    public static function getName(): string
     {
         return 'blade';
     }
 
-    public function description(): string
+    public static function getDescription(): string
     {
         return "A simple preset that uses Laravel's built-in Blade views. Uses Bootstrap for styling.";
     }
 
-    public function requiredStack(): FrontendStack
+    public static function getRequiredStack(): FrontendStack
     {
         return FrontendStack::BLADE;
     }
