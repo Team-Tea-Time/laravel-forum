@@ -9,20 +9,23 @@ use TeamTeaTime\Forum\Http\Livewire\Pages\CategoryIndex;
 use TeamTeaTime\Forum\Http\Livewire\Pages\CategoryShow;
 use TeamTeaTime\Forum\Http\Livewire\Pages\ThreadCreate;
 use TeamTeaTime\Forum\Http\Middleware\ResolveFrontendParameters;
+use TeamTeaTime\Forum\Frontends\Traits\LivewireTrait;
 
 class Livewire implements FrontendInterface
 {
+    use LivewireTrait;
+
     public function register(): void
     {
         // Components
-        \Livewire\Livewire::component('components.button', Button::class);
-        \Livewire\Livewire::component('components.category.card', CategoryCard::class);
-        \Livewire\Livewire::component('components.thread.card', ThreadCard::class);
+        $this->registerComponent('components.button', Button::class);
+        $this->registerComponent('components.category.card', CategoryCard::class);
+        $this->registerComponent('components.thread.card', ThreadCard::class);
 
         // Pages
-        \Livewire\Livewire::component('pages.category.index', CategoryIndex::class);
-        \Livewire\Livewire::component('pages.category.show', CategoryShow::class);
-        \Livewire\Livewire::component('pages.thread.create', ThreadCreate::class);
+        $this->registerComponent('pages.category.index', CategoryIndex::class);
+        $this->registerComponent('pages.category.show', CategoryShow::class);
+        $this->registerComponent('pages.thread.create', ThreadCreate::class);
     }
 
     public function getRouterConfig(): array

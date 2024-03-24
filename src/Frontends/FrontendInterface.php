@@ -2,7 +2,6 @@
 
 namespace TeamTeaTime\Forum\Frontends;
 
-
 interface FrontendInterface
 {
     public function register(): void;
