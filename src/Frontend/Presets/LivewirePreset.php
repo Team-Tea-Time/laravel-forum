@@ -8,6 +8,7 @@ use TeamTeaTime\Forum\{
     Frontend\Presets\Livewire\Components\Post\Card as PostCard,
     Frontend\Presets\Livewire\Components\Thread\Card as ThreadCard,
     Frontend\Presets\Livewire\Components\Button,
+    Frontend\Presets\Livewire\Components\LiveAlerts,
     Frontend\Presets\Livewire\Components\Pill,
     Frontend\Traits\LivewireTrait,
 };
@@ -33,10 +34,11 @@ class LivewirePreset extends AbstractPreset
 
     public function register(): void
     {
-        $this->registerComponent('components.category.card', CategoryCard::class);
-        $this->registerComponent('components.post.card', PostCard::class);
-        $this->registerComponent('components.thread.card', ThreadCard::class);
-        $this->registerComponent('components.button', Button::class);
-        $this->registerComponent('components.pill', Pill::class);
+        $this->livewireComponent('components.category.card', CategoryCard::class);
+        $this->livewireComponent('components.post.card', PostCard::class);
+        $this->livewireComponent('components.thread.card', ThreadCard::class);
+        $this->livewireComponent('components.button', Button::class);
+        $this->livewireComponent('components.live-alerts', LiveAlerts::class);
+        $this->livewireComponent('components.pill', Pill::class);
     }
 }

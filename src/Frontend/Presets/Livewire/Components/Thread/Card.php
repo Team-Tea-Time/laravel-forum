@@ -10,6 +10,8 @@ use TeamTeaTime\Forum\Models\Thread;
 class Card extends Component
 {
     public Thread $thread;
+    public bool $selectable;
+    public string $model;
 
     public function render(): View
     {

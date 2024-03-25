@@ -18,10 +18,10 @@ class Livewire implements StackInterface
     public function register(): void
     {
         // Register full-page components required by the Livewire routes
-        $this->registerComponent('pages.category.index', CategoryIndex::class);
-        $this->registerComponent('pages.category.show', CategoryShow::class);
-        $this->registerComponent('pages.thread.create', ThreadCreate::class);
-        $this->registerComponent('pages.thread.show', ThreadShow::class);
+        $this->livewireComponent('pages.category.index', CategoryIndex::class);
+        $this->livewireComponent('pages.category.show', CategoryShow::class);
+        $this->livewireComponent('pages.thread.create', ThreadCreate::class);
+        $this->livewireComponent('pages.thread.show', ThreadShow::class);
     }
 
     public function getRouterConfig(): array

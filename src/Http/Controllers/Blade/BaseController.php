@@ -5,7 +5,7 @@ namespace TeamTeaTime\Forum\Http\Controllers\Blade;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 abstract class BaseController extends Controller
 {
