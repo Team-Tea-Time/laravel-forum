@@ -24,4 +24,18 @@ class PostRules
             'permadelete' => ['boolean'],
         ];
     }
+
+    public static function bulk(): array
+    {
+        return [
+            'posts' => ['required', 'array'],
+        ];
+    }
+
+    public static function bulkDelete(): array
+    {
+        return static::bulk() + [
+            'permadelete' => ['boolean'],
+        ];
+    }
 }

@@ -2,8 +2,10 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-use TeamTeaTime\Forum\Actions\UpdatePost as Action;
-use TeamTeaTime\Forum\Events\UserUpdatedPost;
+use TeamTeaTime\Forum\{
+    Actions\UpdatePost as Action,
+    Events\UserUpdatedPost,
+};
 
 class UpdatePost extends CreatePost
 {

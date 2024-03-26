@@ -3,11 +3,14 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\Bulk\RestoreThreads as Action;
-use TeamTeaTime\Forum\Events\UserBulkRestoredThreads;
-use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Models\Thread;
+use TeamTeaTime\Forum\{
+    Actions\Bulk\RestoreThreads as Action,
+    Events\UserBulkRestoredThreads,
+    Http\Requests\Traits\AuthorizesAfterValidation,
+    Interfaces\FulfillableRequest,
+    Models\Thread,
+    Support\Validation\ThreadRules,
+};
 
 class RestoreThreads extends FormRequest implements FulfillableRequest
 {
@@ -15,9 +18,7 @@ class RestoreThreads extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'threads' => ['required', 'array'],
-        ];
+        return ThreadRules::bulk();
     }
 
     public function authorizeValidated(): bool

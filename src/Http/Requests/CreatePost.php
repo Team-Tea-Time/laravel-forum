@@ -3,10 +3,12 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\CreatePost as Action;
-use TeamTeaTime\Forum\Events\UserCreatedPost;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Support\Validation\PostRules;
+use TeamTeaTime\Forum\{
+    Actions\CreatePost as Action,
+    Events\UserCreatedPost,
+    Interfaces\FulfillableRequest,
+    Support\Validation\PostRules,
+};
 
 class CreatePost extends FormRequest implements FulfillableRequest
 {

@@ -2,8 +2,10 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-use TeamTeaTime\Forum\Actions\UnlockThread as Action;
-use TeamTeaTime\Forum\Events\UserUnlockedThread;
+use TeamTeaTime\Forum\{
+    Actions\UnlockThread as Action,
+    Events\UserUnlockedThread,
+};
 
 class UnlockThread extends LockThread
 {

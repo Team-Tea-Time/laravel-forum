@@ -2,8 +2,10 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-use TeamTeaTime\Forum\Actions\UnpinThread as Action;
-use TeamTeaTime\Forum\Events\UserUnpinnedThread;
+use TeamTeaTime\Forum\{
+    Actions\UnpinThread as Action,
+    Events\UserUnpinnedThread,
+};
 
 class UnpinThread extends PinThread
 {

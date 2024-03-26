@@ -3,12 +3,14 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\MoveThread as Action;
-use TeamTeaTime\Forum\Events\UserMovedThread;
-use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Support\Validation\ThreadRules;
+use TeamTeaTime\Forum\{
+    Actions\MoveThread as Action,
+    Events\UserMovedThread,
+    Http\Requests\Traits\AuthorizesAfterValidation,
+    Interfaces\FulfillableRequest,
+    Models\Category,
+    Support\Validation\ThreadRules,
+};
 
 class MoveThread extends FormRequest implements FulfillableRequest
 {

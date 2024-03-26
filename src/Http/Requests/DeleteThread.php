@@ -3,11 +3,13 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\DeleteThread as Action;
-use TeamTeaTime\Forum\Events\UserDeletedThread;
-use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Support\Validation\ThreadRules;
+use TeamTeaTime\Forum\{
+    Actions\DeleteThread as Action,
+    Events\UserDeletedThread,
+    Http\Requests\Traits\HandlesDeletion,
+    Interfaces\FulfillableRequest,
+    Support\Validation\ThreadRules,
+};
 
 class DeleteThread extends FormRequest implements FulfillableRequest
 {

@@ -3,9 +3,11 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\RestoreThread as Action;
-use TeamTeaTime\Forum\Events\UserRestoredThread;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\{
+    Actions\RestoreThread as Action,
+    Events\UserRestoredThread,
+    Interfaces\FulfillableRequest,
+};
 
 class RestoreThread extends FormRequest implements FulfillableRequest
 {

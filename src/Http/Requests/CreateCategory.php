@@ -3,10 +3,12 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\CreateCategory as Action;
-use TeamTeaTime\Forum\Events\UserCreatedCategory;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Support\Validation\CategoryRules;
+use TeamTeaTime\Forum\{
+    Actions\CreateCategory as Action,
+    Events\UserCreatedCategory,
+    Interfaces\FulfillableRequest,
+    Support\Validation\CategoryRules,
+};
 
 class CreateCategory extends FormRequest implements FulfillableRequest
 {

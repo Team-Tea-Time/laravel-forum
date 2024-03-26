@@ -28,4 +28,11 @@ class CategoryRules
             'force' => ['boolean'],
         ];
     }
+
+    public static function bulk(): array
+    {
+        return [
+            'categories' => ['required', 'array'],
+        ];
+    }
 }

@@ -2,8 +2,10 @@
 
 namespace TeamTeaTime\Forum\Http\Requests;
 
-use TeamTeaTime\Forum\Actions\UpdateCategory as Action;
-use TeamTeaTime\Forum\Events\UserUpdatedCategory;
+use TeamTeaTime\Forum\{
+    Actions\UpdateCategory as Action,
+    Events\UserUpdatedCategory,
+};
 
 class UpdateCategory extends CreateCategory
 {

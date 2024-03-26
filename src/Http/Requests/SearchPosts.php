@@ -3,12 +3,14 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\SearchPosts as Action;
-use TeamTeaTime\Forum\Events\UserSearchedPosts;
-use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Support\Validation\PostRules;
+use TeamTeaTime\Forum\{
+    Actions\SearchPosts as Action,
+    Events\UserSearchedPosts,
+    Http\Requests\Traits\AuthorizesAfterValidation,
+    Interfaces\FulfillableRequest,
+    Models\Category,
+    Support\Validation\PostRules,
+};
 
 class SearchPosts extends FormRequest implements FulfillableRequest
 {

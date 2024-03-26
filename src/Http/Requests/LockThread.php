@@ -3,9 +3,11 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\LockThread as Action;
-use TeamTeaTime\Forum\Events\UserLockedThread;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\{
+    Actions\LockThread as Action,
+    Events\UserLockedThread,
+    Interfaces\FulfillableRequest,
+};
 
 class LockThread extends FormRequest implements FulfillableRequest
 {

@@ -3,13 +3,16 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\Bulk\LockThreads as Action;
-use TeamTeaTime\Forum\Events\UserBulkLockedThreads;
-use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\CategoryAccess;
+use TeamTeaTime\Forum\{
+    Actions\Bulk\LockThreads as Action,
+    Events\UserBulkLockedThreads,
+    Http\Requests\Traits\AuthorizesAfterValidation,
+    Interfaces\FulfillableRequest,
+    Models\Category,
+    Models\Thread,
+    Support\CategoryAccess,
+    Support\Validation\ThreadRules,
+};
 
 class LockThreads extends FormRequest implements FulfillableRequest
 {
@@ -17,9 +20,7 @@ class LockThreads extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'threads' => ['required', 'array'],
-        ];
+        return ThreadRules::bulk();
     }
 
     public function authorizeValidated(): bool

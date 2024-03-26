@@ -3,9 +3,11 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\PinThread as Action;
-use TeamTeaTime\Forum\Events\UserPinnedThread;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\{
+    Actions\PinThread as Action,
+    Events\UserPinnedThread,
+    Interfaces\FulfillableRequest,
+};
 
 class PinThread extends FormRequest implements FulfillableRequest
 {

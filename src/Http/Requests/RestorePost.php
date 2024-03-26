@@ -3,9 +3,11 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\RestorePost as Action;
-use TeamTeaTime\Forum\Events\UserRestoredPost;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\{
+    Actions\RestorePost as Action,
+    Events\UserRestoredPost,
+    Interfaces\FulfillableRequest,
+};
 
 class RestorePost extends FormRequest implements FulfillableRequest
 {

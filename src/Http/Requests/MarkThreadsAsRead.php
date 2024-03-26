@@ -3,12 +3,14 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\MarkThreadsAsRead as Action;
-use TeamTeaTime\Forum\Events\UserMarkedThreadsAsRead;
-use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Support\Validation\CategoryRules;
+use TeamTeaTime\Forum\{
+    Actions\MarkThreadsAsRead as Action,
+    Events\UserMarkedThreadsAsRead,
+    Http\Requests\Traits\AuthorizesAfterValidation,
+    Interfaces\FulfillableRequest,
+    Models\Category,
+    Support\Validation\CategoryRules,
+};
 
 class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
 {

@@ -3,12 +3,14 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\DeleteCategory as Action;
-use TeamTeaTime\Forum\Events\UserDeletedCategory;
-use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
-use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Support\Validation\CategoryRules;
+use TeamTeaTime\Forum\{
+    Actions\DeleteCategory as Action,
+    Events\UserDeletedCategory,
+    Http\Requests\Traits\AuthorizesAfterValidation,
+    Http\Requests\Traits\HandlesDeletion,
+    Interfaces\FulfillableRequest,
+    Support\Validation\CategoryRules,
+};
 
 class DeleteCategory extends FormRequest implements FulfillableRequest
 {

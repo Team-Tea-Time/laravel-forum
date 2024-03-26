@@ -3,10 +3,12 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\CreateThread as Action;
-use TeamTeaTime\Forum\Events\UserCreatedThread;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Support\Validation\ThreadRules;
+use TeamTeaTime\Forum\{
+    Actions\CreateThread as Action,
+    Events\UserCreatedThread,
+    Interfaces\FulfillableRequest,
+    Support\Validation\ThreadRules,
+};
 
 class CreateThread extends FormRequest implements FulfillableRequest
 {

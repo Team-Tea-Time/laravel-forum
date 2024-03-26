@@ -3,17 +3,18 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\Bulk\ManageCategories as Action;
-use TeamTeaTime\Forum\Events\UserBulkManagedCategories;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
+use TeamTeaTime\Forum\{
+    Actions\Bulk\ManageCategories as Action,
+    Events\UserBulkManagedCategories,
+    Interfaces\FulfillableRequest,
+    Support\Validation\CategoryRules,
+};
 
 class ManageCategories extends FormRequest implements FulfillableRequest
 {
     public function rules(): array
     {
-        return [
-            'categories' => ['required', 'array'],
-        ];
+        return CategoryRules::bulk();
     }
 
     public function authorizeValidated(): bool

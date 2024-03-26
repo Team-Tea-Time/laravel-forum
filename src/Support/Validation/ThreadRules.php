@@ -32,4 +32,25 @@ class ThreadRules
             'permadelete' => ['boolean'],
         ];
     }
+
+    public static function bulk(): array
+    {
+        return [
+            'threads' => ['required', 'array'],
+        ];
+    }
+
+    public static function bulkDelete(): array
+    {
+        return static::bulk() + [
+            'permadelete' => ['boolean'],
+        ];
+    }
+
+    public static function bulkMove(): array
+    {
+        return static::bulk() + [
+            'category_id' => ['required', 'int', 'exists:forum_categories,id'],
+        ];
+    }
 }

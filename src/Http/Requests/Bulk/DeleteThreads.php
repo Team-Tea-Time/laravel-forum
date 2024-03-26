@@ -3,13 +3,16 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\Bulk\DeleteThreads as Action;
-use TeamTeaTime\Forum\Events\UserBulkDeletedThreads;
-use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
-use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\CategoryAccess;
+use TeamTeaTime\Forum\{
+    Actions\Bulk\DeleteThreads as Action,
+    Events\UserBulkDeletedThreads,
+    Http\Requests\Traits\AuthorizesAfterValidation,
+    Http\Requests\Traits\HandlesDeletion,
+    Interfaces\FulfillableRequest,
+    Models\Thread,
+    Support\CategoryAccess,
+    Support\Validation\ThreadRules,
+};
 
 class DeleteThreads extends FormRequest implements FulfillableRequest
 {
@@ -17,10 +20,7 @@ class DeleteThreads extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'threads' => ['required', 'array'],
-            'permadelete' => ['boolean'],
-        ];
+        return ThreadRules::bulkDelete();
     }
 
     public function authorizeValidated(): bool

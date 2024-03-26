@@ -3,13 +3,16 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\Bulk\DeletePosts as Action;
-use TeamTeaTime\Forum\Events\UserBulkDeletedPosts;
-use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
-use TeamTeaTime\Forum\Http\Requests\Traits\HandlesDeletion;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Models\Post;
-use TeamTeaTime\Forum\Support\CategoryAccess;
+use TeamTeaTime\Forum\{
+    Actions\Bulk\DeletePosts as Action,
+    Events\UserBulkDeletedPosts,
+    Http\Requests\Traits\AuthorizesAfterValidation,
+    Http\Requests\Traits\HandlesDeletion,
+    Interfaces\FulfillableRequest,
+    Models\Post,
+    Support\CategoryAccess,
+    Support\Validation\PostRules,
+};
 
 class DeletePosts extends FormRequest implements FulfillableRequest
 {
@@ -17,10 +20,7 @@ class DeletePosts extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'posts' => ['required', 'array'],
-            'permadelete' => ['boolean'],
-        ];
+        return PostRules::bulkDelete();
     }
 
     public function authorizeValidated(): bool

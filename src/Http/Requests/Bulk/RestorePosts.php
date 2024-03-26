@@ -3,11 +3,14 @@
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Foundation\Http\FormRequest;
-use TeamTeaTime\Forum\Actions\Bulk\RestorePosts as Action;
-use TeamTeaTime\Forum\Events\UserBulkRestoredPosts;
-use TeamTeaTime\Forum\Http\Requests\Traits\AuthorizesAfterValidation;
-use TeamTeaTime\Forum\Interfaces\FulfillableRequest;
-use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\{
+    Actions\Bulk\RestorePosts as Action,
+    Events\UserBulkRestoredPosts,
+    Http\Requests\Traits\AuthorizesAfterValidation,
+    Interfaces\FulfillableRequest,
+    Models\Post,
+    Support\Validation\PostRules,
+};
 
 class RestorePosts extends FormRequest implements FulfillableRequest
 {
@@ -15,9 +18,7 @@ class RestorePosts extends FormRequest implements FulfillableRequest
 
     public function rules(): array
     {
-        return [
-            'posts' => ['required', 'array'],
-        ];
+        return PostRules::bulk();
     }
 
     public function authorizeValidated(): bool
