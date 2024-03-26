@@ -2,7 +2,7 @@
 
 namespace TeamTeaTime\Forum\Frontend\Traits;
 
-trait LivewireTrait
+trait RegistersLivewireComponents
 {
     private function livewireComponent(string $name, string $component): void
     {

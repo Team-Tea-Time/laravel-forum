@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Frontend\Traits;
 
 use Illuminate\Support\Facades\Blade;
 
-trait BladeTrait
+trait RegistersBladeComponents
 {
     private function bladeComponent(string $name, string $component): void
     {
