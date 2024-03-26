@@ -57,6 +57,8 @@ class ThreadShow extends EventfulPaginatedComponent
 
         $this->setPage($post->getPage());
 
+        $this->touchUpdateKey();
+
         return $this->alert('general.reply_added')->toLivewire();
     }
 
