@@ -20,10 +20,6 @@ class ThreadShow extends Component
     use WithPagination;
 
     public Thread $thread;
-    public array $threadDestinationCategories;
-    public array $selectablePostIds = [];
-
-    private LengthAwarePaginator $posts;
 
     // Form fields
     public string $content = '';
@@ -39,27 +35,6 @@ class ThreadShow extends Component
         if ($request->user() !== null) {
             UserViewingThread::dispatch($request->user(), $this->thread);
             $this->thread->markAsRead($request->user());
-        }
-
-        $this->threadDestinationCategories = $request->user() && $request->user()->can('moveThreadsFrom', $this->thread->category)
-                    ? Category::acceptsThreads()->get()->toTree()
-                    : [];
-
-        $posts = config('forum.general.display_trashed_posts') || $request->user() && $request->user()->can('viewTrashedPosts')
-               ? $this->thread->posts()->withTrashed()
-               : $this->thread->posts();
-
-        $this->posts = $posts
-            ->with('author', 'thread')
-            ->orderBy('created_at', 'asc')
-            ->paginate();
-
-        if ($request->user()) {
-            foreach ($this->posts as $post) {
-                if ($request->user()->can('delete', $post) || $request->user()->can('restore', $post)) {
-                    $this->selectablePostIds[] = $post->id;
-                }
-            }
         }
     }
 
@@ -82,9 +57,34 @@ class ThreadShow extends Component
         return $this->redirect($post->route, true);
     }
 
-    public function render(): View
+    public function render(Request $request): View
     {
-        return ViewFactory::make('forum::pages.thread.show', ['posts' => $this->posts])
-            ->layout('forum::layouts.main', ['category' => $this->thread->category, 'thread' => $this->thread]);
+        $threadDestinationCategories = $request->user() && $request->user()->can('moveThreadsFrom', $this->thread->category)
+                    ? Category::acceptsThreads()->get()->toTree()
+                    : [];
+
+        $postsQuery = config('forum.general.display_trashed_posts') || $request->user() && $request->user()->can('viewTrashedPosts')
+               ? $this->thread->posts()->withTrashed()
+               : $this->thread->posts();
+
+        $posts = $postsQuery
+            ->with('author', 'thread')
+            ->orderBy('created_at', 'asc')
+            ->paginate();
+
+        $selectablePostIds = [];
+        if ($request->user()) {
+            foreach ($posts as $post) {
+                if ($request->user()->can('delete', $post) || $request->user()->can('restore', $post)) {
+                    $selectablePostIds[] = $post->id;
+                }
+            }
+        }
+
+        return ViewFactory::make('forum::pages.thread.show', [
+            'posts' => $posts,
+            'threadDestinationCategories' => $threadDestinationCategories,
+            'selectablePostIds' => $selectablePostIds,
+        ])->layout('forum::layouts.main', ['category' => $this->thread->category, 'thread' => $this->thread]);
     }
 }
