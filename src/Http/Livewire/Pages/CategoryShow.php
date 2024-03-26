@@ -13,6 +13,7 @@ use TeamTeaTime\Forum\{
     Actions\Bulk\UnpinThreads,
     Events\UserViewingCategory,
     Http\Livewire\Traits\SendsAlerts,
+    Http\Livewire\Traits\UpdatesContent,
     Http\Livewire\EventfulPaginatedComponent,
     Models\Category,
     Support\CategoryAccess,
@@ -21,19 +22,9 @@ use TeamTeaTime\Forum\{
 
 class CategoryShow extends EventfulPaginatedComponent
 {
-    use SendsAlerts;
+    use SendsAlerts, UpdatesContent;
 
     public Category $category;
-
-    /**
-     * A unique string used to trigger updates when threads are updated.
-     */
-    public string $updateKey;
-
-    private function touchUpdateKey()
-    {
-        $this->updateKey = uniqid();
-    }
 
     public function mount(Request $request)
     {
@@ -49,11 +40,8 @@ class CategoryShow extends EventfulPaginatedComponent
         }
     }
 
-    public function lockThreads(Request $request, array $threadIds): array
+    private function handleActionResult($result): array
     {
-        $action = new LockThreads($threadIds, false);
-        $result = $action->execute();
-
         if ($result == null) {
             return $this->invalidSelectionAlert()->toLivewire();
         }
@@ -61,48 +49,34 @@ class CategoryShow extends EventfulPaginatedComponent
         $this->touchUpdateKey();
 
         return $this->transChoiceAlert('threads.updated', $result->count())->toLivewire();
+    }
+
+    public function lockThreads(Request $request, array $threadIds): array
+    {
+        $action = new LockThreads($threadIds, false);
+        $result = $action->execute();
+        return $this->handleActionResult($result);
     }
 
     public function unlockThreads(Request $request, array $threadIds): array
     {
         $action = new UnlockThreads($threadIds, false);
         $result = $action->execute();
-
-        if ($result == null) {
-            return $this->invalidSelectionAlert()->toLivewire();
-        }
-
-        $this->touchUpdateKey();
-
-        return $this->transChoiceAlert('threads.updated', $result->count())->toLivewire();
+        return $this->handleActionResult($result);
     }
 
     public function pinThreads(Request $request, array $threadIds): array
     {
         $action = new PinThreads($threadIds, false);
         $result = $action->execute();
-
-        if ($result == null) {
-            return $this->invalidSelectionAlert()->toLivewire();
-        }
-
-        $this->touchUpdateKey();
-
-        return $this->transChoiceAlert('threads.updated', $result->count())->toLivewire();
+        return $this->handleActionResult($result);
     }
 
     public function unpinThreads(Request $request, array $threadIds): array
     {
         $action = new UnpinThreads($threadIds, false);
         $result = $action->execute();
-
-        if ($result == null) {
-            return $this->invalidSelectionAlert()->toLivewire();
-        }
-
-        $this->touchUpdateKey();
-
-        return $this->transChoiceAlert('threads.updated', $result->count())->toLivewire();
+        return $this->handleActionResult($result);
     }
 
     private function getThreads(Request $request): LengthAwarePaginator
