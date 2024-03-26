@@ -10,12 +10,12 @@ use TeamTeaTime\Forum\{
     Frontend\Presets\Livewire\Components\Button,
     Frontend\Presets\Livewire\Components\LiveAlerts,
     Frontend\Presets\Livewire\Components\Pill,
-    Frontend\Traits\LivewireTrait,
+    Frontend\Traits\RegistersLivewireComponents,
 };
 
 class LivewirePreset extends AbstractPreset
 {
-    use LivewireTrait;
+    use RegistersLivewireComponents;
 
     public static function getName(): string
     {

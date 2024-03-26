@@ -8,12 +8,12 @@ use TeamTeaTime\Forum\{
     Http\Livewire\Pages\ThreadCreate,
     Http\Livewire\Pages\ThreadShow,
     Http\Middleware\ResolveFrontendParameters,
-    Frontend\Traits\LivewireTrait,
+    Frontend\Traits\RegistersLivewireComponents,
 };
 
 class Livewire implements StackInterface
 {
-    use LivewireTrait;
+    use RegistersLivewireComponents;
 
     public function register(): void
     {

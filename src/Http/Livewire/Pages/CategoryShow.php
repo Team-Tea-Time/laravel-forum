@@ -6,16 +6,23 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
-use TeamTeaTime\Forum\Actions\Bulk\LockThreads;
-use TeamTeaTime\Forum\Actions\Bulk\UnlockThreads;
-use TeamTeaTime\Forum\Events\UserViewingCategory;
-use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Support\CategoryAccess;
-use TeamTeaTime\Forum\Support\ThreadAccess;
-use TeamTeaTime\Forum\Http\Livewire\EventfulPaginatedComponent;
+use TeamTeaTime\Forum\{
+    Actions\Bulk\LockThreads,
+    Actions\Bulk\PinThreads,
+    Actions\Bulk\UnlockThreads,
+    Actions\Bulk\UnpinThreads,
+    Events\UserViewingCategory,
+    Http\Livewire\Traits\SendsAlerts,
+    Http\Livewire\EventfulPaginatedComponent,
+    Models\Category,
+    Support\CategoryAccess,
+    Support\ThreadAccess,
+};
 
 class CategoryShow extends EventfulPaginatedComponent
 {
+    use SendsAlerts;
+
     public Category $category;
 
     /**
@@ -48,18 +55,12 @@ class CategoryShow extends EventfulPaginatedComponent
         $result = $action->execute();
 
         if ($result == null) {
-            return [
-                'type' => 'warning',
-                'message' => trans('forum::general.invalid_selection'),
-            ];
+            return $this->invalidSelectionAlert()->toLivewire();
         }
 
         $this->touchUpdateKey();
 
-        return [
-            'type' => 'success',
-            'message' => trans_choice("forum::threads.updated", $result->count())
-        ];
+        return $this->transChoiceAlert('threads.updated', $result->count())->toLivewire();
     }
 
     public function unlockThreads(Request $request, array $threadIds): array
@@ -68,18 +69,40 @@ class CategoryShow extends EventfulPaginatedComponent
         $result = $action->execute();
 
         if ($result == null) {
-            return [
-                'type' => 'warning',
-                'message' => trans('forum::general.invalid_selection'),
-            ];
+            return $this->invalidSelectionAlert()->toLivewire();
         }
 
         $this->touchUpdateKey();
 
-        return [
-            'type' => 'success',
-            'message' => trans_choice("forum::threads.updated", $result->count())
-        ];
+        return $this->transChoiceAlert('threads.updated', $result->count())->toLivewire();
+    }
+
+    public function pinThreads(Request $request, array $threadIds): array
+    {
+        $action = new PinThreads($threadIds, false);
+        $result = $action->execute();
+
+        if ($result == null) {
+            return $this->invalidSelectionAlert()->toLivewire();
+        }
+
+        $this->touchUpdateKey();
+
+        return $this->transChoiceAlert('threads.updated', $result->count())->toLivewire();
+    }
+
+    public function unpinThreads(Request $request, array $threadIds): array
+    {
+        $action = new UnpinThreads($threadIds, false);
+        $result = $action->execute();
+
+        if ($result == null) {
+            return $this->invalidSelectionAlert()->toLivewire();
+        }
+
+        $this->touchUpdateKey();
+
+        return $this->transChoiceAlert('threads.updated', $result->count())->toLivewire();
     }
 
     private function getThreads(Request $request): LengthAwarePaginator
