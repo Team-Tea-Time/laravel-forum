@@ -4,14 +4,6 @@ namespace TeamTeaTime\Forum\Http\Livewire\Types;
 
 use Livewire\Wireable;
 
-enum AlertType: string
-{
-    case Success = 'success';
-    case Info = 'info';
-    case Warning = 'warning';
-    case Error = 'error';
-}
-
 class Alert implements Wireable
 {
     protected AlertType $type;

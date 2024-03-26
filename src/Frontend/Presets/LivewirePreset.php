@@ -8,7 +8,7 @@ use TeamTeaTime\Forum\{
     Frontend\Presets\Livewire\Components\Post\Card as PostCard,
     Frontend\Presets\Livewire\Components\Thread\Card as ThreadCard,
     Frontend\Presets\Livewire\Components\Button,
-    Frontend\Presets\Livewire\Components\LiveAlerts,
+    Frontend\Presets\Livewire\Components\Alerts,
     Frontend\Presets\Livewire\Components\Pill,
     Frontend\Traits\RegistersLivewireComponents,
 };
@@ -38,7 +38,7 @@ class LivewirePreset extends AbstractPreset
         $this->livewireComponent('components.post.card', PostCard::class);
         $this->livewireComponent('components.thread.card', ThreadCard::class);
         $this->livewireComponent('components.button', Button::class);
-        $this->livewireComponent('components.live-alerts', LiveAlerts::class);
+        $this->livewireComponent('components.alerts', Alerts::class);
         $this->livewireComponent('components.pill', Pill::class);
     }
 }

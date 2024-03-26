@@ -12,7 +12,7 @@ use TeamTeaTime\Forum\{
     Actions\Bulk\UnlockThreads,
     Actions\Bulk\UnpinThreads,
     Events\UserViewingCategory,
-    Http\Livewire\Traits\SendsAlerts,
+    Http\Livewire\Traits\CreatesAlerts,
     Http\Livewire\Traits\UpdatesContent,
     Http\Livewire\EventfulPaginatedComponent,
     Models\Category,
@@ -22,7 +22,7 @@ use TeamTeaTime\Forum\{
 
 class CategoryShow extends EventfulPaginatedComponent
 {
-    use SendsAlerts, UpdatesContent;
+    use CreatesAlerts, UpdatesContent;
 
     public Category $category;
 
@@ -48,7 +48,7 @@ class CategoryShow extends EventfulPaginatedComponent
 
         $this->touchUpdateKey();
 
-        return $this->transChoiceAlert('threads.updated', $result->count())->toLivewire();
+        return $this->pluralAlert('threads.updated', $result->count())->toLivewire();
     }
 
     public function lockThreads(Request $request, array $threadIds): array

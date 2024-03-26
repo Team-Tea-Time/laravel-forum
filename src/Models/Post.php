@@ -64,6 +64,11 @@ class Post extends BaseModel
         }
     }
 
+    public function getPage(): int
+    {
+        return ceil($this->sequence / $this->getPerPage());
+    }
+
     protected function route(): Attribute
     {
         return new Attribute(

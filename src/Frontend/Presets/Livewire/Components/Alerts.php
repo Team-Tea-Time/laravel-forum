@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class LiveAlerts extends Component
+class Alerts extends Component
 {
     public function render(): View
     {
-        return ViewFactory::make('forum::components.live-alerts');
+        return ViewFactory::make('forum::components.alerts');
     }
 }

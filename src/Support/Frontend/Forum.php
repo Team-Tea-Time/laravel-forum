@@ -30,7 +30,7 @@ class Forum
     {
         $as = config('forum.frontend.router.as');
 
-        if (! Str::startsWith($route, $as)) {
+        if (!Str::startsWith($route, $as)) {
             $route = "{$as}{$route}";
         }
 
@@ -62,14 +62,14 @@ class Forum
             if ($route == "{$as}thread.show") {
                 // The requested route is for a thread; we need to specify the page number and append a hash for
                 // the post
-                $params['page'] = ceil($model->sequence / $model->getPerPage());
+                $params['page'] = $model->getPage();
                 $append = "#post-{$model->sequence}";
             } else {
                 // Other post routes require the post parameter
                 $params['post'] = $model->id;
             }
 
-            return route($route, $params).$append;
+            return route($route, $params) . $append;
         }
 
         throw new \Exception('Invalid model type passed to Forum::route().');

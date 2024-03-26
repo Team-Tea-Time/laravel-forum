@@ -3,21 +3,22 @@
 namespace TeamTeaTime\Forum\Http\Livewire\Pages;
 
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
-use Livewire\Component;
-use Livewire\WithPagination;
-use TeamTeaTime\Forum\Actions\CreatePost as Action;
-use TeamTeaTime\Forum\Events\UserViewingThread;
-use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\Frontend\Forum;
-use TeamTeaTime\Forum\Support\Validation\PostRules;
+use TeamTeaTime\Forum\{
+    Actions\CreatePost as Action,
+    Events\UserViewingThread,
+    Http\Livewire\Traits\CreatesAlerts,
+    Http\Livewire\Traits\UpdatesContent,
+    Http\Livewire\EventfulPaginatedComponent,
+    Models\Category,
+    Models\Thread,
+    Support\Validation\PostRules,
+};
 
-class ThreadShow extends Component
+class ThreadShow extends EventfulPaginatedComponent
 {
-    use WithPagination;
+    use CreatesAlerts, UpdatesContent;
 
     public Thread $thread;
 
@@ -49,12 +50,14 @@ class ThreadShow extends Component
             ? $this->thread->posts->find($request->input('post'))
             : null;
 
-        Forum::alert('success', 'general.reply_added');
-
         $action = new Action($this->thread, $parent, $request->user(), $validated['content']);
         $post = $action->execute();
 
-        return $this->redirect($post->route, true);
+        $this->content = '';
+
+        $this->setPage($post->getPage());
+
+        return $this->alert('general.reply_added')->toLivewire();
     }
 
     public function render(Request $request): View

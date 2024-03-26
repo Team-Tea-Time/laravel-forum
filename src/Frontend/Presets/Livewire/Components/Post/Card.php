@@ -10,6 +10,7 @@ use TeamTeaTime\Forum\Models\Post;
 class Card extends Component
 {
     public Post $post;
+    public bool $selectable;
 
     public function render(): View
     {
