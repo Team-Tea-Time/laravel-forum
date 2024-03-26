@@ -34,7 +34,7 @@ class DeleteThreads extends FormRequest implements FulfillableRequest
             $canView = $accessibleCategoryIds->contains($thread->category_id) && $this->user()->can('view', $thread);
             $canDelete = $this->user()->can('deleteThreads', $thread->category) && $this->user()->can('delete', $thread);
 
-            if (! ($canView && $canDelete)) {
+            if (!($canView && $canDelete)) {
                 return false;
             }
         }

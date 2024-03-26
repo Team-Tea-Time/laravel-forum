@@ -9,6 +9,7 @@ use TeamTeaTime\Forum\{
     Events\UserBulkMovedThreads,
     Http\Requests\Traits\AuthorizesAfterValidation,
     Interfaces\FulfillableRequest,
+    Models\BaseModel,
     Models\Category,
     Models\Thread,
     Support\CategoryAccess,
@@ -33,12 +34,12 @@ class MoveThreads extends FormRequest implements FulfillableRequest
 
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($this->user());
 
-        if (! ($accessibleCategoryIds->contains($destinationCategory->id) || $this->user()->can('moveThreadsTo', $destinationCategory))) {
+        if (!($accessibleCategoryIds->contains($destinationCategory->id) || $this->user()->can('moveThreadsTo', $destinationCategory))) {
             return false;
         }
 
         foreach ($this->getSourceCategories() as $category) {
-            if (! ($accessibleCategoryIds->contains($category->id) || $this->user()->can('moveThreadsFrom', $category))) {
+            if (!($accessibleCategoryIds->contains($category->id) || $this->user()->can('moveThreadsFrom', $category))) {
                 return false;
             }
         }
@@ -64,14 +65,14 @@ class MoveThreads extends FormRequest implements FulfillableRequest
 
     private function getSourceCategories()
     {
-        if (! $this->sourceCategories) {
+        if (!$this->sourceCategories) {
             $query = Thread::select('category_id')
                 ->distinct()
                 ->where('category_id', '!=', $this->validated()['category_id'])
                 ->whereIn('id', $this->validated()['threads']);
 
-            if (! $this->user()->can('viewTrashedThreads')) {
-                $query = $query->whereNull(Thread::DELETED_AT);
+            if (!$this->user()->can('viewTrashedThreads')) {
+                $query = $query->whereNull(BaseModel::DELETED_AT);
             }
 
             $this->sourceCategories = Category::whereIn('id', $query->get()->pluck('category_id'))->get();

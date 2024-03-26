@@ -2,15 +2,13 @@
 
 namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\Bulk\PinThreads as Action,
     Events\UserBulkPinnedThreads,
     Http\Requests\Traits\AuthorizesAfterValidation,
     Interfaces\FulfillableRequest,
-    Models\Category,
-    Models\Thread,
+    Support\CategoryAccess,
     Support\Validation\ThreadRules,
 };
 
@@ -25,9 +23,10 @@ class PinThreads extends FormRequest implements FulfillableRequest
 
     public function authorizeValidated(): bool
     {
-        $categories = $this->categories();
+        $categories = CategoryAccess::getFilteredCategoryCollectionFor($this->user(), $this->validated()['threads']);
+
         foreach ($categories as $category) {
-            if (! $this->user()->can('pinThreads', $category)) {
+            if (!$this->user()->can('pinThreads', $category)) {
                 return false;
             }
         }
@@ -45,18 +44,5 @@ class PinThreads extends FormRequest implements FulfillableRequest
         }
 
         return $threads;
-    }
-
-    protected function categories(): Collection
-    {
-        $query = Thread::whereIn('id', $this->validated()['threads']);
-
-        if ($this->user()->can('viewTrashedThreads')) {
-            $query = $query->withTrashed();
-        }
-
-        $categoryIds = $query->select('category_id')->distinct()->pluck('category_id');
-
-        return Category::whereIn('id', $categoryIds)->get();
     }
 }

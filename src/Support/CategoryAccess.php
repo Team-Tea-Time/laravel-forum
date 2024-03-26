@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Collection;
 use Kalnoy\Nestedset\Collection as NestedCollection;
 use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Models\Thread;
 
 /**
  * CategoryAccess provides utilities for retrieving category data based on category privacy and user authorisation.
@@ -24,6 +25,22 @@ class CategoryAccess
                 ->ancestorsOf($category->id)
                 ->first()
             : null;
+    }
+
+    public static function getFilteredCategoryCollectionFor(User $user, array $threadIds): Collection
+    {
+        $query = Thread::whereIn('id', $threadIds);
+
+        if ($user->can('viewTrashedThreads')) {
+            $query = $query->withTrashed();
+        }
+
+        $categoryIds = $query->select('category_id')
+            ->distinct()
+            ->pluck('category_id')
+            ->intersect(static::getFilteredIdsFor($user));
+
+        return Category::whereIn('id', $categoryIds)->get();
     }
 
     public static function isAccessibleTo(?User $user, int $categoryId): bool

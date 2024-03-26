@@ -7,6 +7,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Collection;
 use TeamTeaTime\Forum\Models\Category;
+use TeamTeaTime\Forum\Models\Thread;
 
 /**
  * ThreadAccess provides utilities for retrieving thread data based on user authorisation.

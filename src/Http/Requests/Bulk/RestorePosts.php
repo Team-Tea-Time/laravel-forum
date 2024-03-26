@@ -24,8 +24,9 @@ class RestorePosts extends FormRequest implements FulfillableRequest
     public function authorizeValidated(): bool
     {
         $posts = Post::whereIn('id', $this->validated()['posts'])->onlyTrashed()->get();
+
         foreach ($posts as $post) {
-            if (! ($this->user()->can('restorePosts', $post->thread) && $this->user()->can('restore', $post))) {
+            if (!($this->user()->can('restorePosts', $post->thread) && $this->user()->can('restore', $post))) {
                 return false;
             }
         }

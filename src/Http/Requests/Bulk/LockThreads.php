@@ -8,8 +8,6 @@ use TeamTeaTime\Forum\{
     Events\UserBulkLockedThreads,
     Http\Requests\Traits\AuthorizesAfterValidation,
     Interfaces\FulfillableRequest,
-    Models\Category,
-    Models\Thread,
     Support\CategoryAccess,
     Support\Validation\ThreadRules,
 };
@@ -25,19 +23,10 @@ class LockThreads extends FormRequest implements FulfillableRequest
 
     public function authorizeValidated(): bool
     {
-        $query = Thread::whereIn('id', $this->validated()['threads']);
-
-        if ($this->user()->can('viewTrashedThreads')) {
-            $query = $query->withTrashed();
-        }
-
-        $categoryIds = $query->select('category_id')->distinct()->pluck('category_id');
-        $categories = Category::whereIn('id', $categoryIds)->get();
-
-        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($this->user());
+        $categories = CategoryAccess::getFilteredCategoryCollectionFor($this->user(), $this->validated()['threads']);
 
         foreach ($categories as $category) {
-            if (! ($accessibleCategoryIds->contains($category->id) || $this->user()->can('lockThreads', $category))) {
+            if (!$this->user()->can('lockThreads', $category)) {
                 return false;
             }
         }
