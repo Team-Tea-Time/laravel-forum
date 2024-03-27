@@ -53,6 +53,8 @@ class ThreadShow extends EventfulPaginatedComponent
         $action = new Action($this->thread, $parent, $request->user(), $validated['content']);
         $post = $action->execute();
 
+        $post->thread->markAsRead($request->user());
+
         $this->content = '';
 
         $this->setPage($post->getPage());
