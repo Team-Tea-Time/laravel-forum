@@ -80,7 +80,7 @@ class ThreadShow extends EventfulPaginatedComponent
         $selectablePostIds = [];
         if ($request->user()) {
             foreach ($posts as $post) {
-                if ($request->user()->can('delete', $post) || $request->user()->can('restore', $post)) {
+                if ($post->sequence > 1 && ($request->user()->can('delete', $post) || $request->user()->can('restore', $post))) {
                     $selectablePostIds[] = $post->id;
                 }
             }
