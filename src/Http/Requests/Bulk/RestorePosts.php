@@ -7,12 +7,12 @@ use TeamTeaTime\Forum\{
     Actions\Bulk\RestorePosts as Action,
     Events\UserBulkRestoredPosts,
     Http\Requests\Traits\AuthorizesAfterValidation,
-    Interfaces\FulfillableRequest,
+    Http\Requests\FulfillableRequestInterface,
     Models\Post,
     Support\Validation\PostRules,
 };
 
-class RestorePosts extends FormRequest implements FulfillableRequest
+class RestorePosts extends FormRequest implements FulfillableRequestInterface
 {
     use AuthorizesAfterValidation;
 

@@ -6,10 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\RestorePost as Action,
     Events\UserRestoredPost,
-    Interfaces\FulfillableRequest,
 };
 
-class RestorePost extends FormRequest implements FulfillableRequest
+class RestorePost extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {

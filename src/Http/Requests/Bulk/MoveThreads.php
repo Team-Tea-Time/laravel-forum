@@ -8,7 +8,7 @@ use TeamTeaTime\Forum\{
     Actions\Bulk\MoveThreads as Action,
     Events\UserBulkMovedThreads,
     Http\Requests\Traits\AuthorizesAfterValidation,
-    Interfaces\FulfillableRequest,
+    Http\Requests\FulfillableRequestInterface,
     Models\BaseModel,
     Models\Category,
     Models\Thread,
@@ -16,7 +16,7 @@ use TeamTeaTime\Forum\{
     Support\Validation\ThreadRules,
 };
 
-class MoveThreads extends FormRequest implements FulfillableRequest
+class MoveThreads extends FormRequest implements FulfillableRequestInterface
 {
     use AuthorizesAfterValidation;
 

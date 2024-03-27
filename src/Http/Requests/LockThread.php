@@ -6,10 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\LockThread as Action,
     Events\UserLockedThread,
-    Interfaces\FulfillableRequest,
 };
 
-class LockThread extends FormRequest implements FulfillableRequest
+class LockThread extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {

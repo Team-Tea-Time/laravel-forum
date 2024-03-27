@@ -8,13 +8,13 @@ use TeamTeaTime\Forum\{
     Events\UserBulkDeletedPosts,
     Http\Requests\Traits\AuthorizesAfterValidation,
     Http\Requests\Traits\HandlesDeletion,
-    Interfaces\FulfillableRequest,
+    Http\Requests\FulfillableRequestInterface,
     Models\Post,
     Support\CategoryAccess,
     Support\Validation\PostRules,
 };
 
-class DeletePosts extends FormRequest implements FulfillableRequest
+class DeletePosts extends FormRequest implements FulfillableRequestInterface
 {
     use AuthorizesAfterValidation, HandlesDeletion;
 

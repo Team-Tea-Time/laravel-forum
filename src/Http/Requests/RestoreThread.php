@@ -6,10 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\RestoreThread as Action,
     Events\UserRestoredThread,
-    Interfaces\FulfillableRequest,
 };
 
-class RestoreThread extends FormRequest implements FulfillableRequest
+class RestoreThread extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {

@@ -6,11 +6,10 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\CreatePost as Action,
     Events\UserCreatedPost,
-    Interfaces\FulfillableRequest,
     Support\Validation\PostRules,
 };
 
-class CreatePost extends FormRequest implements FulfillableRequest
+class CreatePost extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {

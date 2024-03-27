@@ -6,10 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\PinThread as Action,
     Events\UserPinnedThread,
-    Interfaces\FulfillableRequest,
 };
 
-class PinThread extends FormRequest implements FulfillableRequest
+class PinThread extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {

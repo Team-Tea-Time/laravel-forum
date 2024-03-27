@@ -6,11 +6,11 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\Bulk\ManageCategories as Action,
     Events\UserBulkManagedCategories,
-    Interfaces\FulfillableRequest,
+    Http\Requests\FulfillableRequestInterface,
     Support\Validation\CategoryRules,
 };
 
-class ManageCategories extends FormRequest implements FulfillableRequest
+class ManageCategories extends FormRequest implements FulfillableRequestInterface
 {
     public function rules(): array
     {

@@ -6,11 +6,10 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\CreateThread as Action,
     Events\UserCreatedThread,
-    Interfaces\FulfillableRequest,
     Support\Validation\ThreadRules,
 };
 
-class CreateThread extends FormRequest implements FulfillableRequest
+class CreateThread extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {

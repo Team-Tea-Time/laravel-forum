@@ -6,11 +6,10 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\RenameThread as Action,
     Events\UserRenamedThread,
-    Interfaces\FulfillableRequest,
     Support\Validation\ThreadRules,
 };
 
-class RenameThread extends FormRequest implements FulfillableRequest
+class RenameThread extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {

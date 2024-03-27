@@ -7,12 +7,11 @@ use TeamTeaTime\Forum\{
     Actions\SearchPosts as Action,
     Events\UserSearchedPosts,
     Http\Requests\Traits\AuthorizesAfterValidation,
-    Interfaces\FulfillableRequest,
     Models\Category,
     Support\Validation\PostRules,
 };
 
-class SearchPosts extends FormRequest implements FulfillableRequest
+class SearchPosts extends FormRequest implements FulfillableRequestInterface
 {
     use AuthorizesAfterValidation;
 

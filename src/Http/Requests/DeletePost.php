@@ -7,11 +7,10 @@ use TeamTeaTime\Forum\{
     Actions\DeletePost as Action,
     Events\UserDeletedPost,
     Http\Requests\Traits\HandlesDeletion,
-    Interfaces\FulfillableRequest,
     Support\Validation\PostRules,
 };
 
-class DeletePost extends FormRequest implements FulfillableRequest
+class DeletePost extends FormRequest implements FulfillableRequestInterface
 {
     use HandlesDeletion;
 

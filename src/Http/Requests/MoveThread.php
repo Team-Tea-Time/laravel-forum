@@ -7,12 +7,11 @@ use TeamTeaTime\Forum\{
     Actions\MoveThread as Action,
     Events\UserMovedThread,
     Http\Requests\Traits\AuthorizesAfterValidation,
-    Interfaces\FulfillableRequest,
     Models\Category,
     Support\Validation\ThreadRules,
 };
 
-class MoveThread extends FormRequest implements FulfillableRequest
+class MoveThread extends FormRequest implements FulfillableRequestInterface
 {
     use AuthorizesAfterValidation;
 

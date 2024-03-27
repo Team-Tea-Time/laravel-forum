@@ -8,11 +8,10 @@ use TeamTeaTime\Forum\{
     Events\UserDeletedCategory,
     Http\Requests\Traits\AuthorizesAfterValidation,
     Http\Requests\Traits\HandlesDeletion,
-    Interfaces\FulfillableRequest,
     Support\Validation\CategoryRules,
 };
 
-class DeleteCategory extends FormRequest implements FulfillableRequest
+class DeleteCategory extends FormRequest implements FulfillableRequestInterface
 {
     use AuthorizesAfterValidation, HandlesDeletion;
 

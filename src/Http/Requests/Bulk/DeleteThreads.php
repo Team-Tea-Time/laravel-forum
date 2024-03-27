@@ -8,13 +8,13 @@ use TeamTeaTime\Forum\{
     Events\UserBulkDeletedThreads,
     Http\Requests\Traits\AuthorizesAfterValidation,
     Http\Requests\Traits\HandlesDeletion,
-    Interfaces\FulfillableRequest,
+    Http\Requests\FulfillableRequestInterface,
     Models\Thread,
     Support\CategoryAccess,
     Support\Validation\ThreadRules,
 };
 
-class DeleteThreads extends FormRequest implements FulfillableRequest
+class DeleteThreads extends FormRequest implements FulfillableRequestInterface
 {
     use AuthorizesAfterValidation, HandlesDeletion;
 

@@ -6,11 +6,10 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\CreateCategory as Action,
     Events\UserCreatedCategory,
-    Interfaces\FulfillableRequest,
     Support\Validation\CategoryRules,
 };
 
-class CreateCategory extends FormRequest implements FulfillableRequest
+class CreateCategory extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {

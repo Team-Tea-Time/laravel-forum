@@ -7,12 +7,11 @@ use TeamTeaTime\Forum\{
     Actions\MarkThreadsAsRead as Action,
     Events\UserMarkedThreadsAsRead,
     Http\Requests\Traits\AuthorizesAfterValidation,
-    Interfaces\FulfillableRequest,
     Models\Category,
     Support\Validation\CategoryRules,
 };
 
-class MarkThreadsAsRead extends FormRequest implements FulfillableRequest
+class MarkThreadsAsRead extends FormRequest implements FulfillableRequestInterface
 {
     use AuthorizesAfterValidation;
 

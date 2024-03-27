@@ -7,11 +7,10 @@ use TeamTeaTime\Forum\{
     Actions\DeleteThread as Action,
     Events\UserDeletedThread,
     Http\Requests\Traits\HandlesDeletion,
-    Interfaces\FulfillableRequest,
     Support\Validation\ThreadRules,
 };
 
-class DeleteThread extends FormRequest implements FulfillableRequest
+class DeleteThread extends FormRequest implements FulfillableRequestInterface
 {
     use HandlesDeletion;
 

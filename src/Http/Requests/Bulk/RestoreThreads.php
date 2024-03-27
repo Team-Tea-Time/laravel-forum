@@ -7,12 +7,12 @@ use TeamTeaTime\Forum\{
     Actions\Bulk\RestoreThreads as Action,
     Events\UserBulkRestoredThreads,
     Http\Requests\Traits\AuthorizesAfterValidation,
-    Interfaces\FulfillableRequest,
+    Http\Requests\FulfillableRequestInterface,
     Models\Thread,
     Support\Validation\ThreadRules,
 };
 
-class RestoreThreads extends FormRequest implements FulfillableRequest
+class RestoreThreads extends FormRequest implements FulfillableRequestInterface
 {
     use AuthorizesAfterValidation;
 

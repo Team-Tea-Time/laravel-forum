@@ -7,12 +7,12 @@ use TeamTeaTime\Forum\{
     Actions\Bulk\PinThreads as Action,
     Events\UserBulkPinnedThreads,
     Http\Requests\Traits\AuthorizesAfterValidation,
-    Interfaces\FulfillableRequest,
+    Http\Requests\FulfillableRequestInterface,
     Support\CategoryAccess,
     Support\Validation\ThreadRules,
 };
 
-class PinThreads extends FormRequest implements FulfillableRequest
+class PinThreads extends FormRequest implements FulfillableRequestInterface
 {
     use AuthorizesAfterValidation;
 

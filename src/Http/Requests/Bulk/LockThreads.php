@@ -7,12 +7,12 @@ use TeamTeaTime\Forum\{
     Actions\Bulk\LockThreads as Action,
     Events\UserBulkLockedThreads,
     Http\Requests\Traits\AuthorizesAfterValidation,
-    Interfaces\FulfillableRequest,
+    Http\Requests\FulfillableRequestInterface,
     Support\CategoryAccess,
     Support\Validation\ThreadRules,
 };
 
-class LockThreads extends FormRequest implements FulfillableRequest
+class LockThreads extends FormRequest implements FulfillableRequestInterface
 {
     use AuthorizesAfterValidation;
 
