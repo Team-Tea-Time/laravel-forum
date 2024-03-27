@@ -4,6 +4,7 @@ namespace TeamTeaTime\Forum\Actions\Bulk;
 
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Actions\BaseAction;
+use TeamTeaTime\Forum\Models\BaseModel;
 use TeamTeaTime\Forum\Models\Thread;
 
 class DeleteThreads extends BaseAction
@@ -28,7 +29,7 @@ class DeleteThreads extends BaseAction
 
             // Return early if this is a soft-delete and the selected threads are already trashed,
             // or there are no valid threads in the selection
-            if (! $this->permaDelete && $threads->whereNull(Thread::DELETED_AT)->count() == 0) {
+            if (!$this->permaDelete && $threads->whereNull(BaseModel::DELETED_AT)->count() == 0) {
                 return null;
             }
         } else {
@@ -49,22 +50,26 @@ class DeleteThreads extends BaseAction
             // Drop readers for the removed threads
             DB::table(Thread::READERS_TABLE)->whereIn('thread_id', $this->threadIds)->delete();
         } else {
-            $rowsAffected = $query->whereNull(Thread::DELETED_AT)->update([Thread::DELETED_AT => DB::raw('now()')]);
+            $rowsAffected = $query->whereNull(BaseModel::DELETED_AT)->update([BaseModel::DELETED_AT => DB::raw('now()')]);
+        }
+
+        if ($rowsAffected == 0) {
+            return null;
         }
 
         $threadsByCategory = $threads->groupBy('category_id');
         foreach ($threadsByCategory as $categoryThreads) {
             // Count only non-deleted threads for changes to category stats since soft-deleted threads
             // are already represented
-            $threadCount = $categoryThreads->whereNull(Thread::DELETED_AT)->count();
+            $threadCount = $categoryThreads->whereNull(BaseModel::DELETED_AT)->count();
 
             // Sum of reply counts + thread count = total posts
-            $postCount = $categoryThreads->whereNull(Thread::DELETED_AT)->sum('reply_count') + $threadCount;
+            $postCount = $categoryThreads->whereNull(BaseModel::DELETED_AT)->sum('reply_count') + $threadCount;
 
             $category = $categoryThreads->first()->category;
 
             $updates = [
-                'newest_thread_id' => $category->getNewestThreadId(),
+                'newest_thread_id' => $category->getNewestThreadId() ?? 0,
                 'latest_active_thread_id' => $category->getLatestActiveThreadId(),
             ];
 

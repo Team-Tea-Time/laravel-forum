@@ -77,6 +77,20 @@ class Category extends BaseModel
         return CategoryAccess::isAccessibleTo($user, $this->id);
     }
 
+    public function getNewestThreadId(): ?int
+    {
+        $thread = $this->threads()->orderBy('created_at', 'desc')->first();
+
+        return $thread ? $thread->id : null;
+    }
+
+    public function getLatestActiveThreadId(): ?int
+    {
+        $thread = $this->threads()->orderBy('updated_at', 'desc')->first();
+
+        return $thread ? $thread->id : null;
+    }
+
     protected function route(): Attribute
     {
         return new Attribute(

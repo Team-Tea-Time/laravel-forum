@@ -10,4 +10,9 @@ trait RegistersBladeComponents
     {
         Blade::component("forum::{$name}", $component);
     }
+
+    private function bladeComponentNamespace(string $namespace): void
+    {
+        Blade::componentNamespace($namespace, 'forum');
+    }
 }

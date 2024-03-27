@@ -7,8 +7,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\{
+    Actions\Bulk\DeleteThreads,
     Actions\Bulk\LockThreads,
     Actions\Bulk\PinThreads,
+    Actions\Bulk\RestoreThreads,
     Actions\Bulk\UnlockThreads,
     Actions\Bulk\UnpinThreads,
     Events\UserViewingCategory,
@@ -40,7 +42,7 @@ class CategoryShow extends EventfulPaginatedComponent
         }
     }
 
-    private function handleActionResult($result): array
+    private function handleActionResult($result, string $key = 'threads.updated'): array
     {
         if ($result == null) {
             return $this->invalidSelectionAlert()->toLivewire();
@@ -48,7 +50,25 @@ class CategoryShow extends EventfulPaginatedComponent
 
         $this->touchUpdateKey();
 
-        return $this->pluralAlert('threads.updated', $result->count())->toLivewire();
+        return $this->pluralAlert($key, $result->count())->toLivewire();
+    }
+
+    public function deleteThreads(Request $request, array $threadIds, bool $permadelete): array
+    {
+        $action = new DeleteThreads(
+            $threadIds,
+            $request->user()->can('viewTrashedPosts'),
+            $permadelete);
+
+        $result = $action->execute();
+        return $this->handleActionResult($result, 'threads.deleted');
+    }
+
+    public function restoreThreads(Request $request, array $threadIds): array
+    {
+        $action = new RestoreThreads($threadIds);
+        $result = $action->execute();
+        return $this->handleActionResult($result, 'threads.restored');
     }
 
     public function lockThreads(Request $request, array $threadIds): array
@@ -90,18 +110,39 @@ class CategoryShow extends EventfulPaginatedComponent
 
     public function render(Request $request): View
     {
+        $user = $request->user();
         $threads = $this->getThreads($request);
-        $privateAncestor = CategoryAccess::getPrivateAncestor($request->user(), $this->category);
+        $privateAncestor = CategoryAccess::getPrivateAncestor($user, $this->category);
         $selectableThreadIds = ThreadAccess::getSelectableThreadIdsFor(
-            $request->user(),
+            $user,
             $threads,
             $this->category);
+
+        $bulkActions = [];
+        if ($user->can('deleteThreads', $this->category)) {
+            $bulkActions['delete'] = trans('forum::general.delete');
+        }
+        if ($user->can('restoreThreads', $this->category)) {
+            $bulkActions['restore'] = trans('forum::general.restore');
+        }
+        if ($user->can('moveThreadsFrom', $this->category)) {
+            $bulkActions['move'] = trans('forum::general.move');
+        }
+        if ($user->can('lockThreads', $this->category)) {
+            $bulkActions['lock'] = trans('forum::threads.lock');
+            $bulkActions['unlock'] = trans('forum::threads.unlock');
+        }
+        if ($user->can('pinThreads', $this->category)) {
+            $bulkActions['pin'] = trans('forum::threads.pin');
+            $bulkActions['unpin'] = trans('forum::threads.unpin');
+        }
 
         return ViewFactory::make('forum::pages.category.show', [
             'category' => $this->category,
             'threads' => $threads,
             'privateAncestor' => $privateAncestor,
             'selectableThreadIds' => $selectableThreadIds,
+            'bulkActions' => $bulkActions,
         ])->layout('forum::layouts.main', ['category' => $this->category]);
     }
 }

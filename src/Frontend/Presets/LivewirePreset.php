@@ -7,16 +7,16 @@ use TeamTeaTime\Forum\{
     Frontend\Presets\Livewire\Components\Category\Card as CategoryCard,
     Frontend\Presets\Livewire\Components\Post\Card as PostCard,
     Frontend\Presets\Livewire\Components\Thread\Card as ThreadCard,
-    Frontend\Presets\Livewire\Components\Button,
     Frontend\Presets\Livewire\Components\Alerts,
     Frontend\Presets\Livewire\Components\Pill,
     Frontend\Presets\Livewire\Components\Timestamp,
+    Frontend\Traits\RegistersBladeComponents,
     Frontend\Traits\RegistersLivewireComponents,
 };
 
 class LivewirePreset extends AbstractPreset
 {
-    use RegistersLivewireComponents;
+    use RegistersBladeComponents, RegistersLivewireComponents;
 
     public static function getName(): string
     {
@@ -35,10 +35,11 @@ class LivewirePreset extends AbstractPreset
 
     public function register(): void
     {
+        $this->bladeComponentNamespace("TeamTeaTime\\Forum\\Frontend\\Presets\\Livewire\\Components\\Blade");
+
         $this->livewireComponent('components.category.card', CategoryCard::class);
         $this->livewireComponent('components.post.card', PostCard::class);
         $this->livewireComponent('components.thread.card', ThreadCard::class);
-        $this->livewireComponent('components.button', Button::class);
         $this->livewireComponent('components.alerts', Alerts::class);
         $this->livewireComponent('components.pill', Pill::class);
         $this->livewireComponent('components.timestamp', Timestamp::class);
