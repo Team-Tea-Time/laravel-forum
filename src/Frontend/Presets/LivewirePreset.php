@@ -10,6 +10,7 @@ use TeamTeaTime\Forum\{
     Frontend\Presets\Livewire\Components\Button,
     Frontend\Presets\Livewire\Components\Alerts,
     Frontend\Presets\Livewire\Components\Pill,
+    Frontend\Presets\Livewire\Components\Timestamp,
     Frontend\Traits\RegistersLivewireComponents,
 };
 
@@ -40,5 +41,6 @@ class LivewirePreset extends AbstractPreset
         $this->livewireComponent('components.button', Button::class);
         $this->livewireComponent('components.alerts', Alerts::class);
         $this->livewireComponent('components.pill', Pill::class);
+        $this->livewireComponent('components.timestamp', Timestamp::class);
     }
 }

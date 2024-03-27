@@ -65,12 +65,12 @@ class ThreadShow extends EventfulPaginatedComponent
     public function render(Request $request): View
     {
         $threadDestinationCategories = $request->user() && $request->user()->can('moveThreadsFrom', $this->thread->category)
-                    ? Category::acceptsThreads()->get()->toTree()
-                    : [];
+            ? Category::acceptsThreads()->get()->toTree()
+            : [];
 
         $postsQuery = config('forum.general.display_trashed_posts') || $request->user() && $request->user()->can('viewTrashedPosts')
-               ? $this->thread->posts()->withTrashed()
-               : $this->thread->posts();
+            ? $this->thread->posts()->withTrashed()
+            : $this->thread->posts();
 
         $posts = $postsQuery
             ->with('author', 'thread')
