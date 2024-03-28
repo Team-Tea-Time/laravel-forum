@@ -7,7 +7,9 @@ use TeamTeaTime\Forum\{
     Http\Livewire\Pages\CategoryEdit,
     Http\Livewire\Pages\CategoryIndex,
     Http\Livewire\Pages\CategoryShow,
+    Http\Livewire\Pages\RecentThreads,
     Http\Livewire\Pages\UpdateCategoryTree,
+    Http\Livewire\Pages\UnreadThreads,
     Http\Livewire\Pages\ThreadCreate,
     Http\Livewire\Pages\ThreadShow,
     Http\Middleware\ResolveFrontendParameters,
@@ -28,6 +30,8 @@ class Livewire implements StackInterface
         $this->livewireComponent('pages.category.manage', UpdateCategoryTree::class);
         $this->livewireComponent('pages.thread.create', ThreadCreate::class);
         $this->livewireComponent('pages.thread.show', ThreadShow::class);
+        $this->livewireComponent('pages.thread.recent', RecentThreads::class);
+        $this->livewireComponent('pages.thread.unread', UnreadThreads::class);
     }
 
     public function getRouterConfig(): array

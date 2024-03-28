@@ -11,7 +11,7 @@ class Card extends Component
 {
     public Thread $thread;
     public bool $selectable;
-    public string $model;
+    public bool $showCategory;
 
     public function render(): View
     {
