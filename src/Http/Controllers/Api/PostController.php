@@ -10,7 +10,7 @@ use TeamTeaTime\Forum\Http\Requests\CreatePost;
 use TeamTeaTime\Forum\Http\Requests\DeletePost;
 use TeamTeaTime\Forum\Http\Requests\RestorePost;
 use TeamTeaTime\Forum\Http\Requests\SearchPosts;
-use TeamTeaTime\Forum\Http\Requests\UpdatePost;
+use TeamTeaTime\Forum\Http\Requests\EditPost;
 use TeamTeaTime\Forum\Http\Resources\PostResource;
 use TeamTeaTime\Forum\Models\Post;
 
@@ -87,7 +87,7 @@ class PostController extends BaseController
         return new $this->resourceClass($post);
     }
 
-    public function update(UpdatePost $request): JsonResource
+    public function update(EditPost $request): JsonResource
     {
         $post = $request->fulfill();
 

@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use TeamTeaTime\Forum\Http\Requests\CreateCategory;
 use TeamTeaTime\Forum\Http\Requests\DeleteCategory;
-use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
+use TeamTeaTime\Forum\Http\Requests\EditCategory;
 use TeamTeaTime\Forum\Http\Resources\CategoryResource;
 use TeamTeaTime\Forum\Support\Access\CategoryAccess;
 
@@ -49,7 +49,7 @@ class CategoryController extends BaseController
         return new $this->resourceClass($category);
     }
 
-    public function update(UpdateCategory $request): JsonResource
+    public function update(EditCategory $request): JsonResource
     {
         $category = $request->fulfill();
 

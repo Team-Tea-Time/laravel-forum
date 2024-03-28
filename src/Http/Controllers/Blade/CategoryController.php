@@ -10,7 +10,7 @@ use TeamTeaTime\Forum\Events\UserViewingCategory;
 use TeamTeaTime\Forum\Events\UserViewingIndex;
 use TeamTeaTime\Forum\Http\Requests\CreateCategory;
 use TeamTeaTime\Forum\Http\Requests\DeleteCategory;
-use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
+use TeamTeaTime\Forum\Http\Requests\EditCategory;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Support\Access\CategoryAccess;
 use TeamTeaTime\Forum\Support\Access\ThreadAccess;
@@ -67,7 +67,7 @@ class CategoryController extends BaseController
         return new RedirectResponse(Forum::route('category.show', $category));
     }
 
-    public function update(UpdateCategory $request): RedirectResponse
+    public function update(EditCategory $request): RedirectResponse
     {
         $category = $request->fulfill();
 

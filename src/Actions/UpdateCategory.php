@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Actions;
 
 use TeamTeaTime\Forum\Models\Category;
 
-class UpdateCategory extends BaseAction
+class EditCategory extends BaseAction
 {
     private Category $category;
     private ?string $title;

@@ -6,6 +6,7 @@ use TeamTeaTime\Forum\{
     Config\FrontendStack,
     Frontend\Presets\Livewire\Components\Category\Card as CategoryCard,
     Frontend\Presets\Livewire\Components\Post\Card as PostCard,
+    Frontend\Presets\Livewire\Components\Post\Quote as PostQuote,
     Frontend\Presets\Livewire\Components\Thread\Card as ThreadCard,
     Frontend\Presets\Livewire\Components\Alerts,
     Frontend\Presets\Livewire\Components\Pill,
@@ -39,6 +40,7 @@ class LivewirePreset extends AbstractPreset
 
         $this->livewireComponent('components.category.card', CategoryCard::class);
         $this->livewireComponent('components.post.card', PostCard::class);
+        $this->livewireComponent('components.post.quote', PostQuote::class);
         $this->livewireComponent('components.thread.card', ThreadCard::class);
         $this->livewireComponent('components.alerts', Alerts::class);
         $this->livewireComponent('components.pill', Pill::class);

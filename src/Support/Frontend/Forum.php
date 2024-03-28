@@ -66,7 +66,7 @@ class Forum
                 $append = "#post-{$model->sequence}";
             } else {
                 // Other post routes require the post parameter
-                $params['post'] = $model->id;
+                $params['post_id'] = $model->id;
             }
 
             return route($route, $params) . $append;

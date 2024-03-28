@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
+use Livewire\Component;
 use TeamTeaTime\Forum\{
     Actions\Bulk\DeleteThreads,
     Actions\Bulk\LockThreads,
@@ -23,7 +24,6 @@ use TeamTeaTime\Forum\{
     Events\UserViewingCategory,
     Http\Livewire\Traits\CreatesAlerts,
     Http\Livewire\Traits\UpdatesContent,
-    Http\Livewire\EventfulPaginatedComponent,
     Models\BaseModel,
     Models\Category,
     Models\Thread,
@@ -33,7 +33,7 @@ use TeamTeaTime\Forum\{
     Support\Traits\HandlesDeletion,
 };
 
-class CategoryShow extends EventfulPaginatedComponent
+class CategoryShow extends Component
 {
     use CreatesAlerts, UpdatesContent, HandlesDeletion;
 

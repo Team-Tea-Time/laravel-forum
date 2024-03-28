@@ -4,10 +4,10 @@ namespace TeamTeaTime\Forum\Http\Requests;
 
 use TeamTeaTime\Forum\{
     Actions\UpdateCategory as Action,
-    Events\UserUpdatedCategory,
+    Events\UserEditedCategory,
 };
 
-class UpdateCategory extends CreateCategory
+class EditCategory extends CreateCategory
 {
     public function fulfill()
     {
@@ -23,7 +23,7 @@ class UpdateCategory extends CreateCategory
         $category = $action->execute();
 
         if (!$category === null) {
-            UserUpdatedCategory::dispatch($this->user(), $category);
+            UserEditedCategory::dispatch($this->user(), $category);
         }
 
         return $category;

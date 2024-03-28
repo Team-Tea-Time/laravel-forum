@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Actions;
 
 use TeamTeaTime\Forum\Models\Post;
 
-class UpdatePost extends BaseAction
+class EditPost extends BaseAction
 {
     private Post $post;
     private string $content;

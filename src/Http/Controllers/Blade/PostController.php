@@ -12,7 +12,7 @@ use TeamTeaTime\Forum\Events\UserViewingPost;
 use TeamTeaTime\Forum\Http\Requests\CreatePost;
 use TeamTeaTime\Forum\Http\Requests\DeletePost;
 use TeamTeaTime\Forum\Http\Requests\RestorePost;
-use TeamTeaTime\Forum\Http\Requests\UpdatePost;
+use TeamTeaTime\Forum\Http\Requests\EditPost;
 use TeamTeaTime\Forum\Support\Web\Forum;
 
 class PostController extends BaseController
@@ -81,7 +81,7 @@ class PostController extends BaseController
         return ViewFactory::make('forum.post.edit', compact('category', 'thread', 'post'));
     }
 
-    public function update(UpdatePost $request): RedirectResponse
+    public function update(EditPost $request): RedirectResponse
     {
         $post = $request->route('post');
 

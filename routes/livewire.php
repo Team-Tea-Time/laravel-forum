@@ -8,7 +8,9 @@ use TeamTeaTime\Forum\Http\Livewire\Pages\{
     RecentThreads,
     UnreadThreads,
     UpdateCategoryTree,
+    PostShow,
     ThreadCreate,
+    ThreadReply,
     ThreadShow,
 };
 
@@ -31,4 +33,7 @@ Route::group(['prefix' => $prefix['category'] . '/{category_id}-{category_slug}'
 Route::group(['prefix' => $prefix['thread'] . '/{thread_id}-{thread_slug}'], function () use ($prefix)
 {
     Route::get('/', ThreadShow::class)->name('thread.show');
+    Route::get('reply', ThreadReply::class)->name('thread.reply');
+    Route::get($prefix['post'] . '/{post_id}/edit', PostShow::class)->name('post.edit');
+    Route::get($prefix['post'] . '/{post_id}', PostShow::class)->name('post.show');
 });

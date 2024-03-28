@@ -6,14 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
+use Livewire\Component;
 use TeamTeaTime\Forum\{
     Events\UserViewingRecent,
-    Http\Livewire\EventfulPaginatedComponent,
     Models\Thread,
     Support\Access\CategoryAccess,
 };
 
-class RecentThreads extends EventfulPaginatedComponent
+class RecentThreads extends Component
 {
     protected Collection $threads;
 

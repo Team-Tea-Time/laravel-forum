@@ -13,6 +13,11 @@ use TeamTeaTime\Forum\{
  */
 class PostAuthorization
 {
+    public static function edit(User $user, Post $post): bool
+    {
+        return $user->can('edit', $post);
+    }
+
     public static function delete(User $user, Post $post): bool
     {
         return $post->sequence > 1 && $user->can('deletePosts', $post->thread) && $user->can('delete', $post);

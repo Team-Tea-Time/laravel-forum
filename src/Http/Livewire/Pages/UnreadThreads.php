@@ -6,16 +6,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
+use Livewire\Component;
 use TeamTeaTime\Forum\{
     Events\UserViewingUnread,
-    Http\Livewire\EventfulPaginatedComponent,
     Http\Livewire\Traits\CreatesAlerts,
     Http\Livewire\Traits\UpdatesContent,
     Models\Thread,
     Support\Access\CategoryAccess,
 };
 
-class UnreadThreads extends EventfulPaginatedComponent
+class UnreadThreads extends Component
 {
     use CreatesAlerts, UpdatesContent;
 

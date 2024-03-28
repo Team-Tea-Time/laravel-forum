@@ -3,11 +3,11 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use TeamTeaTime\Forum\{
-    Actions\UpdatePost as Action,
-    Events\UserUpdatedPost,
+    Actions\EditPost as Action,
+    Events\UserEditedPost,
 };
 
-class UpdatePost extends CreatePost
+class EditPost extends CreatePost
 {
     public function authorize(): bool
     {
@@ -20,7 +20,7 @@ class UpdatePost extends CreatePost
         $action = new Action($this->route('post'), $input['content']);
         $post = $action->execute();
 
-        UserUpdatedPost::dispatch($this->user(), $post);
+        UserEditedPost::dispatch($this->user(), $post);
 
         return $post;
     }
