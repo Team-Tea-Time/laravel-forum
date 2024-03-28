@@ -9,7 +9,7 @@ use Illuminate\View\Component;
 class LinkButton extends Component
 {
     public function __construct(
-        public string $type = "",
+        public string $intent = "",
         public string $href = "",
         public string $icon = "",
         public string $label = "",

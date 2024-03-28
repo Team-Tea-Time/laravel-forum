@@ -9,17 +9,17 @@ class ForumPolicy
         return true;
     }
 
-    public function deleteCategories($user): bool
-    {
-        return true;
-    }
-
     public function moveCategories($user): bool
     {
         return true;
     }
 
     public function editCategories($user): bool
+    {
+        return true;
+    }
+
+    public function deleteCategories($user): bool
     {
         return true;
     }

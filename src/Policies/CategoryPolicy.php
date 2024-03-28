@@ -25,7 +25,7 @@ class CategoryPolicy
 
     public function delete(User $user, Category $category): bool
     {
-        return false;
+        return true;
     }
 
     public function createThreads(User $user, Category $category): bool

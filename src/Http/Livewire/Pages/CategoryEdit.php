@@ -16,6 +16,7 @@ use TeamTeaTime\Forum\{
     Support\Access\CategoryAccess,
     Support\Authorization\CategoryAuthorization,
     Support\Validation\CategoryRules,
+    Support\Frontend\Forum,
 };
 
 class CategoryEdit extends Component
@@ -75,6 +76,17 @@ class CategoryEdit extends Component
         UserEditedCategory::dispatch($request->user(), $this->category);
 
         return $this->redirect($this->category->route);
+    }
+
+    public function delete(Request $request)
+    {
+        if (!CategoryAuthorization::delete($request->user(), $this->category)) {
+            abort(403);
+        }
+
+        $this->category->delete();
+
+        return $this->redirect(Forum::route('category.index'));
     }
 
     public function render(): View

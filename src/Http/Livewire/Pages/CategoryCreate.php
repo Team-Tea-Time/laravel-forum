@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
+use Livewire\Attributes\Url;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 use TeamTeaTime\Forum\{
@@ -23,9 +24,12 @@ class CategoryCreate extends Component
     #[Locked]
     public Collection $categories;
 
+    #[Url]
+    public int $parent_id;
+
     // Form fields
     public string $title;
-    public string $description;
+    public string $description = "";
     public string $color;
     public int $parent_category;
     public bool $accepts_threads = false;
@@ -38,6 +42,10 @@ class CategoryCreate extends Component
         // TODO: This is a workaround for a serialisation issue. See: https://github.com/lazychaser/laravel-nestedset/issues/487
         //       Once the issue is fixed, this can be removed.
         $this->categories = CategoryAccess::removeParentRelationships($categories);
+
+        if (isset($this->parent_id)) {
+            $this->parent_category = $this->parent_id;
+        }
 
         if ($request->user() !== null) {
             UserCreatingCategory::dispatch($request->user());

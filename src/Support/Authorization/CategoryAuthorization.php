@@ -27,7 +27,7 @@ class CategoryAuthorization
 
     public static function delete(User $user, Category $category): bool
     {
-        return $user->can('delete', $category);
+        return $user->can('deleteCategories') && $user->can('delete', $category);
     }
 
     public static function createThreads(User $user, Category $category): bool
