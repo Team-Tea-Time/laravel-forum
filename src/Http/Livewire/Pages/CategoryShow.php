@@ -13,20 +13,26 @@ use TeamTeaTime\Forum\{
     Actions\Bulk\RestoreThreads,
     Actions\Bulk\UnlockThreads,
     Actions\Bulk\UnpinThreads,
+    Events\UserBulkDeletedThreads,
+    Events\UserBulkLockedThreads,
+    Events\UserBulkPinnedThreads,
+    Events\UserBulkRestoredThreads,
+    Events\UserBulkUnlockedThreads,
+    Events\UserBulkUnpinnedThreads,
     Events\UserViewingCategory,
     Http\Livewire\Traits\CreatesAlerts,
     Http\Livewire\Traits\UpdatesContent,
     Http\Livewire\EventfulPaginatedComponent,
     Models\Category,
-    Support\Authorization\CategoryAuthorization,
     Support\Authorization\ThreadAuthorization,
     Support\Access\CategoryAccess,
     Support\Access\ThreadAccess,
+    Support\Traits\HandlesDeletion,
 };
 
 class CategoryShow extends EventfulPaginatedComponent
 {
-    use CreatesAlerts, UpdatesContent;
+    use CreatesAlerts, UpdatesContent, HandlesDeletion;
 
     public Category $category;
 
@@ -64,44 +70,93 @@ class CategoryShow extends EventfulPaginatedComponent
         $action = new DeleteThreads(
             $threadIds,
             $request->user()->can('viewTrashedPosts'),
-            $permadelete);
-
+            $this->shouldPermaDelete($permadelete));
         $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkDeletedThreads::dispatch($request->user(), $result);
+        }
+
         return $this->handleActionResult($result, 'threads.deleted');
     }
 
     public function restoreThreads(Request $request, array $threadIds): array
     {
+        if (!ThreadAuthorization::bulkRestore($request->user(), $threadIds)) {
+            abort(403);
+        }
+
         $action = new RestoreThreads($threadIds);
         $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkRestoredThreads::dispatch($request->user(), $result);
+        }
+
         return $this->handleActionResult($result, 'threads.restored');
     }
 
     public function lockThreads(Request $request, array $threadIds): array
     {
-        $action = new LockThreads($threadIds, false);
+        if (!ThreadAuthorization::bulkLock($request->user(), $threadIds)) {
+            abort(403);
+        }
+
+        $action = new LockThreads($threadIds, $request->user()->can('viewTrashedThreads'));
         $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkLockedThreads::dispatch($request->user(), $result);
+        }
+
         return $this->handleActionResult($result);
     }
 
     public function unlockThreads(Request $request, array $threadIds): array
     {
-        $action = new UnlockThreads($threadIds, false);
+        if (!ThreadAuthorization::bulkLock($request->user(), $threadIds)) {
+            abort(403);
+        }
+
+        $action = new UnlockThreads($threadIds, $request->user()->can('viewTrashedThreads'));
         $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkUnlockedThreads::dispatch($request->user(), $result);
+        }
+
         return $this->handleActionResult($result);
     }
 
     public function pinThreads(Request $request, array $threadIds): array
     {
-        $action = new PinThreads($threadIds, false);
+        if (!ThreadAuthorization::bulkPin($request->user(), $threadIds)) {
+            abort(403);
+        }
+
+        $action = new PinThreads($threadIds, $request->user()->can('viewTrashedThreads'));
         $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkPinnedThreads::dispatch($request->user(), $result);
+        }
+
         return $this->handleActionResult($result);
     }
 
     public function unpinThreads(Request $request, array $threadIds): array
     {
-        $action = new UnpinThreads($threadIds, false);
+        if (!ThreadAuthorization::bulkPin($request->user(), $threadIds)) {
+            abort(403);
+        }
+
+        $action = new UnpinThreads($threadIds, $request->user()->can('viewTrashedThreads'));
         $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkUnpinnedThreads::dispatch($request->user(), $result);
+        }
+
         return $this->handleActionResult($result);
     }
 

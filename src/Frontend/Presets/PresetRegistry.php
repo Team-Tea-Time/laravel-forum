@@ -13,7 +13,7 @@ class PresetRegistry
 
     public function get(string $name): AbstractPreset
     {
-        if (! isset($this->presets[$name])) {
+        if (!isset($this->presets[$name])) {
             throw new \Exception("Preset '{$name}' not found. Check the name and ensure the preset is registered.");
         }
 

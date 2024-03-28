@@ -16,7 +16,7 @@ class RestoreThread extends BaseAction
 
     protected function transact()
     {
-        if (! $this->thread->trashed()) {
+        if (!$this->thread->trashed()) {
             return null;
         }
 

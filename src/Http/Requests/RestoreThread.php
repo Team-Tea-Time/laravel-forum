@@ -26,7 +26,7 @@ class RestoreThread extends FormRequest implements FulfillableRequestInterface
         $action = new Action($this->route('thread'));
         $thread = $action->execute();
 
-        if (! $thread === null) {
+        if (!$thread === null) {
             UserRestoredThread::dispatch($this->user(), $thread);
         }
 

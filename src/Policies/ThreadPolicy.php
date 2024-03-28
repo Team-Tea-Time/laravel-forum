@@ -28,7 +28,7 @@ class ThreadPolicy
 
     public function reply($user, Thread $thread): bool
     {
-        return ! $thread->locked;
+        return !$thread->locked;
     }
 
     public function delete($user, Thread $thread): bool

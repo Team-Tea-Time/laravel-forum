@@ -28,7 +28,7 @@
                     || Gate::allows('rename', $thread)
                     || Gate::allows('moveThreadsFrom', $category))
                     <div class="btn-group mb-2" role="group">
-                        @if (! $thread->trashed())
+                        @if (!$thread->trashed())
                             @can ('lockThreads', $category)
                                 @if ($thread->locked)
                                     <a href="#" class="btn btn-secondary" data-open-modal="unlock-thread">
@@ -93,7 +93,7 @@
                 {{ $posts->links('forum.pagination') }}
             </div>
             <div class="col-md-auto text-end">
-                @if (! $thread->trashed())
+                @if (!$thread->trashed())
                     @can ('reply', $thread)
                         <div class="btn-group" role="group">
                             <a href="{{ Forum::route('post.create', $thread) }}" class="btn btn-primary">
@@ -162,7 +162,7 @@
 
         {{ $posts->links('forum.pagination') }}
 
-        @if (! $thread->trashed())
+        @if (!$thread->trashed())
             @can ('reply', $thread)
                 <h3>{{ trans('forum::general.quick_reply') }}</h3>
                 <div id="quick-reply">
@@ -238,7 +238,7 @@
         @endif
     @endif
 
-    @if (! $thread->trashed())
+    @if (!$thread->trashed())
         @can ('lockThreads', $category)
             @if ($thread->locked)
                 @component('forum.modal-form')
@@ -379,14 +379,14 @@
             },
             submitThread (event)
             {
-                if (this.threadActionMethods[this.selectedThreadAction] === 'DELETE' && ! confirm("{{ trans('forum::general.generic_confirm') }}"))
+                if (this.threadActionMethods[this.selectedThreadAction] === 'DELETE' && !confirm("{{ trans('forum::general.generic_confirm') }}"))
                 {
                     event.preventDefault();
                 }
             },
             submitPosts (event)
             {
-                if (this.postActionMethods[this.selectedPostAction] === 'DELETE' && ! confirm("{{ trans('forum::general.generic_confirm') }}"))
+                if (this.postActionMethods[this.selectedPostAction] === 'DELETE' && !confirm("{{ trans('forum::general.generic_confirm') }}"))
                 {
                     event.preventDefault();
                 }

@@ -126,7 +126,7 @@ class Thread extends BaseModel
             get: function ()
             {
                 $age = config('forum.general.old_thread_threshold');
-                return ! $age || $this->updated_at->timestamp < (time() - strtotime($age, 0));
+                return !$age || $this->updated_at->timestamp < (time() - strtotime($age, 0));
             }
         );
     }
@@ -136,7 +136,7 @@ class Thread extends BaseModel
         return new Attribute(
             get: function ()
             {
-                if (! Auth::check()) {
+                if (!Auth::check()) {
                     return null;
                 }
 
@@ -154,7 +154,7 @@ class Thread extends BaseModel
         return new Attribute(
             get: function ()
             {
-                if ($this->isOld || ! Auth::check()) {
+                if ($this->isOld || !Auth::check()) {
                     return null;
                 }
 

@@ -33,7 +33,7 @@ class CategoryController extends BaseController
     {
         $category = $request->route('category');
 
-        if (! $category->isAccessibleTo($request->user())) {
+        if (!$category->isAccessibleTo($request->user())) {
             abort(404);
         }
 

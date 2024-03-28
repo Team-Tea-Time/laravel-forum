@@ -31,7 +31,7 @@ class SearchPosts extends BaseAction
             ->paginate();
 
         $threadIds = $posts->getCollection()->pluck('thread')->filter(function ($thread) {
-            return ! $thread->category->is_private || Gate::allows('view', $thread->category) && Gate::allows('view', $thread);
+            return !$thread->category->is_private || Gate::allows('view', $thread->category) && Gate::allows('view', $thread);
         })->pluck('id')->unique();
 
         $posts->setCollection($posts->getCollection()->filter(function ($post) use ($threadIds) {

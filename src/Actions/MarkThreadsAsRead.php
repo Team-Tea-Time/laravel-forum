@@ -31,7 +31,7 @@ class MarkThreadsAsRead extends BaseAction
         $threads = $threads->get()->filter(function ($thread) use ($accessibleCategoryIds) {
             // @TODO: handle authorization check outside of action?
             return $thread->userReadStatus != null
-                && (! $thread->category->is_private || ($accessibleCategoryIds->contains($thread->category_id) && $this->user->can('view', $thread)));
+                && (!$thread->category->is_private || ($accessibleCategoryIds->contains($thread->category_id) && $this->user->can('view', $thread)));
         });
 
         foreach ($threads as $thread) {

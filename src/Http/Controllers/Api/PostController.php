@@ -26,7 +26,7 @@ class PostController extends BaseController
     public function indexByThread(Request $request): AnonymousResourceCollection|Response
     {
         $thread = $request->route('thread');
-        if (! $thread->category->isAccessibleTo($request->user())) {
+        if (!$thread->category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 
@@ -50,9 +50,9 @@ class PostController extends BaseController
             ->get()
             ->filter(function (Post $post) use ($request, $unreadOnly) {
                 return $post->thread->category->isAccessibleTo($request->user())
-                    && (! $unreadOnly || $post->thread->reader === null || $post->updatedSince($post->thread->reader))
+                    && (!$unreadOnly || $post->thread->reader === null || $post->updatedSince($post->thread->reader))
                     && (
-                        ! $post->thread->category->is_private
+                        !$post->thread->category->is_private
                         || $request->user()
                         && $request->user()->can('view', $post->thread)
                     );
@@ -69,7 +69,7 @@ class PostController extends BaseController
     public function fetch(Request $request): JsonResource|Response
     {
         $post = $request->route('post');
-        if (! $post->thread->category->isAccessibleTo($request->user())) {
+        if (!$post->thread->category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 

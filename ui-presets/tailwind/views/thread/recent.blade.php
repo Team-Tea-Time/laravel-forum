@@ -4,7 +4,7 @@
     <div id="new-posts">
         <h2 class="text-3xl font-medium my-3">{{ trans('forum::threads.recent') }}</h2>
 
-        @if (! $threads->isEmpty())
+        @if (!$threads->isEmpty())
             <div class="my-3">
                 @foreach ($threads as $thread)
                     @include ('forum.thread.partials.list')

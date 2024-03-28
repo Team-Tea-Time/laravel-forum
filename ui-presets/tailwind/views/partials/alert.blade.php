@@ -1,6 +1,6 @@
 <div class="alert alert-{{ $type }} alert-dismissable rounded-md bg-green-100 mb-4 text-green-700 p-4 flex justify-between gap-4">
     <div class="message">
-        {!! $message !!}
+        {!!$message !!}
     </div>
     <button type="button" data-dismiss="alert" aria-hidden="true">
         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

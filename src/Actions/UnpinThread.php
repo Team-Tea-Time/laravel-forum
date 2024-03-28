@@ -15,7 +15,7 @@ class UnpinThread extends BaseAction
 
     protected function transact()
     {
-        if (! $this->thread->pinned) {
+        if (!$this->thread->pinned) {
             return null;
         }
 

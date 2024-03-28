@@ -15,7 +15,7 @@ class UnlockThread extends BaseAction
 
     protected function transact()
     {
-        if (! $this->thread->locked) {
+        if (!$this->thread->locked) {
             return null;
         }
 

@@ -7,10 +7,10 @@ use TeamTeaTime\Forum\{
     Actions\Bulk\DeleteThreads as Action,
     Events\UserBulkDeletedThreads,
     Http\Requests\Traits\AuthorizesAfterValidation,
-    Http\Requests\Traits\HandlesDeletion,
     Http\Requests\FulfillableRequestInterface,
     Support\Authorization\ThreadAuthorization,
     Support\Validation\ThreadRules,
+    Support\Traits\HandlesDeletion,
 };
 
 class DeleteThreads extends FormRequest implements FulfillableRequestInterface
@@ -32,7 +32,7 @@ class DeleteThreads extends FormRequest implements FulfillableRequestInterface
         $action = new Action(
             $this->validated()['threads'],
             $this->user()->can('viewTrashedPosts'),
-            $this->isPermaDeleting()
+            $this->shouldPermaDelete(isset($this->validated()['permadelete']) && $this->validated()['permadelete'])
         );
         $threads = $action->execute();
 

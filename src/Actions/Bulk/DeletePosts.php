@@ -28,7 +28,7 @@ class DeletePosts extends BaseAction
 
             // Return early if this is a soft-delete and the selected posts are already trashed,
             // or there are no valid posts in the selection
-            if (! $this->permaDelete && $posts->whereNull(Post::DELETED_AT)->count() == 0) {
+            if (!$this->permaDelete && $posts->whereNull(Post::DELETED_AT)->count() == 0) {
                 return null;
             }
         } else {
@@ -66,7 +66,7 @@ class DeletePosts extends BaseAction
                 }
 
                 if ($thread->posts()->count() == 0) {
-                    if (! $thread->trashed()) {
+                    if (!$thread->trashed()) {
                         // Thread has not been soft-deleted already;
                         // it should count towards threads removed for this category
                         $categoryThreadsRemoved++;

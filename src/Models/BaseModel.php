@@ -13,7 +13,7 @@ abstract class BaseModel extends Model
         parent::__construct($attributes);
 
         if ($this->forceDeleting) {
-            $this->forceDeleting = ! config('forum.preferences.soft_deletes');
+            $this->forceDeleting = !config('forum.preferences.soft_deletes');
         }
     }
 
@@ -61,7 +61,7 @@ abstract class BaseModel extends Model
 
     protected function withoutTouch(string $method)
     {
-        if (! is_callable([$this, $method])) {
+        if (!is_callable([$this, $method])) {
             throw new \Exception("Method '{$method}' is not callable.");
         }
 

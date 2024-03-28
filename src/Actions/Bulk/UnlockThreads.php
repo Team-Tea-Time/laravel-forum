@@ -23,7 +23,7 @@ class UnlockThreads extends BaseAction
             ->whereIn('id', $this->threadIds)
             ->where(['locked' => true]);
 
-        if (! $this->includeTrashed) {
+        if (!$this->includeTrashed) {
             $query = $query->whereNull(Thread::DELETED_AT);
         }
 

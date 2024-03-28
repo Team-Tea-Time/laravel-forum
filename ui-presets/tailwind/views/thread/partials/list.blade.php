@@ -7,7 +7,7 @@
             <br>
             {{ $thread->authorName }} <span class="text-gray-500">@include ('forum.partials.timestamp', ['carbon' => $thread->created_at])</span>
 
-            @if (! isset($category))
+            @if (!isset($category))
                 <br>
                 <a href="{{ Forum::route('category.show', $thread->category) }}" style="color: {{ $thread->category->color }};">{{ $thread->category->title }}</a>
             @endif
@@ -19,7 +19,7 @@
             @if ($thread->locked)
                 <x-forum.badge type="warning">{{ trans('forum::threads.locked') }}</x-forum.badge>
             @endif
-            @if ($thread->userReadStatus !== null && ! $thread->trashed())
+            @if ($thread->userReadStatus !== null && !$thread->trashed())
                 <x-forum.badge type="success">{{ trans($thread->userReadStatus) }}</x-forum.badge>
             @endif
             @if ($thread->trashed())

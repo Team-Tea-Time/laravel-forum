@@ -4,7 +4,7 @@
     <div id="new-posts">
         <h2 class="text-3xl text-medium my-4">{{ trans('forum::threads.unread_updated') }}</h2>
 
-        @if (! $threads->isEmpty())
+        @if (!$threads->isEmpty())
             <div class="">
                 @foreach ($threads as $thread)
                     @include ('forum.thread.partials.list')
@@ -17,7 +17,7 @@
         @endif
     </div>
 
-    @if (! $threads->isEmpty())
+    @if (!$threads->isEmpty())
         @can ('markThreadsAsRead')
             <div class="flex justify-center mt-4">
                 <x-forum.button class="px-5 flex items-center gap-2" data-open-modal="mark-as-read">

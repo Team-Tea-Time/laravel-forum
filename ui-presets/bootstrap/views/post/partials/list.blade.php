@@ -1,8 +1,8 @@
-<div @if (! $post->trashed())id="post-{{ $post->sequence }}"@endif
+<div @if (!$post->trashed())id="post-{{ $post->sequence }}"@endif
     class="post card mb-2 {{ $post->trashed() || $thread->trashed() ? 'deleted' : '' }}"
     :class="{ 'border-primary': selectedPosts.includes({{ $post->id }}) }">
     <div class="card-header">
-        @if (! isset($single) || ! $single)
+        @if (!isset($single) || !$single)
             <span class="float-end">
                 <a href="{{ Forum::route('thread.show', $post) }}">#{{ $post->sequence }}</a>
                 @if ($post->sequence != 1)
@@ -31,17 +31,17 @@
 
         @if ($post->trashed())
             @can ('viewTrashedPosts')
-                {!! Forum::render($post->content) !!}
+                {!!Forum::render($post->content) !!}
                 <br>
             @endcan
             <span class="badge rounded-pill bg-danger">{{ trans('forum::general.deleted') }}</span>
         @else
-            {!! Forum::render($post->content) !!}
+            {!!Forum::render($post->content) !!}
         @endif
 
-        @if (! isset($single) || ! $single)
+        @if (!isset($single) || !$single)
             <div class="text-end">
-                @if (! $post->trashed())
+                @if (!$post->trashed())
                     <a href="{{ Forum::route('post.show', $post) }}" class="card-link text-muted">{{ trans('forum::general.permalink') }}</a>
                     @if ($post->sequence != 1)
                         @can ('deletePosts', $post->thread)

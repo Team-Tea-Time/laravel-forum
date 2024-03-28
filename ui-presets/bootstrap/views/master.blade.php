@@ -179,7 +179,7 @@
     <nav class="v-navbar navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ url(config('forum.blade.router.prefix')) }}">Laravel Forum</a>
-            <button class="navbar-toggler" type="button" :class="{ collapsed: isCollapsed }" @click="isCollapsed = ! isCollapsed">
+            <button class="navbar-toggler" type="button" :class="{ collapsed: isCollapsed }" @click="isCollapsed = !isCollapsed">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" :class="{ show: !isCollapsed }">
@@ -204,10 +204,10 @@
                 <ul class="navbar-nav">
                     @if (Auth::check())
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" @click="isUserDropdownCollapsed = ! isUserDropdownCollapsed">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" @click="isUserDropdownCollapsed = !isUserDropdownCollapsed">
                                 {{ $username }}
                             </a>
-                            <div class="dropdown-menu" :class="{ show: ! isUserDropdownCollapsed }" aria-labelledby="navbarDropdownMenuLink">
+                            <div class="dropdown-menu" :class="{ show: !isUserDropdownCollapsed }" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Log out
                                 </a>
@@ -250,8 +250,8 @@
             onWindowClick (event) {
                 const ignore = ['navbar-toggler', 'navbar-toggler-icon', 'dropdown-toggle'];
                 if (ignore.some(className => event.target.classList.contains(className))) return;
-                if (! this.isCollapsed) this.isCollapsed = true;
-                if (! this.isUserDropdownCollapsed) this.isUserDropdownCollapsed = true;
+                if (!this.isCollapsed) this.isCollapsed = true;
+                if (!this.isUserDropdownCollapsed) this.isUserDropdownCollapsed = true;
             }
         },
         created: function () {
@@ -265,7 +265,7 @@
     {
         const modal = document.querySelector(`[data-modal=${key}]`);
 
-        if (! modal) throw `Attempted to open modal '${key}' but no such modal found.`;
+        if (!modal) throw `Attempted to open modal '${key}' but no such modal found.`;
 
         return modal;
     }
@@ -295,7 +295,7 @@
     {
         modal.addEventListener('click', event =>
         {
-            if (! event.target.hasAttribute('data-close-modal')) return;
+            if (!event.target.hasAttribute('data-close-modal')) return;
 
             modal.classList.remove('show');
             mask.classList.remove('show');
@@ -324,7 +324,7 @@
 
         const input = document.querySelector('input[name=color]');
 
-        if (! input) return;
+        if (!input) return;
 
         const pickr = Pickr.create({
             el: '.pickr',

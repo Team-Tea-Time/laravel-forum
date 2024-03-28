@@ -6,9 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\DeletePost as Action,
     Events\UserDeletedPost,
-    Http\Requests\Traits\HandlesDeletion,
     Support\Authorization\PostAuthorization,
     Support\Validation\PostRules,
+    Support\Traits\HandlesDeletion,
 };
 
 class DeletePost extends FormRequest implements FulfillableRequestInterface
@@ -29,7 +29,7 @@ class DeletePost extends FormRequest implements FulfillableRequestInterface
     {
         $post = $this->route('post');
 
-        $action = new Action($post, $this->isPermaDeleting());
+        $action = new Action($post, $this->shouldPermaDelete(isset($this->validated()['permadelete']) && $this->validated()['permadelete']));
         $post = $action->execute();
 
         if ($post !== null) {

@@ -3,7 +3,7 @@
     <div class="relative bg-white rounded-md max-w-screen-sm w-full m-2" role="document">
         <div class="">
             <div class="border-b px-4 py-3 flex justify-between">
-                <h5 class="text-xl font-medium flex items-center gap-1">{!! $title !!}</h5>
+                <h5 class="text-xl font-medium flex items-center gap-1">{!!$title !!}</h5>
                 <button type="button" aria-label="Close" data-close-modal>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />

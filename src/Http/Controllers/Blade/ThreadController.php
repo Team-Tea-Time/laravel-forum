@@ -38,7 +38,7 @@ class ThreadController extends BaseController
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user);
 
         $threads = $threads->get()->filter(function ($thread) use ($request, $accessibleCategoryIds) {
-            return $accessibleCategoryIds->contains($thread->category_id) && (! $thread->category->is_private || $request->user() && $request->user()->can('view', $thread));
+            return $accessibleCategoryIds->contains($thread->category_id) && (!$thread->category->is_private || $request->user() && $request->user()->can('view', $thread));
         });
 
         if ($request->user() !== null) {
@@ -56,7 +56,7 @@ class ThreadController extends BaseController
 
         $threads = $threads->get()->filter(function ($thread) use ($request, $accessibleCategoryIds) {
             return $thread->userReadStatus !== null
-                && (! $thread->category->is_private || $request->user() && $accessibleCategoryIds->contains($thread->category_id) && $request->user()->can('view', $thread));
+                && (!$thread->category->is_private || $request->user() && $accessibleCategoryIds->contains($thread->category_id) && $request->user()->can('view', $thread));
         });
 
         if ($request->user() !== null) {
@@ -85,7 +85,7 @@ class ThreadController extends BaseController
     {
         $thread = $request->route('thread');
 
-        if (! $thread->category->isAccessibleTo($request->user())) {
+        if (!$thread->category->isAccessibleTo($request->user())) {
             abort(404);
         }
 
@@ -125,7 +125,7 @@ class ThreadController extends BaseController
     {
         $category = $request->route('category');
 
-        if (! $category->accepts_threads) {
+        if (!$category->accepts_threads) {
             Forum::alert('warning', 'categories.threads_disabled');
 
             return new RedirectResponse(Forum::route('category.show', $category));

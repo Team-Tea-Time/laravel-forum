@@ -6,9 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\DeleteThread as Action,
     Events\UserDeletedThread,
-    Http\Requests\Traits\HandlesDeletion,
     Support\Authorization\ThreadAuthorization,
     Support\Validation\ThreadRules,
+    Support\Traits\HandlesDeletion,
 };
 
 class DeleteThread extends FormRequest implements FulfillableRequestInterface
@@ -27,10 +27,10 @@ class DeleteThread extends FormRequest implements FulfillableRequestInterface
 
     public function fulfill()
     {
-        $action = new Action($this->route('thread'), $this->isPermaDeleting());
+        $action = new Action($this->route('thread'), $this->shouldPermaDelete(isset($this->validated()['permadelete']) && $this->validated()['permadelete']));
         $thread = $action->execute();
 
-        if (! $thread === null) {
+        if (!$thread === null) {
             UserDeletedThread::dispatch($this->user(), $thread);
         }
 

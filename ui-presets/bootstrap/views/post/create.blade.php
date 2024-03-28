@@ -13,7 +13,7 @@
         <hr />
 
         <form method="POST" action="{{ Forum::route('post.store', $thread) }}">
-            {!! csrf_field() !!}
+            {!!csrf_field() !!}
             @if ($post !== null)
                 <input type="hidden" name="post" value="{{ $post->id }}">
             @endif

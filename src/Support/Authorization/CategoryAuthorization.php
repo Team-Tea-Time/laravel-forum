@@ -47,7 +47,7 @@ class CategoryAuthorization
 
     public static function markThreadsAsRead(User $user, ?Category $category): bool
     {
-        if ($category !== null && ! $category->isAccessibleTo($user)) {
+        if ($category !== null && !$category->isAccessibleTo($user)) {
             return false;
         }
 

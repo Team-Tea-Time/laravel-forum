@@ -35,9 +35,9 @@ class ThreadController extends BaseController
             ->get()
             ->filter(function ($thread) use ($request, $unreadOnly) {
                 return $thread->category->isAccessibleTo($request->user())
-                    && (! $unreadOnly || $thread->userReadStatus !== null)
+                    && (!$unreadOnly || $thread->userReadStatus !== null)
                     && (
-                        ! $thread->category->is_private
+                        !$thread->category->is_private
                         || $request->user()
                         && $request->user()->can('view', $thread)
                     );
@@ -61,7 +61,7 @@ class ThreadController extends BaseController
     public function indexByCategory(Request $request): AnonymousResourceCollection|Response
     {
         $category = $request->route('category');
-        if (! $category->isAccessibleTo($request->user())) {
+        if (!$category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 
@@ -106,7 +106,7 @@ class ThreadController extends BaseController
     public function fetch(Request $request): JsonResource|Response
     {
         $thread = $request->route('thread');
-        if (! $thread->category->isAccessibleTo($request->user())) {
+        if (!$thread->category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 

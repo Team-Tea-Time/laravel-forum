@@ -35,7 +35,7 @@ class CategoryController extends BaseController
     public function fetch(Request $request): JsonResource|Response
     {
         $category = $request->route('category');
-        if (! $category->isAccessibleTo($request->user())) {
+        if (!$category->isAccessibleTo($request->user())) {
             return $this->notFoundResponse();
         }
 

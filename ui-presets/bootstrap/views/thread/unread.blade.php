@@ -4,7 +4,7 @@
     <div id="new-posts">
         <h2>{{ trans('forum::threads.unread_updated') }}</h2>
 
-        @if (! $threads->isEmpty())
+        @if (!$threads->isEmpty())
             <div class="threads list-group my-3 shadow-sm">
                 @foreach ($threads as $thread)
                     @include ('forum.thread.partials.list')
@@ -19,7 +19,7 @@
         @endif
     </div>
 
-    @if (! $threads->isEmpty())
+    @if (!$threads->isEmpty())
         @can ('markThreadsAsRead')
             <div class="text-center">
                 <button class="btn btn-primary px-5" data-open-modal="mark-as-read">

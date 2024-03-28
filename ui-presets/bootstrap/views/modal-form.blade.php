@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content shadow-sm">
             <div class="modal-header">
-                <h5 class="modal-title">{!! $title !!}</h5>
+                <h5 class="modal-title">{!!$title !!}</h5>
                 <button type="button" class="btn-close" aria-label="Close" data-close-modal></button>
             </div>
             <form action="{{ $route }}" method="POST">

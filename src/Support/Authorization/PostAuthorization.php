@@ -39,7 +39,7 @@ class PostAuthorization
             $canView = $accessibleCategoryIds->contains($post->thread->category_id) && $user->can('view', $post->thread);
             $canDelete = $user->can('deletePosts', $post->thread) && $user->can('delete', $post);
 
-            if (! ($canView && $canDelete)) {
+            if (!($canView && $canDelete)) {
                 return false;
             }
         }

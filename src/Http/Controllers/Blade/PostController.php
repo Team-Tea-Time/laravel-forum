@@ -21,7 +21,7 @@ class PostController extends BaseController
     {
         $thread = $request->route('thread');
 
-        if (! $thread->category->isAccessibleTo($request->user())) {
+        if (!$thread->category->isAccessibleTo($request->user())) {
             abort(404);
         }
 

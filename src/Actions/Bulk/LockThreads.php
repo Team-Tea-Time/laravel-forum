@@ -4,6 +4,7 @@ namespace TeamTeaTime\Forum\Actions\Bulk;
 
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Actions\BaseAction;
+use TeamTeaTime\Forum\Models\BaseModel;
 use TeamTeaTime\Forum\Models\Thread;
 
 class LockThreads extends BaseAction
@@ -23,8 +24,8 @@ class LockThreads extends BaseAction
             ->whereIn('id', $this->threadIds)
             ->where(['locked' => false]);
 
-        if (! $this->includeTrashed) {
-            $query = $query->whereNull(Thread::DELETED_AT);
+        if (!$this->includeTrashed) {
+            $query = $query->whereNull(BaseModel::DELETED_AT);
         }
 
         $threads = $query->get();

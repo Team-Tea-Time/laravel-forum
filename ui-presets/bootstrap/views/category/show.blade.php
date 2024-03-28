@@ -28,14 +28,14 @@
             </div>
         </div>
 
-        @if (! $category->children->isEmpty())
+        @if (!$category->children->isEmpty())
             @foreach ($category->children as $subcategory)
                 @include('forum.category.partials.list', ['category' => $subcategory])
             @endforeach
         @endif
 
         @if ($category->accepts_threads)
-            @if (! $threads->isEmpty())
+            @if (!$threads->isEmpty())
                 <div class="mt-4">
                     {{ $threads->links('forum.pagination') }}
                 </div>
@@ -150,7 +150,7 @@
         @endif
     </div>
 
-    @if (! $threads->isEmpty())
+    @if (!$threads->isEmpty())
         @can ('markThreadsAsRead')
             <div class="text-center mt-3">
                 <button class="btn btn-primary px-5" data-open-modal="mark-threads-as-read">
@@ -226,7 +226,7 @@
             },
             submit (event)
             {
-                if (this.actionMethods[this.selectedAction] === 'DELETE' && ! confirm("{{ trans('forum::general.generic_confirm') }}"))
+                if (this.actionMethods[this.selectedAction] === 'DELETE' && !confirm("{{ trans('forum::general.generic_confirm') }}"))
                 {
                     event.preventDefault();
                 }

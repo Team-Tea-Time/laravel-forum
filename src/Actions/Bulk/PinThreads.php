@@ -23,7 +23,7 @@ class PinThreads extends BaseAction
             ->whereIn('id', $this->threadIds)
             ->where(['pinned' => false]);
 
-        if (! $this->includeTrashed) {
+        if (!$this->includeTrashed) {
             $query = $query->whereNull(Thread::DELETED_AT);
         }
 

@@ -8,6 +8,6 @@
                 <strong>{{ $post->authorName }}</strong> <span class="text-gray-500">{{ $post->posted }}</span>
             </div>
         </div>
-        {!! \Illuminate\Support\Str::limit(Forum::render($post->content)) !!}
+        {!!\Illuminate\Support\Str::limit(Forum::render($post->content)) !!}
     </div>
 </div>
