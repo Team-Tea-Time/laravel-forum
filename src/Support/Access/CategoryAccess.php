@@ -77,7 +77,7 @@ class CategoryAccess
             ->get()
             ->keyBy('id');
 
-        return static::filter($categories, $user)->makeHidden('parent');
+        return static::filter($categories, $user);
     }
 
     public static function removeParentRelationships(Collection $categories): Collection

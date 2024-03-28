@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Http\Requests\Bulk;
 
 use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
-    Actions\Bulk\ManageCategories as Action,
+    Actions\Bulk\UpdateCategoryTree as Action,
     Events\UserBulkManagedCategories,
     Http\Requests\FulfillableRequestInterface,
     Support\Authorization\CategoryAuthorization,
