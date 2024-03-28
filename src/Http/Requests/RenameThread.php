@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\RenameThread as Action,
     Events\UserRenamedThread,
+    Support\Authorization\ThreadAuthorization,
     Support\Validation\ThreadRules,
 };
 
@@ -13,9 +14,7 @@ class RenameThread extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {
-        $thread = $this->route('thread');
-
-        return $this->user()->can('rename', $thread);
+        return ThreadAuthorization::rename($this->user(), $this->route('thread'));
     }
 
     public function rules(): array

@@ -8,6 +8,7 @@ use TeamTeaTime\Forum\{
     Events\UserDeletedCategory,
     Http\Requests\Traits\AuthorizesAfterValidation,
     Http\Requests\Traits\HandlesDeletion,
+    Support\Authorization\CategoryAuthorization,
     Support\Validation\CategoryRules,
 };
 
@@ -23,13 +24,13 @@ class DeleteCategory extends FormRequest implements FulfillableRequestInterface
     public function withValidator($validator)
     {
         $validator->sometimes('force', 'required', function ($input) {
-            return ! $this->route('category')->isEmpty();
+            return !$this->route('category')->isEmpty();
         });
     }
 
     public function authorizeValidated(): bool
     {
-        return $this->user()->can('delete', $this->route('category'));
+        return CategoryAuthorization::delete($this->user(), $this->route('category'));
     }
 
     public function fulfill()

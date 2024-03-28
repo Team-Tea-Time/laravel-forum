@@ -12,7 +12,7 @@ use TeamTeaTime\Forum\{
     Models\BaseModel,
     Models\Category,
     Models\Thread,
-    Support\CategoryAccess,
+    Support\Authorization\ThreadAuthorization,
     Support\Validation\ThreadRules,
 };
 
@@ -30,21 +30,7 @@ class MoveThreads extends FormRequest implements FulfillableRequestInterface
 
     public function authorizeValidated(): bool
     {
-        $destinationCategory = $this->getDestinationCategory();
-
-        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($this->user());
-
-        if (!($accessibleCategoryIds->contains($destinationCategory->id) || $this->user()->can('moveThreadsTo', $destinationCategory))) {
-            return false;
-        }
-
-        foreach ($this->getSourceCategories() as $category) {
-            if (!($accessibleCategoryIds->contains($category->id) || $this->user()->can('moveThreadsFrom', $category))) {
-                return false;
-            }
-        }
-
-        return true;
+        return ThreadAuthorization::bulkMove($this->user(), $this->getSourceCategories(), $this->getDestinationCategory());
     }
 
     public function fulfill()

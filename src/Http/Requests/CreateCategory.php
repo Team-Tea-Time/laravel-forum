@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\CreateCategory as Action,
     Events\UserCreatedCategory,
+    Support\Authorization\CategoryAuthorization,
     Support\Validation\CategoryRules,
 };
 
@@ -13,7 +14,7 @@ class CreateCategory extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {
-        return $this->user()->can('createCategories');
+        return CategoryAuthorization::create($this->user());
     }
 
     public function rules(): array

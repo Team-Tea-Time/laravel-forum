@@ -12,8 +12,8 @@ use TeamTeaTime\Forum\Http\Requests\CreateCategory;
 use TeamTeaTime\Forum\Http\Requests\DeleteCategory;
 use TeamTeaTime\Forum\Http\Requests\UpdateCategory;
 use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Support\CategoryAccess;
-use TeamTeaTime\Forum\Support\ThreadAccess;
+use TeamTeaTime\Forum\Support\Access\CategoryAccess;
+use TeamTeaTime\Forum\Support\Access\ThreadAccess;
 use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class CategoryController extends BaseController

@@ -7,6 +7,7 @@ use TeamTeaTime\Forum\{
     Actions\DeleteThread as Action,
     Events\UserDeletedThread,
     Http\Requests\Traits\HandlesDeletion,
+    Support\Authorization\ThreadAuthorization,
     Support\Validation\ThreadRules,
 };
 
@@ -16,9 +17,7 @@ class DeleteThread extends FormRequest implements FulfillableRequestInterface
 
     public function authorize(): bool
     {
-        $thread = $this->route('thread');
-
-        return $this->user()->can('deleteThreads', $thread->category) && $this->user()->can('delete', $thread);
+        return ThreadAuthorization::delete($this->user(), $this->route('thread'));
     }
 
     public function rules(): array

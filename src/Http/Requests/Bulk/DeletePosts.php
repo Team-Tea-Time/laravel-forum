@@ -9,8 +9,7 @@ use TeamTeaTime\Forum\{
     Http\Requests\Traits\AuthorizesAfterValidation,
     Http\Requests\Traits\HandlesDeletion,
     Http\Requests\FulfillableRequestInterface,
-    Models\Post,
-    Support\CategoryAccess,
+    Support\Authorization\PostAuthorization,
     Support\Validation\PostRules,
 };
 
@@ -25,26 +24,7 @@ class DeletePosts extends FormRequest implements FulfillableRequestInterface
 
     public function authorizeValidated(): bool
     {
-        $query = Post::query();
-
-        if ($this->user()->can('viewTrashedPosts')) {
-            $query = $query->withTrashed();
-        }
-
-        $posts = $query->with(['thread', 'thread.category'])->whereIn('id', $this->validated()['posts']);
-
-        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($this->user());
-
-        foreach ($posts as $post) {
-            $canView = $accessibleCategoryIds->contains($post->thread->category_id) && $this->user()->can('view', $post->thread);
-            $canDelete = $this->user()->can('deletePosts', $post->thread) && $this->user()->can('delete', $post);
-
-            if (! ($canView && $canDelete)) {
-                return false;
-            }
-        }
-
-        return true;
+        return PostAuthorization::bulkDelete($this->user, $this->validated()['posts']);
     }
 
     public function fulfill()

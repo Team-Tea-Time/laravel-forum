@@ -5,7 +5,7 @@ namespace TeamTeaTime\Forum\Actions;
 use Illuminate\Foundation\Auth\User;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\CategoryAccess;
+use TeamTeaTime\Forum\Support\Access\CategoryAccess;
 
 class MarkThreadsAsRead extends BaseAction
 {

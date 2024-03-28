@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\CreatePost as Action,
     Events\UserCreatedPost,
+    Support\Authorization\ThreadAuthorization,
     Support\Validation\PostRules,
 };
 
@@ -13,7 +14,7 @@ class CreatePost extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {
-        return $this->user()->can('reply', $this->route('thread'));
+        return ThreadAuthorization::reply($this->user(), $this->route('thread'));
     }
 
     public function rules(): array

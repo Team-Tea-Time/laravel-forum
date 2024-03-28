@@ -6,15 +6,14 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\RestorePost as Action,
     Events\UserRestoredPost,
+    Support\Authorization\PostAuthorization,
 };
 
 class RestorePost extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {
-        $post = $this->route('post');
-
-        return $this->user()->can('restorePosts', $post->thread) && $this->user()->can('restore', $post);
+        return PostAuthorization::restore($this->user(), $this->route('post'));
     }
 
     public function rules(): array

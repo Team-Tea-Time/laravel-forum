@@ -37,22 +37,22 @@ class CategoryPolicy
 
     public function moveThreadsFrom($user, Category $category): bool
     {
-        return false;
+        return true;
     }
 
     public function moveThreadsTo($user, Category $category): bool
     {
-        return false;
+        return true;
     }
 
     public function lockThreads($user, Category $category): bool
     {
-        return false;
+        return true;
     }
 
     public function pinThreads($user, Category $category): bool
     {
-        return false;
+        return true;
     }
 
     public function markThreadsAsRead($user, Category $category): bool

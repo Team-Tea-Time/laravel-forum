@@ -7,6 +7,7 @@ use TeamTeaTime\Forum\{
     Actions\DeletePost as Action,
     Events\UserDeletedPost,
     Http\Requests\Traits\HandlesDeletion,
+    Support\Authorization\PostAuthorization,
     Support\Validation\PostRules,
 };
 
@@ -16,11 +17,7 @@ class DeletePost extends FormRequest implements FulfillableRequestInterface
 
     public function authorize(): bool
     {
-        $post = $this->route('post');
-
-        return $post->sequence != 1
-            && $this->user()->can('deletePosts', $post->thread)
-            && $this->user()->can('delete', $post);
+        return PostAuthorization::delete($this->user(), $this->route('post'));
     }
 
     public function rules(): array

@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use TeamTeaTime\Forum\{
     Actions\CreateThread as Action,
     Events\UserCreatedThread,
+    Support\Authorization\CategoryAuthorization,
     Support\Validation\ThreadRules,
 };
 
@@ -13,9 +14,7 @@ class CreateThread extends FormRequest implements FulfillableRequestInterface
 {
     public function authorize(): bool
     {
-        $category = $this->route('category');
-
-        return $category->accepts_threads && $this->user()->can('createThreads', $category);
+        return CategoryAuthorization::createThreads($this->user(), $this->route('category'));
     }
 
     public function rules(): array

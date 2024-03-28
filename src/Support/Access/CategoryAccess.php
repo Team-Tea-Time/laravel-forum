@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamTeaTime\Forum\Support;
+namespace TeamTeaTime\Forum\Support\Access;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User;

@@ -8,7 +8,7 @@ use TeamTeaTime\Forum\{
     Events\UserBulkRestoredThreads,
     Http\Requests\Traits\AuthorizesAfterValidation,
     Http\Requests\FulfillableRequestInterface,
-    Models\Thread,
+    Support\Authorization\ThreadAuthorization,
     Support\Validation\ThreadRules,
 };
 
@@ -23,18 +23,7 @@ class RestoreThreads extends FormRequest implements FulfillableRequestInterface
 
     public function authorizeValidated(): bool
     {
-        if (!$this->user()->can('viewTrashedThreads')) {
-            return false;
-        }
-
-        $threads = Thread::whereIn('id', $this->validated()['threads'])->get();
-        foreach ($threads as $thread) {
-            if (!($this->user()->can('restoreThreads', $thread->category) && $this->user()->can('restore', $thread))) {
-                return false;
-            }
-        }
-
-        return true;
+        return ThreadAuthorization::bulkRestore($this->user(), $this->validated()['threads']);
     }
 
     public function fulfill()

@@ -9,8 +9,7 @@ use TeamTeaTime\Forum\{
     Http\Requests\Traits\AuthorizesAfterValidation,
     Http\Requests\Traits\HandlesDeletion,
     Http\Requests\FulfillableRequestInterface,
-    Models\Thread,
-    Support\CategoryAccess,
+    Support\Authorization\ThreadAuthorization,
     Support\Validation\ThreadRules,
 };
 
@@ -25,21 +24,7 @@ class DeleteThreads extends FormRequest implements FulfillableRequestInterface
 
     public function authorizeValidated(): bool
     {
-        // Eloquent is used here so that we get a collection of Thread instead of
-        // stdClass in order for the gate to infer the policy to use.
-        $threads = Thread::whereIn('id', $this->validated()['threads'])->with('category')->get();
-        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($this->user());
-
-        foreach ($threads as $thread) {
-            $canView = $accessibleCategoryIds->contains($thread->category_id) && $this->user()->can('view', $thread);
-            $canDelete = $this->user()->can('deleteThreads', $thread->category) && $this->user()->can('delete', $thread);
-
-            if (!($canView && $canDelete)) {
-                return false;
-            }
-        }
-
-        return true;
+        return ThreadAuthorization::bulkDelete($this->user(), $this->validated()['threads']);
     }
 
     public function fulfill()

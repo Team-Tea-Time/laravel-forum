@@ -18,8 +18,10 @@ use TeamTeaTime\Forum\{
     Http\Livewire\Traits\UpdatesContent,
     Http\Livewire\EventfulPaginatedComponent,
     Models\Category,
-    Support\CategoryAccess,
-    Support\ThreadAccess,
+    Support\Authorization\CategoryAuthorization,
+    Support\Authorization\ThreadAuthorization,
+    Support\Access\CategoryAccess,
+    Support\Access\ThreadAccess,
 };
 
 class CategoryShow extends EventfulPaginatedComponent
@@ -55,6 +57,10 @@ class CategoryShow extends EventfulPaginatedComponent
 
     public function deleteThreads(Request $request, array $threadIds, bool $permadelete): array
     {
+        if (!ThreadAuthorization::bulkDelete($request->user(), $threadIds)) {
+            abort(403);
+        }
+
         $action = new DeleteThreads(
             $threadIds,
             $request->user()->can('viewTrashedPosts'),
@@ -118,31 +124,11 @@ class CategoryShow extends EventfulPaginatedComponent
             $threads,
             $this->category);
 
-        $bulkActions = [];
-        if ($user->can('deleteThreads', $this->category)) {
-            $bulkActions['delete'] = trans('forum::general.delete');
-        }
-        if ($user->can('restoreThreads', $this->category)) {
-            $bulkActions['restore'] = trans('forum::general.restore');
-        }
-        if ($user->can('moveThreadsFrom', $this->category)) {
-            $bulkActions['move'] = trans('forum::general.move');
-        }
-        if ($user->can('lockThreads', $this->category)) {
-            $bulkActions['lock'] = trans('forum::threads.lock');
-            $bulkActions['unlock'] = trans('forum::threads.unlock');
-        }
-        if ($user->can('pinThreads', $this->category)) {
-            $bulkActions['pin'] = trans('forum::threads.pin');
-            $bulkActions['unpin'] = trans('forum::threads.unpin');
-        }
-
         return ViewFactory::make('forum::pages.category.show', [
             'category' => $this->category,
             'threads' => $threads,
             'privateAncestor' => $privateAncestor,
             'selectableThreadIds' => $selectableThreadIds,
-            'bulkActions' => $bulkActions,
         ])->layout('forum::layouts.main', ['category' => $this->category]);
     }
 }

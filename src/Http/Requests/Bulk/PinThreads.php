@@ -8,7 +8,7 @@ use TeamTeaTime\Forum\{
     Events\UserBulkPinnedThreads,
     Http\Requests\Traits\AuthorizesAfterValidation,
     Http\Requests\FulfillableRequestInterface,
-    Support\CategoryAccess,
+    Support\Authorization\ThreadAuthorization,
     Support\Validation\ThreadRules,
 };
 
@@ -23,15 +23,7 @@ class PinThreads extends FormRequest implements FulfillableRequestInterface
 
     public function authorizeValidated(): bool
     {
-        $categories = CategoryAccess::getFilteredCategoryCollectionFor($this->user(), $this->validated()['threads']);
-
-        foreach ($categories as $category) {
-            if (!$this->user()->can('pinThreads', $category)) {
-                return false;
-            }
-        }
-
-        return true;
+        return ThreadAuthorization::bulkPin($this->user(), $this->validated()['threads']);
     }
 
     public function fulfill()

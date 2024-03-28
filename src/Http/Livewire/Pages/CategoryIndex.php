@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use Livewire\Component;
 use TeamTeaTime\Forum\Events\UserViewingIndex;
-use TeamTeaTime\Forum\Support\CategoryAccess;
+use TeamTeaTime\Forum\Support\Access\CategoryAccess;
 
 class CategoryIndex extends Component
 {

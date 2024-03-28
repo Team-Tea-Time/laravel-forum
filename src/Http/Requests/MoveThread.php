@@ -8,6 +8,7 @@ use TeamTeaTime\Forum\{
     Events\UserMovedThread,
     Http\Requests\Traits\AuthorizesAfterValidation,
     Models\Category,
+    Support\Authorization\CategoryAuthorization,
     Support\Validation\ThreadRules,
 };
 
@@ -24,10 +25,7 @@ class MoveThread extends FormRequest implements FulfillableRequestInterface
 
     public function authorizeValidated(): bool
     {
-        $thread = $this->route('thread');
-        $destinationCategory = $this->getDestinationCategory();
-
-        return $this->user()->can('moveThreadsFrom', $thread->category) && $this->user()->can('moveThreadsTo', $destinationCategory);
+        return CategoryAuthorization::moveThread($this->user(), $this->route('thread')->category, $this->getDestinationCategory());
     }
 
     public function fulfill()

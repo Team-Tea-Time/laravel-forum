@@ -7,6 +7,7 @@ use TeamTeaTime\Forum\{
     Actions\Bulk\ManageCategories as Action,
     Events\UserBulkManagedCategories,
     Http\Requests\FulfillableRequestInterface,
+    Support\Authorization\CategoryAuthorization,
     Support\Validation\CategoryRules,
 };
 
@@ -19,7 +20,7 @@ class ManageCategories extends FormRequest implements FulfillableRequestInterfac
 
     public function authorizeValidated(): bool
     {
-        return $this->user()->can('manageCategories');
+        return CategoryAuthorization::manage($this->user());
     }
 
     public function fulfill()

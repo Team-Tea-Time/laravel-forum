@@ -9,7 +9,7 @@ trait UpdatesContent
      */
     public string $updateKey;
 
-    private function touchUpdateKey()
+    protected function touchUpdateKey()
     {
         $this->updateKey = uniqid();
     }

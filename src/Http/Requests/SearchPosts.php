@@ -8,6 +8,7 @@ use TeamTeaTime\Forum\{
     Events\UserSearchedPosts,
     Http\Requests\Traits\AuthorizesAfterValidation,
     Models\Category,
+    Support\Authorization\CategoryAuthorization,
     Support\Validation\PostRules,
 };
 
@@ -24,9 +25,7 @@ class SearchPosts extends FormRequest implements FulfillableRequestInterface
 
     public function authorizeValidated(): bool
     {
-        $category = $this->getCategory();
-
-        return $category == null || ! $category->is_private || $category->isAccessibleTo($this->user());
+        return CategoryAuthorization::search($this->user(), $this->getCategory());
     }
 
     public function fulfill()
@@ -47,7 +46,7 @@ class SearchPosts extends FormRequest implements FulfillableRequestInterface
     {
         $categoryId = $this->query('category_id');
 
-        if (! isset($this->category) && $categoryId != null && is_numeric($categoryId)) {
+        if (!isset($this->category) && $categoryId != null && is_numeric($categoryId)) {
             $this->category = Category::find($categoryId);
         }
 

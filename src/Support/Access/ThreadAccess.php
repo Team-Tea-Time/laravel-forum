@@ -1,13 +1,11 @@
 <?php
 
-namespace TeamTeaTime\Forum\Support;
+namespace TeamTeaTime\Forum\Support\Access;
 
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Collection;
 use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Models\Thread;
 
 /**
  * ThreadAccess provides utilities for retrieving thread data based on user authorisation.

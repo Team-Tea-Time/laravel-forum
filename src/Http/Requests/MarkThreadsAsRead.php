@@ -8,6 +8,7 @@ use TeamTeaTime\Forum\{
     Events\UserMarkedThreadsAsRead,
     Http\Requests\Traits\AuthorizesAfterValidation,
     Models\Category,
+    Support\Authorization\CategoryAuthorization,
     Support\Validation\CategoryRules,
 };
 
@@ -24,18 +25,12 @@ class MarkThreadsAsRead extends FormRequest implements FulfillableRequestInterfa
 
     public function authorizeValidated(): bool
     {
-        $category = $this->category();
-
-        if ($category !== null && ! $category->isAccessibleTo($this->user())) {
-            return false;
-        }
-
-        return $this->user()->can('markThreadsAsRead', $category);
+        return CategoryAuthorization::markThreadsAsRead($this->user(), $this->getCategory());
     }
 
     public function fulfill()
     {
-        $category = $this->category();
+        $category = $this->getCategory();
 
         $action = new Action($this->user(), $category);
         $threads = $action->execute();
@@ -45,9 +40,9 @@ class MarkThreadsAsRead extends FormRequest implements FulfillableRequestInterfa
         return $category;
     }
 
-    private function category()
+    private function getCategory()
     {
-        if (! isset($this->category)) {
+        if (!isset($this->category)) {
             $this->category = isset($this->validated()['category_id']) ? Category::find($this->validated()['category_id']) : null;
         }
 
