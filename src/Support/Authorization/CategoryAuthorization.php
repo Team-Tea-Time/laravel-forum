@@ -10,9 +10,9 @@ use TeamTeaTime\Forum\Models\Category;
  */
 class CategoryAuthorization
 {
-    public static function manage(User $user): bool
+    public static function move(User $user): bool
     {
-        return $user->can('manageCategories');
+        return $user->can('moveCategories');
     }
 
     public static function create(User $user): bool

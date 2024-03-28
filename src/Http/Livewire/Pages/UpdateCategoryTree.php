@@ -13,18 +13,17 @@ use TeamTeaTime\Forum\{
     Http\Livewire\Traits\CreatesAlerts,
     Models\Category,
     Support\Authorization\CategoryAuthorization,
-    Support\Frontend\Forum,
 };
 
 class UpdateCategoryTree extends Component
 {
     use CreatesAlerts;
 
-    public array $categoryData = [];
+    public array $tree = [];
 
     public function mount(Request $request)
     {
-        if (!CategoryAuthorization::manage($request->user())) {
+        if (!CategoryAuthorization::move($request->user())) {
             abort(404);
         }
 
@@ -35,14 +34,14 @@ class UpdateCategoryTree extends Component
 
     public function save(Request $request): array
     {
-        if (!CategoryAuthorization::manage($request->user())) {
+        if (!CategoryAuthorization::move($request->user())) {
             abort(403);
         }
 
-        $action = new Action($this->categoryData);
+        $action = new Action($this->tree);
         $result = $action->execute();
 
-        UserBulkManagedCategories::dispatch($request->user(), $result, $this->categoryData);
+        UserBulkManagedCategories::dispatch($request->user(), $result, $this->tree);
 
         return $this->alert('general.changes_applied')->toLivewire();
     }

@@ -7,26 +7,15 @@ use TeamTeaTime\Forum\Models\Category;
 
 class UpdateCategoryTree extends BaseAction
 {
-    private array $categoryData;
+    private array $tree;
 
-    public function __construct(array $categoryData)
+    public function __construct(array $tree)
     {
-        $this->categoryData = $categoryData;
+        $this->tree = $tree;
     }
 
     protected function transact()
     {
-        $saveCount = 0;
-        foreach ($this->categoryData as $category) {
-            $model = Category::find($category['id']);
-            $model->parent_id = isset($category['parent_id'])
-                ? $category['parent_id']
-                : null;
-            if ($model->save()) ++$saveCount;
-        }
-
-        return $saveCount;
-
-        // return Category::rebuildTree($this->categoryData);
+        return Category::rebuildTree($this->tree);
     }
 }
