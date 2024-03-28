@@ -11,6 +11,7 @@ use TeamTeaTime\Forum\{
     Actions\Bulk\LockThreads,
     Actions\Bulk\PinThreads,
     Actions\Bulk\RestoreThreads,
+    Actions\Bulk\MoveThreads,
     Actions\Bulk\UnlockThreads,
     Actions\Bulk\UnpinThreads,
     Events\UserBulkDeletedThreads,
@@ -23,10 +24,12 @@ use TeamTeaTime\Forum\{
     Http\Livewire\Traits\CreatesAlerts,
     Http\Livewire\Traits\UpdatesContent,
     Http\Livewire\EventfulPaginatedComponent,
+    Models\BaseModel,
     Models\Category,
-    Support\Authorization\ThreadAuthorization,
+    Models\Thread,
     Support\Access\CategoryAccess,
     Support\Access\ThreadAccess,
+    Support\Authorization\ThreadAuthorization,
     Support\Traits\HandlesDeletion,
 };
 
@@ -94,6 +97,31 @@ class CategoryShow extends EventfulPaginatedComponent
         }
 
         return $this->handleActionResult($result, 'threads.restored');
+    }
+
+    public function moveThreads(Request $request, array $threadIds, int $destinationCategoryId): array
+    {
+        $destination = Category::find($destinationCategoryId);
+
+        $query = Thread::select('category_id')
+            ->distinct()
+            ->where('category_id', '!=', $destination->id)
+            ->whereIn('id', $threadIds);
+
+        if (!$request->user()->can('viewTrashedThreads')) {
+            $query = $query->whereNull(BaseModel::DELETED_AT);
+        }
+
+        $sourceCategories = Category::whereIn('id', $query->get()->pluck('category_id'))->get();
+
+        if (!ThreadAuthorization::bulkMove($request->user(), $sourceCategories, $destination)) {
+            abort(403);
+        }
+
+        $action = new MoveThreads($threadIds, $destination, $request->user()->can('viewTrashedThreads'));
+        $result = $action->execute();
+
+        return $this->handleActionResult($result);
     }
 
     public function lockThreads(Request $request, array $threadIds): array
@@ -178,12 +206,16 @@ class CategoryShow extends EventfulPaginatedComponent
             $user,
             $threads,
             $this->category);
+        $threadDestinationCategories = $request->user() && $request->user()->can('moveCategories')
+            ? Category::query()->threadDestinations()->get()
+            : [];
 
         return ViewFactory::make('forum::pages.category.show', [
             'category' => $this->category,
             'threads' => $threads,
             'privateAncestor' => $privateAncestor,
             'selectableThreadIds' => $selectableThreadIds,
+            'threadDestinationCategories' => $threadDestinationCategories,
         ])->layout('forum::layouts.main', ['category' => $this->category]);
     }
 }
