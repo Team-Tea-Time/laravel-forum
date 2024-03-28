@@ -10,6 +10,7 @@ return [
     'created' => 'Категория создана',
     'deleted' => 'Категория удалена|Категории удалены',
     'disable_threads' => 'Отключить темы',
+    'edit' => 'Edit category',
     'enable_threads' => 'Включить темы',
     'make_private' => 'Сделать приватным',
     'make_public' => 'Опубликовать',

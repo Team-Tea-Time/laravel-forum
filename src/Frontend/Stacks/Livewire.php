@@ -4,9 +4,10 @@ namespace TeamTeaTime\Forum\Frontend\Stacks;
 
 use TeamTeaTime\Forum\{
     Http\Livewire\Pages\CategoryCreate,
+    Http\Livewire\Pages\CategoryEdit,
     Http\Livewire\Pages\CategoryIndex,
     Http\Livewire\Pages\CategoryShow,
-    Http\Livewire\Pages\ManageCategories,
+    Http\Livewire\Pages\UpdateCategoryTree,
     Http\Livewire\Pages\ThreadCreate,
     Http\Livewire\Pages\ThreadShow,
     Http\Middleware\ResolveFrontendParameters,
@@ -21,9 +22,10 @@ class Livewire implements StackInterface
     {
         // Register full-page components required by the Livewire routes
         $this->livewireComponent('pages.category.create', CategoryCreate::class);
+        $this->livewireComponent('pages.category.edit', CategoryEdit::class);
         $this->livewireComponent('pages.category.index', CategoryIndex::class);
         $this->livewireComponent('pages.category.show', CategoryShow::class);
-        $this->livewireComponent('pages.category.manage', ManageCategories::class);
+        $this->livewireComponent('pages.category.manage', UpdateCategoryTree::class);
         $this->livewireComponent('pages.thread.create', ThreadCreate::class);
         $this->livewireComponent('pages.thread.show', ThreadShow::class);
     }

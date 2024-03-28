@@ -16,7 +16,7 @@ use TeamTeaTime\Forum\{
     Support\Frontend\Forum,
 };
 
-class ManageCategories extends Component
+class UpdateCategoryTree extends Component
 {
     use CreatesAlerts;
 

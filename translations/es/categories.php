@@ -10,6 +10,7 @@ return [
     'created' => 'Categoría creado|Categorías creado',
     'deleted' => 'Categoría eliminada|Categorías eliminada',
     'disable_threads' => 'Discusiones Desactivar',
+    'edit' => 'Edit category',
     'enable_threads' => 'Habilitar discusiones',
     'make_private' => 'Haga privada',
     'make_public' => 'Hacer público',

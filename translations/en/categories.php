@@ -10,6 +10,7 @@ return [
     'created' => 'Category created',
     'deleted' => 'Category deleted|Categories deleted',
     'disable_threads' => 'Disable threads',
+    'edit' => 'Edit category',
     'enable_threads' => 'Enable threads',
     'make_private' => 'Make private',
     'make_public' => 'Make public',

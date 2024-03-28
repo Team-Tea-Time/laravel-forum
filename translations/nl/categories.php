@@ -10,6 +10,7 @@ return [
     'created' => 'Categorie aangemaakt',
     'deleted' => 'Categorie verwijderd|Categorieën verwijderd',
     'disable_threads' => 'Onderwerpen uitschakelen',
+    'edit' => 'Edit category',
     'enable_threads' => 'Onderwerpen inschakelen',
     'make_private' => 'Maak privé',
     'make_public' => 'Maak publiekelijk',

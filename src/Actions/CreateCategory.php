@@ -6,11 +6,11 @@ use TeamTeaTime\Forum\Models\Category;
 
 class CreateCategory extends BaseAction
 {
-    private string $title;
-    private string $description;
-    private string $color;
-    private bool $acceptsThreads;
-    private bool $isPrivate;
+    public string $title;
+    public string $description;
+    public string $color;
+    public bool $acceptsThreads;
+    public bool $isPrivate;
 
     public function __construct(string $title, string $description, string $color, bool $acceptsThreads = true, bool $isPrivate = false)
     {

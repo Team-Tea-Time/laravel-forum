@@ -10,6 +10,7 @@ return [
     'created' => '分类已创建',
     'deleted' => '分类已删除|分类已删除',
     'disable_threads' => '禁用贴子',
+    'edit' => 'Edit category',
     'enable_threads' => '启用贴子',
     'make_private' => '设为私有',
     'make_public' => '设为公开',

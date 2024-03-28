@@ -10,6 +10,7 @@ return [
     'created' => 'เพิ่มหมวดหมู่แล้ว',
     'deleted' => 'ลบหมวดหมู่แล้ว|ลบหมวดหมู่แล้ว',
     'disable_threads' => 'ปิดการเพิ่มหัวข้อใหม่',
+    'edit' => 'Edit category',
     'enable_threads' => 'เปิดการเพิ่มหัวข้อใหม่',
     'make_private' => 'ตั้งค่าเป็นส่วนตัว',
     'make_public' => 'ตั้งค่าเป็นสาธารณะ',

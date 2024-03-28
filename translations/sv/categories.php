@@ -10,6 +10,7 @@ return [
     'created' => 'Kategori skapad',
     'deleted' => 'Kategori utgår|Kategorier utgår',
     'disable_threads' => 'Inaktivera trådar',
+    'edit' => 'Edit category',
     'enable_threads' => 'Aktivera trådar',
     'make_private' => 'Gör privat',
     'make_public' => 'Gör ett allmänt',

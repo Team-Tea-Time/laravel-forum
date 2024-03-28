@@ -10,6 +10,7 @@ return [
     'created' => 'Kategori oluşturuldu',
     'deleted' => 'Kategori silindi|Kategoriler Silindi',
     'disable_threads' => 'Konuları kapat',
+    'edit' => 'Edit category',
     'enable_threads' => 'Konuları aktif et',
     'make_private' => 'Özel olarak işaretle',
     'make_public' => 'Herkese açık olarak işaretle',

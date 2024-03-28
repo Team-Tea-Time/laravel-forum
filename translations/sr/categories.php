@@ -10,6 +10,7 @@ return [
     'created' => 'Kategorija napravljena',
     'deleted' => 'Kategorija izbrisana|Kategorije izbrisane',
     'disable_threads' => 'Onemogući teme',
+    'edit' => 'Edit category',
     'enable_threads' => 'Omogući teme',
     'make_private' => 'Učini privatnim',
     'make_public' => 'Učini javnim',

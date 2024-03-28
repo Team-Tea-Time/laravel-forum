@@ -2,9 +2,10 @@
 
 use TeamTeaTime\Forum\Http\Livewire\Pages\{
     CategoryCreate,
+    CategoryEdit,
     CategoryIndex,
     CategoryShow,
-    ManageCategories,
+    UpdateCategoryTree,
     ThreadCreate,
     ThreadShow,
 };
@@ -12,12 +13,13 @@ use TeamTeaTime\Forum\Http\Livewire\Pages\{
 $prefix = config('forum.frontend.route_prefixes');
 
 Route::get('/', CategoryIndex::class)->name('category.index');
-Route::get('manage', ManageCategories::class)->name('category.manage');
+Route::get('category/order', UpdateCategoryTree::class)->name('category.order');
 Route::get('category/create', CategoryCreate::class)->name('category.create');
 
 Route::group(['prefix' => $prefix['category'] . '/{category_id}-{category_slug}'], function () use ($prefix)
 {
     Route::get('/', CategoryShow::class)->name('category.show');
+    Route::get('edit', CategoryEdit::class)->name('category.edit');
     Route::get($prefix['thread'] . '/create', ThreadCreate::class)->name('thread.create');
 });
 

@@ -10,6 +10,7 @@ return [
     'created' => 'Kategori dibuat',
     'deleted' => 'Kategori dihapus|Kategori dihapus',
     'disable_threads' => 'Nonaktifkan Thread',
+    'edit' => 'Edit category',
     'enable_threads' => 'Aktifkan Thread',
     'make_private' => 'Buat Pribadi',
     'make_public' => 'Buat Publik',

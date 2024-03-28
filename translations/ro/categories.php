@@ -10,6 +10,7 @@ return [
     'created' => 'Categorie creat',
     'deleted' => 'Categorie șters|Categorii șters',
     'disable_threads' => 'Discuții dezactiva',
+    'edit' => 'Edit category',
     'enable_threads' => 'Activați discuții',
     'make_private' => 'Să facă publice',
     'make_public' => 'Face privat',

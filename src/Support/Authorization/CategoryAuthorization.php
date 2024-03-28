@@ -20,6 +20,11 @@ class CategoryAuthorization
         return $user->can('createCategories');
     }
 
+    public static function edit(User $user, Category $category): bool
+    {
+        return $user->can('editCategories') && $user->can('edit', $category);
+    }
+
     public static function delete(User $user, Category $category): bool
     {
         return $user->can('delete', $category);
