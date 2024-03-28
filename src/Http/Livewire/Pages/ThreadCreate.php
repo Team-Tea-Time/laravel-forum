@@ -7,8 +7,12 @@ use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
-use TeamTeaTime\Forum\Actions\CreateThread as Action;
-use TeamTeaTime\Forum\Support\Validation\ThreadRules;
+use TeamTeaTime\Forum\{
+    Actions\CreateThread as Action,
+    Events\UserCreatedThread,
+    Support\Authorization\CategoryAuthorization,
+    Support\Validation\ThreadRules,
+};
 
 class ThreadCreate extends Component
 {
@@ -28,9 +32,9 @@ class ThreadCreate extends Component
         $this->breadcrumbs_append = [trans('forum::threads.new_thread')];
     }
 
-    public function save(Request $request)
+    public function create(Request $request)
     {
-        if (!$this->category->accepts_threads || !$request->user()->can('createThreads', $this->category)) {
+        if (!CategoryAuthorization::createThreads($request->user(), $this->category)) {
             abort(403);
         }
 
@@ -38,6 +42,8 @@ class ThreadCreate extends Component
 
         $action = new Action($this->category, $request->user(), $validated['title'], $validated['content']);
         $thread = $action->execute();
+
+        UserCreatedThread::dispatch($request->user(), $thread);
 
         return $this->redirect($thread->route);
     }

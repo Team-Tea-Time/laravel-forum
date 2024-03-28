@@ -15,6 +15,7 @@ return [
     'make_public' => 'Rendre publique',
     'mark_read' => 'Marquer les sujets dans cette catégorie comme lu',
     'marked_read' => 'Les nouveaux sujets dans :category ont été marqués comme lus',
+    'parent' => 'Parent category',
     'restored' => 'Catégorie restauré|Catégories restaurés',
     'subcategories' => 'Les sous-catégories',
     'threads_disabled' => 'La création de sujets a été désactivé dans cette catégorie',

@@ -15,6 +15,7 @@ return [
     'make_public' => 'Face privat',
     'mark_read' => 'Discuții Mark din această categorie ca fiind citit',
     'marked_read' => 'Discuții noi / actualizate din :category au fost marcate ca citite',
+    'parent' => 'Parent category',
     'restored' => 'Categorie restaurat|Categorii restaurat',
     'subcategories' => 'Subcategorii',
     'threads_disabled' => 'Crearea discuție nouă este dezactivată în această categorie',

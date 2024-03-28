@@ -15,6 +15,7 @@ return [
     'make_public' => 'Herkese açık olarak işaretle',
     'mark_read' => 'Bu kategorideki konuları okundu olarak işaretle',
     'marked_read' => 'Yeni/Güncellenen şu :category deki konuları okundu olarak işaretlendi',
+    'parent' => 'Parent category',
     'restored' => 'Kategori geri alındı|Kategoriler geri alındı',
     'subcategories' => 'Alt Kategoriler',
     'threads_disabled' => 'Bu kategori kilitli olduğundan buraya konu açamazsınız.',

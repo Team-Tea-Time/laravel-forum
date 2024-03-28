@@ -15,6 +15,7 @@ return [
     'make_public' => 'Maak publiekelijk',
     'mark_read' => 'Markeer de onderwerpen in deze categorie als gelezen',
     'marked_read' => 'Nieuwe/bijgewerkte onderwerpen in :category zijn als gelezen gemarkeerd',
+    'parent' => 'Parent category',
     'restored' => 'Categorie hersteld|Categorieën hersteld',
     'subcategories' => 'Subcategorieën',
     'threads_disabled' => 'Aanmaken van onderwerpen in deze categorie is uitgeschakeld',

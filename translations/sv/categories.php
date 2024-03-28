@@ -15,6 +15,7 @@ return [
     'make_public' => 'Gör ett allmänt',
     'mark_read' => 'Markera trådar i denna kategori som läst',
     'marked_read' => 'Nya / uppdaterade trådar i :category har markerats som läst',
+    'parent' => 'Parent category',
     'restored' => 'Kategori restaurerade|Kategorier restaurerade',
     'subcategories' => 'Underkategorier',
     'threads_disabled' => 'Ny tråd skapande är inaktiverad i denna kategori',

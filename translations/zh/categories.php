@@ -15,6 +15,7 @@ return [
     'make_public' => '设为公开',
     'mark_read' => '将此类别中的贴子标记为已读',
     'marked_read' => ':category中的新/更新的贴子已被标记为已读',
+    'parent' => 'Parent category',
     'restored' => '分类已恢复|分类已恢复',
     'subcategories' => '子分类',
     'threads_disabled' => '此分类中禁用了新贴子创建',

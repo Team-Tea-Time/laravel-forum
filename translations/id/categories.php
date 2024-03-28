@@ -15,6 +15,7 @@ return [
     'make_public' => 'Buat Publik',
     'mark_read' => 'Tandai Thread di Kategori ini sebagai telah dibaca',
     'marked_read' => 'Thread baru/terbaru di :category telah ditandai sebagai telah dibaca',
+    'parent' => 'Parent category',
     'restored' => 'Kategori dipulihkan|Kategori dipulihkan',
     'subcategories' => 'Sub Kategori',
     'threads_disabled' => 'Pembuatan thread baru di kategori ini telah dinonaktifkan',

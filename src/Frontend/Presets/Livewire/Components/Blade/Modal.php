@@ -6,17 +6,15 @@ use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use Illuminate\View\Component;
 
-class Button extends Component
+class Modal extends Component
 {
     public function __construct(
-        public string $icon = "",
-        public string $label = "",
-        public string $onClick = "",
-        public string $wireConfirm = "",
+        public string $heading = "",
+        public string $onClose = "",
     ) {}
 
     public function render(): View
     {
-        return ViewFactory::make('forum::components.button');
+        return ViewFactory::make('forum::components.modal');
     }
 }

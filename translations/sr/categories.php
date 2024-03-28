@@ -15,6 +15,7 @@ return [
     'make_public' => 'Učini javnim',
     'mark_read' => 'Obeleži teme u ovoj kategoriji kao pročitane',
     'marked_read' => 'Nove/izmenjene teme u :category su obeležene kao pročitane',
+    'parent' => 'Parent category',
     'restored' => 'Kategorija vraćena|Kategorije vraćene',
     'subcategories' => 'Podkategorije',
     'threads_disabled' => 'Kreiranje novih tema je onemogućeno u ovoj kategoriji',

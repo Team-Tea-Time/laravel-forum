@@ -10,6 +10,7 @@ class CategoryRules
             'title' => ['required', 'string', 'min:' . config('forum.general.validation.title_min')],
             'description' => ['nullable', 'string'],
             'color' => ['string'],
+            'parent_category' => ['nullable', 'int', 'exists:forum_categories,id'],
             'accepts_threads' => ['boolean'],
             'is_private' => ['boolean'],
         ];

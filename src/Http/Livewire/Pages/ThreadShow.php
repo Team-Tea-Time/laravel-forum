@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\{
     Actions\CreatePost as Action,
+    Events\UserCreatedPost,
     Events\UserViewingThread,
     Http\Livewire\Traits\CreatesAlerts,
     Http\Livewire\Traits\UpdatesContent,
@@ -54,6 +55,8 @@ class ThreadShow extends EventfulPaginatedComponent
         $post = $action->execute();
 
         $post->thread->markAsRead($request->user());
+
+        UserCreatedPost::dispatch($request->user(), $post);
 
         $this->content = '';
 

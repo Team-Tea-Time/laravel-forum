@@ -15,6 +15,7 @@ return [
     'make_public' => 'Tornar público',
     'mark_read' => 'Marcar como lido os tópicos dessa categoria',
     'marked_read' => 'Tópico novo/atualizado em :category foi marcado como lido',
+    'parent' => 'Parent category',
     'restored' => 'Categoria restaurada|Categorias restauradas',
     'subcategories' => 'Subcategorias',
     'threads_disabled' => 'Criar novo tópico está desativado nessa categoria',

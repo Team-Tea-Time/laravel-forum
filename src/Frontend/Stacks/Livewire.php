@@ -3,6 +3,7 @@
 namespace TeamTeaTime\Forum\Frontend\Stacks;
 
 use TeamTeaTime\Forum\{
+    Http\Livewire\Pages\CategoryCreate,
     Http\Livewire\Pages\CategoryIndex,
     Http\Livewire\Pages\CategoryShow,
     Http\Livewire\Pages\ThreadCreate,
@@ -18,6 +19,7 @@ class Livewire implements StackInterface
     public function register(): void
     {
         // Register full-page components required by the Livewire routes
+        $this->livewireComponent('pages.category.create', CategoryCreate::class);
         $this->livewireComponent('pages.category.index', CategoryIndex::class);
         $this->livewireComponent('pages.category.show', CategoryShow::class);
         $this->livewireComponent('pages.thread.create', ThreadCreate::class);
