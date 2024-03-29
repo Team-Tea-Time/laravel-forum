@@ -8,13 +8,14 @@ use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 use TeamTeaTime\Forum\{
-    Actions\EditPost as Action,
+    Actions\EditPost,
+    Actions\DeletePost,
     Events\UserEditingPost,
     Events\UserEditedPost,
+    Events\UserDeletedPost,
     Models\Post,
     Support\Authorization\PostAuthorization,
-    Support\Validation\CategoryRules,
-    Support\Frontend\Forum,
+    Support\Validation\PostRules,
 };
 
 class PostEdit extends Component
@@ -28,6 +29,7 @@ class PostEdit extends Component
     public function mount(Request $request)
     {
         $this->post = $request->route('post');
+        $this->content = $this->post->content;
 
         if (!PostAuthorization::edit($request->user(), $this->post)) {
             abort(404);
@@ -44,25 +46,30 @@ class PostEdit extends Component
             abort(403);
         }
 
-        $validated = $this->validate(CategoryRules::create());
+        $validated = $this->validate(PostRules::create());
 
-        $action = new Action($this->post, $validated['content']);
-        $action->execute();
+        $action = new EditPost($this->post, $validated['content']);
+        $post = $action->execute();
 
-        UserEditedPost::dispatch($request->user(), $this->post);
+        UserEditedPost::dispatch($request->user(), $post);
 
-        return $this->redirect($this->post->route);
+        $route = $post->route;
+
+        return $this->redirect($post->route);
     }
 
     public function delete(Request $request)
     {
-        if (!PostAuthorization::delete($request->user(), $this->category)) {
+        if (!PostAuthorization::delete($request->user(), $this->post)) {
             abort(403);
         }
 
         $thread = $this->post->thread;
 
-        $this->post->delete();
+        $action = new DeletePost($this->post);
+        $action->execute();
+
+        UserDeletedPost::dispatch($request->user(), $this->post);
 
         return $this->redirect($thread->route);
     }

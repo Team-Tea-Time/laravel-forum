@@ -42,6 +42,7 @@ class CategoryCreate extends Component
         // TODO: This is a workaround for a serialisation issue. See: https://github.com/lazychaser/laravel-nestedset/issues/487
         //       Once the issue is fixed, this can be removed.
         $this->categories = CategoryAccess::removeParentRelationships($categories);
+        $this->color = config('forum.frontend.default_category_color');
 
         if (isset($this->parent_id)) {
             $this->parent_category = $this->parent_id;

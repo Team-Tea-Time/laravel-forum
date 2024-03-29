@@ -4,6 +4,7 @@ return [
 
     'actions' => 'Post actions',
     'created' => 'Post created',
+    'confirm_delete' => 'Are you sure you want to delete this post?|Are you sure you want to delete these posts?',
     'delete' => 'Delete post|Delete posts',
     'deleted' => 'Post deleted|Posts deleted',
     'edit' => 'Edit post',

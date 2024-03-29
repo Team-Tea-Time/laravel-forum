@@ -55,9 +55,13 @@ class Post extends BaseModel
         return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
     }
 
-    public function getSequenceNumber(): int
+    public function getSequenceNumber(bool $withTrashed = false): int
     {
-        foreach ($this->thread->posts as $index => $post) {
+        $posts = $withTrashed
+            ? $this->thread->posts()->withTrashed()->get()
+            : $this->thread->posts;
+
+        foreach ($posts as $index => $post) {
             if ($post->id == $this->id) {
                 return $index + 1;
             }
@@ -66,7 +70,7 @@ class Post extends BaseModel
 
     public function getPage(): int
     {
-        return ceil($this->sequence / $this->getPerPage());
+        return ceil($this->getSequenceNumber(true) / $this->getPerPage());
     }
 
     protected function route(): Attribute
