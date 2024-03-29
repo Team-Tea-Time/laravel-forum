@@ -10,6 +10,7 @@ class Button extends Component
 {
     public function __construct(
         public string $intent = "",
+        public string $size = "",
         public string $icon = "",
         public string $label = "",
         public string $onClick = "",

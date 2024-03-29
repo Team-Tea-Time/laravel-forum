@@ -6,11 +6,10 @@ use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use Illuminate\View\Component;
 
-class LinkButton extends Component
+class GroupButton extends Component
 {
     public function __construct(
         public string $intent = "",
-        public string $size = "",
         public string $href = "#",
         public string $icon = "",
         public string $label = "",
@@ -18,6 +17,6 @@ class LinkButton extends Component
 
     public function render(): View
     {
-        return ViewFactory::make('forum::components.link-button');
+        return ViewFactory::make('forum::components.group-button');
     }
 }
