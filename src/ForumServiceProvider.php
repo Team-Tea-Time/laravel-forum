@@ -36,7 +36,6 @@ class ForumServiceProvider extends ServiceProvider
 {
     private const CONFIG_FILES = [
         'api',
-        'features',
         'frontend',
         'general',
         'integration',
@@ -54,7 +53,7 @@ class ForumServiceProvider extends ServiceProvider
             $this->mergeConfigFrom(__DIR__."/../config/{$key}.php", "forum.{$key}");
         }
 
-        $this->isFrontendEnabled = config('forum.features.frontend.enabled');
+        $this->isFrontendEnabled = config('forum.frontend.enable');
         if (!$this->isFrontendEnabled) {
             return;
         }
@@ -66,7 +65,7 @@ class ForumServiceProvider extends ServiceProvider
 
         $app->instance(PresetRegistry::class, $presetRegistry);
 
-        $this->frontendPreset = $presetRegistry->get(config('forum.features.frontend.preset'));
+        $this->frontendPreset = $presetRegistry->get(config('forum.frontend.preset'));
 
         switch ($this->frontendPreset->getRequiredStack()) {
             case FrontendStack::BLADE:
@@ -99,7 +98,7 @@ class ForumServiceProvider extends ServiceProvider
         $this->publishMigrations();
         $this->publishTranslations();
 
-        if (config('forum.features.api')) {
+        if (config('forum.api.enable')) {
             $this->enableApi($router);
         }
 
