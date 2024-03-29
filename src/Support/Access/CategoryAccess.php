@@ -74,6 +74,7 @@ class CategoryAccess
     public static function getFilteredTreeFor(?User $user, array $select = self::DEFAULT_SELECT, array $with = self::DEFAULT_WITH): NestedCollection
     {
         $categories = static::getQuery($select, $with)
+            ->withDepth()
             ->get()
             ->keyBy('id');
 

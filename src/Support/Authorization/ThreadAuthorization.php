@@ -22,7 +22,7 @@ class ThreadAuthorization
 
     public static function restore(User $user, Thread $thread): bool
     {
-        return $user->can('deleteThreads', $thread->category) && $user->can('restore', $thread);
+        return $user->can('restoreThreads', $thread->category) && $user->can('restore', $thread);
     }
 
     public static function reply(User $user, Thread $thread): bool

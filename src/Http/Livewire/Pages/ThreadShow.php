@@ -6,15 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\{
-    Actions\CreatePost as Action,
-    Events\UserCreatedPost,
     Events\UserViewingThread,
+    Http\Livewire\Forms\ThreadEditForm,
+    Http\Livewire\Forms\ThreadReplyForm,
     Http\Livewire\Traits\CreatesAlerts,
     Http\Livewire\Traits\UpdatesContent,
     Http\Livewire\EventfulPaginatedComponent,
     Models\Category,
     Models\Thread,
-    Support\Validation\PostRules,
+    Support\Access\CategoryAccess,
 };
 
 class ThreadShow extends EventfulPaginatedComponent
@@ -23,12 +23,16 @@ class ThreadShow extends EventfulPaginatedComponent
 
     public Thread $thread;
 
-    // Form fields
-    public string $content = '';
+    public ThreadEditForm $threadEditForm;
+    public int $destinationCategoryId = 0;
+
+    public ThreadReplyForm $threadReplyForm;
 
     public function mount(Request $request)
     {
         $this->thread = $request->route('thread');
+        $this->threadEditForm->title = $this->thread->title;
+        $this->title = $this->thread->title;
 
         if (!$this->thread->category->isAccessibleTo($request->user())) {
             abort(404);
@@ -40,28 +44,75 @@ class ThreadShow extends EventfulPaginatedComponent
         }
     }
 
-    public function reply(Request $request)
+    public function delete(Request $request, bool $permadelete): array
     {
-        if (!$request->user()->can('reply', $this->thread)) {
-            abort(403);
+        $this->thread = $this->threadEditForm->delete($request, $this->thread, $permadelete);
+
+        return $this->pluralAlert('threads.deleted')->toLivewire();
+    }
+
+    public function restore(Request $request): array
+    {
+        $this->thread = $this->threadEditForm->restore($request, $this->thread);
+
+        return $this->pluralAlert('threads.restored')->toLivewire();
+    }
+
+    public function lock(Request $request): array
+    {
+        $this->thread = $this->threadEditForm->lock($request, $this->thread);
+
+        return $this->pluralAlert('threads.updated')->toLivewire();
+    }
+
+    public function unlock(Request $request): array
+    {
+        $this->thread = $this->threadEditForm->unlock($request, $this->thread);
+
+        return $this->pluralAlert('threads.updated')->toLivewire();
+    }
+
+    public function pin(Request $request): array
+    {
+        $this->thread = $this->threadEditForm->pin($request, $this->thread);
+
+        return $this->pluralAlert('threads.updated')->toLivewire();
+    }
+
+    public function unpin(Request $request): array
+    {
+        $this->thread = $this->threadEditForm->unpin($request, $this->thread);
+
+        return $this->pluralAlert('threads.updated')->toLivewire();
+    }
+
+    public function rename(Request $request): array
+    {
+        $this->thread = $this->threadEditForm->rename($request, $this->thread);
+
+        return $this->pluralAlert('threads.updated')->toLivewire();
+    }
+
+    public function move(Request $request): array
+    {
+        $destination = Category::find($this->destinationCategoryId);
+
+        if ($destination == null) {
+            return $this->invalidSelectionAlert()->toLivewire();
         }
 
-        $validated = $this->validate(PostRules::create());
-        $parent = $request->has('post')
-            ? $this->thread->posts->find($request->input('post'))
-            : null;
+        $this->threadEditForm->move($request, $this->thread, $destination);
+        $this->thread->category = $destination;
+        $this->destinationCategoryId = 0;
 
-        $action = new Action($this->thread, $parent, $request->user(), $validated['content']);
-        $post = $action->execute();
+        return $this->pluralAlert('threads.updated')->toLivewire();
+    }
 
-        $post->thread->markAsRead($request->user());
-
-        UserCreatedPost::dispatch($request->user(), $post);
-
-        $this->content = '';
+    public function reply(Request $request): array
+    {
+        $post = $this->threadReplyForm->reply($request, $this->thread);
 
         $this->setPage($post->getPage());
-
         $this->touchUpdateKey();
 
         return $this->alert('general.reply_added')->toLivewire();
@@ -70,7 +121,7 @@ class ThreadShow extends EventfulPaginatedComponent
     public function render(Request $request): View
     {
         $threadDestinationCategories = $request->user() && $request->user()->can('moveThreadsFrom', $this->thread->category)
-            ? Category::acceptsThreads()->get()->toTree()
+            ? CategoryAccess::getFilteredTreeFor($request->user())->toTree()
             : [];
 
         $postsQuery = config('forum.general.display_trashed_posts') || $request->user() && $request->user()->can('viewTrashedPosts')

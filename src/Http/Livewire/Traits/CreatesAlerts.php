@@ -17,7 +17,7 @@ trait CreatesAlerts
         return new Alert($type, trans("forum::{$key}"));
     }
 
-    protected function pluralAlert(string $key, int $count, AlertType $type = AlertType::Success): Alert
+    protected function pluralAlert(string $key, int $count = 1, AlertType $type = AlertType::Success): Alert
     {
         return new Alert($type, trans_choice("forum::{$key}", $count));
     }
