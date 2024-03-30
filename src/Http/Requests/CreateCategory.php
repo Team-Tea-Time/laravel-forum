@@ -29,7 +29,8 @@ class CreateCategory extends FormRequest implements FulfillableRequestInterface
         $action = new Action(
             $input['title'],
             isset($input['description']) ? $input['description'] : '',
-            isset($input['color']) ? $input['color'] : config('forum.blade.default_category_color'),
+            isset($input['color_light_mode']) ? $input['color_light_mode'] : config('forum.blade.default_category_color'),
+            isset($input['color_dark_mode']) ? $input['color_dark_mode'] : config('forum.blade.default_category_color'),
             isset($input['accepts_threads']) && $input['accepts_threads'],
             isset($input['is_private']) && $input['is_private']
         );

@@ -2,14 +2,14 @@
     <div class="flex flex-col md:items-start md:flex-row md:justify-between md:gap-4 p-4">
         <div class="md:w-3/6 text-center md:text-left">
             <span class="lead">
-                <a href="{{ Forum::route('thread.show', $thread) }}" @if (isset($category))style="color: {{ $category->color }};"@endif class="text-lg">{{ $thread->title }}</a>
+                <a href="{{ Forum::route('thread.show', $thread) }}" @if (isset($category))style="color: {{ $category->color_light_mode }};"@endif class="text-lg">{{ $thread->title }}</a>
             </span>
             <br>
             {{ $thread->authorName }} <span class="text-gray-500">@include ('forum.partials.timestamp', ['carbon' => $thread->created_at])</span>
 
             @if (!isset($category))
                 <br>
-                <a href="{{ Forum::route('category.show', $thread->category) }}" style="color: {{ $thread->category->color }};">{{ $thread->category->title }}</a>
+                <a href="{{ Forum::route('category.show', $thread->category) }}" style="color: {{ $thread->category->color_light_mode }};">{{ $thread->category->title }}</a>
             @endif
         </div>
         <div class="md:w-1/6 flex flex-wrap justify-center items-center md:justify-end gap-1">
@@ -25,7 +25,7 @@
             @if ($thread->trashed())
                 <x-forum.badge type="danger">{{ trans('forum::general.deleted') }}</x-forum.badge>
             @endif
-            <x-forum.badge :style="(isset($category) && $category->color) ? 'background: '.$category->color .';' : null">
+            <x-forum.badge :style="(isset($category) && $category->color_light_mode) ? 'background: '.$category->color_light_mode .';' : null">
                 {{ trans('forum::general.replies') }}:
                 {{ $thread->reply_count }}
             </x-forum.badge>

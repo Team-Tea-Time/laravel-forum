@@ -25,7 +25,8 @@ class Category extends BaseModel
         'thread_count',
         'post_count',
         'is_private',
-        'color',
+        'color_light_mode',
+        'color_dark_mode',
     ];
     protected $appends = ['route'];
 
@@ -95,6 +96,13 @@ class Category extends BaseModel
     {
         return new Attribute(
             get: fn () => Forum::route('category.show', $this),
+        );
+    }
+
+    protected function styleVariables(): Attribute
+    {
+        return new Attribute(
+            get: fn () => "--category-light: {$this->color_light_mode}; --category-dark: {$this->color_dark_mode};",
         );
     }
 }

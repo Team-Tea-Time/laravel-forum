@@ -9,7 +9,7 @@ use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 use TeamTeaTime\Forum\{
-    Actions\EditCategory as Action,
+    Actions\EditCategory,
     Events\UserEditingCategory,
     Events\UserEditedCategory,
     Models\Category,
@@ -30,7 +30,8 @@ class CategoryEdit extends Component
     // Form fields
     public string $title;
     public string $description;
-    public string $color;
+    public string $color_light_mode;
+    public string $color_dark_mode;
     public ?int $parent_category = null;
     public bool $accepts_threads = false;
     public bool $is_private = false;
@@ -47,7 +48,8 @@ class CategoryEdit extends Component
         $this->category = $category;
         $this->title = $category->title;
         $this->description = $category->description;
-        $this->color = $category->color;
+        $this->color_light_mode = $category->color_light_mode;
+        $this->color_dark_mode = $category->color_dark_mode;
         $this->parent_category = $category->parent_id;
         $this->accepts_threads = $category->accepts_threads;
         $this->is_private = $category->is_private;
@@ -65,7 +67,7 @@ class CategoryEdit extends Component
 
         $validated = $this->validate(CategoryRules::create());
 
-        $action = new Action($this->category, $validated['title'], $validated['description'], $validated['color'], $validated['accepts_threads'], $validated['is_private']);
+        $action = new EditCategory($this->category, $validated['title'], $validated['description'], $validated['color_light_mode'], $validated['color_dark_mode'], $validated['accepts_threads'], $validated['is_private']);
         $action->execute();
 
         if ($validated['parent_category'] > 0) {

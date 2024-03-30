@@ -30,7 +30,8 @@ class CategoryCreate extends Component
     // Form fields
     public string $title;
     public string $description = "";
-    public string $color;
+    public string $color_light_mode;
+    public string $color_dark_mode;
     public int $parent_category;
     public bool $accepts_threads = false;
     public bool $is_private = false;
@@ -42,7 +43,8 @@ class CategoryCreate extends Component
         // TODO: This is a workaround for a serialisation issue. See: https://github.com/lazychaser/laravel-nestedset/issues/487
         //       Once the issue is fixed, this can be removed.
         $this->categories = CategoryAccess::removeParentRelationships($categories);
-        $this->color = config('forum.frontend.default_category_color');
+        $this->color_light_mode = config('forum.frontend.default_category_color');
+        $this->color_dark_mode = config('forum.frontend.default_category_color');
 
         if (isset($this->parent_id)) {
             $this->parent_category = $this->parent_id;
@@ -61,7 +63,7 @@ class CategoryCreate extends Component
 
         $validated = $this->validate(CategoryRules::create());
 
-        $action = new Action($validated['title'], $validated['description'], $validated['color'], $validated['accepts_threads'], $validated['is_private']);
+        $action = new Action($validated['title'], $validated['description'], $validated['color_light_mode'], $validated['color_dark_mode'], $validated['accepts_threads'], $validated['is_private']);
         $category = $action->execute();
 
         if ($validated['parent_category'] > 0) {

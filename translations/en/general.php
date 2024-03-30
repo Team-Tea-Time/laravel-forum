@@ -8,6 +8,8 @@ return [
     'changes_applied' => 'Changes applied',
     'create' => 'Create',
     'color' => 'Color',
+    'color_light_mode' => 'Color (light mode)',
+    'color_dark_mode' => 'Color (dark mode)',
     'confirm_action' => 'Confirm action',
     'delete' => 'Delete',
     'deleted' => 'Deleted',

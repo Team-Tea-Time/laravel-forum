@@ -26,7 +26,8 @@ class CategoryResource extends JsonResource
             'left' => $this->_lft,
             'right' => $this->_rgt,
             'parent_id' => $this->parent_id,
-            'color' => $this->color,
+            'color_light_mode' => $this->color_light_mode,
+            'color_dark_mode' => $this->color_dark_mode,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'actions' => [
