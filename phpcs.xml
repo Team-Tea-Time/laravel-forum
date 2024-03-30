@@ -41,7 +41,9 @@
     <rule ref="PSR2.Files.EndFileNewline"/>
     <rule ref="PSR2.Methods.MethodDeclaration"/>
     <rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
-    <rule ref="PSR2.Namespaces.UseDeclaration"/>
+	<rule ref="PSR2.Namespaces.UseDeclaration">
+        <exclude name="PSR2.Namespaces.UseDeclaration.MultipleDeclarations" />
+    </rule>
     <rule ref="Squiz.PHP.CommentedOutCode"/>
     <rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
     <rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>

@@ -13,7 +13,8 @@ class InputSelect extends InputComponent
         public string $value = "",
         public string $xShow = "",
         public array $options = [],
-    ) {}
+    ) {
+    }
 
     public function render(): View
     {

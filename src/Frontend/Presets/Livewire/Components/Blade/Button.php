@@ -15,7 +15,8 @@ class Button extends Component
         public string $label = "",
         public string $onClick = "",
         public string $wireConfirm = "",
-    ) {}
+    ) {
+    }
 
     public function render(): View
     {

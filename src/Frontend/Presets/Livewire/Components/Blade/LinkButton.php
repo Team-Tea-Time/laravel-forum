@@ -14,7 +14,8 @@ class LinkButton extends Component
         public string $href = "#",
         public string $icon = "",
         public string $label = "",
-    ) {}
+    ) {
+    }
 
     public function render(): View
     {

@@ -13,7 +13,8 @@ class InputComponent extends Component
         public string $label = "",
         public string $value = "",
         public string $xShow = "",
-    ) {}
+    ) {
+    }
 
     public function render(): View|Closure|string
     {
