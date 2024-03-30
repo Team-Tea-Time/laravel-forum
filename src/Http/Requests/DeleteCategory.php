@@ -7,8 +7,8 @@ use TeamTeaTime\Forum\{
     Actions\DeleteCategory as Action,
     Events\UserDeletedCategory,
     Http\Requests\Traits\AuthorizesAfterValidation,
-    Http\Requests\Traits\HandlesDeletion,
     Support\Authorization\CategoryAuthorization,
+    Support\Traits\HandlesDeletion,
     Support\Validation\CategoryRules,
 };
 

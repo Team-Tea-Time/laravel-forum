@@ -4,9 +4,10 @@ namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
 use Illuminate\Foundation\Auth\User;
 use Orchestra\Testbench\Factories\UserFactory;
+use PHPUnit\Framework\Attributes\Test;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class CategoryUpdateTest extends FeatureTestCase
@@ -27,7 +28,7 @@ class CategoryUpdateTest extends FeatureTestCase
         $this->user = $userFactory->createOne();
     }
 
-    /** @test */
+    #[Test]
     public function should_fail_validation_without_a_title()
     {
         $response = $this->actingAs($this->user)

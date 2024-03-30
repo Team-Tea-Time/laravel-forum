@@ -5,12 +5,13 @@ namespace TeamTeaTime\Forum\Tests\Feature\Web;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User;
 use Orchestra\Testbench\Factories\UserFactory;
+use PHPUnit\Framework\Attributes\Test;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Database\Factories\PostFactory;
 use TeamTeaTime\Forum\Database\Factories\ThreadFactory;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class ThreadRestoreTest extends FeatureTestCase
@@ -41,7 +42,7 @@ class ThreadRestoreTest extends FeatureTestCase
         $postFactory->createOne(['thread_id' => $this->thread->getKey()]);
     }
 
-    /** @test */
+    #[Test]
     public function should_bump_category_stats()
     {
         $this->actingAs($this->user)->post(Forum::route(self::ROUTE, $this->thread), []);

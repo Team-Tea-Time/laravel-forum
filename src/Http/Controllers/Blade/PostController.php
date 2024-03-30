@@ -13,7 +13,7 @@ use TeamTeaTime\Forum\Http\Requests\CreatePost;
 use TeamTeaTime\Forum\Http\Requests\DeletePost;
 use TeamTeaTime\Forum\Http\Requests\RestorePost;
 use TeamTeaTime\Forum\Http\Requests\EditPost;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class PostController extends BaseController
 {

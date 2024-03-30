@@ -4,10 +4,11 @@ namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
 use Illuminate\Foundation\Auth\User;
 use Orchestra\Testbench\Factories\UserFactory;
+use PHPUnit\Framework\Attributes\Test;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class ThreadStoreTest extends FeatureTestCase
@@ -31,14 +32,14 @@ class ThreadStoreTest extends FeatureTestCase
         $this->user = $this->userFactory->createOne();
     }
 
-    /** @test */
+    #[Test]
     public function should_302_when_not_logged_in()
     {
         $response = $this->post(Forum::route(self::ROUTE, $this->category), []);
         $response->assertStatus(302);
     }
 
-    /** @test */
+    #[Test]
     public function should_403_when_category_doesnt_accept_threads()
     {
         $category = $this->categoryFactory->createOne(['accepts_threads' => 0]);
@@ -48,7 +49,7 @@ class ThreadStoreTest extends FeatureTestCase
         $response->assertStatus(403);
     }
 
-    /** @test */
+    #[Test]
     public function should_fail_validation_without_a_title()
     {
         $response = $this->actingAs($this->user)
@@ -60,7 +61,7 @@ class ThreadStoreTest extends FeatureTestCase
         $response->assertSessionHasErrors();
     }
 
-    /** @test */
+    #[Test]
     public function should_fail_validation_without_content()
     {
         $response = $this->actingAs($this->user)
@@ -72,7 +73,7 @@ class ThreadStoreTest extends FeatureTestCase
         $response->assertSessionHasErrors();
     }
 
-    /** @test */
+    #[Test]
     public function should_create_a_post_with_the_thread()
     {
         $this->actingAs($this->user)

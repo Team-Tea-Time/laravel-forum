@@ -4,11 +4,12 @@ namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
 use Illuminate\Foundation\Auth\User;
 use Orchestra\Testbench\Factories\UserFactory;
+use PHPUnit\Framework\Attributes\Test;
 use TeamTeaTime\Forum\Database\Factories\PostFactory;
 use TeamTeaTime\Forum\Database\Factories\ThreadFactory;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class ThreadDeleteTest extends FeatureTestCase
@@ -32,14 +33,14 @@ class ThreadDeleteTest extends FeatureTestCase
         $this->thread = $this->threadFactory->createOne(['author_id' => $this->user->getKey()]);
     }
 
-    /** @test */
+    #[Test]
     public function should_302_when_not_logged_in()
     {
         $response = $this->delete(Forum::route(self::ROUTE, $this->thread), []);
         $response->assertStatus(302);
     }
 
-    /** @test */
+    #[Test]
     public function should_404_with_invalid_thread_id()
     {
         $thread = $this->thread;
@@ -49,7 +50,7 @@ class ThreadDeleteTest extends FeatureTestCase
         $response->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function should_soft_delete_by_default()
     {
         $thread = $this->threadFactory->createOne(['author_id' => $this->user->getKey()]);
@@ -61,7 +62,7 @@ class ThreadDeleteTest extends FeatureTestCase
         $this->assertEquals(2, Thread::withTrashed()->count());
     }
 
-    /** @test */
+    #[Test]
     public function should_delete_all_posts_inside_the_thread_when_perma_deleting()
     {
         $thread = $this->threadFactory->createOne(['author_id' => $this->user->getKey()]);

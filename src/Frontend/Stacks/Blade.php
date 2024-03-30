@@ -15,7 +15,6 @@ class Blade implements StackInterface
     {
         $config = config('forum.frontend.router');
         $config['middleware'][] = ResolveFrontendParameters::class;
-        $config['namespace'] = 'TeamTeaTime\Forum\Http\Controllers\Blade';
 
         return $config;
     }

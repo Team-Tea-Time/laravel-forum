@@ -4,10 +4,11 @@ namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
 use Illuminate\Foundation\Auth\User;
 use Orchestra\Testbench\Factories\UserFactory;
+use PHPUnit\Framework\Attributes\Test;
 use TeamTeaTime\Forum\Database\Factories\PostFactory;
 use TeamTeaTime\Forum\Database\Factories\ThreadFactory;
 use TeamTeaTime\Forum\Models\Post;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class PostUpdateTest extends FeatureTestCase
@@ -30,7 +31,7 @@ class PostUpdateTest extends FeatureTestCase
         $this->post = $postFactory->createOne(['thread_id' => $thread->getKey(), 'author_id' => $this->user->getKey()]);
     }
 
-    /** @test */
+    #[Test]
     public function should_fail_validation_with_empty_content()
     {
         $response = $this->actingAs($this->user)

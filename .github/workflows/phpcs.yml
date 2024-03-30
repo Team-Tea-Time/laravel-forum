@@ -9,11 +9,12 @@ on:
       - ".github/workflows/phpcs.yml"
 
 jobs:
-  runPHPCSInspection:
-    name: Run PHPCS inspection
+  run:
+    name: Run
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.head.sha }}
     - name: Run PHPCS inspection

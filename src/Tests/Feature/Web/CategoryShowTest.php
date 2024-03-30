@@ -2,9 +2,10 @@
 
 namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
+use PHPUnit\Framework\Attributes\Test;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Models\Category;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class CategoryShowTest extends FeatureTestCase
@@ -29,21 +30,21 @@ class CategoryShowTest extends FeatureTestCase
         $this->secondLevelCategory->appendNode($this->thirdLevelCategory);
     }
 
-    /** @test */
+    #[Test]
     public function should_404_when_viewing_inaccessible_category()
     {
         $response = $this->get(Forum::route(self::ROUTE, $this->topLevelCategory));
         $response->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function should_404_when_viewing_child_of_inaccessible_category()
     {
         $response = $this->get(Forum::route(self::ROUTE, $this->secondLevelCategory));
         $response->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function should_404_when_viewing_distant_child_of_inaccessible_category()
     {
         $response = $this->get(Forum::route(self::ROUTE, $this->thirdLevelCategory));

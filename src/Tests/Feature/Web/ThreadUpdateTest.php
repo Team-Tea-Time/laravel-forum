@@ -5,11 +5,12 @@ namespace TeamTeaTime\Forum\Tests\Feature\Web;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Gate;
 use Orchestra\Testbench\Factories\UserFactory;
+use PHPUnit\Framework\Attributes\Test;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Database\Factories\PostFactory;
 use TeamTeaTime\Forum\Database\Factories\ThreadFactory;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class ThreadUpdateTest extends FeatureTestCase
@@ -44,7 +45,7 @@ class ThreadUpdateTest extends FeatureTestCase
         Gate::before(fn () => true);
     }
 
-    /** @test */
+    #[Test]
     public function should_lock_when_receive_lock_action()
     {
         $this->actingAs($this->user)->post(Forum::route(self::ROUTE_LOCK, $this->thread), []);
@@ -54,7 +55,7 @@ class ThreadUpdateTest extends FeatureTestCase
         $this->assertEquals(1, $thread->locked);
     }
 
-    /** @test */
+    #[Test]
     public function should_unlock_when_receive_unlock_action()
     {
         $this->actingAs($this->user)->post(Forum::route(self::ROUTE_LOCK, $this->thread), []);
@@ -65,7 +66,7 @@ class ThreadUpdateTest extends FeatureTestCase
         $this->assertEquals(0, $thread->locked);
     }
 
-    /** @test */
+    #[Test]
     public function should_pin_when_receive_pin_action()
     {
         $this->actingAs($this->user)->post(Forum::route(self::ROUTE_PIN, $this->thread), []);
@@ -75,7 +76,7 @@ class ThreadUpdateTest extends FeatureTestCase
         $this->assertEquals(1, $thread->pinned);
     }
 
-    /** @test */
+    #[Test]
     public function should_unpin_when_receive_unpin_action()
     {
         $this->actingAs($this->user)->post(Forum::route(self::ROUTE_PIN, $this->thread), []);
@@ -86,7 +87,7 @@ class ThreadUpdateTest extends FeatureTestCase
         $this->assertEquals(0, $thread->pinned);
     }
 
-    /** @test */
+    #[Test]
     public function should_have_destination_category_after_move()
     {
         $destinationCategory = $this->categoryFactory->createOne();
@@ -99,7 +100,7 @@ class ThreadUpdateTest extends FeatureTestCase
         $this->assertEquals($destinationCategory->id, $thread->category_id);
     }
 
-    /** @test */
+    #[Test]
     public function should_fail_validation_with_empty_title_when_renaming()
     {
         $response = $this->actingAs($this->user)

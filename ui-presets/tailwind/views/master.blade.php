@@ -43,7 +43,7 @@
     <nav class="v-navbar bg-white shadow py-4">
         <div class="container mx-auto px-4 md:flex md:items-center md:gap-4">
             <div class="flex justify-between items-center">
-                <a class="text-lg" href="{{ url(config('forum.blade.router.prefix')) }}">Laravel Forum</a>
+                <a class="text-lg" href="{{ url(config('forum.frontend.router.prefix')) }}">Laravel Forum</a>
                 <button class="navbar-toggler block md:hidden border rounded-md px-2 py-1" type="button" :class="{ collapsed: isCollapsed }" @click="isCollapsed = !isCollapsed">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="navbar-toggler-icon w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -53,7 +53,7 @@
             <div class="grow justify-between navbar-collapse" :class="{ 'flex flex-col': !isCollapsed, 'hidden md:flex': isCollapsed }">
                 <ul class="flex flex-col md:flex-row gap-3 mb-4 md:mb-0">
                     <li>
-                        <a class="text-gray-500" href="{{ url(config('forum.blade.router.prefix')) }}">{{ trans('forum::general.index') }}</a>
+                        <a class="text-gray-500" href="{{ url(config('forum.frontend.router.prefix')) }}">{{ trans('forum::general.index') }}</a>
                     </li>
                     <li>
                         <a class="text-gray-500" href="{{ route('forum.recent') }}">{{ trans('forum::threads.recent') }}</a>

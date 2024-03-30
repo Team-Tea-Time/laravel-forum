@@ -7,17 +7,15 @@ on:
     branches: [ "6.x" ]
 
 jobs:
-  run-tests:
+  run:
+    name: Run
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-
+      - name: Checkout code
+       uses: actions/checkout@v2
       - name: Bring up MySQL service
         run: docker-compose up -d mysql
-
       - name: Run Composer install
         run: docker-compose run composer install
-
       - name: Run PHPUnit
         run: docker-compose run phpunit

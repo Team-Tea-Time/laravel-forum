@@ -4,13 +4,14 @@ namespace TeamTeaTime\Forum\Tests\Feature\Web;
 
 use Illuminate\Foundation\Auth\User;
 use Orchestra\Testbench\Factories\UserFactory;
+use PHPUnit\Framework\Attributes\Test;
 use TeamTeaTime\Forum\Database\Factories\CategoryFactory;
 use TeamTeaTime\Forum\Database\Factories\PostFactory;
 use TeamTeaTime\Forum\Database\Factories\ThreadFactory;
 use TeamTeaTime\Forum\Models\Category;
 use TeamTeaTime\Forum\Models\Post;
 use TeamTeaTime\Forum\Models\Thread;
-use TeamTeaTime\Forum\Support\Web\Forum;
+use TeamTeaTime\Forum\Support\Frontend\Forum;
 use TeamTeaTime\Forum\Tests\FeatureTestCase;
 
 class CategoryDeleteTest extends FeatureTestCase
@@ -36,7 +37,7 @@ class CategoryDeleteTest extends FeatureTestCase
         $this->postFactory = PostFactory::new();
     }
 
-    /** @test */
+    #[Test]
     public function should_fail_validation_without_force_param_if_not_empty()
     {
         $topLevelCategory = $this->seedCategories();
@@ -47,7 +48,7 @@ class CategoryDeleteTest extends FeatureTestCase
         $response->assertSessionHasErrors();
     }
 
-    /** @test */
+    #[Test]
     public function should_remove_descendant_content_upon_force_deletion()
     {
         $topLevelCategory = $this->seedCategories();

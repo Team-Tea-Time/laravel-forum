@@ -1,75 +1,84 @@
 <?php
 
-$authMiddleware = config('forum.blade.router.auth_middleware');
+use TeamTeaTime\Forum\Http\Controllers\Blade\{
+    Bulk\CategoryController as BulkCategoryController,
+    Bulk\PostController as BulkPostController,
+    Bulk\ThreadController as BulkThreadController,
+    CategoryController,
+    PostController,
+    ThreadController,
+};
+
+$authMiddleware = config('forum.frontend.router.auth_middleware');
 $prefix = config('forum.frontend.route_prefixes');
 
 // Standalone routes
-Route::get('/', ['as' => 'index', 'uses' => 'CategoryController@index']);
+Route::get('/', [CategoryController::class, 'index'])->name('index');
 
-Route::get('recent', ['as' => 'recent', 'uses' => 'ThreadController@recent']);
+Route::get('recent', [ThreadController::class, 'recent'])->name('recent');
 
-Route::get('unread', ['as' => 'unread', 'uses' => 'ThreadController@unread']);
-Route::patch('unread/mark-as-read', ['as' => 'unread.mark-as-read', 'uses' => 'ThreadController@markAsRead'])->middleware($authMiddleware);
+Route::get('unread', [ThreadController::class, 'unread'])->name('unread');
+Route::patch('unread/mark-as-read', [ThreadController::class, 'markAsRead'])->name('unread.mark-as-read')->middleware($authMiddleware);
 
-Route::get('manage', ['as' => 'category.manage', 'uses' => 'CategoryController@manage'])->middleware($authMiddleware);
+Route::get('manage', [CategoryController::class, 'manage'])->name('category.manage')->middleware($authMiddleware);
 
 // Categories
-Route::post($prefix['category'].'/create', ['as' => 'category.store', 'uses' => 'CategoryController@store']);
-Route::group(['prefix' => $prefix['category'].'/{category}-{category_slug}'], function () use ($prefix, $authMiddleware) {
-    Route::get('/', ['as' => 'category.show', 'uses' => 'CategoryController@show']);
-    Route::patch('/', ['as' => 'category.update', 'uses' => 'CategoryController@update'])->middleware($authMiddleware);
-    Route::delete('/', ['as' => 'category.delete', 'uses' => 'CategoryController@delete'])->middleware($authMiddleware);
+Route::post($prefix['category'] . '/create', [CategoryController::class, 'store'])->name('category.store');
+Route::prefix($prefix['category'] . '/{category_id}-{category_slug}')->group(function () use ($prefix, $authMiddleware) {
+    Route::get('/', [CategoryController::class, 'show'])->name('category.show');
+    Route::patch('/', [CategoryController::class, 'update'])->name('category.update')->middleware($authMiddleware);
+    Route::delete('/', [CategoryController::class, 'delete'])->name('category.delete')->middleware($authMiddleware);
 
-    Route::get($prefix['thread'].'/create', ['as' => 'thread.create', 'uses' => 'ThreadController@create']);
-    Route::post($prefix['thread'].'/create', ['as' => 'thread.store', 'uses' => 'ThreadController@store'])->middleware($authMiddleware);
+    Route::get($prefix['thread'] . '/create', [ThreadController::class, 'create'])->name('thread.create');
+    Route::post($prefix['thread'] . '/create', [ThreadController::class, 'store'])->name('thread.store')->middleware($authMiddleware);
 });
 
 // Threads
-Route::group(['prefix' => $prefix['thread'].'/{thread}-{thread_slug}'], function () use ($prefix, $authMiddleware) {
-    Route::get('/', ['as' => 'thread.show', 'uses' => 'ThreadController@show']);
-    Route::get($prefix['post'].'/{post}', ['as' => 'post.show', 'uses' => 'PostController@show']);
+Route::prefix($prefix['thread'] . '/{thread_id}-{thread_slug}')->group(function () use ($prefix, $authMiddleware) {
+    Route::get('/', [ThreadController::class, 'show'])->name('thread.show');
+    Route::get($prefix['post'] . '/{post_id}', [PostController::class, 'show'])->name('post.show');
 
-    Route::group(['middleware' => $authMiddleware], function () use ($prefix) {
-        Route::patch('/', ['as' => 'thread.update', 'uses' => 'ThreadController@update']);
-        Route::post('lock', ['as' => 'thread.lock', 'uses' => 'ThreadController@lock']);
-        Route::post('unlock', ['as' => 'thread.unlock', 'uses' => 'ThreadController@unlock']);
-        Route::post('pin', ['as' => 'thread.pin', 'uses' => 'ThreadController@pin']);
-        Route::post('unpin', ['as' => 'thread.unpin', 'uses' => 'ThreadController@unpin']);
-        Route::post('move', ['as' => 'thread.move', 'uses' => 'ThreadController@move']);
-        Route::post('restore', ['as' => 'thread.restore', 'uses' => 'ThreadController@restore']);
-        Route::post('rename', ['as' => 'thread.rename', 'uses' => 'ThreadController@rename']);
-        Route::delete('/', ['as' => 'thread.delete', 'uses' => 'ThreadController@delete']);
+    Route::middleware($authMiddleware)->group(function () use ($prefix) {
+        Route::patch('/', [ThreadController::class, 'update'])->name('thread.update');
+        Route::post('lock', [ThreadController::class, 'lock'])->name('thread.lock');
+        Route::post('unlock', [ThreadController::class, 'unlock'])->name('thread.unlock');
+        Route::post('pin', [ThreadController::class, 'pin'])->name('thread.pin');
+        Route::post('unpin', [ThreadController::class, 'unpin'])->name('thread.unpin');
+        Route::post('move', [ThreadController::class, 'move'])->name('thread.move');
+        Route::post('restore', [ThreadController::class, 'restore'])->name('thread.restore');
+        Route::post('rename', [ThreadController::class, 'rename'])->name('thread.rename');
+        Route::delete('/', [ThreadController::class, 'delete'])->name('thread.delete');
 
-        Route::get('reply', ['as' => 'post.create', 'uses' => 'PostController@create']);
-        Route::post('reply', ['as' => 'post.store', 'uses' => 'PostController@store']);
-        Route::get($prefix['post'].'/{post}/edit', ['as' => 'post.edit', 'uses' => 'PostController@edit']);
-        Route::patch($prefix['post'].'/{post}', ['as' => 'post.update', 'uses' => 'PostController@update']);
-        Route::get($prefix['post'].'/{post}/delete', ['as' => 'post.confirm-delete', 'uses' => 'PostController@confirmDelete']);
-        Route::get($prefix['post'].'/{post}/restore', ['as' => 'post.confirm-restore', 'uses' => 'PostController@confirmRestore']);
-        Route::delete($prefix['post'].'/{post}', ['as' => 'post.delete', 'uses' => 'PostController@delete']);
-        Route::post($prefix['post'].'/{post}/restore', ['as' => 'post.restore', 'uses' => 'PostController@restore']);
+        Route::get('reply', [PostController::class, 'create'])->name('post.create');
+        Route::post('reply', [PostController::class, 'store'])->name('post.store');
+        Route::get($prefix['post'] . '/{post_id}/edit', [PostController::class, 'edit'])->name('post.edit');
+        Route::patch($prefix['post'] . '/{post_id}', [PostController::class, 'update'])->name('post.update');
+        Route::get($prefix['post'] . '/{post_id}/delete', [PostController::class, 'confirmDelete'])->name('post.confirm-delete');
+        Route::get($prefix['post'] . '/{post_id}/restore', [PostController::class, 'confirmRestore'])->name('post.confirm-restore');
+        Route::delete($prefix['post'] . '/{post_id}', [PostController::class, 'delete'])->name('post.delete');
+        Route::post($prefix['post'] . '/{post_id}/restore', [PostController::class, 'restore'])->name('post.restore');
     });
 });
 
 // Bulk actions
-Route::group(['prefix' => 'bulk', 'as' => 'bulk.', 'namespace' => 'Bulk', 'middleware' => $authMiddleware], function () {
+Route::prefix('bulk')->middleware($authMiddleware)->name('bulk.')->group(function () {
     // Categories
-    Route::post('category/manage', ['as' => 'category.manage', 'uses' => 'CategoryController@manage']);
+    Route::post('category/manage', [BulkCategoryController::class, 'manage'])->name('category.manage');
 
     // Threads
-    Route::group(['prefix' => 'thread', 'as' => 'thread.'], function () {
-        Route::post('move', ['as' => 'move', 'uses' => 'ThreadController@move']);
-        Route::post('lock', ['as' => 'lock', 'uses' => 'ThreadController@lock']);
-        Route::post('unlock', ['as' => 'unlock', 'uses' => 'ThreadController@unlock']);
-        Route::post('pin', ['as' => 'pin', 'uses' => 'ThreadController@pin']);
-        Route::post('unpin', ['as' => 'unpin', 'uses' => 'ThreadController@unpin']);
-        Route::delete('/', ['as' => 'delete', 'uses' => 'ThreadController@delete']);
-        Route::post('restore', ['as' => 'restore', 'uses' => 'ThreadController@restore']);
+    Route::prefix('thread')->name('thread.')->group(function () {
+        Route::post('move', [BulkThreadController::class, 'move'])->name('move');
+        Route::post('lock', [BulkThreadController::class, 'lock'])->name('lock');
+        Route::post('unlock', [BulkThreadController::class, 'unlock'])->name('unlock');
+        Route::post('pin', [BulkThreadController::class, 'pin'])->name('pin');
+        Route::post('unpin', [BulkThreadController::class, 'unpin'])->name('unpin');
+        Route::delete('/', [BulkThreadController::class, 'delete'])->name('delete');
+        Route::post('restore', [BulkThreadController::class, 'restore'])->name('restore');
     });
 
     // Posts
-    Route::group(['prefix' => 'post', 'as' => 'post.'], function () {
-        Route::delete('/', ['as' => 'delete', 'uses' => 'PostController@delete']);
-        Route::post('restore', ['as' => 'restore', 'uses' => 'PostController@restore']);
+    Route::prefix('post')->name('post.')->group(function () {
+        Route::post('restore', [BulkPostController::class, 'restore'])->name('restore');
+        Route::delete('/', [BulkPostController::class, 'delete'])->name('delete');
     });
 });

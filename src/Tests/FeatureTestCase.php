@@ -11,8 +11,6 @@ class FeatureTestCase extends TestCase
         parent::setUp();
 
         // Create dummy login route for the default redirection
-        Route::get('login', ['as' => 'login'], function () {
-            return '';
-        });
+        Route::get('login', function () { return 'wat'; })->name('login');
     }
 }
