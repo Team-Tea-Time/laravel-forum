@@ -22,10 +22,10 @@ use TeamTeaTime\Forum\{
     Console\Commands\Seed,
     Console\Commands\SyncStats,
     Frontend\Presets\AbstractPreset,
-    Frontend\Presets\BootstrapPreset,
+    Frontend\Presets\BladeBootstrapPreset,
     Frontend\Presets\PresetRegistry,
-    Frontend\Presets\LivewirePreset,
-    Frontend\Presets\TailwindPreset,
+    Frontend\Presets\LivewireTailwindPreset,
+    Frontend\Presets\BladeTailwindPreset,
     Frontend\Stacks\Blade,
     Frontend\Stacks\StackInterface,
     Frontend\Stacks\Livewire,
@@ -50,7 +50,7 @@ class ForumServiceProvider extends ServiceProvider
         parent::__construct($app);
 
         foreach (self::CONFIG_FILES as $key) {
-            $this->mergeConfigFrom(__DIR__."/../config/{$key}.php", "forum.{$key}");
+            $this->mergeConfigFrom(__DIR__ . "/../config/{$key}.php", "forum.{$key}");
         }
 
         $this->isFrontendEnabled = config('forum.frontend.enable');
@@ -59,9 +59,9 @@ class ForumServiceProvider extends ServiceProvider
         }
 
         $presetRegistry = new PresetRegistry;
-        $presetRegistry->register(new LivewirePreset);
-        $presetRegistry->register(new BootstrapPreset);
-        $presetRegistry->register(new TailwindPreset);
+        $presetRegistry->register(new LivewireTailwindPreset);
+        $presetRegistry->register(new BladeBootstrapPreset);
+        $presetRegistry->register(new BladeTailwindPreset);
 
         $app->instance(PresetRegistry::class, $presetRegistry);
 
@@ -104,12 +104,12 @@ class ForumServiceProvider extends ServiceProvider
 
         if ($this->isFrontendEnabled) {
             $routerConfig = $this->frontendStack->getRouterConfig();
-            $router->group($routerConfig, fn () => $this->loadRoutesFrom($this->frontendStack->getRoutesPath()));
+            $router->group($routerConfig, fn() => $this->loadRoutesFrom($this->frontendStack->getRoutesPath()));
 
             $viewsPath = $this->frontendPreset->getViewsPath();
             $this->loadViewsFrom($viewsPath, 'forum');
 
-            View::composer('forum.master', function ($view) {
+            View::composer('forum::layouts.main', function ($view) {
                 if (Auth::check()) {
                     $nameAttribute = config('forum.integration.user_name');
                     $view->username = Auth::user()->{$nameAttribute};
@@ -120,7 +120,7 @@ class ForumServiceProvider extends ServiceProvider
             $loader->alias('Forum', config('forum.frontend.utility_class'));
         }
 
-        $this->loadTranslationsFrom(__DIR__.'/../translations', 'forum');
+        $this->loadTranslationsFrom(__DIR__ . '/../translations', 'forum');
 
         $this->registerPolicies($gate);
 
@@ -141,7 +141,7 @@ class ForumServiceProvider extends ServiceProvider
     {
         $configPathMap = [];
         foreach (self::CONFIG_FILES as $key) {
-            $configPathMap[__DIR__."/../config/{$key}.php"] = config_path("forum/{$key}.php");
+            $configPathMap[__DIR__ . "/../config/{$key}.php"] = config_path("forum/{$key}.php");
         }
 
         $this->publishes($configPathMap, 'config');
@@ -150,14 +150,14 @@ class ForumServiceProvider extends ServiceProvider
     private function publishMigrations(): void
     {
         $this->publishes([
-            __DIR__.'/../database/migrations/' => database_path('migrations'),
+            __DIR__ . '/../database/migrations/' => database_path('migrations'),
         ], 'migrations');
     }
 
     private function publishTranslations(): void
     {
         $this->publishes([
-            __DIR__.'/../translations/' => function_exists('lang_path') ? lang_path('vendor/forum') : resource_path('lang/vendor/forum'),
+            __DIR__ . '/../translations/' => function_exists('lang_path') ? lang_path('vendor/forum') : resource_path('lang/vendor/forum'),
         ], 'translations');
     }
 
@@ -166,9 +166,8 @@ class ForumServiceProvider extends ServiceProvider
         $config = config('forum.api.router');
         $config['middleware'][] = ResolveApiParameters::class;
 
-        $router->group($config, function ($router)
-        {
-            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        $router->group($config, function ($router) {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
         });
     }
 

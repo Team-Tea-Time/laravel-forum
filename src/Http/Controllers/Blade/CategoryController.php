@@ -20,13 +20,13 @@ class CategoryController extends BaseController
 {
     public function index(Request $request): View
     {
-        $categories = CategoryAccess::getFilteredTreeFor($request->user());
+        $categories = CategoryAccess::getFilteredTreeFor($request->user())->toTree();
 
         if ($request->user() !== null) {
             UserViewingIndex::dispatch($request->user());
         }
 
-        return ViewFactory::make('forum.category.index', compact('categories'));
+        return ViewFactory::make('forum::category.index', compact('categories'));
     }
 
     public function show(Request $request): View
@@ -55,7 +55,7 @@ class CategoryController extends BaseController
 
         $selectableThreadIds = ThreadAccess::getSelectableThreadIdsFor($request->user(), $threads, $category);
 
-        return ViewFactory::make('forum.category.show', compact('privateAncestor', 'threadDestinationCategories', 'category', 'threads', 'selectableThreadIds'));
+        return ViewFactory::make('forum::category.show', compact('privateAncestor', 'threadDestinationCategories', 'category', 'threads', 'selectableThreadIds'));
     }
 
     public function store(CreateCategory $request): RedirectResponse
@@ -94,6 +94,6 @@ class CategoryController extends BaseController
         $categories = Category::defaultOrder()->get();
         $categories->makeHidden(['_lft', '_rgt', 'thread_count', 'post_count']);
 
-        return ViewFactory::make('forum.category.manage', ['categories' => $categories->toTree()]);
+        return ViewFactory::make('forum::category.manage', ['categories' => $categories->toTree()]);
     }
 }

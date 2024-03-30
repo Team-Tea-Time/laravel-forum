@@ -27,7 +27,7 @@ abstract class AbstractPreset
 
     protected function getSourcePath(): string
     {
-        return __DIR__."/../../ui-presets/{$this->getName()}";
+        return __DIR__ . "/../../../ui-presets/{$this->getName()}";
     }
 
     protected function getDestinationPath(): string

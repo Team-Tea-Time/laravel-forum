@@ -50,6 +50,6 @@ class Livewire implements StackInterface
 
     public function getRoutesPath(): string
     {
-        return __DIR__.'/../../../routes/livewire.php';
+        return __DIR__ . '/../../../routes/livewire.php';
     }
 }
