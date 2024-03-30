@@ -1,19 +1,19 @@
-![Tests](https://github.com/Team-Tea-Time/laravel-forum/actions/workflows/tests.yml/badge.svg) ![phpcs](https://github.com/Team-Tea-Time/laravel-forum/actions/workflows/phpcs.yml/badge.svg) [![StyleCI](https://github.styleci.io/repos/28139801/shield?style=flat&branch=5.0)](https://github.styleci.io/repos/28139801?branch=5.0) ![Packagist Downloads](https://img.shields.io/packagist/dm/riari/laravel-forum) ![Packagist License](https://img.shields.io/packagist/l/riari/laravel-forum)
+![Tests](https://github.com/Team-Tea-Time/laravel-forum/actions/workflows/tests.yml/badge.svg) ![phpcs](https://github.com/Team-Tea-Time/laravel-forum/actions/workflows/phpcs.yml/badge.svg) ![Packagist Downloads](https://img.shields.io/packagist/dm/riari/laravel-forum) ![Packagist License](https://img.shields.io/packagist/l/riari/laravel-forum)
 
 ![Laravel Forum Logo](./logo.png)
 
-**Complete documentation is available on [teamteatime.net](https://www.teamteatime.net/docs/laravel-forum/5/).**
+**Complete documentation is available on [teamteatime.net](https://www.teamteatime.net/docs/laravel-forum/6/).**
 
 ## Versions
 
 | **Laravel version** | **Package version** | **PHP version** |
 |---------------------|---------------------|-----------------|
+| 11                  | ^6.0                | ^8.2            |
 | 10                  | ^5.5                | ^8.1            |
-| 9                   | ^5.3                | ^8.0            |
-| 6 - 8               | ^5.0                | ^7.4            |
-| 5                   | ^4.0                | ^7.4            |
 
-See the [support policy in the Laravel docs](https://laravel.com/docs/9.x/releases#support-policy) for more information about Laravel release versions, their supported PHP versions, and how long they receive bug & security fixes.
+Please note that older package versions not listed above are no longer maintained or supported.
+
+See the [support policy in the Laravel docs](https://laravel.com/docs/11.x/releases#support-policy) for more information about Laravel release versions, their supported PHP versions, and how long they receive bug & security fixes.
 
 ## Installation
 
@@ -25,7 +25,7 @@ Install the package via composer:
 composer require riari/laravel-forum:~5.0
 ```
 
-[Package Discovery](https://laravel.com/docs/8.x/packages#package-discovery) should take care of registering the service provider automatically, but if you need to do so manually, add the service provider to your `config/app.php`:
+[Package Discovery](https://laravel.com/docs/11.x/packages#package-discovery) should take care of registering the service provider automatically, but if you need to do so manually, add the service provider to your `config/app.php`:
 
 ```php
 TeamTeaTime\Forum\ForumServiceProvider::class,
@@ -63,7 +63,7 @@ Laravel Forum currently supports 15 languages: German, English, Spanish, French,
 
 ## Development
 
-If you wish to contribute, an easy way to set up the package for local development is [Team-Tea-Time/laravel-studio](https://github.com/Team-Tea-Time/laravel-studio), which is set up to load a local working copy of this repository (see the [readme](https://github.com/Team-Tea-Time/laravel-studio/blob/6.x/readme.md#usage) for usage details).
+If you wish to contribute, an easy way to set up the package for local development is [Team-Tea-Time/laravel-studio](https://github.com/Team-Tea-Time/laravel-studio), which is set up to load a local working copy of this repository (see the [readme](https://github.com/Team-Tea-Time/laravel-studio/blob/11.x/readme.md#usage) for usage details).
 
 ### Running tests
 
