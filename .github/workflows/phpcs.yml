@@ -2,7 +2,7 @@ name: phpcs
 
 on:
   pull_request:
-    branches: [ "5.0" ]
+    branches: [ "6.x" ]
     paths:
       - "**.php"
       - "phpcs.xml"
