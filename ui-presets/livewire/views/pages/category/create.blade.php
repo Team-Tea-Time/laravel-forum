@@ -6,7 +6,7 @@
         <div class="grow max-w-screen-md">
             <h1>{{ trans('forum::categories.create') }}</h1>
 
-            <div class="bg-white rounded-md shadow-md my-2 p-6">
+            <div class="bg-white rounded-md shadow-md my-2 p-6 dark:bg-slate-700">
                 <form wire:submit="create">
                     <x-forum::form.input-text
                         id="title"
@@ -20,8 +20,14 @@
 
                     <x-forum::form.input-text
                         id="color"
-                        :label="trans('forum::general.color')"
-                        wire:model="color"
+                        :label="trans('forum::general.color_light_mode')"
+                        wire:model="color_light_mode"
+                        data-coloris />
+
+                    <x-forum::form.input-text
+                        id="color"
+                        :label="trans('forum::general.color_dark_mode')"
+                        wire:model="color_dark_mode"
                         data-coloris />
 
                     @if ($categories->count() > 0)
