@@ -24,6 +24,9 @@
     <rule ref="Generic.Strings.UnnecessaryStringConcat"/>
     <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
     <rule ref="Generic.WhiteSpace.ScopeIndent"/>
+    <rule ref="Internal.NoCodeFound">
+        <exclude-pattern>*.blade.php</exclude-pattern>
+    </rule>
     <rule ref="MySource.PHP.EvalObjectFactory"/>
     <rule ref="MySource.PHP.GetRequestData"/>
     <rule ref="MySource.PHP.AjaxNullComparison"/>
