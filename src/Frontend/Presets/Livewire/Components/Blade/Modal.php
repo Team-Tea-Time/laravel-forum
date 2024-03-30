@@ -11,7 +11,8 @@ class Modal extends Component
     public function __construct(
         public string $heading = "",
         public string $onClose = "",
-    ) {
+    )
+    {
     }
 
     public function render(): View
