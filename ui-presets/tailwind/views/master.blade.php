@@ -198,7 +198,7 @@
             default: input.value || null,
 
             swatches: [
-                '{{ config('forum.blade.default_category_color') }}',
+                '{{ config('forum.frontend.default_category_color') }}',
                 '#f44336',
                 '#e91e63',
                 '#9c27b0',
