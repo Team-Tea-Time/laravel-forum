@@ -11,7 +11,7 @@
         </h2>
     </div>
 
-    <div class="v-category-show">
+    <div id="category">
         <div class="clearfix">
             @if ($category->accepts_threads)
                 @can ('createThreads', $category)
@@ -20,7 +20,7 @@
             @endif
 
             <div class="btn-group" role="group">
-                @can ('manageCategories')
+                @can ('editCategories')
                     <button type="button" class="btn btn-secondary" data-open-modal="edit-category">
                         {{ trans('forum::general.edit') }}
                     </button>
@@ -42,16 +42,16 @@
 
                 @if (count($selectableThreadIds) > 0)
                     @can ('manageThreads', $category)
-                        <form :action="actions[selectedAction]" method="POST">
+                        <form :action="actions[state.selectedAction]" method="POST">
                             @csrf
-                            <input type="hidden" name="_method" :value="actionMethods[selectedAction]" />
+                            <input type="hidden" name="_method" :value="actionMethods[state.selectedAction]" />
 
                             <div class="text-end mt-2">
                                 <div class="form-check">
                                     <label for="selectAllThreads">
                                         {{ trans('forum::threads.select_all') }}
                                     </label>
-                                    <input type="checkbox" value="" id="selectAllThreads" class="align-middle" @click="toggleAll" :checked="selectedThreads.length == selectableThreadIds.length">
+                                    <input type="checkbox" value="" id="selectAllThreads" class="align-middle" @click="toggleAll" :checked="state.selectedThreads.length == selectableThreadIds.length">
                                 </div>
                             </div>
                     @endcan
@@ -67,7 +67,7 @@
                     @can ('manageThreads', $category)
                             <div class="fixed-bottom-right pb-xs-0 pr-xs-0 pb-sm-3 pr-sm-3 m-2" style="z-index: 1000;">
                                 <transition name="fade">
-                                    <div class="card text-white bg-secondary shadow-sm" v-if="selectedThreads.length">
+                                    <div class="card text-white bg-secondary shadow-sm" v-if="state.selectedThreads.length">
                                         <div class="card-header text-center">
                                             {{ trans('forum::general.with_selection') }}
                                         </div>
@@ -76,7 +76,7 @@
                                                 <div class="input-group-prepend">
                                                     <label class="input-group-text" for="bulk-actions">{{ trans_choice('forum::general.actions', 1) }}</label>
                                                 </div>
-                                                <select class="form-select" id="bulk-actions" v-model="selectedAction">
+                                                <select class="form-select" id="bulk-actions" v-model="state.selectedAction">
                                                     @can ('deleteThreads', $category)
                                                         <option value="delete">{{ trans('forum::general.delete') }}</option>
                                                     @endcan
@@ -97,15 +97,15 @@
                                                 </select>
                                             </div>
 
-                                            <div class="mb-3" v-if="selectedAction == 'move'">
+                                            <div class="mb-3" v-if="state.selectedAction == 'move'">
                                                 <label for="category-id">{{ trans_choice('forum::categories.category', 1) }}</label>
                                                 <select name="category_id" id="category-id" class="form-select">
-                                                    @include ('forum::category.partials.options', ['hide' => $category])
+                                                    @include ('forum::category.partials.options', ['categories' => $threadDestinationCategories, 'hide' => $category])
                                                 </select>
                                             </div>
 
                                             @if (config('forum.general.soft_deletes'))
-                                                <div class="form-check mb-3" v-if="selectedAction == 'delete'">
+                                                <div class="form-check mb-3" v-if="state.selectedAction == 'delete'">
                                                     <input class="form-check-input" type="checkbox" name="permadelete" value="1" id="permadelete">
                                                     <label class="form-check-label" for="permadelete">
                                                         {{ trans('forum::general.perma_delete') }}
@@ -114,7 +114,7 @@
                                             @endif
 
                                             <div class="text-end">
-                                                <button type="submit" class="btn btn-primary" @click="submit" :disabled="selectedAction == null">{{ trans('forum::general.proceed') }}</button>
+                                                <button type="submit" class="btn btn-primary" @click="submit" :disabled="state.selectedAction == null">{{ trans('forum::general.proceed') }}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -162,8 +162,10 @@
         @endcan
     @endif
 
-    @can ('manageCategories')
+    @can ('editCategories')
         @include ('forum::category.modals.edit')
+    @endcan
+    @can ('deleteCategories')
         @include ('forum::category.modals.delete')
     @endcan
 
@@ -190,56 +192,70 @@
     }
     </style>
 
-    <script>
-    new Vue({
-        el: '.v-category-show',
-        name: 'CategoryShow',
-        data: {
-            selectableThreadIds: @json($selectableThreadIds),
-            actions: {
-                'delete': "{{ Forum::route('bulk.thread.delete') }}",
-                'restore': "{{ Forum::route('bulk.thread.restore') }}",
-                'lock': "{{ Forum::route('bulk.thread.lock') }}",
-                'unlock': "{{ Forum::route('bulk.thread.unlock') }}",
-                'pin': "{{ Forum::route('bulk.thread.pin') }}",
-                'unpin': "{{ Forum::route('bulk.thread.unpin') }}",
-                'move': "{{ Forum::route('bulk.thread.move') }}"
-            },
-            actionMethods: {
-                'delete': 'DELETE',
-                'restore': 'POST',
-                'lock': 'POST',
-                'unlock': 'POST',
-                'pin': 'POST',
-                'unpin': 'POST',
-                'move': 'POST'
-            },
-            selectedAction: null,
-            selectedThreads: [],
-            isEditModalOpen: false,
-            isDeleteModalOpen: false
-        },
-        methods: {
-            toggleAll ()
+    <script type="module">
+    Vue.createApp({
+        setup() {
+            const selectableThreadIds = @json($selectableThreadIds);
+
+            const actions = {
+                delete: "{{ Forum::route('bulk.thread.delete') }}",
+                restore: "{{ Forum::route('bulk.thread.restore') }}",
+                lock: "{{ Forum::route('bulk.thread.lock') }}",
+                unlock: "{{ Forum::route('bulk.thread.unlock') }}",
+                pin: "{{ Forum::route('bulk.thread.pin') }}",
+                unpin: "{{ Forum::route('bulk.thread.unpin') }}",
+                move: "{{ Forum::route('bulk.thread.move') }}"
+            };
+
+            const actionMethods = {
+                delete: 'DELETE',
+                restore: 'POST',
+                lock: 'POST',
+                unlock: 'POST',
+                pin: 'POST',
+                unpin: 'POST',
+                move: 'POST'
+            };
+
+            const state = Vue.reactive({
+                selectedAction: null,
+                selectedThreads: [],
+                isEditModalOpen: false,
+                isDeleteModalOpen: false
+            });
+
+            function toggleAll()
             {
-                this.selectedThreads = (this.selectedThreads.length < this.selectableThreadIds.length) ? this.selectableThreadIds : [];
-            },
-            submit (event)
+                state.selectedThreads = (state.selectedThreads.length < selectableThreadIds.length) ? selectableThreadIds : [];
+            }
+
+            function submit(event)
             {
-                if (this.actionMethods[this.selectedAction] === 'DELETE' && !confirm("{{ trans('forum::general.generic_confirm') }}"))
+                if (actionMethods[state.selectedAction] === 'DELETE' && !confirm("{{ trans('forum::general.generic_confirm') }}"))
                 {
                     event.preventDefault();
                 }
-            },
-            onClickModal (event)
+            }
+
+            function onClickModal(event)
             {
                 if (event.target.classList.contains('modal'))
                 {
-                    this.isEditModalOpen = false;
-                    this.isDeleteModalOpen = false;
+                    state.isEditModalOpen = false;
+                    state.isDeleteModalOpen = false;
                 }
             }
+
+            return {
+                selectableThreadIds,
+                actions,
+                actionMethods,
+                state,
+                toggleAll,
+                submit,
+                onClickModal,
+            };
         }
-    });
+    }).mount('#category');
     </script>
 @stop

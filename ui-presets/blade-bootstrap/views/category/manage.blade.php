@@ -13,79 +13,98 @@
         @endcan
     </div>
 
-    <div class="v-manage-categories">
-        <draggable-category-list :categories="categories"></draggable-category-list>
+    <div id="manage-categories">
+        <draggable-category-list :categories="state.categories"></draggable-category-list>
 
         <transition name="fade">
-            <div v-show="changesApplied" class="alert alert-success mt-3" role="alert">
+            <div v-show="state.changesApplied" class="alert alert-success mt-3" role="alert">
                 {{ trans('forum::general.changes_applied') }}
             </div>
         </transition>
 
         <div class="text-end py-3">
-            <button type="button" class="btn btn-primary px-5" :disabled="isSavingDisabled" @click="onSave">
+            <button type="button" class="btn btn-primary px-5" :disabled="state.isSavingDisabled" @click="onSave">
                 {{ trans('forum::general.save') }}
             </button>
         </div>
     </div>
 
     <script type="text/x-template" id="draggable-category-list-template">
-        <draggable tag="ul" class="list-group" :list="categories" group="categories" :invertSwap="true" :emptyInsertThreshold="14">
-            <li class="list-group-item" v-for="category in categories" :data-id="category.id" :key="category.id">
-                <a class="float-end btn btn-sm btn-danger ml-2" :href="`${category.route}#modal=delete-category`">{{ trans('forum::general.delete') }}</a>
-                <a class="float-end btn btn-sm btn-link ml-2" :href="`${category.route}#modal=edit-category`">{{ trans('forum::general.edit') }}</a>
-                <strong :style="{ color: category.color }">@{{ category.title }}</strong>
-                <div class="text-muted">@{{ category.description }}</div>
+        <draggable
+            :list="categories"
+            tag="ul"
+            class="list-group"
+            @start="drag=true"
+            @end="drag=false"
+            :group="{ name: 'categories' }"
+            item-key="id">
+            <template #item="{element}">
+                <li class="list-group-item" :data-id="element.id">
+                    <a class="float-end btn btn-sm btn-danger ml-2" :href="element.route + '#modal=delete-category'">{{ trans('forum::general.delete') }}</a>
+                    <a class="float-end btn btn-sm btn-link ml-2" :href="element.route + '#modal=edit-category'">{{ trans('forum::general.edit') }}</a>
+                    <strong :style="{ color: element.color }">@{{ element.title }}</strong>
+                    <div class="text-muted">@{{ element.description }}</div>
 
-                <draggable-category-list :categories="category.children"></draggable-category-list>
-            </li>
+                    <draggable-category-list :categories="element.children" />
+                </li>
+            </template>
         </draggable>
     </script>
 
-    <script>
-    var draggableCategoryList = {
-        name: 'draggable-category-list',
-        template: '#draggable-category-list-template',
-        props: ['categories']
-    };
+    <script type="module">
+    const app = Vue.createApp({
+        setup() {
+            const state = Vue.reactive({
+                categories: @json($categories),
+                isSavingDisabled: true,
+                changesApplied: false,
+            });
 
-    new Vue({
-        el: '.v-manage-categories',
-        name: 'ManageCategories',
-        components: {
-            draggableCategoryList
-        },
-        data: {
-            categories: @json($categories),
-            isSavingDisabled: true,
-            changesApplied: false
-        },
-        watch: {
-            categories: {
-                handler: function (categories) {
-                    this.isSavingDisabled = false;
+            Vue.watch(
+                () => state.categories,
+                async (newValue, oldValue) => {
+                    state.isSavingDisabled = false;
                 },
-                deep: true
-            }
-        },
-        methods: {
-            onSave ()
-            {
-                this.isSavingDisabled = true;
-                this.changesApplied = false;
+                { deep: true }
+            );
 
-                var payload = { categories: this.categories };
+            function onSave()
+            {
+                state.isSavingDisabled = true;
+                state.changesApplied = false;
+
+                var payload = { categories: state.categories };
                 axios.post('{{ route('forum.bulk.category.manage') }}', payload)
                     .then(response => {
-                        this.changesApplied = true;
-                        setTimeout(() => this.changesApplied = false, 3000);
+                        state.changesApplied = true;
+                        setTimeout(() => state.changesApplied = false, 3000);
                     })
                     .catch(error => {
-                        this.isSavingDisabled = false;
+                        state.isSavingDisabled = false;
                         console.log(error);
                     });
             }
+
+            return {
+                state,
+                onSave
+            };
         }
     });
+
+    app.component(
+        'Draggable',
+        VueDraggable
+    );
+
+    app.component(
+        'DraggableCategoryList',
+        {
+            props: ['categories'],
+            template: '#draggable-category-list-template',
+        }
+    );
+
+    app.mount('#manage-categories');
     </script>
 @stop

@@ -1,4 +1,4 @@
-<div class="list-group-item {{ $thread->pinned ? 'pinned' : '' }} {{ $thread->locked ? 'locked' : '' }} {{ $thread->trashed() ? 'deleted' : '' }}" :class="{ 'border border-blue-500': selectedThreads.includes({{ $thread->id }}) }">
+<div class="list-group-item {{ $thread->pinned ? 'pinned' : '' }} {{ $thread->locked ? 'locked' : '' }} {{ $thread->trashed() ? 'deleted' : '' }}" :class="{ 'border border-blue-500': state.selectedThreads.includes({{ $thread->id }}) }">
     <div class="row align-items-center text-center">
         <div class="col-sm text-md-start">
             <span class="lead">
@@ -42,7 +42,7 @@
 
         @if (isset($category) && isset($selectableThreadIds) && in_array($thread->id, $selectableThreadIds))
             <div class="col-sm" style="flex: 0;">
-                <input type="checkbox" name="threads[]" :value="{{ $thread->id }}" v-model="selectedThreads">
+                <input type="checkbox" name="threads[]" :value="{{ $thread->id }}" v-model="state.selectedThreads">
             </div>
         @endif
     </div>

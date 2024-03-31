@@ -20,7 +20,7 @@
             @endif
 
             <x-forum::button-group>
-                @can ('manageCategories')
+                @can ('editCategories')
                     <x-forum::button-secondary type="button" data-open-modal="edit-category">
                         {{ trans('forum::general.edit') }}
                     </x-forum::button-secondary>

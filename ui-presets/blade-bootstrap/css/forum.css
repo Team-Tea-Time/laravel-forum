@@ -1,0 +1,133 @@
+body
+{
+    padding: 0;
+    background: #f8fafc;
+}
+
+textarea
+{
+    min-height: 200px;
+}
+
+table tr td
+{
+    white-space: nowrap;
+}
+
+a
+{
+    text-decoration: none;
+}
+
+.deleted
+{
+    opacity: 0.65;
+}
+
+#main
+{
+    padding: 2em;
+}
+
+.shadow-sm
+{
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.card.category
+{
+    margin-bottom: 1em;
+}
+
+.list-group .list-group
+{
+    min-height: 1em;
+    margin-top: 1em;
+}
+
+.btn svg.feather
+{
+    width: 16px;
+    height: 16px;
+    stroke-width: 3px;
+    vertical-align: -2px;
+}
+
+.modal-title svg.feather
+{
+    margin-right: .5em;
+    vertical-align: -3px;
+}
+
+.category .subcategories
+{
+    background: #fff;
+}
+
+.category > .list-group-item
+{
+    z-index: 1000;
+}
+
+.category .subcategories .list-group-item:first-child
+{
+    border-radius: 0;
+}
+
+.timestamp
+{
+    border-bottom: 1px dotted var(--bs-gray);
+    cursor: help;
+}
+
+.fixed-bottom-right
+{
+    position: fixed;
+    right: 0;
+    bottom: 0;
+}
+
+.fade-enter-active, .fade-leave-active
+{
+    transition: opacity .3s;
+}
+.fade-enter, .fade-leave-to
+{
+    opacity: 0;
+}
+
+.mask
+{
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(50, 50, 50, .2);
+    opacity: 0;
+    transition: opacity .2s ease;
+    z-index: 1020;
+}
+.mask.show
+{
+    opacity: 1;
+}
+
+.form-check
+{
+    user-select: none;
+}
+
+.sortable-chosen
+{
+    background: var(--bs-light);
+}
+
+@media (max-width: 575.98px)
+{
+    #main
+    {
+        padding: 1em;
+    }
+}

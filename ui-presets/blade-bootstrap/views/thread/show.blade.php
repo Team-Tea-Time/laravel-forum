@@ -1,7 +1,7 @@
 @extends ('forum::layouts.main', ['thread' => null, 'breadcrumbs_append' => [$thread->title], 'thread_title' => $thread->title])
 
 @section ('content')
-    <div id="thread" class="v-thread">
+    <div id="thread">
         <div class="d-flex flex-column flex-md-row justify-content-between">
             <h2 class="flex-grow-1">{{ $thread->title }}</h2>
 
@@ -331,7 +331,7 @@
                         <label class="input-group-text" for="category-id">{{ trans_choice('forum::categories.category', 1) }}</label>
                     </div>
                     <select name="category_id" id="category-id" class="form-select">
-                        @include ('forum::category.partials.options', ['hide' => $thread->category])
+                        @include ('forum::category.partials.options', ['categories' => $threadDestinationCategories, 'hide' => $thread->category])
                     </select>
                 </div>
 
@@ -349,49 +349,56 @@
     }
     </style>
 
-    <script>
-    new Vue({
-        el: '.v-thread',
-        name: 'Thread',
-        data: {
-            posts: @json($posts),
-            selectablePosts: @json($selectablePosts),
-            postActions: {
-                'delete': "{{ Forum::route('bulk.post.delete') }}",
-                'restore': "{{ Forum::route('bulk.post.restore') }}"
-            },
-            postActionMethods: {
-                'delete': 'DELETE',
-                'restore': 'POST'
-            },
-            selectedPostAction: 'delete',
-            selectedPosts: [],
-            selectedThreadAction: null
-        },
-        created ()
-        {
-            this.posts.data = this.posts.data.filter(post => post.sequence != 1);
-        },
-        methods: {
-            toggleAll ()
-            {
-                this.selectedPosts = (this.selectedPosts.length < this.selectablePosts.length) ? this.selectablePosts : [];
-            },
-            submitThread (event)
-            {
-                if (this.threadActionMethods[this.selectedThreadAction] === 'DELETE' && !confirm("{{ trans('forum::general.generic_confirm') }}"))
-                {
-                    event.preventDefault();
-                }
-            },
-            submitPosts (event)
-            {
-                if (this.postActionMethods[this.selectedPostAction] === 'DELETE' && !confirm("{{ trans('forum::general.generic_confirm') }}"))
+    <script type="module">
+    Vue.createApp({
+        setup() {
+            let posts = @json($posts);
+            posts.data = posts.data.filter(post => post.sequence > 1);
+
+            const selectablePosts = @json($selectablePosts);
+            const postActions = {
+                delete: "{{ Forum::route('bulk.post.delete') }}",
+                restore: "{{ Forum::route('bulk.post.restore') }}"
+            };
+            const postActionMethods = {
+                delete: 'DELETE',
+                restore: 'POST',
+            };
+
+            const state = Vue.reactive({
+                selectedPostAction: 'delete',
+                selectedPosts: [],
+                selectedThreadAction: null,
+            });
+
+            function toggleAll() {
+                state.selectedPosts = (state.selectedPosts.length < selectablePosts.length) ? selectablePosts : [];
+            }
+
+            function submitThread(event) {
+                if (threadActionMethods[state.selectedThreadAction] === 'DELETE' && !confirm("{{ trans('forum::general.generic_confirm') }}"))
                 {
                     event.preventDefault();
                 }
             }
+
+            function submitPosts(event) {
+                if (postActionMethods[state.selectedPostAction] === 'DELETE' && !confirm("{{ trans('forum::general.generic_confirm') }}")) {
+                    event.preventDefault();
+                }
+            }
+
+            return {
+                posts,
+                selectablePosts,
+                postActions,
+                postActionMethods,
+                state,
+                toggleAll,
+                submitThread,
+                submitPosts,
+            };
         }
-    });
+    }).mount('#thread');
     </script>
 @stop
