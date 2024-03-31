@@ -14,7 +14,7 @@
         @endforeach
 
         @if ($threads->count() == 0)
-            <div class="p-6 border border-slate-300 rounded-md text-center text-slate-500 text-lg font-medium">
+            <div class="p-6 border border-slate-300 dark:border-slate-700 rounded-md text-center text-slate-500 text-lg font-medium">
                 {{ trans('forum::threads.none_found') }}
             </div>
         @endif

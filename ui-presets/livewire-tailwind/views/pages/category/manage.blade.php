@@ -15,7 +15,7 @@
                 </div>
             @endcan
 
-            <div class="bg-white rounded-md shadow-md my-2 p-6">
+            <div class="bg-white dark:bg-slate-700 rounded-md shadow-md my-2 p-6">
                 <ol id="category-tree">
                     @include ('forum::components.category.draggable-items', ['categories' => $categories])
                 </ol>
