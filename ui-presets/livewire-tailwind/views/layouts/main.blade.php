@@ -14,7 +14,7 @@
             {{ trans('forum::general.home_title') }}
         </title>
 
-        @vite(['resources/forum/livewire/css/forum.css', 'resources/forum/livewire/js/forum.js'])
+        @vite(['resources/forum/livewire-tailwind/css/forum.css', 'resources/forum/livewire-tailwind/js/forum.js'])
     </head>
     <body class="forum bg-slate-200 dark:bg-slate-800">
         <div class="bg-white shadow-md border-b border-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:shadow-none">

@@ -7,7 +7,7 @@
 </time>
 
 @script
-<script>
+<script type="module">
 Alpine.data('timestamp', () => {
     return {
         naturalDiff: '',

@@ -1,5 +1,5 @@
 <nav aria-label="breadcrumb">
-    <ol class="flex [&_li]:after:content-['/'] [&_li]:after:px-2 [&_li]:after:text-gray-500 [&_li:last-child]:after:content-['']">
+    <ol class="flex flex-wrap [&_li]:after:content-['/'] [&_li]:after:px-2 [&_li]:after:text-gray-500 [&_li:last-child]:after:content-['']">
         <li class=""><a href="{{ url(config('forum.frontend.router.prefix')) }}" class="text-blue-500">{{ trans('forum::general.index') }}</a></li>
         @if (isset($category) && $category)
             @include ('forum::partials.breadcrumb-categories', ['category' => $category])

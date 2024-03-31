@@ -112,7 +112,7 @@ class ThreadController extends BaseController
 
         if ($request->user()) {
             foreach ($posts as $post) {
-                if ($request->user()->can('delete', $post) || $request->user()->can('restore', $post)) {
+                if ($post->sequence > 1 && ($request->user()->can('delete', $post) || $request->user()->can('restore', $post))) {
                     $selectablePosts[] = $post->id;
                 }
             }

@@ -24,7 +24,7 @@ class DeletePosts extends FormRequest implements FulfillableRequestInterface
 
     public function authorizeValidated(): bool
     {
-        return PostAuthorization::bulkDelete($this->user, $this->validated()['posts']);
+        return PostAuthorization::bulkDelete($this->user(), $this->validated()['posts']);
     }
 
     public function fulfill()

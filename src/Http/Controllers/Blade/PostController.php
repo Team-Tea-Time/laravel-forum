@@ -45,7 +45,7 @@ class PostController extends BaseController
 
         UserCreatingPost::dispatch($request->user(), $thread);
 
-        $post = $request->has('post') ? $thread->posts->find($request->input('post')) : null;
+        $post = $request->has('post_id') ? $thread->posts->find($request->input('post_id')) : null;
 
         return ViewFactory::make('forum::post.create', compact('thread', 'post'));
     }
