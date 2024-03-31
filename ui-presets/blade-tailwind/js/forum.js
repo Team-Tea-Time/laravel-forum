@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }).mount('.v-navbar');
 
-    function findModal (key)
+    function findModal(key)
     {
         const modal = document.querySelector(`[data-modal=${key}]`);
 
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return modal;
     }
 
-    function openModal (modal)
+    function openModal(modal)
     {
         setTimeout(function()
         {

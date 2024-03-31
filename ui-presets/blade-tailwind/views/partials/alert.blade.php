@@ -6,7 +6,7 @@ $colorClasses = match ($type) {
 };
 @endphp
 
-<div class="alert alert-dismissable rounded-md my-4 p-4 flex justify-between gap-4 {{ $colorClasses }}">
+<div class="alert alert-{{ $type }} alert-dismissable rounded-md my-4 p-4 flex justify-between gap-4 {{ $colorClasses }}">
     <div class="message">
         {!! $message !!}
     </div>

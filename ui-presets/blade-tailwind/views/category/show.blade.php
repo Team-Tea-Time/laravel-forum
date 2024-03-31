@@ -166,8 +166,10 @@
         @endcan
     @endif
 
-    @can ('manageCategories')
+    @can ('editCategories')
         @include ('forum::category.modals.edit')
+    @endcan
+    @can ('deleteCategories')
         @include ('forum::category.modals.delete')
     @endcan
 

@@ -16,6 +16,6 @@
     @endif
 
     @slot('actions')
-        <button type="submit" class="btn btn-danger">{{ trans('forum::general.delete') }}</button>
+        <x-forum::button type="submit" class="bg-red-500 hover:bg-red-400">{{ trans('forum::general.delete') }}</x-forum::button>
     @endslot
 @endcomponent
