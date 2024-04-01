@@ -2,7 +2,6 @@
 
 namespace TeamTeaTime\Forum\Tests;
 
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class TestCase extends \Orchestra\Testbench\TestCase
@@ -12,11 +11,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        config([
-            'forum.frontend.preset' => 'blade.tailwind',
-            'forum.integration.user_model' => User::class
-        ]);
 
         $this->loadLaravelMigrations();
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
