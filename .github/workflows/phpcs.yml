@@ -10,7 +10,7 @@ on:
 
 jobs:
   run:
-    name: Run
+    name: Run PHP_CodeSniffer
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
