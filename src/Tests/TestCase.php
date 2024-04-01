@@ -13,8 +13,10 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         parent::setUp();
 
-        // Override user model in config
-        config(['forum.integration.user_model' => User::class]);
+        config([
+            'forum.frontend.preset' => 'blade.tailwind',
+            'forum.integration.user_model' => User::class
+        ]);
 
         $this->loadLaravelMigrations();
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
