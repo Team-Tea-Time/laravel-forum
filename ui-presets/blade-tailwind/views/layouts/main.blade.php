@@ -17,7 +17,7 @@
     @vite(['resources/forum/blade-tailwind/css/forum.css', 'resources/forum/blade-tailwind/js/forum.js'])
 </head>
 <body class="forum bg-gray-100">
-    <nav class="v-navbar bg-white shadow py-4">
+    <nav id="navbar" class="bg-white shadow py-4">
         <div class="container mx-auto px-4 md:flex md:items-center md:gap-4">
             <div class="flex justify-between items-center">
                 <a class="text-lg font-semibold" href="{{ url(config('forum.frontend.router.prefix')) }}">Laravel Forum</a>
