@@ -9,9 +9,21 @@ abstract class AbstractPreset
 {
     abstract public static function getName(): string;
 
-    abstract public static function getDescription(): string;
+    /**
+     * Returns a short summary of the preset.
+     * Shown in the forum:preset-list table.
+     */
+    abstract public static function getSummary(): string;
 
     abstract public static function getRequiredStack(): FrontendStack;
+
+    /**
+     * Returns any NPM packages required by the preset.
+     */
+    public static function getRequiredPackages(): array
+    {
+        return [];
+    }
 
     /**
      * Registers any components required by the preset.
@@ -25,12 +37,12 @@ abstract class AbstractPreset
         return file_exists($this->getSourcePath());
     }
 
-    protected function getSourcePath(): string
+    public function getSourcePath(): string
     {
         return __DIR__ . "/../../../ui-presets/{$this->getName()}";
     }
 
-    protected function getDestinationPath(): string
+    public function getDestinationPath(): string
     {
         return resource_path("forum/{$this->getName()}");
     }
@@ -51,7 +63,7 @@ abstract class AbstractPreset
     {
         return [
             'name' => $this->getName(),
-            'description' => $this->getDescription(),
+            'description' => $this->getSummary(),
             'required_stack' => $this->getRequiredStack()->value,
         ];
     }

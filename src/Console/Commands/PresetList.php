@@ -6,6 +6,11 @@ use Illuminate\Console\Command;
 use TeamTeaTime\Forum\Frontend\Presets\AbstractPreset;
 use TeamTeaTime\Forum\Frontend\Presets\PresetRegistry;
 
+use function Laravel\Prompts\{
+    info,
+    table,
+};
+
 class PresetList extends Command
 {
     protected $signature = 'forum:preset-list';
@@ -29,8 +34,8 @@ class PresetList extends Command
             $table[] = $preset->toArray();
         }
 
-        $this->table(['Name', 'Description', 'Required Stack'], $table);
+        table(['Name', 'Summary', 'Required Stack'], $table);
 
-        $this->info("Install a preset with: php artisan forum:preset:install {preset}.");
+        info("Install a preset with: php artisan forum:preset-install {preset}.");
     }
 }

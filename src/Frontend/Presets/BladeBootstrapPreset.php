@@ -11,13 +11,25 @@ class BladeBootstrapPreset extends AbstractPreset
         return 'blade-bootstrap';
     }
 
-    public static function getDescription(): string
+    public static function getSummary(): string
     {
-        return "Uses Blade with Bootstrap for styling.";
+        return "Blade with Vue and Bootstrap.";
     }
 
     public static function getRequiredStack(): FrontendStack
     {
         return FrontendStack::BLADE;
+    }
+
+    public static function getRequiredPackages(): array
+    {
+        return [
+            '@simonwep/pickr',
+            'axios',
+            'bootstrap',
+            'feather-icons',
+            'vue',
+            'vuedraggable',
+        ];
     }
 }

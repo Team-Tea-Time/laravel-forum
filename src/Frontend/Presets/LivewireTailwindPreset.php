@@ -24,14 +24,26 @@ class LivewireTailwindPreset extends AbstractPreset
         return 'livewire-tailwind';
     }
 
-    public static function getDescription(): string
+    public static function getSummary(): string
     {
-        return "Uses Blade with Livewire and Tailwind CSS for styling.";
+        return "Blade with Livewire, AlpineJS, and Tailwind CSS.";
     }
 
     public static function getRequiredStack(): FrontendStack
     {
         return FrontendStack::LIVEWIRE;
+    }
+
+    public static function getRequiredPackages(): array
+    {
+        return [
+            '@melloware/coloris',
+            'alpinejs',
+            'date-fns',
+            'laravel-echo',
+            'nested-sort',
+            'tailwindcss',
+        ];
     }
 
     public function register(): void

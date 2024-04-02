@@ -16,14 +16,26 @@ class BladeTailwindPreset extends AbstractPreset
         return 'blade-tailwind';
     }
 
-    public static function getDescription(): string
+    public static function getSummary(): string
     {
-        return "Uses Blade with Tailwind CSS for styling.";
+        return "Blade with Vue and Tailwind CSS.";
     }
 
     public static function getRequiredStack(): FrontendStack
     {
         return FrontendStack::BLADE;
+    }
+
+    public static function getRequiredPackages(): array
+    {
+        return [
+            '@simonwep/pickr',
+            'axios',
+            'feather-icons',
+            'tailwindcss',
+            'vue',
+            'vuedraggable',
+        ];
     }
 
     public function register(): void
