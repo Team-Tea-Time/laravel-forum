@@ -37,9 +37,7 @@ class MoveThread extends FormRequest implements FulfillableRequestInterface
         $action = new Action($thread, $destinationCategory);
         $thread = $action->execute();
 
-        if (!$thread === null) {
-            UserMovedThread::dispatch($this->user(), $thread, $sourceCategory, $destinationCategory);
-        }
+        UserMovedThread::dispatch($this->user(), $thread, $sourceCategory, $destinationCategory);
 
         return $thread;
     }
