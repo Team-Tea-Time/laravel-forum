@@ -29,7 +29,7 @@ class BladeBootstrapPreset extends AbstractPreset
             'bootstrap',
             'feather-icons',
             'vue',
-            'vuedraggable',
+            'vuedraggable@next',
         ];
     }
 }

@@ -34,7 +34,7 @@ class BladeTailwindPreset extends AbstractPreset
             'feather-icons',
             'tailwindcss',
             'vue',
-            'vuedraggable',
+            'vuedraggable@next',
         ];
     }
 
