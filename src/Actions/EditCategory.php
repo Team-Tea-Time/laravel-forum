@@ -16,7 +16,7 @@ class EditCategory extends CreateCategory
 
     protected function transact()
     {
-        return $this->category->update([
+        $this->category->update([
             'title' => $this->title,
             'description' => $this->description,
             'color_light_mode' => $this->colorLightMode,
@@ -24,5 +24,7 @@ class EditCategory extends CreateCategory
             'accepts_threads' => $this->acceptsThreads,
             'is_private' => $this->isPrivate,
         ]);
+
+        return $this->category;
     }
 }
