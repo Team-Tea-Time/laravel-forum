@@ -14,9 +14,9 @@ class EditCategory extends CreateCategory
         $input = $this->validated();
         $action = new Action(
             $this->route('category'),
-            $input['title'] ?? null,
-            $input['description'] ?? null,
-            $input['color'] ?? null,
+            $input['title'],
+            $input['description'] ?? "",
+            $input['color_light_mode'] ?? "",
             $input['accepts_threads'] ?? null,
             $input['is_private'] ?? null
         );
