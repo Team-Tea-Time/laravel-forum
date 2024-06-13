@@ -3,7 +3,7 @@
 namespace TeamTeaTime\Forum\Http\Requests;
 
 use TeamTeaTime\Forum\{
-    Actions\UpdateCategory as Action,
+    Actions\EditCategory as Action,
     Events\UserEditedCategory,
 };
 
