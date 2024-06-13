@@ -20,13 +20,13 @@
                         wire:model="description" />
 
                     <x-forum::form.input-text
-                        id="color"
+                        id="color-light-mode"
                         :label="trans('forum::general.color_light_mode')"
                         wire:model="color_light_mode"
                         data-coloris />
 
                     <x-forum::form.input-text
-                        id="color"
+                        id="color-dark-mode"
                         :label="trans('forum::general.color_dark_mode')"
                         wire:model="color_dark_mode"
                         data-coloris />

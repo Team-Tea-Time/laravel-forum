@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     feather.replace();
 
-    const input = document.querySelector('input[name=color]');
+    const input = document.querySelector('input[name=color_light_mode]');
 
     if (!input) return;
 
