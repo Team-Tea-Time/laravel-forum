@@ -73,4 +73,27 @@ return [
         'content_min' => 3,
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Moderation queues
+    |--------------------------------------------------------------------------
+    |
+    | Values for the moderation queues feature. Enabling either of the queues
+    | here will override the equivalent per-category setting.
+    | rejection_should_soft_delete is always ignored if soft deletes are
+    | disabled.
+    |
+    */
+
+    'moderation_queues' => [
+        'threads' => [
+            'enable_globally' => false,
+            'rejection_should_soft_delete' => false
+        ],
+        'posts' => [
+            'enable_globally' => false,
+            'rejection_should_soft_delete' => false
+        ]
+    ]
+
 ];
