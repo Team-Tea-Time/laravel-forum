@@ -31,6 +31,11 @@ class ThreadPolicy
         return $user->getKey() === $thread->author_id;
     }
 
+    public function approvePosts($user, Thread $thread): bool
+    {
+        return true;
+    }
+
     public function deletePosts($user, Thread $thread): bool
     {
         return true;
