@@ -8,9 +8,9 @@ class EditCategory extends CreateCategory
 {
     protected Category $category;
 
-    public function __construct(Category $category, string $title, string $description, string $colorLightMode, string $colorDarkMode, bool $acceptsThreads = true, bool $isPrivate = false)
+    public function __construct(Category $category, string $title, string $description, string $colorLightMode, string $colorDarkMode, bool $acceptsThreads = true, bool $isPrivate = false, bool $threadQueueEnabled = false, bool $postQueueEnabled = false)
     {
-        parent::__construct($title, $description, $colorLightMode, $colorDarkMode, $acceptsThreads, $isPrivate);
+        parent::__construct($title, $description, $colorLightMode, $colorDarkMode, $acceptsThreads, $isPrivate, $threadQueueEnabled, $postQueueEnabled);
         $this->category = $category;
     }
 
@@ -23,6 +23,8 @@ class EditCategory extends CreateCategory
             'color_dark_mode' => $this->colorDarkMode,
             'accepts_threads' => $this->acceptsThreads,
             'is_private' => $this->isPrivate,
+            'thread_queue_enabled' => $this->threadQueueEnabled,
+            'post_queue_enabled' => $this->postQueueEnabled
         ]);
 
         return $this->category;

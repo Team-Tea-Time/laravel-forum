@@ -37,6 +37,8 @@ class CategoryEdit extends Component
     public ?int $parent_category = null;
     public bool $accepts_threads = false;
     public bool $is_private = false;
+    public bool $thread_queue_enabled = false;
+    public bool $post_queue_enabled = false;
 
     public function mount(Request $request)
     {
@@ -60,6 +62,8 @@ class CategoryEdit extends Component
         $this->parent_category = $category->parent_id;
         $this->accepts_threads = $category->accepts_threads;
         $this->is_private = $category->is_private;
+        $this->thread_queue_enabled = $category->thread_queue_enabled;
+        $this->post_queue_enabled = $category->post_queue_enabled;
 
         UserEditingCategory::dispatch($request->user(), $category);
     }
@@ -72,7 +76,7 @@ class CategoryEdit extends Component
 
         $validated = $this->validate(CategoryRules::create());
 
-        $action = new EditCategory($this->category, $validated['title'], $validated['description'], $validated['color_light_mode'], $validated['color_dark_mode'], $validated['accepts_threads'], $validated['is_private']);
+        $action = new EditCategory($this->category, $validated['title'], $validated['description'], $validated['color_light_mode'], $validated['color_dark_mode'], $validated['accepts_threads'], $validated['is_private'], $validated['thread_queue_enabled'], $validated['post_queue_enabled']);
         $action->execute();
 
         if ($validated['parent_category'] > 0) {

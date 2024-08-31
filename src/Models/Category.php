@@ -25,6 +25,8 @@ class Category extends BaseModel
         'thread_count',
         'post_count',
         'is_private',
+        'thread_queue_enabled',
+        'post_queue_enabled',
         'color_light_mode',
         'color_dark_mode',
     ];

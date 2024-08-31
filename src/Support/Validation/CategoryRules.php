@@ -14,6 +14,8 @@ class CategoryRules
             'parent_category' => ['nullable', 'int', 'exists:forum_categories,id'],
             'accepts_threads' => ['boolean'],
             'is_private' => ['boolean'],
+            'thread_queue_enabled' => ['boolean'],
+            'post_queue_enabled' => ['boolean'],
         ];
     }
 

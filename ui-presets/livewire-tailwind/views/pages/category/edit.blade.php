@@ -51,6 +51,20 @@
                         :label="trans('forum::categories.make_private')"
                         wire:model="is_private" />
 
+                    @if (!config('forum.general.moderation_queues.threads.enable_globally'))
+                        <x-forum::form.input-checkbox
+                            id="thread-queue-enabled"
+                            :label="trans('forum::categories.enable_thread_queue')"
+                            wire:model="thread_queue_enabled" />
+                    @endif
+
+                    @if (!config('forum.general.moderation_queues.posts.enable_globally'))
+                        <x-forum::form.input-checkbox
+                            id="post-queue-enabled"
+                            :label="trans('forum::categories.enable_post_queue')"
+                            wire:model="post_queue_enabled" />
+                    @endif
+
                     <div class="flex mt-4">
                         <div class="grow">
                             <x-forum::button
