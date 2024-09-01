@@ -80,6 +80,16 @@ class Category extends BaseModel
         return CategoryAccess::isAccessibleTo($user, $this->id);
     }
 
+    public function requiresThreadApproval(): bool
+    {
+        return config('forum.general.moderation_queues.threads.enable_globally') || $this->thread_queue_enabled;
+    }
+
+    public function requiresPostApproval(): bool
+    {
+        return config('forum.general.moderation_queues.posts.enable_globally') || $this->post_queue_enabled;
+    }
+
     public function getNewestThreadId(): ?int
     {
         $thread = $this->threads()->orderBy('created_at', 'desc')->first();

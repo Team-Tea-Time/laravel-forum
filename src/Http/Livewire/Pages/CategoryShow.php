@@ -199,6 +199,10 @@ class CategoryShow extends Component
             ? $this->category->threads()->withTrashed()
             : $this->category->threads();
 
+        if ($this->category->requiresThreadApproval() && !$request->user() || !$request->user()->can('approveThreads', $this->category)) {
+            $threads = $threads->authoredByOrApproved($request->user());
+        }
+
         return $threads->withPostAndAuthorRelationships()->ordered()->paginate();
     }
 

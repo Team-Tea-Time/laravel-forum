@@ -40,7 +40,7 @@ class ThreadShow extends EventfulPaginatedComponent
         $this->threadEditForm->title = $this->thread->title;
         $this->title = $this->thread->title;
 
-        if (!$this->thread->category->isAccessibleTo($request->user())) {
+        if (!$this->thread->isAccessibleTo($request->user())) {
             abort(404);
         }
 
