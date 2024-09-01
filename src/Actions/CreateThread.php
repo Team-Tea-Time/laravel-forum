@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Actions;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Models\Category;
@@ -28,6 +29,7 @@ class CreateThread extends BaseAction
             'author_id' => $this->author->getKey(),
             'category_id' => $this->category->id,
             'title' => $this->title,
+            'approved_at' => $this->category->requiresThreadApproval() ? null : Carbon::now(),
         ]);
 
         $post = $thread->posts()->create([
@@ -41,12 +43,14 @@ class CreateThread extends BaseAction
             'last_post_id' => $post->id,
         ]);
 
-        $thread->category->updateWithoutTouch([
-            'newest_thread_id' => $thread->id,
-            'latest_active_thread_id' => $thread->id,
-            'thread_count' => DB::raw('thread_count + 1'),
-            'post_count' => DB::raw('post_count + 1'),
-        ]);
+        if (!$this->category->requiresThreadApproval()) {
+            $thread->category->updateWithoutTouch([
+                'newest_thread_id' => $thread->id,
+                'latest_active_thread_id' => $thread->id,
+                'thread_count' => DB::raw('thread_count + 1'),
+                'post_count' => DB::raw('post_count + 1'),
+            ]);
+        }
 
         return $thread;
     }
