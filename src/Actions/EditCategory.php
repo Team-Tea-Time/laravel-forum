@@ -27,6 +27,8 @@ class EditCategory extends CreateCategory
             'post_queue_enabled' => $this->postQueueEnabled
         ]);
 
+        // TODO: when the thread queue is enabled, any existing threads that don't have an approved_at value should probably be given one. Same for posts.
+
         return $this->category;
     }
 }
