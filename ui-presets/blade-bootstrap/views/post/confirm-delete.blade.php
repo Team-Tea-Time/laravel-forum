@@ -16,7 +16,7 @@
                 <div class="card-body">
 
                     @if (config('forum.general.soft_deletes'))
-                        <div class="form-check" v-if="selectedPostAction == 'delete'">
+                        <div class="form-check" v-if="state.selectedPostAction == 'delete'">
                             <input class="form-check-input" type="checkbox" name="permadelete" value="1" id="permadelete">
                             <label class="form-check-label" for="permadelete">
                                 {{ trans('forum::general.perma_delete') }}
