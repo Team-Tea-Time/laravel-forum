@@ -46,6 +46,14 @@ class LivewireTailwindPreset extends AbstractPreset
         ];
     }
 
+    public static function getViteInput(): array
+    {
+        return [
+            'resources/forum/livewire-tailwind/css/forum.css',
+            'resources/forum/livewire-tailwind/js/forum.js',
+        ];
+    }
+
     public function register(): void
     {
         $this->bladeComponentNamespace("TeamTeaTime\\Forum\\Frontend\\Presets\\LivewireTailwind\\Components\\Blade");

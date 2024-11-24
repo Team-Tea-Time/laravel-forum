@@ -38,6 +38,14 @@ class BladeTailwindPreset extends AbstractPreset
         ];
     }
 
+    public static function getViteInput(): array
+    {
+        return [
+            'resources/forum/blade-tailwind/css/forum.css',
+            'resources/forum/blade-tailwind/js/forum.js',
+        ];
+    }
+
     public function register(): void
     {
         $this->bladeComponentNamespace("TeamTeaTime\\Forum\\Frontend\\Presets\\BladeTailwind\\Components");

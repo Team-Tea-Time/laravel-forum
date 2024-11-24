@@ -9,11 +9,13 @@ use TeamTeaTime\Forum\Frontend\Presets\AbstractPreset;
 use TeamTeaTime\Forum\Frontend\Presets\PresetRegistry;
 
 use function Laravel\Prompts\{
+    alert,
     confirm,
     error,
     info,
     note,
     select,
+    warning,
 };
 
 class PresetInstall extends Command implements PromptsForMissingInput
@@ -77,21 +79,38 @@ class PresetInstall extends Command implements PromptsForMissingInput
 
         $preset->publish($filesystem);
 
-        info("Preset '{$name}' has been copied to your application's resource directory.");
+        info("Done! Preset '{$name}' has been copied to your application's resource directory.");
+
+        alert("IMPORTANT: Please read the info below as it details manual steps required for the preset to work!");
 
         $requiredPackages = $preset->getRequiredPackages();
 
         if (count($requiredPackages) > 0) {
             info("This preset requires the following NPM packages:");
             foreach ($requiredPackages as $package) {
-                $this->line("  $package");
+                $this->line("    $package");
             }
 
             info("You can install them with:");
             note("npm i " . implode(' ', $requiredPackages));
+
+            if (in_array("tailwindcss", $requiredPackages) && !file_exists(base_path("tailwind.config.js"))) {
+                warning("This preset requires Tailwind, but it looks like your app doesn't have a Tailwind configuration. You should set it up either by following the guide at https://tailwindcss.com/docs/guides/laravel or by installing a Laravel starter kit that includes it, such as Laravel Breeze: https://laravel.com/docs/11.x/starter-kits#breeze-and-blade");
+            }
         }
 
-        info("Finished!");
+        $viteInput = $preset->getViteInput();
+
+        if (count($viteInput) > 0) {
+            info("This preset requires the following lines need to be added to the Laravel input array in your vite.config.js file:");
+            foreach ($viteInput as $input) {
+                $this->line("    '$input',");
+            }
+
+            info("After adding these lines, don't forget to build for production:");
+            note("npm run build");
+        }
+
         info("To activate this preset, make sure the package config is published to your app and set the forum.frontend.preset value to '{$preset->getName()}'.");
     }
 }

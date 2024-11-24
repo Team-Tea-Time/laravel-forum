@@ -26,6 +26,14 @@ abstract class AbstractPreset
     }
 
     /**
+     * Returns lines that should be added to the input array in vite.config.js.
+     */
+    public static function getViteInput(): array
+    {
+        return [];
+    }
+
+    /**
      * Registers any components required by the preset.
      */
     public function register(): void
@@ -52,7 +60,7 @@ abstract class AbstractPreset
         return $this->getDestinationPath() . '/views';
     }
 
-    public function publish(FileSystem $filesystem): void
+    public function publish(Filesystem $filesystem): void
     {
         $destinationPath = $this->getDestinationPath();
         $filesystem->ensureDirectoryExists($destinationPath);
