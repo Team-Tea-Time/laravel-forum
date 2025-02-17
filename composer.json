@@ -20,12 +20,12 @@
     ],
     "require": {
         "php": "^8.2",
-        "laravel/framework": "^11.0",
+        "laravel/framework": "^11.0|^12.0",
         "kalnoy/nestedset": "^6.0",
         "doctrine/dbal": "^4.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^9.0"
+        "orchestra/testbench": "^9.0|^10.0"
     },
     "autoload": {
         "psr-4": {
