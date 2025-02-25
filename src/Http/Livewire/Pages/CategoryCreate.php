@@ -67,7 +67,7 @@ class CategoryCreate extends Component
 
         $validated = $this->validate(CategoryRules::create());
 
-        $action = new Action($validated['title'], $validated['description'], $validated['color_light_mode'], $validated['color_dark_mode'], $validated['accepts_threads'], $validated['is_private']);
+        $action = new Action($validated['title'], $validated['description'], $validated['color_light_mode'], $validated['color_dark_mode'], $validated['accepts_threads'], $validated['is_private'], $validated['thread_queue_enabled'], $validated['post_queue_enabled']);
         $category = $action->execute();
 
         if ($validated['parent_category'] > 0) {
