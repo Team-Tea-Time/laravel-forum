@@ -45,11 +45,6 @@
                         :label="trans('forum::categories.enable_threads')"
                         wire:model="accepts_threads" />
 
-                    <x-forum::form.input-checkbox
-                        id="make-private"
-                        :label="trans('forum::categories.make_private')"
-                        wire:model="is_private" />
-
                     @if (!config('forum.general.moderation_queues.threads.enable_globally'))
                         <x-forum::form.input-checkbox
                             id="thread-queue-enabled"
@@ -63,6 +58,11 @@
                             :label="trans('forum::categories.enable_post_queue')"
                             wire:model="post_queue_enabled" />
                     @endif
+
+                    <x-forum::form.input-checkbox
+                        id="make-private"
+                        :label="trans('forum::categories.make_private')"
+                        wire:model="is_private" />
 
                     <div class="text-center mt-4">
                         <x-forum::button :label="trans('forum::general.create')" type="submit" />

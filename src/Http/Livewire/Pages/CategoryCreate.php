@@ -35,6 +35,8 @@ class CategoryCreate extends Component
     public int $parent_category;
     public bool $accepts_threads = false;
     public bool $is_private = false;
+    public bool $thread_queue_enabled = false;
+    public bool $post_queue_enabled = false;
 
     public function mount(Request $request)
     {
