@@ -28,6 +28,11 @@ class CategoryPolicy
         return true;
     }
 
+    public function createThreadsWithoutApproval(User $user, Category $category): bool
+    {
+        return false;
+    }
+
     public function manageThreads(User $user, Category $category): bool
     {
         return $this->approveThreads($user, $category)

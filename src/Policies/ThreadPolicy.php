@@ -2,46 +2,52 @@
 
 namespace TeamTeaTime\Forum\Policies;
 
+use Illuminate\Foundation\Auth\User;
 use TeamTeaTime\Forum\Models\Thread;
 
 class ThreadPolicy
 {
-    public function view($user, Thread $thread): bool
+    public function view(User $user, Thread $thread): bool
     {
         return true;
     }
 
-    public function rename($user, Thread $thread): bool
+    public function rename(User $user, Thread $thread): bool
     {
         return $user->getKey() === $thread->author_id;
     }
 
-    public function reply($user, Thread $thread): bool
+    public function reply(User $user, Thread $thread): bool
     {
         return !$thread->locked;
     }
 
-    public function delete($user, Thread $thread): bool
+    public function replyWithoutApproval(User $user, Thread $thread): bool
+    {
+        return false;
+    }
+
+    public function delete(User $user, Thread $thread): bool
     {
         return $user->getKey() === $thread->author_id;
     }
 
-    public function restore($user, Thread $thread): bool
+    public function restore(User $user, Thread $thread): bool
     {
         return $user->getKey() === $thread->author_id;
     }
 
-    public function approvePosts($user, Thread $thread): bool
+    public function approvePosts(User $user, Thread $thread): bool
     {
         return true;
     }
 
-    public function deletePosts($user, Thread $thread): bool
+    public function deletePosts(User $user, Thread $thread): bool
     {
         return true;
     }
 
-    public function restorePosts($user, Thread $thread): bool
+    public function restorePosts(User $user, Thread $thread): bool
     {
         return true;
     }
