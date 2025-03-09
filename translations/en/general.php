@@ -3,6 +3,8 @@
 return [
 
     'actions' => 'Action|Actions',
+    'approve' => 'Approve',
+    'approved' => 'Approved',
     'author' => 'Author',
     'cancel' => 'Cancel',
     'changes_applied' => 'Changes applied',
@@ -44,6 +46,8 @@ return [
     'save' => 'Save',
     'subject' => 'Subject',
     'title' => 'Title',
+    'unapprove' => 'Unapprove',
+    'unapproved' => 'Unapproved',
     'unread' => 'Unread',
     'updated' => 'Updated',
     'weight' => 'Weight',

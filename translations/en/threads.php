@@ -3,6 +3,7 @@
 return [
 
     'actions' => 'Thread actions',
+    'approved' => 'Thread approved|Threads approved',
     'created' => 'Thread created',
     'confirm_perma_delete' => 'Are you sure you want to permanently delete this thread?|Are you sure you want to permanently delete these threads?',
     'confirm_restore' => 'Are you sure you want to restore this thread?|Are you sure you want to restore these threads?',
@@ -28,10 +29,11 @@ return [
     'restored' => 'Thread restored|Threads restored',
     'select_all' => 'Select all threads',
     'thread' => 'Thread|Threads',
-    'updated' => 'Thread updated|Threads updated',
+    'unapproved' => 'Thread unapproved|Threads unapproved',
     'unlock' => 'Unlock',
     'unpin' => 'Unpin',
     'unread_updated' => 'Unread & updated threads',
+    'updated' => 'Thread updated|Threads updated',
     'view' => 'View thread',
 
 ];
