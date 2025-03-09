@@ -31,7 +31,7 @@ class CreatePost extends BaseAction
             'author_id' => $this->author->getKey(),
             'sequence' => $this->thread->posts->count() + 1,
             'content' => $this->content,
-            'approved_at' => $requiresApproval ? NULL : Carbon::now(),
+            'approved_at' => $requiresApproval ? null : Carbon::now(),
         ]);
 
         $this->thread->update([
