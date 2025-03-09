@@ -3,6 +3,7 @@
 return [
 
     'actions' => 'Post actions',
+    'approved' => 'Post approved|Posts approved',
     'created' => 'Post created',
     'confirm_delete' => 'Are you sure you want to delete this post?|Are you sure you want to delete these posts?',
     'delete' => 'Delete post|Delete posts',
@@ -14,6 +15,8 @@ return [
     'restore' => 'Restore post|Restore posts',
     'restored' => 'Post restored|Posts restored',
     'select_all' => 'Select all posts',
+    'unapproved' => 'Post unapproved|Posts unapproved',
+    'unapproved_title' => 'Unapproved posts',
     'updated' => 'Post updated|Posts updated',
     'view' => 'View post',
     'your_post' => 'Your post',

@@ -3,6 +3,7 @@
 return [
 
     'actions' => 'Action|Actions',
+    'approve_selection' => 'Approve selection',
     'approve' => 'Approve',
     'approved' => 'Approved',
     'author' => 'Author',

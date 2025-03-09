@@ -18,7 +18,7 @@ class ThreadAccess
 
         if (!$user) return $threadIds;
 
-        if (Gate::any(['moveThreadsFrom', 'lockThreads', 'pinThreads'], $category)) {
+        if (Gate::any(['moveThreadsFrom', 'lockThreads', 'pinThreads', 'approveThreads'], $category)) {
             // There are no thread-specific abilities corresponding to these,
             // so we can include all of the threads for this page
             $threadIds = $threads->pluck('id')->toArray();

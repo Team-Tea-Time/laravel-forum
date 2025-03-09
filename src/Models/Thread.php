@@ -103,6 +103,11 @@ class Thread extends BaseModel
         return $query->whereNotNull('approved_at')->where('approved_at', '<', Carbon::now());
     }
 
+    public function scopeUnapproved(Builder $query): Builder
+    {
+        return $query->whereNull('approved_at')->orWhere('approved_at', '>', Carbon::now());
+    }
+
     public function scopeAuthoredByOrApproved(Builder $query, ?User $user): Builder
     {
         if ($user === null) return $query->approved();
