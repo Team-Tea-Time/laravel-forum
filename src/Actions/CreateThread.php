@@ -25,11 +25,12 @@ class CreateThread extends BaseAction
 
     protected function transact()
     {
+        $requiresApproval = $this->category->requiresThreadApproval() && !$this->author->can('approveThreads', $this->category);
         $thread = Thread::create([
             'author_id' => $this->author->getKey(),
             'category_id' => $this->category->id,
             'title' => $this->title,
-            'approved_at' => $this->category->requiresThreadApproval() ? null : Carbon::now(),
+            'approved_at' => $requiresApproval ? null : Carbon::now(),
         ]);
 
         $post = $thread->posts()->create([

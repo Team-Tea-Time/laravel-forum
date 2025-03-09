@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Actions;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Models\Post;
@@ -24,11 +25,13 @@ class CreatePost extends BaseAction
 
     protected function transact()
     {
+        $requiresApproval = $this->thread->category->requiresPostApproval() && !$this->author->can('approvePosts', $this->thread);
         $post = $this->thread->posts()->create([
             'post_id' => $this->parent === null ? null : $this->parent->id,
             'author_id' => $this->author->getKey(),
             'sequence' => $this->thread->posts->count() + 1,
             'content' => $this->content,
+            'approved_at' => $requiresApproval ? NULL : Carbon::now(),
         ]);
 
         $this->thread->update([
