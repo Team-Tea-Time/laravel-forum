@@ -8,18 +8,22 @@ use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use Livewire\Component;
 use TeamTeaTime\Forum\{
+    Actions\Bulk\ApproveThreads,
     Actions\Bulk\DeleteThreads,
     Actions\Bulk\LockThreads,
     Actions\Bulk\PinThreads,
     Actions\Bulk\RestoreThreads,
     Actions\Bulk\MoveThreads,
+    Actions\Bulk\UnapproveThreads,
     Actions\Bulk\UnlockThreads,
     Actions\Bulk\UnpinThreads,
+    Events\UserBulkApprovedThreads,
     Events\UserBulkDeletedThreads,
     Events\UserBulkLockedThreads,
     Events\UserBulkMovedThreads,
     Events\UserBulkPinnedThreads,
     Events\UserBulkRestoredThreads,
+    Events\UserBulkUnapprovedThreads,
     Events\UserBulkUnlockedThreads,
     Events\UserBulkUnpinnedThreads,
     Events\UserViewingCategory,
@@ -63,6 +67,38 @@ class CategoryShow extends Component
         $this->touchUpdateKey();
 
         return $this->pluralAlert($key, $result->count())->toLivewire();
+    }
+
+    public function approveThreads(Request $request, array $threadIds): array
+    {
+        if (!ThreadAuthorization::bulkApprove($request->user(), $threadIds)) {
+            abort(403);
+        }
+
+        $action = new ApproveThreads($threadIds);
+        $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkApprovedThreads::dispatch($request->user(), $result);
+        }
+
+        return $this->handleActionResult($result, 'threads.approved');
+    }
+
+    public function unapproveThreads(Request $request, array $threadIds): array
+    {
+        if (!ThreadAuthorization::bulkApprove($request->user(), $threadIds)) {
+            abort(403);
+        }
+
+        $action = new UnapproveThreads($threadIds);
+        $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkUnapprovedThreads::dispatch($request->user(), $result);
+        }
+
+        return $this->handleActionResult($result, 'threads.unapproved');
     }
 
     public function deleteThreads(Request $request, array $threadIds, bool $permadelete): array
