@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('forum_categories', function (Blueprint $table) {
-            $table->boolean('thread_queue_enabled')->default(false)->after('is_private');
-            $table->boolean('post_queue_enabled')->default(false)->after('thread_queue_enabled');
+            $table->boolean('thread_approval_enabled')->default(false)->after('is_private');
+            $table->boolean('post_approval_enabled')->default(false)->after('thread_approval_enabled');
         });
 
         Schema::table('forum_threads', function (Blueprint $table) {
@@ -31,8 +31,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('forum_categories', function (Blueprint $table) {
-            $table->dropColumn('thread_queue_enabled');
-            $table->dropColumn('post_queue_enabled');
+            $table->dropColumn('thread_approval_enabled');
+            $table->dropColumn('post_approval_enabled');
         });
 
         Schema::table('forum_threads', function (Blueprint $table) {

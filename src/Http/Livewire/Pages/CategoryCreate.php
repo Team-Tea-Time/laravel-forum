@@ -35,8 +35,8 @@ class CategoryCreate extends Component
     public int $parent_category;
     public bool $accepts_threads = false;
     public bool $is_private = false;
-    public bool $thread_queue_enabled = false;
-    public bool $post_queue_enabled = false;
+    public bool $thread_approval_enabled = false;
+    public bool $post_approval_enabled = false;
 
     public function mount(Request $request)
     {
@@ -67,7 +67,7 @@ class CategoryCreate extends Component
 
         $validated = $this->validate(CategoryRules::create());
 
-        $action = new Action($validated['title'], $validated['description'], $validated['color_light_mode'], $validated['color_dark_mode'], $validated['accepts_threads'], $validated['is_private'], $validated['thread_queue_enabled'], $validated['post_queue_enabled']);
+        $action = new Action($validated['title'], $validated['description'], $validated['color_light_mode'], $validated['color_dark_mode'], $validated['accepts_threads'], $validated['is_private'], $validated['thread_approval_enabled'], $validated['post_approval_enabled']);
         $category = $action->execute();
 
         if ($validated['parent_category'] > 0) {

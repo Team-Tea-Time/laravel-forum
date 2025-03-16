@@ -45,18 +45,18 @@
                         :label="trans('forum::categories.enable_threads')"
                         wire:model="accepts_threads" />
 
-                    @if (!config('forum.general.moderation_queues.threads.enable_globally'))
+                    @if (!config('forum.general.content_approval.threads.enable_globally'))
                         <x-forum::form.input-checkbox
-                            id="thread-queue-enabled"
-                            :label="trans('forum::categories.enable_thread_queue')"
-                            wire:model="thread_queue_enabled" />
+                            id="thread-approval-enabled"
+                            :label="trans('forum::categories.enable_thread_approval')"
+                            wire:model="thread_approval_enabled" />
                     @endif
 
-                    @if (!config('forum.general.moderation_queues.posts.enable_globally'))
+                    @if (!config('forum.general.content_approval.posts.enable_globally'))
                         <x-forum::form.input-checkbox
-                            id="post-queue-enabled"
-                            :label="trans('forum::categories.enable_post_queue')"
-                            wire:model="post_queue_enabled" />
+                            id="post-approval-enabled"
+                            :label="trans('forum::categories.enable_post_approval')"
+                            wire:model="post_approval_enabled" />
                     @endif
 
                     <x-forum::form.input-checkbox

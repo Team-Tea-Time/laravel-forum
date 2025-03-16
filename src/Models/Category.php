@@ -25,8 +25,8 @@ class Category extends BaseModel
         'thread_count',
         'post_count',
         'is_private',
-        'thread_queue_enabled',
-        'post_queue_enabled',
+        'thread_approval_enabled',
+        'post_approval_enabled',
         'color_light_mode',
         'color_dark_mode',
     ];
@@ -82,12 +82,12 @@ class Category extends BaseModel
 
     public function requiresThreadApproval(): bool
     {
-        return config('forum.general.moderation_queues.threads.enable_globally') || $this->thread_queue_enabled;
+        return config('forum.general.content_approval.threads.enable_globally') || $this->thread_approval_enabled;
     }
 
     public function requiresPostApproval(): bool
     {
-        return config('forum.general.moderation_queues.posts.enable_globally') || $this->post_queue_enabled;
+        return config('forum.general.content_approval.posts.enable_globally') || $this->post_approval_enabled;
     }
 
     public function getNewestThreadId(): ?int

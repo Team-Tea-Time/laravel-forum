@@ -75,17 +75,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Moderation queues
+    | Approval
     |--------------------------------------------------------------------------
     |
-    | Values for the moderation queues feature. Enabling either of the queues
-    | here will override the equivalent per-category setting.
+    | Values for the content approval feature. Enabling either of the approval
+    | types will override the equivalent per-category setting.
     | rejection_should_soft_delete is always ignored if soft deletes are
     | disabled.
     |
     */
 
-    'moderation_queues' => [
+    'content_approval' => [
         'threads' => [
             'enable_globally' => false,
             'rejection_should_soft_delete' => false
