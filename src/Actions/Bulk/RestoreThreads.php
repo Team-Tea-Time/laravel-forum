@@ -27,8 +27,8 @@ class RestoreThreads extends BaseAction
         // Use the raw query builder to prevent touching updated_at
         $rowsAffected = DB::table(Thread::getTableName())
             ->whereIn('id', $this->threadIds)
-            ->whereNotNull(Thread::DELETED_AT)
-            ->update([Thread::DELETED_AT => null]);
+            ->whereNotNull('deleted_at')
+            ->update(['deleted_at' => null]);
 
         if ($rowsAffected == 0) {
             return null;

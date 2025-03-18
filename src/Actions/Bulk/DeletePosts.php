@@ -28,7 +28,7 @@ class DeletePosts extends BaseAction
 
             // Return early if this is a soft-delete and the selected posts are already trashed,
             // or there are no valid posts in the selection
-            if (!$this->permaDelete && $posts->whereNull(Post::DELETED_AT)->count() == 0) {
+            if (!$this->permaDelete && $posts->whereNull('deleted_at')->count() == 0) {
                 return null;
             }
         } else {

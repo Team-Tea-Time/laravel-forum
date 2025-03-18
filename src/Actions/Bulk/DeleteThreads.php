@@ -5,7 +5,6 @@ namespace TeamTeaTime\Forum\Actions\Bulk;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\{
     Actions\BaseAction,
-    Models\BaseModel,
     Models\Post,
     Models\Thread,
 };
@@ -32,7 +31,7 @@ class DeleteThreads extends BaseAction
 
             // Return early if this is a soft-delete and the selected threads are already trashed,
             // or there are no valid threads in the selection
-            if (!$this->permaDelete && $threads->whereNull(BaseModel::DELETED_AT)->count() == 0) {
+            if (!$this->permaDelete && $threads->whereNull('deleted_at')->count() == 0) {
                 return null;
             }
         } else {
@@ -53,7 +52,7 @@ class DeleteThreads extends BaseAction
             // Drop readers for the removed threads
             DB::table(Thread::READERS_TABLE)->whereIn('thread_id', $this->threadIds)->delete();
         } else {
-            $rowsAffected = $query->whereNull(BaseModel::DELETED_AT)->update([BaseModel::DELETED_AT => DB::raw('now()')]);
+            $rowsAffected = $query->whereNull('deleted_at')->update(['deleted_at' => DB::raw('now()')]);
         }
 
         if ($rowsAffected == 0) {
@@ -64,10 +63,10 @@ class DeleteThreads extends BaseAction
         foreach ($threadsByCategory as $categoryThreads) {
             // Count only non-deleted threads for changes to category stats since soft-deleted threads
             // are already represented
-            $threadCount = $categoryThreads->whereNull(BaseModel::DELETED_AT)->count();
+            $threadCount = $categoryThreads->whereNull('deleted_at')->count();
 
             // Sum of reply counts + thread count = total posts
-            $postCount = $categoryThreads->whereNull(BaseModel::DELETED_AT)->sum('reply_count') + $threadCount;
+            $postCount = $categoryThreads->whereNull('deleted_at')->sum('reply_count') + $threadCount;
 
             $category = $categoryThreads->first()->category;
 

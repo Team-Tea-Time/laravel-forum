@@ -27,8 +27,8 @@ class RestorePosts extends BaseAction
         // Use the raw query builder to prevent touching updated_at
         $rowsAffected = DB::table(Post::getTableName())
             ->whereIn('id', $this->postIds)
-            ->whereNotNull(Post::DELETED_AT)
-            ->update([Post::DELETED_AT => null]);
+            ->whereNotNull('deleted_at')
+            ->update(['deleted_at' => null]);
 
         if ($rowsAffected == 0) {
             return null;

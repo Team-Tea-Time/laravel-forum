@@ -29,7 +29,6 @@ use TeamTeaTime\Forum\{
     Events\UserViewingCategory,
     Http\Livewire\Traits\CreatesAlerts,
     Http\Livewire\Traits\UpdatesContent,
-    Models\BaseModel,
     Models\Category,
     Models\Thread,
     Support\Access\CategoryAccess,
@@ -146,7 +145,7 @@ class CategoryShow extends Component
             ->whereIn('id', $threadIds);
 
         if (!$request->user()->can('viewTrashedThreads')) {
-            $query = $query->whereNull(BaseModel::DELETED_AT);
+            $query = $query->whereNull('deleted_at');
         }
 
         $sourceCategories = Category::whereIn('id', $query->get()->pluck('category_id'))->get();

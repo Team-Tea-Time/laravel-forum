@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseModel extends Model
 {
-    const APPROVED_AT = 'approved_at';
-    const DELETED_AT = 'deleted_at';
-
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
