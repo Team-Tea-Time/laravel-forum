@@ -8,8 +8,8 @@
 
 | **Laravel version** | **Package version** | **PHP version** |
 |---------------------|---------------------|-----------------|
+| 12                  | ^7.0                | ^8.2            |
 | 11                  | ^6.0                | ^8.2            |
-| 10                  | ^5.5                | ^8.1            |
 
 Please note that older package versions not listed above are no longer maintained or supported.
 
