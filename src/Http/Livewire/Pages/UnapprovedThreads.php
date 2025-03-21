@@ -25,7 +25,7 @@ class UnapprovedThreads extends Component
 
     protected function getThreads(Request $request): Collection
     {
-        $threads = Thread::recent()->unapproved()->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
+        $threads = Thread::unapproved()->orderBy('created_at', 'desc')->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
 
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
 
@@ -37,6 +37,10 @@ class UnapprovedThreads extends Component
     public function mount(Request $request)
     {
         $this->touchUpdateKey();
+    }
+
+    public function approve(Request $request)
+    {
     }
 
     public function render(Request $request): View

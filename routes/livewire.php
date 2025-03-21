@@ -25,7 +25,7 @@ Route::get('category/create', CategoryCreate::class)->name('category.create');
 
 Route::get('recent', RecentThreads::class)->name('recent');
 Route::get('unread', UnreadThreads::class)->name('unread');
-Route::get('unapproved/threads', UnapprovedThreads::class)->name('unapproved-threads');
+Route::get('unapproved/threads', UnapprovedThreads::class)->name('unapproved.threads');
 Route::get('unapproved/posts', UnapprovedPosts::class)->name('unapproved.posts');
 
 Route::group(['prefix' => $prefix['category'] . '/{category_id}-{category_slug}'], function () use ($prefix) {
