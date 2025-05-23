@@ -8,18 +8,22 @@ use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use Livewire\Component;
 use TeamTeaTime\Forum\{
+    Actions\Bulk\ApproveThreads,
+    Events\UserBulkApprovedThreads,
     Events\UserMarkedThreadsAsRead,
     Events\UserViewingUnapprovedThreads,
     Http\Livewire\Traits\CreatesAlerts,
+    Http\Livewire\Traits\HandlesBulkActions,
     Http\Livewire\Traits\UpdatesContent,
     Models\Thread,
     Support\Access\CategoryAccess,
     Support\Access\ThreadAccess,
+    Support\Authorization\ThreadAuthorization,
 };
 
 class UnapprovedThreads extends Component
 {
-    use CreatesAlerts, UpdatesContent;
+    use CreatesAlerts, HandlesBulkActions, UpdatesContent;
 
     protected Collection $threads;
 
@@ -39,8 +43,20 @@ class UnapprovedThreads extends Component
         $this->touchUpdateKey();
     }
 
-    public function approve(Request $request)
+    public function approve(Request $request, array $threadIds)
     {
+        if (!ThreadAuthorization::bulkApprove($request->user(), $threadIds)) {
+            abort(403);
+        }
+
+        $action = new ApproveThreads($threadIds);
+        $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkApprovedThreads::dispatch($request->user(), $result);
+        }
+
+        return $this->handleActionResult($result, 'threads.approved');
     }
 
     public function render(Request $request): View

@@ -6,6 +6,14 @@
 
     <div class="flex items-center mt-4 mb-6">
         <div class="grow">
+            @if ($thread->category->requiresThreadApproval() && !$thread->isApproved())
+                <livewire:forum::components.pill
+                    bg-color="bg-orange-400"
+                    text-color="text-orange-950"
+                    margin="mr-2"
+                    icon="x-circle-mini"
+                    :text="trans('forum::general.unapproved')" />
+            @endif
             @if ($thread->pinned)
                 <livewire:forum::components.pill
                     bg-color="bg-amber-400"

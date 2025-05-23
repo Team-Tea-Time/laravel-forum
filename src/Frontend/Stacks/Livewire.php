@@ -8,6 +8,7 @@ use TeamTeaTime\Forum\{
     Http\Livewire\Pages\CategoryIndex,
     Http\Livewire\Pages\CategoryShow,
     Http\Livewire\Pages\RecentThreads,
+    Http\Livewire\Pages\UnapprovedThreads,
     Http\Livewire\Pages\UpdateCategoryTree,
     Http\Livewire\Pages\UnreadThreads,
     Http\Livewire\Pages\PostEdit,
@@ -36,6 +37,7 @@ class Livewire implements StackInterface
         $this->livewireComponent('pages.thread.show', ThreadShow::class);
         $this->livewireComponent('pages.thread.recent', RecentThreads::class);
         $this->livewireComponent('pages.thread.unread', UnreadThreads::class);
+        $this->livewireComponent('pages.thread.unapproved', UnapprovedThreads::class);
         $this->livewireComponent('pages.post.edit', PostEdit::class);
         $this->livewireComponent('pages.post.show', PostShow::class);
     }

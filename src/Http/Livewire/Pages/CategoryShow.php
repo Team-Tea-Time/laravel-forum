@@ -28,6 +28,7 @@ use TeamTeaTime\Forum\{
     Events\UserBulkUnpinnedThreads,
     Events\UserViewingCategory,
     Http\Livewire\Traits\CreatesAlerts,
+    Http\Livewire\Traits\HandlesBulkActions,
     Http\Livewire\Traits\UpdatesContent,
     Models\Category,
     Models\Thread,
@@ -39,7 +40,7 @@ use TeamTeaTime\Forum\{
 
 class CategoryShow extends Component
 {
-    use CreatesAlerts, UpdatesContent, HandlesDeletion;
+    use CreatesAlerts, HandlesBulkActions, UpdatesContent, HandlesDeletion;
 
     public Category $category;
 
@@ -55,17 +56,6 @@ class CategoryShow extends Component
         if ($request->user() !== null) {
             UserViewingCategory::dispatch($request->user(), $this->category);
         }
-    }
-
-    private function handleActionResult($result, string $key = 'threads.updated'): array
-    {
-        if ($result == null) {
-            return $this->invalidSelectionAlert()->toLivewire();
-        }
-
-        $this->touchUpdateKey();
-
-        return $this->pluralAlert($key, $result->count())->toLivewire();
     }
 
     public function approveThreads(Request $request, array $threadIds): array
