@@ -19,7 +19,6 @@ class DeleteThread extends BaseAction
     protected function transact()
     {
         $threadAlreadyTrashed = $this->thread->trashed();
-        $postsRemoved = $this->thread->postCount;
 
         if ($this->permaDelete) {
             $this->thread->readers()->detach();
@@ -41,11 +40,14 @@ class DeleteThread extends BaseAction
             return $this->thread;
         }
 
-        $attributes = [
-            'thread_count' => DB::raw('thread_count - 1'),
-        ];
+        $attributes = [];
 
-        if ($postsRemoved) {
+        if ($this->thread->isApproved) {
+            $attributes['thread_count'] = DB::raw('thread_count - 1');
+        }
+
+        $postsRemoved = $this->thread->postCount;
+        if ($postsRemoved > 0) {
             $attributes['post_count'] = DB::raw("post_count - {$postsRemoved}");
         }
 

@@ -99,7 +99,7 @@ class Category extends BaseModel
 
     public function getLatestActiveThreadId(): ?int
     {
-        $thread = $this->threads()->notDeleted()->approved()->orderBy('updated_at', 'desc')->first();
+        $thread = $this->threads()->notDeleted()->approved()->where('reply_count', '>', 0)->orderBy('updated_at', 'desc')->first();
 
         return $thread ? $thread->id : null;
     }

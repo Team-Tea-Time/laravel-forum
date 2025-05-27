@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Actions\Bulk;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Actions\BaseAction;
 use TeamTeaTime\Forum\Models\Post;
@@ -56,7 +57,11 @@ class DeletePosts extends BaseAction
             $categoryPostsRemoved = 0;
 
             foreach ($threads->where('category_id', $category->id) as $thread) {
-                $threadPostsRemoved = $posts->where('thread_id', $thread->id)->whereNull('deleted_at')->count();
+                $threadPostsRemoved = $posts->where('thread_id', $thread->id)
+                    ->whereNull('deleted_at')
+                    ->whereNotNull('approved_at')
+                    ->where('approved_at', '<=', Carbon::now())
+                    ->count();
                 $categoryPostsRemoved += $threadPostsRemoved;
 
                 // Skip updates if the affected posts were already soft-deleted
@@ -66,8 +71,8 @@ class DeletePosts extends BaseAction
                 }
 
                 if ($thread->posts()->count() == 0) {
-                    if (!$thread->trashed()) {
-                        // Thread has not been soft-deleted already;
+                    if (!$thread->trashed() && $thread->approved()) {
+                        // Thread has not been soft-deleted and is approved;
                         // it should count towards threads removed for this category
                         $categoryThreadsRemoved++;
                     }

@@ -11,7 +11,7 @@ trait HasApproval
 {
     public function scopeApproved(Builder $query): Builder
     {
-        return $query->whereNotNull('approved_at')->where('approved_at', '<', Carbon::now());
+        return $query->whereNotNull('approved_at')->where('approved_at', '<=', Carbon::now());
     }
 
     public function scopePendingApproval(Builder $query): Builder

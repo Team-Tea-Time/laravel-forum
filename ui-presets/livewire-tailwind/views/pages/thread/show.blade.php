@@ -202,12 +202,16 @@
             id="bulk-action"
             x-model="postsAction">
                 <option value="none" disabled>{{ trans_choice('forum::general.actions', 1) }}...</option>
-            @can ('deletePosts', $thread)
-                <option value="delete">{{ trans('forum::general.delete') }}</option>
-            @endcan
-            @can ('restorePosts', $thread)
-                <option value="restore">{{ trans('forum::general.restore') }}</option>
-            @endcan
+                @can ('deletePosts', $thread)
+                    <option value="delete">{{ trans('forum::general.delete') }}</option>
+                @endcan
+                @can ('restorePosts', $thread)
+                    <option value="restore">{{ trans('forum::general.restore') }}</option>
+                @endcan
+                @if (Gate::allows('approvePosts') && Gate::allows('approvePosts', $thread))
+                    <option value="approve">{{ trans('forum::general.approve') }}</option>
+                    <option value="unapprove">{{ trans('forum::general.unapprove') }}</option>
+                @endif
         </x-forum::form.input-select>
 
         @if (config('forum.general.soft_deletes'))
@@ -373,6 +377,12 @@ Alpine.data('thread', () => {
                     break;
                 case 'restore':
                     result = await $wire.restorePosts(this.selectedPosts);
+                    break;
+                case 'approve':
+                    result = await $wire.approvePosts(this.selectedPosts);
+                    break;
+                case 'unapprove':
+                    result = await $wire.unapprovePosts(this.selectedPosts);
                     break;
             }
 

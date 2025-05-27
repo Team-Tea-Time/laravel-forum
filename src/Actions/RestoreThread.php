@@ -23,12 +23,17 @@ class RestoreThread extends BaseAction
         $this->thread->setTouchedRelations([])->restoreWithoutTouch();
 
         $category = $this->thread->category;
-        $category->update([
+        $attributes = [
             'newest_thread_id' => max($this->thread->id, $category->newest_thread_id),
             'latest_active_thread_id' => $category->getLatestActiveThreadId(),
-            'thread_count' => DB::raw('thread_count + 1'),
             'post_count' => DB::raw("post_count + {$this->thread->postCount}"),
-        ]);
+        ];
+
+        if ($this->thread->isApproved) {
+            $attributes['thread_count'] = DB::raw('thread_count + 1');
+        }
+
+        $category->update($attributes);
 
         return $this->thread;
     }

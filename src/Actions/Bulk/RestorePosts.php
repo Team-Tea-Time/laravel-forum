@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Actions\Bulk;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Actions\BaseAction;
 use TeamTeaTime\Forum\Models\Post;
@@ -38,9 +39,14 @@ class RestorePosts extends BaseAction
         $postsByThread = $posts->groupBy('thread_id');
 
         foreach ($threads as $thread) {
-            $threadPosts = $postsByThread->get($thread->id);
+            $threadPosts = $postsByThread->get($thread->id)
+                ->whereNotNull('approved_at')
+                ->where('approved_at', '<=', Carbon::now());
+            $lastApprovedPost = $thread->getLastApprovedPost();
+
             $thread->updateWithoutTouch([
-                'last_post_id' => $thread->getLastPost()->id,
+                'updated_at' => $lastApprovedPost ? $lastApprovedPost->created_at : $thread->created_at,
+                'last_post_id' => $lastApprovedPost && $lastApprovedPost->sequence > 1 ? $lastApprovedPost->id : null,
                 'reply_count' => DB::raw("reply_count + {$threadPosts->count()}"),
             ]);
         }
@@ -50,7 +56,11 @@ class RestorePosts extends BaseAction
 
         foreach ($categories as $category) {
             $categoryThreads = $threadsByCategory->get($category->id);
-            $postCount = $posts->whereIn('thread_id', $categoryThreads->pluck('id'))->count();
+            $postCount = $posts->whereNotNull('approved_at')
+                ->where('approved_at', '<=', Carbon::now())
+                ->whereIn('thread_id', $categoryThreads->pluck('id'))
+                ->count();
+
             $category->updateWithoutTouch([
                 'latest_active_thread_id' => $category->getLatestActiveThreadId(),
                 'post_count' => DB::raw("post_count + {$postCount}"),

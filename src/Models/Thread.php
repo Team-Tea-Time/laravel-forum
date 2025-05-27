@@ -104,6 +104,16 @@ class Thread extends BaseModel
         return $this->posts()->orderBy('created_at', 'desc')->first();
     }
 
+    public function getFirstApprovedPost(): ?Post
+    {
+        return $this->posts()->approved()->orderBy('created_at', 'asc')->first();
+    }
+
+    public function getLastApprovedPost(): ?Post
+    {
+        return $this->posts()->approved()->orderBy('created_at', 'desc')->first();
+    }
+
     public function markAsRead(Model $user): void
     {
         if ($this->isOld) {

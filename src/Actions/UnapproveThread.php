@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Actions;
 
+use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Models\Thread;
 
 class UnapproveThread extends BaseAction
@@ -29,7 +30,11 @@ class UnapproveThread extends BaseAction
 
         $category = $this->thread->category;
 
-        $attributes = [];
+        $attributes = [
+            'thread_count' => DB::raw('thread_count - 1'),
+            'post_count' => DB::raw("post_count - {$this->thread->postCount}"),
+        ];
+
         if ($category->newest_thread_id === $this->thread->id) {
             $attributes['newest_thread_id'] = $category->getNewestThreadId();
         }

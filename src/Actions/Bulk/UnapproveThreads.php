@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\{
     Actions\BaseAction,
+    Models\Category,
     Models\Thread,
 };
 
@@ -41,9 +42,9 @@ class UnapproveThreads extends BaseAction
             return null;
         }
 
-        $affectedCategoryIds = $threads->pluck('category_id');
-        $affectedCategories = Category::whereIn('id', $affectedCategoryIds);
-        foreach ($affectedCategories as $category) {
+        $categoryIds = $threads->pluck('category_id');
+        $categories = Category::whereIn('id', $categoryIds)->get();
+        foreach ($categories as $category) {
             $category->update([
                 'newest_thread_id' => $category->getNewestThreadId() ?? 0,
                 'latest_active_thread_id' => $category->getLatestActiveThreadId(),

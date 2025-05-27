@@ -6,14 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\{
+    Actions\Bulk\ApprovePosts,
     Actions\Bulk\DeletePosts,
     Actions\Bulk\RestorePosts,
+    Actions\Bulk\UnapprovePosts,
+    Events\UserBulkApprovedPosts,
     Events\UserBulkDeletedPosts,
     Events\UserBulkRestoredPosts,
+    Events\UserBulkUnapprovedPosts,
     Events\UserViewingThread,
     Http\Livewire\Forms\ThreadEditForm,
     Http\Livewire\Forms\ThreadReplyForm,
     Http\Livewire\Traits\CreatesAlerts,
+    Http\Livewire\Traits\HandlesBulkActions,
     Http\Livewire\Traits\UpdatesContent,
     Http\Livewire\EventfulPaginatedComponent,
     Models\Category,
@@ -25,7 +30,7 @@ use TeamTeaTime\Forum\{
 
 class ThreadShow extends EventfulPaginatedComponent
 {
-    use CreatesAlerts, UpdatesContent, HandlesDeletion;
+    use CreatesAlerts, HandlesBulkActions, UpdatesContent, HandlesDeletion;
 
     public Thread $thread;
 
@@ -173,6 +178,42 @@ class ThreadShow extends EventfulPaginatedComponent
         }
 
         return $this->pluralAlert('posts.restored', $result->count())->toLivewire();
+    }
+
+    public function approvePosts(Request $request, array $postIds): array
+    {
+        if (!PostAuthorization::bulkApprove($request->user(), $postIds)) {
+            abort(403);
+        }
+
+        $action = new ApprovePosts($postIds);
+        $result = $action->execute();
+
+        $this->touchUpdateKey();
+
+        if ($result !== null) {
+            UserBulkApprovedPosts::dispatch($request->user(), $result);
+        }
+
+        return $this->handleActionResult($result, 'posts.approved');
+    }
+
+    public function unapprovePosts(Request $request, array $postIds): array
+    {
+        if (!PostAuthorization::bulkApprove($request->user(), $postIds)) {
+            abort(403);
+        }
+
+        $action = new UnapprovePosts($postIds);
+        $result = $action->execute();
+
+        $this->touchUpdateKey();
+
+        if ($result !== null) {
+            UserBulkUnapprovedPosts::dispatch($request->user(), $result);
+        }
+
+        return $this->handleActionResult($result, 'posts.unapproved');
     }
 
     public function render(Request $request): View
