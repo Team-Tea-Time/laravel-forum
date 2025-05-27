@@ -26,7 +26,7 @@
             @endif
 
             <div class="dark:text-slate-100">
-                @if ($post->sequence != 1 && $post->thread->category->requiresPostApproval() && !$post->isApproved())
+                @if ($post->sequence != 1 && $post->thread->category->requiresPostApproval() && !$post->isApproved)
                     <div class="mb-2">
                         <livewire:forum::components.pill
                             bg-color="bg-orange-400"

@@ -6,7 +6,7 @@
 
     <div class="flex items-center mt-4 mb-6">
         <div class="grow">
-            @if ($thread->category->requiresThreadApproval() && !$thread->isApproved())
+            @if ($thread->category->requiresThreadApproval() && !$thread->isApproved)
                 <livewire:forum::components.pill
                     bg-color="bg-orange-400"
                     text-color="text-orange-950"
@@ -133,6 +133,23 @@
                             :label="trans('forum::general.move')"
                             @click.prevent="confirmThreadAction('move', '')" />
                     @endcan
+                    @if (Gate::allows('approveThreads') && Gate::allows('approveThreads', $thread->category))
+                        @if ($thread->isApproved)
+                            <x-forum::group-button
+                                intent="secondary"
+                                size="small"
+                                icon="x-circle-mini"
+                                :label="trans('forum::general.unapprove')"
+                                @click.prevent="confirmThreadAction('unapprove', '{{ trans_choice('forum::threads.confirm_unapprove', 1) }}')" />
+                        @else
+                            <x-forum::group-button
+                                intent="secondary"
+                                size="small"
+                                icon="check-badge-mini"
+                                :label="trans('forum::general.approve')"
+                                @click.prevent="confirmThreadAction('approve', '{{ trans_choice('forum::threads.confirm_approve', 1) }}')" />
+                        @endif
+                    @endif
                 @endif
             </div>
         </div>
@@ -328,6 +345,12 @@ Alpine.data('thread', () => {
                     break;
                 case 'move':
                     result = await $wire.move();
+                    break;
+                case 'approve':
+                    result = await $wire.approve();
+                    break;
+                case 'unapprove':
+                    result = await $wire.unapprove();
                     break;
             }
 

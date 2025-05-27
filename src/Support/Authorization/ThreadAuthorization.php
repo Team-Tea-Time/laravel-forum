@@ -32,7 +32,7 @@ class ThreadAuthorization
 
     public static function reply(User $user, Thread $thread): bool
     {
-        if (!$thread->isApproved()) {
+        if (!$thread->isApproved) {
             return $user->can('replyWithoutApproval', $thread);
         }
 

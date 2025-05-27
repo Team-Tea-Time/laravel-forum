@@ -5,6 +5,8 @@ return [
     'actions' => 'Thread actions',
     'approved' => 'Thread approved|Threads approved',
     'created' => 'Thread created',
+    'confirm_approve' => 'Are you sure you want to approve this thread?|Are you sure you want to approve these threads?',
+    'confirm_unapprove' => 'Are you sure you want to unapprove this thread?|Are you sure you want to unapprove these threads?',
     'confirm_perma_delete' => 'Are you sure you want to permanently delete this thread?|Are you sure you want to permanently delete these threads?',
     'confirm_restore' => 'Are you sure you want to restore this thread?|Are you sure you want to restore these threads?',
     'confirm_delete' => 'Are you sure you want to delete this thread?|Are you sure you want to delete these threads?',

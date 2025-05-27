@@ -2,7 +2,7 @@
     <div class="bg-white transition ease-in-out shadow-md rounded-lg p-4 flex flex-col sm:flex-row items-center justify-items-center dark:bg-slate-700 {{ $thread->trashed() ? 'opacity-75' : '' }}" :class="classes">
         <div class="grow text-center sm:text-left">
             <a href="{{ $thread->route }}" class="block text-xl mb-2">
-                @if ($thread->category->requiresThreadApproval() && !$thread->isApproved())
+                @if ($thread->category->requiresThreadApproval() && !$thread->isApproved)
                     <livewire:forum::components.pill
                         bg-color="bg-orange-400"
                         text-color="text-orange-950"

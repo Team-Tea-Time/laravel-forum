@@ -5,20 +5,24 @@ namespace TeamTeaTime\Forum\Http\Livewire\Forms;
 use Illuminate\Http\Request;
 use Livewire\Form;
 use TeamTeaTime\Forum\{
+    Actions\ApproveThread,
     Actions\DeleteThread,
     Actions\LockThread,
     Actions\MoveThread,
     Actions\PinThread,
     Actions\RenameThread,
     Actions\RestoreThread,
+    Actions\UnapproveThread,
     Actions\UnlockThread,
     Actions\UnpinThread,
+    Events\UserApprovedThread,
     Events\UserDeletedThread,
     Events\UserLockedThread,
     Events\UserMovedThread,
     Events\UserPinnedThread,
     Events\UserRenamedThread,
     Events\UserRestoredThread,
+    Events\UserUnapprovedThread,
     Events\UserUnlockedThread,
     Events\UserUnpinnedThread,
     Models\Category,
@@ -145,6 +149,34 @@ class ThreadEditForm extends Form
         $thread = $action->execute();
 
         UserMovedThread::dispatch($request->user(), $thread, $destination);
+
+        return $thread;
+    }
+
+    public function approve(Request $request, Thread $thread): Thread
+    {
+        if (!ThreadAuthorization::approve($request->user(), $thread)) {
+            abort(403);
+        }
+
+        $action = new ApproveThread($thread);
+        $thread = $action->execute();
+
+        UserApprovedThread::dispatch($request->user(), $thread);
+
+        return $thread;
+    }
+
+    public function unapprove(Request $request, Thread $thread): Thread
+    {
+        if (!ThreadAuthorization::approve($request->user(), $thread)) {
+            abort(403);
+        }
+
+        $action = new UnapproveThread($thread);
+        $thread = $action->execute();
+
+        UserUnapprovedThread::dispatch($request->user(), $thread);
 
         return $thread;
     }

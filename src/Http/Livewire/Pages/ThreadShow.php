@@ -114,6 +114,20 @@ class ThreadShow extends EventfulPaginatedComponent
         return $this->pluralAlert('threads.updated')->toLivewire();
     }
 
+    public function approve(Request $request): array
+    {
+        $this->thread = $this->threadEditForm->approve($request, $this->thread);
+
+        return $this->pluralAlert('threads.updated')->toLivewire();
+    }
+
+    public function unapprove(Request $request): array
+    {
+        $this->thread = $this->threadEditForm->unapprove($request, $this->thread);
+
+        return $this->pluralAlert('threads.updated')->toLivewire();
+    }
+
     public function reply(Request $request): array
     {
         $post = $this->threadReplyForm->reply($request, $this->thread);
