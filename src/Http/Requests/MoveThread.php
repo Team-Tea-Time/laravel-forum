@@ -25,7 +25,7 @@ class MoveThread extends FormRequest implements FulfillableRequestInterface
 
     public function authorizeValidated(): bool
     {
-        return CategoryAuthorization::moveThread($this->user(), $this->route('thread')->category, $this->getDestinationCategory());
+        return CategoryAuthorization::moveThreads($this->user(), $this->route('thread')->category, $this->getDestinationCategory());
     }
 
     public function fulfill()

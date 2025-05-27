@@ -29,6 +29,16 @@ class ForumPolicy
         return true;
     }
 
+    public function approveThreads($user): bool
+    {
+        return true;
+    }
+
+    public function approvePosts($user): bool
+    {
+        return true;
+    }
+
     public function viewTrashedThreads($user): bool
     {
         return true;

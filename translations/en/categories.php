@@ -15,6 +15,7 @@ return [
     'enable_thread_approval' => 'Enable thread approval',
     'enable_threads' => 'Enable threads',
     'make_private' => 'Make private',
+    'manage' => 'Manage categories',
     'mark_read' => 'Mark threads in this category as read',
     'marked_read' => 'New/updated threads in :category have been marked as read',
     'parent' => 'Parent category',

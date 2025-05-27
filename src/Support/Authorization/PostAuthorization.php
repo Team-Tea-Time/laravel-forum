@@ -13,6 +13,11 @@ use TeamTeaTime\Forum\{
  */
 class PostAuthorization
 {
+    public static function approve(User $user, Post $post): bool
+    {
+        return $user->can('approvePosts') && $user->can('approvePosts', $post->thread);
+    }
+
     public static function edit(User $user, Post $post): bool
     {
         return $user->can('edit', $post);
@@ -26,6 +31,33 @@ class PostAuthorization
     public static function restore(User $user, Post $post): bool
     {
         return $user->can('restorePosts', $post->thread) && $user->can('restore', $post);
+    }
+
+    public static function bulkApprove(User $user, array $postIds): bool
+    {
+        if (!$user->can('approvePosts')) {
+            return false;
+        }
+
+        $query = Post::query();
+
+        if ($user->can('viewTrashedPosts')) {
+            $query = $query->withTrashed();
+        }
+
+        $posts = $query->with(['thread', 'thread.category'])->whereIn('id', $postIds);
+        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($user);
+
+        foreach ($posts as $post) {
+            $canView = $accessibleCategoryIds->contains($post->thread->category_id) && $user->can('view', $post->thread);
+            $canApprove = $user->can('approvePosts', $post->thread) && $user->can('approve', $post);
+
+            if (!($canView && $canApprove)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static function bulkDelete(User $user, array $postIds): bool

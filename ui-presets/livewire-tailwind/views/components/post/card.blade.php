@@ -6,18 +6,37 @@
                     {{ $post->authorName }}
                 </div>
                 <div>
-                    @if (! isset($single) || ! $single)
+                    @if (!isset($single) || !$single)
                         <a href="{{ Forum::route('thread.show', $post) }}">#{{ $post->sequence }}</a>
                     @endif
                 </div>
             </div>
         @endif
         <div class="grow p-6 w-full sm:w-4/5">
+            @if ($showThreadTitle)
+                <h2 class="mb-2">
+                    Re: <a href="{{ $post->thread->route }}" class="text-category">
+                        {{ $post->thread->title }}
+                    </a>
+                </h2>
+            @endif
+
             @if (isset($post->parent))
                 <livewire:forum::components.post.quote :post="$post->parent" />
             @endif
 
             <div class="dark:text-slate-100">
+                @if ($post->sequence != 1 && $post->thread->category->requiresPostApproval() && !$post->isApproved())
+                    <div class="mb-2">
+                        <livewire:forum::components.pill
+                            bg-color="bg-orange-400"
+                            text-color="text-orange-950"
+                            margin="m-0"
+                            icon="clipboard-document-check-mini"
+                            :text="trans('forum::general.pending_approval')" />
+                    </div>
+                @endif
+
                 @if ($post->trashed())
                     @can ('viewTrashedPosts')
                         <div class="mb-4">

@@ -8,22 +8,32 @@ use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use Livewire\Component;
 use TeamTeaTime\Forum\{
+    Actions\Bulk\ApprovePosts,
+    Actions\Bulk\DeletePosts,
+    Events\UserBulkApprovedPosts,
+    Events\UserBulkDeletedPosts,
     Events\UserViewingPostsPendingApproval,
     Http\Livewire\Traits\CreatesAlerts,
+    Http\Livewire\Traits\HandlesBulkActions,
     Http\Livewire\Traits\UpdatesContent,
     Models\Post,
     Support\Access\CategoryAccess,
+    Support\Authorization\PostAuthorization,
 };
 
 class PostsPendingApproval extends Component
 {
-    use CreatesAlerts, UpdatesContent;
+    use CreatesAlerts, HandlesBulkActions, UpdatesContent;
 
     protected Collection $threads;
 
     protected function getPosts(Request $request): Collection
     {
-        $posts = Post::recent()->unapproved()->with('thread', 'author');
+        $posts = Post::notDeleted()
+            ->notFirstInThread()
+            ->pendingApproval()
+            ->orderBy('created_at', 'desc')
+            ->with('thread', 'author');
 
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
 
@@ -35,6 +45,22 @@ class PostsPendingApproval extends Component
     public function mount(Request $request)
     {
         $this->touchUpdateKey();
+    }
+
+    public function approve(Request $request, array $postIds)
+    {
+        if (!PostAuthorization::bulkApprove($request->user(), $postIds)) {
+            abort(403);
+        }
+
+        $action = new ApprovePosts($postIds);
+        $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkApprovedThreads::dispatch($request->user(), $result);
+        }
+
+        return $this->handleActionResult($result, 'threads.approved');
     }
 
     public function render(Request $request): View

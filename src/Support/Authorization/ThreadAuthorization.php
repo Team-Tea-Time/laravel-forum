@@ -17,7 +17,7 @@ class ThreadAuthorization
 {
     public static function approve(User $user, Thread $thread): bool
     {
-        return $user->can('approveThreads', $thread->category);
+        return $user->can('approveThreads') && $user->can('approveThreads', $thread->category);
     }
 
     public static function delete(User $user, Thread $thread): bool
@@ -32,6 +32,10 @@ class ThreadAuthorization
 
     public static function reply(User $user, Thread $thread): bool
     {
+        if (!$thread->isApproved()) {
+            return $user->can('replyWithoutApproval', $thread);
+        }
+
         return $user->can('reply', $thread);
     }
 
@@ -42,6 +46,10 @@ class ThreadAuthorization
 
     public static function bulkApprove(User $user, array $threadIds): bool
     {
+        if (!$user->can('approveThreads')) {
+            return false;
+        }
+
         $threads = Thread::whereIn('id', $threadIds)->with('category')->get();
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($user);
 

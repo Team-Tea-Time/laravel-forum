@@ -11,6 +11,7 @@ class Card extends Component
 {
     public Post $post;
     public bool $showAuthorPane = true;
+    public bool $showThreadTitle = false;
     public bool $selectable;
     public bool $single;
 

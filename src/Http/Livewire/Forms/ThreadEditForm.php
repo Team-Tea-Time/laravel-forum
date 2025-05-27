@@ -137,7 +137,7 @@ class ThreadEditForm extends Form
 
     public function move(Request $request, Thread $thread, Category $destination): Thread
     {
-        if (!CategoryAuthorization::moveThread($request->user(), $thread->category, $destination)) {
+        if (!CategoryAuthorization::moveThreads($request->user(), $thread->category, $destination)) {
             abort(403);
         }
 

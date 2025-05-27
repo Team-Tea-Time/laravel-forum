@@ -57,6 +57,16 @@ class Post extends BaseModel
         return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
     }
 
+    public function scopeFirstInThread(Builder $query): Builder
+    {
+        return $query->where('sequence', 1);
+    }
+
+    public function scopeNotFirstInThread(Builder $query): Builder
+    {
+        return $query->where('sequence', '!=', 1);
+    }
+
     public function getPage(): int
     {
         return ceil($this->sequence / $this->getPerPage());

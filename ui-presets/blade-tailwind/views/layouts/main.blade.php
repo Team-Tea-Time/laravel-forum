@@ -49,14 +49,14 @@
                 <ul class="navbar-nav flex gap-4 flex-col md:flex-row">
                     @if (Auth::check())
                         <li class="nav-item dropdown relative">
-                            <a class="dropdown-toggle text-gray-500 flex items-center gap-1" href="#" id="navbarDropdownMenuLink" @click="isUserDropdownCollapsed = !isUserDropdownCollapsed">
+                            <a class="dropdown-toggle text-gray-500 flex items-center gap-1" href="#" id="userDropdownMenuLink" @click="isUserDropdownCollapsed = !isUserDropdownCollapsed">
                                 {{ $username }}
 
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </a>
-                            <div class="border absolute left-0 bg-white rounded-md w-44 divide-y" :class="{ hidden: isUserDropdownCollapsed }" aria-labelledby="navbarDropdownMenuLink">
+                            <div class="border absolute left-0 bg-white rounded-md w-44 divide-y" :class="{ hidden: isUserDropdownCollapsed }" aria-labelledby="userDropdownMenuLink">
                                 <a class="block px-4 py-2" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Log out
                                 </a>

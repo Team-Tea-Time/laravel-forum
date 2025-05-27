@@ -6,34 +6,35 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\{
     Actions\BaseAction,
-    Models\Thread,
+    Models\Post,
 };
 
-class UnapproveThreads extends BaseAction
+class UnapprovePosts extends BaseAction
 {
-    private array $threadIds;
+    private array $postIds;
 
-    public function __construct(array $threadIds)
+    public function __construct(array $postIds)
     {
-        $this->threadIds = $threadIds;
+        $this->postIds = $postIds;
     }
 
     protected function transact()
     {
-        $threads = Thread::whereIn('id', $this->threadIds)
+        $posts = Post::whereIn('id', $this->postIds)
             ->notDeleted()
+            ->notFirstInThread()
             ->approved()
             ->get();
 
-        if ($threads->count() == 0) {
+        if ($posts->count() == 0) {
             return null;
         }
 
         // We only want to execute the action on the valid subset of the selection
-        $eligibleThreadIds = $threads->pluck('id');
+        $eligiblePostIds = $posts->pluck('id');
 
         // Use the raw query builder to prevent touching updated_at
-        $query = DB::table(Thread::getTableName())->whereIn('id', $eligibleThreadIds);
+        $query = DB::table(Post::getTableName())->whereIn('id', $eligiblePostIds);
         $rowsAffected = $query->where('approved_at', '<=', Carbon::now()->toDateTimeString())
             ->update(['approved_at' => null]);
 
@@ -41,6 +42,6 @@ class UnapproveThreads extends BaseAction
             return null;
         }
 
-        return $threads;
+        return $posts;
     }
 }

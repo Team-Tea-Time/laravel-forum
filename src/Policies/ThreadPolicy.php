@@ -24,7 +24,7 @@ class ThreadPolicy
 
     public function replyWithoutApproval(User $user, Thread $thread): bool
     {
-        return false;
+        return $user->getKey() === $thread->author_id;
     }
 
     public function delete(User $user, Thread $thread): bool

@@ -4,7 +4,7 @@
 
     <div class="flex justify-center items-center">
         <div class="grow max-w-screen-lg">
-            <h1>{{ trans('forum::general.manage') }}</h1>
+            <h1>{{ trans('forum::categories.manage') }}</h1>
 
             @can ('createCategories')
                 <div class="mb-6 text-right">
