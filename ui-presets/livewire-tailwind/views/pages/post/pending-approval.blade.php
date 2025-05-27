@@ -1,8 +1,8 @@
-<div x-data="unapproved">
+<div x-data="pending-approval">
     @include ('forum::components.loading-overlay')
     @include ('forum::components.breadcrumbs')
 
-    <h1 class="mb-0">{{ trans('forum::posts.unapproved') }}</h1>
+    <h1 class="mb-0">{{ trans('forum::posts.pending-approval') }}</h1>
 
     <div class="my-4">
         @foreach ($posts as $post)
@@ -23,7 +23,7 @@
 
 @script
 <script>
-Alpine.data('unapproved', () => {
+Alpine.data('pending-approval', () => {
     return {
         toggledAllThreads: false,
         selectedThreads: [],

@@ -9,9 +9,11 @@ use Illuminate\View\View;
 use Livewire\Component;
 use TeamTeaTime\Forum\{
     Actions\Bulk\ApproveThreads,
+    Actions\Bulk\DeleteThreads,
     Events\UserBulkApprovedThreads,
+    Events\UserBulkDeletedThreads,
     Events\UserMarkedThreadsAsRead,
-    Events\UserViewingUnapprovedThreads,
+    Events\UserViewingThreadsPendingApproval,
     Http\Livewire\Traits\CreatesAlerts,
     Http\Livewire\Traits\HandlesBulkActions,
     Http\Livewire\Traits\UpdatesContent,
@@ -21,7 +23,7 @@ use TeamTeaTime\Forum\{
     Support\Authorization\ThreadAuthorization,
 };
 
-class UnapprovedThreads extends Component
+class ThreadsPendingApproval extends Component
 {
     use CreatesAlerts, HandlesBulkActions, UpdatesContent;
 
@@ -29,7 +31,7 @@ class UnapprovedThreads extends Component
 
     protected function getThreads(Request $request): Collection
     {
-        $threads = Thread::unapproved()->orderBy('created_at', 'desc')->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
+        $threads = Thread::notDeleted()->pendingApproval()->orderBy('created_at', 'desc')->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
 
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
 
@@ -59,14 +61,31 @@ class UnapprovedThreads extends Component
         return $this->handleActionResult($result, 'threads.approved');
     }
 
+    public function delete(Request $request, array $threadIds)
+    {
+        // TODO: implement me
+        if (!ThreadAuthorization::bulkDelete($request->user(), $threadIds)) {
+            abort(403);
+        }
+
+        $action = new DeleteThreads($threadIds, false);
+        $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkDeletedThreads::dispatch($request->user(), $result);
+        }
+
+        return $this->handleActionResult($result, 'threads.deleted');
+    }
+
     public function render(Request $request): View
     {
         $user = $request->user();
         $threads = $this->getThreads($request);
 
-        UserViewingUnapprovedThreads::dispatch($request->user(), $threads);
+        UserViewingThreadsPendingApproval::dispatch($request->user(), $threads);
 
-        return ViewFactory::make('forum::pages.thread.unapproved', [
+        return ViewFactory::make('forum::pages.thread.pending-approval', [
             'threads' => $threads,
         ])->layout('forum::layouts.main');
     }

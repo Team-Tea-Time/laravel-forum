@@ -2,9 +2,8 @@
 
 namespace TeamTeaTime\Forum\Models;
 
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -13,13 +12,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
+use TeamTeaTime\Forum\Models\Traits\HasApproval;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
+use TeamTeaTime\Forum\Models\Traits\HasSoftDeletion;
 use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class Thread extends BaseModel
 {
     use SoftDeletes;
-    use HasAuthor;
+    use HasApproval, HasAuthor, HasSoftDeletion;
 
     protected $table = 'forum_threads';
     protected $dates = ['deleted_at'];
@@ -98,24 +99,6 @@ class Thread extends BaseModel
         return $query->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc');
     }
 
-    public function scopeApproved(Builder $query): Builder
-    {
-        return $query->whereNotNull('approved_at')->where('approved_at', '<', Carbon::now());
-    }
-
-    public function scopeUnapproved(Builder $query): Builder
-    {
-        return $query->whereNull('approved_at')->orWhere('approved_at', '>', Carbon::now());
-    }
-
-    public function scopeAuthoredByOrApproved(Builder $query, ?User $user): Builder
-    {
-        if ($user === null) return $query->approved();
-
-        return $query->where('author_id', $user->getKey())
-            ->orWhere(fn ($query) => $query->approved());
-    }
-
     public function getLastPost(): Post
     {
         return $this->posts()->orderBy('created_at', 'desc')->first();
@@ -150,11 +133,6 @@ class Thread extends BaseModel
                 return !$age || $this->updated_at->timestamp < (time() - strtotime($age, 0));
             }
         );
-    }
-
-    public function isApproved(): bool
-    {
-        return $this->approved_at != null && $this->approved_at < Carbon::now();
     }
 
     public function isAccessibleTo(?User $user): bool

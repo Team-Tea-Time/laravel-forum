@@ -11,8 +11,8 @@
                     bg-color="bg-orange-400"
                     text-color="text-orange-950"
                     margin="mr-2"
-                    icon="x-circle-mini"
-                    :text="trans('forum::general.unapproved')" />
+                    icon="clipboard-document-check-mini"
+                    :text="trans('forum::general.pending_approval')" />
             @endif
             @if ($thread->pinned)
                 <livewire:forum::components.pill

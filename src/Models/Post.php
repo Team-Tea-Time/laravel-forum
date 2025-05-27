@@ -2,18 +2,20 @@
 
 namespace TeamTeaTime\Forum\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use TeamTeaTime\Forum\Models\Traits\HasApproval;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
+use TeamTeaTime\Forum\Models\Traits\HasSoftDeletion;
 use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class Post extends BaseModel
 {
     use SoftDeletes;
-    use HasAuthor;
+    use HasApproval, HasAuthor, HasSoftDeletion;
 
     protected $table = 'forum_posts';
     protected $dates = ['deleted_at'];

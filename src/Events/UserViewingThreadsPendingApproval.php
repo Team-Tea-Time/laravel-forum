@@ -4,6 +4,6 @@ namespace TeamTeaTime\Forum\Events;
 
 use TeamTeaTime\Forum\Events\Types\CollectionEvent;
 
-class UserViewingUnapprovedThreads extends CollectionEvent
+class UserViewingThreadsPendingApproval extends CollectionEvent
 {
 }

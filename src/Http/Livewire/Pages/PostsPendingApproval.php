@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use Livewire\Component;
 use TeamTeaTime\Forum\{
-    Events\UserViewingUnapprovedPosts,
+    Events\UserViewingPostsPendingApproval,
     Http\Livewire\Traits\CreatesAlerts,
     Http\Livewire\Traits\UpdatesContent,
     Models\Post,
     Support\Access\CategoryAccess,
 };
 
-class UnapprovedPosts extends Component
+class PostsPendingApproval extends Component
 {
     use CreatesAlerts, UpdatesContent;
 
@@ -41,9 +41,9 @@ class UnapprovedPosts extends Component
     {
         $posts = $this->getPosts($request);
 
-        UserViewingUnapprovedPosts::dispatch($request->user(), $posts);
+        UserViewingPostsPendingApproval::dispatch($request->user(), $posts);
 
-        return ViewFactory::make('forum::pages.post.unapproved', [
+        return ViewFactory::make('forum::pages.post.pending-approval', [
             'posts' => $posts,
         ])->layout('forum::layouts.main');
     }

@@ -1,8 +1,8 @@
-<div x-data="unapproved">
+<div x-data="pendingApproval">
     @include ('forum::components.loading-overlay')
     @include ('forum::components.breadcrumbs')
 
-    <h1 class="mb-0">{{ trans('forum::threads.unapproved_title') }}</h1>
+    <h1 class="mb-0">{{ trans('forum::threads.pending_approval') }}</h1>
 
     <div class="flex justify-end">
         <x-forum::form.input-checkbox
@@ -29,27 +29,44 @@
         @endif
     </div>
 
-    <div class="mt-4 text-right">
-        <x-forum::button
-            id="save"
-            :label="trans('forum::general.approve_selection')"
-            x-ref="button"
-            @click="approveSelection"
-            disabled />
+    <div class="mt-4 flex">
+        <div class="flex-1">
+            <x-forum::button
+                id="delete"
+                intent="danger"
+                :label="trans('forum::general.delete_selection')"
+                x-ref="buttonDelete"
+                @click="deleteSelection"
+                disabled />
+        </div>
+        <div>
+            <x-forum::button
+                id="approve"
+                :label="trans('forum::general.approve_selection')"
+                x-ref="buttonApprove"
+                @click="approveSelection"
+                disabled />
+        </div>
     </div>
 </div>
 
 @script
 <script>
-Alpine.data('unapproved', () => {
+Alpine.data('pendingApproval', () => {
     return {
         toggledAllThreads: false,
         selectedThreads: [],
+        confirmMessage: "{{ trans('forum::general.generic_confirm') }}",
+
+        setButtonsDisabled(disabled) {
+            $refs.buttonApprove.disabled = disabled;
+            $refs.buttonDelete.disabled = disabled;
+        },
 
         reset() {
             this.toggledAllThreads = false;
             this.selectedThreads = [];
-            $refs.button.disabled = true;
+            this.setButtonsDisabled(true);
         },
 
         onThreadChanged(event) {
@@ -59,7 +76,7 @@ Alpine.data('unapproved', () => {
                 this.selectedThreads.splice(this.selectedThreads.indexOf(event.detail.id), 1);
             }
 
-            $refs.button.disabled = this.selectedThreads.length == 0;
+            this.setButtonsDisabled(this.selectedThreads.length == 0);
         },
 
         toggleAllThreads(event) {
@@ -75,6 +92,13 @@ Alpine.data('unapproved', () => {
 
         async approveSelection() {
             const result = await $wire.approve(this.selectedThreads);
+            if (result.type == 'success') this.reset();
+            $dispatch('alert', result);
+        },
+
+        async deleteSelection() {
+            if (!confirm(this.confirmMessage)) return;
+            const result = await $wire.delete(this.selectedThreads);
             if (result.type == 'success') this.reset();
             $dispatch('alert', result);
         }
