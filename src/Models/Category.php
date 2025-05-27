@@ -39,12 +39,12 @@ class Category extends BaseModel
 
     public function newestThread(): HasOne
     {
-        return $this->hasOne(Thread::class, 'id', 'newest_thread_id');
+        return $this->hasOne(Thread::class, 'id', 'newest_thread_id')->approved();
     }
 
     public function latestActiveThread(): HasOne
     {
-        return $this->hasOne(Thread::class, 'id', 'latest_active_thread_id');
+        return $this->hasOne(Thread::class, 'id', 'latest_active_thread_id')->approved();
     }
 
     public function scopeTopLevel(Builder $query): Builder
@@ -92,14 +92,14 @@ class Category extends BaseModel
 
     public function getNewestThreadId(): ?int
     {
-        $thread = $this->threads()->orderBy('created_at', 'desc')->first();
+        $thread = $this->threads()->notDeleted()->approved()->orderBy('created_at', 'desc')->first();
 
         return $thread ? $thread->id : null;
     }
 
     public function getLatestActiveThreadId(): ?int
     {
-        $thread = $this->threads()->orderBy('updated_at', 'desc')->first();
+        $thread = $this->threads()->notDeleted()->approved()->orderBy('updated_at', 'desc')->first();
 
         return $thread ? $thread->id : null;
     }

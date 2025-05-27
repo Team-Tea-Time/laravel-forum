@@ -9,7 +9,7 @@ class ThreadPolicy
 {
     public function view(User $user, Thread $thread): bool
     {
-        return true;
+        return $thread->isApproved || $user->getKey() == 1 || $user->getKey() == 2;
     }
 
     public function rename(User $user, Thread $thread): bool

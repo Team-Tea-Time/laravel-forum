@@ -42,6 +42,8 @@ class UnapprovePosts extends BaseAction
             return null;
         }
 
+        // TODO: Update the latest_active_thread_id of affected categories
+
         return $posts;
     }
 }

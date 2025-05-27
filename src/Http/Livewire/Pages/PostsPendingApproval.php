@@ -12,6 +12,7 @@ use TeamTeaTime\Forum\{
     Actions\Bulk\DeletePosts,
     Events\UserBulkApprovedPosts,
     Events\UserBulkDeletedPosts,
+    Events\UserBulkUnapprovedThreads,
     Events\UserViewingPostsPendingApproval,
     Http\Livewire\Traits\CreatesAlerts,
     Http\Livewire\Traits\HandlesBulkActions,
@@ -44,6 +45,10 @@ class PostsPendingApproval extends Component
 
     public function mount(Request $request)
     {
+        if (!$request->user()->can('approvePosts')) {
+            abort(404);
+        }
+
         $this->touchUpdateKey();
     }
 

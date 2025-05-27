@@ -37,12 +37,13 @@ class ThreadShow extends EventfulPaginatedComponent
     public function mount(Request $request)
     {
         $this->thread = $request->route('thread');
-        $this->threadEditForm->title = $this->thread->title;
-        $this->title = $this->thread->title;
 
         if (!$this->thread->isAccessibleTo($request->user())) {
             abort(404);
         }
+
+        $this->threadEditForm->title = $this->thread->title;
+        $this->title = $this->thread->title;
 
         if ($request->user() !== null) {
             UserViewingThread::dispatch($request->user(), $this->thread);

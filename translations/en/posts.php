@@ -10,6 +10,7 @@ return [
     'deleted' => 'Post deleted|Posts deleted',
     'edit' => 'Edit post',
     'last' => 'Last post',
+    'none_found' => 'No posts found',
     'pending_approval' => 'Posts pending approval',
     'perma_deleted' => 'Post permanently deleted|Posts permanently deleted',
     'post' => 'Post|Posts',

@@ -42,6 +42,10 @@ class ThreadsPendingApproval extends Component
 
     public function mount(Request $request)
     {
+        if (!$request->user()->can('approveThreads')) {
+            abort(404);
+        }
+
         $this->touchUpdateKey();
     }
 

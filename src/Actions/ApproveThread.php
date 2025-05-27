@@ -24,6 +24,15 @@ class ApproveThread extends BaseAction
             'approved_at' => Carbon::now(),
         ]);
 
+        $this->thread->firstPost->updateWithoutTouch([
+            'approved_at' => Carbon::now(),
+        ]);
+
+        $this->thread->category->updateWithoutTouch([
+            'newest_thread_id' => max($this->thread->id, $this->thread->category->newest_thread_id),
+            'latest_active_thread_id' => $this->thread->category->getLatestActiveThreadId(),
+        ]);
+
         return $this->thread;
     }
 }

@@ -6,46 +6,46 @@ class ForumPolicy
 {
     public function createCategories($user): bool
     {
-        return true;
+        return $user->getKey() != 3;
     }
 
     public function moveCategories($user): bool
     {
-        return true;
+        return $user->getKey() != 3;
     }
 
     public function editCategories($user): bool
     {
-        return true;
+        return $user->getKey() != 3;
     }
 
     public function deleteCategories($user): bool
     {
-        return true;
+        return $user->getKey() != 3;
     }
 
     public function markThreadsAsRead($user): bool
     {
-        return true;
+        return $user->getKey() != 3;
     }
 
     public function approveThreads($user): bool
     {
-        return true;
+        return $user->getKey() != 3;
     }
 
     public function approvePosts($user): bool
     {
-        return true;
+        return $user->getKey() != 3;
     }
 
     public function viewTrashedThreads($user): bool
     {
-        return true;
+        return $user->getKey() != 3;
     }
 
     public function viewTrashedPosts($user): bool
     {
-        return true;
+        return $user->getKey() != 3;
     }
 }

@@ -63,10 +63,10 @@ class DeleteThreads extends BaseAction
         foreach ($threadsByCategory as $categoryThreads) {
             // Count only non-deleted threads for changes to category stats since soft-deleted threads
             // are already represented
-            $threadCount = $categoryThreads->whereNull('deleted_at')->count();
+            $threadCount = $categoryThreads->notDeleted()->count();
 
             // Sum of reply counts + thread count = total posts
-            $postCount = $categoryThreads->whereNull('deleted_at')->sum('reply_count') + $threadCount;
+            $postCount = $categoryThreads->notDeleted()->sum('reply_count') + $threadCount;
 
             $category = $categoryThreads->first()->category;
 

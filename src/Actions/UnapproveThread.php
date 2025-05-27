@@ -23,6 +23,22 @@ class UnapproveThread extends BaseAction
             'approved_at' => null,
         ]);
 
+        $this->thread->firstPost->updateWithoutTouch([
+            'approved_at' => null,
+        ]);
+
+        $category = $this->thread->category;
+
+        $attributes = [];
+        if ($category->newest_thread_id === $this->thread->id) {
+            $attributes['newest_thread_id'] = $category->getNewestThreadId();
+        }
+        if ($category->latest_active_thread_id === $this->thread->id) {
+            $attributes['latest_active_thread_id'] = $category->getLatestActiveThreadId();
+        }
+
+        $category->update($attributes);
+
         return $this->thread;
     }
 }
