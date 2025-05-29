@@ -20,20 +20,20 @@ class RestoreThread extends BaseAction
             return null;
         }
 
-        $this->thread->setTouchedRelations([])->restoreWithoutTouch();
+        Thread::withoutTimestamps(fn () => $this->thread->setTouchedRelations([])->restore());
 
-        $category = $this->thread->category;
-        $attributes = [
-            'newest_thread_id' => max($this->thread->id, $category->newest_thread_id),
-            'latest_active_thread_id' => $category->getLatestActiveThreadId(),
-            'post_count' => DB::raw("post_count + {$this->thread->postCount}"),
-        ];
-
-        if ($this->thread->isApproved) {
-            $attributes['thread_count'] = DB::raw('thread_count + 1');
+        // Skip category update if the thread isn't approved
+        if (!$this->thread->isApproved) {
+            return $this->thread;
         }
 
-        $category->update($attributes);
+        $category = $this->thread->category;
+        $category->update([
+            'thread_count' => DB::raw("thread_count + 1"),
+            'post_count' => DB::raw("post_count + {$this->thread->approvedPostCount}"),
+            'newest_thread_id' => max($this->thread->id, $category->newest_thread_id),
+            'latest_active_thread_id' => $category->getLatestActiveThreadId(),
+        ]);
 
         return $this->thread;
     }

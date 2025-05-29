@@ -204,4 +204,14 @@ class Thread extends BaseModel
             }
         );
     }
+
+    protected function approvedPostCount(): Attribute
+    {
+        return new Attribute(
+            get: function ()
+            {
+                return $this->posts()->approved()->count();
+            }
+        );
+    }
 }

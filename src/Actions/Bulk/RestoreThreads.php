@@ -17,30 +17,29 @@ class RestoreThreads extends BaseAction
 
     protected function transact()
     {
-        $threads = Thread::whereIn('id', $this->threadIds)->onlyTrashed()->get();
+        $query = Thread::whereIn('id', $this->threadIds)->onlyTrashed();
 
         // Return early if there are no eligible threads in the selection
-        if ($threads->count() == 0) {
+        if ($query->count() == 0) {
             return null;
         }
 
-        // Use the raw query builder to prevent touching updated_at
-        $rowsAffected = DB::table(Thread::getTableName())
-            ->whereIn('id', $this->threadIds)
-            ->whereNotNull('deleted_at')
-            ->update(['deleted_at' => null]);
+        // Fetch the approved subset of the threads so we can operate on the affected categories below
+        $threads = $query->approved()->get();
+
+        $rowsAffected = Thread::withoutTimestamps(fn () => $query->restore());
 
         if ($rowsAffected == 0) {
             return null;
         }
 
         $threadsByCategory = $threads->groupBy('category_id');
-        foreach ($threadsByCategory as $threads) {
-            $threadCount = $threads->count();
-            $postCount = $threads->sum('reply_count') + $threadCount; // count the first post of each thread
+        foreach ($threadsByCategory as $categoryThreads) {
+            $threadCount = $categoryThreads->count();
+            $postCount = $categoryThreads->sum('reply_count') + $threadCount; // count the first post of each thread
             $category = $threads->first()->category;
 
-            $category->updateWithoutTouch([
+            $category->update([
                 'newest_thread_id' => max($threads->max('id'), $category->newest_thread_id),
                 'latest_active_thread_id' => $category->getLatestActiveThreadId(),
                 'thread_count' => DB::raw("thread_count + {$threadCount}"),

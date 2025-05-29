@@ -4,8 +4,10 @@ namespace TeamTeaTime\Forum\Actions;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use TeamTeaTime\Forum\Models\Post;
-use TeamTeaTime\Forum\Models\Thread;
+use TeamTeaTime\Forum\Models\{
+    Post,
+    Thread
+};
 
 class ApproveThread extends BaseAction
 {
@@ -22,17 +24,17 @@ class ApproveThread extends BaseAction
             return null;
         }
 
-        $this->thread->updateWithoutTouch([
-            'approved_at' => Carbon::now(),
-        ]);
+        Post::withoutTimestamps(fn () => $this->thread->firstPost()->update([
+            'approved_at' => Carbon::now()
+        ]));
 
-        DB::table(Post::getTableName())->where('id', $this->thread->first_post_id)->update([
-            'approved_at' => Carbon::now(),
-        ]);
+        Thread::withoutTimestamps(fn () => $this->thread->update([
+            'approved_at' => Carbon::now()
+        ]));
 
-        $this->thread->category->updateWithoutTouch([
+        $this->thread->category->update([
             'thread_count' => DB::raw('thread_count + 1'),
-            'post_count' => DB::raw("post_count + {$this->thread->postCount}"),
+            'post_count' => DB::raw("post_count + {$this->thread->approvedPostCount}"),
             'newest_thread_id' => max($this->thread->id, $this->thread->category->newest_thread_id),
             'latest_active_thread_id' => $this->thread->category->getLatestActiveThreadId(),
         ]);

@@ -29,42 +29,4 @@ abstract class BaseModel extends Model
     {
         return $this->updated_at > $this->created_at;
     }
-
-    public function saveWithoutTouch()
-    {
-        $this->withoutTouch('save');
-    }
-
-    public function updateWithoutTouch(array $attributes)
-    {
-        $this->timestamps = false;
-        $this->update($attributes);
-        $this->timestamps = true;
-    }
-
-    public function deleteWithoutTouch()
-    {
-        $this->withoutTouch('delete');
-    }
-
-    public function forceDeleteWithoutTouch()
-    {
-        $this->withoutTouch('forceDelete');
-    }
-
-    public function restoreWithoutTouch()
-    {
-        $this->withoutTouch('restore');
-    }
-
-    protected function withoutTouch(string $method)
-    {
-        if (!is_callable([$this, $method])) {
-            throw new \Exception("Method '{$method}' is not callable.");
-        }
-
-        $this->timestamps = false;
-        $this->{$method}();
-        $this->timestamps = true;
-    }
 }

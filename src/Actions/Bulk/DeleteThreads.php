@@ -26,67 +26,61 @@ class DeleteThreads extends BaseAction
     {
         $query = Thread::whereIn('id', $this->threadIds);
 
-        if ($this->includeTrashed) {
-            $threads = $query->withTrashed()->get();
-
-            // Return early if this is a soft-delete and the selected threads are already trashed,
-            // or there are no valid threads in the selection
-            if (!$this->permaDelete && $threads->whereNull('deleted_at')->count() == 0) {
-                return null;
-            }
-        } else {
-            $threads = $query->get();
-
-            // Return early if there are no valid threads in the selection
-            if ($threads->count() == 0) {
-                return null;
-            }
+        if ($this->permaDelete && $this->includeTrashed) {
+            $query = $query->withTrashed();
         }
 
-        // Use the raw query builder to prevent touching updated_at
-        $query = DB::table(Thread::getTableName())->whereIn('id', $this->threadIds);
+        if ($query->count() == 0 || ($this->permaDelete && $query->notDeleted()->count() == 0)) {
+            return null;
+        }
+
+        // Fetch the approved, non-deleted subset of the threads so we can operate on the affected
+        // categories below
+        $threads = $query->approved()->notDeleted()->get();
 
         if ($this->permaDelete) {
-            $rowsAffected = $query->delete();
+            $query->forceDelete();
+
+            Post::whereIn('thread_id', $this->threadIds)->withTrashed()->forceDelete();
 
             // Drop readers for the removed threads
             DB::table(Thread::READERS_TABLE)->whereIn('thread_id', $this->threadIds)->delete();
         } else {
-            $rowsAffected = $query->whereNull('deleted_at')->update(['deleted_at' => DB::raw('now()')]);
+            Thread::withoutTimestamps(fn () => $query->delete());
+
+            // Note: in order to preserve the deletion state of posts in case any of the threads
+            // are restored, we skip soft-deletion of posts here.
         }
 
-        if ($rowsAffected == 0) {
-            return null;
+        if ($threads->count() == 0) {
+            // We only dealt with unapproved and/or soft-deleted threads, so no category update is
+            // necessary
+            return $threads;
         }
 
         $threadsByCategory = $threads->groupBy('category_id');
         foreach ($threadsByCategory as $categoryThreads) {
-            // Count only non-deleted threads for changes to category stats since soft-deleted threads
-            // are already represented
-            $threadCount = $categoryThreads->notDeleted()->count();
+            $threadCount = $categoryThreads->count();
 
             // Sum of reply counts + thread count = total posts
-            $postCount = $categoryThreads->notDeleted()->sum('reply_count') + $threadCount;
+            $postCount = $categoryThreads->sum('reply_count') + $threadCount;
 
             $category = $categoryThreads->first()->category;
 
             $updates = [
-                'newest_thread_id' => $category->getNewestThreadId() ?? 0,
+                'newest_thread_id' => $category->getNewestThreadId(),
                 'latest_active_thread_id' => $category->getLatestActiveThreadId(),
             ];
 
             if ($threadCount > 0) {
                 $updates['thread_count'] = DB::raw("thread_count - {$threadCount}");
             }
+
             if ($postCount > 0) {
                 $updates['post_count'] = DB::raw("post_count - {$postCount}");
             }
 
             $category->update($updates);
-        }
-
-        if ($this->permaDelete) {
-            Post::whereIn('thread_id', $this->threadIds)->withTrashed()->forceDelete();
         }
 
         return $threads;

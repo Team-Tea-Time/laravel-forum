@@ -3,7 +3,10 @@
 namespace TeamTeaTime\Forum\Actions;
 
 use Illuminate\Support\Facades\DB;
-use TeamTeaTime\Forum\Models\Thread;
+use TeamTeaTime\Forum\Models\{
+    Post,
+    Thread
+};
 
 class UnapproveThread extends BaseAction
 {
@@ -20,19 +23,21 @@ class UnapproveThread extends BaseAction
             return null;
         }
 
-        $this->thread->updateWithoutTouch([
-            'approved_at' => null,
-        ]);
+        $postCount = $this->thread->approvedPostCount;
 
-        $this->thread->firstPost->updateWithoutTouch([
-            'approved_at' => null,
-        ]);
+        Post::withoutTimestamps(fn () => $this->thread->firstPost()->update([
+            'approved_at' => null
+        ]));
+
+        Thread::withoutTimestamps(fn () => $this->thread->update([
+            'approved_at' => null
+        ]));
 
         $category = $this->thread->category;
 
         $attributes = [
             'thread_count' => DB::raw('thread_count - 1'),
-            'post_count' => DB::raw("post_count - {$this->thread->postCount}"),
+            'post_count' => DB::raw("post_count - {$postCount}"),
         ];
 
         if ($category->newest_thread_id === $this->thread->id) {

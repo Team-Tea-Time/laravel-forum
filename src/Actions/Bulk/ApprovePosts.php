@@ -22,52 +22,45 @@ class ApprovePosts extends BaseAction
 
     protected function transact()
     {
-        $posts = Post::whereIn('id', $this->postIds)
+        $query = Post::whereIn('id', $this->postIds)
             ->notDeleted()
             ->notFirstInThread()
-            ->pendingApproval()
-            ->get();
+            ->pendingApproval();
 
-        if ($posts->count() == 0) {
+        if ($query->count() == 0) {
             return null;
         }
 
-        // We only want to execute the action on the valid subset of the selection
-        $eligiblePostIds = $posts->pluck('id');
+        // Fetch the posts so we can operate on affected threads and categories below
+        $posts = $query->with(['thread', 'thread.category'])->get();
 
-        // Use the raw query builder to prevent touching updated_at
-        $query = DB::table(Post::getTableName())->whereIn('id', $eligiblePostIds);
-        $rowsAffected = $query->whereNull('approved_at')
-            ->orWhere('approved_at', '>', Carbon::now()->toDateTimeString())
-            ->update(['approved_at' => DB::raw('now()')]);
+        Post::withoutTimestamps(fn () => $query->update(['approved_at' => Carbon::now()]));
 
-        if ($rowsAffected == 0) {
-            return null;
-        }
-
-        $posts->load('thread');
-
-        $threadIds = $posts->pluck('thread_id')->unique()->values();
-        $threads = Thread::whereIn('id', $threadIds)->get();
+        $threads = $posts->pluck('thread')->unique()->values();
         foreach ($threads as $thread) {
             $lastApprovedPost = $thread->getLastApprovedPost();
-            $thread->updateWithoutTouch([
-                'reply_count' => $thread->posts()->approved()->count() - 1,
+            $postCount = $posts->where('thread_id', $thread->id)->count();
+
+            Thread::withoutTimestamps(fn () => $thread->update([
+                'reply_count' => DB::raw("reply_count + {$postCount}"),
                 'last_post_id' => $lastApprovedPost ? $lastApprovedPost->id : null,
                 'updated_at' => $lastApprovedPost ? $lastApprovedPost->created_at : $thread->created_at
-            ]);
+            ]));
         }
 
-        $categoryIds = $posts->pluck('thread.category_id')->unique()->values();
-        $categories = Category::whereIn('id', $categoryIds)->get();
+        $categories = $threads->pluck('category')->unique()->values();
         foreach ($categories as $category) {
             $threadsInCategory = $threads->whereNotNull('approved_at')
                 ->where('approved_at', '<=', Carbon::now())
                 ->where('category_id', $category->id);
+
+            if ($threadsInCategory->count() == 0) continue;
+
             $postCount = $posts->whereIn('thread_id', $threadsInCategory->pluck('id'))->count();
+
             $category->update([
                 'post_count' => DB::raw("post_count + {$postCount}"),
-                'newest_thread_id' => $category->getNewestThreadid(),
+                'newest_thread_id' => $category->getNewestThreadId(),
                 'latest_active_thread_id' => $category->getLatestActiveThreadId()
             ]);
         }

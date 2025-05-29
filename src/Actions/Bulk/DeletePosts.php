@@ -24,34 +24,33 @@ class DeletePosts extends BaseAction
     {
         $query = Post::whereIn('id', $this->postIds);
 
-        if ($this->includeTrashed) {
-            $posts = $query->withTrashed()->get();
-
-            // Return early if this is a soft-delete and the selected posts are already trashed,
-            // or there are no valid posts in the selection
-            if (!$this->permaDelete && $posts->whereNull('deleted_at')->count() == 0) {
-                return null;
-            }
-        } else {
-            $posts = $query->get();
-
-            // Return early if there are no valid posts in the selection
-            if ($posts->count() == 0) {
-                return null;
-            }
+        if ($this->permaDelete && $this->includeTrashed) {
+            $query = $query->withTrashed();
         }
 
-        $rowsAffected = $this->permaDelete
-            ? $query->forceDelete()
-            : $query->delete();
-
-        if ($rowsAffected == 0) {
+        if ($query->count() == 0 || ($this->permaDelete && $query->notDeleted()->count() == 0)) {
             return null;
         }
 
+        // Fetch the approved, non-deleted subset of the posts so we can operate on the affected
+        // threads and categories below
+        $posts = $query->approved()->notDeleted()->with(['thread', 'thread.category'])->get();
+
+        if ($this->permaDelete) {
+            $query->forceDelete();
+        } else {
+            Post::withoutTimestamps(fn () => $query->delete());
+        }
+
+        if ($posts->count() == 0) {
+            // We only dealt with unapproved and/or soft-deleted posts, so no thread or category
+            // update is necessary
+            return $posts;
+        }
+
+        // TODO: Refactor below
         $threads = $posts->pluck('thread')->unique();
         $categories = $threads->pluck('category')->unique();
-
         foreach ($categories as $category) {
             $categoryThreadsRemoved = 0;
             $categoryPostsRemoved = 0;
