@@ -80,6 +80,10 @@ return [
     |
     | Values for the content approval feature. Enabling either of the approval
     | types will override the equivalent per-category setting.
+    |
+    | Note that any content that is pending approval won't be automatically
+    | approved when switching `enable_globally` from true to false.
+    |
     | rejection_should_soft_delete is always ignored if soft deletes are
     | disabled.
     |

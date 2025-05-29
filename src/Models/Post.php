@@ -25,6 +25,7 @@ class Post extends BaseModel
         'post_id',
         'sequence',
         'content',
+        'approved_at',
     ];
     protected $appends = ['route'];
 

@@ -226,6 +226,10 @@ class ThreadShow extends EventfulPaginatedComponent
             ? $this->thread->posts()->withTrashed()
             : $this->thread->posts();
 
+        if (!$request->user() || !$request->user()->can('approvePosts', $this->thread)) {
+            $postsQuery = $postsQuery->approved();
+        }
+
         $posts = $postsQuery
             ->with('author', 'thread')
             ->orderBy('created_at', 'asc')

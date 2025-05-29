@@ -2,7 +2,12 @@
 
 namespace TeamTeaTime\Forum\Actions;
 
-use TeamTeaTime\Forum\Models\Category;
+use Carbon\Carbon;
+use TeamTeaTime\Forum\Models\{
+    Category,
+    Post,
+    Thread,
+};
 
 class EditCategory extends CreateCategory
 {
@@ -16,6 +21,24 @@ class EditCategory extends CreateCategory
 
     protected function transact()
     {
+        $threadApprovalWasDisabled = $this->category->thread_approval_enabled && !$this->threadApprovalEnabled;
+        $postApprovalWasDisabled = $this->category->post_approval_enabled && !$this->postApprovalEnabled;
+
+        if ($threadApprovalWasDisabled || $postApprovalWasDisabled) {
+            // TODO: Move these operations to a job so they can be executed async.
+            foreach ($this->category->threads as $thread) {
+                if ($threadApprovalWasDisabled) {
+                    Thread::withoutTimestamps(fn () => $thread->update(['approved_at' => Carbon::now()->subSecond()]));
+                }
+
+                if ($postApprovalWasDisabled) {
+                    foreach ($thread->posts as $post) {
+                        Post::withoutTimestamps(fn () => $post->update(['approved_at' => Carbon::now()->subSecond()]));
+                    }
+                }
+            }
+        }
+
         $this->category->update([
             'title' => $this->title,
             'description' => $this->description,
@@ -26,8 +49,6 @@ class EditCategory extends CreateCategory
             'thread_approval_enabled' => $this->threadApprovalEnabled,
             'post_approval_enabled' => $this->postApprovalEnabled
         ]);
-
-        // TODO: when thread approval is enabled, any existing threads that don't have an approved_at value should probably be given one. Same for posts.
 
         return $this->category;
     }

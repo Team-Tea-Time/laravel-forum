@@ -67,7 +67,6 @@ class ThreadsPendingApproval extends Component
 
     public function delete(Request $request, array $threadIds)
     {
-        // TODO: implement me
         if (!ThreadAuthorization::bulkDelete($request->user(), $threadIds)) {
             abort(403);
         }

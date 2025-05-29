@@ -34,7 +34,7 @@ class ApprovePosts extends BaseAction
         // Fetch the posts so we can operate on affected threads and categories below
         $posts = $query->with(['thread', 'thread.category'])->get();
 
-        Post::withoutTimestamps(fn () => $query->update(['approved_at' => Carbon::now()]));
+        Post::withoutTimestamps(fn () => $query->update(['approved_at' => Carbon::now()->subSecond()]));
 
         $threads = $posts->pluck('thread')->unique()->values();
         foreach ($threads as $thread) {

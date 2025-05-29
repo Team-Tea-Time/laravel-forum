@@ -33,14 +33,14 @@ class CreateThread extends BaseAction
             'author_id' => $this->author->getKey(),
             'category_id' => $this->category->id,
             'title' => $this->title,
-            'approved_at' => $requiresApproval ? null : Carbon::now(),
+            'approved_at' => $requiresApproval ? null : Carbon::now()->subSecond(),
         ]);
 
         $post = $thread->posts()->create([
             'author_id' => $this->author->getKey(),
             'content' => $this->content,
             'sequence' => 1,
-            'approved_at' => $requiresApproval ? null : Carbon::now(),
+            'approved_at' => $requiresApproval ? null : Carbon::now()->subSecond(),
         ]);
 
         $thread->update([

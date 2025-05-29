@@ -4,8 +4,12 @@ namespace TeamTeaTime\Forum\Actions\Bulk;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use TeamTeaTime\Forum\Actions\BaseAction;
-use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\{
+    Actions\BaseAction,
+    Models\Category,
+    Models\Post,
+    Models\Thread,
+};
 
 class DeletePosts extends BaseAction
 {
@@ -36,11 +40,9 @@ class DeletePosts extends BaseAction
         // threads and categories below
         $posts = $query->approved()->notDeleted()->with(['thread', 'thread.category'])->get();
 
-        if ($this->permaDelete) {
-            $query->forceDelete();
-        } else {
-            Post::withoutTimestamps(fn () => $query->delete());
-        }
+        $this->permaDelete
+            ? $query->forceDelete()
+            : Post::withoutTimestamps(fn () => $query->delete());
 
         if ($posts->count() == 0) {
             // We only dealt with unapproved and/or soft-deleted posts, so no thread or category
@@ -48,7 +50,6 @@ class DeletePosts extends BaseAction
             return $posts;
         }
 
-        // TODO: Refactor below
         $threads = $posts->pluck('thread')->unique();
         $categories = $threads->pluck('category')->unique();
         foreach ($categories as $category) {
@@ -56,39 +57,35 @@ class DeletePosts extends BaseAction
             $categoryPostsRemoved = 0;
 
             foreach ($threads->where('category_id', $category->id) as $thread) {
-                $threadPostsRemoved = $posts->where('thread_id', $thread->id)
-                    ->whereNull('deleted_at')
-                    ->whereNotNull('approved_at')
-                    ->where('approved_at', '<=', Carbon::now())
-                    ->count();
+                $threadPostsRemoved = $posts->where('thread_id', $thread->id)->count();
                 $categoryPostsRemoved += $threadPostsRemoved;
 
-                // Skip updates if the affected posts were already soft-deleted
-                // or there were no valid post IDs given for this thread
-                if ($threadPostsRemoved == 0) {
-                    continue;
-                }
-
                 if ($thread->posts()->count() == 0) {
+                    // No non-deleted posts left in this thread
+
                     if (!$thread->trashed() && $thread->approved()) {
                         // Thread has not been soft-deleted and is approved;
                         // it should count towards threads removed for this category
                         $categoryThreadsRemoved++;
                     }
 
+                    // If the thread doesn't even have any soft-deleted posts, we'll delete it
+                    // permanently. Otherwise soft-delete it so as not to orphan the posts.
                     if ($thread->posts()->withTrashed()->count() == 0) {
                         $thread->forceDelete();
                     } else {
                         $thread->delete();
                     }
                 } else {
-                    $thread->updateWithoutTouch([
+                    Thread::withoutTimestamps(fn () => $thread->update([
                         'last_post_id' => $thread->getLastPost()->id,
                         'reply_count' => DB::raw("reply_count - {$threadPostsRemoved}"),
-                    ]);
+                    ]));
 
-                    $thread->posts()->withTrashed()->each(function ($p, $i) {
-                        $p->updateWithoutTouch(['sequence' => $i + 1]);
+                    Post::withoutTimestamps(function () use ($thread) {
+                        $thread->posts()->withTrashed()->each(function ($post, $i) {
+                            $post->update(['sequence' => $i + 1]);
+                        });
                     });
                 }
             }
@@ -105,7 +102,7 @@ class DeletePosts extends BaseAction
                 $attributes['post_count'] = DB::raw("post_count - {$categoryPostsRemoved}");
             }
 
-            $category->updateWithoutTouch($attributes);
+            $category->update($attributes);
         }
 
         return $posts;

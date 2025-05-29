@@ -33,7 +33,7 @@ class ApproveThreads extends BaseAction
         // Fetch the threads so we can operate on the affected categories below
         $threads = $query->with('category')->get();
 
-        Thread::withoutTimestamps(fn () => $query->update(['approved_at' => Carbon::now()]));
+        Thread::withoutTimestamps(fn () => $query->update(['approved_at' => Carbon::now()->subSecond()]));
 
         $categories = $threads->pluck('category')->unique()->values();
         foreach ($categories as $category) {
@@ -42,7 +42,7 @@ class ApproveThreads extends BaseAction
 
             foreach ($threadsInCategory as $thread) {
                 Post::withoutTimestamps(fn () => $thread->firstPost()->update([
-                    'approved_at' => Carbon::now()
+                    'approved_at' => Carbon::now()->subSecond()
                 ]));
 
                 $postCount += $thread->approvedPostCount;
