@@ -10,6 +10,7 @@ use TeamTeaTime\Forum\Events\UserCreatingThread;
 use TeamTeaTime\Forum\Events\UserViewingRecent;
 use TeamTeaTime\Forum\Events\UserViewingThread;
 use TeamTeaTime\Forum\Events\UserViewingUnread;
+use TeamTeaTime\Forum\Http\Requests\ApproveThread;
 use TeamTeaTime\Forum\Http\Requests\CreateThread;
 use TeamTeaTime\Forum\Http\Requests\DeleteThread;
 use TeamTeaTime\Forum\Http\Requests\LockThread;
@@ -18,6 +19,7 @@ use TeamTeaTime\Forum\Http\Requests\MoveThread;
 use TeamTeaTime\Forum\Http\Requests\PinThread;
 use TeamTeaTime\Forum\Http\Requests\RenameThread;
 use TeamTeaTime\Forum\Http\Requests\RestoreThread;
+use TeamTeaTime\Forum\Http\Requests\UnapproveThread;
 use TeamTeaTime\Forum\Http\Requests\UnlockThread;
 use TeamTeaTime\Forum\Http\Requests\UnpinThread;
 use TeamTeaTime\Forum\Models\Category;
@@ -243,6 +245,32 @@ class ThreadController extends BaseController
         }
 
         Forum::alert('success', 'threads.updated');
+
+        return new RedirectResponse(Forum::route('thread.show', $thread));
+    }
+
+    public function approve(ApproveThread $request): RedirectResponse
+    {
+        $thread = $request->fulfill();
+
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
+
+        Forum::alert('success', 'threads.approved');
+
+        return new RedirectResponse(Forum::route('thread.show', $thread));
+    }
+
+    public function unapprove(UnapproveThread $request): RedirectResponse
+    {
+        $thread = $request->fulfill();
+
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
+
+        Forum::alert('success', 'threads.unapproved');
 
         return new RedirectResponse(Forum::route('thread.show', $thread));
     }

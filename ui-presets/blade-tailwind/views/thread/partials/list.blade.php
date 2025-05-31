@@ -27,6 +27,9 @@
             @if ($thread->trashed())
                 <x-forum::badge type="danger">{{ trans('forum::general.deleted') }}</x-forum::badge>
             @endif
+            @if (!$thread->isApproved)
+                <x-forum::badge type="warning">{{ trans('forum::general.pending_approval') }}</x-forum::badge>
+            @endif
             <x-forum::badge :style="(isset($category) && $category->color_light_mode) ? 'background: '.$category->color_light_mode .';' : null">
                 {{ trans('forum::general.replies') }}:
                 {{ $thread->reply_count }}

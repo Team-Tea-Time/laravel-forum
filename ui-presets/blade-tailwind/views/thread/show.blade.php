@@ -26,7 +26,8 @@
                 @if (Gate::allows('lockThreads', $category)
                     || Gate::allows('pinThreads', $category)
                     || Gate::allows('rename', $thread)
-                    || Gate::allows('moveThreadsFrom', $category))
+                    || Gate::allows('moveThreadsFrom', $category)
+                    || (Gate::allows('approveThreads') && Gate::allows('approveThreads', $category)))
                     <x-forum::button-group>
                         @if (!$thread->trashed())
                             @can ('lockThreads', $category)
@@ -61,6 +62,17 @@
                                     <i data-feather="corner-up-right" class="w-4"></i> {{ trans('forum::general.move') }}
                                 </x-forum::button-link>
                             @endcan
+                            @if (Gate::allows('approveThreads') && Gate::allows('approveThreads', $category))
+                                @if ($thread->isApproved)
+                                    <x-forum::button-link href="#" data-open-modal="unapprove-thread" class="inline-flex items-center gap-2 bg-gray-500 hover:bg-gray-400">
+                                        <i data-feather="x-circle" class="w-4"></i> {{ trans('forum::general.unapprove') }}
+                                    </x-forum::button-link>
+                                @else
+                                    <x-forum::button-link href="#" data-open-modal="approve-thread" class="inline-flex items-center gap-2 bg-gray-500 hover:bg-gray-400">
+                                        <i data-feather="check-circle" class="w-4"></i> {{ trans('forum::general.approve') }}
+                                    </x-forum::button-link>
+                                @endif
+                            @endif
                         @endif
                     </x-forum::button-group>
                 @endcan
@@ -76,6 +88,9 @@
             @endif
             @if ($thread->locked)
                 <x-forum::badge type="warning">{{ trans('forum::threads.locked') }}</x-forum::badge>
+            @endif
+            @if (!$thread->isApproved)
+                <x-forum::badge type="warning">{{ trans('forum::general.pending_approval') }}</x-forum::badge>
             @endif
         </div>
 
@@ -334,6 +349,36 @@
                 @endslot
             @endcomponent
         @endcan
+
+        @if (Gate::allows('approveThreads') && Gate::allows('approveThreads', $category))
+            @if ($thread->isApproved)
+                @component('forum::modal-form')
+                    @slot('key', 'unapprove-thread')
+                    @slot('title', '<i data-feather="x-circle" class="text-gray-500"></i> ' . trans('forum::general.unapprove'))
+                    @slot('route', Forum::route('thread.unapprove', $thread))
+                    @slot('method', 'POST')
+
+                    {{ trans('forum::general.generic_confirm') }}
+
+                    @slot('actions')
+                        <x-forum::button type="submit">{{ trans('forum::general.proceed') }}</x-forum::button>
+                    @endslot
+                @endcomponent
+            @else
+                @component('forum::modal-form')
+                    @slot('key', 'approve-thread')
+                    @slot('title', '<i data-feather="check-circle" class="text-gray-500"></i> ' . trans('forum::general.approve'))
+                    @slot('route', Forum::route('thread.approve', $thread))
+                    @slot('method', 'POST')
+
+                    {{ trans('forum::general.generic_confirm') }}
+
+                    @slot('actions')
+                        <x-forum::button type="submit">{{ trans('forum::general.proceed') }}</x-forum::button>
+                    @endslot
+                @endcomponent
+            @endif
+        @endif
     @endif
 
     <script type="module">
