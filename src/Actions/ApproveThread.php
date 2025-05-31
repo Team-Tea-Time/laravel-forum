@@ -24,13 +24,8 @@ class ApproveThread extends BaseAction
             return null;
         }
 
-        Post::withoutTimestamps(fn () => $this->thread->firstPost()->update([
-            'approved_at' => Carbon::now()
-        ]));
-
-        Thread::withoutTimestamps(fn () => $this->thread->update([
-            'approved_at' => Carbon::now()
-        ]));
+        Post::withoutTimestamps(fn () => $this->thread->firstPost()->update(['approved_at' => Carbon::now()->subSecond()]));
+        Thread::withoutTimestamps(fn () => $this->thread->update(['approved_at' => Carbon::now()->subSecond()]));
 
         $this->thread->category->update([
             'thread_count' => DB::raw('thread_count + 1'),

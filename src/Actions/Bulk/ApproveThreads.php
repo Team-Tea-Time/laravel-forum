@@ -41,9 +41,7 @@ class ApproveThreads extends BaseAction
             $postCount = 0;
 
             foreach ($threadsInCategory as $thread) {
-                Post::withoutTimestamps(fn () => $thread->firstPost()->update([
-                    'approved_at' => Carbon::now()->subSecond()
-                ]));
+                Post::withoutTimestamps(fn () => $thread->firstPost()->update(['approved_at' => Carbon::now()->subSecond()]));
 
                 $postCount += $thread->approvedPostCount;
             }

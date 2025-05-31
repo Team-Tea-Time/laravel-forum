@@ -17,9 +17,7 @@ class RenameThread extends BaseAction
 
     protected function transact()
     {
-        $this->thread->updateWithoutTouch([
-            'title' => $this->title,
-        ]);
+        Thread::withoutTimestamps(fn () => $this->thread->update(['title' => $this->title]));
 
         return $this->thread;
     }

@@ -2,7 +2,6 @@
 
 namespace TeamTeaTime\Forum\Tests;
 
-use Illuminate\Contracts\Config\Repository;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Route;
 

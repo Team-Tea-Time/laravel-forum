@@ -18,6 +18,8 @@ class CategoryFactory extends Factory
             'thread_count' => 0,
             'post_count' => 0,
             'is_private' => 0,
+            'thread_approval_enabled' => 0,
+            'post_approval_enabled' => 0,
             'color_light_mode' => '#007BFF',
             'color_dark_mode' => '#007BFF',
         ];
