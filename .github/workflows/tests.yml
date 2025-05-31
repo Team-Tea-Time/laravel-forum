@@ -2,9 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: [ "6.x" ]
+    branches: [ "6.x", "7.x" ]
   pull_request:
-    branches: [ "6.x" ]
+    branches: [ "6.x", "7.x" ]
 
 jobs:
   run:
