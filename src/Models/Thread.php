@@ -151,7 +151,9 @@ class Thread extends BaseModel
 
         if ($this->category->requiresThreadApproval() && !$this->isApproved) {
             $isAuthor = $user != null && $this->author_id == $user->getKey();
-            $canApproveThreads = $user != null && $user->can('approveThreads', $this->category);
+            $canApproveThreads = $user != null
+                && $user->can('approveThreads')
+                && $user->can('approveThreads', $this->category);
 
             if (!$isAuthor && !$canApproveThreads) return false;
         }

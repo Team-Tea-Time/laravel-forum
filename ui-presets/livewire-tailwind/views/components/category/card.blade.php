@@ -32,7 +32,7 @@
                         </span>
                     </div>
                 @endif
-                @if ($category->latestActiveThread && $category->latestActiveThread->reply_count > 1)
+                @if ($category->latestActiveThread && $category->latestActiveThread->reply_count > 0)
                     <div>
                         @include ("forum::components.icons.chat-bubble-text-mini")
                         <a href="{{ $category->latestActiveThread->lastPost->route }}" class="inline-block max-w-36 md:max-w-48 lg:max-w-64 truncate align-middle">

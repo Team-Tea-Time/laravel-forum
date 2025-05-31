@@ -4,14 +4,16 @@
 
     <h1 class="mb-0">{{ trans('forum::threads.pending_approval') }}</h1>
 
-    <div class="flex justify-end">
-        <x-forum::form.input-checkbox
-            id="toggle-all"
-            value=""
-            :label="trans('forum::threads.select_all')"
-            x-model="toggledAllThreads"
-            @click="toggleAllThreads" />
-    </div>
+    @if ($threads->count() > 0)
+        <div class="flex justify-end">
+            <x-forum::form.input-checkbox
+                id="toggle-all"
+                value=""
+                :label="trans('forum::threads.select_all')"
+                x-model="toggledAllThreads"
+                @click="toggleAllThreads" />
+        </div>
+    @endif
 
     <div class="my-4">
         @foreach ($threads as $thread)
@@ -36,7 +38,7 @@
                 intent="danger"
                 :label="trans('forum::general.delete_selection')"
                 x-ref="buttonDelete"
-                @click="deleteSelection"
+                @click="showDeleteModal = true"
                 disabled />
         </div>
         <div>
@@ -44,10 +46,54 @@
                 id="approve"
                 :label="trans('forum::general.approve_selection')"
                 x-ref="buttonApprove"
-                @click="approveSelection"
+                @click="showApproveModal = true"
                 disabled />
         </div>
     </div>
+
+    <x-forum::modal
+        :heading="trans('forum::general.delete_selection')"
+        x-show="showDeleteModal"
+        onClose="showDeleteModal = false">
+        {{ trans('forum::general.generic_confirm') }}
+
+        <div class="flex flex-wrap mt-6">
+            <div class="grow">
+                <x-forum::button
+                    intent="secondary"
+                    :label="trans('forum::general.cancel')"
+                    @click="showDeleteModal = false" />
+            </div>
+            <div>
+                <x-forum::button
+                    intent="danger"
+                    :label="trans('forum::general.proceed')"
+                    @click="deleteSelection" />
+            </div>
+        </div>
+    </x-forum::modal>
+
+    <x-forum::modal
+        :heading="trans('forum::general.approve_selection')"
+        x-show="showApproveModal"
+        onClose="showApproveModal = false">
+        {{ trans('forum::general.generic_confirm') }}
+
+        <div class="flex flex-wrap mt-6">
+            <div class="grow">
+                <x-forum::button
+                    intent="secondary"
+                    :label="trans('forum::general.cancel')"
+                    @click="showApproveModal = false" />
+            </div>
+            <div>
+                <x-forum::button
+                    intent="primary"
+                    :label="trans('forum::general.proceed')"
+                    @click="approveSelection" />
+            </div>
+        </div>
+    </x-forum::modal>
 </div>
 
 @script
@@ -56,11 +102,12 @@ Alpine.data('pendingApproval', () => {
     return {
         toggledAllThreads: false,
         selectedThreads: [],
-        confirmMessage: "{{ trans('forum::general.generic_confirm') }}",
+        showDeleteModal: false,
+        showApproveModal: false,
 
         setButtonsDisabled(disabled) {
-            $refs.buttonApprove.disabled = disabled;
             $refs.buttonDelete.disabled = disabled;
+            $refs.buttonApprove.disabled = disabled;
         },
 
         reset() {
@@ -90,16 +137,17 @@ Alpine.data('pendingApproval', () => {
             });
         },
 
-        async approveSelection() {
-            const result = await $wire.approve(this.selectedThreads);
+        async deleteSelection() {
+            const result = await $wire.delete(this.selectedThreads);
             if (result.type == 'success') this.reset();
+            this.showDeleteModal = false;
             $dispatch('alert', result);
         },
 
-        async deleteSelection() {
-            if (!confirm(this.confirmMessage)) return;
-            const result = await $wire.delete(this.selectedThreads);
+        async approveSelection() {
+            const result = await $wire.approve(this.selectedThreads);
             if (result.type == 'success') this.reset();
+            this.showApproveModal = false;
             $dispatch('alert', result);
         }
     }

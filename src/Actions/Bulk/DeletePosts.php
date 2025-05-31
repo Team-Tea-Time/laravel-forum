@@ -38,7 +38,7 @@ class DeletePosts extends BaseAction
 
         // Fetch the approved, non-deleted subset of the posts so we can operate on the affected
         // threads and categories below
-        $posts = $query->approved()->notDeleted()->with(['thread', 'thread.category'])->get();
+        $posts = with(clone $query)->approved()->notDeleted()->with(['thread', 'thread.category'])->get();
 
         $this->permaDelete
             ? $query->forceDelete()
@@ -102,7 +102,7 @@ class DeletePosts extends BaseAction
                 $attributes['post_count'] = DB::raw("post_count - {$categoryPostsRemoved}");
             }
 
-            $category->update($attributes);
+            Category::withoutTimestamps(fn () => $category->update($attributes));
         }
 
         return $posts;

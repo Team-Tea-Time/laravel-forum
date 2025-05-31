@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User;
 use TeamTeaTime\Forum\Models\Traits\HasApproval;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
 use TeamTeaTime\Forum\Models\Traits\HasSoftDeletion;
@@ -78,5 +79,23 @@ class Post extends BaseModel
         return new Attribute(
             get: fn() => Forum::route('thread.show', $this),
         );
+    }
+
+    public function isAccessibleTo(?User $user): bool
+    {
+        if (!$this->thread->isAccessibleTo($user)) {
+            return false;
+        }
+
+        if ($this->thread->category->requiresPostApproval() && !$this->isApproved) {
+            $isAuthor = $user != null && $this->author_id == $user->getKey();
+            $canApprovePosts = $user != null
+                && $user->can('approvePosts')
+                && $user->can('approvePosts', $this->thread);
+
+            if (!$isAuthor && !$canApprovePosts) return false;
+        }
+
+        return true;
     }
 }

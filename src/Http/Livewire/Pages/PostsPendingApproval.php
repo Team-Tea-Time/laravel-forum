@@ -62,10 +62,10 @@ class PostsPendingApproval extends Component
         $result = $action->execute();
 
         if ($result !== null) {
-            UserBulkApprovedThreads::dispatch($request->user(), $result);
+            UserBulkApprovedPosts::dispatch($request->user(), $result);
         }
 
-        return $this->handleActionResult($result, 'threads.approved');
+        return $this->handleActionResult($result, 'posts.approved');
     }
 
     public function render(Request $request): View
