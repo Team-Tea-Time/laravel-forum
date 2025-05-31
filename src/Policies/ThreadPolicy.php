@@ -9,7 +9,7 @@ class ThreadPolicy
 {
     public function view(User $user, Thread $thread): bool
     {
-        return $thread->isApproved || $user->getKey() == 1 || $user->getKey() == 2;
+        return true;
     }
 
     public function rename(User $user, Thread $thread): bool
@@ -29,7 +29,6 @@ class ThreadPolicy
 
     public function delete(User $user, Thread $thread): bool
     {
-        return true;
         return $user->getKey() === $thread->author_id;
     }
 

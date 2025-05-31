@@ -40,4 +40,3 @@ Route::group(['prefix' => $prefix['thread'] . '/{thread_id}-{thread_slug}'], fun
     Route::get($prefix['post'] . '/{post_id}/edit', PostEdit::class)->name('post.edit');
     Route::get($prefix['post'] . '/{post_id}', PostShow::class)->name('post.show');
 });
-

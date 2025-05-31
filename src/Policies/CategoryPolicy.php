@@ -30,7 +30,7 @@ class CategoryPolicy
 
     public function createThreadsWithoutApproval(User $user, Category $category): bool
     {
-        return false;
+        return true;
     }
 
     public function manageThreads(User $user, Category $category): bool
@@ -45,41 +45,41 @@ class CategoryPolicy
 
     public function approveThreads(User $user, Category $category): bool
     {
-        return $user->getKey() != 3;
+        return true;
     }
 
     public function deleteThreads(User $user, Category $category): bool
     {
-        return $user->getKey() != 3;
+        return true;
     }
 
     public function restoreThreads(User $user, Category $category): bool
     {
-        return $user->getKey() != 3;
+        return true;
     }
 
     public function moveThreadsFrom(User $user, Category $category): bool
     {
-        return $user->getKey() != 3;
+        return true;
     }
 
     public function moveThreadsTo(User $user, Category $category): bool
     {
-        return $user->getKey() != 3;
+        return true;
     }
 
     public function lockThreads(User $user, Category $category): bool
     {
-        return $user->getKey() != 3;
+        return true;
     }
 
     public function pinThreads(User $user, Category $category): bool
     {
-        return $user->getKey() != 3;
+        return true;
     }
 
     public function markThreadsAsRead(User $user, Category $category): bool
     {
-        return $user->getKey() != 3;
+        return true;
     }
 }
