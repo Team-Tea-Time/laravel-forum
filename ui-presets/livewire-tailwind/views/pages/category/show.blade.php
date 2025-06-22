@@ -76,10 +76,10 @@
             id="selected-action"
             x-model="selectedAction">
                 <option value="none" disabled>{{ trans_choice('forum::general.actions', 1) }}...</option>
-            @can ('approveThreads', $category)
+            @if (Gate::allows('approveThreads') && Gate::allows('approveThreads', $category))
                 <option value="approve">{{ trans('forum::general.approve') }}</option>
                 <option value="unapprove">{{ trans('forum::general.unapprove') }}</option>
-            @endcan
+            @endif
             @can ('deleteThreads', $category)
                 <option value="delete">{{ trans('forum::general.delete') }}</option>
             @endcan
