@@ -20,16 +20,12 @@ class PostController extends BaseController
     public function show(Request $request): View
     {
         $thread = $request->route('thread');
+        $post = $request->route('post');
 
-        if (!$thread->category->isAccessibleTo($request->user())) {
+        if (!$post->isAccessibleTo($request->user())) {
             abort(404);
         }
 
-        if ($thread->category->is_private) {
-            $this->authorize('view', $thread);
-        }
-
-        $post = $request->route('post');
         if ($request->user() !== null) {
             UserViewingPost::dispatch($request->user(), $post);
         }

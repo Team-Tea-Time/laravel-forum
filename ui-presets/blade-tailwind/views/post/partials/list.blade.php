@@ -30,6 +30,12 @@
             @include ('forum::post.partials.quote', ['post' => $post->parent])
         @endif
 
+        @if ($post->sequence != 1 && $post->thread->category->requiresPostApproval() && !$post->isApproved)
+            <div class="mb-2">
+                <x-forum::badge type="warning">{{ trans('forum::general.pending_approval') }}</x-forum::badge>
+            </div>
+        @endif
+
         @if ($post->trashed())
             @can ('viewTrashedPosts')
                 {!! Forum::render($post->content) !!}

@@ -135,7 +135,10 @@
             @include ('forum::post.partials.list', compact('post'))
         @endforeach
 
-        @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)) && count($selectablePosts) > 0)
+        @if ($selectablePosts > 0
+            && ((Gate::allows('approvePosts') && Gate::allows('approvePosts', $thread))
+                || Gate::allows('deletePosts', $thread)
+                || Gate::allows('restorePosts', $thread)))
                 <div class="fixed bottom-0 right-0 m-2" style="z-index: 1000;" v-if="state.selectedPosts.length">
                     <div class="bg-white shadow-sm rounded-md min-w-96 max-w-full">
                         <div class="border-b text-center py-4 px-6">
@@ -148,8 +151,16 @@
                                 </div>
 
                                 <x-forum::select id="bulk-actions" v-model="state.selectedPostAction">
-                                    <option value="delete">{{ trans('forum::general.delete') }}</option>
-                                    <option value="restore">{{ trans('forum::general.restore') }}</option>
+                                    @if (Gate::allows('approvePosts') && Gate::allows('approvePosts', $thread))
+                                        <option value="approve">{{ trans('forum::general.approve') }}</option>
+                                        <option value="unapprove">{{ trans('forum::general.unapprove') }}</option>
+                                    @endif
+                                    @can ('deletePosts', $thread)
+                                        <option value="delete">{{ trans('forum::general.delete') }}</option>
+                                    @endcan
+                                    @can ('restorePosts', $thread)
+                                        <option value="restore">{{ trans('forum::general.restore') }}</option>
+                                    @endcan
                                 </x-forum::select>
                             </div>
 
@@ -389,16 +400,20 @@
 
             const selectablePosts = @json($selectablePosts);
             const postActions = {
+                approve: "{{ Forum::route('bulk.post.approve') }}",
+                unapprove: "{{ Forum::route('bulk.post.unapprove') }}",
                 delete: "{{ Forum::route('bulk.post.delete') }}",
                 restore: "{{ Forum::route('bulk.post.restore') }}"
             };
             const postActionMethods = {
+                approve: 'POST',
+                unapprove: 'POST',
                 delete: 'DELETE',
                 restore: 'POST',
             };
 
             const state = Vue.reactive({
-                selectedPostAction: 'delete',
+                selectedPostAction: 'approve',
                 selectedPosts: [],
                 selectedThreadAction: null,
             });

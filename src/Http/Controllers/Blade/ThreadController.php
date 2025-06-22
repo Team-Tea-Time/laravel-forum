@@ -105,6 +105,10 @@ class ThreadController extends BaseController
                ? $thread->posts()->withTrashed()
                : $thread->posts();
 
+        if (!$request->user() || !$request->user()->can('approvePosts', $thread)) {
+            $posts = $posts->approved();
+        }
+
         $posts = $posts
             ->with('author', 'thread')
             ->orderBy('created_at', 'asc')
