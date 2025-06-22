@@ -22,6 +22,9 @@ Route::patch('unread/mark-as-read', [ThreadController::class, 'markAsRead'])->na
 
 Route::get('manage', [CategoryController::class, 'manage'])->name('category.manage')->middleware($authMiddleware);
 
+Route::get('pending-approval/threads', [ThreadController::class, 'pendingApproval'])->name('pending-approval.threads')->middleware($authMiddleware);
+Route::get('pending-approval/posts', [PostController::class, 'pendingApproval'])->name('pending-approval.posts')->middleware($authMiddleware);
+
 // Categories
 Route::post($prefix['category'] . '/create', [CategoryController::class, 'store'])->name('category.store');
 Route::prefix($prefix['category'] . '/{category_id}-{category_slug}')->group(function () use ($prefix, $authMiddleware) {

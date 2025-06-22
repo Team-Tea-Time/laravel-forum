@@ -278,4 +278,17 @@ class ThreadController extends BaseController
 
         return new RedirectResponse(Forum::route('thread.show', $thread));
     }
+
+    public function pendingApproval(Request $request): View
+    {
+        $threads = Thread::notDeleted()->pendingApproval()->orderBy('created_at', 'desc')->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
+
+        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
+
+        $threads = $threads->get()->filter(function ($thread) use ($request, $accessibleCategoryIds) {
+            return !$thread->category->is_private || $request->user() && $accessibleCategoryIds->contains($thread->category_id) && $request->user()->can('view', $thread);
+        });
+
+        return ViewFactory::make('forum::thread.pending-approval', compact('threads'));
+    }
 }

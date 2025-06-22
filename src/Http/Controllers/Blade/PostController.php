@@ -13,6 +13,8 @@ use TeamTeaTime\Forum\Http\Requests\CreatePost;
 use TeamTeaTime\Forum\Http\Requests\DeletePost;
 use TeamTeaTime\Forum\Http\Requests\RestorePost;
 use TeamTeaTime\Forum\Http\Requests\EditPost;
+use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\Support\Access\CategoryAccess;
 use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class PostController extends BaseController
@@ -130,5 +132,22 @@ class PostController extends BaseController
         Forum::alert('success', 'posts.updated', 1);
 
         return new RedirectResponse(Forum::route('thread.show', $post));
+    }
+
+    public function pendingApproval(Request $request): View
+    {
+        $posts = Post::notDeleted()
+            ->notFirstInThread()
+            ->pendingApproval()
+            ->orderBy('created_at', 'desc')
+            ->with('thread', 'author');
+
+        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
+
+        $posts = $posts->get()->filter(function ($post) use ($request, $accessibleCategoryIds) {
+            return !$post->thread->category->is_private || $request->user() && $accessibleCategoryIds->contains($post->category_id) && $request->user()->can('view', $post->thread);
+        });
+
+        return ViewFactory::make('forum::post.pending-approval', ['posts' => $posts]);
     }
 }
