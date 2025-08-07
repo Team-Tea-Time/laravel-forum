@@ -14,17 +14,20 @@ document.addEventListener('DOMContentLoaded', function () {
     createApp({
         setup() {
             const isCollapsed = ref(true);
+            const isManageDropdownCollapsed = ref(true);
             const isUserDropdownCollapsed = ref(true);
 
             window.addEventListener('click', event => {
                 const ignore = ['navbar-toggler', 'navbar-toggler-icon', 'dropdown-toggle'];
                 if (ignore.some(className => event.target.classList.contains(className))) return;
                 if (!isCollapsed.value) isCollapsed.value = true;
+                if (!isManageDropdownCollapsed.value) isManageDropdownCollapsed.value = true;
                 if (!isUserDropdownCollapsed.value) isUserDropdownCollapsed.value = true;
             });
 
             return {
                 isCollapsed,
+                isManageDropdownCollapsed,
                 isUserDropdownCollapsed,
             };
         }
