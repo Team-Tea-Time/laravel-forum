@@ -87,7 +87,7 @@ class ThreadController extends BaseController
     {
         $thread = $request->route('thread');
 
-        if (!$thread->category->isAccessibleTo($request->user())) {
+        if (!$thread->isAccessibleTo($request->user())) {
             abort(404);
         }
 
