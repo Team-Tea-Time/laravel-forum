@@ -47,8 +47,8 @@ Route::prefix('thread')->name('thread.')->group(function () use ($authMiddleware
     });
 
     // Posts by thread
-    Route::get('{thread}/posts', [ThreadController::class, 'indexByThread'])->name('posts');
-    Route::post('{thread}/posts', [ThreadController::class, 'store'])->name('posts.store')->middleware($authMiddleware);
+    Route::get('{thread}/posts', [PostController::class, 'indexByThread'])->name('posts');
+    Route::post('{thread}/posts', [PostController::class, 'store'])->name('posts.store')->middleware($authMiddleware);
 });
 
 // Posts
