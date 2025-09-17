@@ -8,4 +8,4 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # PHP extensions
 RUN docker-php-ext-install zip
 
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY --from=docker.io/composer /usr/bin/composer /usr/bin/composer
