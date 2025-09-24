@@ -349,12 +349,13 @@
     }
     </style>
 
+    @if ((count($posts) > 1 || $posts->currentPage() > 1) && count($selectablePosts) > 0)
     <script>
     new Vue({
         el: '.v-thread',
         name: 'Thread',
         data: {
-            posts: @json($posts),
+            posts: @json(['data' => $posts->map(fn($post) => ['id' => $post->id, 'sequence' => $post->sequence])]),
             selectablePosts: @json($selectablePosts),
             postActions: {
                 'delete': "{{ Forum::route('bulk.post.delete') }}",
@@ -394,4 +395,5 @@
         }
     });
     </script>
+    @endif
 @stop
