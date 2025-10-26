@@ -23,6 +23,25 @@
             <label class="form-check-label" for="is-private">{{ trans('forum::categories.make_private') }}</label>
         </div>
     </div>
+
+    @if (!config('forum.general.content_approval.threads.enable_globally'))
+        <div class="mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="thread_approval_enabled" id="thread-approval-enabled" value="1" {{ old('thread_approval_enabled') ? 'checked' : '' }}>
+                <label class="form-check-label" for="thread-approval-enabled">{{ trans('forum::categories.enable_thread_approval') }}</label>
+            </div>
+        </div>
+    @endif
+
+    @if (!config('forum.general.content_approval.posts.enable_globally'))
+        <div class="mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="post_approval_enabled" id="post-approval-enabled" value="1" {{ old('post_approval_enabled') ? 'checked' : '' }}>
+                <label class="form-check-label" for="post-approval-enabled">{{ trans('forum::categories.enable_post_approval') }}</label>
+            </div>
+        </div>
+    @endif
+
     @include ('forum::category.partials.inputs.color')
 
     @slot('actions')
