@@ -49,7 +49,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </a>
-                            <div class="border absolute left-0 bg-white rounded-md w-44 divide-y" :class="{ hidden: isManageDropdownCollapsed }" aria-labelledby="manageDropdownMenuLink">
+                            <div class="border absolute z-50 left-0 bg-white rounded-md w-44 divide-y" :class="{ hidden: isManageDropdownCollapsed }" aria-labelledby="manageDropdownMenuLink">
                                 @can ('moveCategories')
                                     <a class="block px-4 py-2" href="{{ route('forum.category.manage') }}">
                                         {{ trans('forum::categories.manage') }}
@@ -79,7 +79,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </a>
-                            <div class="border absolute left-0 bg-white rounded-md w-44 divide-y" :class="{ hidden: isUserDropdownCollapsed }" aria-labelledby="userDropdownMenuLink">
+                            <div class="border absolute z-50 left-0 bg-white rounded-md w-44 divide-y" :class="{ hidden: isUserDropdownCollapsed }" aria-labelledby="userDropdownMenuLink">
                                 <a class="block px-4 py-2" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Log out
                                 </a>
