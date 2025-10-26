@@ -21,7 +21,9 @@ class EditCategory extends CreateCategory
             $input['color_light_mode'] ?? $defaultCategoryColor,
             $input['color_dark_mode'] ?? $defaultCategoryColor,
             $input['accepts_threads'] ?? null,
-            $input['is_private'] ?? null
+            $input['is_private'] ?? null,
+            $input['thread_approval_enabled'] ?? null,
+            $input['post_approval_enabled'] ?? null
         );
         $category = $action->execute();
 

@@ -32,7 +32,9 @@ class CreateCategory extends FormRequest implements FulfillableRequestInterface
             isset($input['color_light_mode']) ? $input['color_light_mode'] : config('forum.frontend.default_category_color'),
             isset($input['color_dark_mode']) ? $input['color_dark_mode'] : config('forum.frontend.default_category_color'),
             isset($input['accepts_threads']) && $input['accepts_threads'],
-            isset($input['is_private']) && $input['is_private']
+            isset($input['is_private']) && $input['is_private'],
+            isset($input['thread_approval_enabled']) && $input['thread_approval_enabled'],
+            isset($input['post_approval_enabled']) && $input['post_approval_enabled']
         );
 
         $category = $action->execute();
