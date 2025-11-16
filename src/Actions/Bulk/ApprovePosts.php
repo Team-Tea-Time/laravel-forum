@@ -23,7 +23,7 @@ class ApprovePosts extends BaseAction
     protected function transact()
     {
         $query = Post::whereIn('id', $this->postIds)
-            ->notDeleted()
+            ->withTrashed()
             ->notFirstInThread()
             ->pendingApproval();
 

@@ -112,9 +112,10 @@ class ThreadController extends BaseController
         }
 
         if ($user) {
-            $postsQuery = $postsQuery->orWhere(function ($query) use ($user)
+            $postsQuery = $postsQuery->orWhere(function ($query) use ($thread, $user)
                 {
-                    $query->whereNull('approved_at')
+                    $query->where('thread_id', $thread->id)
+                          ->whereNull('approved_at')
                           ->where('author_id', $user->getKey());
                 });
         }

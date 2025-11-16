@@ -23,7 +23,7 @@ class ApproveThreads extends BaseAction
     protected function transact()
     {
         $query = Thread::whereIn('id', $this->threadIds)
-            ->notDeleted()
+            ->withTrashed()
             ->pendingApproval();
 
         if ($query->count() == 0) {

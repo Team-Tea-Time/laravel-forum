@@ -45,14 +45,13 @@ class PostAuthorization
             $query = $query->withTrashed();
         }
 
-        $posts = $query->with(['thread', 'thread.category'])->whereIn('id', $postIds);
+        $posts = $query->with(['thread', 'thread.category'])->whereIn('id', $postIds)->get();
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($user);
 
         foreach ($posts as $post) {
             $canView = $accessibleCategoryIds->contains($post->thread->category_id) && $user->can('view', $post->thread);
-            $canApprove = $user->can('approvePosts', $post->thread) && $user->can('approve', $post);
-
-            if (!($canView && $canApprove)) {
+            $canApprove = $user->can('approvePosts', $post->thread);
+            if (!$canView || !$canApprove) {
                 return false;
             }
         }

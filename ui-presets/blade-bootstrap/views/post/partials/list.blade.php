@@ -27,12 +27,12 @@
 
         @if ($post->trashed())
             @can ('viewTrashedPosts')
-                {!!Forum::render($post->content) !!}
+                {!! Forum::render($post->content) !!}
                 <br>
             @endcan
             <span class="badge rounded-pill bg-danger">{{ trans('forum::general.deleted') }}</span>
         @else
-            {!!Forum::render($post->content) !!}
+            {!! Forum::render($post->content) !!}
         @endif
 
         @if (!isset($single) || !$single)
