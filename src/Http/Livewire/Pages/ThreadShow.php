@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Livewire\Pages;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
@@ -218,16 +219,26 @@ class ThreadShow extends EventfulPaginatedComponent
 
     public function render(Request $request): View
     {
-        $threadDestinationCategories = $request->user() && $request->user()->can('moveThreadsFrom', $this->thread->category)
-            ? CategoryAccess::getFilteredTreeFor($request->user())->toTree()
+        $user = $request->user();
+
+        $threadDestinationCategories = $user && $user->can('moveThreadsFrom', $this->thread->category)
+            ? CategoryAccess::getFilteredTreeFor($user)->toTree()
             : [];
 
-        $postsQuery = config('forum.general.display_trashed_posts') || $request->user() && $request->user()->can('viewTrashedPosts')
+        $postsQuery = config('forum.general.display_trashed_posts') || $user && $user->can('viewTrashedPosts')
             ? $this->thread->posts()->withTrashed()
             : $this->thread->posts();
 
-        if (!$request->user() || !$request->user()->can('approvePosts', $this->thread)) {
+        if (!$user || !$user->can('approvePosts', $this->thread)) {
             $postsQuery = $postsQuery->approved();
+        }
+
+        if ($user) {
+            $postsQuery = $postsQuery->orWhere(function ($query) use ($user)
+                {
+                    $query->whereNull('approved_at')
+                          ->where('author_id', $user->getKey());
+                });
         }
 
         $posts = $postsQuery
@@ -236,9 +247,12 @@ class ThreadShow extends EventfulPaginatedComponent
             ->paginate();
 
         $selectablePostIds = [];
-        if ($request->user()) {
+        if ($user) {
             foreach ($posts as $post) {
-                if ($post->sequence > 1 && ($request->user()->can('delete', $post) || $request->user()->can('restore', $post))) {
+                $isReply = $post->sequence > 1;
+                $canDeleteOrRestore = $user->can('delete', $post) || $user->can('restore', $post);
+                $canApprove = ($post->approved_at == null || $post->approved_at > Carbon::now()) && $user->can('approvePosts', $this->thread);
+                if ($isReply && ($canDeleteOrRestore || $canApprove)) {
                     $selectablePostIds[] = $post->id;
                 }
             }

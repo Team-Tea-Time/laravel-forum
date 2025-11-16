@@ -132,7 +132,7 @@
         @endif
 
         @foreach ($posts as $post)
-            @include ('forum::post.partials.list', compact('post'))
+            @include ('forum::post.partials.list', ['post' => $post, 'isSelectable' => in_array($post->id, $selectablePosts)])
         @endforeach
 
         @if ($selectablePosts > 0

@@ -5,12 +5,8 @@
         @if (!isset($single) || !$single)
             <span class="float-end">
                 <a href="{{ Forum::route('thread.show', $post) }}" class="text-blue-500">#{{ $post->sequence }}</a>
-                @if ($post->sequence != 1)
-                    @can ('deletePosts', $post->thread)
-                        @can ('delete', $post)
-                            <input type="checkbox" name="posts[]" :value="{{ $post->id }}" v-model="state.selectedPosts" class="ml-2" />
-                        @endcan
-                    @endcan
+                @if ($isSelectable)
+                    <input type="checkbox" name="posts[]" :value="{{ $post->id }}" v-model="state.selectedPosts" class="ml-2" />
                 @endif
             </span>
         @endif
