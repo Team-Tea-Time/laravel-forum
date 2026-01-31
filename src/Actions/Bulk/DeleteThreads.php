@@ -36,7 +36,8 @@ class DeleteThreads extends BaseAction
 
         // Fetch the approved, non-deleted subset of the threads so we can operate on the affected
         // categories below
-        $threads = (clone $query)->approved()->notDeleted()->get();
+        $accessibleThreads = (clone $query)->get();
+        $threads = $accessibleThreads->where('approved', 1)->where('deleted_at', null);
 
         if ($this->permaDelete) {
             $query->forceDelete();
@@ -55,7 +56,7 @@ class DeleteThreads extends BaseAction
         if ($threads->count() == 0) {
             // We only dealt with unapproved and/or soft-deleted threads, so no category update is
             // necessary
-            return $threads;
+            return $accessibleThreads;
         }
 
         $threadsByCategory = $threads->groupBy('category_id');
@@ -83,6 +84,6 @@ class DeleteThreads extends BaseAction
             $category->update($updates);
         }
 
-        return $threads;
+        return $accessibleThreads;
     }
 }

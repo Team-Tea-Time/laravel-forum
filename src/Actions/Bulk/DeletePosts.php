@@ -38,7 +38,8 @@ class DeletePosts extends BaseAction
 
         // Fetch the approved, non-deleted subset of the posts so we can operate on the affected
         // threads and categories below
-        $posts = with(clone $query)->approved()->notDeleted()->with(['thread', 'thread.category'])->get();
+        $accessiblePosts = (clone $query)->get();
+        $posts = (clone $query)->approved()->notDeleted()->with(['thread', 'thread.category'])->get();
 
         $this->permaDelete
             ? $query->forceDelete()
@@ -47,7 +48,7 @@ class DeletePosts extends BaseAction
         if ($posts->count() == 0) {
             // We only dealt with unapproved and/or soft-deleted posts, so no thread or category
             // update is necessary
-            return $posts;
+            return $accessiblePosts;
         }
 
         $threads = $posts->pluck('thread')->unique();
@@ -105,6 +106,6 @@ class DeletePosts extends BaseAction
             Category::withoutTimestamps(fn () => $category->update($attributes));
         }
 
-        return $posts;
+        return $accessiblePosts;
     }
 }
