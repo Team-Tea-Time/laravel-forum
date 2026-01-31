@@ -15,6 +15,8 @@ abstract class AbstractPreset
      */
     abstract public static function getSummary(): string;
 
+    abstract public static function isSupported(): bool;
+
     abstract public static function getRequiredStack(): FrontendStack;
 
     /**
@@ -72,6 +74,7 @@ abstract class AbstractPreset
         return [
             'name' => $this->getName(),
             'summary' => $this->getSummary(),
+            'supported' => $this->isSupported(),
             'required_stack' => $this->getRequiredStack()->value,
         ];
     }

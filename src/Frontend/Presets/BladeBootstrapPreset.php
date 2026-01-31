@@ -21,6 +21,11 @@ class BladeBootstrapPreset extends AbstractPreset
         return FrontendStack::BLADE;
     }
 
+    public static function isSupported(): bool
+    {
+        return false;
+    }
+
     public static function getViteInput(): array
     {
         return [

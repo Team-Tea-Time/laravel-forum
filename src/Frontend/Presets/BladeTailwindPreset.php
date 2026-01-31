@@ -21,6 +21,11 @@ class BladeTailwindPreset extends AbstractPreset
         return "Blade with Vue and Tailwind CSS.";
     }
 
+    public static function isSupported(): bool
+    {
+        return true;
+    }
+
     public static function getRequiredStack(): FrontendStack
     {
         return FrontendStack::BLADE;

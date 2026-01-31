@@ -34,7 +34,7 @@ class PresetList extends Command
             $table[] = $preset->toArray();
         }
 
-        table(['Name', 'Summary', 'Required Stack'], $table);
+        table(['Name', 'Summary', 'Supported', 'Required Stack'], $table);
 
         info("Install a preset with: php artisan forum:preset-install {preset}.");
     }
