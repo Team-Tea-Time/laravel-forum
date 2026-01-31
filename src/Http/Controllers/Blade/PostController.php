@@ -142,12 +142,41 @@ class PostController extends BaseController
             ->orderBy('created_at', 'desc')
             ->with('thread', 'author');
 
+        // Get accessible category IDs for the current user
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
-
-        $posts = $posts->get()->filter(function ($post) use ($request, $accessibleCategoryIds) {
-            return !$post->thread->category->is_private || $request->user() && $accessibleCategoryIds->contains($post->category_id) && $request->user()->can('view', $post->thread);
+        
+        // Apply filtering to the query
+        $posts = $posts->where(function ($query) use ($request, $accessibleCategoryIds) {
+            // Public categories or private categories the user has access to
+            $query->whereHas('thread.category', function ($q) use ($accessibleCategoryIds) {
+                $q->where('is_private', false)
+                  ->when($accessibleCategoryIds->isNotEmpty(), function ($q) use ($accessibleCategoryIds) {
+                      $q->orWhereIn('id', $accessibleCategoryIds);
+                  });
+            });
+            
+            // Check view permissions for the thread
+            if ($request->user()) {
+                $query->whereHas('thread', function ($q) use ($accessibleCategoryIds) {
+                    $q->where(function ($q) use ($accessibleCategoryIds) {
+                        $q->whereDoesntHave('category', function ($q) {
+                            $q->where('is_private', true);
+                        })->orWhereHas('category', function ($q) use ($accessibleCategoryIds) {
+                            $q->whereIn('id', $accessibleCategoryIds);
+                        });
+                    })->where(function ($q) use ($accessibleCategoryIds) {
+                        $q->whereNull('category_id')
+                          ->orWhereIn('category_id', $accessibleCategoryIds);
+                    });
+                });
+            }
         });
 
-        return ViewFactory::make('forum::post.pending-approval', ['posts' => $posts]);
+        // Paginate the results
+        $posts = $posts->paginate();
+
+        return ViewFactory::make('forum::post.pending-approval', [
+            'posts' => $posts
+        ]);
     }
 }

@@ -68,7 +68,6 @@ class PostAuthorization
         }
 
         $posts = $query->with(['thread', 'thread.category'])->whereIn('id', $postIds)->get();
-
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($user);
 
         foreach ($posts as $post) {

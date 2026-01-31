@@ -300,13 +300,38 @@ class ThreadController extends BaseController
 
     public function pendingApproval(Request $request): View
     {
-        $threads = Thread::notDeleted()->pendingApproval()->orderBy('created_at', 'desc')->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
+        $threads = Thread::notDeleted()
+            ->pendingApproval()
+            ->orderBy('created_at', 'desc')
+            ->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
 
+        // Get accessible category IDs for the current user
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
-
-        $threads = $threads->get()->filter(function ($thread) use ($request, $accessibleCategoryIds) {
-            return !$thread->category->is_private || $request->user() && $accessibleCategoryIds->contains($thread->category_id) && $request->user()->can('view', $thread);
+        
+        // Apply filtering to the query
+        $threads = $threads->where(function ($query) use ($request, $accessibleCategoryIds) {
+            // Public categories or private categories the user has access to
+            $query->whereHas('category', function ($q) use ($accessibleCategoryIds) {
+                $q->where('is_private', false)
+                  ->when($accessibleCategoryIds->isNotEmpty(), function ($q) use ($accessibleCategoryIds) {
+                      $q->orWhereIn('id', $accessibleCategoryIds);
+                  });
+            });
+            
+            // Check view permissions for the thread
+            if ($request->user()) {
+                $query->where(function ($q) use ($accessibleCategoryIds) {
+                    $q->whereDoesntHave('category', function ($q) {
+                        $q->where('is_private', true);
+                    })->orWhereHas('category', function ($q) use ($accessibleCategoryIds) {
+                        $q->whereIn('id', $accessibleCategoryIds);
+                    });
+                });
+            }
         });
+
+        // Paginate the results
+        $threads = $threads->paginate();
 
         return ViewFactory::make('forum::thread.pending-approval', compact('threads'));
     }

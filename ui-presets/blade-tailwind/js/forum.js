@@ -1,5 +1,5 @@
 import feather from 'feather-icons';
-import { createApp, ref, reactive, watch } from 'vue/dist/vue.esm-bundler.js';
+import { createApp, ref, reactive, watch, computed } from 'vue/dist/vue.esm-bundler.js';
 import axios from 'axios';
 import Pickr from '@simonwep/pickr';
 import draggable from 'vuedraggable/src/vuedraggable';
@@ -7,7 +7,7 @@ import draggable from 'vuedraggable/src/vuedraggable';
 import '@simonwep/pickr/dist/themes/classic.min.css';
 
 window.axios = axios;
-window.Vue = { createApp, ref, reactive, watch };
+window.Vue = { createApp, ref, reactive, watch, computed };
 window.VueDraggable = draggable;
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -33,8 +33,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }).mount('.v-navbar');
 
-    function findModal(key)
-    {
+    const pendingApprovalElement = document.getElementById('pending-approval');
+    if (pendingApprovalElement) {
+        createApp({
+            setup() {
+                const allIds = JSON.parse(pendingApprovalElement.dataset.allIds || '[]');
+                const selectedIds = ref([]);
+
+                const selectAll = computed({
+                    get: () => allIds.length > 0 && selectedIds.value.length === allIds.length,
+                    set: (val) => {
+                        selectedIds.value = val ? [...allIds] : [];
+                    }
+                });
+
+                return {
+                    selectedIds,
+                    selectAll
+                };
+            }
+        }).mount(pendingApprovalElement);
+    }
+
+    function findModal(key) {
         const modal = document.querySelector(`[data-modal=${key}]`);
 
         if (!modal) throw `Attempted to open modal '${key}' but no such modal found.`;
@@ -42,48 +63,49 @@ document.addEventListener('DOMContentLoaded', function () {
         return modal;
     }
 
-    function openModal(modal)
-    {
-        setTimeout(function()
-        {
+    function openModal(modal) {
+        setTimeout(function () {
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }, 200);
     }
 
-    document.querySelectorAll('[data-open-modal]').forEach(item =>
-    {
-        item.addEventListener('click', event =>
-        {
+    function closeModal(modal) {
+        setTimeout(function () {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }, 200);
+    }
+
+    document.addEventListener('click', event => {
+        // Open Modal
+        const openTrigger = event.target.closest('[data-open-modal]');
+        if (openTrigger) {
             event.preventDefault();
+            openModal(findModal(openTrigger.dataset.openModal));
+            return;
+        }
 
-            openModal(findModal(event.currentTarget.dataset.openModal));
-        });
-    });
+        // Close Modal
+        const closeTrigger = event.target.closest('[data-close-modal]');
+        if (closeTrigger) {
+            event.preventDefault();
+            const modal = closeTrigger.closest('[data-modal]');
+            if (modal) closeModal(modal);
+            return;
+        }
 
-    document.querySelectorAll('[data-close-modal]').forEach(modalClose =>
-    {
-        modalClose.addEventListener('click', event =>
-        {
-            event.preventDefault
-
-            setTimeout(function()
-            {
-                modalClose.closest('[data-modal]').classList.remove('flex');
-                modalClose.closest('[data-modal]').classList.add('hidden');
-            }, 200);
-        });
-    });
-
-    document.querySelectorAll('[data-dismiss]').forEach(item =>
-    {
-        item.addEventListener('click', event => event.currentTarget.parentElement.style.display = 'none');
+        // Dismiss Alert
+        const dismissTrigger = event.target.closest('[data-dismiss]');
+        if (dismissTrigger) {
+            const target = dismissTrigger.parentElement;
+            if (target) target.style.display = 'none';
+        }
     });
 
     const hash = window.location.hash.substr(1);
-    if (hash.startsWith('modal='))
-    {
-        openModal(findModal(hash.replace('modal=','')));
+    if (hash.startsWith('modal=')) {
+        openModal(findModal(hash.replace('modal=', '')));
     }
 
     feather.replace();
@@ -130,13 +152,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     pickr.on('save', instance => pickr.hide())
-        .on('clear', instance =>
-        {
+        .on('clear', instance => {
             input.value = '';
             input.dispatchEvent(new Event('change'));
         })
-        .on('cancel', instance =>
-        {
+        .on('cancel', instance => {
             const selectedColor = instance
                 .getSelectedColor()
                 .toHEXA()
@@ -145,8 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
             input.value = selectedColor;
             input.dispatchEvent(new Event('change'));
         })
-        .on('change', (color, instance) =>
-        {
+        .on('change', (color, instance) => {
             const selectedColor = color
                 .toHEXA()
                 .toString();

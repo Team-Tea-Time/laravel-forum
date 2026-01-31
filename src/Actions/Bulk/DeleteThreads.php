@@ -36,7 +36,7 @@ class DeleteThreads extends BaseAction
 
         // Fetch the approved, non-deleted subset of the threads so we can operate on the affected
         // categories below
-        $threads = $query->approved()->notDeleted()->get();
+        $threads = (clone $query)->approved()->notDeleted()->get();
 
         if ($this->permaDelete) {
             $query->forceDelete();
