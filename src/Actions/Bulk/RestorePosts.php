@@ -2,9 +2,14 @@
 
 namespace TeamTeaTime\Forum\Actions\Bulk;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use TeamTeaTime\Forum\Actions\BaseAction;
-use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\{
+    Actions\BaseAction,
+    Models\Category,
+    Models\Post,
+    Models\Thread,
+};
 
 class RestorePosts extends BaseAction
 {
@@ -17,32 +22,29 @@ class RestorePosts extends BaseAction
 
     protected function transact()
     {
-        $posts = Post::whereIn('id', $this->postIds)->onlyTrashed()->get();
+        $query = Post::whereIn('id', $this->postIds)->onlyTrashed();
 
-        // Return early if there are no eligible threads in the selection
-        if ($posts->count() == 0) {
+        if ($query->count() == 0) {
             return null;
         }
 
-        // Use the raw query builder to prevent touching updated_at
-        $rowsAffected = DB::table(Post::getTableName())
-            ->whereIn('id', $this->postIds)
-            ->whereNotNull(Post::DELETED_AT)
-            ->update([Post::DELETED_AT => null]);
+        // Fetch the approved subset of the psots so we can oeprate on the affected threads and
+        // categories below
+        $posts = with(clone $query)->approved()->with(['thread', 'thread.category'])->get();
 
-        if ($rowsAffected == 0) {
-            return null;
-        }
+        Post::withoutTimestamps(fn () => $query->restore());
 
         $threads = $posts->pluck('thread')->unique();
         $postsByThread = $posts->groupBy('thread_id');
-
         foreach ($threads as $thread) {
             $threadPosts = $postsByThread->get($thread->id);
-            $thread->updateWithoutTouch([
-                'last_post_id' => $thread->getLastPost()->id,
+            $lastApprovedPost = $thread->getLastApprovedPost();
+
+            Thread::withoutTimestamps(fn () => $thread->update([
+                'updated_at' => $lastApprovedPost ? $lastApprovedPost->created_at : $thread->created_at,
+                'last_post_id' => $lastApprovedPost && $lastApprovedPost->sequence > 1 ? $lastApprovedPost->id : null,
                 'reply_count' => DB::raw("reply_count + {$threadPosts->count()}"),
-            ]);
+            ]));
         }
 
         $categories = $threads->pluck('category')->unique();
@@ -50,11 +52,15 @@ class RestorePosts extends BaseAction
 
         foreach ($categories as $category) {
             $categoryThreads = $threadsByCategory->get($category->id);
-            $postCount = $posts->whereIn('thread_id', $categoryThreads->pluck('id'))->count();
-            $category->updateWithoutTouch([
+            $postCount = $posts->whereNotNull('approved_at')
+                ->where('approved_at', '<=', Carbon::now())
+                ->whereIn('thread_id', $categoryThreads->pluck('id'))
+                ->count();
+
+            Category::withoutTimestamps(fn () => $category->update([
                 'latest_active_thread_id' => $category->getLatestActiveThreadId(),
                 'post_count' => DB::raw("post_count + {$postCount}"),
-            ]);
+            ]));
         }
 
         return $posts;

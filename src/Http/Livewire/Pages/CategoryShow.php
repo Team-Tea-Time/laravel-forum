@@ -8,24 +8,28 @@ use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use Livewire\Component;
 use TeamTeaTime\Forum\{
+    Actions\Bulk\ApproveThreads,
     Actions\Bulk\DeleteThreads,
     Actions\Bulk\LockThreads,
     Actions\Bulk\PinThreads,
     Actions\Bulk\RestoreThreads,
     Actions\Bulk\MoveThreads,
+    Actions\Bulk\UnapproveThreads,
     Actions\Bulk\UnlockThreads,
     Actions\Bulk\UnpinThreads,
+    Events\UserBulkApprovedThreads,
     Events\UserBulkDeletedThreads,
     Events\UserBulkLockedThreads,
     Events\UserBulkMovedThreads,
     Events\UserBulkPinnedThreads,
     Events\UserBulkRestoredThreads,
+    Events\UserBulkUnapprovedThreads,
     Events\UserBulkUnlockedThreads,
     Events\UserBulkUnpinnedThreads,
     Events\UserViewingCategory,
     Http\Livewire\Traits\CreatesAlerts,
+    Http\Livewire\Traits\HandlesBulkActions,
     Http\Livewire\Traits\UpdatesContent,
-    Models\BaseModel,
     Models\Category,
     Models\Thread,
     Support\Access\CategoryAccess,
@@ -36,7 +40,7 @@ use TeamTeaTime\Forum\{
 
 class CategoryShow extends Component
 {
-    use CreatesAlerts, UpdatesContent, HandlesDeletion;
+    use CreatesAlerts, HandlesBulkActions, UpdatesContent, HandlesDeletion;
 
     public Category $category;
 
@@ -54,15 +58,36 @@ class CategoryShow extends Component
         }
     }
 
-    private function handleActionResult($result, string $key = 'threads.updated'): array
+    public function approveThreads(Request $request, array $threadIds): array
     {
-        if ($result == null) {
-            return $this->invalidSelectionAlert()->toLivewire();
+        if (!ThreadAuthorization::bulkApprove($request->user(), $threadIds)) {
+            abort(403);
         }
 
-        $this->touchUpdateKey();
+        $action = new ApproveThreads($threadIds);
+        $result = $action->execute();
 
-        return $this->pluralAlert($key, $result->count())->toLivewire();
+        if ($result !== null) {
+            UserBulkApprovedThreads::dispatch($request->user(), $result);
+        }
+
+        return $this->handleActionResult($result, 'threads.approved');
+    }
+
+    public function unapproveThreads(Request $request, array $threadIds): array
+    {
+        if (!ThreadAuthorization::bulkApprove($request->user(), $threadIds)) {
+            abort(403);
+        }
+
+        $action = new UnapproveThreads($threadIds);
+        $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkUnapprovedThreads::dispatch($request->user(), $result);
+        }
+
+        return $this->handleActionResult($result, 'threads.unapproved');
     }
 
     public function deleteThreads(Request $request, array $threadIds, bool $permadelete): array
@@ -110,7 +135,7 @@ class CategoryShow extends Component
             ->whereIn('id', $threadIds);
 
         if (!$request->user()->can('viewTrashedThreads')) {
-            $query = $query->whereNull(BaseModel::DELETED_AT);
+            $query = $query->whereNull('deleted_at');
         }
 
         $sourceCategories = Category::whereIn('id', $query->get()->pluck('category_id'))->get();
@@ -198,6 +223,10 @@ class CategoryShow extends Component
         $threads = $request->user() && $request->user()->can('viewTrashedThreads')
             ? $this->category->threads()->withTrashed()
             : $this->category->threads();
+
+        if ($this->category->requiresThreadApproval() && !$request->user() || !$request->user()->can('approveThreads', $this->category)) {
+            $threads = $threads->authoredByOrApproved($request->user());
+        }
 
         return $threads->withPostAndAuthorRelationships()->ordered()->paginate();
     }

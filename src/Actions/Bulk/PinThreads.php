@@ -24,7 +24,7 @@ class PinThreads extends BaseAction
             ->where(['pinned' => false]);
 
         if (!$this->includeTrashed) {
-            $query = $query->whereNull(Thread::DELETED_AT);
+            $query = $query->whereNull('deleted_at');
         }
 
         $threads = $query->get();

@@ -5,9 +5,11 @@ use TeamTeaTime\Forum\Http\Livewire\Pages\{
     CategoryEdit,
     CategoryIndex,
     CategoryShow,
+    PostsPendingApproval,
     PostEdit,
     PostShow,
     RecentThreads,
+    ThreadsPendingApproval,
     ThreadCreate,
     ThreadReply,
     ThreadShow,
@@ -23,6 +25,8 @@ Route::get('category/create', CategoryCreate::class)->name('category.create');
 
 Route::get('recent', RecentThreads::class)->name('recent');
 Route::get('unread', UnreadThreads::class)->name('unread');
+Route::get('pending-approval/threads', ThreadsPendingApproval::class)->name('pending-approval.threads');
+Route::get('pending-approval/posts', PostsPendingApproval::class)->name('pending-approval.posts');
 
 Route::group(['prefix' => $prefix['category'] . '/{category_id}-{category_slug}'], function () use ($prefix) {
     Route::get('/', CategoryShow::class)->name('category.show');

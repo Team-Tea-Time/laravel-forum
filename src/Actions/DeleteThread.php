@@ -19,7 +19,6 @@ class DeleteThread extends BaseAction
     protected function transact()
     {
         $threadAlreadyTrashed = $this->thread->trashed();
-        $postsRemoved = $this->thread->postCount;
 
         if ($this->permaDelete) {
             $this->thread->readers()->detach();
@@ -32,28 +31,25 @@ class DeleteThread extends BaseAction
             }
 
             $this->thread->readers()->detach();
-            $this->thread->deleteWithoutTouch();
+            Thread::withoutTimestamps(fn () => $this->thread->delete());
         }
 
-        // The thread was already trashed - skip stat/attribute updates since they were done
-        // previously.
-        if ($threadAlreadyTrashed) {
+        // Skip category update if the thread was already trashed or isn't approved
+        if ($threadAlreadyTrashed || !$this->thread->isApproved) {
             return $this->thread;
         }
 
         $attributes = [
-            'thread_count' => DB::raw('thread_count - 1'),
+            'thread_count' => DB::raw("thread_count - 1"),
+            'post_count' => DB::raw("post_count - {$this->thread->approvedPostCount}")
         ];
-
-        if ($postsRemoved) {
-            $attributes['post_count'] = DB::raw("post_count - {$postsRemoved}");
-        }
 
         $category = $this->thread->category;
 
         if ($category->newest_thread_id === $this->thread->id) {
             $attributes['newest_thread_id'] = $category->getNewestThreadId();
         }
+
         if ($category->latest_active_thread_id === $this->thread->id) {
             $attributes['latest_active_thread_id'] = $category->getLatestActiveThreadId();
         }

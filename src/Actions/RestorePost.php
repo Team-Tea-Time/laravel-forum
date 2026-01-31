@@ -3,7 +3,11 @@
 namespace TeamTeaTime\Forum\Actions;
 
 use Illuminate\Support\Facades\DB;
-use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\Models\{
+    Category,
+    Post,
+    Thread,
+};
 
 class RestorePost extends BaseAction
 {
@@ -20,17 +24,17 @@ class RestorePost extends BaseAction
             return null;
         }
 
-        $this->post->restoreWithoutTouch();
+        Post::withoutTimestamps(fn () => $this->post->restore());
 
-        $this->post->thread->updateWithoutTouch([
+        Thread::withoutTimestamps(fn () => $this->post->thread->update([
             'last_post_id' => max($this->post->id, $this->post->thread->last_post_id),
             'reply_count' => DB::raw('reply_count + 1'),
-        ]);
+        ]));
 
-        $this->post->thread->category->updateWithoutTouch([
+        Category::withoutTimestamps(fn () => $this->post->thread->category->update([
             'latest_active_thread_id' => $this->post->thread->category->getLatestActiveThreadId(),
             'post_count' => DB::raw('post_count + 1'),
-        ]);
+        ]));
 
         return $this->post;
     }

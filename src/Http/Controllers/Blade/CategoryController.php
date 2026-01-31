@@ -51,6 +51,10 @@ class CategoryController extends BaseController
             ? $category->threads()->withTrashed()
             : $category->threads();
 
+        if ($category->requiresThreadApproval() && ($request->user() == null || !$request->user()->can('approveThreads', $category))) {
+            $threads = $threads->authoredByOrApproved($request->user());
+        }
+
         $threads = $threads->withPostAndAuthorRelationships()->ordered()->paginate();
 
         $selectableThreadIds = ThreadAccess::getSelectableThreadIdsFor($request->user(), $threads, $category);

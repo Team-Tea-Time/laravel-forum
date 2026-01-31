@@ -13,6 +13,8 @@ use TeamTeaTime\Forum\Http\Requests\CreatePost;
 use TeamTeaTime\Forum\Http\Requests\DeletePost;
 use TeamTeaTime\Forum\Http\Requests\RestorePost;
 use TeamTeaTime\Forum\Http\Requests\EditPost;
+use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\Support\Access\CategoryAccess;
 use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class PostController extends BaseController
@@ -20,16 +22,12 @@ class PostController extends BaseController
     public function show(Request $request): View
     {
         $thread = $request->route('thread');
+        $post = $request->route('post');
 
-        if (!$thread->category->isAccessibleTo($request->user())) {
+        if (!$post->isAccessibleTo($request->user())) {
             abort(404);
         }
 
-        if ($thread->category->is_private) {
-            $this->authorize('view', $thread);
-        }
-
-        $post = $request->route('post');
         if ($request->user() !== null) {
             UserViewingPost::dispatch($request->user(), $post);
         }
@@ -134,5 +132,51 @@ class PostController extends BaseController
         Forum::alert('success', 'posts.updated', 1);
 
         return new RedirectResponse(Forum::route('thread.show', $post));
+    }
+
+    public function pendingApproval(Request $request): View
+    {
+        $posts = Post::notDeleted()
+            ->notFirstInThread()
+            ->pendingApproval()
+            ->orderBy('created_at', 'desc')
+            ->with('thread', 'author');
+
+        // Get accessible category IDs for the current user
+        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
+        
+        // Apply filtering to the query
+        $posts = $posts->where(function ($query) use ($request, $accessibleCategoryIds) {
+            // Public categories or private categories the user has access to
+            $query->whereHas('thread.category', function ($q) use ($accessibleCategoryIds) {
+                $q->where('is_private', false)
+                  ->when($accessibleCategoryIds->isNotEmpty(), function ($q) use ($accessibleCategoryIds) {
+                      $q->orWhereIn('id', $accessibleCategoryIds);
+                  });
+            });
+            
+            // Check view permissions for the thread
+            if ($request->user()) {
+                $query->whereHas('thread', function ($q) use ($accessibleCategoryIds) {
+                    $q->where(function ($q) use ($accessibleCategoryIds) {
+                        $q->whereDoesntHave('category', function ($q) {
+                            $q->where('is_private', true);
+                        })->orWhereHas('category', function ($q) use ($accessibleCategoryIds) {
+                            $q->whereIn('id', $accessibleCategoryIds);
+                        });
+                    })->where(function ($q) use ($accessibleCategoryIds) {
+                        $q->whereNull('category_id')
+                          ->orWhereIn('category_id', $accessibleCategoryIds);
+                    });
+                });
+            }
+        });
+
+        // Paginate the results
+        $posts = $posts->paginate();
+
+        return ViewFactory::make('forum::post.pending-approval', [
+            'posts' => $posts
+        ]);
     }
 }

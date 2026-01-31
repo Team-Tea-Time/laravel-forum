@@ -4,16 +4,40 @@ namespace TeamTeaTime\Forum\Http\Controllers\Blade\Bulk;
 
 use Illuminate\Http\RedirectResponse;
 use TeamTeaTime\Forum\Http\Controllers\Blade\BaseController;
+use TeamTeaTime\Forum\Http\Requests\Bulk\ApproveThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\DeleteThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\LockThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\MoveThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\PinThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\RestoreThreads;
+use TeamTeaTime\Forum\Http\Requests\Bulk\UnapproveThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\UnlockThreads;
 use TeamTeaTime\Forum\Http\Requests\Bulk\UnpinThreads;
 
 class ThreadController extends BaseController
 {
+    public function approve(ApproveThreads $request): RedirectResponse
+    {
+        $result = $request->fulfill();
+
+        if ($result === null) {
+            return $this->invalidSelectionResponse();
+        }
+
+        return $this->bulkActionResponse($result->count(), 'threads.approved');
+    }
+
+    public function unapprove(UnapproveThreads $request): RedirectResponse
+    {
+        $result = $request->fulfill();
+
+        if ($result === null) {
+            return $this->invalidSelectionResponse();
+        }
+
+        return $this->bulkActionResponse($result->count(), 'threads.unapproved');
+    }
+
     public function move(MoveThreads $request): RedirectResponse
     {
         $result = $request->fulfill();

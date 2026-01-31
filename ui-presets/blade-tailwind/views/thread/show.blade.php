@@ -26,7 +26,8 @@
                 @if (Gate::allows('lockThreads', $category)
                     || Gate::allows('pinThreads', $category)
                     || Gate::allows('rename', $thread)
-                    || Gate::allows('moveThreadsFrom', $category))
+                    || Gate::allows('moveThreadsFrom', $category)
+                    || (Gate::allows('approveThreads') && Gate::allows('approveThreads', $category)))
                     <x-forum::button-group>
                         @if (!$thread->trashed())
                             @can ('lockThreads', $category)
@@ -61,6 +62,17 @@
                                     <i data-feather="corner-up-right" class="w-4"></i> {{ trans('forum::general.move') }}
                                 </x-forum::button-link>
                             @endcan
+                            @if (Gate::allows('approveThreads') && Gate::allows('approveThreads', $category))
+                                @if ($thread->isApproved)
+                                    <x-forum::button-link href="#" data-open-modal="unapprove-thread" class="inline-flex items-center gap-2 bg-gray-500 hover:bg-gray-400">
+                                        <i data-feather="x-circle" class="w-4"></i> {{ trans('forum::general.unapprove') }}
+                                    </x-forum::button-link>
+                                @else
+                                    <x-forum::button-link href="#" data-open-modal="approve-thread" class="inline-flex items-center gap-2 bg-gray-500 hover:bg-gray-400">
+                                        <i data-feather="check-circle" class="w-4"></i> {{ trans('forum::general.approve') }}
+                                    </x-forum::button-link>
+                                @endif
+                            @endif
                         @endif
                     </x-forum::button-group>
                 @endcan
@@ -76,6 +88,9 @@
             @endif
             @if ($thread->locked)
                 <x-forum::badge type="warning">{{ trans('forum::threads.locked') }}</x-forum::badge>
+            @endif
+            @if (!$thread->isApproved)
+                <x-forum::badge type="warning">{{ trans('forum::general.pending_approval') }}</x-forum::badge>
             @endif
         </div>
 
@@ -117,10 +132,13 @@
         @endif
 
         @foreach ($posts as $post)
-            @include ('forum::post.partials.list', compact('post'))
+            @include ('forum::post.partials.list', ['post' => $post, 'isSelectable' => in_array($post->id, $selectablePosts)])
         @endforeach
 
-        @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)) && count($selectablePosts) > 0)
+        @if ($selectablePosts > 0
+            && ((Gate::allows('approvePosts') && Gate::allows('approvePosts', $thread))
+                || Gate::allows('deletePosts', $thread)
+                || Gate::allows('restorePosts', $thread)))
                 <div class="fixed bottom-0 right-0 m-2" style="z-index: 1000;" v-if="state.selectedPosts.length">
                     <div class="bg-white shadow-sm rounded-md min-w-96 max-w-full">
                         <div class="border-b text-center py-4 px-6">
@@ -133,8 +151,16 @@
                                 </div>
 
                                 <x-forum::select id="bulk-actions" v-model="state.selectedPostAction">
-                                    <option value="delete">{{ trans('forum::general.delete') }}</option>
-                                    <option value="restore">{{ trans('forum::general.restore') }}</option>
+                                    @if (Gate::allows('approvePosts') && Gate::allows('approvePosts', $thread))
+                                        <option value="approve">{{ trans('forum::general.approve') }}</option>
+                                        <option value="unapprove">{{ trans('forum::general.unapprove') }}</option>
+                                    @endif
+                                    @can ('deletePosts', $thread)
+                                        <option value="delete">{{ trans('forum::general.delete') }}</option>
+                                    @endcan
+                                    @can ('restorePosts', $thread)
+                                        <option value="restore">{{ trans('forum::general.restore') }}</option>
+                                    @endcan
                                 </x-forum::select>
                             </div>
 
@@ -334,6 +360,36 @@
                 @endslot
             @endcomponent
         @endcan
+
+        @if (Gate::allows('approveThreads') && Gate::allows('approveThreads', $category))
+            @if ($thread->isApproved)
+                @component('forum::modal-form')
+                    @slot('key', 'unapprove-thread')
+                    @slot('title', '<i data-feather="x-circle" class="text-gray-500"></i> ' . trans('forum::general.unapprove'))
+                    @slot('route', Forum::route('thread.unapprove', $thread))
+                    @slot('method', 'POST')
+
+                    {{ trans('forum::general.generic_confirm') }}
+
+                    @slot('actions')
+                        <x-forum::button type="submit">{{ trans('forum::general.proceed') }}</x-forum::button>
+                    @endslot
+                @endcomponent
+            @else
+                @component('forum::modal-form')
+                    @slot('key', 'approve-thread')
+                    @slot('title', '<i data-feather="check-circle" class="text-gray-500"></i> ' . trans('forum::general.approve'))
+                    @slot('route', Forum::route('thread.approve', $thread))
+                    @slot('method', 'POST')
+
+                    {{ trans('forum::general.generic_confirm') }}
+
+                    @slot('actions')
+                        <x-forum::button type="submit">{{ trans('forum::general.proceed') }}</x-forum::button>
+                    @endslot
+                @endcomponent
+            @endif
+        @endif
     @endif
 
     <script type="module">
@@ -344,16 +400,20 @@
 
             const selectablePosts = @json($selectablePosts);
             const postActions = {
+                approve: "{{ Forum::route('bulk.post.approve') }}",
+                unapprove: "{{ Forum::route('bulk.post.unapprove') }}",
                 delete: "{{ Forum::route('bulk.post.delete') }}",
                 restore: "{{ Forum::route('bulk.post.restore') }}"
             };
             const postActionMethods = {
+                approve: 'POST',
+                unapprove: 'POST',
                 delete: 'DELETE',
                 restore: 'POST',
             };
 
             const state = Vue.reactive({
-                selectedPostAction: 'delete',
+                selectedPostAction: 'approve',
                 selectedPosts: [],
                 selectedThreadAction: null,
             });

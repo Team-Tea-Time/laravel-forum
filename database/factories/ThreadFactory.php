@@ -17,6 +17,7 @@ class ThreadFactory extends Factory
             'locked' => 0,
             'pinned' => 0,
             'reply_count' => 0,
+            'approved_at' => now()->subSecond(),
             'deleted_at' => null,
         ];
     }

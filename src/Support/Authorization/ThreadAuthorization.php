@@ -15,6 +15,11 @@ use TeamTeaTime\Forum\{
  */
 class ThreadAuthorization
 {
+    public static function approve(User $user, Thread $thread): bool
+    {
+        return $user->can('approveThreads') && $user->can('approveThreads', $thread->category);
+    }
+
     public static function delete(User $user, Thread $thread): bool
     {
         return $user->can('deleteThreads', $thread->category) && $user->can('delete', $thread);
@@ -27,12 +32,37 @@ class ThreadAuthorization
 
     public static function reply(User $user, Thread $thread): bool
     {
+        if (!$thread->isApproved) {
+            return $user->can('replyWithoutApproval', $thread);
+        }
+
         return $user->can('reply', $thread);
     }
 
     public static function rename(User $user, Thread $thread): bool
     {
         return $user->can('rename', $thread);
+    }
+
+    public static function bulkApprove(User $user, array $threadIds): bool
+    {
+        if (!$user->can('approveThreads')) {
+            return false;
+        }
+
+        $threads = Thread::whereIn('id', $threadIds)->with('category')->get();
+        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($user);
+
+        foreach ($threads as $thread) {
+            $canView = $accessibleCategoryIds->contains($thread->category_id) && $user->can('view', $thread);
+            $canApprove = $user->can('approveThreads', $thread->category);
+
+            if (!($canView && $canApprove)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static function bulkDelete(User $user, array $threadIds): bool

@@ -36,11 +36,30 @@
                             <a class="nav-link" href="{{ route('forum.unread') }}">{{ trans('forum::threads.unread_updated') }}</a>
                         </li>
                     @endauth
-                    @can ('moveCategories')
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('forum.category.manage') }}">{{ trans('forum::general.manage') }}</a>
+                    @if (Gate::allows('moveCategories') || Gate::allows('approveThreads') || Gate::allows('approvePosts'))
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="manageDropdownMenuLink" @click="isManageDropdownCollapsed = !isManageDropdownCollapsed">
+                                {{ trans('forum::general.manage') }}
+                            </a>
+                            <div class="dropdown-menu" :class="{ show: !isManageDropdownCollapsed }" aria-labelledby="manageDropdownMenuLink">
+                                @can ('moveCategories')
+                                    <a class="dropdown-item" href="{{ route('forum.category.manage') }}">
+                                        {{ trans('forum::categories.manage') }}
+                                    </a>
+                                @endcan
+                                @can ('approveThreads')
+                                    <a class="dropdown-item" href="{{ route('forum.pending-approval.threads') }}">
+                                        {{ trans('forum::threads.pending_approval') }}
+                                    </a>
+                                @endcan
+                                @can ('approvePosts')
+                                    <a class="dropdown-item" href="{{ route('forum.pending-approval.posts') }}">
+                                        {{ trans('forum::posts.pending_approval') }}
+                                    </a>
+                                @endcan
+                            </div>
                         </li>
-                    @endcan
+                    @endif
                 </ul>
                 <ul class="navbar-nav">
                     @if (Auth::check())

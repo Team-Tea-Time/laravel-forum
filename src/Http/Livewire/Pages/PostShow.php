@@ -16,7 +16,7 @@ class PostShow extends Component
     {
         $post = $request->route('post');
 
-        if (!$post->thread->category->isAccessibleTo($request->user())) {
+        if (!$post->isAccessibleTo($request->user())) {
             abort(404);
         }
 

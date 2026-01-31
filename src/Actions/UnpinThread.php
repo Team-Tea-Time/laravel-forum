@@ -19,9 +19,7 @@ class UnpinThread extends BaseAction
             return null;
         }
 
-        $this->thread->updateWithoutTouch([
-            'pinned' => false,
-        ]);
+        Thread::withoutTimestamps(fn () => $this->thread->update(['pinned' => false]));
 
         return $this->thread;
     }

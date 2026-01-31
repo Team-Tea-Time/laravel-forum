@@ -2,22 +2,25 @@
 
 namespace TeamTeaTime\Forum\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
+use TeamTeaTime\Forum\Models\Traits\HasApproval;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
+use TeamTeaTime\Forum\Models\Traits\HasSoftDeletion;
 use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class Thread extends BaseModel
 {
     use SoftDeletes;
-    use HasAuthor;
+    use HasApproval, HasAuthor, HasSoftDeletion;
 
     protected $table = 'forum_threads';
     protected $dates = ['deleted_at'];
@@ -31,6 +34,7 @@ class Thread extends BaseModel
         'first_post_id',
         'last_post_id',
         'updated_at',
+        'approved_at',
     ];
     protected $appends = ['route'];
 
@@ -100,6 +104,16 @@ class Thread extends BaseModel
         return $this->posts()->orderBy('created_at', 'desc')->first();
     }
 
+    public function getFirstApprovedPost(): ?Post
+    {
+        return $this->posts()->approved()->orderBy('created_at', 'asc')->first();
+    }
+
+    public function getLastApprovedPost(): ?Post
+    {
+        return $this->posts()->approved()->orderBy('created_at', 'desc')->first();
+    }
+
     public function markAsRead(Model $user): void
     {
         if ($this->isOld) {
@@ -129,6 +143,22 @@ class Thread extends BaseModel
                 return !$age || $this->updated_at->timestamp < (time() - strtotime($age, 0));
             }
         );
+    }
+
+    public function isAccessibleTo(?User $user): bool
+    {
+        if (!$this->category->isAccessibleTo($user)) return false;
+
+        if ($this->category->requiresThreadApproval() && !$this->isApproved) {
+            $isAuthor = $user != null && $this->author_id == $user->getKey();
+            $canApproveThreads = $user != null
+                && $user->can('approveThreads')
+                && $user->can('approveThreads', $this->category);
+
+            if (!$isAuthor && !$canApproveThreads) return false;
+        }
+
+        return true;
     }
 
     protected function reader(): Attribute
@@ -173,6 +203,16 @@ class Thread extends BaseModel
             get: function ()
             {
                 return $this->reply_count + 1;
+            }
+        );
+    }
+
+    protected function approvedPostCount(): Attribute
+    {
+        return new Attribute(
+            get: function ()
+            {
+                return $this->posts()->approved()->count();
             }
         );
     }

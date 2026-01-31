@@ -2,18 +2,21 @@
 
 namespace TeamTeaTime\Forum\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User;
+use TeamTeaTime\Forum\Models\Traits\HasApproval;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
+use TeamTeaTime\Forum\Models\Traits\HasSoftDeletion;
 use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class Post extends BaseModel
 {
     use SoftDeletes;
-    use HasAuthor;
+    use HasApproval, HasAuthor, HasSoftDeletion;
 
     protected $table = 'forum_posts';
     protected $dates = ['deleted_at'];
@@ -23,6 +26,7 @@ class Post extends BaseModel
         'post_id',
         'sequence',
         'content',
+        'approved_at',
     ];
     protected $appends = ['route'];
 
@@ -55,6 +59,16 @@ class Post extends BaseModel
         return $query->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))->orderBy('updated_at', 'desc');
     }
 
+    public function scopeFirstInThread(Builder $query): Builder
+    {
+        return $query->where('sequence', 1);
+    }
+
+    public function scopeNotFirstInThread(Builder $query): Builder
+    {
+        return $query->where('sequence', '!=', 1);
+    }
+
     public function getPage(): int
     {
         return ceil($this->sequence / $this->getPerPage());
@@ -65,5 +79,23 @@ class Post extends BaseModel
         return new Attribute(
             get: fn() => Forum::route('thread.show', $this),
         );
+    }
+
+    public function isAccessibleTo(?User $user): bool
+    {
+        if (!$this->thread->isAccessibleTo($user)) {
+            return false;
+        }
+
+        if ($this->thread->category->requiresPostApproval() && !$this->isApproved) {
+            $isAuthor = $user != null && $this->author_id == $user->getKey();
+            $canApprovePosts = $user != null
+                && $user->can('approvePosts')
+                && $user->can('approvePosts', $this->thread);
+
+            if (!$isAuthor && !$canApprovePosts) return false;
+        }
+
+        return true;
     }
 }

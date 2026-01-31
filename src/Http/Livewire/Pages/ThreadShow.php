@@ -2,18 +2,24 @@
 
 namespace TeamTeaTime\Forum\Http\Livewire\Pages;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\View\View;
 use TeamTeaTime\Forum\{
+    Actions\Bulk\ApprovePosts,
     Actions\Bulk\DeletePosts,
     Actions\Bulk\RestorePosts,
+    Actions\Bulk\UnapprovePosts,
+    Events\UserBulkApprovedPosts,
     Events\UserBulkDeletedPosts,
     Events\UserBulkRestoredPosts,
+    Events\UserBulkUnapprovedPosts,
     Events\UserViewingThread,
     Http\Livewire\Forms\ThreadEditForm,
     Http\Livewire\Forms\ThreadReplyForm,
     Http\Livewire\Traits\CreatesAlerts,
+    Http\Livewire\Traits\HandlesBulkActions,
     Http\Livewire\Traits\UpdatesContent,
     Http\Livewire\EventfulPaginatedComponent,
     Models\Category,
@@ -25,7 +31,7 @@ use TeamTeaTime\Forum\{
 
 class ThreadShow extends EventfulPaginatedComponent
 {
-    use CreatesAlerts, UpdatesContent, HandlesDeletion;
+    use CreatesAlerts, HandlesBulkActions, UpdatesContent, HandlesDeletion;
 
     public Thread $thread;
 
@@ -37,12 +43,13 @@ class ThreadShow extends EventfulPaginatedComponent
     public function mount(Request $request)
     {
         $this->thread = $request->route('thread');
-        $this->threadEditForm->title = $this->thread->title;
-        $this->title = $this->thread->title;
 
-        if (!$this->thread->category->isAccessibleTo($request->user())) {
+        if (!$this->thread->isAccessibleTo($request->user())) {
             abort(404);
         }
+
+        $this->threadEditForm->title = $this->thread->title;
+        $this->title = $this->thread->title;
 
         if ($request->user() !== null) {
             UserViewingThread::dispatch($request->user(), $this->thread);
@@ -114,6 +121,20 @@ class ThreadShow extends EventfulPaginatedComponent
         return $this->pluralAlert('threads.updated')->toLivewire();
     }
 
+    public function approve(Request $request): array
+    {
+        $this->thread = $this->threadEditForm->approve($request, $this->thread);
+
+        return $this->pluralAlert('threads.updated')->toLivewire();
+    }
+
+    public function unapprove(Request $request): array
+    {
+        $this->thread = $this->threadEditForm->unapprove($request, $this->thread);
+
+        return $this->pluralAlert('threads.updated')->toLivewire();
+    }
+
     public function reply(Request $request): array
     {
         $post = $this->threadReplyForm->reply($request, $this->thread);
@@ -160,15 +181,66 @@ class ThreadShow extends EventfulPaginatedComponent
         return $this->pluralAlert('posts.restored', $result->count())->toLivewire();
     }
 
+    public function approvePosts(Request $request, array $postIds): array
+    {
+        if (!PostAuthorization::bulkApprove($request->user(), $postIds)) {
+            abort(403);
+        }
+
+        $action = new ApprovePosts($postIds);
+        $result = $action->execute();
+
+        $this->touchUpdateKey();
+
+        if ($result !== null) {
+            UserBulkApprovedPosts::dispatch($request->user(), $result);
+        }
+
+        return $this->handleActionResult($result, 'posts.approved');
+    }
+
+    public function unapprovePosts(Request $request, array $postIds): array
+    {
+        if (!PostAuthorization::bulkApprove($request->user(), $postIds)) {
+            abort(403);
+        }
+
+        $action = new UnapprovePosts($postIds);
+        $result = $action->execute();
+
+        $this->touchUpdateKey();
+
+        if ($result !== null) {
+            UserBulkUnapprovedPosts::dispatch($request->user(), $result);
+        }
+
+        return $this->handleActionResult($result, 'posts.unapproved');
+    }
+
     public function render(Request $request): View
     {
-        $threadDestinationCategories = $request->user() && $request->user()->can('moveThreadsFrom', $this->thread->category)
-            ? CategoryAccess::getFilteredTreeFor($request->user())->toTree()
+        $user = $request->user();
+
+        $threadDestinationCategories = $user && $user->can('moveThreadsFrom', $this->thread->category)
+            ? CategoryAccess::getFilteredTreeFor($user)->toTree()
             : [];
 
-        $postsQuery = config('forum.general.display_trashed_posts') || $request->user() && $request->user()->can('viewTrashedPosts')
+        $postsQuery = config('forum.general.display_trashed_posts') || $user && $user->can('viewTrashedPosts')
             ? $this->thread->posts()->withTrashed()
             : $this->thread->posts();
+
+        if (!$user || !$user->can('approvePosts', $this->thread)) {
+            $postsQuery = $postsQuery->approved();
+        }
+
+        if ($user) {
+            $postsQuery = $postsQuery->orWhere(function ($query) use ($user)
+                {
+                    $query->where('thread_id', $this->thread->id)
+                          ->whereNull('approved_at')
+                          ->where('author_id', $user->getKey());
+                });
+        }
 
         $posts = $postsQuery
             ->with('author', 'thread')
@@ -176,9 +248,12 @@ class ThreadShow extends EventfulPaginatedComponent
             ->paginate();
 
         $selectablePostIds = [];
-        if ($request->user()) {
+        if ($user) {
             foreach ($posts as $post) {
-                if ($post->sequence > 1 && ($request->user()->can('delete', $post) || $request->user()->can('restore', $post))) {
+                $isReply = $post->sequence > 1;
+                $canDeleteOrRestore = $user->can('delete', $post) || $user->can('restore', $post);
+                $canApprove = ($post->approved_at == null || $post->approved_at > Carbon::now()) && $user->can('approvePosts', $this->thread);
+                if ($isReply && ($canDeleteOrRestore || $canApprove)) {
                     $selectablePostIds[] = $post->id;
                 }
             }

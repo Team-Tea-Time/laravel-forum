@@ -76,6 +76,10 @@
             id="selected-action"
             x-model="selectedAction">
                 <option value="none" disabled>{{ trans_choice('forum::general.actions', 1) }}...</option>
+            @if (Gate::allows('approveThreads') && Gate::allows('approveThreads', $category))
+                <option value="approve">{{ trans('forum::general.approve') }}</option>
+                <option value="unapprove">{{ trans('forum::general.unapprove') }}</option>
+            @endif
             @can ('deleteThreads', $category)
                 <option value="delete">{{ trans('forum::general.delete') }}</option>
             @endcan
@@ -155,6 +159,13 @@ Alpine.data('category', () => {
 
             let result;
             switch (this.selectedAction) {
+                case 'approve':
+                    if (!confirm(this.confirmMessage)) return;
+                    result = await $wire.approveThreads(this.selectedThreads);
+                    break;
+                case 'unapprove':
+                    result = await $wire.unapproveThreads(this.selectedThreads);
+                    break;
                 case 'delete':
                     if (!confirm(this.confirmMessage)) return;
                     result = await $wire.deleteThreads(this.selectedThreads, this.permadelete);

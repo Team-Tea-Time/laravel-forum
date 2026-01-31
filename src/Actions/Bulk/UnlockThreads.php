@@ -24,7 +24,7 @@ class UnlockThreads extends BaseAction
             ->where(['locked' => true]);
 
         if (!$this->includeTrashed) {
-            $query = $query->whereNull(Thread::DELETED_AT);
+            $query = $query->whereNull('deleted_at');
         }
 
         $threads = $query->get();

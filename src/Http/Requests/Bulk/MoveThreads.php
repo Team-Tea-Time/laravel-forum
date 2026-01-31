@@ -58,7 +58,7 @@ class MoveThreads extends FormRequest implements FulfillableRequestInterface
                 ->whereIn('id', $this->validated()['threads']);
 
             if (!$this->user()->can('viewTrashedThreads')) {
-                $query = $query->whereNull(BaseModel::DELETED_AT);
+                $query = $query->whereNull('deleted_at');
             }
 
             $this->sourceCategories = Category::whereIn('id', $query->get()->pluck('category_id'))->get();

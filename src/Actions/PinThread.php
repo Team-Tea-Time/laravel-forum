@@ -19,9 +19,7 @@ class PinThread extends BaseAction
             return null;
         }
 
-        $this->thread->updateWithoutTouch([
-            'pinned' => true,
-        ]);
+        Thread::withoutTimestamps(fn () => $this->thread->update(['pinned' => true]));
 
         return $this->thread;
     }

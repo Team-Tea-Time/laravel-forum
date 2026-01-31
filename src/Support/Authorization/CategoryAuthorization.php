@@ -35,7 +35,7 @@ class CategoryAuthorization
         return $category->accepts_threads && $user->can('createThreads', $category);
     }
 
-    public static function moveThread(User $user, Category $sourceCategory, Category $destinationCategory): bool
+    public static function moveThreads(User $user, Category $sourceCategory, Category $destinationCategory): bool
     {
         return $user->can('moveThreadsFrom', $sourceCategory) && $user->can('moveThreadsTo', $destinationCategory);
     }

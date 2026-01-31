@@ -16,6 +16,7 @@ class PostFactory extends Factory
             'author_id' => 0,
             'post_id' => null,
             'content' => $this->faker->text,
+            'approved_at' => now()->subSecond(),
         ];
     }
 }

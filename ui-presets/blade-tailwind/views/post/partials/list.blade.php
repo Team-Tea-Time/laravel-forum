@@ -5,12 +5,8 @@
         @if (!isset($single) || !$single)
             <span class="float-end">
                 <a href="{{ Forum::route('thread.show', $post) }}" class="text-blue-500">#{{ $post->sequence }}</a>
-                @if ($post->sequence != 1)
-                    @can ('deletePosts', $post->thread)
-                        @can ('delete', $post)
-                            <input type="checkbox" name="posts[]" :value="{{ $post->id }}" v-model="state.selectedPosts" class="ml-2" />
-                        @endcan
-                    @endcan
+                @if ($isSelectable)
+                    <input type="checkbox" name="posts[]" :value="{{ $post->id }}" v-model="state.selectedPosts" class="ml-2" />
                 @endif
             </span>
         @endif
@@ -28,6 +24,12 @@
     <div class="p-6">
         @if ($post->parent !== null)
             @include ('forum::post.partials.quote', ['post' => $post->parent])
+        @endif
+
+        @if ($post->sequence != 1 && $post->thread->category->requiresPostApproval() && !$post->isApproved)
+            <div class="mb-2">
+                <x-forum::badge type="warning">{{ trans('forum::general.pending_approval') }}</x-forum::badge>
+            </div>
         @endif
 
         @if ($post->trashed())

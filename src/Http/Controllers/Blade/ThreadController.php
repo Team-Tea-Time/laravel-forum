@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Http\Controllers\Blade;
 
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as ViewFactory;
@@ -10,6 +11,7 @@ use TeamTeaTime\Forum\Events\UserCreatingThread;
 use TeamTeaTime\Forum\Events\UserViewingRecent;
 use TeamTeaTime\Forum\Events\UserViewingThread;
 use TeamTeaTime\Forum\Events\UserViewingUnread;
+use TeamTeaTime\Forum\Http\Requests\ApproveThread;
 use TeamTeaTime\Forum\Http\Requests\CreateThread;
 use TeamTeaTime\Forum\Http\Requests\DeleteThread;
 use TeamTeaTime\Forum\Http\Requests\LockThread;
@@ -18,6 +20,7 @@ use TeamTeaTime\Forum\Http\Requests\MoveThread;
 use TeamTeaTime\Forum\Http\Requests\PinThread;
 use TeamTeaTime\Forum\Http\Requests\RenameThread;
 use TeamTeaTime\Forum\Http\Requests\RestoreThread;
+use TeamTeaTime\Forum\Http\Requests\UnapproveThread;
 use TeamTeaTime\Forum\Http\Requests\UnlockThread;
 use TeamTeaTime\Forum\Http\Requests\UnpinThread;
 use TeamTeaTime\Forum\Models\Category;
@@ -84,41 +87,63 @@ class ThreadController extends BaseController
     public function show(Request $request): View
     {
         $thread = $request->route('thread');
+        $user = $request->user();
 
-        if (!$thread->category->isAccessibleTo($request->user())) {
+        if (!$thread->isAccessibleTo($user)) {
             abort(404);
         }
 
-        if ($request->user() !== null) {
-            UserViewingThread::dispatch($request->user(), $thread);
+        if ($user !== null) {
+            UserViewingThread::dispatch($user, $thread);
             $thread->markAsRead($request->user());
         }
 
         $category = $thread->category;
-        $categories = $request->user() && $request->user()->can('moveThreadsFrom', $category)
+        $categories = $user && $user->can('moveThreadsFrom', $category)
                     ? Category::acceptsThreads()->get()->toTree()
                     : [];
 
-        $posts = config('forum.general.display_trashed_posts') || $request->user() && $request->user()->can('viewTrashedPosts')
-               ? $thread->posts()->withTrashed()
-               : $thread->posts();
+        $postsQuery = config('forum.general.display_trashed_posts') || $user && $user->can('viewTrashedPosts')
+            ? $thread->posts()->withTrashed()
+            : $thread->posts();
 
-        $posts = $posts
+        if (!$user || !$user->can('approvePosts', $thread)) {
+            $postsQuery = $postsQuery->approved();
+        }
+
+        if ($user) {
+            $postsQuery = $postsQuery->orWhere(function ($query) use ($thread, $user)
+                {
+                    $query->where('thread_id', $thread->id)
+                          ->whereNull('approved_at')
+                          ->where('author_id', $user->getKey());
+                });
+        }
+
+        $posts = $postsQuery
             ->with('author', 'thread')
             ->orderBy('created_at', 'asc')
             ->paginate();
 
-        $selectablePosts = [];
-
-        if ($request->user()) {
+        $selectablePostIds = [];
+        if ($user) {
             foreach ($posts as $post) {
-                if ($post->sequence > 1 && ($request->user()->can('delete', $post) || $request->user()->can('restore', $post))) {
-                    $selectablePosts[] = $post->id;
+                $isReply = $post->sequence > 1;
+                $canDeleteOrRestore = $user->can('delete', $post) || $user->can('restore', $post);
+                $canApprove = ($post->approved_at == null || $post->approved_at > Carbon::now()) && $user->can('approvePosts', $thread);
+                if ($isReply && ($canDeleteOrRestore || $canApprove)) {
+                    $selectablePostIds[] = $post->id;
                 }
             }
         }
 
-        return ViewFactory::make('forum::thread.show', compact('categories', 'category', 'thread', 'posts', 'selectablePosts'));
+        return ViewFactory::make('forum::thread.show', [
+            'categories' => $categories,
+            'category' => $category,
+            'thread' => $thread,
+            'posts' => $posts,
+            'selectablePosts' => $selectablePostIds
+        ]);
     }
 
     public function create(Request $request): View|RedirectResponse
@@ -245,5 +270,69 @@ class ThreadController extends BaseController
         Forum::alert('success', 'threads.updated');
 
         return new RedirectResponse(Forum::route('thread.show', $thread));
+    }
+
+    public function approve(ApproveThread $request): RedirectResponse
+    {
+        $thread = $request->fulfill();
+
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
+
+        Forum::alert('success', 'threads.approved');
+
+        return new RedirectResponse(Forum::route('thread.show', $thread));
+    }
+
+    public function unapprove(UnapproveThread $request): RedirectResponse
+    {
+        $thread = $request->fulfill();
+
+        if ($thread === null) {
+            return $this->invalidSelectionResponse();
+        }
+
+        Forum::alert('success', 'threads.unapproved');
+
+        return new RedirectResponse(Forum::route('thread.show', $thread));
+    }
+
+    public function pendingApproval(Request $request): View
+    {
+        $threads = Thread::notDeleted()
+            ->pendingApproval()
+            ->orderBy('created_at', 'desc')
+            ->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
+
+        // Get accessible category IDs for the current user
+        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
+        
+        // Apply filtering to the query
+        $threads = $threads->where(function ($query) use ($request, $accessibleCategoryIds) {
+            // Public categories or private categories the user has access to
+            $query->whereHas('category', function ($q) use ($accessibleCategoryIds) {
+                $q->where('is_private', false)
+                  ->when($accessibleCategoryIds->isNotEmpty(), function ($q) use ($accessibleCategoryIds) {
+                      $q->orWhereIn('id', $accessibleCategoryIds);
+                  });
+            });
+            
+            // Check view permissions for the thread
+            if ($request->user()) {
+                $query->where(function ($q) use ($accessibleCategoryIds) {
+                    $q->whereDoesntHave('category', function ($q) {
+                        $q->where('is_private', true);
+                    })->orWhereHas('category', function ($q) use ($accessibleCategoryIds) {
+                        $q->whereIn('id', $accessibleCategoryIds);
+                    });
+                });
+            }
+        });
+
+        // Paginate the results
+        $threads = $threads->paginate();
+
+        return ViewFactory::make('forum::thread.pending-approval', compact('threads'));
     }
 }

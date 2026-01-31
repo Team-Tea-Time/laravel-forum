@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Support\Frontend;
 
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use TeamTeaTime\Forum\Models\Category;

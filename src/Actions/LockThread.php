@@ -19,9 +19,7 @@ class LockThread extends BaseAction
             return null;
         }
 
-        $this->thread->updateWithoutTouch([
-            'locked' => true,
-        ]);
+        Thread::withoutTimestamps(fn () => $this->thread->update(['locked' => true]));
 
         return $this->thread;
     }

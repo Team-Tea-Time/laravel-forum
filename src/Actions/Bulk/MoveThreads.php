@@ -49,24 +49,26 @@ class MoveThreads extends BaseAction
             $categoryThreads = $threadsByCategory->get($category->id);
             $threadCount = $categoryThreads->count();
             $postCount = $threadCount + $categoryThreads->sum('reply_count');
-            $category->updateWithoutTouch([
+
+            Category::withoutTimestamps(fn () => $category->update([
                 'newest_thread_id' => $category->getNewestThreadId(),
                 'latest_active_thread_id' => $category->getLatestActiveThreadId(),
                 'thread_count' => DB::raw("thread_count - {$threadCount}"),
                 'post_count' => DB::raw("post_count - {$postCount}"),
-            ]);
+            ]));
 
             $seen[] = $category->id;
         }
 
         $threadCount = $threads->count();
         $postCount = $threads->count() + $threads->sum('reply_count');
-        $destinationCategory->updateWithoutTouch([
+
+        Category::withoutTimestamps(fn () => $destinationCategory->update([
             'newest_thread_id' => max($threads->max('id'), $destinationCategory->newest_thread_id),
             'latest_active_thread_id' => $destinationCategory->getLatestActiveThreadId(),
             'thread_count' => DB::raw("thread_count + {$threadCount}"),
             'post_count' => DB::raw("post_count + {$postCount}"),
-        ]);
+        ]));
 
         return $threads;
     }

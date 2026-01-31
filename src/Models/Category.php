@@ -25,6 +25,8 @@ class Category extends BaseModel
         'thread_count',
         'post_count',
         'is_private',
+        'thread_approval_enabled',
+        'post_approval_enabled',
         'color_light_mode',
         'color_dark_mode',
     ];
@@ -37,12 +39,12 @@ class Category extends BaseModel
 
     public function newestThread(): HasOne
     {
-        return $this->hasOne(Thread::class, 'id', 'newest_thread_id');
+        return $this->hasOne(Thread::class, 'id', 'newest_thread_id')->approved();
     }
 
     public function latestActiveThread(): HasOne
     {
-        return $this->hasOne(Thread::class, 'id', 'latest_active_thread_id');
+        return $this->hasOne(Thread::class, 'id', 'latest_active_thread_id')->approved();
     }
 
     public function scopeTopLevel(Builder $query): Builder
@@ -78,16 +80,26 @@ class Category extends BaseModel
         return CategoryAccess::isAccessibleTo($user, $this->id);
     }
 
+    public function requiresThreadApproval(): bool
+    {
+        return config('forum.general.content_approval.threads.enable_globally') || $this->thread_approval_enabled;
+    }
+
+    public function requiresPostApproval(): bool
+    {
+        return config('forum.general.content_approval.posts.enable_globally') || $this->post_approval_enabled;
+    }
+
     public function getNewestThreadId(): ?int
     {
-        $thread = $this->threads()->orderBy('created_at', 'desc')->first();
+        $thread = $this->threads()->notDeleted()->approved()->orderBy('created_at', 'desc')->first();
 
         return $thread ? $thread->id : null;
     }
 
     public function getLatestActiveThreadId(): ?int
     {
-        $thread = $this->threads()->orderBy('updated_at', 'desc')->first();
+        $thread = $this->threads()->notDeleted()->approved()->where('reply_count', '>', 0)->orderBy('updated_at', 'desc')->first();
 
         return $thread ? $thread->id : null;
     }

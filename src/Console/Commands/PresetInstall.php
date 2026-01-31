@@ -102,7 +102,7 @@ class PresetInstall extends Command implements PromptsForMissingInput
         $viteInput = $preset->getViteInput();
 
         if (count($viteInput) > 0) {
-            info("This preset requires the following lines need to be added to the Laravel input array in your vite.config.js file:");
+            info("This preset requires the following lines to be added to the Laravel input array in your vite.config.js file:");
             foreach ($viteInput as $input) {
                 $this->line("    '$input',");
             }

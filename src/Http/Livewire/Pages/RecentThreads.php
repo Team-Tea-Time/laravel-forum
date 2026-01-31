@@ -25,11 +25,10 @@ class RecentThreads extends Component
             $threads = $threads->where('category_id', $request->input('category_id'));
         }
 
-        $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
-
-        $this->threads = $threads->get()->filter(function ($thread) use ($request, $accessibleCategoryIds) {
-            return $accessibleCategoryIds->contains($thread->category_id)
-                && (!$thread->category->is_private || $request->user() && $request->user()->can('view', $thread));
+        // TODO: optimise this. Using Thread::isAccessibleTo could be quite slow depending on how policies are
+        // implemented and probably shouldn't be used to filter collections.
+        $this->threads = $threads->get()->filter(function ($thread) use ($request) {
+            return $thread->isAccessibleTo($request->user());
         });
 
         if ($request->user() !== null) {

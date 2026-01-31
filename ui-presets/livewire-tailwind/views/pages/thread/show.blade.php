@@ -6,6 +6,14 @@
 
     <div class="flex items-center mt-4 mb-6">
         <div class="grow">
+            @if ($thread->category->requiresThreadApproval() && !$thread->isApproved)
+                <livewire:forum::components.pill
+                    bg-color="bg-orange-400"
+                    text-color="text-orange-950"
+                    margin="mr-2"
+                    icon="clipboard-document-check-mini"
+                    :text="trans('forum::general.pending_approval')" />
+            @endif
             @if ($thread->pinned)
                 <livewire:forum::components.pill
                     bg-color="bg-amber-400"
@@ -125,6 +133,23 @@
                             :label="trans('forum::general.move')"
                             @click.prevent="confirmThreadAction('move', '')" />
                     @endcan
+                    @if (Gate::allows('approveThreads') && Gate::allows('approveThreads', $thread->category))
+                        @if ($thread->isApproved)
+                            <x-forum::group-button
+                                intent="secondary"
+                                size="small"
+                                icon="x-circle-mini"
+                                :label="trans('forum::general.unapprove')"
+                                @click.prevent="confirmThreadAction('unapprove', '{{ trans_choice('forum::threads.confirm_unapprove', 1) }}')" />
+                        @else
+                            <x-forum::group-button
+                                intent="secondary"
+                                size="small"
+                                icon="check-badge-mini"
+                                :label="trans('forum::general.approve')"
+                                @click.prevent="confirmThreadAction('approve', '{{ trans_choice('forum::threads.confirm_approve', 1) }}')" />
+                        @endif
+                    @endif
                 @endif
             </div>
         </div>
@@ -177,12 +202,16 @@
             id="bulk-action"
             x-model="postsAction">
                 <option value="none" disabled>{{ trans_choice('forum::general.actions', 1) }}...</option>
-            @can ('deletePosts', $thread)
-                <option value="delete">{{ trans('forum::general.delete') }}</option>
-            @endcan
-            @can ('restorePosts', $thread)
-                <option value="restore">{{ trans('forum::general.restore') }}</option>
-            @endcan
+                @can ('deletePosts', $thread)
+                    <option value="delete">{{ trans('forum::general.delete') }}</option>
+                @endcan
+                @can ('restorePosts', $thread)
+                    <option value="restore">{{ trans('forum::general.restore') }}</option>
+                @endcan
+                @if (Gate::allows('approvePosts') && Gate::allows('approvePosts', $thread))
+                    <option value="approve">{{ trans('forum::general.approve') }}</option>
+                    <option value="unapprove">{{ trans('forum::general.unapprove') }}</option>
+                @endif
         </x-forum::form.input-select>
 
         @if (config('forum.general.soft_deletes'))
@@ -321,6 +350,12 @@ Alpine.data('thread', () => {
                 case 'move':
                     result = await $wire.move();
                     break;
+                case 'approve':
+                    result = await $wire.approve();
+                    break;
+                case 'unapprove':
+                    result = await $wire.unapprove();
+                    break;
             }
 
             if (result === null) return;
@@ -342,6 +377,12 @@ Alpine.data('thread', () => {
                     break;
                 case 'restore':
                     result = await $wire.restorePosts(this.selectedPosts);
+                    break;
+                case 'approve':
+                    result = await $wire.approvePosts(this.selectedPosts);
+                    break;
+                case 'unapprove':
+                    result = await $wire.unapprovePosts(this.selectedPosts);
                     break;
             }
 

@@ -2,6 +2,7 @@
 
 namespace TeamTeaTime\Forum\Actions;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use TeamTeaTime\Forum\Models\Category;
@@ -24,16 +25,22 @@ class CreateThread extends BaseAction
 
     protected function transact()
     {
+        $requiresApproval = $this->category->requiresThreadApproval()
+            && !$this->author->can('approveThreads', $this->category)
+            && !$this->author->can('createThreadsWithoutApproval', $this->category);
+
         $thread = Thread::create([
             'author_id' => $this->author->getKey(),
             'category_id' => $this->category->id,
             'title' => $this->title,
+            'approved_at' => $requiresApproval ? null : Carbon::now()->subSecond(),
         ]);
 
         $post = $thread->posts()->create([
             'author_id' => $this->author->getKey(),
             'content' => $this->content,
             'sequence' => 1,
+            'approved_at' => $requiresApproval ? null : Carbon::now()->subSecond(),
         ]);
 
         $thread->update([
@@ -41,12 +48,14 @@ class CreateThread extends BaseAction
             'last_post_id' => $post->id,
         ]);
 
-        $thread->category->updateWithoutTouch([
-            'newest_thread_id' => $thread->id,
-            'latest_active_thread_id' => $thread->id,
-            'thread_count' => DB::raw('thread_count + 1'),
-            'post_count' => DB::raw('post_count + 1'),
-        ]);
+        if (!$requiresApproval) {
+            $thread->category->update([
+                'newest_thread_id' => $thread->id,
+                'latest_active_thread_id' => $thread->id,
+                'thread_count' => DB::raw('thread_count + 1'),
+                'post_count' => DB::raw('post_count + 1'),
+            ]);
+        }
 
         return $thread;
     }

@@ -79,6 +79,10 @@
                                             </div>
 
                                             <x-forum::select id="bulk-actions" v-model="state.selectedAction">
+                                                @if (Gate::allows('approveThreads') && Gate::allows('approveThreads', $category))
+                                                    <option value="approve">{{ trans('forum::general.approve') }}</option>
+                                                    <option value="unapprove">{{ trans('forum::general.unapprove') }}</option>
+                                                @endif
                                                 @can ('deleteThreads', $category)
                                                     <option value="delete">{{ trans('forum::general.delete') }}</option>
                                                 @endcan
@@ -185,6 +189,8 @@
             const selectableThreadIds = @json($selectableThreadIds);
 
             const actions = {
+                approve: "{{ Forum::route('bulk.thread.approve') }}",
+                unapprove: "{{ Forum::route('bulk.thread.unapprove') }}",
                 delete: "{{ Forum::route('bulk.thread.delete') }}",
                 restore: "{{ Forum::route('bulk.thread.restore') }}",
                 lock: "{{ Forum::route('bulk.thread.lock') }}",
@@ -195,6 +201,8 @@
             };
 
             const actionMethods = {
+                approve: 'POST',
+                unapprove: 'POST',
                 delete: 'DELETE',
                 restore: 'POST',
                 lock: 'POST',

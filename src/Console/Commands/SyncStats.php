@@ -60,17 +60,14 @@ class SyncStats extends Command
         $bar->start();
 
         foreach ($categories as $category) {
-            $newestThreadId = $category->newestThread?->id;
-            $latestActiveThreadId = $category->latestActiveThread?->id;
-
             $postCount = Post::whereHas('thread', function (Builder $query) use ($category) {
-                $query->where('category_id', $category->id);
-            })->count();
+                $query->where('category_id', $category->id)->notDeleted()->approved();
+            })->notDeleted()->approved()->count();
 
             $category->update([
-                'newest_thread_id' => $newestThreadId,
-                'latest_active_thread_id' => $latestActiveThreadId,
-                'thread_count' => $category->threads->count(),
+                'newest_thread_id' => $category->getNewestThreadId(),
+                'latest_active_thread_id' => $category->getLatestActiveThreadId(),
+                'thread_count' => $category->threads()->notDeleted()->approved()->count(),
                 'post_count' => $postCount,
             ]);
 
@@ -101,10 +98,13 @@ class SyncStats extends Command
         $bar->start();
 
         foreach ($threads as $thread) {
+            $firstPost = $thread->posts()->orderBy('created_at', 'ASC')->first();
+            $lastApprovedPost = $thread->posts()->notDeleted()->approved()->orderBy('created_at', 'DESC')->first();
+
             $thread->update([
-                'reply_count' => $thread->posts->count() - 1,
-                'first_post_id' => $thread->posts()->orderBy('created_at', 'ASC')->first()->id,
-                'last_post_id' => $thread->posts()->orderBy('created_at', 'DESC')->first()->id,
+                'reply_count' => max($thread->posts()->approved()->count() - 1, 0),
+                'first_post_id' => $firstPost->id,
+                'last_post_id' => $lastApprovedPost ? $lastApprovedPost->id : $firstPost->id,
             ]);
 
             $bar->advance();

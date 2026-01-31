@@ -120,7 +120,7 @@
         @endif
 
         @foreach ($posts as $post)
-            @include ('forum::post.partials.list', compact('post'))
+            @include ('forum::post.partials.list', ['post' => $post, 'isSelectable' => in_array($post->id, $selectablePosts)])
         @endforeach
 
         @if ((count($posts) > 1 || $posts->currentPage() > 1) && (Gate::allows('deletePosts', $thread) || Gate::allows('restorePosts', $thread)) && count($selectablePosts) > 0)

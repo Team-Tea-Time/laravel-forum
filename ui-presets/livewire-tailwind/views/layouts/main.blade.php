@@ -49,20 +49,42 @@
                                     <a href="{{ route('forum.unread') }}" class="block hover:bg-slate-100 dark:hover:bg-slate-600 rounded-md px-4 py-2 md:hover:bg-transparent md:dark:hover:bg-transparent md:inline">{{ trans('forum::threads.unread_updated') }}</a>
                                 </span>
                             @endauth
-                            @can ('moveCategories')
-                                <span class="w-full md:w-auto">
-                                    <a href="{{ route('forum.category.order') }}" class="block hover:bg-slate-100 dark:hover:bg-slate-600 rounded-md px-4 py-2 md:hover:bg-transparent md:dark:hover:bg-transparent md:inline">{{ trans('forum::general.manage') }}</a>
+                            @if (Gate::allows('moveCategories') || Gate::allows('approveThreads') || Gate::allows('approvePosts'))
+                                <span class="relative w-full md:w-auto" @click.outside="closeManageDropdown">
+                                    <a class="block flex flex-row items-center place-content-center gap-1 hover:bg-slate-100 dark:hover:bg-slate-600 rounded-md px-4 py-2 md:hover:bg-transparent md:dark:hover:bg-transparent w-full md:w-auto md:inline" href="#" id="manageDropdownMenuLink" @click="toggleManageDropdown">
+                                        {{ trans('forum::general.manage') }}
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline w-3 h-3">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </a>
+                                    <div class="absolute right-0 left-0 md:left-auto w-auto md:w-44 divide-y divide-slate-200 dark:divide-slate-600 border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-md" :class="{ hidden: isManageDropdownCollapsed }" aria-labelledby="manageDropdownMenuLink">
+                                        @can ('moveCategories')
+                                            <a class="block px-4 py-2" href="{{ route('forum.category.order') }}">
+                                                {{ trans('forum::categories.manage') }}
+                                            </a>
+                                        @endcan
+                                        @can ('approveThreads')
+                                            <a class="block px-4 py-2" href="{{ route('forum.pending-approval.threads') }}">
+                                                {{ trans('forum::threads.pending_approval') }}
+                                            </a>
+                                        @endcan
+                                        @can ('approvePosts')
+                                            <a class="block px-4 py-2" href="{{ route('forum.pending-approval.posts') }}">
+                                                {{ trans('forum::posts.pending_approval') }}
+                                            </a>
+                                        @endcan
+                                    </div>
                                 </span>
-                            @endcan
+                            @endif
                             @if (Auth::check())
                                 <span class="relative w-full md:w-auto" @click.outside="closeUserDropdown">
-                                    <a class="block flex flex-row items-center place-content-center gap-1 hover:bg-slate-100 dark:hover:bg-slate-600 rounded-md px-4 py-2 md:hover:bg-transparent md:dark:hover:bg-transparent w-full md:w-auto md:inline" href="#" id="navbarDropdownMenuLink" @click="toggleUserDropdown">
+                                    <a class="block flex flex-row items-center place-content-center gap-1 hover:bg-slate-100 dark:hover:bg-slate-600 rounded-md px-4 py-2 md:hover:bg-transparent md:dark:hover:bg-transparent w-full md:w-auto md:inline" href="#" id="userDropdownMenuLink" @click="toggleUserDropdown">
                                         {{ $username }}
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline w-3 h-3">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                                         </svg>
                                     </a>
-                                    <div class="absolute right-0 left-0 md:left-auto w-auto md:w-44 divide-y border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-md" :class="{ hidden: isUserDropdownCollapsed }" aria-labelledby="navbarDropdownMenuLink">
+                                    <div class="absolute right-0 left-0 md:left-auto w-auto md:w-44 divide-y border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-md" :class="{ hidden: isUserDropdownCollapsed }" aria-labelledby="userDropdownMenuLink">
                                         <a class="block px-4 py-2" href="#" @click.prevent="logout">
                                             {{ __('Log out') }}
                                         </a>
@@ -107,12 +129,20 @@
             Alpine.data('navbar', () => {
                 return {
                     isMenuCollapsed: true,
+                    isManageDropdownCollapsed: true,
                     isUserDropdownCollapsed: true,
+
                     toggleMenu() {
                         this.isMenuCollapsed = !this.isMenuCollapsed;
                     },
                     closeMenu() {
                         this.isMenuCollapsed = true;
+                    },
+                    toggleManageDropdown() {
+                        this.isManageDropdownCollapsed = !this.isManageDropdownCollapsed;
+                    },
+                    closeManageDropdown() {
+                        this.isManageDropdownCollapsed = true;
                     },
                     toggleUserDropdown() {
                         this.isUserDropdownCollapsed = !this.isUserDropdownCollapsed;

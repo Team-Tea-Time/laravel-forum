@@ -24,7 +24,7 @@ class UnreadThreads extends Component
 
     protected function getThreads(Request $request): Collection
     {
-        $threads = Thread::recent()->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
+        $threads = Thread::recent()->approved()->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
 
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
 

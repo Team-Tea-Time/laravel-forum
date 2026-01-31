@@ -3,7 +3,11 @@
 namespace TeamTeaTime\Forum\Actions;
 
 use Illuminate\Support\Facades\DB;
-use TeamTeaTime\Forum\Models\Post;
+use TeamTeaTime\Forum\Models\{
+    Category,
+    Post,
+    Thread,
+};
 
 class DeletePost extends BaseAction
 {
@@ -25,31 +29,31 @@ class DeletePost extends BaseAction
                 return null;
             }
 
-            $this->post->deleteWithoutTouch();
+            Post::withoutTimestamps(fn () => $this->post->delete());
         }
 
         $lastPostInThread = $this->post->thread->getLastPost();
 
-        $this->post->thread->updateWithoutTouch([
+        Thread::withoutTimestamps(fn () => $this->post->thread->update([
             'last_post_id' => $lastPostInThread->id,
             'updated_at' => $lastPostInThread->updated_at,
             'reply_count' => DB::raw('reply_count - 1'),
-        ]);
+        ]));
 
-        $this->post->thread->category->updateWithoutTouch([
+        Category::withoutTimestamps(fn () => $this->post->thread->category->update([
             'latest_active_thread_id' => $this->post->thread->category->getLatestActiveThreadId(),
             'post_count' => DB::raw('post_count - 1'),
-        ]);
+        ]));
 
         if ($this->permaDelete && $this->post->children !== null) {
             // Other posts reference this one; null their post IDs
-            $this->post->children()->update(['post_id' => null]);
+            Post::withoutTimestamps(fn () => $this->post->children()->update(['post_id' => null]));
         }
 
         // Update sequence numbers for all of the thread's posts
-        $this->post->thread->posts()->withTrashed()->each(function ($p, $i) {
-            $p->updateWithoutTouch(['sequence' => $i + 1]);
-        });
+        Post::withoutTimestamps(fn () => $this->post->thread->posts()->withTrashed()->each(function ($post, $i) {
+            $post->update(['sequence' => $i + 1]);
+        }));
 
         return $this->post;
     }
