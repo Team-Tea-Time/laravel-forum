@@ -3,14 +3,32 @@
 namespace TeamTeaTime\Forum\Http\Controllers\Api\Bulk;
 
 use Illuminate\Http\Response;
-use TeamTeaTime\Forum\Http\Requests\Bulk\ManageCategories;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use TeamTeaTime\Forum\Http\Controllers\Api\BaseController;
+use TeamTeaTime\Forum\Http\Requests\Bulk\ReorderCategories;
+use TeamTeaTime\Forum\Http\Resources\Category as CategoryResource;
+use TeamTeaTime\Forum\Models\Category;
 
-class CategoryController
+class CategoryController extends BaseController
 {
-    public function manage(ManageCategories $request): Response
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $request->fulfill();
+        $query = Category::defaultOrder();
+        $categories = $request->query('include_private') ? $query->get() : $query->where('is_private', false)->get();
 
-        return new Response(['success' => true], 200);
+        return CategoryResource::collection($categories);
+    }
+
+    public function fetch(Request $request): CategoryResource
+    {
+        return new CategoryResource($request->route('category'));
+    }
+
+    public function reorder(ReorderCategories $request): Response
+    {
+        $categories = $request->fulfill();
+
+        return new Response(['categories' => CategoryResource::collection($categories)]);
     }
 }
