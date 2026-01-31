@@ -29,6 +29,11 @@ class LivewireTailwindPreset extends AbstractPreset
         return "Blade with Livewire, AlpineJS, and Tailwind CSS.";
     }
 
+    public static function isSupported(): bool
+    {
+        return true;
+    }
+
     public static function getRequiredStack(): FrontendStack
     {
         return FrontendStack::LIVEWIRE;

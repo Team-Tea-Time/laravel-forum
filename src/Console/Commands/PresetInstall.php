@@ -38,6 +38,9 @@ class PresetInstall extends Command implements PromptsForMissingInput
         $options = [];
         foreach ($this->presets->getAll() as $preset) {
             $options[$preset->getName()] = $preset->getSummary();
+            if (!$preset->isSupported()) {
+                $options[$preset->getName()] .= " (Unsupported)";
+            }
         }
 
         return [
@@ -65,6 +68,11 @@ class PresetInstall extends Command implements PromptsForMissingInput
 
         if (!$preset->isValid()) {
             error("This preset is not valid. It may have incorrect or missing paths.");
+            return;
+        }
+
+        if (!$preset->isSupported() && !confirm("This preset is no longer supported. Proceed anyway?")) {
+            info("Cancelled.");
             return;
         }
 
