@@ -68,6 +68,22 @@ class PostsPendingApproval extends Component
         return $this->handleActionResult($result, 'posts.approved');
     }
 
+    public function delete(Request $request, array $postIds)
+    {
+        if (!PostAuthorization::bulkDelete($request->user(), $postIds)) {
+            abort(403);
+        }
+
+        $action = new DeletePosts($postIds, false);
+        $result = $action->execute();
+
+        if ($result !== null) {
+            UserBulkDeletedPosts::dispatch($request->user(), $result);
+        }
+
+        return $this->handleActionResult($result, 'posts.deleted');
+    }
+
     public function render(Request $request): View
     {
         $posts = $this->getPosts($request);
