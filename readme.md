@@ -22,7 +22,7 @@ See the [support policy in the Laravel docs](https://laravel.com/docs/11.x/relea
 Install the package via composer:
 
 ```
-composer require riari/laravel-forum:^6.0
+composer require riari/laravel-forum:^7.0
 ```
 
 [Package Discovery](https://laravel.com/docs/11.x/packages#package-discovery) should take care of registering the service provider automatically, but if you need to do so manually, add the service provider to your `bootstrap/providers.php`:
