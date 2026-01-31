@@ -11,7 +11,7 @@ use TeamTeaTime\Forum\{
     Support\Validation\CategoryRules,
 };
 
-class ManageCategories extends FormRequest implements FulfillableRequestInterface
+class ReorderCategories extends FormRequest implements FulfillableRequestInterface
 {
     public function rules(): array
     {
@@ -20,7 +20,7 @@ class ManageCategories extends FormRequest implements FulfillableRequestInterfac
 
     public function authorizeValidated(): bool
     {
-        return CategoryAuthorization::manage($this->user());
+        return CategoryAuthorization::move($this->user());
     }
 
     public function fulfill()

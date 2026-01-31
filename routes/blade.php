@@ -70,7 +70,7 @@ Route::prefix($prefix['thread'] . '/{thread_id}-{thread_slug}')->group(function 
 // Bulk actions
 Route::prefix('bulk')->middleware($authMiddleware)->name('bulk.')->group(function () {
     // Categories
-    Route::post('category/manage', [BulkCategoryController::class, 'manage'])->name('category.manage');
+    Route::post('category/reorder', [BulkCategoryController::class, 'reorder'])->name('category.reorder');
 
     // Threads
     Route::prefix('thread')->name('thread.')->group(function () {

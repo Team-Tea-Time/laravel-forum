@@ -72,7 +72,7 @@ Route::prefix('post')->name('post.')->group(function () use ($authMiddleware) {
 Route::prefix('bulk')->name('bulk.')->middleware($authMiddleware)->group(function () use ($authMiddleware) {
     // Categories
     Route::prefix('category')->name('category.')->group(function () {
-        Route::post('manage', [BulkCategoryController::class, 'manage'])->name('manage');
+        Route::post('reorder', [BulkCategoryController::class, 'reorder'])->name('reorder');
     });
 
     // Threads

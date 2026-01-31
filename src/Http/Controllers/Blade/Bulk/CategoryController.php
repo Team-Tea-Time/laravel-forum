@@ -3,14 +3,17 @@
 namespace TeamTeaTime\Forum\Http\Controllers\Blade\Bulk;
 
 use Illuminate\Http\JsonResponse;
-use TeamTeaTime\Forum\Http\Requests\Bulk\ManageCategories;
+use Illuminate\Support\Facades\Response;
+use TeamTeaTime\Forum\Http\Controllers\Blade\BaseController;
+use TeamTeaTime\Forum\Http\Requests\Bulk\ReorderCategories;
+use TeamTeaTime\Forum\Support\Web\Forum;
 
-class CategoryController
+class CategoryController extends BaseController
 {
-    public function manage(ManageCategories $request): JsonResponse
+    public function reorder(ReorderCategories $request): JsonResponse
     {
         $request->fulfill();
 
-        return new JsonResponse(['success' => true], 200);
+        return Response::json(['status' => 'success']);
     }
 }

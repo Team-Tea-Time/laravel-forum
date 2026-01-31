@@ -84,7 +84,7 @@
                 state.changesApplied = false;
 
                 var payload = { categories: state.categories };
-                axios.post('{{ route('forum.bulk.category.manage') }}', payload)
+                axios.post('{{ route('forum.bulk.category.reorder') }}', payload)
                     .then(response => {
                         state.changesApplied = true;
                         setTimeout(() => state.changesApplied = false, 3000);
