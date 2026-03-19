@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User;
-use Kalnoy\Nestedset\NodeTrait;
+use Aimeos\Nestedset\NodeTrait;
 use TeamTeaTime\Forum\Support\Access\CategoryAccess;
 use TeamTeaTime\Forum\Support\Frontend\Forum;
 
@@ -66,8 +66,7 @@ class Category extends BaseModel
     {
         return $query->defaultOrder()
             ->with('children')
-            ->where('accepts_threads', true)
-            ->withDepth();
+            ->where('accepts_threads', true);
     }
 
     public function isEmpty(): bool

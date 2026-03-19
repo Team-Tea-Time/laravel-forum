@@ -1,7 +1,7 @@
 @foreach ($categories as $cat)
     @if (!isset($hide) || (isset($hide) && $cat->id != $hide->id))
         <option value="{{ $cat->id }}" {{ (isset($category) && $cat->id == $category->id) ? 'selected' : '' }}>
-            @for ($i = 0; $i < $cat->depth; $i++)- @endfor
+            @for ($i = 0; $i < $cat->getDepth(); $i++)- @endfor
             {{ $cat->title }}
         </option>
     @endif
