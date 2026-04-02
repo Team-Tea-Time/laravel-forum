@@ -98,6 +98,8 @@ class CategoryController extends BaseController
         $categories = Category::defaultOrder()->get();
         $categories->makeHidden(['_lft', '_rgt', 'thread_count', 'post_count']);
 
-        return ViewFactory::make('forum::category.manage', ['categories' => $categories->toTree()]);
+        return ViewFactory::make('forum::category.manage', [
+            'categories' => CategoryAccess::removeParentRelationships($categories->toTree()),
+        ]);
     }
 }

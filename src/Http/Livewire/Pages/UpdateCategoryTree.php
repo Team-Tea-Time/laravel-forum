@@ -12,6 +12,7 @@ use TeamTeaTime\Forum\{
     Events\UserReorderingCategories,
     Http\Livewire\Traits\CreatesAlerts,
     Models\Category,
+    Support\Access\CategoryAccess,
     Support\Authorization\CategoryAuthorization,
 };
 
@@ -50,7 +51,7 @@ class UpdateCategoryTree extends Component
         $categories->makeHidden(['_lft', '_rgt', 'thread_count', 'post_count']);
 
         return ViewFactory::make('forum::pages.category.manage', [
-            'categories' => $categories->toTree(),
+            'categories' => CategoryAccess::removeParentRelationships($categories->toTree()),
         ])->layout('forum::layouts.main');
     }
 }
