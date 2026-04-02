@@ -164,8 +164,8 @@ class ForumServiceProvider extends ServiceProvider
     private function registerPolicies(GateContract $gate): void
     {
         $forumPolicy = config('forum.integration.policies.forum');
-        foreach (get_class_methods(new $forumPolicy()) as $method) {
-            $gate->define($method, "{$forumPolicy}@{$method}");
+        foreach (get_class_methods($forumPolicy) as $method) {
+            $gate->define($method, [$forumPolicy, $method]);
         }
 
         foreach (config('forum.integration.policies.model') as $model => $policy) {

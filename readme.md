@@ -8,12 +8,13 @@
 
 | **Laravel version** | **Package version** | **PHP version** |
 |---------------------|---------------------|-----------------|
+| 13                  | ^8.0                | ^8.3            |
 | 12                  | ^7.0                | ^8.2            |
 | 11                  | ^6.0                | ^8.2            |
 
 Please note that older package versions not listed above are no longer maintained or supported.
 
-See the [support policy in the Laravel docs](https://laravel.com/docs/11.x/releases#support-policy) for more information about Laravel release versions, their supported PHP versions, and how long they receive bug & security fixes.
+See the [support policy in the Laravel docs](https://laravel.com/docs/13.x/releases#support-policy) for more information about Laravel release versions, their supported PHP versions, and how long they receive bug & security fixes.
 
 ## Installation
 
@@ -22,10 +23,10 @@ See the [support policy in the Laravel docs](https://laravel.com/docs/11.x/relea
 Install the package via composer:
 
 ```
-composer require riari/laravel-forum:^6.0
+composer require riari/laravel-forum:^8.0
 ```
 
-[Package Discovery](https://laravel.com/docs/11.x/packages#package-discovery) should take care of registering the service provider automatically, but if you need to do so manually, add the service provider to your `bootstrap/providers.php`:
+[Package Discovery](https://laravel.com/docs/13.x/packages#package-discovery) should take care of registering the service provider automatically, but if you need to do so manually, add the service provider to your `bootstrap/providers.php`:
 
 ```php
 TeamTeaTime\Forum\ForumServiceProvider::class,
@@ -50,7 +51,7 @@ A `forum:preset-install {name}` command is available for installing UI presets. 
 `php artisan forum:preset-install livewire-tailwind`
 
 > [!NOTE]  
-> By default, the `livewire-tailwind` preset is set as the active one in the `forum.frontend.preset` config value. This preset requires Livewire and a few other dependencies. Refer to [UI Presets](https://www.teamteatime.net/docs/laravel-forum/6.x/front-end/ui-presets) for details.
+> By default, the `livewire-tailwind` preset is set as the active one in the `forum.frontend.preset` config value. This preset requires Livewire and a few other dependencies. Refer to [UI Presets](https://www.teamteatime.net/docs/laravel-forum/8.x/front-end/ui-presets) for details.
 
 ### Additional steps
 
@@ -70,7 +71,7 @@ Laravel Forum currently supports 15 languages: German, English, Spanish, French,
 
 ## Development
 
-If you wish to contribute, an easy way to set up the package for local development is [Team-Tea-Time/laravel-studio](https://github.com/Team-Tea-Time/laravel-studio), which is set up to load a local working copy of this repository (see the [readme](https://github.com/Team-Tea-Time/laravel-studio/blob/11.x/readme.md#usage) for usage details).
+If you wish to contribute, an easy way to set up the package for local development is [Team-Tea-Time/laravel-studio](https://github.com/Team-Tea-Time/laravel-studio), which is set up to load a local working copy of this repository (see the [readme](https://github.com/Team-Tea-Time/laravel-studio/blob/13.x/readme.md#usage) for usage details).
 
 ### Running tests
 

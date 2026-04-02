@@ -4,7 +4,7 @@ namespace TeamTeaTime\Forum\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-abstract class BaseModel extends Model
+class BaseModel extends Model
 {
     public function __construct(array $attributes = [])
     {
@@ -17,7 +17,7 @@ abstract class BaseModel extends Model
 
     public static function getTableName()
     {
-        return with(new static)->getTable();
+        return (new static)->getTable();
     }
 
     public function updatedSince(Model &$model): bool

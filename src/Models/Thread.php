@@ -23,7 +23,6 @@ class Thread extends BaseModel
     use HasApproval, HasAuthor, HasSoftDeletion;
 
     protected $table = 'forum_threads';
-    protected $dates = ['deleted_at'];
     protected $fillable = [
         'category_id',
         'author_id',

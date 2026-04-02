@@ -19,7 +19,6 @@ class Post extends BaseModel
     use HasApproval, HasAuthor, HasSoftDeletion;
 
     protected $table = 'forum_posts';
-    protected $dates = ['deleted_at'];
     protected $fillable = [
         'thread_id',
         'author_id',
