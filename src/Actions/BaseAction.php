@@ -2,8 +2,8 @@
 
 namespace TeamTeaTime\Forum\Actions;
 
-use Exception;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 abstract class BaseAction
 {
@@ -18,9 +18,9 @@ abstract class BaseAction
             DB::commit();
 
             return $result;
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             DB::rollBack();
-            throw new Exception('An exception occurred during an Action transaction.', 0, $e);
+            throw $e;
         }
     }
 }
