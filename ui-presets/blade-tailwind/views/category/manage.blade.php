@@ -13,21 +13,27 @@
         @endcan
     </div>
 
-    <div id="manage-categories">
-        <draggable-category-list :categories="state.categories"></draggable-category-list>
+    @if ($categories->isEmpty())
+        <p class="text-gray-500 text-center py-4">
+            {{ trans('forum::categories.none') }}
+        </p>
+    @else
+        <div id="manage-categories">
+            <draggable-category-list :categories="state.categories"></draggable-category-list>
 
-        <transition name="fade">
-            <div v-show="state.changesApplied" class="bg-green-100 mb-4 text-green-700 mt-3 px-4 py-3" role="alert">
-                {{ trans('forum::general.changes_applied') }}
+            <transition name="fade">
+                <div v-show="state.changesApplied" class="bg-green-100 mb-4 text-green-700 mt-3 px-4 py-3" role="alert">
+                    {{ trans('forum::general.changes_applied') }}
+                </div>
+            </transition>
+
+            <div class="flex justify-end py-3">
+                <button type="button" class="bg-blue-500 text-white rounded py-2 px-8 hover:cursor-pointer disabled:opacity-50" :disabled="state.isSavingDisabled" @click="onSave">
+                    {{ trans('forum::general.save') }}
+                </button>
             </div>
-        </transition>
-
-        <div class="flex justify-end py-3">
-            <button type="button" class="bg-blue-500 text-white rounded py-2 px-8 hover:cursor-pointer disabled:opacity-50" :disabled="state.isSavingDisabled" @click="onSave">
-                {{ trans('forum::general.save') }}
-            </button>
         </div>
-    </div>
+    @endif
 
     <script type="text/x-template" id="draggable-category-list-template">
         <draggable

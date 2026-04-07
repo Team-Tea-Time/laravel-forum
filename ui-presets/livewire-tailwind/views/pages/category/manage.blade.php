@@ -16,18 +16,24 @@
             @endcan
 
             <div class="bg-white dark:bg-slate-700 rounded-md shadow-md my-2 p-6">
-                <ol id="category-tree">
-                    @include ('forum::components.category.draggable-items', ['categories' => $categories])
-                </ol>
+                @if ($categories->isEmpty())
+                    <p class="text-slate-500 dark:text-slate-400 text-center py-4">
+                        {{ trans('forum::categories.none') }}
+                    </p>
+                @else
+                    <ol id="category-tree">
+                        @include ('forum::components.category.draggable-items', ['categories' => $categories])
+                    </ol>
 
-                <div class="mt-4 text-right">
-                    <x-forum::button
-                        id="save"
-                        :label="trans('forum::general.save')"
-                        x-ref="button"
-                        @click="save"
-                        disabled />
-                </div>
+                    <div class="mt-4 text-right">
+                        <x-forum::button
+                            id="save"
+                            :label="trans('forum::general.save')"
+                            x-ref="button"
+                            @click="save"
+                            disabled />
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -52,7 +58,7 @@ Alpine.data('manage', () => {
                     onDrop: () => $refs.button.disabled = false
                 },
                 el: '#category-tree',
-                listItemClassNames: 'border border-slate-300 rounded-md text-lg p-4 my-2'
+                listItemClassNames: 'font-medium border border-slate-300 dark:border-slate-600 rounded-md text-lg p-4 my-2 cursor-move'
             });
         },
         getItems (ol) {

@@ -84,8 +84,8 @@ class CategoryAccess
     {
         $categories->each(function ($category) {
             $category->setRelation('parent', null);
-            if ($category->children) {
-                $category->children = static::removeParentRelationships($category->children);
+            if ($category->relationLoaded('children') && $category->getRelation('children')->isNotEmpty()) {
+                static::removeParentRelationships($category->getRelation('children'));
             }
         });
 

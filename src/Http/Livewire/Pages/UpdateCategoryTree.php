@@ -11,6 +11,7 @@ use TeamTeaTime\Forum\{
     Events\UserBulkReorderedCategories,
     Events\UserReorderingCategories,
     Http\Livewire\Traits\CreatesAlerts,
+    Http\Livewire\Types\AlertType,
     Models\Category,
     Support\Access\CategoryAccess,
     Support\Authorization\CategoryAuthorization,
@@ -35,6 +36,10 @@ class UpdateCategoryTree extends Component
     {
         if (!CategoryAuthorization::move($request->user())) {
             abort(403);
+        }
+
+        if (empty($this->tree)) {
+            return $this->alert('general.invalid_selection', AlertType::Warning)->toLivewire();
         }
 
         $action = new Action($this->tree);

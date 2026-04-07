@@ -16,6 +16,7 @@ return [
     'enable_threads' => 'Enable threads',
     'make_private' => 'Make private',
     'manage' => 'Manage categories',
+    'none' => 'No categories exist yet.',
     'mark_read' => 'Mark threads in this category as read',
     'marked_read' => 'New/updated threads in :category have been marked as read',
     'parent' => 'Parent category',

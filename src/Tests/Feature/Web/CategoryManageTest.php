@@ -44,9 +44,34 @@ class CategoryManageTest extends TestCase
         $this->assertStringContainsString('Child category', $json);
         $this->assertStringContainsString('"parent":null', $json);
     }
+
+    #[Test]
+    public function should_not_set_children_as_attribute_when_removing_parent_relationships()
+    {
+        $parent = new Category(['title' => 'Parent category']);
+        $child = new Category(['title' => 'Child category']);
+
+        $parent->setAttribute('id', 1);
+        $child->setAttribute('id', 2);
+
+        $parent->setAppends([]);
+        $child->setAppends([]);
+
+        $child->setRelation('parent', $parent);
+        $child->setRelation('children', new Collection());
+        $parent->setRelation('children', new Collection([$child]));
+
+        $categories = new Collection([$parent]);
+
+        CategoryAccess::removeParentRelationships($categories);
+
+        $this->assertArrayNotHasKey('children', $parent->getAttributes(),
+            'removeParentRelationships should not set children as a model attribute');
+        $this->assertArrayNotHasKey('children', $child->getAttributes(),
+            'removeParentRelationships should not set children as a model attribute');
+
+        $this->assertTrue($parent->relationLoaded('children'));
+        $this->assertCount(1, $parent->getRelation('children'));
+        $this->assertNull($child->getRelation('parent'));
+    }
 }
-
-
-
-
-
