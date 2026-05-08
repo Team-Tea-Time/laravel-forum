@@ -6,7 +6,7 @@
                 {{ $post->authorName }}
             </span>
             <span class="text-slate-500">
-                <livewire:forum::components.timestamp :carbon="$post->updated_at" />
+                <livewire:forum.components.timestamp :carbon="$post->updated_at" />
             </span>
         </div>
         <div>

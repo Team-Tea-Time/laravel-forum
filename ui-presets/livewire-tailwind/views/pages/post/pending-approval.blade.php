@@ -17,7 +17,7 @@
 
     <div class="my-4">
         @foreach ($posts as $post)
-            <livewire:forum::components.post.card
+            <livewire:forum.components.post.card
                 :$post
                 :key="$post->id . $updateKey"
                 :selectable="true"

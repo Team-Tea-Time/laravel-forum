@@ -11,7 +11,7 @@
                 <x-forum::link-button :href="$post->route" :label="trans('forum::threads.view')" />
             </div>
 
-            <livewire:forum::components.post.card :$post :single="true" />
+            <livewire:forum.components.post.card :$post :single="true" />
         </div>
     </div>
 </div>

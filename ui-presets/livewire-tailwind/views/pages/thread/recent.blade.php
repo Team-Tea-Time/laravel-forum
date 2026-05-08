@@ -6,7 +6,7 @@
 
     <div class="my-4">
         @foreach ($threads as $thread)
-            <livewire:forum::components.thread.card
+            <livewire:forum.components.thread.card
                 :$thread
                 :key="$thread->id"
                 :selectable="false"

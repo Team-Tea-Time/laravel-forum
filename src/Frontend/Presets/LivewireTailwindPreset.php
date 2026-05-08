@@ -63,12 +63,12 @@ class LivewireTailwindPreset extends AbstractPreset
     {
         $this->bladeComponentNamespace("TeamTeaTime\\Forum\\Frontend\\Presets\\LivewireTailwind\\Components\\Blade");
 
-        $this->livewireComponent('components.category.card', CategoryCard::class);
-        $this->livewireComponent('components.post.card', PostCard::class);
-        $this->livewireComponent('components.post.quote', PostQuote::class);
-        $this->livewireComponent('components.thread.card', ThreadCard::class);
-        $this->livewireComponent('components.alerts', Alerts::class);
-        $this->livewireComponent('components.pill', Pill::class);
-        $this->livewireComponent('components.timestamp', Timestamp::class);
+        $this->livewireComponent('forum.components.alerts', Alerts::class);
+        $this->livewireComponent('forum.components.category.card', CategoryCard::class);
+        $this->livewireComponent('forum.components.post.card', PostCard::class);
+        $this->livewireComponent('forum.components.post.quote', PostQuote::class);
+        $this->livewireComponent('forum.components.thread.card', ThreadCard::class);
+        $this->livewireComponent('forum.components.pill', Pill::class);
+        $this->livewireComponent('forum.components.timestamp', Timestamp::class);
     }
 }

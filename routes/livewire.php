@@ -19,24 +19,24 @@ use TeamTeaTime\Forum\Http\Livewire\Pages\{
 
 $prefix = config('forum.frontend.route_prefixes');
 
-Route::get('/', CategoryIndex::class)->name('category.index');
-Route::get('category/order', UpdateCategoryTree::class)->name('category.order');
-Route::get('category/create', CategoryCreate::class)->name('category.create');
+Route::livewire('/', 'forum.pages.category.index')->name('category.index');
+Route::livewire('category/order', 'forum.pages.category.manage')->name('category.order');
+Route::livewire('category/create', 'forum.pages.category.create')->name('category.create');
 
-Route::get('recent', RecentThreads::class)->name('recent');
-Route::get('unread', UnreadThreads::class)->name('unread');
-Route::get('pending-approval/threads', ThreadsPendingApproval::class)->name('pending-approval.threads');
-Route::get('pending-approval/posts', PostsPendingApproval::class)->name('pending-approval.posts');
+Route::livewire('recent', 'forum.pages.thread.recent')->name('recent');
+Route::livewire('unread', 'forum.pages.thread.unread')->name('unread');
+Route::livewire('pending-approval/threads', 'forum.pages.thread.pending-approval')->name('pending-approval.threads');
+Route::livewire('pending-approval/posts', 'forum.pages.post.pending-approval')->name('pending-approval.posts');
 
 Route::group(['prefix' => $prefix['category'] . '/{category_id}-{category_slug}'], function () use ($prefix) {
-    Route::get('/', CategoryShow::class)->name('category.show');
-    Route::get('edit', CategoryEdit::class)->name('category.edit');
-    Route::get($prefix['thread'] . '/create', ThreadCreate::class)->name('thread.create');
+    Route::livewire('/', 'forum.pages.category.show')->name('category.show');
+    Route::livewire('edit', 'forum.pages.category.edit')->name('category.edit');
+    Route::livewire($prefix['thread'] . '/create', 'forum.pages.thread.create')->name('thread.create');
 });
 
 Route::group(['prefix' => $prefix['thread'] . '/{thread_id}-{thread_slug}'], function () use ($prefix) {
-    Route::get('/', ThreadShow::class)->name('thread.show');
-    Route::get('reply', ThreadReply::class)->name('thread.reply');
-    Route::get($prefix['post'] . '/{post_id}/edit', PostEdit::class)->name('post.edit');
-    Route::get($prefix['post'] . '/{post_id}', PostShow::class)->name('post.show');
+    Route::livewire('/', 'forum.pages.thread.show')->name('thread.show');
+    Route::livewire('reply', 'forum.pages.thread.reply')->name('thread.reply');
+    Route::livewire($prefix['post'] . '/{post_id}/edit', 'forum.pages.post.edit')->name('post.edit');
+    Route::livewire($prefix['post'] . '/{post_id}', 'forum.pages.post.show')->name('post.show');
 });

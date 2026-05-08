@@ -7,7 +7,7 @@
     <div class="flex items-center mt-4 mb-6">
         <div class="grow">
             @if ($thread->category->requiresThreadApproval() && !$thread->isApproved)
-                <livewire:forum::components.pill
+                <livewire:forum.components.pill
                     bg-color="bg-orange-400"
                     text-color="text-orange-950"
                     margin="mr-2"
@@ -15,7 +15,7 @@
                     :text="trans('forum::general.pending_approval')" />
             @endif
             @if ($thread->pinned)
-                <livewire:forum::components.pill
+                <livewire:forum.components.pill
                     bg-color="bg-amber-400"
                     text-color="text-amber-950"
                     margin="mr-2"
@@ -23,7 +23,7 @@
                     :text="trans('forum::threads.pinned')" />
             @endif
             @if ($thread->locked)
-                <livewire:forum::components.pill
+                <livewire:forum.components.pill
                     bg-color="bg-rose-400"
                     text-color="text-rose-950"
                     margin="mr-2"
@@ -31,7 +31,7 @@
                     :text="trans('forum::threads.locked')" />
             @endif
             @if ($thread->trashed())
-                <livewire:forum::components.pill
+                <livewire:forum.components.pill
                     bg-color="bg-zinc-400"
                     text-color="text-zinc-950"
                     margin="mr-2"
@@ -172,7 +172,7 @@
 
     <div>
         @foreach ($posts as $post)
-            <livewire:forum::components.post.card
+            <livewire:forum.components.post.card
                 :$post
                 :key="$post->id . $updateKey"
                 :selectable="in_array($post->id, $selectablePostIds)" />

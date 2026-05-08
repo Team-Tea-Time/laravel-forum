@@ -11,10 +11,10 @@
         </div>
         <div class="text-center text-base mt-2 sm:mt-0">
             @if ($category->accepts_threads)
-                <livewire:forum::components.pill
+                <livewire:forum.components.pill
                     icon="chat-bubbles-mini"
                     :text="trans_choice('forum::threads.thread', 2) . ': ' . $category->thread_count" />
-                <livewire:forum::components.pill
+                <livewire:forum.components.pill
                     icon="chat-bubble-text-mini"
                     :text="trans_choice('forum::posts.post', 2) . ': ' . $category->post_count" />
             @endif
@@ -28,7 +28,7 @@
                             {{ $category->newestThread->title }}
                         </a>
                         <span class="inline-block align-middle">
-                            <livewire:forum::components.timestamp :carbon="$category->newestThread->created_at" />
+                            <livewire:forum.components.timestamp :carbon="$category->newestThread->created_at" />
                         </span>
                     </div>
                 @endif
@@ -39,7 +39,7 @@
                             Re: {{ $category->latestActiveThread->title }}
                         </a>
                         <span class="inline-block align-middle">
-                            <livewire:forum::components.timestamp :carbon="$category->latestActiveThread->lastPost->created_at" />
+                            <livewire:forum.components.timestamp :carbon="$category->latestActiveThread->lastPost->created_at" />
                         </span>
                     </div>
                 @endif
@@ -62,10 +62,10 @@
                     </div>
                     <div class="text-center text-base mt-2 sm:mt-0">
                         @if ($subcategory->accepts_threads)
-                            <livewire:forum::components.pill
+                            <livewire:forum.components.pill
                                 icon="chat-bubbles-mini"
                                 :text="trans_choice('forum::threads.thread', 2) . ': ' . $subcategory->thread_count" />
-                            <livewire:forum::components.pill
+                            <livewire:forum.components.pill
                                 icon="chat-bubble-text-mini"
                                 :text="trans_choice('forum::posts.post', 2) . ': ' . $subcategory->post_count" />
                         @endif
@@ -79,7 +79,7 @@
                                         {{ $subcategory->newestThread->title }}
                                     </a>
                                     <span class="inline-block align-middle">
-                                        <livewire:forum::components.timestamp :carbon="$subcategory->newestThread->created_at" />
+                                        <livewire:forum.components.timestamp :carbon="$subcategory->newestThread->created_at" />
                                     </span>
                                 </div>
                             @endif
@@ -90,7 +90,7 @@
                                         Re: {{ $subcategory->latestActiveThread->title }}
                                     </a>
                                     <span class="inline-block align-middle">
-                                        <livewire:forum::components.timestamp :carbon="$subcategory->latestActiveThread->lastPost->created_at" />
+                                        <livewire:forum.components.timestamp :carbon="$subcategory->latestActiveThread->lastPost->created_at" />
                                     </span>
                                 </div>
                             @endif

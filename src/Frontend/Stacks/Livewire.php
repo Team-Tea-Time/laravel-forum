@@ -27,21 +27,20 @@ class Livewire implements StackInterface
 
     public function register(): void
     {
-        // Register full-page components required by the Livewire routes
-        $this->livewireComponent('pages.category.create', CategoryCreate::class);
-        $this->livewireComponent('pages.category.edit', CategoryEdit::class);
-        $this->livewireComponent('pages.category.index', CategoryIndex::class);
-        $this->livewireComponent('pages.category.show', CategoryShow::class);
-        $this->livewireComponent('pages.category.manage', UpdateCategoryTree::class);
-        $this->livewireComponent('pages.thread.create', ThreadCreate::class);
-        $this->livewireComponent('pages.thread.reply', ThreadReply::class);
-        $this->livewireComponent('pages.thread.show', ThreadShow::class);
-        $this->livewireComponent('pages.thread.recent', RecentThreads::class);
-        $this->livewireComponent('pages.thread.unread', UnreadThreads::class);
-        $this->livewireComponent('pages.thread.pending-approval', ThreadsPendingApproval::class);
-        $this->livewireComponent('pages.post.edit', PostEdit::class);
-        $this->livewireComponent('pages.post.show', PostShow::class);
-        $this->livewireComponent('pages.post.pending-approval', PostsPendingApproval::class);
+        $this->livewireComponent('forum.pages.category.index', CategoryIndex::class);
+        $this->livewireComponent('forum.pages.category.create', CategoryCreate::class);
+        $this->livewireComponent('forum.pages.category.edit', CategoryEdit::class);
+        $this->livewireComponent('forum.pages.category.show', CategoryShow::class);
+        $this->livewireComponent('forum.pages.category.manage', UpdateCategoryTree::class);
+        $this->livewireComponent('forum.pages.thread.create', ThreadCreate::class);
+        $this->livewireComponent('forum.pages.thread.reply', ThreadReply::class);
+        $this->livewireComponent('forum.pages.thread.show', ThreadShow::class);
+        $this->livewireComponent('forum.pages.thread.recent', RecentThreads::class);
+        $this->livewireComponent('forum.pages.thread.unread', UnreadThreads::class);
+        $this->livewireComponent('forum.pages.thread.pending-approval', ThreadsPendingApproval::class);
+        $this->livewireComponent('forum.pages.post.edit', PostEdit::class);
+        $this->livewireComponent('forum.pages.post.show', PostShow::class);
+        $this->livewireComponent('forum.pages.post.pending-approval', PostsPendingApproval::class);
     }
 
     public function getRouterConfig(): array

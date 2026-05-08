@@ -112,7 +112,7 @@
             {{ $slot }}
         </div>
 
-        <livewire:forum::components.alerts />
+        <livewire:forum.components.alerts />
 
         <script type="module">
             document.addEventListener('alpine:init', () => {

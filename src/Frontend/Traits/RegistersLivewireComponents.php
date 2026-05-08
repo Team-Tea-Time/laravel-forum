@@ -4,8 +4,11 @@ namespace TeamTeaTime\Forum\Frontend\Traits;
 
 trait RegistersLivewireComponents
 {
-    private function livewireComponent(string $name, string $component): void
+    private function livewireComponent(string $name, string $class): void
     {
-        \Livewire\Livewire::component("forum::{$name}", $component);
+        \Livewire\Livewire::addComponent(
+            name: $name,
+            class: $class
+        );
     }
 }

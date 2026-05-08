@@ -25,7 +25,7 @@
     </div>
 
     @foreach ($category->descendants as $child)
-        <livewire:forum::components.category.card :category="$child" :key="$child->id" />
+        <livewire:forum.components.category.card :category="$child" :key="$child->id" />
     @endforeach
 
     <div class="flex mt-6 mb-8">
@@ -56,7 +56,7 @@
 
     <div class="my-4">
         @foreach ($threads as $thread)
-            <livewire:forum::components.thread.card
+            <livewire:forum.components.thread.card
                 :$thread
                 :key="$thread->id . $updateKey"
                 :selectable="in_array($thread->id, $selectableThreadIds)" />

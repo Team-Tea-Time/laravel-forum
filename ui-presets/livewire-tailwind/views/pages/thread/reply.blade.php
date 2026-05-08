@@ -9,7 +9,7 @@
 
             @if (isset($parent) && !$parent->trashed())
                 <h3 class="mt-4 text-slate-500">{{ trans('forum::general.replying_to', ['item' => $parent->authorName]) }}</h3>
-                <livewire:forum::components.post.card :post="$parent" :single="true" :show-author-pane="false" />
+                <livewire:forum.components.post.card :post="$parent" :single="true" :show-author-pane="false" />
             @endif
 
             <div class="bg-white rounded-md shadow-md my-2 p-6 dark:bg-slate-700">

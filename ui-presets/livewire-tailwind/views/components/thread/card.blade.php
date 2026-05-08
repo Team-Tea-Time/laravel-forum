@@ -3,7 +3,7 @@
         <div class="grow text-center sm:text-left">
             <a href="{{ $thread->route }}" class="block text-xl mb-2">
                 @if ($thread->category->requiresThreadApproval() && !$thread->isApproved)
-                    <livewire:forum::components.pill
+                    <livewire:forum.components.pill
                         bg-color="bg-orange-400"
                         text-color="text-orange-950"
                         margin="mr-2"
@@ -11,7 +11,7 @@
                         :text="trans('forum::general.pending_approval')" />
                 @endif
                 @if ($thread->pinned)
-                    <livewire:forum::components.pill
+                    <livewire:forum.components.pill
                         bg-color="bg-amber-400"
                         text-color="text-amber-950"
                         margin="mr-2"
@@ -19,7 +19,7 @@
                         :text="trans('forum::threads.pinned')" />
                 @endif
                 @if ($thread->locked)
-                    <livewire:forum::components.pill
+                    <livewire:forum.components.pill
                         bg-color="bg-rose-400"
                         text-color="text-rose-950"
                         margin="mr-2"
@@ -27,7 +27,7 @@
                         :text="trans('forum::threads.locked')" />
                 @endif
                 @if ($thread->userReadStatus !== null && ! $thread->trashed())
-                    <livewire:forum::components.pill
+                    <livewire:forum.components.pill
                         bg-color="bg-indigo-400"
                         text-color="text-indigo-950"
                         margin="mr-2"
@@ -35,7 +35,7 @@
                         :text="trans($thread->userReadStatus)" />
                 @endif
                 @if ($thread->trashed())
-                    <livewire:forum::components.pill
+                    <livewire:forum.components.pill
                         bg-color="bg-zinc-400"
                         text-color="text-zinc-950"
                         margin="mr-2"
@@ -54,11 +54,11 @@
             @endif
             {{ $thread->author->name }}
             <span class="text-slate-500">
-                <livewire:forum::components.timestamp :carbon="$thread->created_at" />
+                <livewire:forum.components.timestamp :carbon="$thread->created_at" />
             </span>
         </div>
         <div class="text-center text-base mt-2 sm:mt-0">
-            <livewire:forum::components.pill
+            <livewire:forum.components.pill
                 icon="chat-bubble-text-mini"
                 :text="trans('forum::general.replies') . ': ' . $thread->reply_count" />
         </div>
@@ -68,7 +68,7 @@
                 <br>
                 {{ $thread->lastPost->authorName }}
                 <span class="text-slate-500">
-                    <livewire:forum::components.timestamp :carbon="$thread->lastPost->created_at" />
+                    <livewire:forum.components.timestamp :carbon="$thread->lastPost->created_at" />
                 </span>
             @endif
         </div>
