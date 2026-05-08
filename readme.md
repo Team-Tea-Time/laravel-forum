@@ -6,11 +6,12 @@
 
 ## Versions
 
-| **Laravel version** | **Package version** | **PHP version** |
-|---------------------|---------------------|-----------------|
-| 13                  | ^8.0                | ^8.3            |
-| 12                  | ^7.0                | ^8.2            |
-| 11                  | ^6.0                | ^8.2            |
+| **Laravel version** | **Livewire version \*** | **Package version** | **PHP version** |
+|---------------------|-------------------------|---------------------|-----------------|
+| 13                  | 4                       | ^8.0                | ^8.3            |
+| 12                  | 3                       | ^7.0                | ^8.2            |
+
+_* Only applicable if you intend to use a Livewire-based UI preset._
 
 Please note that older package versions not listed above are no longer maintained or supported.
 
