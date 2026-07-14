@@ -30,7 +30,7 @@
                                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                                         <div class="flex-1">
                                             <div class="mt-2 text-sm text-gray-700">
-                                                {!! $post->content !!}
+                                                {!! Forum::render($post->content) !!}
                                             </div>
                                             <div class="text-sm text-gray-500 mt-1">
                                                 {{ $post->authorName }}
@@ -51,13 +51,13 @@
             </div>
 
             <div class="mt-4 flex gap-4">
-                <button type="button" 
+                <button type="button"
                         :disabled="!selectedIds.length"
                         data-open-modal="delete-posts"
                         class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed">
                     {{ trans('forum::general.delete_selection') }}
                 </button>
-                <button type="button" 
+                <button type="button"
                         :disabled="!selectedIds.length"
                         data-open-modal="approve-posts"
                         class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -71,7 +71,7 @@
                 </div>
             @endif
         @endif
-        
+
         @component('forum::modal-form')
             @slot('key', 'delete-posts')
             @slot('title', trans('forum::general.delete_selection'))
@@ -88,7 +88,7 @@
                 <input type="hidden" name="posts[]" :value="id">
             </template>
         @endcomponent
-    
+
         @component('forum::modal-form')
             @slot('key', 'approve-posts')
             @slot('title', trans('forum::general.approve_selection'))
