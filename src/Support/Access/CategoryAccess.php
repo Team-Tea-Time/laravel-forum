@@ -15,7 +15,7 @@ use TeamTeaTime\Forum\Models\Thread;
 class CategoryAccess
 {
     const DEFAULT_SELECT = ['*'];
-    const DEFAULT_WITH = ['newestThread', 'latestActiveThread', 'newestThread.lastPost', 'latestActiveThread.lastPost'];
+    const DEFAULT_WITH = ['newestThread', 'latestActiveThread', 'newestThread.lastPost.thread', 'latestActiveThread.lastPost.thread'];
 
     public static function getPrivateAncestor(?User $user, Category $category): ?Category
     {

@@ -42,7 +42,7 @@ class ThreadShow extends EventfulPaginatedComponent
 
     public function mount(Request $request)
     {
-        $this->thread = $request->route('thread');
+        $this->thread = $request->route('thread')->load('category');
 
         if (!$this->thread->isAccessibleTo($request->user())) {
             abort(404);
