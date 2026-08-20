@@ -243,7 +243,7 @@ class ThreadShow extends EventfulPaginatedComponent
         }
 
         $posts = $postsQuery
-            ->with('author', 'thread')
+            ->with('author', 'thread.category', 'parent', 'parent.author', 'parent.thread.category')
             ->orderBy('created_at', 'asc')
             ->paginate();
 
