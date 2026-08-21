@@ -90,7 +90,7 @@ class Thread extends BaseModel
 
     public function scopeWithPostAndAuthorRelationships(Builder $query): Builder
     {
-        return $query->with('firstPost', 'lastPost', 'firstPost.author', 'lastPost.author', 'lastPost.thread', 'author');
+        return $query->with('category', 'firstPost', 'lastPost', 'firstPost.author', 'lastPost.author', 'lastPost.thread', 'author');
     }
 
     public function scopeOrdered(Builder $query): Builder

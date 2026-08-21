@@ -30,14 +30,14 @@ class ThreadReply extends Component
 
     public function mount(Request $request)
     {
-        $this->thread = $request->route('thread');
+        $this->thread = $request->route('thread')->load('category');
 
         if (!$this->thread->category->isAccessibleTo($request->user())) {
             abort(404);
         }
 
         if ($request->input('parent_id')) {
-            $this->parent = $this->thread->posts->find($request->input('parent_id'));
+            $this->parent = $this->thread->posts()->find($request->input('parent_id'));
         }
 
         UserCreatingPost::dispatch($request->user(), $this->thread);

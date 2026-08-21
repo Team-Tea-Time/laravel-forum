@@ -34,7 +34,7 @@ class PostsPendingApproval extends Component
             ->notFirstInThread()
             ->pendingApproval()
             ->orderBy('created_at', 'desc')
-            ->with('thread', 'author');
+            ->with('thread.category', 'author', 'parent', 'parent.author', 'parent.thread.category');
 
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
 

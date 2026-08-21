@@ -42,7 +42,7 @@ class ThreadShow extends EventfulPaginatedComponent
 
     public function mount(Request $request)
     {
-        $this->thread = $request->route('thread');
+        $this->thread = $request->route('thread')->load('category');
 
         if (!$this->thread->isAccessibleTo($request->user())) {
             abort(404);
@@ -243,7 +243,7 @@ class ThreadShow extends EventfulPaginatedComponent
         }
 
         $posts = $postsQuery
-            ->with('author', 'thread')
+            ->with('author', 'thread.category', 'parent', 'parent.author', 'parent.thread.category')
             ->orderBy('created_at', 'asc')
             ->paginate();
 
