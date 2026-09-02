@@ -28,6 +28,8 @@ class PostController extends BaseController
             abort(404);
         }
 
+        $post->load(['parent', 'parent.author', 'parent.thread', 'parent.thread.category']);
+
         if ($request->user() !== null) {
             UserViewingPost::dispatch($request->user(), $post);
         }
@@ -44,6 +46,10 @@ class PostController extends BaseController
         UserCreatingPost::dispatch($request->user(), $thread);
 
         $post = $request->has('post_id') ? $thread->posts->find($request->input('post_id')) : null;
+
+        if ($post !== null) {
+            $post->load(['author', 'thread']);
+        }
 
         return ViewFactory::make('forum::post.create', compact('thread', 'post'));
     }
@@ -70,11 +76,12 @@ class PostController extends BaseController
         }
 
         $this->authorize('edit', $post);
-
-        UserEditingPost::dispatch($request->user(), $post);
-
+        
         $thread = $post->thread;
         $category = $post->thread->category;
+        $post->load(['parent', 'parent.author', 'parent.thread', 'parent.thread.category']);
+
+        UserEditingPost::dispatch($request->user(), $post);
 
         return ViewFactory::make('forum::post.edit', compact('category', 'thread', 'post'));
     }
@@ -96,6 +103,7 @@ class PostController extends BaseController
     {
         $thread = $request->route('thread');
         $post = $request->route('post');
+        $post->load(['parent', 'parent.author', 'parent.thread', 'parent.thread.category']);
 
         return ViewFactory::make('forum::post.confirm-delete', ['category' => $thread->category, 'thread' => $thread, 'post' => $post]);
     }
@@ -104,6 +112,7 @@ class PostController extends BaseController
     {
         $thread = $request->route('thread');
         $post = $request->route('post');
+        $post->load(['parent', 'parent.author', 'parent.thread', 'parent.thread.category']);
 
         return ViewFactory::make('forum::post.confirm-restore', ['category' => $thread->category, 'thread' => $thread, 'post' => $post]);
     }
@@ -140,7 +149,7 @@ class PostController extends BaseController
             ->notFirstInThread()
             ->pendingApproval()
             ->orderBy('created_at', 'desc')
-            ->with('thread', 'author');
+            ->with('thread', 'thread.category', 'author', 'parent', 'parent.thread', 'parent.thread.category');
 
         // Get accessible category IDs for the current user
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());

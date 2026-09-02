@@ -121,7 +121,7 @@ class ThreadController extends BaseController
         }
 
         $posts = $postsQuery
-            ->with('author', 'thread')
+            ->with('author', 'thread', 'parent', 'parent.author', 'parent.thread', 'parent.thread.category')
             ->orderBy('created_at', 'asc')
             ->paginate();
 
@@ -303,7 +303,7 @@ class ThreadController extends BaseController
         $threads = Thread::notDeleted()
             ->pendingApproval()
             ->orderBy('created_at', 'desc')
-            ->with('category', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
+            ->with('category', 'firstPost', 'author', 'lastPost', 'lastPost.author', 'lastPost.thread');
 
         // Get accessible category IDs for the current user
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
