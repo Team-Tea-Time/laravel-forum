@@ -27,6 +27,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (!Schema::hasColumn('forum_categories', 'depth')) {
+            return;
+        }
+
         Schema::table('forum_categories', function (Blueprint $table) {
             NestedSet::dropColumnsDepth($table);
         });
