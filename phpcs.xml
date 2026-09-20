@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="laravel-forum-phpcs">
+    <file>src</file>
+    <file>config</file>
+    <file>database</file>
+    <file>routes</file>
+    <file>translations</file>
     <exclude-pattern>./src/Tests/*</exclude-pattern>
     <rule ref="Generic.Classes.DuplicateClassName"/>
     <rule ref="Generic.CodeAnalysis.EmptyStatement"/>
