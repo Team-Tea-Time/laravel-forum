@@ -112,12 +112,11 @@ class ThreadController extends BaseController
         }
 
         if ($user) {
-            $postsQuery = $postsQuery->orWhere(function ($query) use ($thread, $user)
-                {
-                    $query->where('thread_id', $thread->id)
-                          ->whereNull('approved_at')
-                          ->where('author_id', $user->getKey());
-                });
+            $postsQuery = $postsQuery->orWhere(function ($query) use ($thread, $user) {
+                $query->where('thread_id', $thread->id)
+                      ->whereNull('approved_at')
+                      ->where('author_id', $user->getKey());
+            });
         }
 
         $posts = $postsQuery
@@ -307,7 +306,7 @@ class ThreadController extends BaseController
 
         // Get accessible category IDs for the current user
         $accessibleCategoryIds = CategoryAccess::getFilteredIdsFor($request->user());
-        
+
         // Apply filtering to the query
         $threads = $threads->where(function ($query) use ($request, $accessibleCategoryIds) {
             // Public categories or private categories the user has access to
@@ -317,7 +316,7 @@ class ThreadController extends BaseController
                       $q->orWhereIn('id', $accessibleCategoryIds);
                   });
             });
-            
+
             // Check view permissions for the thread
             if ($request->user()) {
                 $query->where(function ($q) use ($accessibleCategoryIds) {

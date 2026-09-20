@@ -234,12 +234,11 @@ class ThreadShow extends EventfulPaginatedComponent
         }
 
         if ($user) {
-            $postsQuery = $postsQuery->orWhere(function ($query) use ($user)
-                {
-                    $query->where('thread_id', $this->thread->id)
-                          ->whereNull('approved_at')
-                          ->where('author_id', $user->getKey());
-                });
+            $postsQuery = $postsQuery->orWhere(function ($query) use ($user) {
+                $query->where('thread_id', $this->thread->id)
+                      ->whereNull('approved_at')
+                      ->where('author_id', $user->getKey());
+            });
         }
 
         $posts = $postsQuery
