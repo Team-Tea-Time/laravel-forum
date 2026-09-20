@@ -8,17 +8,20 @@ on:
       - "phpcs.xml"
       - ".github/workflows/phpcs.yml"
 
+permissions:
+  contents: read
+
 jobs:
   run:
     name: Run PHP_CodeSniffer
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
-    - name: Run PHPCS inspection
-      uses: rtCamp/action-phpcs-code-review@v3
-      env:
-        GH_BOT_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
-        SKIP_FOLDERS: ".github,ui-presets,src/Tests"
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: phpcs, cs2pr
+
+      - name: Run PHPCS
+        run: phpcs -q --report=checkstyle | cs2pr
